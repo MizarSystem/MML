@@ -1,0 +1,953 @@
+:: Metric Spaces
+::  by Stanis{\l}awa Kanas, Adam Lecko and Mariusz Startek
+::
+:: Received May 3, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PARTFUN1, RELAT_1, BOOLE, FUNCOP_1, RELAT_2, ARYTM_3,
+      FUNCT_3, ABSVALUE, ARYTM_1, ARYTM, METRIC_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0,
+      REAL_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FUNCOP_1, RELAT_1,
+      ABSVALUE, STRUCT_0;
+ constructors REAL_1, FUNCT_3, BINOP_1, FUNCOP_1, ABSVALUE, STRUCT_0, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, STRUCT_0, XREAL_0, FUNCOP_1, RELSET_1, RELAT_1, FUNCT_1,
+      MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
+ definitions STRUCT_0, XBOOLE_0;
+ theorems TARSKI, REAL_1, AXIOMS, BINOP_1, FUNCOP_1, ZFMISC_1, FUNCT_2,
+      RELSET_1, RELAT_1, FUNCT_3, ABSVALUE, SUBSET_1, STRUCT_0, PARTFUN1,
+      CARD_1, FUNCT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes FUNCT_2, FRAENKEL;
+
+begin
+
+definition
+ struct(1-sorted) MetrStruct
+                (# carrier -> set,
+                 distance -> Function of [:the carrier,the carrier:],REAL #);
+end;
+
+definition
+  cluster non empty strict MetrStruct;
+ existence
+  proof
+   consider A being non empty set, r being Function of [:A,A:],REAL;
+   take MetrStruct(#A,r#);
+   thus the carrier of MetrStruct(#A,r#) is non empty;
+   thus thesis;
+  end;
+end;
+
+definition let A,B be set, f be PartFunc of [:A,B:],REAL;
+  let a be Element of A; let b be Element of B;
+redefine func f.(a,b) -> Real;
+coherence
+  proof
+A1: f.(a,b) = f.[a,b] by BINOP_1:def 1;
+    per cases;
+    suppose [a,b] in dom f;
+    hence thesis by A1,PARTFUN1:27;
+    suppose not [a,b] in dom f;
+    hence thesis by A1,CARD_1:51,FUNCT_1:def 4;
+  end;
+end;
+
+definition let M be MetrStruct;
+           let a, b be Element of M;
+  func dist(a,b) -> Real equals :Def1:
+    (the distance of M).(a,b);
+  coherence;
+end;
+
+definition
+  func Empty^2-to-zero -> Function of [:{{}},{{}}:], REAL equals :Def2:
+    [:{{}},{{}}:] --> 0;
+     coherence
+      proof
+      set X=[:{{}},{{}}:];
+        {0} c= REAL & X<>{} by ZFMISC_1:37;
+      then X=dom (X-->0) & rng (X-->0) c= REAL by FUNCOP_1:14,19;
+      hence thesis by FUNCT_2:def 1,RELSET_1:11;
+      end;
+end;
+
+Lm1:[{},{}] in [:{{}},{{}}:] by ZFMISC_1:34;
+
+Lm2:  Empty^2-to-zero.({},{}) = Empty^2-to-zero.[{},{}] by BINOP_1:def 1
+                          .= 0 by Def2,Lm1,FUNCOP_1:13;
+
+Lm3: for x,y be Element of {{}} holds Empty^2-to-zero.(x,y)=0 iff x=y
+          proof
+          let x,y be Element of {{}};
+            x={} & y={} by TARSKI:def 1;
+          hence thesis by Lm2;
+          end;
+
+Lm4:  for x,y be Element of {{}} holds
+   Empty^2-to-zero.(x,y)=Empty^2-to-zero.(y,x)
+         proof
+         let x,y be Element of {{}};
+           x={} & y={} by TARSKI:def 1;
+         hence thesis;
+         end;
+
+Lm5: for x,y,z be Element of {{}} holds
+        Empty^2-to-zero.(x,z) <= Empty^2-to-zero.(x,y) + Empty^2-to-zero.(y,z)
+          proof
+          let x,y,z be Element of {{}};
+            x={} & y={} & z={} by TARSKI:def 1;
+          hence thesis by Lm2;
+          end;
+
+definition let A be set; let f be PartFunc of [:A,A:], REAL;
+  attr f is Reflexive means :Def3:
+   for a being Element of A holds f.(a,a) = 0;
+
+  attr f is discerning means :Def4:
+   for a, b being Element of A holds
+    f.(a,b) = 0 implies a = b;
+
+  attr f is symmetric means :Def5:
+   for a, b being Element of A holds f.(a,b) = f.(b,a);
+
+  attr f is triangle means :Def6:
+   for a, b, c being Element of A holds
+     f.(a,c) <= f.(a,b) + f.(b,c);
+end;
+
+definition let M be MetrStruct;
+  attr M is Reflexive means :Def7:
+   the distance of M is Reflexive;
+
+  attr M is discerning means :Def8:
+   the distance of M is discerning;
+
+  attr M is symmetric means :Def9:
+   the distance of M is symmetric;
+
+  attr M is triangle means :Def10:
+   the distance of M is triangle;
+end;
+
+definition
+  cluster strict Reflexive discerning symmetric triangle non empty MetrStruct;
+  existence
+  proof
+    reconsider M = MetrStruct(#{{}},Empty^2-to-zero#) as strict
+      non empty MetrStruct by STRUCT_0:def 1;
+    take M;
+   M is Reflexive discerning symmetric triangle
+    proof
+      thus the distance of M is Reflexive
+      proof
+        let a be Element of M;
+        thus thesis by Lm3;
+      end;
+     thus the distance of M is discerning
+     proof
+      let a, b be Element of M;
+      assume (the distance of M).(a,b) = 0;
+      hence thesis by Lm3;
+     end;
+     thus the distance of M is symmetric
+     proof
+      let a, b be Element of M;
+      thus thesis by Lm4;
+     end;
+     thus the distance of M is triangle
+     proof
+      let a, b, c be Element of M;
+      thus thesis by Lm5;
+     end;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  mode MetrSpace is Reflexive discerning symmetric triangle MetrStruct;
+end;
+
+theorem Th1:
+  for M being MetrStruct holds
+  ( for a being Element of M holds dist(a,a) = 0 ) iff
+    M is Reflexive
+  proof
+   let M be MetrStruct;
+    hereby
+     assume A1: for a being Element of M holds dist(a,a) = 0;
+       the distance of M is Reflexive
+     proof let a be Element of M;
+         (the distance of M).(a,a) = dist(a,a) by Def1 .= 0 by A1;
+       hence thesis;
+     end;
+     hence M is Reflexive by Def7;
+    end;
+    assume M is Reflexive;
+then A2: the distance of M is Reflexive by Def7;
+      now let a be Element of M;
+      thus dist(a,a) = (the distance of M).(a,a) by Def1 .= 0 by A2,Def3;
+    end;
+    hence thesis;
+  end;
+
+theorem
+    for M being MetrStruct holds
+  ( for a, b being Element of M st dist(a,b) = 0 holds a = b )
+    iff M is discerning
+  proof
+   let M be MetrStruct;
+    hereby
+     assume A1: for a, b being Element of M st dist(a,b) = 0
+       holds a = b;
+       the distance of M is discerning
+     proof let a, b be Element of M;
+       assume (the distance of M).(a,b) = 0;
+       then dist(a,b) = 0 by Def1;
+       hence thesis by A1;
+     end;
+     hence M is discerning by Def8;
+    end;
+    assume M is discerning;
+then A2: the distance of M is discerning by Def8;
+      now let a, b be Element of M;
+      assume dist(a,b) = 0;
+      then (the distance of M).(a,b) = 0 by Def1;
+      hence a = b by A2,Def4;
+    end;
+    hence thesis;
+  end;
+
+theorem Th3:
+  for M being MetrStruct holds
+  ( for a, b being Element of M holds dist(a,b) = dist(b,a) )
+    iff M is symmetric
+  proof
+   let M be MetrStruct;
+    hereby
+     assume
+A1:   for a, b being Element of M holds dist(a,b) = dist(b,a);
+       the distance of M is symmetric
+     proof let a, b be Element of M;
+       thus (the distance of M).(a,b) = dist(a,b) by Def1
+                                .= dist(b,a) by A1
+                                .= (the distance of M).(b,a) by Def1;
+     end;
+     hence M is symmetric by Def9;
+    end;
+    assume M is symmetric;
+then A2: the distance of M is symmetric by Def9;
+      now let a, b be Element of M;
+      thus dist(a,b) = (the distance of M).(a,b) by Def1
+                    .= (the distance of M).(b,a) by A2,Def5
+                    .= dist(b,a) by Def1;
+    end;
+    hence thesis;
+  end;
+
+theorem Th4:
+  for M being MetrStruct holds
+  ( for a, b, c being Element of M holds
+    dist(a,c) <= dist(a,b) + dist(b,c) ) iff M is triangle
+  proof
+   let M be MetrStruct;
+    hereby
+     assume
+A1:   for a, b, c being Element of M holds
+        dist(a,c) <= dist(a,b) + dist(b,c);
+       the distance of M is triangle
+     proof let a, b, c be Element of M;
+A2:     (the distance of M).(a,b) = dist(a,b) by Def1;
+A3:     (the distance of M).(a,c) = dist(a,c) by Def1;
+       (the distance of M).(b,c) = dist(b,c) by Def1;
+       hence (the distance of M).(a,c) <= (the distance of M).(a,b) +
+         (the distance of M).(b,c) by A1,A2,A3;
+     end;
+     hence M is triangle by Def10;
+    end;
+    assume M is triangle;
+then A4: the distance of M is triangle by Def10;
+    let a, b, c be Element of M;
+A5:    dist(a,b) = (the distance of M).(a,b) by Def1;
+A6:    dist(a,c) = (the distance of M).(a,c) by Def1;
+        dist(b,c) = (the distance of M).(b,c) by Def1;
+      hence dist(a,c) <= dist(a,b) + dist(b,c) by A4,A5,A6,Def6;
+  end;
+
+definition let M be symmetric MetrStruct;
+           let a, b be Element of M;
+  redefine func dist(a,b);
+  commutativity by Th3;
+end;
+
+theorem
+    for M being symmetric triangle Reflexive MetrStruct,
+      a, b being Element of M holds
+  0 <= dist(a,b)
+  proof
+   let M be symmetric triangle Reflexive MetrStruct,
+       a, b be Element of M;
+       A1:dist(a,a)<=dist(a,b)+dist(b,a) by Th4;
+A2:       dist(a,b) =(1/2)*2*dist(a,b)
+                 .=(1/2)*((1+1)*dist(a,b)) by XCMPLX_1:4
+                 .=(1/2)*(1*dist(a,b)+1*dist(a,b)) by XCMPLX_1:8;
+        (1/2)*dist(a,a)=(1/2)*0 by Th1;
+      hence thesis by A1,A2,AXIOMS:25;
+      end;
+
+theorem Th6:
+  for M being MetrStruct st
+  (for a, b, c being Element of M holds
+         (dist(a,b) = 0 iff a=b) &
+         dist(a,b) = dist(b,a) &
+         dist(a,c) <= dist(a,b) + dist(b,c)) holds
+         M is MetrSpace
+proof
+ let M be MetrStruct;
+ assume A1: for a,b,c being Element of M holds
+         (dist(a,b) = 0 iff a=b) &
+         dist(a,b) = dist(b,a) &
+         dist(a,c)<=dist(a,b)+dist(b,c);
+   M is Reflexive discerning symmetric triangle
+    proof
+      thus the distance of M is Reflexive
+      proof
+        let a be Element of M;
+          (the distance of M).(a,a) = dist(a,a) by Def1
+                                 .= 0 by A1;
+        hence thesis;
+      end;
+     thus the distance of M is discerning
+     proof
+      let a, b be Element of M;
+      assume (the distance of M).(a,b) = 0;
+      then dist(a,b) = 0 by Def1;
+      hence thesis by A1;
+     end;
+     thus the distance of M is symmetric
+     proof
+      let a, b be Element of M;
+        (the distance of M).(a,b) = dist(a,b) by Def1
+                               .= dist(b,a) by A1
+                               .= (the distance of M).(b,a) by Def1;
+      hence thesis;
+     end;
+     thus the distance of M is triangle
+     proof
+      let a, b, c be Element of M;
+A2:    (the distance of M).(a,c) = dist(a,c) by Def1;
+A3:    (the distance of M).(a,b) = dist(a,b) by Def1;
+        (the distance of M).(b,c) = dist(b,c) by Def1;
+      hence thesis by A1,A2,A3;
+     end;
+    end;
+    hence thesis;
+end;
+
+definition let A be set;
+  func discrete_dist A -> Function of [:A,A:], REAL means :Def11:
+   for x,y being Element of A holds
+     it.(x,x) = 0 &
+     (x <> y implies it.(x,y) = 1);
+     existence
+       proof
+       per cases;
+       suppose
+A1:      A is empty;
+       then [:A,A:] = {} by ZFMISC_1:113;
+       then reconsider f = {} as Function of [:A,A:], REAL by FUNCT_2:55,
+RELAT_1:60;
+       take f;
+       let x, y be Element of A;
+A2:    dom {} = {};
+       thus f.(x,x) = f.[x,x] by BINOP_1:def 1
+         .= 0 by A2,FUNCT_1:def 4;
+         x = {} by A1,SUBSET_1:def 2
+        .= y by A1,SUBSET_1:def 2;
+       hence thesis;
+       suppose
+A3:      A is non empty;
+       A4:{0,1} c= REAL by ZFMISC_1:38;
+         rng chi([:A,A:]\id A,[:A,A:]) c= {0,1} by FUNCT_3:48;
+       then A5:rng chi([:A,A:]\id A,[:A,A:]) c= REAL by A4,XBOOLE_1:1;
+         dom chi([:A,A:]\id A,[:A,A:]) = [:A,A:] by FUNCT_3:def 3;
+       then reconsider char=chi([:A,A:]\id A,[:A,A:]) as Function of
+            [:A,A:],REAL by A5,FUNCT_2:def 1,RELSET_1:11;
+       take char;
+       let x,y be Element of A;
+       A6:id A c= [:A,A:] by RELSET_1:28;
+A7:    [x,y] in [:A,A:] by A3,ZFMISC_1:def 2;
+         [:A,A:]\([:A,A:]\id A)=[:A,A:]/\id A by XBOOLE_1:48
+                                      .=id A by A6,XBOOLE_1:28;
+       then A8:[x,x] in [:A,A:]\([:A,A:]\id A) by A3,RELAT_1:def 10;
+       thus char.(x,x)=char.[x,x] by BINOP_1:def 1
+                     .=0 by A8,FUNCT_3:43;
+       assume x<>y;
+       then not [x,y] in id A by RELAT_1:def 10;
+       then A9:[x,y] in [:A,A:]\id A by A7,XBOOLE_0:def 4;
+       thus char.(x,y)=char.[x,y] by BINOP_1:def 1
+                     .=1 by A7,A9,FUNCT_3:def 3;
+       end;
+     uniqueness
+     proof
+     let f,f' be Function of [:A,A:],REAL;
+     assume that
+     A10: for x,y being Element of A holds
+                  f.(x,x)=0 &
+                  (x<>y implies f.(x,y)=1) and
+     A11: for x,y being Element of A holds
+                  f'.(x,x)=0 &
+                  (x<>y implies f'.(x,y)=1);
+     per cases;
+     suppose A is empty;
+then A12:  [:A,A:] = {} by ZFMISC_1:113;
+     hence f = {} by PARTFUN1:57
+       .= f' by A12,PARTFUN1:57;
+     suppose
+A13:    A is non empty;
+       now
+     let x,y be Element of A;
+        now per cases;
+       suppose A14:x=y;
+       thus f.[x,y]=f.(x,y) by BINOP_1:def 1
+                   .=0 by A10,A14
+                   .=f'.(x,y) by A11,A14
+                   .=f'.[x,y] by BINOP_1:def 1;
+       suppose A15:x<>y;
+       thus f.[x,y]=f.(x,y) by BINOP_1:def 1
+                   .=1 by A10,A15
+                   .=f'.(x,y) by A11,A15
+                   .=f'.[x,y] by BINOP_1:def 1;
+      end;
+     hence f.[x,y]=f'.[x,y];
+     end;
+     hence f=f' by A13,FUNCT_2:120;
+     end;
+end;
+
+
+
+definition let A be set;
+  func DiscreteSpace A -> strict MetrStruct equals :Def12:
+    MetrStruct (#A,discrete_dist A#);
+   coherence;
+end;
+
+definition let A be non empty set;
+  cluster DiscreteSpace A -> non empty;
+   coherence
+  proof
+      MetrStruct (#A,discrete_dist A#) is non empty by STRUCT_0:def 1;
+    hence thesis by Def12;
+  end;
+end;
+
+definition let A be set;
+  cluster DiscreteSpace A -> Reflexive discerning symmetric triangle;
+   coherence
+    proof
+    set M = MetrStruct (#A,discrete_dist A#);
+      M is Reflexive discerning symmetric triangle
+    proof
+      thus the distance of M is Reflexive
+      proof
+        let a be Element of M;
+        thus thesis by Def11;
+      end;
+      thus the distance of M is discerning
+      proof
+        let a, b be Element of M;
+        assume (the distance of M).(a,b) = 0;
+        hence thesis by Def11;
+      end;
+      thus the distance of M is symmetric
+      proof
+        let a, b be Element of M;
+          now per cases;
+          suppose A1: a <> b;
+          hence (the distance of M).(a,b) = 1 by Def11
+                   .= (the distance of M).(b,a) by A1,Def11;
+          suppose a = b;
+          hence (the distance of M).(a,b) = (the distance of M).(b,a);
+        end;
+        hence thesis;
+      end;
+      thus the distance of M is triangle
+      proof
+        let a, b, c be Element of M;
+       A2:(the distance of M).(a,b) = 0 iff a=b by Def11;
+        per cases;
+          suppose a=b & a=c;
+          hence (the distance of M).(a,c)<=(the distance of M).(a,b)+
+          (the distance of M).(b,c) by A2;
+          suppose a=b & a<>c;
+          hence (the distance of M).(a,c)<=(the distance of M).(a,b)
+          +(the distance of M).(b,c) by A2;
+          suppose A3:a=c & a<>b;
+          then A4:(the distance of M).(a,c)=0 by Def11;
+          A5:(the distance of M).(a,b)=1 by A3,Def11;
+            (the distance of M).(b,c)=1 by A3,Def11;
+          hence (the distance of M).(a,c)<=(the distance of M).(a,b)+
+          (the distance of M).(b,c) by A4,A5;
+          suppose A6:b=c & a<>c;
+          then (the distance of M).(b,c)=0 by Def11;
+          hence (the distance of M).(a,c)<=(the distance of M).(a,b)+
+          (the distance of M).(b,c) by A6;
+          suppose a<>b & a<>c & b<>c;
+          then (the distance of M).(a,c)=1 & (the distance of M).(a,b)=1 &
+          (the distance of M).(b,c)=1 by Def11;
+          hence (the distance of M).(a,c)<=(the distance of M).(a,b)+
+          (the distance of M).(b,c);
+        thus thesis;
+      end;
+   thus thesis;
+   end;
+   hence thesis by Def12;
+  end;
+end;
+
+definition
+  func real_dist -> Function of [:REAL,REAL:], REAL means :Def13:
+    for x,y being Element of REAL holds it.(x,y) = abs(x-y);
+   existence
+     proof
+     deffunc G(Element of REAL,Element of REAL)= abs($1-$2);
+     consider F being Function of [:REAL,REAL:],REAL such that
+      A1: for x,y being Element of REAL holds
+               F.[x,y] = G(x,y) from Lambda2D;
+     take F;
+     let x,y be Element of REAL;
+     thus F.(x,y)=F.[x,y] by BINOP_1:def 1
+                .=abs(x-y) by A1;
+     end;
+   uniqueness
+     proof
+     let F1,F2 be Function of [:REAL,REAL:],REAL;
+     assume that
+     A2:for x,y being Element of REAL holds
+               F1.(x,y) = abs(x-y) and
+     A3:for x,y being Element of REAL holds
+               F2.(x,y) = abs(x-y);
+       for x,y being Element of REAL holds F1.(x,y)=F2.(x,y)
+       proof
+       let x,y be Element of REAL;
+       thus F1.(x,y)=abs(x-y) by A2
+                   .=F2.(x,y) by A3;
+       end;
+     hence thesis by BINOP_1:2;
+     end;
+end;
+
+canceled 2;
+
+theorem Th9:
+  for x,y being Element of REAL holds real_dist.(x,y) = 0 iff x = y
+       proof
+       let x,y be Element of REAL;
+       thus real_dist.(x,y)=0 implies x=y
+        proof
+         assume real_dist.(x,y)=0;
+         then 0=abs(x-y) by Def13;
+         then x-y = 0 by ABSVALUE:7;
+         hence thesis by XCMPLX_1:15;
+        end;
+       assume x=y;
+        then x-y=0 by XCMPLX_1:14;
+        then abs(x-y)=0 by ABSVALUE:7;
+        hence thesis by Def13;
+       end;
+
+theorem Th10:
+  for x,y being Element of REAL holds real_dist.(x,y) = real_dist.(y,x)
+       proof
+       let x,y be Element of REAL;
+       thus real_dist.(x,y)=abs(x-y) by Def13
+                          .=abs(-(x-y)) by ABSVALUE:17
+                          .=abs(y-x) by XCMPLX_1:143
+                          .=real_dist.(y,x) by Def13;
+       end;
+
+theorem Th11:
+  for x,y,z being Element of REAL holds
+    real_dist.(x,y) <= real_dist.(x,z) + real_dist.(z,y)
+       proof
+       let x,y,z be Element of REAL;
+       A1:abs(x-y)<=abs(x-z)+abs(z-y)
+         proof
+            abs(x-y)=abs((x+0)-y)
+                  .=abs((x+(z-z))-y) by XCMPLX_1:14
+                  .=abs((x+-(z-z))-y) by XCMPLX_1:143
+                  .=abs((x-(z-z))-y) by XCMPLX_0:def 8
+                  .=abs((x-z+z)-y) by XCMPLX_1:37
+                  .=abs((x+-z+z)-y) by XCMPLX_0:def 8
+                  .=abs(((x+-z)+z)+-y) by XCMPLX_0:def 8
+                  .=abs((x+-z)+(z+-y)) by XCMPLX_1:1
+                  .=abs((x+-z)+(z-y)) by XCMPLX_0:def 8
+                  .=abs((x-z)+(z-y)) by XCMPLX_0:def 8;
+          hence thesis by ABSVALUE:13;
+         end;
+         real_dist.(x,y)=abs(x-y) &
+       real_dist.(x,z)=abs(x-z) &
+       real_dist.(z,y)=abs(z-y) by Def13;
+       hence thesis by A1;
+       end;
+
+definition
+  func RealSpace -> strict MetrStruct equals :Def14:
+    MetrStruct (# REAL, real_dist #);
+  coherence;
+end;
+
+definition
+  cluster RealSpace -> non empty;
+  coherence by Def14,STRUCT_0:def 1;
+end;
+
+definition
+  cluster RealSpace -> Reflexive discerning symmetric triangle;
+  coherence
+  proof
+  reconsider M = MetrStruct(#REAL,real_dist#) as non empty MetrStruct
+      by STRUCT_0:def 1;
+    M is MetrSpace
+    proof
+        now let a,b,c be Element of M;
+      reconsider a'=a,b'=b,c'=c as Element of REAL;
+      A1:dist(a,b)=real_dist.(a',b') by Def1;
+      A2:dist(b,a)=real_dist.(b',a') by Def1;
+      A3:dist(a,c)=real_dist.(a',c') by Def1;
+      A4:dist(b,c)=real_dist.(b',c') by Def1;
+      thus dist(a,b)=0 iff a=b by A1,Th9;
+      thus dist(a,b)=dist(b,a) by A1,A2,Th10;
+      thus dist(a,c)<=dist(a,b)+dist(b,c) by A1,A3,A4,Th11;
+     end;
+     hence thesis by Th6;
+    end;
+   hence thesis by Def14;
+  end;
+end;
+
+definition let M be MetrStruct, p be Element of M,
+           r be real number;
+ func Ball(p,r) -> Subset of M means :Def15:
+  ex M' being non empty MetrStruct, p' being Element of M' st
+   M' = M & p' = p &
+   it = {q where q is Element of M' : dist(p',q) < r}
+    if M is non empty
+  otherwise it is empty;
+  existence
+    proof
+     thus M is non empty implies ex X being Subset of M st
+      ex M' being non empty MetrStruct, p' being Element of M'
+       st M' = M & p' = p &
+        X = {q where q is Element of M' : dist(p',q) < r}
+     proof
+      assume M is non empty;
+      then reconsider M' = M as non empty MetrStruct;
+      reconsider p' = p as Element of M';
+      defpred P[Element of M'] means dist(p',$1)<r;
+      set X = {q where q is Element of M': P[q]};
+        X c= the carrier of M' from Fr_Set0;
+      then reconsider X as Subset of M;
+      take X, M', p';
+      thus thesis;
+     end;
+     assume M is empty;
+       {} c= the carrier of M by XBOOLE_1:2;
+     then reconsider X = {} as Subset of M;
+     take X;
+     thus thesis;
+    end;
+   correctness;
+end;
+
+definition let M be MetrStruct, p be Element of M,
+           r be real number;
+ func cl_Ball(p,r) -> Subset of M means :Def16:
+  ex M' being non empty MetrStruct, p' being Element of M' st
+   M' = M & p' = p &
+   it = {q where q is Element of M' : dist(p',q) <= r}
+    if M is non empty
+  otherwise it is empty;
+  existence
+    proof
+     thus M is non empty implies ex X being Subset of M st
+      ex M' being non empty MetrStruct, p' being Element of M'
+       st M' = M & p' = p &
+        X = {q where q is Element of M' : dist(p',q) <= r}
+     proof
+      assume M is non empty;
+      then reconsider M' = M as non empty MetrStruct;
+      reconsider p' = p as Element of M';
+      defpred P[Element of M'] means dist(p',$1)<=r;
+      set X = {q where q is Element of M': P[q]};
+        X c= the carrier of M' from Fr_Set0;
+      then reconsider X as Subset of M;
+      take X, M', p';
+      thus thesis;
+     end;
+     assume M is empty;
+       {} c= the carrier of M by XBOOLE_1:2;
+     then reconsider X = {} as Subset of M;
+     take X;
+     thus thesis;
+    end;
+   correctness;
+end;
+
+definition let M be MetrStruct, p be Element of M,
+           r be real number;
+  func Sphere(p,r) -> Subset of M means :Def17:
+  ex M' being non empty MetrStruct, p' being Element of M' st
+   M' = M & p' = p &
+   it = {q where q is Element of M' : dist(p',q) = r}
+    if M is non empty
+  otherwise it is empty;
+  existence
+    proof
+     thus M is non empty implies ex X being Subset of M st
+      ex M' being non empty MetrStruct, p' being Element of M'
+       st M' = M & p' = p &
+        X = {q where q is Element of M' : dist(p',q) = r}
+     proof
+      assume M is non empty;
+      then reconsider M' = M as non empty MetrStruct;
+      reconsider p' = p as Element of M';
+      defpred P[Element of M'] means dist(p',$1)=r;
+      set X = {q where q is Element of M': P[q]};
+        X c= the carrier of M' from Fr_Set0;
+      then reconsider X as Subset of M;
+      take X, M', p';
+      thus thesis;
+     end;
+     assume M is empty;
+       {} c= the carrier of M by XBOOLE_1:2;
+     then reconsider X = {} as Subset of M;
+     take X;
+     thus thesis;
+    end;
+   correctness;
+end;
+
+reserve r for real number;
+
+Lm6:
+for M being non empty MetrStruct, p being Element of M holds
+ Ball(p,r) = {q where q is Element of M: dist(p,q) < r}
+  proof
+    let M be non empty MetrStruct, p be Element of M;
+      ex M' being non empty MetrStruct, p' being Element of M'
+st
+     M' = M & p' = p &
+     Ball(p,r) = {q where q is Element of M' : dist(p',q) < r}
+     by Def15;
+    hence thesis;
+  end;
+
+Lm7:
+for M being non empty MetrStruct, p being Element of M holds
+ cl_Ball(p,r) = {q where q is Element of M: dist(p,q) <= r}
+  proof
+    let M be non empty MetrStruct, p be Element of M;
+      ex M' being non empty MetrStruct, p' being Element of M'
+st
+     M' = M & p' = p &
+   cl_Ball(p,r) = {q where q is Element of M' : dist(p',q) <= r}
+    by Def16;
+   hence thesis;
+  end;
+
+Lm8:
+for M being non empty MetrStruct, p being Element of M holds
+ Sphere(p,r) = {q where q is Element of M: dist(p,q) = r}
+  proof
+    let M be non empty MetrStruct, p be Element of M;
+      ex M' being non empty MetrStruct, p' being Element of M'
+st
+     M' = M & p' = p &
+    Sphere(p,r) = {q where q is Element of M' : dist(p',q) = r}
+    by Def17;
+   hence thesis;
+  end;
+
+theorem Th12:
+  for M being MetrStruct, p, x being Element of M holds
+     x in Ball(p,r) iff M is non empty & dist(p,x) < r
+    proof
+      let M be MetrStruct,p,x be Element of M;
+      hereby
+       assume
+A1:      x in Ball(p,r);
+A2:    M is non empty
+       proof
+         thus the carrier of M is non empty by A1;
+       end;
+       then reconsider M' = M as non empty MetrStruct;
+       reconsider p' = p as Element of M';
+         x in {q where q is Element of M':dist(p',q)<r}
+       by A1,Lm6;
+       then ex q be Element of M st x=q & dist(p,q)<r;
+       hence M is non empty & dist(p,x)<r by A2;
+      end;
+      assume
+       M is non empty;
+      then reconsider M' = M as non empty MetrStruct;
+      reconsider p' = p as Element of M';
+      assume dist(p,x)<r;
+      then x in {q where q is Element of M':dist(p',q)<r};
+      hence x in Ball(p,r) by Lm6;
+    end;
+
+theorem Th13:
+  for M being MetrStruct, p, x being Element of M holds
+     x in cl_Ball(p,r) iff M is non empty & dist(p,x) <= r
+    proof
+      let M be MetrStruct,p,x be Element of M;
+      hereby
+       assume
+A1:      x in cl_Ball(p,r);
+A2:    M is non empty
+       proof
+         thus the carrier of M is non empty by A1;
+       end;
+       then reconsider M' = M as non empty MetrStruct;
+       reconsider p' = p as Element of M';
+         x in {q where q is Element of M':dist(p',q)<=r}
+       by A1,Lm7;
+       then ex q be Element of M st x=q & dist(p,q)<=r;
+       hence M is non empty & dist(p,x)<=r by A2;
+      end;
+      assume
+       M is non empty;
+      then reconsider M' = M as non empty MetrStruct;
+      reconsider p' = p as Element of M';
+      assume dist(p,x)<=r;
+      then x in {q where q is Element of M':dist(p',q)<=r};
+      hence x in cl_Ball(p,r) by Lm7;
+    end;
+
+theorem Th14:
+  for M being MetrStruct, p, x being Element of M holds
+     x in Sphere(p,r) iff M is non empty & dist(p,x) = r
+    proof
+      let M be MetrStruct,p,x be Element of M;
+      hereby
+       assume
+A1:    x in Sphere(p,r);
+A2:    M is non empty
+       proof
+         thus the carrier of M is non empty by A1;
+       end;
+       then reconsider M' = M as non empty MetrStruct;
+       reconsider p' = p as Element of M';
+         x in {q where q is Element of M':dist(p',q)=r}
+       by A1,Lm8;
+       then ex q be Element of M st x=q & dist(p,q)=r;
+       hence M is non empty & dist(p,x)=r by A2;
+      end;
+      assume
+       M is non empty;
+      then reconsider M' = M as non empty MetrStruct;
+      reconsider p' = p as Element of M';
+      assume dist(p,x)=r;
+      then x in {q where q is Element of M':dist(p',q)=r};
+      hence x in Sphere(p,r) by Lm8;
+    end;
+
+theorem Th15:
+  for M being MetrStruct, p being Element of M holds
+    Ball(p,r) c= cl_Ball(p,r)
+    proof
+      let M be MetrStruct,p be Element of M;
+      per cases;
+      suppose M is non empty;
+      then consider M' being non empty MetrStruct,
+               p' being Element of M' such that
+A1:     M' = M & p' = p and
+          Ball(p,r) = {q where q is Element of M' :
+          dist(p',q) < r} by Def15;
+        now let x be Element of M';
+      assume x in Ball(p',r);
+      then dist(p',x)<=r by Th12;
+      then x in {q where q is Element of M':dist(p',q)<=r};
+      hence x in cl_Ball(p',r) by Lm7;
+      end;
+     hence thesis by A1,SUBSET_1:7;
+     suppose M is empty;
+     then Ball(p,r) is empty & cl_Ball(p,r) is empty by Def15,Def16;
+     hence thesis;
+    end;
+
+theorem Th16:
+  for M being MetrStruct, p being Element of M holds
+    Sphere(p,r) c= cl_Ball(p,r)
+    proof
+      let M be MetrStruct,p be Element of M;
+      per cases;
+      suppose M is non empty;
+      then consider M' being non empty MetrStruct,
+               p' being Element of M' such that
+A1:     M' = M & p' = p and
+          Sphere(p,r) = {q where q is Element of M' :
+          dist(p',q) = r} by Def17;
+        now let x be Element of M';
+       assume x in Sphere(p',r);
+       then dist(p',x)=r by Th14;
+       then x in {q where q is Element of M':dist(p',q)<=r};
+       hence x in cl_Ball(p',r) by Lm7;
+      end;
+     hence thesis by A1,SUBSET_1:7;
+     suppose M is empty;
+     then Sphere(p,r) is empty & cl_Ball(p,r) is empty by Def16,Def17;
+     hence thesis;
+    end;
+
+theorem
+    for M being MetrStruct, p being Element of M holds
+    Sphere(p,r) \/ Ball(p,r) = cl_Ball(p,r)
+proof
+    let M be MetrStruct,p be Element of M;
+      Sphere(p,r) c= cl_Ball(p,r) & Ball(p,r) c= cl_Ball(p,r) by Th15,Th16;
+    hence Sphere(p,r) \/ Ball(p,r) c= cl_Ball(p,r) by XBOOLE_1:8;
+    per cases;
+    suppose M is non empty;
+    then consider M' being non empty MetrStruct,
+             p' being Element of M' such that
+A1:   M' = M & p' = p and
+        Sphere(p,r) = {q where q is Element of M' :
+          dist(p',q) = r} by Def17;
+      now let x be Element of M';
+     assume x in cl_Ball(p',r);
+     then A2:dist(p',x)<=r by Th13;
+         now per cases by A2,REAL_1:def 5;
+         case dist(p',x)<r;
+             hence x in Ball(p',r) by Th12;
+         case dist(p',x)=r;
+             hence x in Sphere(p',r) by Th14;
+       end;
+     hence x in Sphere(p',r) \/ Ball(p',r) by XBOOLE_0:def 2;
+    end;
+  hence thesis by A1,SUBSET_1:7;
+    suppose M is empty;
+    then Ball(p,r) is empty & cl_Ball(p,r) is empty & Sphere(p,r) is empty
+      by Def15,Def16,Def17;
+    hence thesis;
+end;
+
+theorem
+   for M being non empty MetrStruct, p being Element of M holds
+  Ball(p,r) = {q where q is Element of M: dist(p,q) < r}
+   by Lm6;
+
+theorem
+   for M being non empty MetrStruct, p being Element of M holds
+  cl_Ball(p,r) = {q where q is Element of M: dist(p,q) <= r}
+   by Lm7;
+
+theorem
+   for M being non empty MetrStruct, p being Element of M holds
+  Sphere(p,r) = {q where q is Element of M: dist(p,q) = r}
+   by Lm8;

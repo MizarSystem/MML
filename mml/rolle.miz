@@ -1,0 +1,870 @@
+:: Average Value Theorems for Real Functions of One Variable
+::  by Jaros{\l}aw Kotowicz, Konrad Raczkowski and Pawe{\l} Sadowski
+::
+:: Received June 18, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary SEQ_1, PARTFUN1, FCONT_1, RCOMP_1, FUNCT_1, FDIFF_1, PRE_TOPC,
+      RELAT_1, COMPTS_1, ARYTM, SEQ_4, LATTICES, SEQ_2, PARTFUN2, ARYTM_3,
+      BOOLE, ARYTM_1, SEQM_3, ORDINAL2, RFUNCT_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, RELSET_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, PARTFUN1, PARTFUN2,
+      RFUNCT_2, RCOMP_1, FCONT_1, FDIFF_1;
+ constructors REAL_1, SEQ_2, SEQM_3, SEQ_4, PARTFUN2, RFUNCT_2, RCOMP_1,
+      FCONT_1, FDIFF_1, PARTFUN1, MEMBERED, XBOOLE_0;
+ clusters RCOMP_1, FDIFF_1, RELSET_1, XREAL_0, SEQ_1, NAT_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, RFUNCT_2;
+ theorems AXIOMS, TARSKI, NAT_1, REAL_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SQUARE_1,
+      PARTFUN2, RFUNCT_2, RCOMP_1, FCONT_1, FDIFF_1, ZFMISC_1, FUNCT_1,
+      XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes SEQ_1;
+
+begin
+
+reserve y for set;
+reserve g,r,s,p,t,x,x0,x1,x2 for Real;
+reserve n,n1 for Nat;
+reserve s1,s2,s3 for Real_Sequence;
+reserve f,f1,f2,f3 for PartFunc of REAL,REAL;
+
+theorem Th1:
+for p,g st p<g for f st
+f is_continuous_on [.p,g.] & f.p=f.g & f is_differentiable_on ].p,g.[
+ex x0 st x0 in ].p,g.[ & diff(f,x0)=0
+proof let p,g such that A1: p<g;
+      let f such that
+      A2: f is_continuous_on [.p,g.] and
+      A3: f.p=f.g and
+      A4: f is_differentiable_on ].p,g.[;
+ reconsider Z=].p,g.[ as open Subset of REAL;
+ A5: [.p,g.] c= dom f by A2,FCONT_1:def 2;
+ A6: ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+ then A7: ].p,g.[ c= dom f by A5,XBOOLE_1:1;
+ A8: [.p,g.] is compact by RCOMP_1:24;
+   p in [.p,g.] by A1,RCOMP_1:15;
+ then consider x1,x2 be real number such that A9: x1 in [.p,g.] & x2 in [.p,g.]
+&
+ f.x1 = upper_bound (f.:[.p,g.]) &
+ f.x2 = lower_bound (f.:[.p,g.]) by A2,A5,A8,FCONT_1:32;
+ reconsider x1,x2 as Real by XREAL_0:def 1;
+   p in {r: p<=r & r<=g} by A1;
+  then p in [.p,g.] by RCOMP_1:def 1;
+ then A10: f.p in f.:[.p,g.] by A5,FUNCT_1:def 12;
+   f.:[.p,g.] is compact by A2,A5,A8,FCONT_1:30;
+ then A11: f.:[.p,g.] is bounded by RCOMP_1:28;
+ then A12: f.:[.p,g.] is bounded_above & f.:[.p,g.] is bounded_below by SEQ_4:
+def 3;
+A13: not f.x1 < f.x2 by A9,A10,A11,SEQ_4:24;
+ per cases by A13,REAL_1:def 5;
+  suppose f.x1 = f.x2; then f is_constant_on [.p,g.] by A5,A9,A11,RFUNCT_2:42
+;
+   then A14: f is_constant_on Z by A6,PARTFUN2:57;
+   A15: p/2<g/2 by A1,REAL_1:73; then p/2+g/2<g/2+g/2 by REAL_1:67;
+   then A16: p/2+g/2<g by XCMPLX_1:66; p/2+p/2<p/2+g/2 by A15,REAL_1:67;
+    then p<p/2+g/2 by XCMPLX_1:66;
+   then p/2+g/2 in {r: p<r & r<g} by A16;
+   then A17: p/2+g/2 in Z by RCOMP_1:def 2;
+   then (f`|Z).(p/2+g/2) = 0 by A7,A14,FDIFF_1:30;
+   then p/2+g/2 in ].p,g.[ & diff(f,(p/2+g/2)) = 0 by A4,A17,FDIFF_1:def 8;
+   hence thesis;
+  suppose A18: f.x2 < f.x1;
+   A19: x2 in ].p,g.[ or x1 in ].p,g.[
+    proof
+     assume that A20: not x2 in ].p,g.[ and
+                 A21: not x1 in ].p,g.[;
+       x1 in ].p,g.[ \/ {p,g} & x2 in ].p,g.[ \/ {p,g} by A1,A9,RCOMP_1:11;
+     then x1 in {p,g} & x2 in {p,g} by A20,A21,XBOOLE_0:def 2;
+     then (x1 = p or x1 = g) & (x2 = p or x2 = g) by TARSKI:def 2;
+     hence contradiction by A3,A18;
+    end;
+     now per cases by A19;
+    case A22: x2 in ].p,g.[;
+     then A23: f is_differentiable_in x2 by A4,FDIFF_1:16;
+     consider N1 be Neighbourhood of x2 such that A24:
+     N1 c= Z by A22,RCOMP_1:39;
+     A25: N1 c= dom f by A7,A24,XBOOLE_1:1;
+     consider r be real number such that A26: 0<r & N1=].x2-r,x2+r.[
+     by RCOMP_1:def 7;
+     reconsider r as Real by XREAL_0:def 1;
+     consider s1 such that A27: rng s1 = {x2} by SEQ_1:10;
+     reconsider c = s1 as constant Real_Sequence by A27,SEQM_3:15;
+     deffunc F(Nat)=r/($1+2);
+     consider s2 such that A28: for n holds s2.n=F(n) from ExRealSeq;
+     A29: now let n;
+        0<n+2 by NAT_1:19;
+      then 0<r/(n+2) by A26,SEQ_2:6;
+      hence 0<s2.n by A28;
+     end;
+       now let n;
+        0<n+2 by NAT_1:19; then 0<>r/(n+2) by A26,SEQ_2:6;
+      hence 0<>s2.n by A28;
+     end;
+     then A30: s2 is_not_0 by SEQ_1:7;
+       s2 is convergent & lim s2 = 0 by A28,SEQ_4:46;
+     then reconsider h1 = s2 as convergent_to_0 Real_Sequence by A30,FDIFF_1:
+def 1;
+     deffunc G(Nat) = -(r/($1+2));
+     consider s3 such that A31: for n holds s3.n=G(n) from ExRealSeq;
+     A32: now let n;
+        0<n+2 by NAT_1:19;
+      then 0<r/(n+2) by A26,SEQ_2:6;
+      then -(r/(n+2))<0 by REAL_1:26,50;
+      hence s3.n<0 by A31;
+     end;
+       now let n;
+        0<n+2 by NAT_1:19; then 0<>-(r/(n+2))
+       by A26,REAL_1:26,SEQ_2:6;
+      hence 0<>s3.n by A31;
+     end;
+     then A33: s3 is_not_0 by SEQ_1:7;
+        now let n;
+        s3.n = -(r/(n+2)) by A31;
+      hence s3.n = (-r)/(n+2) by XCMPLX_1:188;
+     end;
+     then s3 is convergent & lim s3 = 0 by SEQ_4:46;
+     then reconsider h2 = s3 as convergent_to_0 Real_Sequence by A33,FDIFF_1:
+def 1;
+     A34: now let n;
+             c.n in {x2} by A27,RFUNCT_2:10;
+           hence c.n = x2 by TARSKI:def 1;
+          end;
+     A35: now let n;
+        0<=n by NAT_1:18;
+      then 0+1<=n+1 by AXIOMS:24;
+      then 1<n+1+1 by NAT_1:38;
+      then A36: 1<n+(1+1) by XCMPLX_1:1;
+      then r/(n+2)<r/1 by A26,SEQ_2:10;
+      then A37: x2 + r/(n+2) < x2 + r by REAL_1:53;
+        0<n+2 by A36,AXIOMS:22;
+      then A38: 0< r/(n+2) by A26,SEQ_2:6;
+        -r<0 by A26,REAL_1:26,50;
+      then -r<r/(n+2) by A38,AXIOMS:22;
+      then x2+-r<x2+r/(n+2) by REAL_1:53;
+      then x2-r<x2+r/(n+2) by XCMPLX_0:def 8;
+      then x2+r/(n+2) in {s: x2-r<s & s<x2+r} by A37;
+      hence x2+r/(n+2) in N1 by A26,RCOMP_1:def 2;
+     end;
+     A39: rng (h1+c) c= N1
+     proof
+      let y; assume y in rng (h1+c);
+      then consider n such that A40: (h1+c).n=y by RFUNCT_2:9;
+        y = h1.n + c.n by A40,SEQ_1:11
+       .= r/(n+2) + c.n by A28
+       .= x2 + r/(n+2) by A34;
+      hence y in N1 by A35;
+     end;
+     A41: now let n;
+        0<=n by NAT_1:18;
+      then 0+1<=n+1 by AXIOMS:24;
+      then 1<n+1+1 by NAT_1:38;
+      then A42: 1<n+(1+1) by XCMPLX_1:1;
+      then r/(n+2)<r/1 by A26,SEQ_2:10;
+then A43: x2 - r < x2 - r/(n+2) by REAL_1:92;
+        0<n+2 by A42,AXIOMS:22;
+       then 0< r/(n+2) by A26,SEQ_2:6;
+      then -r/(n+2)<0 by REAL_1:26,50;
+      then -r/(n+2)<r by A26,AXIOMS:22;
+      then x2+-r/(n+2)<x2+r by REAL_1:53;
+      then x2-r/(n+2)<x2+r by XCMPLX_0:def 8;
+      then x2-r/(n+2) in {s: x2-r<s & s<x2+r} by A43;
+      hence x2-r/(n+2) in N1 by A26,RCOMP_1:def 2;
+     end;
+     A44: rng (h2+c) c= N1
+     proof
+      let y; assume y in rng (h2+c);
+      then consider n such that A45: (h2+c).n=y by RFUNCT_2:9;
+        y = h2.n + c.n by A45,SEQ_1:11
+       .= -(r/(n+2)) + c.n by A31
+       .= x2 +- r/(n+2) by A34
+       .= x2 - r/(n+2) by XCMPLX_0:def 8;
+      hence y in N1 by A41;
+     end;
+     then A46: h2"(#)(f*(h2+c) - f*c) is convergent &
+     diff(f,x2) = lim (h2"(#)(f*(h2+c) - f*c)) by A23,A25,A27,FDIFF_1:20;
+     A47: h1"(#)(f*(h1+c) - f*c) is convergent &
+     diff(f,x2) = lim (h1"(#)(f*(h1+c) - f*c)) by A23,A25,A27,A39,FDIFF_1:20;
+       for n holds 0<=(h1"(#)(f*(h1+c) - f*c)).n
+     proof let n;
+        (h1+c).n in rng(h1+c) by RFUNCT_2:10;
+      then (h1+c).n in N1 by A39;
+      then (h1+c).n in Z by A24; then f.((h1+c).n) in f.:[.p,g.] by A6,A7,
+FUNCT_1:def 12;
+      then f.x2 <= f.((h1+c).n) by A9,A12,SEQ_4:def 5;
+      then A48: 0<=f.((h1+c).n) - f.x2 by SQUARE_1:12;
+      A49: 0<h1.n by A29;
+        (h1").n = (h1.n)" by SEQ_1:def 8;
+      then A50: 0<=(h1").n by A49,REAL_1:72;
+        now let n1;
+        (h1+c).n1 in rng(h1+c) by RFUNCT_2:10;
+      then (h1+c).n1 in N1 by A39;
+      hence (h1+c).n1 in ].p,g.[ by A24; end;
+      then rng (h1+c) c= ].p,g.[ by RFUNCT_2:19;
+      then A51: rng (h1+c) c= dom f by A7,XBOOLE_1:1;
+      A52: rng c c= dom f by A5,A9,A27,ZFMISC_1:37;
+        (h1"(#)(f*(h1+c) - f*c)).n = (h1").n*(f*(h1+c) - f*c).n by SEQ_1:12
+       .= (h1").n*((f*(h1+c)).n - (f*c).n) by RFUNCT_2:6
+       .= (h1").n*(f.((h1+c).n) - (f*c).n) by A51,RFUNCT_2:21
+       .= (h1").n*(f.((h1+c).n) - f.(c.n)) by A52,RFUNCT_2:21
+       .= (h1").n*(f.((h1+c).n) - f.x2) by A34;
+      hence thesis by A48,A50,SQUARE_1:19;
+     end;
+     then A53: 0 <= diff(f,x2) by A47,SEQ_2:31;
+       for n holds (h2"(#)(f*(h2+c) - f*c)).n <= 0
+     proof let n;
+        (h2+c).n in rng(h2+c) by RFUNCT_2:10;
+      then (h2+c).n in N1 by A44;
+      then (h2+c).n in Z by A24; then f.((h2+c).n) in f.:[.p,g.] by A6,A7,
+FUNCT_1:def 12;
+      then f.x2 <= f.((h2+c).n) by A9,A12,SEQ_4:def 5;
+      then A54: 0<=f.((h2+c).n)-f.x2 by SQUARE_1:12;
+      A55: h2.n<0 by A32;
+      A56: (h2").n = (h2.n)" by SEQ_1:def 8;
+         0<-h2.n by A55,REAL_1:26,50;
+      then 0<(-h2.n)" by REAL_1:72;
+      then 0<1/(-h2.n) by XCMPLX_1:217;
+      then 0<-1/(h2.n) by XCMPLX_1:189;
+      then 0<-(h2.n)" by XCMPLX_1:217;
+      then A57: (h2").n<=0 by A56,REAL_1:66;
+        now let n1;
+        (h2+c).n1 in rng(h2+c) by RFUNCT_2:10;
+      then (h2+c).n1 in N1 by A44;
+      hence (h2+c).n1 in ].p,g.[ by A24; end;
+      then rng (h2+c) c= ].p,g.[ by RFUNCT_2:19;
+      then A58: rng (h2+c) c= dom f by A7,XBOOLE_1:1;
+      A59: rng c c= dom f by A5,A9,A27,ZFMISC_1:37;
+        (h2"(#)(f*(h2+c) - f*c)).n = (h2").n*(f*(h2+c) - f*c).n by SEQ_1:12
+       .= (h2").n*((f*(h2+c)).n - (f*c).n) by RFUNCT_2:6
+       .= (h2").n*(f.((h2+c).n) - (f*c).n) by A58,RFUNCT_2:21
+       .= (h2").n*(f.((h2+c).n) - f.(c.n)) by A59,RFUNCT_2:21
+       .= (h2").n*(f.((h2+c).n) - f.(x2)) by A34;
+      hence thesis by A54,A57,SQUARE_1:23;
+     end; hence
+       x2 in ].p,g.[ & diff(f,x2) = 0 by A22,A46,A53,RFUNCT_2:18;
+    case A60: x1 in ].p,g.[;
+    then A61: f is_differentiable_in x1 by A4,FDIFF_1:16;
+     consider N1 be Neighbourhood of x1 such that A62:
+     N1 c= ].p,g.[ by A60,RCOMP_1:42;
+     A63: N1 c= dom f by A7,A62,XBOOLE_1:1;
+     consider r be real number such that
+     A64: 0<r & N1=].x1-r,x1+r.[ by RCOMP_1:def 7;
+     reconsider r as Real by XREAL_0:def 1;
+     consider s1 such that A65: rng s1 = {x1} by SEQ_1:10;
+     reconsider c = s1 as constant Real_Sequence by A65,SEQM_3:15;
+     deffunc F(Nat) = r/($1+2);
+     consider s2 such that A66: for n holds s2.n=F(n) from ExRealSeq;
+     A67: now let n;
+        0<n+2 by NAT_1:19;
+      then 0<r/(n+2) by A64,SEQ_2:6;
+      hence 0<s2.n by A66;
+     end;
+       now let n;
+        0<n+2 by NAT_1:19; then 0<>r/(n+2) by A64,SEQ_2:6;
+      hence 0<>s2.n by A66;
+     end;
+     then A68: s2 is_not_0 by SEQ_1:7;
+       s2 is convergent & lim s2 = 0 by A66,SEQ_4:46;
+     then reconsider h1 = s2 as convergent_to_0 Real_Sequence by A68,FDIFF_1:
+def 1;
+     deffunc G(Nat) = -(r/($1+2));
+     consider s3 such that A69: for n holds s3.n=G(n) from ExRealSeq;
+     A70: now let n;
+        0<n+2 by NAT_1:19;
+      then 0<r/(n+2) by A64,SEQ_2:6;
+      then -(r/(n+2))<0 by REAL_1:26,50;
+      hence s3.n<0 by A69;
+     end;
+       now let n;
+        0<n+2 by NAT_1:19; then 0<>-(r/(n+2))
+       by A64,REAL_1:26,SEQ_2:6;
+      hence 0<>s3.n by A69;
+     end;
+     then A71: s3 is_not_0 by SEQ_1:7;
+        now let n;
+        s3.n = -(r/(n+2)) by A69;
+      hence s3.n = (-r)/(n+2) by XCMPLX_1:188;
+     end;
+     then s3 is convergent & lim s3 = 0 by SEQ_4:46;
+     then reconsider h2 = s3 as convergent_to_0 Real_Sequence by A71,FDIFF_1:
+def 1;
+     A72: now let n;
+             c.n in {x1} by A65,RFUNCT_2:10;
+           hence c.n = x1 by TARSKI:def 1;
+          end;
+     A73: now let n;
+        0<=n by NAT_1:18;
+      then 0+1<=n+1 by AXIOMS:24;
+      then 1<n+1+1 by NAT_1:38;
+      then A74: 1<n+(1+1) by XCMPLX_1:1;
+      then r/(n+2)<r/1 by A64,SEQ_2:10;
+      then A75: x1 + r/(n+2) < x1 + r by REAL_1:53;
+        0<n+2 by A74,AXIOMS:22;
+      then A76: 0< r/(n+2) by A64,SEQ_2:6;
+        -r<0 by A64,REAL_1:26,50;
+      then -r<r/(n+2) by A76,AXIOMS:22;
+      then x1+-r<x1+r/(n+2) by REAL_1:53;
+      then x1-r<x1+r/(n+2) by XCMPLX_0:def 8;
+      then x1+r/(n+2) in {s: x1-r<s & s<x1+r} by A75;
+      hence x1+r/(n+2) in N1 by A64,RCOMP_1:def 2;
+     end;
+     A77: rng (h1+c) c= N1
+     proof
+      let y; assume y in rng (h1+c);
+      then consider n such that A78: (h1+c).n=y by RFUNCT_2:9;
+        y = h1.n + c.n by A78,SEQ_1:11
+       .= r/(n+2) + c.n by A66
+       .= x1 + r/(n+2) by A72;
+      hence y in N1 by A73;
+     end;
+     A79: now let n;
+        0<=n by NAT_1:18;
+      then 0+1<=n+1 by AXIOMS:24;
+      then 1<n+1+1 by NAT_1:38;
+      then A80: 1<n+(1+1) by XCMPLX_1:1;
+      then r/(n+2)<r/1 by A64,SEQ_2:10;
+then A81: x1 - r < x1 - r/(n+2) by REAL_1:92;
+        0<n+2 by A80,AXIOMS:22;
+       then 0< r/(n+2) by A64,SEQ_2:6;
+      then -r/(n+2)<0 by REAL_1:26,50;
+      then -r/(n+2)<r by A64,AXIOMS:22;
+      then x1+-r/(n+2)<x1+r by REAL_1:53;
+      then x1-r/(n+2)<x1+r by XCMPLX_0:def 8;
+      then x1-r/(n+2) in {s: x1-r<s & s<x1+r} by A81;
+      hence x1-r/(n+2) in N1 by A64,RCOMP_1:def 2;
+     end;
+     A82: rng (h2+c) c= N1
+     proof
+      let y; assume y in rng (h2+c);
+      then consider n such that A83: (h2+c).n=y by RFUNCT_2:9;
+        y = h2.n + c.n by A83,SEQ_1:11
+       .= -r/(n+2) + c.n by A69
+       .= x1 +- r/(n+2) by A72
+       .= x1 - r/(n+2) by XCMPLX_0:def 8;
+      hence y in N1 by A79;
+     end;
+     then A84: h2"(#)(f*(h2+c) - f*c) is convergent &
+     diff(f,x1) = lim (h2"(#)(f*(h2+c) - f*c)) by A61,A63,A65,FDIFF_1:20;
+     A85: h1"(#)(f*(h1+c) - f*c) is convergent &
+     diff(f,x1) = lim (h1"(#)(f*(h1+c) - f*c)) by A61,A63,A65,A77,FDIFF_1:20;
+       for n holds (h1"(#)(f*(h1+c) - f*c)).n <= 0
+     proof let n;
+        (h1+c).n in rng(h1+c) by RFUNCT_2:10;
+      then (h1+c).n in N1 by A77;
+      then (h1+c).n in Z by A62; then f.((h1+c).n) in f.:[.p,g.] by A6,A7,
+FUNCT_1:def 12;
+      then f.((h1+c).n) <= f.x1 by A9,A12,SEQ_4:def 4;
+      then 0<=f.x1 - f.((h1+c).n) by SQUARE_1:12;
+      then -(f.x1 - f.((h1+c).n))<=0 by REAL_1:26,50;
+      then A86: f.((h1+c).n) - f.x1<=0 by XCMPLX_1:143;
+      A87: 0<h1.n by A67;
+        (h1").n = (h1.n)" by SEQ_1:def 8;
+      then A88: 0<=(h1").n by A87,REAL_1:72;
+        now let n1;
+        (h1+c).n1 in rng(h1+c) by RFUNCT_2:10;
+      then (h1+c).n1 in N1 by A77;
+      hence (h1+c).n1 in ].p,g.[ by A62; end;
+      then rng (h1+c) c= ].p,g.[ by RFUNCT_2:19;
+      then A89: rng (h1+c) c= dom f by A7,XBOOLE_1:1;
+      A90: rng c c= dom f by A5,A9,A65,ZFMISC_1:37;
+        (h1"(#)(f*(h1+c) - f*c)).n = (h1").n*(f*(h1+c) - f*c).n by SEQ_1:12
+       .= (h1").n*((f*(h1+c)).n - (f*c).n) by RFUNCT_2:6
+       .= (h1").n*(f.((h1+c).n) - (f*c).n) by A89,RFUNCT_2:21
+       .= (h1").n*(f.((h1+c).n) - f.(c.n)) by A90,RFUNCT_2:21
+       .= (h1").n*(f.((h1+c).n) - f.x1) by A72;
+      hence thesis by A86,A88,SQUARE_1:23;
+     end;
+     then A91: diff(f,x1) <= 0 by A85,RFUNCT_2:18;
+       for n holds 0 <= (h2"(#)(f*(h2+c) - f*c)).n
+     proof let n;
+        (h2+c).n in rng(h2+c) by RFUNCT_2:10;
+      then (h2+c).n in N1 by A82;
+      then (h2+c).n in Z by A62; then f.((h2+c).n) in f.:[.p,g.] by A6,A7,
+FUNCT_1:def 12;
+      then f.((h2+c).n) <= f.x1 by A9,A12,SEQ_4:def 4;
+      then 0<=f.x1 - f.((h2+c).n) by SQUARE_1:12;
+      then -(f.x1 - f.((h2+c).n))<=0 by REAL_1:26,50;
+      then A92: f.((h2+c).n) - f.x1<=0 by XCMPLX_1:143;
+      A93: h2.n<0 by A70;
+      A94: (h2").n = (h2.n)" by SEQ_1:def 8;
+         0<-h2.n by A93,REAL_1:26,50;
+      then 0<(-h2.n)" by REAL_1:72;
+      then 0<1/(-h2.n) by XCMPLX_1:217;
+      then 0<-1/(h2.n) by XCMPLX_1:189;
+      then 0<-(h2.n)" by XCMPLX_1:217;
+      then A95: (h2").n<=0 by A94,REAL_1:66;
+        now let n1;
+        (h2+c).n1 in rng(h2+c) by RFUNCT_2:10;
+      then (h2+c).n1 in N1 by A82;
+      hence (h2+c).n1 in ].p,g.[ by A62; end;
+      then rng (h2+c) c= ].p,g.[ by RFUNCT_2:19;
+      then A96: rng (h2+c) c= dom f by A7,XBOOLE_1:1;
+      A97: rng c c= dom f by A5,A9,A65,ZFMISC_1:37;
+        (h2"(#)(f*(h2+c) - f*c)).n = (h2").n*(f*(h2+c) - f*c).n by SEQ_1:12
+       .= (h2").n*((f*(h2+c)).n - (f*c).n) by RFUNCT_2:6
+       .= (h2").n*(f.((h2+c).n) - (f*c).n) by A96,RFUNCT_2:21
+       .= (h2").n*(f.((h2+c).n) - f.(c.n)) by A97,RFUNCT_2:21
+       .= (h2").n*(f.((h2+c).n) - f.(x1)) by A72;
+      hence thesis by A92,A95,SQUARE_1:20;
+     end; hence
+       x1 in ].p,g.[ & diff(f,x1) = 0 by A60,A84,A91,SEQ_2:31;
+   end;
+   hence thesis;
+end;
+
+theorem
+  for x,t st 0<t for f st f is_continuous_on [.x,x+t.] &
+f.x=f.(x+t) & f is_differentiable_on ].x,x+t.[
+ex s st 0<s & s<1 & diff(f,x+s*t)=0
+proof let x,t such that A1: 0<t; let f such that
+ A2: f is_continuous_on [.x,x+t.] and
+ A3: f.x=f.(x+t) and A4: f is_differentiable_on ].x,x+t.[;
+   x<x+t by A1,REAL_1:69;
+ then consider x0 such that A5: x0 in ].x,x+t.[ & diff(f,x0)=0 by A2,A3,A4,Th1;
+ take s = (x0-x)/t;
+   x0 in {r: x<r & r<x+t} by A5,RCOMP_1:def 2;
+then A6: ex g st g=x0 & x<g & g<x+t; then 0<x0-x by SQUARE_1:11;
+ then 0/t < (x0-x)/t by A1,REAL_1:73; hence 0<s;
+   x0-x<t by A6,REAL_1:84; then (x0-x)/t<t/t by A1,REAL_1:73;
+ hence s<1 by A1,XCMPLX_1:60;
+   s*t+x = (x0-x)+x by A1,XCMPLX_1:88;
+ hence thesis by A5,XCMPLX_1:27;
+end;
+
+theorem Th3:
+for p,g st p<g for f st
+f is_continuous_on [.p,g.] & f is_differentiable_on ].p,g.[
+ex x0 st x0 in ].p,g.[ & diff(f,x0)=(f.g-f.p)/(g-p)
+proof let p,g such that A1: p<g;
+      let f such that
+      A2: f is_continuous_on [.p,g.] and
+      A3: f is_differentiable_on ].p,g.[;
+ A4: [.p,g.] c= dom f by A2,FCONT_1:def 2;
+   [.p,g.] = ].p,g.[ \/ {p,g} by A1,RCOMP_1:11;
+ then {p,g} c= [.p,g.] by XBOOLE_1:7;
+ then A5: p in [.p,g.] & g in [.p,g.] by ZFMISC_1:38;
+ reconsider Z=].p,g.[ as open Subset of REAL;
+ A6: ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+ then A7: Z c= dom f by A4,XBOOLE_1:1;
+ A8: 0<>g-p by A1,SQUARE_1:11;
+ set r = (f.g-f.p)/(g-p);
+ defpred P[set] means $1 in [.p,g.];
+ deffunc F(Real) =r*($1-p);
+ consider f1 such that
+ A9: (for x holds x in dom f1 iff P[x]) &
+     for x st x in dom f1 holds f1.x = F(x) from LambdaPFD';
+ A10: [.p,g.] c= dom f1
+ proof let y; assume y in [.p,g.];
+  hence y in dom f1 by A9;
+ end;
+   now let x be real number; assume x in [.p,g.]; then x in dom f1 by A9;
+  hence f1.x = r*(x-p) by A9
+   .= r*x - r*p by XCMPLX_1:40
+   .= r*x + -r*p by XCMPLX_0:def 8;
+ end;
+ then A11: f1 is_continuous_on [.p,g.] by A10,FCONT_1:48;
+ A12: Z c= dom f1 by A6,A10,XBOOLE_1:1;
+A13:
+ now let x; assume x in Z; then x in dom f1 by A6,A9;
+  hence f1.x = r*(x-p) by A9
+   .= r*x - r*p by XCMPLX_1:40
+   .= r*x + -r*p by XCMPLX_0:def 8;
+ end;
+ then A14: f1 is_differentiable_on Z & for x st x in Z holds (f1`|Z).x=r
+     by A12,FDIFF_1:31;
+ set f2 = f - f1;
+ A15: f2 is_continuous_on [.p,g.] by A2,A11,FCONT_1:19;
+   Z c= dom f /\ dom f1 by A7,A12,XBOOLE_1:19;
+then A16: Z c= dom f2 by SEQ_1:def 4;
+ then A17: f2 is_differentiable_on Z & for x st x in Z holds
+     (f2`|Z).x = diff(f,x) - diff(f1,x) by A3,A14,FDIFF_1:27;
+ A18: p in dom f1 & g in dom f1 by A5,A9;
+   [.p,g.] c= dom f /\ dom f1 by A4,A10,XBOOLE_1:19;
+ then A19: [.p,g.] c= dom f2 by SEQ_1:def 4;
+ then A20: f2.p = f.p-f1.p by A5,SEQ_1:def 4
+  .= f.p - r*(p-p) by A9,A18
+  .= f.p - r*0 by XCMPLX_1:14
+  .= f.p;
+   f2.g = f.g-f1.g by A5,A19,SEQ_1:def 4
+  .= f.g - ((f.g-f.p)/(g-p))*(g-p) by A9,A18
+  .= f.g - (f.g-f.p) by A8,XCMPLX_1:88
+  .= f.g - f.g + f.p by XCMPLX_1:37
+  .= 0 + f.p by XCMPLX_1:14
+  .= f2.p by A20;
+ then consider x0 such that A21: x0 in ].p,g.[ & diff(f2,x0)=0 by A1,A15,A17,
+Th1;
+ take x0;
+   diff(f2,x0) = (f2`|Z).x0 by A17,A21,FDIFF_1:def 8
+            .= diff(f,x0) - diff(f1,x0) by A3,A14,A16,A21,FDIFF_1:27
+            .= diff(f,x0) - (f1`|Z).x0 by A14,A21,FDIFF_1:def 8;
+ then 0 = diff(f,x0) - r by A12,A13,A21,FDIFF_1:31;
+ hence thesis by A21,XCMPLX_1:15;
+end;
+
+theorem
+  for x,t st 0<t for f st f is_continuous_on [.x,x+t.] &
+f is_differentiable_on ].x,x+t.[
+ex s st 0<s & s<1 & f.(x+t) = f.x + t*diff(f,x+s*t)
+proof let x,t such that A1: 0<t; let f such that
+ A2: f is_continuous_on [.x,x+t.] and
+ A3: f is_differentiable_on ].x,x+t.[;
+   x<x+t by A1,REAL_1:69;
+ then consider x0 such that A4: x0 in ].x,x+t.[ &
+ diff(f,x0)=(f.(x+t)-f.x)/(x+t-x) by A2,A3,Th3; take s = (x0-x)/t;
+   x0 in {r: x<r & r<x+t} by A4,RCOMP_1:def 2;
+then A5: ex g st g=x0 & x<g & g<x+t; then 0<x0-x by SQUARE_1:11;
+ then 0/t < (x0-x)/t by A1,REAL_1:73; hence 0<s;
+   x0-x<t by A5,REAL_1:84; then (x0-x)/t<t/t by A1,REAL_1:73;
+ hence s<1 by A1,XCMPLX_1:60;
+   diff(f,x0)*t=(f.(x+t)-f.x)/t*t by A4,XCMPLX_1:26;
+ then f.x + t*diff(f,x0)=f.x + (f.(x+t)-f.x) by A1,XCMPLX_1:88;
+ then A6: f.x + t*diff(f,x0)=f.(x+t) by XCMPLX_1:27;
+   s*t+x = (x0-x)+x by A1,XCMPLX_1:88;
+ hence thesis by A6,XCMPLX_1:27;
+end;
+
+theorem Th5:
+for p,g st p<g for f1,f2 st
+f1 is_continuous_on [.p,g.] & f1 is_differentiable_on ].p,g.[ &
+f2 is_continuous_on [.p,g.] & f2 is_differentiable_on ].p,g.[
+ex x0 st x0 in ].p,g.[ & (f1.g-f1.p)*diff(f2,x0)=(f2.g-f2.p)*diff(f1,x0)
+proof let p,g such that A1: p<g; let f1,f2 such that
+ A2: f1 is_continuous_on [.p,g.] & f1 is_differentiable_on ].p,g.[ and
+ A3: f2 is_continuous_on [.p,g.] & f2 is_differentiable_on ].p,g.[;
+ A4: ].p,g.[ c= [.p,g.] by RCOMP_1:15;
+   now per cases;
+ suppose A5: f2.p=f2.g; then consider x0 such that
+  A6: x0 in ].p,g.[ & diff(f2,x0) = 0 by A1,A3,Th1;
+  A7: f2.g-f2.p = 0 by A5,XCMPLX_1:14;
+  take x0;
+  thus x0 in ].p,g.[ & (f1.g-f1.p)*diff(f2,x0)=(f2.g-f2.p)*diff(f1,x0) by A6,A7
+;
+ suppose f2.p<>f2.g; then A8: f2.g-f2.p<>0 by XCMPLX_1:15;
+  set s=(f1.g-f1.p)/(f2.g-f2.p);
+  defpred P[set] means $1 in [.p,g.];
+  deffunc F(Real)=f1.p - f2.p*s;
+  consider f3 such that A9: (for x holds x in dom f3 iff P[x]) &
+  for x st x in dom f3 holds f3.x = F(x) from LambdaPFD';
+  reconsider Z=].p,g.[ as open Subset of REAL;
+  A10: [.p,g.] c= dom f3
+  proof let y; assume y in [.p,g.];
+   hence y in dom f3 by A9;
+  end;
+    now let x; assume x in [.p,g.] /\ dom f3; then x in dom f3 by XBOOLE_0:def
+3
+;
+   hence f3.x=f1.p - f2.p*s by A9;
+  end; then A11: f3 is_constant_on [.p,g.] by PARTFUN2:76;
+  then A12: f3 is_continuous_on [.p,g.] by A10,FCONT_1:44;
+  A13: f3 is_constant_on ].p,g.[ by A4,A11,PARTFUN2:57;
+  A14: Z c= dom f3 by A4,A10,XBOOLE_1:1;
+  then A15: f3 is_differentiable_on Z &
+      for x st x in Z holds (f3`|Z).x=0 by A13,FDIFF_1:30;
+  set f4 = s(#)f2;
+  set f5 = f3+f4;
+  set f=f5-f1;
+    f4 is_continuous_on [.p,g.] by A3,FCONT_1:21;
+  then f5 is_continuous_on [.p,g.] by A12,FCONT_1:19;
+  then A16: f is_continuous_on [.p,g.] by A2,FCONT_1:19;
+  A17: dom f4 = dom f2 by SEQ_1:def 6;
+  A18: [.p,g.] c= dom f2 by A3,FCONT_1:def 2;
+  then A19: Z c= dom f4 by A4,A17,XBOOLE_1:1;
+  then A20: f4 is_differentiable_on Z &
+      for x st x in Z holds (f4`|Z).x=s*diff(f2,x) by A3,FDIFF_1:28;
+    Z c= dom f3 /\ dom f4 by A14,A19,XBOOLE_1:19;
+  then A21: Z c= dom f5 by SEQ_1:def 3;
+  then A22: f5 is_differentiable_on Z &
+      for x st x in Z holds
+      (f5`|Z).x=diff(f3,x)+diff(f4,x) by A15,A20,FDIFF_1:26;
+  A23: [.p,g.] c= dom f1 by A2,FCONT_1:def 2;
+  then Z c= dom f1 by A4,XBOOLE_1:1;
+  then Z c= dom f5 /\ dom f1 by A21,XBOOLE_1:19;
+then A24:  Z c= dom f by SEQ_1:def 4;
+  then A25: f is_differentiable_on Z &
+      for x st x in Z holds
+      (f`|Z).x=diff(f5,x)-diff(f1,x) by A2,A22,FDIFF_1:27;
+  A26: p in [.p,g.] by A1,RCOMP_1:15;
+  then p in dom f3 /\ dom f4 by A10,A17,A18,XBOOLE_0:def 3;
+  then A27: p in dom f5 by SEQ_1:def 3;
+  then p in dom f5 /\ dom f1 by A23,A26,XBOOLE_0:def 3;
+  then p in dom f by SEQ_1:def 4;
+  then A28: f.p = f5.p - f1.p by SEQ_1:def 4
+   .= f3.p + f4.p - f1.p by A27,SEQ_1:def 3
+   .= f3.p + s*f2.p - f1.p by A17,A18,A26,SEQ_1:def 6
+   .= f1.p - s*f2.p + s*f2.p - f1.p by A9,A10,A26
+   .= -f1.p + (f1.p - s*f2.p + s*f2.p) by XCMPLX_0:def 8
+   .= -f1.p + (f1.p - (s*f2.p - s*f2.p)) by XCMPLX_1:37
+   .= -f1.p + (f1.p - 0) by XCMPLX_1:14
+   .= 0 by XCMPLX_0:def 6;
+  A29: g in [.p,g.] by A1,RCOMP_1:15;
+  then g in dom f3 /\ dom f4 by A10,A17,A18,XBOOLE_0:def 3;
+  then A30: g in dom f5 by SEQ_1:def 3;
+  then g in dom f5 /\ dom f1 by A23,A29,XBOOLE_0:def 3;
+  then g in dom f by SEQ_1:def 4;
+  then f.g = f5.g - f1.g by SEQ_1:def 4
+   .= f3.g + f4.g - f1.g by A30,SEQ_1:def 3
+   .= f3.g + s*f2.g - f1.g by A17,A18,A29,SEQ_1:def 6
+   .= f1.p - s*f2.p + s*f2.g - f1.g by A9,A10,A29
+   .= -f1.g + (f1.p - s*f2.p + s*f2.g) by XCMPLX_0:def 8
+   .= -f1.g + (f1.p - (s*f2.p - s*f2.g)) by XCMPLX_1:37
+   .= -f1.g + (f1.p - s*(f2.p - f2.g)) by XCMPLX_1:40
+   .= -f1.g+(f1.p-((f1.g-f1.p)/(f2.g-f2.p))*(-(f2.g-f2.p))) by XCMPLX_1:143
+   .= -f1.g+(f1.p-(-((f1.g-f1.p)/(f2.g-f2.p)))*(f2.g-f2.p)) by XCMPLX_1:176
+   .= -f1.g+(f1.p-(-(f1.g-f1.p))/(f2.g-f2.p)*(f2.g-f2.p)) by XCMPLX_1:188
+   .= -f1.g+(f1.p-(f1.p-f1.g)/(f2.g-f2.p)*(f2.g-f2.p)) by XCMPLX_1:143
+   .= -f1.g+(f1.p-(f1.p-f1.g)) by A8,XCMPLX_1:88
+   .= -f1.g+(f1.p-f1.p+f1.g) by XCMPLX_1:37
+   .= -f1.g+(0+f1.g) by XCMPLX_1:14
+   .= f.p by A28,XCMPLX_0:def 6;
+  then consider x0 such that A31: x0 in ].p,g.[ & diff(f,x0)=0 by A1,A16,A25,
+Th1;
+  take x0;
+    diff(f,x0) = (f`|Z).x0 by A25,A31,FDIFF_1:def 8
+   .= diff(f5,x0) - diff(f1,x0) by A2,A22,A24,A31,FDIFF_1:27
+   .= (f5`|Z).x0 - diff(f1,x0) by A22,A31,FDIFF_1:def 8
+   .= diff(f3,x0) + diff(f4,x0) - diff(f1,x0) by A15,A20,A21,A31,FDIFF_1:26
+   .= (f3`|Z).x0 + diff(f4,x0) - diff(f1,x0) by A15,A31,FDIFF_1:def 8
+   .= 0 + diff(f4,x0) - diff(f1,x0) by A13,A14,A31,FDIFF_1:30
+   .= (f4`|Z).x0 - diff(f1,x0) by A20,A31,FDIFF_1:def 8
+   .= s*diff(f2,x0) - diff(f1,x0) by A3,A19,A31,FDIFF_1:28;
+  then diff(f2,x0)*((f1.g-f1.p)/(f2.g-f2.p)) = diff(f1,x0) by A31,XCMPLX_1:15;
+  then (diff(f2,x0)*(f1.g-f1.p))/(f2.g-f2.p)*(f2.g-f2.p) =
+  diff(f1,x0)*(f2.g-f2.p) by XCMPLX_1:75;hence
+    x0 in ].p,g.[ & (f1.g-f1.p)*diff(f2,x0) = (f2.g-f2.p)*diff(f1,x0) by A8,A31
+,XCMPLX_1:88;
+ end;
+ hence thesis;
+end;
+
+theorem
+  for x,t st 0<t for f1,f2 st f1 is_continuous_on [.x,x+t.] &
+f1 is_differentiable_on ].x,x+t.[ & f2 is_continuous_on [.x,x+t.] &
+f2 is_differentiable_on ].x,x+t.[ &
+(for x1 st x1 in ].x,x+t.[ holds diff(f2,x1)<>0)
+ex s st 0<s & s<1 &
+(f1.(x+t)-f1.x)/(f2.(x+t)-f2.x) = diff(f1,x+s*t)/diff(f2,x+s*t)
+proof let x,t such that A1: 0<t; let f1,f2 such that
+ A2: f1 is_continuous_on [.x,x+t.] & f1 is_differentiable_on ].x,x+t.[ and
+ A3: f2 is_continuous_on [.x,x+t.] & f2 is_differentiable_on ].x,x+t.[ and
+ A4: for x1 st x1 in ].x,x+t.[ holds diff(f2,x1)<>0;
+ A5: x<x+t by A1,REAL_1:69;
+ then consider x0 such that A6: x0 in ].x,x+t.[ &
+ (f1.(x+t)-f1.x)*diff(f2,x0)=(f2.(x+t)-f2.x)*diff(f1,x0) by A2,A3,Th5;
+ take s = (x0-x)/t;
+   x0 in {r: x<r & r<x+t} by A6,RCOMP_1:def 2;
+then A7: ex g st g=x0 & x<g & g<x+t; then 0<x0-x by SQUARE_1:11;
+ then 0/t < (x0-x)/t by A1,REAL_1:73; hence 0<s;
+   x0-x<t by A7,REAL_1:84; then (x0-x)/t<t/t by A1,REAL_1:73;
+ hence s<1 by A1,XCMPLX_1:60;
+   f2.x<>f2.(x+t) by A3,A4,A5,Th1;
+ then A8: 0<>f2.(x+t)-f2.x by XCMPLX_1:15;
+ A9: diff(f2,x0)<>0 by A4,A6; diff(f2,x0)*((f1.(x+t)-f1.x)/diff(f2,x0))=
+ (f2.(x+t)-f2.x)*diff(f1,x0)/diff(f2,x0) by A6,XCMPLX_1:75;
+ then f1.(x+t)-f1.x = (f2.(x+t)-f2.x)*diff(f1,x0)/diff(f2,x0) by A9,XCMPLX_1:88
+;
+ then (f1.(x+t)-f1.x)/(f2.(x+t)-f2.x) = (f2.(x+t)-f2.x)*
+ (diff(f1,x0)/diff(f2,x0))/(f2.(x+t)-f2.x) by XCMPLX_1:75;
+then A10: (f1.(x+t)-f1.x)/(f2.(x+t)-f2.x)=((diff(f1,x0)/diff(f2,x0))/(f2.(x+t)-
+f2.x))*
+ (f2.(x+t)-f2.x) by XCMPLX_1:75;
+   s*t+x = (x0-x)+x by A1,XCMPLX_1:88;
+ then x+s*t = x0 by XCMPLX_1:27;
+ hence thesis by A8,A10,XCMPLX_1:88;
+end;
+
+theorem Th7:
+for p,g st p<g for f st f is_differentiable_on ].p,g.[ &
+(for x st x in ].p,g.[ holds diff(f,x) = 0)
+holds f is_constant_on ].p,g.[
+proof let p,g such that p<g;
+ let f such that
+ A1: f is_differentiable_on ].p,g.[ and
+ A2: for x st x in ].p,g.[ holds diff(f,x) = 0;
+ A3: f is_continuous_on ].p,g.[ by A1,FDIFF_1:33;
+   now let x1,x2; assume x1 in ].p,g.[ /\ dom f & x2 in ].p,g.[ /\ dom f;
+  then A4: x1 in ].p,g.[ & x2 in ].p,g.[ by XBOOLE_0:def 3;
+    now per cases;
+   suppose x1=x2; hence f.x1=f.x2;
+   suppose A5: not x1=x2;
+     now per cases by A5,AXIOMS:21;
+    suppose A6: x1<x2;
+     reconsider Z=].x1,x2.[ as open Subset of REAL;
+     A7: [.x1,x2.] c= ].p,g.[ by A4,RCOMP_1:17;
+       Z c= [.x1,x2.] by RCOMP_1:15;
+     then A8: Z c= ].p,g.[ by A7,XBOOLE_1:1;
+        0<>x2-x1 by A6,SQUARE_1:11;
+     then A9: 0<>(x2-x1)" by XCMPLX_1:203;
+     A10: f is_continuous_on [.x1,x2.] by A3,A7,FCONT_1:17;
+       f is_differentiable_on Z by A1,A8,FDIFF_1:34;
+     then consider x0 such that A11: x0 in ].x1,x2.[ &
+     diff(f,x0) = (f.x2-f.x1)/(x2-x1) by A6,A10,Th3;
+       0 = (f.x2-f.x1)/(x2-x1) by A2,A8,A11
+      .= (f.x2-f.x1)*(x2-x1)" by XCMPLX_0:def 9;
+     then 0 = (f.x2-f.x1) by A9,XCMPLX_1:6;
+     hence f.x1=f.x2 by XCMPLX_1:15;
+    suppose A12: x2<x1;
+     reconsider Z=].x2,x1.[ as open Subset of REAL;
+     A13: [.x2,x1.] c= ].p,g.[ by A4,RCOMP_1:17;
+       Z c= [.x2,x1.] by RCOMP_1:15;
+     then A14: Z c= ].p,g.[ by A13,XBOOLE_1:1;
+        0<>x1-x2 by A12,SQUARE_1:11;
+     then A15: 0<>(x1-x2)" by XCMPLX_1:203;
+     A16: f is_continuous_on [.x2,x1.] by A3,A13,FCONT_1:17;
+       f is_differentiable_on Z by A1,A14,FDIFF_1:34;
+     then consider x0 such that A17: x0 in ].x2,x1.[ &
+     diff(f,x0) = (f.x1-f.x2)/(x1-x2) by A12,A16,Th3;
+       0 = (f.x1-f.x2)/(x1-x2) by A2,A14,A17
+      .= (f.x1-f.x2)*(x1-x2)" by XCMPLX_0:def 9;
+     then 0 = (f.x1-f.x2) by A15,XCMPLX_1:6;
+     hence f.x1=f.x2 by XCMPLX_1:15;
+   end; hence f.x1=f.x2;
+  end; hence f.x1=f.x2;
+ end; hence f is_constant_on ].p,g.[ by PARTFUN2:77;
+end;
+
+theorem
+  for p,g st p<g for f1,f2 st f1 is_differentiable_on ].p,g.[ &
+f2 is_differentiable_on ].p,g.[ &
+(for x st x in ].p,g.[ holds diff(f1,x) = diff(f2,x))
+holds f1-f2 is_constant_on ].p,g.[ &
+ex r st for x st x in ].p,g.[ holds f1.x = f2.x+r
+proof let p,g such that A1: p<g; let f1,f2 such that
+ A2: f1 is_differentiable_on ].p,g.[ and
+ A3: f2 is_differentiable_on ].p,g.[ and
+ A4: for x st x in ].p,g.[ holds diff(f1,x) = diff(f2,x);
+ reconsider Z=].p,g.[ as open Subset of REAL;
+ A5: ].p,g.[ c= dom f1 by A2,FDIFF_1:def 7;
+   ].p,g.[ c= dom f2 by A3,FDIFF_1:def 7;
+ then ].p,g.[ c= dom f1 /\ dom f2 by A5,XBOOLE_1:19;
+ then A6: ].p,g.[ c= dom (f1-f2) by SEQ_1:def 4;
+ then A7: f1-f2 is_differentiable_on Z &
+  for x st x in Z holds
+  ((f1-f2)`|Z).x=diff(f1,x)-diff(f2,x) by A2,A3,FDIFF_1:27;
+   now let x; assume A8: x in ].p,g.[; hence
+    diff(f1-f2,x) = ((f1-f2)`|Z).x by A7,FDIFF_1:def 8
+   .= diff(f1,x)-diff(f2,x) by A2,A3,A6,A8,FDIFF_1:27
+   .= diff(f1,x)-diff(f1,x) by A4,A8
+   .= 0 by XCMPLX_1:14;
+ end;
+ hence f1-f2 is_constant_on ].p,g.[ by A1,A7,Th7;
+ then consider r such that
+ A9: for x st x in ].p,g.[ /\ dom(f1-f2) holds (f1-f2).x = r by PARTFUN2:76;
+ take r;
+ let x; assume A10: x in ].p,g.[;
+ then x in ].p,g.[ /\ dom(f1-f2) by A6,XBOOLE_1:28;
+ then r = (f1-f2).x by A9
+  .= f1.x - f2.x by A6,A10,SEQ_1:def 4;
+ then f1.x - (f2.x - f2.x) = r + f2.x by XCMPLX_1:37;
+ then f1.x - 0 = r + f2.x by XCMPLX_1:14;
+ hence thesis;
+end;
+
+theorem
+  for p,g st p<g for f st f is_differentiable_on ].p,g.[ &
+(for x st x in ].p,g.[ holds 0<diff(f,x))
+holds f is_increasing_on ].p,g.[
+proof let p,g such that p<g; let f such that
+ A1: f is_differentiable_on ].p,g.[ and
+ A2: for x st x in ].p,g.[ holds 0<diff(f,x);
+ A3: f is_continuous_on ].p,g.[ by A1,FDIFF_1:33;
+ let x1,x2 such that
+ A4: x1 in ].p,g.[ /\ dom f & x2 in ].p,g.[ /\ dom f and A5: x1<x2;
+ A6: x1 in ].p,g.[ & x2 in ].p,g.[ by A4,XBOOLE_0:def 3;
+ reconsider Z=].x1,x2.[ as open Subset of REAL;
+ A7: [.x1,x2.] c= ].p,g.[ by A6,RCOMP_1:17;
+   Z c= [.x1,x2.] by RCOMP_1:15;
+ then A8: Z c= ].p,g.[ by A7,XBOOLE_1:1;
+ A9: 0<x2-x1 by A5,SQUARE_1:11;
+ A10: 0<>x2-x1 by A5,SQUARE_1:11;
+ A11: f is_continuous_on [.x1,x2.] by A3,A7,FCONT_1:17;
+   f is_differentiable_on Z by A1,A8,FDIFF_1:34;
+ then consider x0 such that A12: x0 in ].x1,x2.[ &
+ diff(f,x0) = (f.x2-f.x1)/(x2-x1) by A5,A11,Th3;
+   0<(f.x2-f.x1)/(x2-x1) by A2,A8,A12;
+ then 0*(x2-x1)<(f.x2-f.x1)/(x2-x1)*(x2-x1) by A9,REAL_1:70;
+ then 0<f.x2-f.x1 by A10,XCMPLX_1:88; then f.x1+0<f.x2 by REAL_1:86;
+ hence thesis;
+end;
+
+theorem
+  for p,g st p<g for f st f is_differentiable_on ].p,g.[ &
+(for x st x in ].p,g.[ holds diff(f,x)<0)
+holds f is_decreasing_on ].p,g.[
+proof let p,g such that p<g; let f such that
+ A1: f is_differentiable_on ].p,g.[ and
+ A2: for x st x in ].p,g.[ holds diff(f,x)<0;
+ A3: f is_continuous_on ].p,g.[ by A1,FDIFF_1:33;
+ let x1,x2 such that
+ A4: x1 in ].p,g.[ /\ dom f & x2 in ].p,g.[ /\ dom f and A5: x1<x2;
+ A6: x1 in ].p,g.[ & x2 in ].p,g.[ by A4,XBOOLE_0:def 3;
+ reconsider Z=].x1,x2.[ as open Subset of REAL;
+ A7: [.x1,x2.] c= ].p,g.[ by A6,RCOMP_1:17;
+   Z c= [.x1,x2.] by RCOMP_1:15;
+ then A8: Z c= ].p,g.[ by A7,XBOOLE_1:1;
+ A9: 0<x2-x1 by A5,SQUARE_1:11;
+ A10: 0<>x2-x1 by A5,SQUARE_1:11;
+ A11: f is_continuous_on [.x1,x2.] by A3,A7,FCONT_1:17;
+   f is_differentiable_on Z by A1,A8,FDIFF_1:34;
+ then consider x0 such that A12: x0 in ].x1,x2.[ &
+ diff(f,x0) = (f.x2-f.x1)/(x2-x1) by A5,A11,Th3;
+   (f.x2-f.x1)/(x2-x1)<0 by A2,A8,A12;
+ then (f.x2-f.x1)/(x2-x1)*(x2-x1)<0*(x2-x1) by A9,REAL_1:70;
+ then f.x2-f.x1<0 by A10,XCMPLX_1:88; then f.x2<f.x1+0 by REAL_1:84;
+ hence thesis;
+end;
+
+theorem
+  for p,g st p<g for f st f is_differentiable_on ].p,g.[ &
+(for x st x in ].p,g.[ holds 0<=diff(f,x))
+holds f is_non_decreasing_on ].p,g.[
+proof let p,g such that p<g; let f such that
+ A1: f is_differentiable_on ].p,g.[ and
+ A2: for x st x in ].p,g.[ holds 0<=diff(f,x);
+ A3: f is_continuous_on ].p,g.[ by A1,FDIFF_1:33;
+ let x1,x2 such that
+ A4: x1 in ].p,g.[ /\ dom f & x2 in ].p,g.[ /\ dom f and A5: x1<x2;
+ A6: x1 in ].p,g.[ & x2 in ].p,g.[ by A4,XBOOLE_0:def 3;
+ reconsider Z=].x1,x2.[ as open Subset of REAL;
+ A7: [.x1,x2.] c= ].p,g.[ by A6,RCOMP_1:17;
+   Z c= [.x1,x2.] by RCOMP_1:15;
+ then A8: Z c= ].p,g.[ by A7,XBOOLE_1:1;
+  A9: 0<=x2-x1 by A5,SQUARE_1:11;
+ A10: 0<>x2-x1 by A5,SQUARE_1:11;
+ A11: f is_continuous_on [.x1,x2.] by A3,A7,FCONT_1:17;
+   f is_differentiable_on Z by A1,A8,FDIFF_1:34;
+ then consider x0 such that A12: x0 in ].x1,x2.[ &
+ diff(f,x0) = (f.x2-f.x1)/(x2-x1) by A5,A11,Th3;
+   0<=(f.x2-f.x1)/(x2-x1) by A2,A8,A12;
+ then 0*(x2-x1)<=(f.x2-f.x1)/(x2-x1)*(x2-x1) by A9,AXIOMS:25;
+ then 0<=f.x2-f.x1 by A10,XCMPLX_1:88; then f.x1+0<=f.x2 by REAL_1:84;
+ hence thesis;
+end;
+
+theorem
+  for p,g st p<g for f st f is_differentiable_on ].p,g.[ &
+(for x st x in ].p,g.[ holds diff(f,x)<=0)
+holds f is_non_increasing_on ].p,g.[
+proof let p,g such that p<g; let f such that
+ A1: f is_differentiable_on ].p,g.[ and
+ A2: for x st x in ].p,g.[ holds diff(f,x)<=0;
+ A3: f is_continuous_on ].p,g.[ by A1,FDIFF_1:33;
+ let x1,x2 such that
+ A4: x1 in ].p,g.[ /\ dom f & x2 in ].p,g.[ /\ dom f and A5: x1<x2;
+ A6: x1 in ].p,g.[ & x2 in ].p,g.[ by A4,XBOOLE_0:def 3;
+ reconsider Z=].x1,x2.[ as open Subset of REAL;
+ A7: [.x1,x2.] c= ].p,g.[ by A6,RCOMP_1:17;
+   Z c= [.x1,x2.] by RCOMP_1:15;
+ then A8: Z c= ].p,g.[ by A7,XBOOLE_1:1;
+  A9: 0<=x2-x1 by A5,SQUARE_1:11;
+ A10: 0<>x2-x1 by A5,SQUARE_1:11;
+ A11: f is_continuous_on [.x1,x2.] by A3,A7,FCONT_1:17;
+   f is_differentiable_on Z by A1,A8,FDIFF_1:34;
+ then consider x0 such that A12: x0 in ].x1,x2.[ &
+ diff(f,x0) = (f.x2-f.x1)/(x2-x1) by A5,A11,Th3;
+   (f.x2-f.x1)/(x2-x1)<=0 by A2,A8,A12;
+ then (f.x2-f.x1)/(x2-x1)*(x2-x1)<=0*(x2-x1) by A9,AXIOMS:25;
+ then f.x2-f.x1<=0 by A10,XCMPLX_1:88; then f.x2<=f.x1+0 by REAL_1:86;
+ hence thesis;
+end;

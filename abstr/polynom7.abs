@@ -1,0 +1,483 @@
+:: More About Polynomials: Monomials and Constant Polynomials
+::  by Christoph Schwarzweller
+::
+:: Received November 28, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary POLYNOM1, POLYNOM2, POLYNOM7, BOOLE, FUNCT_1, CAT_1, TRIANG_1,
+      FINSEQ_1, ALGSTR_1, ALGSTR_2, VECTSP_1, RLVECT_1, ORDINAL1, LATTICES,
+      ALGSEQ_1, QUOFIELD, ORDERS_2, ANPROJ_1, QC_LANG1, FUNCOP_1, FINSET_1,
+      PRE_TOPC, CAT_3, FUNCT_4, GRCAT_1, ENDALG, GROUP_1, ARYTM_3, RELAT_1,
+      REALSET1, BINOP_1, FINSEQ_4, COHSP_1, VECTSP_2, BINOM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, STRUCT_0, RELAT_1,
+      BINOM, RELSET_1, FUNCT_1, FINSET_1, ORDINAL1, PARTFUN1, FUNCT_2, FUNCT_4,
+      NAT_1, ALGSTR_1, RLVECT_1, ORDERS_2, FINSEQ_1, CQC_LANG, FUNCOP_1,
+      GROUP_1, QUOFIELD, PRE_TOPC, GRCAT_1, ENDALG, TRIANG_1, REALSET1,
+      VECTSP_2, POLYNOM1, POLYNOM2, VECTSP_1, FINSEQ_4;
+ constructors ORDERS_2, CQC_LANG, WELLFND1, ALGSTR_2, QUOFIELD, BINOM, GRCAT_1,
+      TRIANG_1, ENDALG, MONOID_0, POLYNOM2, MEMBERED;
+ clusters STRUCT_0, FINSET_1, RELSET_1, FUNCOP_1, CQC_LANG, ORDINAL1, VECTSP_2,
+      CARD_1, ALGSTR_1, BINOM, POLYNOM1, POLYNOM2, MONOID_0, VECTSP_1,
+      MEMBERED;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+definition
+cluster non trivial (non empty ZeroStr);
+end;
+
+definition
+cluster non trivial -> non empty ZeroStr;
+end;
+
+definition
+cluster Abelian left_zeroed right_zeroed add-associative
+        right_complementable unital associative commutative
+        distributive domRing-like (non trivial doubleLoopStr);
+end;
+
+definition
+let R be non trivial ZeroStr;
+cluster non-zero Element of R;
+end;
+
+definition
+let X be set,
+    R be non empty ZeroStr,
+    p be Series of X,R;
+ canceled;
+
+attr p is non-zero means
+:: POLYNOM7:def 2
+  p <> 0_(X,R);
+end;
+
+definition
+let X be set,
+    R be non trivial ZeroStr;
+cluster non-zero Series of X,R;
+end;
+
+definition
+let n be Ordinal,
+    R be non trivial ZeroStr;
+cluster non-zero Polynomial of n,R;
+end;
+
+theorem :: POLYNOM7:1
+for X being set,
+    R being non empty ZeroStr,
+    s being Series of X,R
+holds s = 0_(X,R) iff Support s = {};
+
+theorem :: POLYNOM7:2
+  for X being set,
+    R being non empty ZeroStr
+holds R is non trivial iff ex s being Series of X,R st Support(s) <> {};
+
+definition
+let X be set,
+    b be bag of X;
+attr b is univariate means
+:: POLYNOM7:def 3
+  ex u being Element of X st support b = {u};
+end;
+
+definition
+let X be non empty set;
+cluster univariate bag of X;
+end;
+
+definition
+let X be non empty set;
+cluster univariate -> non empty bag of X;
+end;
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::: Polynomials without Variables
+
+begin
+
+theorem :: POLYNOM7:3
+  for b being bag of {} holds b = EmptyBag {};
+
+theorem :: POLYNOM7:4
+  for L being right_zeroed add-associative right_complementable
+            well-unital distributive (non trivial doubleLoopStr),
+    p being Polynomial of {},L,
+    x being Function of {},L
+holds eval(p,x) = p.(EmptyBag{});
+
+theorem :: POLYNOM7:5
+  for L being right_zeroed add-associative right_complementable
+            well-unital distributive (non trivial doubleLoopStr)
+holds Polynom-Ring({},L) is_ringisomorph_to L;
+
+begin :: Monomials
+
+definition
+let X be set,
+    L be non empty ZeroStr,
+    p be Series of X,L;
+attr p is monomial-like means
+:: POLYNOM7:def 4
+  ex b being bag of X
+  st for b' being bag of X st b' <> b holds p.b' = 0.L;
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr;
+cluster monomial-like Series of X,L;
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr;
+mode Monomial of X,L is monomial-like Series of X,L;
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr;
+cluster monomial-like -> finite-Support Series of X,L;
+end;
+
+theorem :: POLYNOM7:6
+for X being set,
+    L being non empty ZeroStr,
+    p being Series of X,L
+holds p is Monomial of X,L iff
+      (Support p = {} or ex b being bag of X st Support p = {b});
+
+definition
+let X be set,
+    L be non empty ZeroStr,
+    a be Element of L,
+    b be bag of X;
+func Monom(a,b) -> Monomial of X,L equals
+:: POLYNOM7:def 5
+  0_(X,L)+*(b,a);
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr,
+    m be Monomial of X,L;
+func term(m) -> bag of X means
+:: POLYNOM7:def 6
+  m.it <> 0.L or (Support m = {} & it = EmptyBag X);
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr,
+    m be Monomial of X,L;
+func coefficient(m) -> Element of L equals
+:: POLYNOM7:def 7
+  m.(term(m));
+end;
+
+theorem :: POLYNOM7:7
+for X being set,
+    L being non empty ZeroStr,
+    m being Monomial of X,L
+holds Support(m) = {} or Support(m) = {term(m)};
+
+theorem :: POLYNOM7:8
+for X being set,
+    L being non empty ZeroStr,
+    b being bag of X
+holds coefficient(Monom(0.L,b)) = 0.L & term(Monom(0.L,b)) = EmptyBag X;
+
+theorem :: POLYNOM7:9
+for X being set,
+    L being non empty ZeroStr,
+    a being Element of L,
+    b being bag of X
+holds coefficient(Monom(a,b)) = a;
+
+theorem :: POLYNOM7:10
+for X being set,
+    L being non trivial ZeroStr,
+    a being non-zero Element of L,
+    b being bag of X
+holds term(Monom(a,b)) = b;
+
+theorem :: POLYNOM7:11
+  for X being set,
+    L being non empty ZeroStr,
+    m being Monomial of X,L
+holds Monom(coefficient(m),term(m)) = m;
+
+theorem :: POLYNOM7:12
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive (non trivial doubleLoopStr),
+    m being Monomial of n,L,
+    x being Function of n,L
+holds eval(m,x) = coefficient(m) * eval(term(m),x);
+
+theorem :: POLYNOM7:13
+  for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive (non trivial doubleLoopStr),
+    a being Element of L,
+    b being bag of n,
+    x being Function of n,L
+holds eval(Monom(a,b),x) = a * eval(b,x);
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::: Constant Polynomials
+
+begin
+
+definition
+let X be set,
+    L be non empty ZeroStr,
+    p be Series of X,L;
+attr p is Constant means
+:: POLYNOM7:def 8
+  for b being bag of X st b <> EmptyBag X holds p.b = 0.L;
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr;
+cluster Constant Series of X,L;
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr;
+mode ConstPoly of X,L is Constant Series of X,L;
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr;
+cluster Constant -> monomial-like Series of X,L;
+end;
+
+theorem :: POLYNOM7:14
+for X being set,
+    L being non empty ZeroStr,
+    p being Series of X,L
+holds p is ConstPoly of X,L iff
+      (p = 0_(X,L) or Support p = {EmptyBag X});
+
+definition
+let X be set,
+    L be non empty ZeroStr;
+cluster 0_(X,L) -> Constant;
+end;
+
+definition
+let X be set,
+    L be unital (non empty doubleLoopStr);
+cluster 1_(X,L) -> Constant;
+end;
+
+theorem :: POLYNOM7:15
+for X being set,
+    L being non empty ZeroStr,
+    c being ConstPoly of X,L
+holds Support(c) = {} or Support(c) = {EmptyBag X};
+
+theorem :: POLYNOM7:16
+  for X being set,
+    L being non empty ZeroStr,
+    c being ConstPoly of X,L
+holds term(c) = EmptyBag X & coefficient(c) = c.(EmptyBag X);
+
+definition
+let X be set,
+    L be non empty ZeroStr,
+    a be Element of L;
+func a _(X,L) -> Series of X,L equals
+:: POLYNOM7:def 9
+ 0_(X,L)+*(EmptyBag X,a);
+end;
+
+definition
+let X be set,
+    L be non empty ZeroStr,
+    a be Element of L;
+cluster a _(X,L) -> Constant;
+end;
+
+theorem :: POLYNOM7:17
+  for X being set,
+    L being non empty ZeroStr,
+    p being Series of X,L
+holds p is ConstPoly of X,L iff ex a being Element of L st p = a _(X,L);
+
+theorem :: POLYNOM7:18
+for X being set,
+    L being non empty multLoopStr_0,
+    a being Element of L
+holds (a _(X,L)).EmptyBag X = a &
+      for b being bag of X st b <> EmptyBag X holds (a _(X,L)).b = 0.L;
+
+theorem :: POLYNOM7:19
+  for X being set,
+    L being non empty ZeroStr
+holds 0.L _(X,L) = 0_(X,L);
+
+theorem :: POLYNOM7:20
+  for X being set,
+    L being unital (non empty multLoopStr_0)
+holds 1.L _(X,L) = 1_(X,L);
+
+theorem :: POLYNOM7:21
+  for X being set,
+    L being non empty ZeroStr,
+    a,b being Element of L
+holds a _(X,L) = b _(X,L) iff a = b;
+
+theorem :: POLYNOM7:22
+  for X being set,
+    L being non empty ZeroStr,
+    a being Element of L
+holds Support(a _(X,L)) = {} or Support(a _(X,L)) = {EmptyBag X};
+
+theorem :: POLYNOM7:23
+for X being set,
+    L being non empty ZeroStr,
+    a being Element of L
+holds term(a _(X,L)) = EmptyBag X & coefficient(a _(X,L)) = a;
+
+theorem :: POLYNOM7:24
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive (non trivial doubleLoopStr),
+    c being ConstPoly of n,L,
+    x being Function of n,L
+holds eval(c,x) = coefficient(c);
+
+theorem :: POLYNOM7:25
+for n being Ordinal,
+    L being right_zeroed add-associative right_complementable
+            unital distributive (non trivial doubleLoopStr),
+    a being Element of L,
+    x being Function of n,L
+holds eval(a _(n,L),x) = a;
+
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::: Multiplication with Coefficients
+
+begin
+
+definition
+let X be set,
+    L be non empty multLoopStr_0,
+    p be Series of X,L,
+    a be Element of L;
+func a * p -> Series of X,L means
+:: POLYNOM7:def 10
+  for b being bag of X holds it.b = a * p.b;
+func p * a -> Series of X,L means
+:: POLYNOM7:def 11
+  for b being bag of X holds it.b = p.b * a;
+end;
+
+definition
+let X be set,
+    L be left_zeroed right_zeroed add-cancelable
+         distributive (non empty doubleLoopStr),
+    p be finite-Support Series of X,L,
+    a be Element of L;
+cluster a * p -> finite-Support;
+cluster p * a -> finite-Support;
+end;
+
+theorem :: POLYNOM7:26
+  for X being set,
+    L being commutative (non empty multLoopStr_0),
+    p being Series of X,L,
+    a being Element of L
+holds a * p = p * a;
+
+theorem :: POLYNOM7:27
+for n being Ordinal,
+    L being add-associative right_complementable right_zeroed
+            left-distributive (non empty doubleLoopStr),
+    p being Series of n,L,
+    a being Element of L
+holds a * p = a _(n,L) *' p;
+
+theorem :: POLYNOM7:28
+for n being Ordinal,
+    L being add-associative right_complementable right_zeroed
+            right-distributive (non empty doubleLoopStr),
+    p being Series of n,L,
+    a being Element of L
+holds p * a = p *' (a _(n,L));
+
+theorem :: POLYNOM7:29
+  for n being Ordinal,
+    L being Abelian left_zeroed right_zeroed add-associative
+            right_complementable unital associative commutative
+            distributive (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    a being Element of L,
+    x being Function of n,L
+holds eval(a*p,x) = a * eval(p,x);
+
+theorem :: POLYNOM7:30
+  for n being Ordinal,
+    L being left_zeroed right_zeroed add-left-cancelable add-associative
+            right_complementable unital associative domRing-like
+            distributive (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    a being Element of L,
+    x being Function of n,L
+holds eval(a*p,x) = a * eval(p,x);
+
+theorem :: POLYNOM7:31
+  for n being Ordinal,
+    L being Abelian left_zeroed right_zeroed add-associative
+            right_complementable unital associative commutative
+            distributive (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    a being Element of L,
+    x being Function of n,L
+holds eval(p*a,x) = eval(p,x) * a;
+
+theorem :: POLYNOM7:32
+  for n being Ordinal,
+    L being left_zeroed right_zeroed add-left-cancelable add-associative
+            right_complementable unital associative commutative
+            distributive domRing-like (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    a being Element of L,
+    x being Function of n,L
+holds eval(p*a,x) = eval(p,x) * a;
+
+theorem :: POLYNOM7:33
+  for n being Ordinal,
+    L being Abelian left_zeroed right_zeroed add-associative
+            right_complementable unital associative commutative
+            distributive (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    a being Element of L,
+    x being Function of n,L
+holds eval((a _(n,L))*'p,x) = a * eval(p,x);
+
+theorem :: POLYNOM7:34
+  for n being Ordinal,
+    L being Abelian left_zeroed right_zeroed add-associative
+            right_complementable unital associative commutative
+            distributive (non trivial doubleLoopStr),
+    p being Polynomial of n,L,
+    a being Element of L,
+    x being Function of n,L
+holds eval(p*'(a _(n,L)),x) = eval(p,x) * a;
+
+

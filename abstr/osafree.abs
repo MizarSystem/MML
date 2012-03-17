@@ -1,0 +1,947 @@
+:: Free Order Sorted Universal Algebra
+::  by Josef Urban
+::
+:: Received September 19, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PBOOLE, TDGROUP, CARD_3, RELAT_1, MSUALG_2, PRALG_1,
+      REALSET1, BOOLE, ZF_REFLE, PROB_1, TARSKI, AMI_1, MSUALG_1, ALG_1,
+      FINSEQ_1, QC_LANG1, LANG1, DTCONSTR, TREES_4, TREES_2, TREES_3, FUNCT_6,
+      MCART_1, UNIALG_2, GROUP_6, MSUALG_3, MSAFREE, MSUALG_4, NATTRA_1,
+      FINSEQ_4, OSALG_1, SEQM_3, YELLOW18, COH_SP, EQREL_1, RELAT_2, FUNCT_5,
+      CARD_LAR, CARD_5, OSALG_2, OSALG_4, OSAFREE, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, RELAT_1,
+      RELSET_1, STRUCT_0, FUNCT_1, MCART_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      FINSEQ_2, RELAT_2, TREES_2, PROB_1, CARD_3, EQREL_1, FINSEQ_4, LANG1,
+      TREES_3, FUNCT_6, TREES_4, FUNCT_5, DTCONSTR, ORDERS_1, ORDERS_3, PBOOLE,
+      PRALG_1, MSUALG_1, MSUALG_2, MSUALG_3, MSUALG_4, OSALG_1, OSALG_2,
+      OSALG_3, OSALG_4, MSAFREE, YELLOW18;
+ constructors NAT_1, MSUALG_3, FINSOP_1, FINSEQ_4, FINSEQOP, ORDERS_3, OSALG_2,
+      OSALG_3, OSALG_4, MSAFREE3, MEMBERED, YELLOW18;
+ clusters SUBSET_1, PBOOLE, TREES_3, TREES_4, DTCONSTR, PRALG_1, MSUALG_1,
+      RELSET_1, STRUCT_0, XBOOLE_0, MSUALG_4, MSUALG_9, OSALG_1, OSALG_4,
+      MSAFREE, NAT_1, MEMBERED, PARTFUN1, NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin
+
+reserve S for OrderSortedSign;
+
+:: REVISE: should rather be attribute
+:: changing to MSSubset and its OSCl, to make free algebras easier
+:: no good way how to retypeOSCL into OSSubset now?
+definition
+ let S be OrderSortedSign,
+     U0 be OSAlgebra of S;
+mode OSGeneratorSet of U0 -> MSSubset of U0 means
+:: OSAFREE:def 1
+for O being OSSubset of U0 st O = OSCl it holds
+the Sorts of GenOSAlg(O) = the Sorts of U0;
+end;
+
+theorem :: OSAFREE:1
+  for S be OrderSortedSign,
+    U0 be strict non-empty OSAlgebra of S,
+    A be MSSubset of U0 holds
+    A is OSGeneratorSet of U0 iff
+    for O being OSSubset of U0 st O = OSCl A holds GenOSAlg(O) = U0;
+
+:: renaming to osfree - if OSGeneratorSet and GeneratorSet become
+:: attributes, Mizar would be puzzled
+:: we do this for monotone osas only, though more general approach is possible
+definition
+ let S; let U0 be monotone OSAlgebra of S;
+ let IT be OSGeneratorSet of U0;
+attr IT is osfree means
+:: OSAFREE:def 2
+  for U1 be monotone non-empty OSAlgebra of S
+ for f be ManySortedFunction of IT,the Sorts of U1
+  ex h be ManySortedFunction of U0,U1
+   st h is_homomorphism U0,U1 & h is order-sorted & h || IT = f;
+end;
+
+definition
+ let S be OrderSortedSign;
+ let IT be monotone OSAlgebra of S;
+attr IT is osfree means
+:: OSAFREE:def 3
+   ex G being OSGeneratorSet of IT st G is osfree;
+end;
+
+begin
+::
+:: Construction of Free Order Sorted Algebras for Given Signature
+::
+
+definition
+ let S be OrderSortedSign,
+     X be ManySortedSet of S;
+func OSREL(X) -> Relation of
+   ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X)),
+   (([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*) means
+:: OSAFREE:def 4
+
+for a be Element of
+        [:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X),
+    b be Element of
+       ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*
+ holds
+ [a,b] in it iff
+  a in [:the OperSymbols of S,{the carrier of S}:] &
+  for o be OperSymbol of S st [o,the carrier of S] = a holds
+   len b = len (the_arity_of o) &
+   for x be set st x in dom b holds
+    (b.x in [:the OperSymbols of S,{the carrier of S}:] implies
+    for o1 be OperSymbol of S st [o1,the carrier of S] = b.x
+      holds (the_result_sort_of o1) <= (the_arity_of o)/.x) &
+    (b.x in Union (coprod X) implies
+    ex i being Element of S st
+    i <= (the_arity_of o)/.x &
+    b.x in coprod(i,X));
+end;
+
+reserve S for OrderSortedSign,
+        X for ManySortedSet of S,
+        o for OperSymbol of S,
+        b for Element of
+        ([:the OperSymbols of S,{the carrier of S}:] \/ Union (coprod X))*;
+
+theorem :: OSAFREE:2
+  [[o,the carrier of S],b] in OSREL(X)
+                            iff
+   len b = len (the_arity_of o) &
+   for x be set st x in dom b holds
+    (b.x in [:the OperSymbols of S,{the carrier of S}:] implies
+     for o1 be OperSymbol of S st [o1,the carrier of S] = b.x
+    holds (the_result_sort_of o1) <= (the_arity_of o)/.x) &
+    (b.x in Union (coprod X) implies
+     ex i being Element of S st
+     i <= (the_arity_of o)/.x &
+     b.x in coprod(i,X));
+
+definition
+ let S be OrderSortedSign,
+     X be ManySortedSet of S;
+func DTConOSA(X) -> DTConstrStr equals
+:: OSAFREE:def 5
+ DTConstrStr (# [:the OperSymbols of S,{the carrier of S}:]
+                   \/ Union (coprod X), OSREL(X) #);
+end;
+
+definition
+ let S be OrderSortedSign,
+     X be ManySortedSet of S;
+ cluster DTConOSA(X) -> strict non empty;
+end;
+
+theorem :: OSAFREE:3
+  for S be OrderSortedSign,
+      X be non-empty ManySortedSet of S holds
+  NonTerminals(DTConOSA(X)) = [:the OperSymbols of S,{the carrier of S}:]
+  & Terminals (DTConOSA(X)) = Union (coprod X);
+
+reserve x for set;
+
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+cluster DTConOSA(X) -> with_terminals with_nonterminals
+   with_useful_nonterminals;
+end;
+
+theorem :: OSAFREE:4
+for S be OrderSortedSign,
+    X be non-empty ManySortedSet of S,
+    t be set holds
+               t in Terminals DTConOSA(X)
+                          iff
+ ex s be Element of S, x be set st x in X.s & t = [x,s];
+
+:: have to rename
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     o be OperSymbol of S;
+func OSSym(o,X) ->Symbol of DTConOSA(X) equals
+:: OSAFREE:def 6
+ [o,the carrier of S];
+end;
+
+:: originally FreeSort, but it is not a good name in order-sorted context
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     s be Element of S;
+func ParsedTerms(X,s) -> Subset of TS(DTConOSA(X)) equals
+:: OSAFREE:def 7
+ {a where a is Element of TS(DTConOSA(X)):
+       (ex s1 being Element of S, x be set st
+       s1 <= s & x in X.s1 & a = root-tree [x,s1]) or
+       ex o be OperSymbol of S st [o,the carrier of S] = a.{}
+           & the_result_sort_of o <= s};
+end;
+
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     s be Element of S;
+cluster ParsedTerms(X,s) -> non empty;
+end;
+
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+func ParsedTerms(X) -> OrderSortedSet of S means
+:: OSAFREE:def 8
+for s be Element of S holds it.s = ParsedTerms(X,s);
+end;
+
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+cluster ParsedTerms(X) -> non-empty;
+end;
+
+theorem :: OSAFREE:5
+for S be OrderSortedSign,
+    X be non-empty ManySortedSet of S, o be OperSymbol of S,
+    x be set
+ st x in ((ParsedTerms X)# * (the Arity of S)).o holds
+    x is FinSequence of TS(DTConOSA(X));
+
+theorem :: OSAFREE:6
+for S be OrderSortedSign,
+    X be non-empty ManySortedSet of S,
+    o be OperSymbol of S,
+    p be FinSequence of TS(DTConOSA(X))
+holds p in ((ParsedTerms X)# * (the Arity of S)).o iff
+ dom p = dom (the_arity_of o) &
+ for n be Nat st n in dom p holds
+ p.n in ParsedTerms(X,(the_arity_of o)/.n);
+
+theorem :: OSAFREE:7
+for S be OrderSortedSign,
+    X be non-empty ManySortedSet of S,
+    o be OperSymbol of S,
+    p be FinSequence of TS(DTConOSA(X)) holds
+ OSSym(o,X) ==> roots p iff p in ((ParsedTerms X)# * (the Arity of S)).o;
+
+theorem :: OSAFREE:8
+for S be OrderSortedSign,
+    X be non-empty ManySortedSet of S holds
+ union rng (ParsedTerms X) = TS (DTConOSA(X));
+
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     o be OperSymbol of S;
+func PTDenOp(o,X) ->
+Function of ((ParsedTerms X)# * (the Arity of S)).o,
+            ((ParsedTerms X) * (the ResultSort of S)).o means
+:: OSAFREE:def 9
+for p be FinSequence of TS(DTConOSA(X)) st OSSym(o,X) ==> roots p holds
+  it.p = (OSSym(o,X))-tree p;
+end;
+
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+func PTOper(X) ->
+       ManySortedFunction of (ParsedTerms X)# * (the Arity of S),
+       (ParsedTerms X) * (the ResultSort of S) means
+:: OSAFREE:def 10
+for o be OperSymbol of S holds it.o = PTDenOp(o,X);
+end;
+
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+func ParsedTermsOSA(X) -> OSAlgebra of S equals
+:: OSAFREE:def 11
+ MSAlgebra (# ParsedTerms(X), PTOper(X) #);
+end;
+
+definition
+ let S be OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+cluster ParsedTermsOSA(X) -> strict non-empty;
+end;
+
+definition
+  let S be OrderSortedSign;
+  let X be non-empty ManySortedSet of S;
+  let o be OperSymbol of S;
+ redefine func OSSym(o, X) -> NonTerminal of DTConOSA X;
+end;
+
+theorem :: OSAFREE:9
+  for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S,
+      s being Element of S holds
+   (the Sorts of ParsedTermsOSA(X)).s =
+      {a where a is Element of TS(DTConOSA(X)):
+       (ex s1 being Element of S, x be set st
+       s1 <= s & x in X.s1 & a = root-tree [x,s1]) or
+       ex o be OperSymbol of S st [o,the carrier of S] = a.{}
+           & the_result_sort_of o <= s};
+
+theorem :: OSAFREE:10
+  for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S,
+      s,s1 being Element of S,
+      x being set st x in X.s holds
+  root-tree [x,s] is Element of TS DTConOSA(X) &
+  ( for z being set holds
+    [z,the carrier of S] <> (root-tree [x,s]).{} ) &
+  ( root-tree [x,s] in (the Sorts of ParsedTermsOSA(X)).s1
+    iff s <= s1 );
+
+theorem :: OSAFREE:11
+  for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S,
+      t being Element of TS (DTConOSA X),
+      o being OperSymbol of S st t.{} = [o,the carrier of S] holds
+  (ex p being SubtreeSeq of OSSym(o,X) st
+    t = OSSym(o,X)-tree p & OSSym(o,X) ==> roots p &
+    p in Args(o,ParsedTermsOSA(X)) &
+    t = Den(o,ParsedTermsOSA(X)).p ) &
+  ( for s2 being Element of S, x being set holds
+     t <> root-tree [x,s2] ) &
+  for s1 being Element of S holds
+    t in (the Sorts of ParsedTermsOSA(X)).s1
+    iff the_result_sort_of o <= s1;
+
+theorem :: OSAFREE:12
+  for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S,
+      nt being Symbol of DTConOSA(X),
+      ts being FinSequence of TS(DTConOSA(X)) st
+      nt ==> roots ts holds
+      nt in NonTerminals DTConOSA(X) &
+      nt-tree ts in TS DTConOSA(X) &
+      ex o being OperSymbol of S st nt = [o,the carrier of S] &
+       ts in Args(o,ParsedTermsOSA(X)) &
+       nt-tree ts = Den(o,ParsedTermsOSA(X)).ts &
+       for s1 being Element of S holds
+         nt-tree ts in (the Sorts of ParsedTermsOSA(X)).s1
+         iff the_result_sort_of o <= s1;
+
+:: Element of Args is FinSequence (if clusters MSUALG_9)
+theorem :: OSAFREE:13
+  for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S, o be OperSymbol of S,
+      x being FinSequence holds
+      x in Args(o,ParsedTermsOSA(X)) iff
+      x is FinSequence of TS(DTConOSA(X)) &
+        OSSym(o,X) ==> roots x;
+
+theorem :: OSAFREE:14
+  for S be OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      t be Element of TS DTConOSA(X)
+  ex s being SortSymbol of S st
+  t in (the Sorts of ParsedTermsOSA(X)).s &
+       for s1 being Element of S st
+       t in (the Sorts of ParsedTermsOSA(X)).s1 holds
+       s <= s1;
+
+:: this should be done more generally for leastsorted osas (and
+:: then remove the LeastSorts func), however, it is better here
+:: to have it defined for terms (and not Elements of osa)
+definition
+  let S be OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      t be Element of TS DTConOSA(X);
+func LeastSort t -> SortSymbol of S means
+:: OSAFREE:def 12
+ t in (the Sorts of ParsedTermsOSA(X)).it &
+       for s1 being Element of S st
+       t in (the Sorts of ParsedTermsOSA(X)).s1 holds
+       it <= s1;
+end;
+
+:: REVISE: the clusters needed to make the def from MSAFREE3 work
+:: are too demanding, make it more easily accessible (or include
+:: the clusters if it is too hard)
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ mode Element of A is Element of Union the Sorts of A;
+ canceled;
+end;
+
+theorem :: OSAFREE:15
+  for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S,
+      x being set holds
+      x is Element of ParsedTermsOSA(X) iff
+      x is Element of TS DTConOSA(X);
+
+theorem :: OSAFREE:16
+  for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S,
+      s be Element of S,
+      x being set st x in (the Sorts of ParsedTermsOSA(X)).s
+   holds x is Element of TS DTConOSA(X);
+
+theorem :: OSAFREE:17
+    for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S,
+      s being Element of S,
+      x being set st x in X.s
+  for t being Element of TS DTConOSA(X) st t = root-tree [x,s]
+  holds LeastSort t = s;
+
+theorem :: OSAFREE:18
+  for S being OrderSortedSign,
+      X being non-empty ManySortedSet of S, o be OperSymbol of S,
+      x being Element of Args(o,ParsedTermsOSA(X)) holds
+      for t being Element of TS DTConOSA(X)
+        st t = Den(o,ParsedTermsOSA(X)).x
+      holds LeastSort t = the_result_sort_of o;
+
+:: WHY is this necessary??? bug?
+definition
+  let S be OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+  let o2 be OperSymbol of S;
+cluster Args(o2,ParsedTermsOSA(X)) -> non empty;
+end;
+
+:: REVISE: was probably needed for casting, but try if
+:: LeastSort * x does the work and if so, remove this
+definition
+  let S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      x be FinSequence of TS DTConOSA(X);
+func LeastSorts x -> Element of (the carrier of S)* means
+:: OSAFREE:def 14
+ dom it = dom x &
+       for y being Nat st y in dom x holds
+       ex t being Element of TS DTConOSA(X) st t = x.y &
+       it.y = LeastSort t;
+end;
+
+:: all these should be generalized to any leastsorted osa
+theorem :: OSAFREE:19
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      o be OperSymbol of S,
+      x be FinSequence of TS DTConOSA(X) holds
+  LeastSorts x <= the_arity_of o iff x in Args(o,ParsedTermsOSA(X));
+
+definition
+  cluster locally_directed regular (monotone OrderSortedSign);
+end;
+
+:: just casting funcs necessary for the usage of schemes,
+definition
+  let S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S,
+      o be OperSymbol of S,
+      x be FinSequence of TS DTConOSA(X);
+assume  OSSym(LBound(o,LeastSorts x),X) ==> roots x;
+func pi(o,x) -> Element of TS DTConOSA(X) equals
+:: OSAFREE:def 15
+ OSSym(LBound(o,LeastSorts x),X)-tree x;
+end;
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     t be Symbol of DTConOSA(X);
+assume  ex p be FinSequence st t ==> p;
+func @(X,t) -> OperSymbol of S means
+:: OSAFREE:def 16
+  [it,the carrier of S] = t;
+end;
+
+definition
+  let S be OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+  let t be Symbol of DTConOSA(X);
+  assume  t in Terminals DTConOSA(X);
+  func pi t -> Element of TS(DTConOSA(X)) equals
+:: OSAFREE:def 17
+ root-tree t;
+end;
+
+:: the least monotone OSCongruence
+definition
+  let S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+func LCongruence X -> monotone OSCongruence of ParsedTermsOSA(X) means
+:: OSAFREE:def 18
+    for R be monotone OSCongruence of ParsedTermsOSA(X) holds
+    it c= R;
+end;
+
+definition
+  let S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+func FreeOSA(X) -> strict non-empty monotone OSAlgebra of S equals
+:: OSAFREE:def 19
+  QuotOSAlg(ParsedTermsOSA(X),LCongruence(X));
+end;
+
+:: now we need an explicit description of a sufficiently small
+:: monotone OSCongruence on PTA; the PTCongruence turns out to
+:: be LCongruence on regular signatures, and is also used to describe
+:: minimal terms there
+
+:: just casting funcs necessary for the usage of schemes,
+:: remove when Frankel behaves better
+definition
+  let S be OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+  let t be Symbol of DTConOSA(X);
+  func @ t -> Subset of [:TS(DTConOSA(X)), the carrier of S:] equals
+:: OSAFREE:def 20
+  {[root-tree t,s1] where s1 is Element of S:
+  ex s be Element of S, x be set st
+  x in X.s & t = [x,s] & s <= s1};
+end;
+
+definition
+  let S be OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+  let nt be Symbol of DTConOSA(X),
+      x be FinSequence of bool [:TS(DTConOSA(X)), the carrier of S:];
+  func @ (nt,x) -> Subset of [:TS(DTConOSA(X)), the carrier of S:]
+  equals
+:: OSAFREE:def 21
+         {[Den(o2,ParsedTermsOSA(X)).x2,s3] where
+o2 is OperSymbol of S,
+           x2 is Element of Args(o2,ParsedTermsOSA(X)),
+s3 is Element of S :
+( ex o1 being OperSymbol of S st nt = [o1,the carrier of S] &
+o1 ~= o2 & len the_arity_of o1 = len the_arity_of o2 &
+  the_result_sort_of o1 <= s3 & the_result_sort_of o2 <= s3) &
+   ex w3 being Element of (the carrier of S)* st
+   dom w3 = dom x &
+   for y being Nat st y in dom x holds
+        [x2.y,w3/.y] in x.y
+        };
+end;
+
+:: a bit technical, to create the PTCongruence
+definition
+  let S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+func PTClasses X -> Function of TS(DTConOSA(X)),
+                     bool [:TS(DTConOSA(X)), the carrier of S:] means
+:: OSAFREE:def 22
+
+  (for t being Symbol of DTConOSA(X) st t in Terminals DTConOSA(X)
+         holds it.(root-tree t) = @(t) ) &
+  (for nt being Symbol of DTConOSA(X),
+       ts being FinSequence of TS(DTConOSA(X)) st nt ==> roots ts
+         holds it.(nt-tree ts) = @(nt,it * ts) );
+end;
+
+theorem :: OSAFREE:20
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      t being Element of TS DTConOSA(X)
+      holds
+       ( for s being Element of S holds
+         t in (the Sorts of ParsedTermsOSA(X)).s iff
+         [t,s] in (PTClasses X).t ) &
+       ( for s being Element of S,
+         y being Element of TS(DTConOSA X) holds
+         [y,s] in (PTClasses X).t implies [t,s] in (PTClasses X).y );
+
+theorem :: OSAFREE:21
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      t being Element of TS DTConOSA(X),
+      s being Element of S holds
+       ( ex y being Element of TS(DTConOSA X)
+         st [y,s] in (PTClasses X).t )
+       implies [t,s] in (PTClasses X).t;
+
+theorem :: OSAFREE:22
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      x,y being Element of TS DTConOSA(X),
+      s1,s2 being Element of S
+      st s1 <= s2 & x in (the Sorts of ParsedTermsOSA(X)).s1
+      & y in (the Sorts of ParsedTermsOSA(X)).s1 holds
+      [y,s1] in (PTClasses X).x iff [y,s2] in (PTClasses X).x;
+
+theorem :: OSAFREE:23
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      x,y,z being Element of TS DTConOSA(X),
+      s being Element of S holds
+     [y,s] in (PTClasses X).x & [z,s] in (PTClasses X).y implies
+     [x,s] in (PTClasses X).z;
+
+definition
+  let S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+func PTCongruence(X) -> MSEquivalence-like OrderSortedRelation of
+                        ParsedTermsOSA(X) means
+:: OSAFREE:def 23
+  for i being set st i in the carrier of S holds
+  it.i = {[x,y] where x,y is Element of TS(DTConOSA(X)):
+                      [x,i] in (PTClasses X).y};
+end;
+
+theorem :: OSAFREE:24
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      x,y,s being set st [x,s] in (PTClasses X).y holds
+      x in TS DTConOSA(X) & y in TS DTConOSA(X) &
+      s in the carrier of S;
+
+theorem :: OSAFREE:25
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      C be Component of S,
+      x,y being set holds
+  [x,y] in CompClass(PTCongruence X,C) iff
+  ex s1 being Element of S
+  st s1 in C & [x,s1] in (PTClasses X).y;
+
+theorem :: OSAFREE:26
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      s be Element of S,
+      x be Element of (the Sorts of ParsedTermsOSA(X)).s holds
+ OSClass(PTCongruence X,x) = proj1((PTClasses X).x);
+
+:: more explicit description of PTCongruence
+theorem :: OSAFREE:27
+  for S being locally_directed OrderSortedSign,
+      X being non-empty ManySortedSet of S,
+      R being ManySortedRelation of ParsedTermsOSA(X) holds
+      R = PTCongruence(X)
+iff
+( for s1,s2 being Element of S,
+      x being set st x in X.s1 holds
+   ( s1 <= s2 implies
+    [root-tree [x,s1],root-tree[x,s1]] in R.s2 ) &
+   for y being set holds
+    ( [root-tree [x,s1],y] in R.s2 or
+     [y,root-tree [x,s1]] in R.s2) implies
+     s1 <= s2 & y = root-tree [x,s1] )
+ &
+  for o1,o2 being OperSymbol of S,
+      x1 being Element of Args(o1,ParsedTermsOSA(X)),
+      x2 being Element of Args(o2,ParsedTermsOSA(X)),
+      s3 being Element of S holds
+  [Den(o1,ParsedTermsOSA(X)).x1,Den(o2,ParsedTermsOSA(X)).x2] in R.s3
+  iff
+   o1 ~= o2 & len the_arity_of o1 = len the_arity_of o2 &
+   the_result_sort_of o1 <= s3 & the_result_sort_of o2 <= s3 &
+   ex w3 being Element of (the carrier of S)* st
+    dom w3 = dom x1 &
+      ( for y being Nat st y in dom w3 holds
+        [x1.y,x2.y] in R.(w3/.y)
+      );
+
+:: the minimality for regular oss is done later
+theorem :: OSAFREE:28
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S holds
+    PTCongruence(X) is monotone;
+
+:: MSCongruence-like is ensured by the OSALG_4 cluster
+definition
+  let S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+cluster PTCongruence(X) -> monotone;
+end;
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     s be Element of S;
+func PTVars(s,X) -> Subset of (the Sorts of ParsedTermsOSA(X)).s means
+:: OSAFREE:def 24
+for x be set holds x in it iff
+  ex a be set st a in X.s &
+  x = root-tree [a,s];
+end;
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     s be Element of S;
+cluster PTVars(s,X) -> non empty;
+end;
+
+theorem :: OSAFREE:29
+for S be locally_directed OrderSortedSign,
+    X be non-empty ManySortedSet of S,
+    s be Element of S holds
+    PTVars(s,X) = { root-tree t where
+    t is Symbol of DTConOSA(X): t in Terminals DTConOSA(X) & t`2 = s};
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+func PTVars(X) -> MSSubset of ParsedTermsOSA(X) means
+:: OSAFREE:def 25
+for s be Element of S holds it.s = PTVars(s,X);
+end;
+
+theorem :: OSAFREE:30
+  for S be locally_directed OrderSortedSign,
+    X be non-empty ManySortedSet of S
+holds PTVars(X) is non-empty;
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     s be Element of S;
+func OSFreeGen(s,X) -> Subset of (the Sorts of FreeOSA(X)).s means
+:: OSAFREE:def 26
+for x be set holds x in it iff
+  ex a be set st a in X.s &
+  x = (OSNat_Hom(ParsedTermsOSA(X),LCongruence(X)).s).(root-tree [a,s]);
+end;
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     s be Element of S;
+cluster OSFreeGen(s,X) -> non empty;
+end;
+
+theorem :: OSAFREE:31
+for S be locally_directed OrderSortedSign,
+    X be non-empty ManySortedSet of S,
+    s be Element of S holds
+OSFreeGen(s,X) =
+{ (OSNat_Hom(ParsedTermsOSA(X),LCongruence(X)).s).root-tree t where
+t is Symbol of DTConOSA(X): t in Terminals DTConOSA(X) & t`2 = s};
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+func OSFreeGen(X) -> OSGeneratorSet of FreeOSA(X) means
+:: OSAFREE:def 27
+for s be Element of S holds it.s = OSFreeGen(s,X);
+end;
+
+theorem :: OSAFREE:32
+for S be locally_directed OrderSortedSign,
+    X be non-empty ManySortedSet of S
+holds OSFreeGen(X) is non-empty;
+
+definition
+  let S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S;
+cluster OSFreeGen(X) -> non-empty;
+end;
+
+definition
+  let S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      R be OSCongruence of ParsedTermsOSA(X),
+      t be Element of TS DTConOSA(X);
+func OSClass(R,t) -> Element of OSClass(R,LeastSort t) means
+:: OSAFREE:def 28
+   for s being Element of S,
+       x being Element of (the Sorts of ParsedTermsOSA(X)).s st
+       t = x holds it = OSClass(R,x);
+end;
+
+theorem :: OSAFREE:33
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      R be OSCongruence of ParsedTermsOSA(X),
+      t be Element of TS DTConOSA(X) holds
+      t in OSClass(R,t);
+
+theorem :: OSAFREE:34
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      s be Element of S,
+      t being Element of TS DTConOSA(X),
+      x,x1 being set st x in X.s & t = root-tree [x,s] holds
+      x1 in OSClass(PTCongruence(X),t) iff x1 = t;
+
+theorem :: OSAFREE:35
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      R be OSCongruence of ParsedTermsOSA(X),
+      t1,t2 be Element of TS DTConOSA(X) holds
+      t2 in OSClass(R,t1) iff
+      OSClass(R,t1) = OSClass(R,t2);
+
+theorem :: OSAFREE:36
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      R1,R2 be OSCongruence of ParsedTermsOSA(X),
+      t be Element of TS DTConOSA(X) holds
+      R1 c= R2 implies OSClass(R1,t) c= OSClass(R2,t);
+
+theorem :: OSAFREE:37
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      s be Element of S,
+      t being Element of TS DTConOSA(X),
+      x,x1 being set st x in X.s & t = root-tree [x,s] holds
+      x1 in OSClass(LCongruence(X),t) iff x1 = t;
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     A be non-empty ManySortedSet of the carrier of S,
+     F be ManySortedFunction of PTVars(X), A,
+     t be Symbol of DTConOSA(X);
+assume  t in Terminals (DTConOSA(X));
+func pi(F,A,t) -> Element of Union A means
+:: OSAFREE:def 29
+ for f be Function st f = F.(t`2) holds
+ it = f.(root-tree t);
+end;
+
+theorem :: OSAFREE:38
+  for S be locally_directed OrderSortedSign,
+      X be non-empty ManySortedSet of S,
+      U1 be monotone non-empty OSAlgebra of S,
+      f be ManySortedFunction of PTVars(X),the Sorts of U1
+  ex h be ManySortedFunction of ParsedTermsOSA(X),U1
+   st h is_homomorphism ParsedTermsOSA(X),U1
+   & h is order-sorted & h || PTVars(X) = f;
+
+:: NH stanbds for NatHom
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S,
+     s be Element of S;
+func NHReverse(s,X) -> Function of OSFreeGen(s,X),PTVars(s,X) means
+:: OSAFREE:def 30
+  for t be Symbol of DTConOSA(X) st
+  (OSNat_Hom(ParsedTermsOSA(X),LCongruence(X)).s).(root-tree t) in
+  OSFreeGen(s,X)
+  holds
+  it.((OSNat_Hom(ParsedTermsOSA(X),LCongruence(X)).s).(root-tree t))
+    = root-tree t;
+end;
+
+definition
+ let S be locally_directed OrderSortedSign,
+     X be non-empty ManySortedSet of S;
+func NHReverse(X) -> ManySortedFunction of OSFreeGen(X),PTVars(X) means
+:: OSAFREE:def 31
+  for s be Element of S holds it.s = NHReverse(s,X);
+end;
+
+theorem :: OSAFREE:39
+for S be locally_directed OrderSortedSign,
+    X be non-empty ManySortedSet of S holds OSFreeGen(X) is osfree;
+
+theorem :: OSAFREE:40
+for S be locally_directed OrderSortedSign,
+    X be non-empty ManySortedSet of S holds
+FreeOSA(X) is osfree;
+
+definition
+ let S be locally_directed OrderSortedSign;
+cluster osfree strict (non-empty monotone OSAlgebra of S);
+end;
+
+begin
+:: PTMin ... minimality of PTCongruence on regular signatures
+:: minimal terms
+
+definition
+  let S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S;
+func PTMin X -> Function of TS(DTConOSA(X)), TS(DTConOSA(X)) means
+:: OSAFREE:def 32
+  (for t being Symbol of DTConOSA(X) st t in Terminals DTConOSA(X)
+         holds it.(root-tree t) = pi t ) &
+  (for nt being Symbol of DTConOSA(X),
+       ts being FinSequence of TS(DTConOSA(X)) st nt ==> roots ts
+         holds it.(nt-tree ts) = pi(@(X,nt),it * ts) );
+end;
+
+theorem :: OSAFREE:41
+  for S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S,
+      t being Element of TS DTConOSA(X) holds
+      (PTMin X).t in OSClass(PTCongruence(X),t) &
+      LeastSort ((PTMin X).t) <= LeastSort t &
+  (for s being Element of S,
+       x being set st x in X.s & t = root-tree [x,s]
+       holds (PTMin X).t = t ) &
+  (for o being OperSymbol of S,
+       ts being FinSequence of TS(DTConOSA(X))
+       st OSSym(o,X) ==> roots ts & t = OSSym(o,X)-tree ts holds
+       LeastSorts ((PTMin X)*ts) <= the_arity_of o &
+       OSSym(o,X) ==> roots ((PTMin X)*ts) &
+       OSSym(LBound(o,LeastSorts ((PTMin X)*ts)),X) ==>
+       roots ((PTMin X)*ts) &
+       (PTMin X).t =
+      OSSym(LBound(o,LeastSorts ((PTMin X)*ts)),X)-tree ((PTMin X)*ts));
+
+theorem :: OSAFREE:42
+  for S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S,
+      t,t1 being Element of TS DTConOSA(X)
+      st t1 in OSClass(PTCongruence(X),t)
+    holds (PTMin X).t1 = (PTMin X).t;
+
+theorem :: OSAFREE:43
+  for S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S,
+      t1,t2 be Element of TS DTConOSA(X) holds
+      t2 in OSClass(PTCongruence(X),t1) iff (PTMin X).t2 = (PTMin X).t1;
+
+theorem :: OSAFREE:44
+  for S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S,
+      t1 be Element of TS DTConOSA(X) holds
+      (PTMin X).((PTMin X).t1) = (PTMin X).t1;
+
+theorem :: OSAFREE:45
+  for S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S,
+      R be monotone (MSEquivalence-like OrderSortedRelation of
+           ParsedTermsOSA(X)),
+      t be Element of TS DTConOSA(X)
+    holds [t,(PTMin X).t] in R.(LeastSort t);
+
+theorem :: OSAFREE:46
+  for S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S,
+      R be monotone (MSEquivalence-like OrderSortedRelation of
+           ParsedTermsOSA(X))
+    holds PTCongruence(X) c= R;
+
+:: minimality of PTCongruence
+theorem :: OSAFREE:47
+    for S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S
+   holds LCongruence(X) = PTCongruence(X);
+
+:: I would prefer attribute "minimal", but non-clusterable
+definition
+  let S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S;
+mode MinTerm of S,X -> Element of TS DTConOSA(X) means
+:: OSAFREE:def 33
+  (PTMin X).it = it;
+end;
+
+definition
+  let S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S;
+func MinTerms X -> Subset of TS DTConOSA(X) equals
+:: OSAFREE:def 34
+  rng (PTMin X);
+end;
+
+theorem :: OSAFREE:48
+    for S be locally_directed regular (monotone OrderSortedSign),
+      X be non-empty ManySortedSet of S,
+      x being set holds x is MinTerm of S,X iff x in MinTerms X;

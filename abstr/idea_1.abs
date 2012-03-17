@@ -1,0 +1,615 @@
+:: Algebraic group on Fixed-length bit integer and its adaptation
+::  to {IDEA} Cryptography
+::  by Yasushi Fuwa and Yoshinori Fujisawa
+::
+:: Received September 7, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary MIDSP_3, MARGREL1, FILTER_0, ARYTM_3, NAT_1, INT_1, ARYTM_1, POWER,
+      GRCAT_1, FINSEQ_2, BINARITH, FINSEQ_1, FUNCT_1, RELAT_1, BINARI_3,
+      CQC_LANG, MATRIX_1, INCSP_1, PRALG_1, FUNCT_7, FUNCT_2, FUNCT_5, BOOLE,
+      TREES_1, IDEA_1, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, INT_1, INT_2,
+      NAT_1, MARGREL1, RELAT_1, FUNCT_1, MATRIX_1, PRALG_1, PARTFUN1, FUNCT_2,
+      FUNCT_5, FUNCT_7, SERIES_1, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      BINARITH, BINARI_3, WSIERP_1, MIDSP_3;
+ constructors FUNCT_7, BINARI_2, SERIES_1, BINARITH, BINARI_3, FINSEQ_4,
+      WSIERP_1, INT_2, MEMBERED;
+ clusters INT_1, FUNCT_1, RELSET_1, MARGREL1, BINARITH, FUNCT_7, NAT_1,
+      XREAL_0, MEMBERED, FUNCT_2, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin ::Some selected theorems on integers
+
+reserve i,j,k,n for Nat;
+reserve x,y,z for Tuple of n, BOOLEAN;
+
+theorem :: IDEA_1:1
+  for i,j,k holds j is prime & i<j & k<j & i<>0 implies
+    ex a being Nat st (a*i) mod j = k & a < j;
+
+theorem :: IDEA_1:2
+  for n,k1,k2 being Nat holds
+    n <> 0 & k1 mod n = k2 mod n & k1 <= k2 implies
+      ex t being Nat st k2 - k1 = n*t;
+
+theorem :: IDEA_1:3
+  for a, b being Nat holds a - b <= a;
+
+theorem :: IDEA_1:4
+  for b1,b2,c being Nat holds b2 <= c implies b2 - b1 <= c;
+
+theorem :: IDEA_1:5
+  for a,b,c being Nat holds 0<a & 0<b & a<c & b<c & c is prime implies
+    (a * b) mod c <> 0;
+
+theorem :: IDEA_1:6
+    for n being non empty Nat holds 2 to_power(n) <> 1;
+
+begin :: Algebraic group on Fixed-length bit Integer
+:: In this section,we construct an algebraic group on
+:: Fixed-length bit Integer.
+:: IDEA's Basic operators are 'xor', ADD_MOD and MUL_MOD.
+:: 'xor' is 16-bitwise XOR. ADD_MOD is addition mod 2^{16}.
+:: MUL_MOD is multiplication mod 2^(16)+1. And, we define
+:: two functions NEG_MOD and INV_MOD that give inverse
+:: element of ADD_MOD and MUL_MOD respectively.
+
+definition
+  let n;
+  func ZERO( n ) -> Tuple of n, BOOLEAN equals
+:: IDEA_1:def 1
+
+  n |-> FALSE;
+end;
+
+definition
+  let n;
+  let x, y be Tuple of n, BOOLEAN;
+  func x 'xor' y -> Tuple of n, BOOLEAN means
+:: IDEA_1:def 2
+
+  for i st i in Seg n holds it/.i = (x/.i) 'xor' (y/.i);
+end;
+
+theorem :: IDEA_1:7
+  for n,x holds x 'xor' x = ZERO(n);
+
+theorem :: IDEA_1:8
+  for n,x,y holds x 'xor' y = y 'xor' x;
+
+definition
+  let n;
+  let x, y be Tuple of n, BOOLEAN;
+  redefine func x 'xor' y;
+  commutativity;
+end;
+
+theorem :: IDEA_1:9
+  for n,x holds ZERO(n) 'xor' x = x;
+
+theorem :: IDEA_1:10
+  for n,x,y,z holds (x 'xor' y) 'xor' z = x 'xor' (y 'xor' z);
+
+definition
+  let n;
+  let i be Nat;
+  pred i is_expressible_by n means
+:: IDEA_1:def 3
+   i < 2 to_power(n);
+end;
+
+theorem :: IDEA_1:11
+    for n holds n-BinarySequence 0 = ZERO(n);
+
+definition
+  let n;
+  let i, j be Nat;
+  func ADD_MOD(i,j,n) -> Nat equals
+:: IDEA_1:def 4
+
+  (i + j) mod 2 to_power(n);
+end;
+
+definition
+  let n;
+  let i be Nat;
+  assume  i is_expressible_by n;
+  func NEG_N(i,n) -> Nat equals
+:: IDEA_1:def 5
+
+     2 to_power(n) - i;
+end;
+
+definition
+  let n;
+  let i be Nat;
+  func NEG_MOD(i,n) -> Nat equals
+:: IDEA_1:def 6
+
+     NEG_N(i,n) mod 2 to_power(n);
+end;
+
+theorem :: IDEA_1:12
+  i is_expressible_by n implies ADD_MOD(i, NEG_MOD(i,n), n) = 0;
+
+theorem :: IDEA_1:13
+  ADD_MOD(i,j,n) = ADD_MOD(j,i,n);
+
+theorem :: IDEA_1:14
+  i is_expressible_by n implies ADD_MOD(0,i,n) = i;
+
+theorem :: IDEA_1:15
+  ADD_MOD(ADD_MOD(i,j,n),k,n) = ADD_MOD(i,ADD_MOD(j,k,n),n);
+
+theorem :: IDEA_1:16
+  ADD_MOD(i,j,n) is_expressible_by n;
+
+theorem :: IDEA_1:17
+    NEG_MOD(i,n) is_expressible_by n;
+
+definition
+  let n, i be Nat;
+  func ChangeVal_1(i,n) -> Nat equals
+:: IDEA_1:def 7
+
+    2 to_power(n) if i = 0
+    otherwise i;
+end;
+
+theorem :: IDEA_1:18
+  i is_expressible_by n implies
+      ChangeVal_1(i,n) <= 2 to_power(n) & ChangeVal_1(i,n) > 0;
+
+theorem :: IDEA_1:19
+  for n,a1,a2 be Nat holds a1 is_expressible_by n & a2 is_expressible_by n &
+    ChangeVal_1(a1,n) = ChangeVal_1(a2,n) implies a1 = a2;
+
+definition
+  let n;
+  let i be Nat;
+  func ChangeVal_2(i,n) -> Nat equals
+:: IDEA_1:def 8
+
+    0 if i = 2 to_power(n)
+    otherwise i;
+end;
+
+theorem :: IDEA_1:20
+    i is_expressible_by n implies
+    ChangeVal_2(i,n) is_expressible_by n;
+
+theorem :: IDEA_1:21
+  for n,a1,a2 be Nat holds a1 <> 0 & a2 <> 0 &
+    ChangeVal_2(a1,n) = ChangeVal_2(a2,n) implies a1 = a2;
+
+definition
+  let n;
+  let i,j be Nat;
+  func MUL_MOD(i,j,n) -> Nat equals
+:: IDEA_1:def 9
+
+    ChangeVal_2((ChangeVal_1(i,n)*ChangeVal_1(j,n)) mod (2 to_power(n)+1),n);
+end;
+
+definition
+  let n be non empty Nat;
+  let i be Nat;
+  assume  i is_expressible_by n & (2 to_power(n) + 1) is prime;
+    func INV_MOD(i,n) -> Nat means
+:: IDEA_1:def 10
+
+    MUL_MOD(i,it,n) = 1 & it is_expressible_by n;
+end;
+
+theorem :: IDEA_1:22
+  MUL_MOD(i,j,n) = MUL_MOD(j,i,n);
+
+theorem :: IDEA_1:23
+  i is_expressible_by n implies MUL_MOD(1,i,n) = i;
+
+theorem :: IDEA_1:24
+  (2 to_power(n)+1) is prime & i is_expressible_by n &
+    j is_expressible_by n & k is_expressible_by n implies
+       MUL_MOD(MUL_MOD(i,j,n),k,n) = MUL_MOD(i,MUL_MOD(j,k,n),n);
+
+theorem :: IDEA_1:25
+  MUL_MOD(i,j,n) is_expressible_by n;
+
+theorem :: IDEA_1:26
+    ChangeVal_2(i,n) = 1 implies i = 1;
+
+begin :: Operations of IDEA Cryptograms
+:: We define three IDEA's operations IDEAoperationA, IDEAoperationB
+:: and IDEAoperationC using the basic operators. IDEA Cryptogram
+:: encrypts 64-bit plain text to 64-bit ciphertext. These texts
+:: are divided into 4 16-bits text blocks. Here, we use m as the
+:: text block sequence. And, IDEA's operations use key sequence
+:: explains k in this section. n is bit-length of text blocks.
+
+:: Definiton of IDEA Operation A
+definition
+  let n;
+  let m,k be FinSequence of NAT;
+  func IDEAoperationA(m, k, n) -> FinSequence of NAT means
+:: IDEA_1:def 11
+
+   len(it) = len(m) &
+   for i being Nat st i in dom m holds
+     (i=1 implies it.i = MUL_MOD(m.1, k.1, n)) &
+     (i=2 implies it.i = ADD_MOD(m.2, k.2, n)) &
+     (i=3 implies it.i = ADD_MOD(m.3, k.3, n)) &
+     (i=4 implies it.i = MUL_MOD(m.4, k.4, n)) &
+     (i<>1 & i <> 2 & i<>3 & i<>4 implies it.i = m.i);
+end;
+
+:: Definiton of IDEA Operation B
+
+reserve m,k,k1,k2 for FinSequence of NAT;
+
+definition
+  let n be non empty Nat;
+  let m,k be FinSequence of NAT;
+  func IDEAoperationB(m, k, n) -> FinSequence of NAT means
+:: IDEA_1:def 12
+
+  len(it) = len(m) & for i being Nat st i in dom m holds
+  (i=1 implies it.i =
+    Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+  (i=2 implies it.i =
+    Absval((n-BinarySequence m.2) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+  (i=3 implies it.i =
+    Absval((n-BinarySequence m.3) 'xor' (n-BinarySequence
+            MUL_MOD(ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),Absval((n-BinarySequence m.2) 'xor'
+              (n-BinarySequence m.4)),n),k.6,n))))&
+  (i=4 implies it.i =
+    Absval((n-BinarySequence m.4) 'xor' (n-BinarySequence
+            ADD_MOD(MUL_MOD(Absval((n-BinarySequence m.1) 'xor'
+             (n-BinarySequence m.3)),k.5,n),MUL_MOD(ADD_MOD(MUL_MOD(
+               Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence m.3)),
+                k.5,n),Absval((n-BinarySequence m.2) 'xor'
+                 (n-BinarySequence m.4)),n),k.6,n),n))))&
+  (i<>1 & i <> 2 & i<>3 & i<>4 implies it.i = m.i);
+end;
+
+:: Definiton of IDEA Operation C
+definition
+  let m be FinSequence of NAT;
+  func IDEAoperationC(m) -> FinSequence of NAT means
+:: IDEA_1:def 13
+
+   len(it) = len(m) &
+   for i being Nat st i in dom m holds
+     it.i = IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i));
+end;
+
+theorem :: IDEA_1:27
+  len m >= 4 implies
+    IDEAoperationA(m,k,n).1 is_expressible_by n &
+    IDEAoperationA(m,k,n).2 is_expressible_by n &
+    IDEAoperationA(m,k,n).3 is_expressible_by n &
+    IDEAoperationA(m,k,n).4 is_expressible_by n;
+
+theorem :: IDEA_1:28
+  for n being non empty Nat holds
+    len m >= 4 implies
+    IDEAoperationB(m,k,n).1 is_expressible_by n &
+    IDEAoperationB(m,k,n).2 is_expressible_by n &
+    IDEAoperationB(m,k,n).3 is_expressible_by n &
+    IDEAoperationB(m,k,n).4 is_expressible_by n;
+
+theorem :: IDEA_1:29
+    len m >= 4 &
+    m.1 is_expressible_by n & m.2 is_expressible_by n &
+    m.3 is_expressible_by n & m.4 is_expressible_by n implies
+    IDEAoperationC(m).1 is_expressible_by n &
+    IDEAoperationC(m).2 is_expressible_by n &
+    IDEAoperationC(m).3 is_expressible_by n &
+    IDEAoperationC(m).4 is_expressible_by n;
+
+theorem :: IDEA_1:30
+  for n being non empty Nat,m,k1,k2 holds
+    2 to_power(n)+1 is prime & len m >= 4 &
+    m.1 is_expressible_by n & m.2 is_expressible_by n &
+    m.3 is_expressible_by n & m.4 is_expressible_by n &
+    k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+    k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+    k2.1=INV_MOD(k1.1,n) & k2.2=NEG_MOD(k1.2,n) &
+    k2.3=NEG_MOD(k1.3,n) & k2.4=INV_MOD(k1.4,n) implies
+    IDEAoperationA( IDEAoperationA(m,k1,n), k2, n) = m;
+
+theorem :: IDEA_1:31
+  for n being non empty Nat,m,k1,k2 holds
+    2 to_power(n)+1 is prime & len m >= 4 &
+    m.1 is_expressible_by n & m.2 is_expressible_by n &
+    m.3 is_expressible_by n & m.4 is_expressible_by n &
+    k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+    k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+    k2.1=INV_MOD(k1.1,n) & k2.2=NEG_MOD(k1.3,n) &
+    k2.3=NEG_MOD(k1.2,n) & k2.4=INV_MOD(k1.4,n) implies
+    IDEAoperationA(IDEAoperationC(IDEAoperationA(IDEAoperationC(m),k1,n)),k2,n)
+      = m;
+
+theorem :: IDEA_1:32
+  for n being non empty Nat,m,k1,k2 holds
+    2 to_power(n)+1 is prime & len m >= 4 &
+    m.1 is_expressible_by n & m.2 is_expressible_by n &
+    m.3 is_expressible_by n & m.4 is_expressible_by n &
+    k1.5 is_expressible_by n & k1.6 is_expressible_by n &
+    k2.5=k1.5 & k2.6=k1.6 implies
+    IDEAoperationB( IDEAoperationB(m,k1,n), k2, n) = m;
+
+theorem :: IDEA_1:33
+    for m holds len m >= 4 implies IDEAoperationC( IDEAoperationC(m) ) = m;
+
+begin :: Sequences of IDEA Cryptogram's operations
+:: For making a model of IDEA, we define sequences of IDEA's
+:: operations IDEA_P, IDEA_PS, IDEA_PE, IDEA_Q, IDEA_QS and
+:: IDEA_QE. And, we define MESSAGES as plain and cipher text.
+
+definition
+  func MESSAGES -> set equals
+:: IDEA_1:def 14
+
+     NAT*;
+end;
+
+definition
+  cluster MESSAGES -> non empty;
+end;
+
+definition
+  cluster -> Function-like Relation-like Element of MESSAGES;
+end;
+
+definition
+  cluster -> FinSequence-like Element of MESSAGES;
+end;
+
+definition
+  let n be non empty Nat,k;
+  func IDEA_P(k,n) -> Function of MESSAGES, MESSAGES means
+:: IDEA_1:def 15
+
+  for m holds it.m = IDEAoperationA(IDEAoperationC(IDEAoperationB(m,k,n)),k,n);
+end;
+
+definition
+  let n be non empty Nat,k;
+  func IDEA_Q(k,n) -> Function of MESSAGES, MESSAGES means
+:: IDEA_1:def 16
+
+  for m holds it.m = IDEAoperationB(IDEAoperationA(IDEAoperationC(m),k,n),k,n);
+end;
+
+definition
+  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  func IDEA_P_F(Key,n,r) -> FinSequence means
+:: IDEA_1:def 17
+
+  len it = r & for i st i in dom it holds it.i = IDEA_P(Line(Key,i),n);
+end;
+
+definition
+  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  cluster IDEA_P_F(Key,n,r) -> Function-yielding;
+end;
+
+definition
+  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  func IDEA_Q_F(Key,n,r) -> FinSequence means
+:: IDEA_1:def 18
+
+  len it = r & for i st i in dom it holds it.i = IDEA_Q(Line(Key,r-'i+1),n);
+end;
+
+definition
+  let r,lk be Nat,n be non empty Nat,Key be Matrix of lk,6,NAT;
+  cluster IDEA_Q_F(Key,n,r) -> Function-yielding;
+end;
+
+definition
+  let k,n;
+  func IDEA_PS(k,n) -> Function of MESSAGES, MESSAGES means
+:: IDEA_1:def 19
+
+  for m holds it.m = IDEAoperationA(m,k,n);
+end;
+
+definition
+  let k,n;
+  func IDEA_QS(k,n) -> Function of MESSAGES, MESSAGES means
+:: IDEA_1:def 20
+
+  for m holds it.m = IDEAoperationA(m,k,n);
+end;
+
+definition
+  let n be non empty Nat,k;
+  func IDEA_PE(k,n) -> Function of MESSAGES, MESSAGES means
+:: IDEA_1:def 21
+
+  for m holds it.m = IDEAoperationA(IDEAoperationB(m,k,n),k,n);
+end;
+
+definition
+  let n be non empty Nat,k;
+  func IDEA_QE(k,n) -> Function of MESSAGES, MESSAGES means
+:: IDEA_1:def 22
+
+  for m holds it.m = IDEAoperationB(IDEAoperationA(m,k,n),k,n);
+end;
+
+theorem :: IDEA_1:34
+  for n being non empty Nat,m,k1,k2
+     holds 2 to_power(n)+1 is prime & len m >= 4 &
+      m.1 is_expressible_by n & m.2 is_expressible_by n &
+      m.3 is_expressible_by n & m.4 is_expressible_by n &
+      k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+      k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+      k1.5 is_expressible_by n & k1.6 is_expressible_by n &
+      k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.3,n) &
+      k2.3 = NEG_MOD(k1.2,n) & k2.4 = INV_MOD(k1.4,n) &
+      k2.5 = k1.5 & k2.6 = k1.6 implies
+        (IDEA_Q(k2,n)*IDEA_P(k1,n)).m = m;
+
+theorem :: IDEA_1:35
+  for n being non empty Nat,m,k1,k2 holds
+       2 to_power(n)+1 is prime & len m >= 4 &
+       m.1 is_expressible_by n & m.2 is_expressible_by n &
+       m.3 is_expressible_by n & m.4 is_expressible_by n &
+       k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+       k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+       k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.2,n) &
+       k2.3 = NEG_MOD(k1.3,n) & k2.4 = INV_MOD(k1.4,n) implies
+       (IDEA_QS(k2,n)*IDEA_PS(k1,n)).m = m;
+
+theorem :: IDEA_1:36
+  for n being non empty Nat,m,k1,k2 holds
+    2 to_power(n)+1 is prime & len m >= 4 &
+      m.1 is_expressible_by n & m.2 is_expressible_by n &
+      m.3 is_expressible_by n & m.4 is_expressible_by n &
+      k1.1 is_expressible_by n & k1.2 is_expressible_by n &
+      k1.3 is_expressible_by n & k1.4 is_expressible_by n &
+      k1.5 is_expressible_by n & k1.6 is_expressible_by n &
+      k2.1 = INV_MOD(k1.1,n) & k2.2 = NEG_MOD(k1.2,n) &
+      k2.3 = NEG_MOD(k1.3,n) & k2.4 = INV_MOD(k1.4,n) &
+      k2.5 = k1.5 & k2.6 = k1.6 implies
+      (IDEA_QE(k2,n)*IDEA_PE(k1,n)).m = m;
+
+theorem :: IDEA_1:37
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds IDEA_P_F(Key,n,(k+1)) =
+      IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>;
+
+theorem :: IDEA_1:38
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds IDEA_Q_F(Key,n,(k+1)) =
+      <* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k);
+
+theorem :: IDEA_1:39
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds IDEA_P_F(Key,n,k) is FuncSeq-like FinSequence;
+
+
+theorem :: IDEA_1:40
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds IDEA_Q_F(Key,n,k) is FuncSeq-like FinSequence;
+
+theorem :: IDEA_1:41
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds k <> 0 implies
+      IDEA_P_F(Key,n,k) is FuncSequence of MESSAGES,MESSAGES;
+
+theorem :: IDEA_1:42
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    k being Nat holds k <> 0 implies
+      IDEA_Q_F(Key,n,k) is FuncSequence of MESSAGES,MESSAGES;
+
+theorem :: IDEA_1:43
+  for n being non empty Nat,M being FinSequence of NAT,m,k st
+    M = IDEA_P(k,n).m & len m >= 4 holds len M >= 4 &
+     M.1 is_expressible_by n & M.2 is_expressible_by n &
+     M.3 is_expressible_by n & M.4 is_expressible_by n;
+
+theorem :: IDEA_1:44
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    r being Nat holds rng compose(IDEA_P_F(Key,n,r),MESSAGES) c=MESSAGES &
+      dom compose(IDEA_P_F(Key,n,r),MESSAGES) =MESSAGES;
+
+theorem :: IDEA_1:45
+    for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    r being Nat holds rng compose(IDEA_Q_F(Key,n,r),MESSAGES) c=MESSAGES &
+      dom compose(IDEA_Q_F(Key,n,r),MESSAGES) =MESSAGES;
+
+theorem :: IDEA_1:46
+  for n being non empty Nat,m being FinSequence of NAT, lk being Nat,
+      Key being Matrix of lk,6,NAT, r being Nat,
+      M being FinSequence of NAT st
+      M = compose(IDEA_P_F(Key,n,r),MESSAGES).m & len m >= 4
+      holds len M >= 4;
+
+theorem :: IDEA_1:47
+  for n being non empty Nat,lk being Nat,Key being Matrix of lk,6,NAT,
+    r being Nat,M being FinSequence of NAT,m st
+      M = compose(IDEA_P_F(Key,n,r),MESSAGES).m & len m >= 4 &
+       m.1 is_expressible_by n & m.2 is_expressible_by n &
+       m.3 is_expressible_by n & m.4 is_expressible_by n
+      holds
+       len M >= 4 &
+       M.1 is_expressible_by n &
+       M.2 is_expressible_by n &
+       M.3 is_expressible_by n &
+       M.4 is_expressible_by n;
+
+begin :: Modeling of IDEA Cryptogram
+:: IDEA encryption algorithm is as follows:
+::     IDEA_PS -> IDEA_P -> IDEA_P -> ... -> IDEA_P -> IDEA_PE
+:: IDEA decryption algorithm is as follows:
+::     IDEA_QE -> IDEA_Q -> IDEA_Q -> ... -> IDEA_Q -> IDEA_QS
+:: Theorem 49 ensures that the ciphertext that is encrypted by IDEA
+:: encryption algorithm can be decrypted by IDEA decryption algorithm.
+
+theorem :: IDEA_1:48
+  for n being non empty Nat,lk being Nat,Key1,Key2 being Matrix of lk,6,NAT,
+    r being Nat,m st lk >= r &
+      2 to_power(n)+1 is prime & len m >= 4 &
+      m.1 is_expressible_by n & m.2 is_expressible_by n &
+      m.3 is_expressible_by n & m.4 is_expressible_by n &
+      (for i being Nat holds i <= r implies
+        Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
+        Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
+        Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &
+        Key2*(i,1) is_expressible_by n & Key2*(i,2) is_expressible_by n &
+        Key2*(i,3) is_expressible_by n & Key2*(i,4) is_expressible_by n &
+        Key2*(i,5) is_expressible_by n & Key2*(i,6) is_expressible_by n &
+        Key2*(i,1)=INV_MOD(Key1*(i,1),n) & Key2*(i,2)=NEG_MOD(Key1*
+(i,3),n) &
+        Key2*(i,3)=NEG_MOD(Key1*(i,2),n) & Key2*(i,4)=INV_MOD(Key1*
+(i,4),n) &
+        Key1*(i,5)=Key2*(i,5) & Key1*(i,6)=Key2*(i,6))
+     holds compose(IDEA_P_F(Key1,n,r)^IDEA_Q_F(Key2,n,r),MESSAGES).m = m;
+
+theorem :: IDEA_1:49
+    for n being non empty Nat,lk being Nat,Key1,Key2 being Matrix of lk,6,NAT,
+    r being Nat,ks1,ks2,ke1,ke2 being FinSequence of NAT,m st lk >= r &
+        2 to_power(n)+1 is prime & len m >= 4 &
+        m.1 is_expressible_by n & m.2 is_expressible_by n &
+        m.3 is_expressible_by n & m.4 is_expressible_by n &
+        (for i being Nat holds i <= r implies
+         Key1*(i,1) is_expressible_by n & Key1*(i,2) is_expressible_by n &
+         Key1*(i,3) is_expressible_by n & Key1*(i,4) is_expressible_by n &
+         Key1*(i,5) is_expressible_by n & Key1*(i,6) is_expressible_by n &
+         Key2*(i,1) is_expressible_by n & Key2*(i,2) is_expressible_by n &
+         Key2*(i,3) is_expressible_by n & Key2*(i,4) is_expressible_by n &
+         Key2*(i,5) is_expressible_by n & Key2*(i,6) is_expressible_by n &
+         Key2*(i,1)=INV_MOD(Key1*(i,1),n) & Key2*(i,2)=NEG_MOD(Key1*
+(i,3),n) &
+         Key2*(i,3)=NEG_MOD(Key1*(i,2),n) & Key2*(i,4)=INV_MOD(Key1*
+(i,4),n) &
+         Key1*(i,5)=Key2*(i,5) & Key1*(i,6)=Key2*(i,6))&
+         ks1.1 is_expressible_by n & ks1.2 is_expressible_by n &
+         ks1.3 is_expressible_by n & ks1.4 is_expressible_by n &
+         ks2.1 = INV_MOD(ks1.1,n) & ks2.2 = NEG_MOD(ks1.2,n) &
+         ks2.3 = NEG_MOD(ks1.3,n) & ks2.4 = INV_MOD(ks1.4,n) &
+         ke1.1 is_expressible_by n & ke1.2 is_expressible_by n &
+         ke1.3 is_expressible_by n & ke1.4 is_expressible_by n &
+         ke1.5 is_expressible_by n & ke1.6 is_expressible_by n &
+         ke2.1 = INV_MOD(ke1.1,n) & ke2.2 = NEG_MOD(ke1.2,n) &
+         ke2.3 = NEG_MOD(ke1.3,n) & ke2.4 = INV_MOD(ke1.4,n) &
+         ke2.5 = ke1.5 & ke2.6 = ke1.6
+       holds (IDEA_QS(ks2,n)*(compose(IDEA_Q_F(Key2,n,r),MESSAGES)*
+        (IDEA_QE(ke2,n)*(IDEA_PE(ke1,n)*(compose(IDEA_P_F(Key1,n,r),MESSAGES)*
+         IDEA_PS(ks1,n)))))).m = m;

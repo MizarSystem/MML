@@ -1,0 +1,1060 @@
+:: More on the Lattice of Congruences in a Many Sorted Algebra
+::  by Robert Milewski
+::
+:: Received March 6, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FINSEQ_1, AMI_1, MSUALG_1, ZF_REFLE, RELAT_1, FUNCT_1,
+      MSUALG_5, EQREL_1, LATTICES, BOOLE, BHSP_3, LATTICE3, SETFAM_1, TARSKI,
+      REWRITE1, MSUALG_4, CLOSURE2, PRALG_2, QC_LANG1, FUNCT_4, CANTOR_1,
+      FINSET_1, MSUALG_6, MSUALG_7, MSUALG_8, CARD_3, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, SETFAM_1, RELAT_1,
+      RELSET_1, STRUCT_0, NAT_1, BINOP_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
+      FINSEQ_1, CARD_3, FINSEQ_4, REWRITE1, EQREL_1, LATTICES, LATTICE3,
+      PBOOLE, MSSUBFAM, CANTOR_1, PRALG_2, MSUALG_1, MSUALG_4, MSUALG_5,
+      CLOSURE2, MSUALG_6, MSUALG_7;
+ constructors BINOP_1, NAT_1, REWRITE1, LATTICE3, CANTOR_1, MSUALG_5, CLOSURE2,
+      MSUALG_6, MSUALG_7, FINSEQ_4, MEMBERED, MSSUBFAM;
+ clusters SUBSET_1, STRUCT_0, FINSET_1, MSUALG_1, MSUALG_3, MSUALG_5, CLOSURE2,
+      MSUALG_7, RELSET_1, PRALG_1, LATTICES, EQREL_1, MSUALG_6, ARYTM_3,
+      MEMBERED, PARTFUN1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, PBOOLE, NAT_LAT, MSUALG_4, MSUALG_5, MSUALG_7, CLOSURE2,
+      SETFAM_1, CANTOR_1, LATTICES, LATTICE3, MSSUBFAM, ZFMISC_1, FINSEQ_1,
+      SUBSET_1, REWRITE1, RELAT_1, MSUALG_6, FUNCT_2, RELSET_1, NAT_1, EQREL_1,
+      VECTSP_8, CARD_3, XBOOLE_1;
+ schemes FINSEQ_1, PARTFUN1, ZFREFLE1;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::       MORE  ON  THE  LATTICE  OF  EQUIVALENCE  RELATIONS      ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  reserve I for non empty set;
+  reserve M for ManySortedSet of I;
+  reserve Y,x,y,y1,z,i,j for set;
+  reserve k for Nat;
+  reserve p for FinSequence;
+  reserve S for non void non empty ManySortedSign;
+  reserve A for non-empty MSAlgebra over S;
+
+  theorem Th1:
+   for n be Nat,
+       p be FinSequence holds
+    1 <= n & n < len p iff n in dom p & n+1 in dom p
+   proof
+    let n be Nat;
+    let p be FinSequence;
+    thus 1 <= n & n < len p implies n in dom p & n+1 in dom p
+    proof
+     assume A1: 1 <= n & n < len p;
+     then A2: n in Seg len p by FINSEQ_1:3;
+     A3: 1 <= n + 1 by NAT_1:29;
+       n + 1 <= len p by A1,NAT_1:38;
+     then n + 1 in Seg len p by A3,FINSEQ_1:3;
+     hence n in dom p & n+1 in dom p by A2,FINSEQ_1:def 3;
+    end;
+    thus n in dom p & n+1 in dom p implies 1 <= n & n < len p
+    proof
+     assume n in dom p & n+1 in dom p;
+     then n in Seg len p & n+1 in Seg len p by FINSEQ_1:def 3;
+     then 1 <= n & n+1 <= len p by FINSEQ_1:3;
+     hence 1 <= n & n < len p by NAT_1:38;
+    end;
+   end;
+
+  scheme NonUniqSeqEx{A()->Nat,P[set,set]}:
+    ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
+   provided
+    A1: for k st k in Seg A() ex x st P[k,x]
+   proof
+    defpred Z[set,set] means P[$1,$2];
+    A2: for x st x in Seg A() ex y st Z[x,y] by A1;
+    consider f being Function such that A3: dom f = Seg A() &
+     (for x st x in Seg A() holds Z[x,f.x]) from NonUniqFuncEx(A2);
+    reconsider p = f as FinSequence by A3,FINSEQ_1:def 2;
+    take p;
+    thus thesis by A3;
+   end;
+
+  theorem Th2:
+   for a,b be Element of EqRelLatt Y
+   for A,B be Equivalence_Relation of Y st a = A & b = B holds
+    a [= b iff A c= B
+   proof
+    let a,b be Element of EqRelLatt Y;
+    let A,B be Equivalence_Relation of Y;
+    assume A1: a = A & b = B;
+    thus a [= b implies A c= B
+    proof
+     assume A2: a [= b;
+       A /\ B = (the L_meet of EqRelLatt Y).(A,B) by MSUALG_5:def 2
+          .= a "/\" b by A1,LATTICES:def 2
+          .= A by A1,A2,LATTICES:21;
+     hence A c= B by XBOOLE_1:17;
+    end;
+    thus A c= B implies a [= b
+    proof
+     assume A3: A c= B;
+       a "/\" b = (the L_meet of EqRelLatt Y).(A,B) by A1,LATTICES:def 2
+           .= A /\ B by MSUALG_5:def 2
+           .= a by A1,A3,XBOOLE_1:28;
+     hence a [= b by LATTICES:21;
+    end;
+   end;
+
+  definition let Y;
+   cluster EqRelLatt Y -> bounded;
+   coherence
+   proof
+      ex c being Element of EqRelLatt Y st
+     for a being Element of EqRelLatt Y holds
+      c"/\"a = c & a"/\"c = c
+    proof
+     set c' = id Y;
+     reconsider c = c' as Element of EqRelLatt Y by MSUALG_7:1;
+     take c;
+     let a be Element of EqRelLatt Y;
+     reconsider a' = a as Equivalence_Relation of Y by MSUALG_7:1;
+     thus c"/\"a = (the L_meet of EqRelLatt Y).(c,a) by LATTICES:def 2
+       .= c' /\ a' by MSUALG_5:def 2
+       .= c by EQREL_1:17;
+     hence a"/\"c = c;
+    end;
+    then A1: EqRelLatt Y is lower-bounded by LATTICES:def 13;
+      ex c being Element of EqRelLatt Y st
+     for a being Element of EqRelLatt Y holds
+      c"\/"a = c & a"\/"c = c
+    proof
+     set c' = nabla Y;
+     reconsider c = c' as Element of EqRelLatt Y
+                                                               by MSUALG_7:1;
+     take c;
+     let a be Element of EqRelLatt Y;
+     reconsider a' = a as Equivalence_Relation of Y by MSUALG_7:1;
+     thus c"\/"a = (the L_join of EqRelLatt Y).(c,a) by LATTICES:def 1
+       .= c' "\/" a' by MSUALG_5:def 2
+       .= EqCl (c' \/ a') by MSUALG_5:2
+       .= EqCl c' by MSUALG_5:4
+       .= c by MSUALG_5:3;
+     hence thesis;
+    end;
+    then EqRelLatt Y is upper-bounded by LATTICES:def 14;
+    hence EqRelLatt Y is bounded by A1,LATTICES:def 15;
+   end;
+  end;
+
+  theorem
+     Bottom EqRelLatt Y = id Y
+   proof
+    reconsider K = id Y as Element of EqRelLatt Y
+      by MSUALG_7:1;
+      now let a be Element of EqRelLatt Y;
+     reconsider a' = a as Equivalence_Relation of Y by MSUALG_7:1;
+     thus K "/\" a = (the L_meet of EqRelLatt Y).(K,a) by LATTICES:def 2
+       .= id Y /\ a' by MSUALG_5:def 2
+       .= K by EQREL_1:17;
+     hence a "/\" K = K;
+    end;
+    hence thesis by LATTICES:def 16;
+   end;
+
+  theorem
+     Top EqRelLatt Y = nabla Y
+   proof
+    reconsider K = nabla Y as Element of EqRelLatt Y
+      by MSUALG_7:1;
+      now let a be Element of EqRelLatt Y;
+     reconsider a' = a as Equivalence_Relation of Y by MSUALG_7:1;
+     thus K "\/" a = (the L_join of EqRelLatt Y).(K,a) by LATTICES:def 1
+       .= nabla Y "\/" a' by MSUALG_5:def 2
+       .= EqCl (nabla Y \/ a') by MSUALG_5:2
+       .= EqCl (nabla Y) by MSUALG_5:4
+       .= K by MSUALG_5:3;
+     hence a "\/" K = K;
+    end;
+    hence thesis by LATTICES:def 17;
+   end;
+
+  theorem Th5:
+   EqRelLatt Y is complete
+   proof
+      for X being Subset of EqRelLatt Y
+     ex a being Element of EqRelLatt Y st a is_less_than X &
+      for b being Element of EqRelLatt Y st b is_less_than X
+       holds b [= a
+    proof
+     let X be Subset of EqRelLatt Y;
+     per cases;
+      suppose A1: X is empty;
+       take a = Top EqRelLatt Y;
+         for q be Element of EqRelLatt Y st q in X holds a [= q
+                                                                      by A1;
+       hence a is_less_than X by LATTICE3:def 16;
+       let b be Element of EqRelLatt Y;
+       assume b is_less_than X;
+       thus b [= a by LATTICES:45;
+      suppose A2: X is non empty;
+       set a = meet X;
+         X c= bool [:Y,Y:]
+       proof let x;
+        assume x in X;
+        then x is Equivalence_Relation of Y by MSUALG_7:1;
+        hence x in bool [:Y,Y:];
+       end;
+       then reconsider X' = X as Subset-Family of [:Y,Y:] by SETFAM_1:def 7;
+         for Z be set st Z in X holds
+        Z is Equivalence_Relation of Y by MSUALG_7:1;
+       then meet X' is Equivalence_Relation of Y by A2,EQREL_1:19;
+       then reconsider a as Equivalence_Relation of Y;
+       set a' = a;
+       reconsider a as Element of EqRelLatt Y by MSUALG_7:1;
+       take a;
+         now let q be Element of EqRelLatt Y;
+        reconsider q' = q as Equivalence_Relation of Y by MSUALG_7:1;
+        assume q in X;
+        then a' c= q' by SETFAM_1:4;
+        hence a [= q by Th2;
+       end;
+       hence a is_less_than X by LATTICE3:def 16;
+         now let b be Element of EqRelLatt Y;
+        reconsider b' = b as Equivalence_Relation of Y by MSUALG_7:1;
+        assume A3: b is_less_than X;
+          now let x;
+         assume A4: x in b';
+           now let Z be set;
+          assume A5: Z in X;
+          then reconsider Z1 = Z as Element of EqRelLatt Y;
+          reconsider Z' = Z1 as Equivalence_Relation of Y by MSUALG_7:1;
+            b [= Z1 by A3,A5,LATTICE3:def 16;
+          then b' c= Z' by Th2;
+          hence x in Z by A4;
+         end;
+         hence x in meet X by A2,SETFAM_1:def 1;
+        end;
+        then b' c= meet X by TARSKI:def 3;
+        hence b [= a by Th2;
+       end;
+       hence thesis;
+    end;
+    hence thesis by VECTSP_8:def 6;
+   end;
+
+  definition
+   let Y;
+   cluster EqRelLatt Y -> complete;
+   coherence by Th5;
+  end;
+
+  theorem Th6:
+   for Y be set
+   for X be Subset of EqRelLatt Y holds
+    union X is Relation of Y
+   proof
+    let Y be set;
+    let X be Subset of EqRelLatt Y;
+      now let x;
+     assume x in union X;
+     then consider X' be set such that A1: x in X' & X' in X by TARSKI:def 4;
+       X' is Equivalence_Relation of Y by A1,MSUALG_7:1;
+     then consider y,z such that A2: x = [y,z] & y in Y & z in Y
+                                                            by A1,RELSET_1:6;
+     thus x in [:Y,Y:] by A2,ZFMISC_1:106;
+    end;
+    then union X c= [:Y,Y:] by TARSKI:def 3;
+    hence thesis by RELSET_1:def 1;
+   end;
+
+  theorem Th7:
+   for Y be set
+   for X be Subset of EqRelLatt Y holds
+    union X c= "\/" X
+   proof
+    let Y be set;
+    let X be Subset of EqRelLatt Y;
+    reconsider X' = "\/" X as Equivalence_Relation of Y by MSUALG_7:1;
+    let x;
+     assume x in union X;
+     then consider X1 be set such that A1: x in X1 & X1 in X by TARSKI:def 4;
+     reconsider X1 as Element of EqRelLatt Y by A1;
+     reconsider X2 = X1 as Equivalence_Relation of Y by MSUALG_7:1;
+       X is_less_than "\/" X by LATTICE3:def 21;
+     then X1 [= "\/" X by A1,LATTICE3:def 17;
+     then X2 c= X' by Th2;
+     hence x in "\/" X by A1;
+   end;
+
+  theorem Th8:
+   for Y be set
+   for X be Subset of EqRelLatt Y
+   for R be Relation of Y st R = union X holds
+    "\/" X = EqCl R
+   proof
+    let Y be set;
+    let X be Subset of EqRelLatt Y;
+    let R be Relation of Y;
+    assume A1: R = union X;
+    then A2: R c= "\/" X by Th7;
+    reconsider X1 = "\/" X as Equivalence_Relation of Y by MSUALG_7:1;
+      now let EqR be Equivalence_Relation of Y;
+     reconsider EqR1 = EqR as Element of EqRelLatt Y
+     by MSUALG_7:1;
+     assume A3: R c= EqR;
+       now let q be Element of EqRelLatt Y;
+      reconsider q1 = q as Equivalence_Relation of Y by MSUALG_7:1;
+      assume A4: q in X;
+        now let x;
+       assume x in q1;
+       then x in union X by A4,TARSKI:def 4;
+       hence x in EqR by A1,A3;
+      end;
+      then q1 c= EqR by TARSKI:def 3;
+      hence q [= EqR1 by Th2;
+     end;
+     then X is_less_than EqR1 by LATTICE3:def 17;
+     then "\/" X [= EqR1 by LATTICE3:def 21;
+     hence X1 c= EqR by Th2;
+    end;
+    hence thesis by A2,MSUALG_5:def 1;
+   end;
+
+  theorem Th9:
+   for Y be set
+   for X be Subset of EqRelLatt Y
+   for R be Relation st R = union X holds
+    R = R~
+   proof
+    let Y be set;
+    let X be Subset of EqRelLatt Y;
+    let R be Relation;
+    assume A1: R = union X;
+      now let x,y;
+     thus [x,y] in R implies [x,y] in R~
+     proof
+      assume [x,y] in R;
+      then consider Z be set such that A2:
+       [x,y] in Z & Z in X by A1,TARSKI:def 4;
+      reconsider Z as Equivalence_Relation of Y by A2,MSUALG_7:1;
+        [y,x] in Z by A2,EQREL_1:12;
+      then [y,x] in R by A1,A2,TARSKI:def 4;
+      hence [x,y] in R~ by RELAT_1:def 7;
+     end;
+     thus [x,y] in R~ implies [x,y] in R
+     proof
+      assume [x,y] in R~;
+      then [y,x] in R by RELAT_1:def 7;
+      then consider Z be set such that A3:
+       [y,x] in Z & Z in X by A1,TARSKI:def 4;
+      reconsider Z as Equivalence_Relation of Y by A3,MSUALG_7:1;
+        [x,y] in Z by A3,EQREL_1:12;
+      hence [x,y] in R by A1,A3,TARSKI:def 4;
+     end;
+    end;
+    hence R = R~ by RELAT_1:def 2;
+   end;
+
+  theorem Th10:
+   for Y be set
+   for X be Subset of EqRelLatt Y holds
+    x in Y & y in Y implies ( [x,y] in "\/" X iff
+     ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
+     for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in union X )
+   proof
+    let Y be set;
+    let X be Subset of EqRelLatt Y;
+    assume A1: x in Y & y in Y;
+    then reconsider Y' = Y as non empty set;
+    reconsider x' = x , y' = y as Element of Y' by A1;
+    reconsider R = union X as Relation of Y' by Th6;
+      R = R~ by Th9;
+    then A2: R \/ R~ = R;
+    A3: [x,y] in "\/" X iff R reduces x,y
+    proof
+     thus [x,y] in "\/" X implies R reduces x,y
+     proof
+      assume [x,y] in "\/" X;
+      then [x',y'] in EqCl R by Th8;
+      then x,y are_convertible_wrt R by MSUALG_6:41;
+      hence R reduces x,y by A2,REWRITE1:def 4;
+     end;
+     thus R reduces x,y implies [x,y] in "\/" X
+     proof
+      assume R reduces x,y;
+      then x,y are_convertible_wrt R by REWRITE1:26;
+      then [x',y'] in EqCl R by MSUALG_6:41;
+      hence [x,y] in "\/" X by Th8;
+     end;
+    end;
+    thus [x,y] in "\/" X implies
+     ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
+      for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in union X
+    proof
+     assume [x,y] in "\/" X;
+     then consider f be FinSequence such that A4: len f > 0 & x = f.1 &
+      y = f.(len f) & for i be Nat st i in dom f & i+1 in dom f holds
+       [f.i,f.(i+1)] in R by A3,REWRITE1:12;
+     take f;
+       0 + 1 <= len f by A4,NAT_1:38;
+     hence 1 <= len f & x = f.1 & y = f.(len f) by A4;
+     let i be Nat;
+     assume 1 <= i & i < len f;
+     then i in dom f & i+1 in dom f by Th1;
+     hence [f.i,f.(i+1)] in union X by A4;
+    end;
+    thus ( ex f being FinSequence st 1 <= len f & x = f.1 & y = f.(len f) &
+     for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in union X )
+     implies [x,y] in "\/" X
+    proof
+     given f be FinSequence such that A5: 1 <= len f & x = f.1 &
+      y = f.(len f) & for i be Nat st 1 <= i & i < len f holds
+       [f.i,f.(i+1)] in union X;
+       0 + 1 <= len f by A5;
+     then A6: len f > 0 by NAT_1:38;
+       now let i be Nat;
+      assume i in dom f & i+1 in dom f;
+      then 1 <= i & i < len f by Th1;
+      hence [f.i,f.(i+1)] in union X by A5;
+     end;
+     hence thesis by A3,A5,A6,REWRITE1:12;
+    end;
+   end;
+
+begin
+ :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ ::         LATTICE  OF  CONGRUENCES  IN  A  MANY  SORTED  ALGEBRA        ::
+ :: AS  SUBLATTICE  OF  LATTICE  OF  MANY  SORTED  EQUIVALENCE  RELATIONS ::
+ ::                      INHERITED  SUP'S  AND  INF'S                     ::
+ :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  theorem Th11:
+   for B be Subset of CongrLatt A holds
+    "/\" (B,EqRelLatt the Sorts of A) is MSCongruence of A
+   proof
+    set M = the Sorts of A;
+    set E = EqRelLatt M;
+    set C = CongrLatt A;
+    let B be Subset of C;
+      the carrier of C c= the carrier of E by NAT_LAT:def 16;
+    then reconsider B1 = B as Subset of E by XBOOLE_1:1;
+    reconsider B1 as SubsetFamily of [|M,M|] by MSUALG_7:6;
+    set d' = "/\" (B,E);
+    reconsider d = d' as Equivalence_Relation of the Sorts of A
+                                                         by MSUALG_5:def 5;
+    reconsider d as MSEquivalence-like ManySortedRelation of A
+                                          by MSUALG_4:def 5;
+    per cases;
+     suppose B is empty;
+      then reconsider B' = B as empty Subset of CongrLatt A;
+        for q being Element of E st q in B' holds Top E [= q;
+      then A1: Top E is_less_than B by LATTICE3:def 16;
+        for b be Element of E st b is_less_than B holds
+       b [= Top E by LATTICES:45;
+      then "/\" (B,E) = Top E by A1,LATTICE3:34
+        .= [|M,M|] by MSUALG_7:5;
+      hence "/\" (B,E) is MSCongruence of A by MSUALG_5:20;
+     suppose A2: B is non empty;
+        for o be OperSymbol of S, x,y be Element of Args(o,A) st
+       (for n be Nat st n in dom x holds
+        [x.n,y.n] in d.((the_arity_of o)/.n))
+       holds [Den(o,A).x,Den(o,A).y] in d.(the_result_sort_of o)
+      proof
+       let o be OperSymbol of S;
+       let x,y be Element of Args(o,A);
+       assume A3: for n be Nat st n in dom x holds
+        [x.n,y.n] in d.((the_arity_of o)/.n);
+       reconsider m = meet |:B1:| as Equivalence_Relation of M
+                                                           by A2,MSUALG_7:9;
+       A4: now let q be MSCongruence of A;
+        assume A5: q in B;
+          now let n be Nat;
+         assume A6: n in dom x;
+           m c= q by A5,MSUALG_7:8;
+         then A7: m.((the_arity_of o)/.n) c= q.((the_arity_of o)/.n)
+                                                            by PBOOLE:def 5;
+           [x.n,y.n] in d.((the_arity_of o)/.n) by A3,A6;
+         then [x.n,y.n] in m.((the_arity_of o)/.n) by A2,MSUALG_7:11;
+         hence [x.n,y.n] in q.((the_arity_of o)/.n) by A7;
+        end;
+        hence [Den(o,A).x,Den(o,A).y] in q.(the_result_sort_of o)
+                                                          by MSUALG_4:def 6;
+       end;
+       consider Q be Subset-Family of ([|M,M|].(the_result_sort_of o))
+        such that A8: Q = |:B1:|.(the_result_sort_of o) &
+         m.(the_result_sort_of o) = Intersect Q by MSSUBFAM:def 2;
+       reconsider B1' = B1 as non empty SubsetFamily of [|M,M|] by A2;
+         |:B1':| is non-empty;
+       then A9: Q <> {} by A8,PBOOLE:def 16;
+       A10: |:B1:|.(the_result_sort_of o) = { x1.(the_result_sort_of o)
+        where x1 is Element of Bool [|M,M|] : x1 in B } by A2,CLOSURE2:15;
+         now let Y be set;
+        assume Y in |:B1:|.(the_result_sort_of o);
+        then consider z be Element of Bool [|M,M|] such that
+         A11: Y = z.(the_result_sort_of o) & z in B by A10;
+        reconsider z' = z as MSCongruence of A by A11,MSUALG_5:def 6;
+          [Den(o,A).x,Den(o,A).y] in z'.(the_result_sort_of o) by A4,A11;
+        hence [Den(o,A).x,Den(o,A).y] in Y by A11;
+       end;
+       then [Den(o,A).x,Den(o,A).y] in meet (|:B1:|.(the_result_sort_of o))
+                                                by A8,A9,SETFAM_1:def 1;
+       then [Den(o,A).x,Den(o,A).y] in m.(the_result_sort_of o)
+                                                by A8,A9,CANTOR_1:def 3;
+       hence [Den(o,A).x,Den(o,A).y] in d.(the_result_sort_of o)
+                                                 by A2,MSUALG_7:11;
+      end;
+      hence thesis by MSUALG_4:def 6;
+   end;
+
+  definition
+   let S,A;
+   let E be Element of EqRelLatt the Sorts of A;
+   func CongrCl E -> MSCongruence of A equals :Def1:
+     "/\" ({x where x is Element of EqRelLatt the Sorts of A
+     : x is MSCongruence of A & E [= x},EqRelLatt the Sorts of A);
+   coherence
+   proof
+    set Z = {x where x is Element of EqRelLatt the Sorts of A :
+     x is MSCongruence of A & E [= x};
+      now let z be set;
+     assume z in Z;
+     then consider z1 be Element of EqRelLatt the Sorts of A
+      such that A1: z = z1 & z1 is MSCongruence of A & E [= z1;
+     thus z in the carrier of CongrLatt A by A1,MSUALG_5:def 6;
+    end;
+    then reconsider Z' = Z as Subset of CongrLatt A
+                                                            by TARSKI:def 3;
+       "/\" (Z',EqRelLatt the Sorts of A) is MSCongruence of A by Th11;
+    hence thesis;
+   end;
+  end;
+
+  definition
+   let S,A;
+   let X be Subset of EqRelLatt the Sorts of A;
+   func CongrCl X -> MSCongruence of A equals :Def2:
+     "/\" ({x where x is Element of EqRelLatt the Sorts of A
+     : x is MSCongruence of A & X is_less_than x},EqRelLatt the Sorts of A);
+   coherence
+   proof
+    set Z = {x where x is Element of EqRelLatt the Sorts of A :
+     x is MSCongruence of A & X is_less_than x};
+      now let z be set;
+     assume z in Z;
+     then consider z1 be Element of EqRelLatt the Sorts of A
+      such that A1: z = z1 & z1 is MSCongruence of A & X is_less_than z1;
+     thus z in the carrier of CongrLatt A by A1,MSUALG_5:def 6;
+    end;
+    then reconsider Z' = Z as Subset of CongrLatt A
+                                                            by TARSKI:def 3;
+       "/\" (Z',EqRelLatt the Sorts of A) is MSCongruence of A by Th11;
+    hence thesis;
+   end;
+  end;
+
+  theorem
+     for C be Element of EqRelLatt the Sorts of A st
+    C is MSCongruence of A holds CongrCl C = C
+   proof
+    let C be Element of EqRelLatt the Sorts of A;
+    set Z = {x where x is Element of EqRelLatt the Sorts of A
+     : x is MSCongruence of A & C [= x};
+    assume A1: C is MSCongruence of A;
+    then reconsider C' = C as MSCongruence of A;
+    A2: C in Z by A1;
+      now let q be Element of EqRelLatt the Sorts of A;
+     assume q in Z;
+     then consider x be Element of EqRelLatt the Sorts of A
+      such that A3: q = x & x is MSCongruence of A & C [= x;
+     thus C [= q by A3;
+    end;
+    then C is_less_than Z by LATTICE3:def 16;
+    then C' = "/\" (Z,EqRelLatt the Sorts of A) by A2,LATTICE3:42;
+    hence CongrCl C = C by Def1;
+   end;
+
+  theorem
+     for X be Subset of EqRelLatt the Sorts of A holds
+    CongrCl "\/" (X,EqRelLatt the Sorts of A) = CongrCl X
+   proof
+    let X be Subset of EqRelLatt the Sorts of A;
+    set D1 = {x where x is Element of EqRelLatt the Sorts of A
+     : x is MSCongruence of A & "\/" (X,EqRelLatt the Sorts of A) [= x};
+    set D2 = {x where x is Element of EqRelLatt the Sorts of A :
+        x is MSCongruence of A & X is_less_than x};
+      D1 = D2
+    proof
+     thus D1 c= D2
+     proof
+      let x1 be set;
+      assume x1 in D1;
+      then consider x be Element of EqRelLatt the Sorts of A
+       such that A1: x1 = x & x is MSCongruence of A &
+        "\/" (X,EqRelLatt the Sorts of A) [= x;
+        now let q be Element of EqRelLatt the Sorts of A;
+       assume A2: q in X;
+         X is_less_than "\/" (X,EqRelLatt the Sorts of A) by LATTICE3:def 21;
+       then q [= "\/" (X,EqRelLatt the Sorts of A) by A2,LATTICE3:def 17;
+       hence q [= x by A1,LATTICES:25;
+      end;
+      then X is_less_than x by LATTICE3:def 17;
+      hence x1 in D2 by A1;
+     end;
+     thus D2 c= D1
+     proof
+      let x1 be set;
+      assume x1 in D2;
+      then consider x be Element of EqRelLatt the Sorts of A
+       such that A3: x1 = x & x is MSCongruence of A & X is_less_than x;
+        "\/" (X,EqRelLatt the Sorts of A) [= x by A3,LATTICE3:def 21;
+      hence x1 in D1 by A3;
+     end;
+    end;
+    hence CongrCl "\/" (X,EqRelLatt the Sorts of A) =
+     "/\" ({x where x is Element of EqRelLatt the Sorts of A :
+        x is MSCongruence of A & X is_less_than x},EqRelLatt the Sorts of A)
+        by Def1
+    .= CongrCl X by Def2;
+   end;
+
+  theorem
+     for B1,B2 be Subset of CongrLatt A,
+       C1,C2 be MSCongruence of A st
+        C1 = "\/"(B1,EqRelLatt the Sorts of A) &
+        C2 = "\/"(B2,EqRelLatt the Sorts of A) holds
+    C1 "\/" C2 = "\/"(B1 \/ B2,EqRelLatt the Sorts of A)
+   proof
+    let B1,B2 be Subset of CongrLatt A;
+      the carrier of CongrLatt A c= the carrier of EqRelLatt the Sorts of A
+                                                          by NAT_LAT:def 16;
+    then reconsider D1 = B1 , D2 = B2 as Subset of
+                                        EqRelLatt the Sorts of A by XBOOLE_1:1;
+    let C1,C2 be MSCongruence of A;
+    set C = EqRelLatt the Sorts of A;
+    assume A1: C1 = "\/"(B1,EqRelLatt the Sorts of A) &
+               C2 = "\/"(B2,EqRelLatt the Sorts of A);
+      now let i;
+     assume i in { B1,B2 };
+     then i = D1 or i = D2 by TARSKI:def 2;
+     hence i in bool the carrier of C;
+    end;
+    then A2: { B1,B2 } c= bool the carrier of C by TARSKI:def 3;
+    A3: {"\/" Y where Y is Subset of C: Y in { B1,B2 } }
+        = { "\/" D1, "\/" D2 }
+    proof
+     thus {"\/" Y where Y is Subset of C: Y in { B1,B2 } }
+         c= { "\/" D1, "\/" D2 }
+     proof
+      let x;
+      assume x in {"\/" Y where Y is Subset of C: Y in
+ { B1,B2 } };
+      then consider X1 be Subset of C such that
+       A4: x = "\/" X1 & X1 in { B1,B2 };
+        X1 = B1 or X1 = B2 by A4,TARSKI:def 2;
+      hence x in { "\/" D1, "\/" D2 } by A4,TARSKI:def 2;
+     end;
+     thus { "\/" D1, "\/" D2 } c=
+        {"\/" Y where Y is Subset of C: Y in { B1,B2 } }
+     proof
+      let x;
+      A5: D1 in { B1,B2 } & D2 in { B1,B2 } by TARSKI:def 2;
+      assume x in { "\/" D1, "\/" D2 };
+      then x = "\/" D1 or x = "\/" D2 by TARSKI:def 2;
+      hence x in {"\/"
+ Y where Y is Subset of C: Y in { B1,B2 } }
+      by A5;
+     end;
+    end;
+    thus "\/" (B1 \/ B2,EqRelLatt the Sorts of A) = "\/" (union { B1,B2 }, C)
+                                                               by ZFMISC_1:93
+       .= "\/" ({"\/"
+ Y where Y is Subset of C: Y in { B1,B2 } }, C)
+                                                            by A2,LATTICE3:49
+       .= ( "\/" D1 ) "\/" ( "\/" D2 ) by A3,LATTICE3:44
+       .= (the L_join of C).(C1,C2) by A1,LATTICES:def 1
+       .= C1 "\/" C2 by MSUALG_5:def 5;
+   end;
+
+  theorem
+     for X be Subset of CongrLatt A holds
+    "\/" (X,EqRelLatt the Sorts of A) = "\/" ({ "\/"
+ (X0,EqRelLatt the Sorts of A)
+     where X0 is Subset of EqRelLatt the Sorts of A :
+      X0 is finite Subset of X },EqRelLatt the Sorts of A)
+   proof
+    let X be Subset of CongrLatt A;
+    set E = EqRelLatt the Sorts of A;
+    set X1 = { X0 where X0 is Subset of E :
+     X0 is finite Subset of X };
+      now let i;
+     assume i in X1;
+     then consider I1 be Subset of E such that
+      A1: i = I1 & I1 is finite Subset of X;
+     thus i in bool the carrier of E by A1;
+    end;
+    then A2: X1 c= bool the carrier of E by TARSKI:def 3;
+    set B1 = { "\/"Y where Y is Subset of E : Y in X1 };
+    set B2 = { "\/" (X0,EqRelLatt the Sorts of A) where
+     X0 is Subset of E : X0 is finite Subset of X };
+    A3: B1 = B2
+    proof
+     thus B1 c= B2
+     proof
+      let x;
+      assume x in B1;
+      then consider Y1 be Subset of E such that
+       A4: x = "\/" Y1 & Y1 in X1;
+      consider Y2 be Subset of E such that
+       A5: Y1 = Y2 & Y2 is finite Subset of X by A4;
+      thus x in B2 by A4,A5;
+     end;
+     thus B2 c= B1
+     proof
+      let x;
+      assume x in B2;
+      then consider Y1 be Subset of E such that
+       A6: x = "\/" Y1 & Y1 is finite Subset of X;
+        Y1 in X1 by A6;
+      hence x in B1 by A6;
+     end;
+    end;
+      X = union X1
+    proof
+     thus X c= union X1
+     proof
+      let x;
+      assume A7: x in X;
+      then reconsider x' = x as Element of CongrLatt A;
+        the carrier of CongrLatt A c= the carrier of E by NAT_LAT:def 16;
+      then reconsider x' as Element of E by TARSKI:def 3;
+      A8: x in {x} by TARSKI:def 1;
+        {x} is finite Subset of X by A7,SUBSET_1:63;
+      then {x'} in X1;
+      hence x in union X1 by A8,TARSKI:def 4;
+     end;
+     thus union X1 c= X
+     proof
+      let x;
+      assume x in union X1;
+      then consider Y1 be set such that
+       A9: x in Y1 & Y1 in X1 by TARSKI:def 4;
+      consider Y2 be Subset of E such that
+       A10: Y1 = Y2 & Y2 is finite Subset of X by A9;
+      thus x in X by A9,A10;
+     end;
+    end;
+    hence thesis by A2,A3,LATTICE3:49;
+   end;
+
+  theorem Th16:
+   for i be Element of I
+   for e be Equivalence_Relation of M.i
+    ex E be Equivalence_Relation of M st E.i = e &
+     for j be Element of I st j <> i holds E.j = nabla (M.j)
+   proof
+    let i be Element of I;
+    let e be Equivalence_Relation of M.i;
+    defpred C[set] means $1 = i;
+    deffunc F(set) = e;
+    deffunc G(set) = nabla (M.$1);
+    consider E being Function such that
+     A1: dom E = I and
+     A2: for j st j in I holds ( C[j] implies E.j = F(j)) &
+      (not C[j] implies E.j = G(j)) from LambdaC;
+    reconsider E as ManySortedSet of I by A1,PBOOLE:def 3;
+      now let k be set;
+     assume A3: k in I;
+     per cases;
+     suppose k = i;
+      hence E.k is Relation of M.k by A2;
+     suppose k <> i;
+      then E.k = nabla (M.k) by A2,A3;
+      hence E.k is Relation of M.k;
+    end;
+    then reconsider E as ManySortedRelation of M by MSUALG_4:def 2;
+      now let k be set,
+            R be Relation of M.k;
+     assume A4: k in I & E.k = R;
+     per cases;
+     suppose k = i;
+      hence R is Equivalence_Relation of M.k by A2,A4;
+     suppose k <> i;
+      then E.k = nabla (M.k) by A2,A4;
+      hence R is Equivalence_Relation of M.k by A4;
+    end;
+    then reconsider E as Equivalence_Relation of M by MSUALG_4:def 3;
+    take E;
+    thus E.i = e by A2;
+    let j be Element of I;
+    assume j <> i;
+    hence E.j = nabla (M.j) by A2;
+   end;
+
+  definition
+   let I be non empty set;
+   let M be ManySortedSet of I;
+   let i be Element of I;
+   let X be Subset of EqRelLatt M;
+   redefine func pi(X,i) -> Subset of EqRelLatt M.i means :Def3:
+    x in it iff ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X;
+   coherence
+   proof
+      pi(X,i) c= the carrier of EqRelLatt M.i
+    proof
+     let z be set;
+     assume z in pi(X,i);
+     then consider f be Function such that
+      A1: f in X & z = f.i by CARD_3:def 6;
+     reconsider f as Equivalence_Relation of M by A1,MSUALG_5:def 5;
+       f.i is Equivalence_Relation of M.i by MSUALG_4:def 3;
+     hence z in the carrier of EqRelLatt M.i by A1,MSUALG_7:1;
+    end;
+    hence thesis;
+   end;
+   compatibility
+   proof
+    thus for Y being Subset of EqRelLatt M.i holds
+     Y = pi(X,i) iff
+      for x holds x in Y iff
+       ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X
+    proof
+     let Y be Subset of EqRelLatt M.i;
+     thus Y = pi(X,i) implies
+      (for x holds x in Y iff
+       ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X)
+     proof
+      assume A2: Y = pi(X,i);
+      let x;
+      thus x in Y implies
+       ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X
+      proof
+       assume x in Y;
+       then consider f be Function such that
+        A3: f in X & x = f.i by A2,CARD_3:def 6;
+       reconsider f as Equivalence_Relation of M by A3,MSUALG_5:def 5;
+       take f;
+       thus thesis by A3;
+      end;
+      thus (ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X)
+       implies x in Y by A2,CARD_3:def 6;
+     end;
+     thus (for x holds x in Y iff
+      ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X) implies
+       Y = pi(X,i)
+     proof
+      assume A4: for x holds x in Y iff
+       ex Eq be Equivalence_Relation of M st x = Eq.i & Eq in X;
+      thus Y c= pi(X,i)
+      proof
+       let y1;
+       assume y1 in Y;
+       then consider Eq be Equivalence_Relation of M such that
+        A5: y1 = Eq.i & Eq in X by A4;
+       thus y1 in pi(X,i) by A5,CARD_3:def 6;
+      end;
+      thus pi(X,i) c= Y
+      proof
+       let y1;
+       assume y1 in pi(X,i);
+       then consider f be Function such that
+        A6: f in X & y1 = f.i by CARD_3:def 6;
+       reconsider f as Equivalence_Relation of M by A6,MSUALG_5:def 5;
+         ex Eq be Equivalence_Relation of M st y1 = Eq.i & Eq in X
+       proof
+        take f;
+        thus thesis by A6;
+       end;
+       hence thesis by A4;
+      end;
+     end;
+    end;
+   end;
+   synonym EqRelSet (X,i);
+  end;
+
+  theorem Th17:
+   for i be Element of S
+   for X be Subset of EqRelLatt the Sorts of A
+   for B be Equivalence_Relation of the Sorts of A st
+    B = "\/" X
+     holds
+    B.i = "\/" (EqRelSet (X,i) , EqRelLatt (the Sorts of A).i)
+   proof
+    let i be Element of S;
+    set M = the Sorts of A;
+    set E = EqRelLatt M;
+    set Ei = EqRelLatt M.i;
+    let X be Subset of E;
+    let B be Equivalence_Relation of M;
+    reconsider B' = B as Element of E by MSUALG_5:def 5;
+    reconsider Bi = B.i as Equivalence_Relation of M.i by MSUALG_4:def 3;
+    reconsider Bi' = Bi as Element of Ei by MSUALG_7:1;
+    assume A1: B = "\/" X;
+      now let q' be Element of Ei;
+     reconsider q = q' as Equivalence_Relation of M.i by MSUALG_7:1;
+     assume q' in EqRelSet (X,i);
+     then consider Eq be Equivalence_Relation of M such that
+      A2: q' = Eq.i & Eq in X by Def3;
+     reconsider Eq' = Eq as Element of E by MSUALG_5:def 5;
+       Eq' [= B' by A1,A2,LATTICE3:38;
+     then Eq c= B by MSUALG_7:7;
+     then q c= Bi by A2,PBOOLE:def 5;
+     hence q' [= Bi' by Th2;
+    end;
+    then A3: EqRelSet (X,i) is_less_than Bi' by LATTICE3:def 17;
+      now let ri be Element of Ei;
+     reconsider ri' = ri as Equivalence_Relation of M.i by MSUALG_7:1;
+     consider r' be Equivalence_Relation of the Sorts of A such that
+      A4: r'.i = ri' & for j be SortSymbol of S st j <> i holds
+       r'.j = nabla ((the Sorts of A).j) by Th16;
+     reconsider r = r' as Element of E by MSUALG_5:def 5;
+     assume A5: EqRelSet (X,i) is_less_than ri;
+       now let c be Element of E;
+      reconsider c' = c as Equivalence_Relation of M by MSUALG_5:def 5;
+      reconsider ci' = c'.i as Equivalence_Relation of M.i
+                                                          by MSUALG_4:def 3;
+      reconsider ci = ci' as Element of Ei by MSUALG_7:1;
+      assume c in X;
+      then ci in EqRelSet (X,i) by Def3;
+      then A6: ci [= ri by A5,LATTICE3:def 17;
+        now let j;
+       assume A7: j in the carrier of S;
+       then reconsider j' = j as Element of S;
+       reconsider rj' = r'.j', cj' = c'.j' as
+                              Equivalence_Relation of M.j by MSUALG_4:def 3;
+       per cases;
+       suppose j = i;
+        hence c'.j c= r'.j by A4,A6,Th2;
+       suppose j <> i;
+        then r'.j = nabla ((the Sorts of A).j) by A4,A7;
+        then cj' /\ rj' = cj' by EQREL_1:18;
+        hence c'.j c= r'.j by XBOOLE_1:17;
+      end;
+      then c' c= r' by PBOOLE:def 5;
+      hence c [= r by MSUALG_7:7;
+     end;
+     then X is_less_than r by LATTICE3:def 17;
+     then B' [= r by A1,LATTICE3:def 21;
+     then B c= r' by MSUALG_7:7;
+     then Bi c= ri' by A4,PBOOLE:def 5;
+     hence Bi' [= ri by Th2;
+    end;
+    hence thesis by A3,LATTICE3:def 21;
+   end;
+
+  theorem Th18:
+   for X be Subset of CongrLatt A holds
+    "\/" (X,EqRelLatt the Sorts of A) is MSCongruence of A
+   proof
+    let X' be Subset of CongrLatt A;
+    set M = the Sorts of A;
+    set E = EqRelLatt M;
+      the carrier of CongrLatt A c= the carrier of EqRelLatt M
+                                                          by NAT_LAT:def 16;
+    then reconsider X = X' as Subset of EqRelLatt M
+                                                                 by XBOOLE_1:1;
+    reconsider V = "\/" (X,E) as Equivalence_Relation of M by MSUALG_5:def 5;
+    reconsider V as ManySortedRelation of A;
+    reconsider V as MSEquivalence-like ManySortedRelation of A
+                                                          by MSUALG_4:def 5;
+      for s1,s2 being SortSymbol of S
+    for t being Function st t is_e.translation_of A,s1,s2
+    for a,b being set st [a,b] in V.s1 holds [t.a, t.b] in V.s2
+    proof
+     let s1,s2 be SortSymbol of S;
+     let t be Function;
+     assume A1: t is_e.translation_of A,s1,s2;
+     let a,b be set;
+     assume A2: [a,b] in V.s1;
+     then A3: [a,b] in "\/" EqRelSet (X,s1) by Th17;
+     A4: a in M.s1 & b in M.s1 by A2,ZFMISC_1:106;
+     then consider f be FinSequence such that
+      A5: 1 <= len f & a = f.1 & b = f.(len f) &
+       for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in
+        union EqRelSet (X,s1) by A3,Th10;
+     reconsider t' = t as Function of M.s1,M.s2 by A1,MSUALG_6:11;
+     A6: t'.a in M.s2 & t'.b in M.s2 by A4,FUNCT_2:7;
+       ex g be FinSequence st
+      1 <= len g & t.a = g.1 & t.b = g.(len g) &
+       for i be Nat st 1 <= i & i < len g holds [g.i,g.(i+1)] in
+        union EqRelSet (X,s2)
+     proof
+      deffunc F(set)=t.(f.$1);
+      consider g be FinSequence such that
+       A7: len g = len f & for k be Nat st k in Seg len f holds
+        g.k = F(k) from SeqLambda;
+      take g;
+      thus 1 <= len g by A5,A7;
+        1 in Seg len f by A5,FINSEQ_1:3;
+      hence g.1 = t.a by A5,A7;
+        len g in Seg len f by A5,A7,FINSEQ_1:3;
+      hence g.(len g) = t.b by A5,A7;
+      let j be Nat;
+      assume A8: 1 <= j & j < len g;
+      then [f.j,f.(j+1)] in union EqRelSet (X,s1) by A5,A7;
+      then consider Z be set such that
+       A9: [f.j,f.(j+1)] in Z & Z in EqRelSet (X,s1) by TARSKI:def 4;
+      consider Eq be Equivalence_Relation of M such that
+       A10: Z = Eq.s1 & Eq in X by A9,Def3;
+      reconsider Eq as ManySortedRelation of A;
+      reconsider Eq as MSEquivalence-like ManySortedRelation of A
+                                                          by MSUALG_4:def 5;
+        Eq is MSCongruence of A by A10,MSUALG_5:def 6;
+      then reconsider Eq as
+        compatible MSEquivalence-like ManySortedRelation of A by MSUALG_6:27;
+        ex W be set st [t.(f.j),t.(f.(j+1))] in W & W in EqRelSet (X,s2)
+      proof
+       take W = Eq.s2;
+       thus [t.(f.j),t.(f.(j+1))] in W by A1,A9,A10,MSUALG_6:def 8;
+       thus W in EqRelSet (X,s2) by A10,Def3;
+      end;
+      then A11: [t.(f.j),t.(f.(j+1))] in union EqRelSet (X,s2)
+                                                            by TARSKI:def 4;
+        j in Seg len f by A7,A8,FINSEQ_1:3;
+      then A12: g.j = t.(f.j) by A7;
+        1 <= j+1 & j+1 <= len f by A7,A8,NAT_1:38;
+      then j+1 in Seg len f by FINSEQ_1:3;
+      hence [g.j,g.(j+1)] in union EqRelSet (X,s2) by A7,A11,A12;
+     end;
+     then [t.a,t.b] in "\/" EqRelSet (X,s2) by A6,Th10;
+     hence [t.a, t.b] in V.s2 by Th17;
+    end;
+    then reconsider V as invariant MSEquivalence-like ManySortedRelation of A
+                                                          by MSUALG_6:def 8;
+      V is compatible;
+    hence thesis by MSUALG_6:27;
+   end;
+
+  theorem Th19:
+   CongrLatt A is /\-inheriting
+   proof
+    set E = EqRelLatt the Sorts of A;
+    set C = CongrLatt A;
+      now let B be Subset of C;
+     reconsider d = "/\" (B,E) as MSCongruence of A by Th11;
+       d in the carrier of C by MSUALG_5:def 6;
+     hence "/\" (B,E) in the carrier of C;
+    end;
+    hence C is /\-inheriting by MSUALG_7:def 2;
+   end;
+
+  theorem Th20:
+   CongrLatt A is \/-inheriting
+   proof
+    set E = EqRelLatt the Sorts of A;
+    set C = CongrLatt A;
+      now let B be Subset of C;
+     reconsider d = "\/" (B,E) as MSCongruence of A by Th18;
+       d in the carrier of C by MSUALG_5:def 6;
+     hence "\/" (B,E) in the carrier of C;
+    end;
+    hence thesis by MSUALG_7:def 3;
+   end;
+
+  definition
+   let S,A;
+   cluster CongrLatt A -> /\-inheriting \/-inheriting;
+   coherence by Th19,Th20;
+  end;
+

@@ -1,0 +1,1350 @@
+:: Boolean Properties of Sets - Theorems
+::  by Library Committee
+::
+:: Received April 08, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, ZFMISC_1;
+ notation TARSKI, XBOOLE_0;
+ constructors TARSKI, XBOOLE_0;
+ clusters XBOOLE_0;
+ requirements BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems TARSKI, XBOOLE_0;
+
+begin
+
+ reserve x,A,B,X,X',Y,Y',Z,V for set;
+
+theorem Th1: :: BOOLE'29:
+  X c= Y & Y c= Z implies X c= Z
+proof
+  assume that A1: X c= Y and
+              A2: Y c= Z;
+   let x; assume x in X; then x in Y by A1,TARSKI:def 3;
+   hence thesis by A2,TARSKI:def 3;
+end;
+
+theorem Th2: :: BOOLE'27:
+  {} c= X
+proof let x;
+  thus thesis;
+end;
+
+theorem Th3: :: BOOLE'30:
+  X c= {} implies X = {}
+proof
+  assume X c= {};
+  hence X c= {} & {} c= X by Th2;
+end;
+
+:: \/
+
+theorem Th4: :: BOOLE'64:
+  (X \/ Y) \/ Z = X \/ (Y \/ Z)
+proof
+ thus (X \/ Y) \/ Z c= X \/ (Y \/ Z)
+   proof let x;
+      assume x in (X \/ Y) \/ Z;
+      then x in X \/ Y or x in Z by XBOOLE_0:def 2;
+      then x in X or x in Y or x in Z by XBOOLE_0:def 2;
+      then x in X or x in Y \/ Z by XBOOLE_0:def 2;
+      hence thesis by XBOOLE_0:def 2;
+   end;
+  let x;
+  assume x in X \/ (Y \/ Z);
+  then x in X or x in Y \/ Z by XBOOLE_0:def 2;
+  then x in X or x in Y or x in Z by XBOOLE_0:def 2;
+  then x in X \/ Y or x in Z by XBOOLE_0:def 2;
+  hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: SYSREL'2:
+    (X \/ Y) \/ Z = (X \/ Z) \/ (Y \/ Z)
+proof
+    (X \/ Y) \/ Z = X \/ ((Z \/ Z) \/ Y) by Th4
+            .= X \/ (Z \/ (Z \/ Y)) by Th4
+            .= (X \/ Z) \/ (Y \/ Z) by Th4;
+  hence thesis;
+end;
+
+theorem :: SYSREL'3:
+    X \/ (X \/ Y) = X \/ Y
+proof
+    X \/ (X \/ Y) = (X \/ X) \/ Y by Th4
+               .= X \/ Y;
+  hence thesis;
+end;
+
+theorem Th7: :: BOOLE'31:
+  X c= X \/ Y
+proof
+  let x;
+  thus thesis by XBOOLE_0:def 2;
+end;
+
+theorem Th8: :: BOOLE'32:
+  X c= Z & Y c= Z implies X \/ Y c= Z
+proof
+  assume A1: X c= Z & Y c= Z;
+  let x;
+  assume x in X \/ Y;
+  then x in X or x in Y by XBOOLE_0:def 2;
+  hence thesis by A1,TARSKI:def 3;
+end;
+
+theorem Th9: :: BOOLE'33:
+  X c= Y implies X \/ Z c= Y \/ Z
+proof
+  assume A1: X c= Y;
+  let x; assume x in X \/ Z;
+  then x in X or x in Z by XBOOLE_0:def 2;
+  then x in Y or x in Z by A1,TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: AMI_5'2:
+    X c= Y implies X c= Z \/ Y
+ proof
+  assume X c= Y;
+then A1: Z \/ X c= Z \/ Y by Th9;
+    X c= Z \/ X by Th7;
+  hence X c= Z \/ Y by A1,Th1;
+ end;
+
+theorem :: SETWISEO'7:
+    X \/ Y c= Z implies X c= Z
+proof
+    X c= X \/ Y by Th7;
+  hence thesis by Th1;
+end;
+
+theorem Th12: :: BOOLE'35:
+  X c= Y implies X \/ Y = Y
+proof
+  assume A1: X c= Y;
+   thus X \/ Y c= Y
+     proof
+       let x; assume x in X \/ Y;
+       then x in X or x in Y by XBOOLE_0:def 2;
+       hence thesis by A1,TARSKI:def 3;
+     end;
+  let x;
+  thus thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: BOOLE'34:
+    X c= Y & Z c= V implies X \/ Z c= Y \/ V
+proof
+  assume A1: X c= Y;
+  assume A2: Z c= V;
+  let x; assume x in X \/ Z;
+  then x in X or x in Z by XBOOLE_0:def 2;
+  then x in Y or x in V by A1,A2,TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: BOOLE'56:
+    (Y c= X & Z c= X & for V st Y c= V & Z c= V holds X c= V) implies X = Y \/
+Z
+proof
+  assume that A1: Y c= X and
+              A2: Z c= X and
+              A3: Y c= V & Z c= V implies X c= V;
+    Y c= Y \/ Z & Z c= Y \/ Z by Th7;
+  hence X c= Y \/ Z by A3;
+  thus Y \/ Z c= X by A1,A2,Th8;
+end;
+
+theorem :: BOOLE'59:
+    X \/ Y = {} implies X = {}
+proof
+  assume
+  X \/ Y = {};
+  then not ex x st x in X by XBOOLE_0:def 2;
+  hence thesis by XBOOLE_0:def 1;
+end;
+
+:: /\
+
+theorem Th16: :: BOOLE'67:
+  (X /\ Y) /\ Z = X /\ (Y /\ Z)
+proof
+  thus (X /\ Y) /\ Z c= X /\ (Y /\ Z)
+  proof let x;
+    assume x in (X /\ Y) /\ Z;
+    then x in X /\ Y & x in Z by XBOOLE_0:def 3;
+    then x in X & x in Y & x in Z by XBOOLE_0:def 3;
+    then x in X & x in Y /\ Z by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  let x;
+  assume x in X /\ (Y /\ Z);
+  then x in X & x in Y /\ Z by XBOOLE_0:def 3;
+  then x in X & x in Y & x in Z by XBOOLE_0:def 3;
+  then x in X /\ Y & x in Z by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem Th17: :: BOOLE'37:
+  X /\ Y c= X
+proof
+  let x;
+  thus thesis by XBOOLE_0:def 3;
+end;
+
+theorem :: SYSREL'4:
+    X c= Y /\ Z implies X c= Y
+proof Y /\ Z c= Y by Th17;
+  hence thesis by Th1;
+end;
+
+theorem Th19: :: BOOLE'39:
+  Z c= X & Z c= Y implies Z c= X /\ Y
+proof
+  assume A1: Z c= X & Z c= Y;
+  let x;
+  assume x in Z;
+  then x in X & x in Y by A1,TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem :: BOOLE'57:
+    (X c= Y & X c= Z & for V st V c= Y & V c= Z holds V c= X) implies X = Y /\
+Z
+proof
+  assume that A1: X c= Y and
+              A2: X c= Z and
+              A3: V c= Y & V c= Z implies V c= X;
+  thus X c= Y /\ Z by A1,A2,Th19;
+    Y /\ Z c= Y & Y /\ Z c= Z implies Y /\ Z c= X by A3;
+  hence Y /\ Z c= X by Th17;
+end;
+
+theorem :: BOOLE'68:
+    X /\ (X \/ Y) = X
+proof
+  thus X /\ (X \/ Y) c= X
+  proof let x;
+    thus thesis by XBOOLE_0:def 3;
+  end;
+  let x;
+  assume x in X;
+  then x in X & x in X \/ Y by XBOOLE_0:def 2;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem Th22: :: BOOLE'69:
+  X \/ (X /\ Y) = X
+proof
+  thus X \/ (X /\ Y) c= X
+  proof let x;
+    assume x in X \/ (X /\ Y);
+    then x in X or x in X /\ Y by XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  let x;
+  thus thesis by XBOOLE_0:def 2;
+end;
+
+theorem Th23: :: BOOLE'70:
+  X /\ (Y \/ Z) = X /\ Y \/ X /\ Z
+proof
+  thus X /\ (Y \/ Z) c= X /\ Y \/ X /\ Z
+  proof let x;
+    assume x in X /\ (Y \/ Z);
+    then x in X & x in Y \/ Z by XBOOLE_0:def 3;
+    then x in X & (x in Y or x in Z) by XBOOLE_0:def 2;
+    then x in X /\ Y or x in X /\ Z by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 2;
+  end;
+  let x;
+  assume x in X /\ Y \/ X /\ Z;
+   then x in X /\ Y or x in X /\ Z by XBOOLE_0:def 2;
+   then x in X & x in Y or x in X & x in Z by XBOOLE_0:def 3;
+   then x in X & x in Y \/ Z by XBOOLE_0:def 2;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem Th24: :: BOOLE'71:
+  X \/ Y /\ Z = (X \/ Y) /\ (X \/ Z)
+proof
+  thus X \/ Y /\ Z c= (X \/ Y) /\ (X \/ Z)
+  proof let x;
+    assume x in X \/ Y /\ Z;
+    then x in X or x in Y /\ Z by XBOOLE_0:def 2;
+    then x in X or x in Y & x in Z by XBOOLE_0:def 3;
+    then x in X \/ Y & x in X \/ Z by XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  let x;
+  assume x in (X \/ Y) /\ (X \/ Z);
+   then x in X \/ Y & x in X \/ Z by XBOOLE_0:def 3;
+   then (x in X or x in Y) & (x in X or x in Z) by XBOOLE_0:def 2;
+   then x in X or x in Y /\ Z by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: BOOLE'72:
+    (X /\ Y) \/ (Y /\ Z) \/ (Z /\ X) = (X \/ Y) /\ (Y \/ Z) /\ (Z \/ X)
+proof
+  thus X /\ Y \/ Y /\ Z \/ Z /\ X
+        = (X /\ Y \/ Y /\ Z \/ Z) /\ (X /\ Y \/ Y /\ Z \/ X) by Th24
+       .= (X /\ Y \/ (Y /\ Z \/ Z)) /\ (X /\ Y \/ Y /\ Z \/ X) by Th4
+       .= (X /\ Y \/ Z) /\ (X /\ Y \/ Y /\ Z \/ X) by Th22
+       .= (X /\ Y \/ Z) /\ (X /\ Y \/ X \/ Y /\ Z) by Th4
+       .= (X /\ Y \/ Z) /\ (X \/ Y /\ Z) by Th22
+       .= (X \/ Z) /\ (Y \/ Z) /\ (X \/ Y /\ Z) by Th24
+       .= (X \/ Z) /\ (Y \/ Z) /\ ((X \/ Y) /\ (X \/ Z)) by Th24
+       .= (X \/ Y) /\ ((Y \/ Z) /\ (X \/ Z) /\ (X \/ Z)) by Th16
+       .= (X \/ Y) /\ ((Y \/ Z) /\ ((X \/ Z) /\ (X \/ Z))) by Th16
+       .= (X \/ Y) /\ (Y \/ Z) /\ (Z \/ X) by Th16;
+end;
+
+theorem Th26: :: BOOLE'40:
+  X c= Y implies X /\ Z c= Y /\ Z
+proof
+  assume A1: X c= Y;
+  let x;
+  assume x in X /\ Z;
+  then x in X & x in Z by XBOOLE_0:def 3;
+  then x in Y & x in Z by A1,TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem :: BOOLE'41:
+    X c= Y & Z c= V implies X /\ Z c= Y /\ V
+proof
+  assume A1: X c= Y & Z c= V;
+  let x;
+  assume x in X /\ Z;
+  then x in X & x in Z by XBOOLE_0:def 3;
+  then x in Y & x in V by A1,TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem Th28: :: BOOLE'42:
+  X c= Y implies X /\ Y = X
+proof
+  assume A1: X c= Y;
+  thus X /\ Y c= X by Th17;
+  let x;
+  assume x in X;
+  then x in X & x in Y by A1,TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 3;
+end;
+
+theorem :: BOOLE'38:
+    X /\ Y c= X \/ Z
+proof
+    X /\ Y c= X & X c= X \/ Z by Th7,Th17;
+  hence thesis by Th1;
+end;
+
+theorem :: BOOLE'44:
+    X c= Z implies X \/ Y /\ Z = (X \/ Y) /\ Z
+proof assume
+A1: X c= Z;
+  thus X \/ Y /\ Z c= (X \/ Y) /\ Z
+  proof let x;
+    assume x in X \/ Y /\ Z;
+    then x in X or x in Y /\ Z by XBOOLE_0:def 2;
+    then x in X or x in Y & x in Z by XBOOLE_0:def 3;
+    then x in (X \/ Y) & x in Z by A1,TARSKI:def 3,XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  let x;
+  assume x in (X \/ Y) /\ Z;
+  then x in X \/ Y & x in Z by XBOOLE_0:def 3;
+  then (x in X or x in Y) & x in Z by XBOOLE_0:def 2;
+  then x in X & x in Z or x in Y /\ Z by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: BOOLE'53:
+    (X /\ Y) \/ (X /\ Z) c= Y \/ Z
+proof
+    now let x;
+    assume x in (X /\ Y) \/ (X /\ Z);
+    then x in (X /\ Y) or x in (X /\ Z) by XBOOLE_0:def 2;
+    then (x in X & x in Y) or (x in X & x in Z) by XBOOLE_0:def 3;
+    hence x in Y \/ Z by XBOOLE_0:def 2;
+  end;
+  hence thesis by TARSKI:def 3;
+end;
+
+Lm1: X \ Y = {} iff X c= Y
+proof
+  thus X \ Y = {} implies X c= Y
+  proof
+    assume A1:X \ Y = {};
+    let x;
+    assume x in X & not x in Y;
+    hence contradiction by A1,XBOOLE_0:def 4;
+  end;
+  assume A2:X c= Y;
+    now let x;
+      x in X & not x in Y iff contradiction by A2,TARSKI:def 3;
+    hence x in X \ Y iff x in {} by XBOOLE_0:def 4;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+:: \
+
+theorem :: BOOLE'90:
+    X \ Y = Y \ X implies X = Y
+proof
+   assume A1: X \ Y = Y \ X;
+     now let x;
+      (x in X & not x in Y) iff x in Y \ X by A1,XBOOLE_0:def 4;
+    hence x in X iff x in Y by XBOOLE_0:def 4;
+   end;
+ hence thesis by TARSKI:2;
+end;
+
+theorem Th33: :: BOOLE'46:
+  X c= Y implies X \ Z c= Y \ Z
+proof
+  assume A1:X c= Y;
+  let x;
+  assume x in X \ Z;
+  then x in X & not x in Z by XBOOLE_0:def 4;
+  then x in Y & not x in Z by A1,TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 4;
+end;
+
+theorem Th34: :: BOOLE'47:
+  X c= Y implies Z \ Y c= Z \ X
+proof
+  assume A1:X c= Y;
+  let x;
+  assume x in Z \ Y;
+  then x in Z & not x in Y by XBOOLE_0:def 4;
+  then x in Z & not x in X by A1,TARSKI:def 3;
+  hence thesis by XBOOLE_0:def 4;
+end;
+
+Lm2: X \ (Y /\ Z) = (X \ Y) \/ (X \ Z)
+proof
+  thus X \ (Y /\ Z) c= (X \ Y) \/ (X \ Z)
+  proof
+    let x;
+    assume x in X \ (Y /\ Z);
+    then x in X & not x in (Y /\ Z) by XBOOLE_0:def 4;
+    then x in X & (not x in Y or not x in Z) by XBOOLE_0:def 3;
+    then x in (X \ Y) or x in (X \ Z) by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 2;
+  end;
+    Y /\ Z c= Y & Y /\ Z c= Z by Th17;
+  then (X \ Y) c= X \ (Y /\ Z) & X \ Z c= X \ (Y /\ Z) by Th34;
+  hence (X \ Y) \/ (X \ Z) c= X \ (Y /\ Z) by Th8;
+end;
+
+theorem :: BOOLE'48:
+    X c= Y & Z c= V implies X \ V c= Y \ Z
+proof
+  assume that A1:X c= Y and
+              A2:Z c= V;
+  A3:X \ V c= Y \ V by A1,Th33;
+       Y \ V c= Y \ Z by A2,Th34;
+  hence thesis by A3,Th1;
+end;
+
+theorem Th36: :: BOOLE'49:
+  X \ Y c= X
+proof
+  let x;
+  thus thesis by XBOOLE_0:def 4;
+end;
+
+theorem :: BOOLE'45:
+    X \ Y = {} iff X c= Y by Lm1;
+
+theorem :: BOOLE'50:
+    X c= Y \ X implies X = {}
+proof
+  assume A1:X c= Y \ X;
+  thus X c= {}
+   proof let x;
+    assume
+A2:   x in X;
+     then x in Y \ X by A1,TARSKI:def 3;
+   hence thesis by A2,XBOOLE_0:def 4;
+   end;
+ thus thesis by Th2;
+end;
+
+theorem Th39: :: BOOLE'79:
+  X \/ (Y \ X) = X \/ Y
+proof
+  thus X \/ (Y \ X) c= X \/ Y
+  proof
+   let x;
+   assume x in X \/ (Y \ X);
+    then x in X or x in Y \ X by XBOOLE_0:def 2;
+    then x in X or x in Y by XBOOLE_0:def 4;
+   hence thesis by XBOOLE_0:def 2;
+  end;
+  let x;
+  assume x in X \/ Y;
+   then x in X or x in Y & not x in X by XBOOLE_0:def 2;
+   then x in X or x in Y \ X by XBOOLE_0:def 4;
+  hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: BOOLE'83:
+    (X \/ Y) \ Y = X \ Y
+proof
+ thus x in (X \/ Y) \ Y implies x in X \ Y
+   proof
+    assume x in (X \/ Y) \ Y;
+     then x in (X \/ Y) & not x in Y by XBOOLE_0:def 4;
+     then (x in X or x in Y) & not x in Y by XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 4;
+   end;
+ thus x in X \ Y implies x in (X \/ Y) \ Y
+  proof
+   assume x in X \ Y;
+    then (x in X or x in Y) & not x in Y by XBOOLE_0:def 4;
+    then x in (X \/ Y) & not x in Y by XBOOLE_0:def 2;
+   hence thesis by XBOOLE_0:def 4;
+   end;
+end;
+
+theorem Th41: :: BOOLE'88:
+  (X \ Y) \ Z = X \ (Y \/ Z)
+proof
+  thus x in (X \ Y) \ Z implies x in X \ (Y \/ Z)
+  proof
+    assume x in (X \ Y) \ Z;
+    then x in (X \ Y) & not x in Z by XBOOLE_0:def 4;
+    then x in X & not (x in Y or x in Z) by XBOOLE_0:def 4;
+    then x in X & not x in (Y \/ Z) by XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+  thus x in X \ (Y \/ Z) implies x in (X \ Y) \ Z
+  proof
+    assume x in X \ (Y \/ Z);
+    then x in X & not x in (Y \/ Z) by XBOOLE_0:def 4;
+    then (x in X & not x in Y) & not x in Z by XBOOLE_0:def 2;
+    then x in (X \ Y) & not x in Z by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+end;
+
+theorem Th42: :: BOOLE'89:
+  (X \/ Y) \ Z = (X \ Z) \/ (Y \ Z)
+proof
+  thus (X \/ Y) \ Z c= (X \ Z) \/ (Y \ Z)
+   proof
+    let x;
+    assume x in (X \/ Y) \ Z;
+    then x in (X \/ Y) & not x in Z by XBOOLE_0:def 4;
+    then (x in X & not x in Z) or (x in Y & not x in Z) by XBOOLE_0:def 2;
+    then x in (X \ Z) or x in (Y \ Z) by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 2;
+   end;
+  let x;
+   assume x in (( X \ Z) \/ (Y \ Z));
+   then x in (X \ Z) or x in (Y \ Z) by XBOOLE_0:def 2;
+   then (x in X & not x in Z) or (x in Y & not x in Z) by XBOOLE_0:def 4;
+   then x in (X \/ Y) & not x in Z by XBOOLE_0:def 2;
+  hence thesis by XBOOLE_0:def 4;
+end;
+
+theorem :: BOOLE'52:
+    X c= Y \/ Z implies X \ Y c= Z
+proof
+  assume A1: X c= Y \/ Z;
+   let x; assume x in X \ Y;
+    then x in X & not x in Y by XBOOLE_0:def 4;
+    then x in Y \/ Z & not x in Y by A1,TARSKI:def 3;
+    hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: NORMFORM'2:
+    X \ Y c= Z implies X c= Y \/ Z
+proof assume
+A1: x in X \ Y implies x in Z;
+  let x;
+  assume x in X;
+   then x in X \ Y or x in Y by XBOOLE_0:def 4;
+   then x in Z or x in Y by A1;
+  hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem :: BOOLE'54:
+    X c= Y implies Y = X \/ (Y \ X)
+proof
+  assume A1: X c= Y;
+    now let x;
+      x in Y iff x in X or x in (Y \ X) by A1,TARSKI:def 3,XBOOLE_0:def 4;
+    hence x in Y iff x in X \/ (Y \ X) by XBOOLE_0:def 2;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+theorem :: BOOLE'76:
+    X \ (X \/ Y) = {}
+proof
+    X c= X \/ Y & X c= Y \/ X by Th7;
+  hence thesis by Lm1;
+end;
+
+theorem Th47: :: BOOLE'77:
+  X \ X /\ Y = X \ Y
+proof
+    now let x;
+      x in X & not x in X /\ Y iff x in X & not x in Y by XBOOLE_0:def 3;
+    hence x in X \ X /\ Y iff x in X \ Y by XBOOLE_0:def 4;
+  end;
+  hence X \ X /\ Y = X \ Y by TARSKI:2;
+end;
+
+theorem :: BOOLE'82:
+    X \ (X \ Y) = X /\ Y
+proof
+  thus x in X \ (X \ Y) implies x in X /\ Y
+  proof
+    assume x in X \ (X \ Y);
+    then x in X & not x in (X \ Y) by XBOOLE_0:def 4;
+    then x in X & (not x in X or x in Y) by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 3;
+  end;
+  thus x in X /\ Y implies x in X \ (X \ Y)
+  proof
+    assume x in X /\ Y;
+    then x in X & (not x in X or x in Y) by XBOOLE_0:def 3;
+    then x in X & not x in (X \ Y) by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+end;
+
+theorem Th49: :: BOOLE'116:
+  X /\ (Y \ Z) = (X /\ Y) \ Z
+proof
+   now let x;
+     x in X & x in Y & not x in Z iff x in X & x in Y & not x in Z;
+   then x in X & x in (Y \ Z) iff x in (X /\ Y) & not x in Z
+     by XBOOLE_0:def 3,def 4;
+   hence x in X /\ (Y \ Z) iff x in (X /\ Y) \ Z by XBOOLE_0:def 3,def 4;
+ end;
+ hence thesis by TARSKI:2;
+end;
+
+theorem Th50: :: BOOLE'117
+  X /\ (Y \ Z) = X /\ Y \ X /\ Z
+proof
+  A1: X /\ Y c= X by Th17;
+       X /\ Y \ X /\ Z = ((X /\ Y) \ X) \/ ((X /\ Y) \ Z) by Lm2
+                  .= {} \/ ((X /\ Y) \ Z) by A1,Lm1
+                  .= (X /\ Y) \ Z;
+    hence X /\ (Y \ Z) = X /\ Y \ X /\ Z by Th49;
+end;
+
+theorem Th51: :: BOOLE'80:
+  X /\ Y \/ (X \ Y) = X
+proof
+  thus X /\ Y \/ (X \ Y) c= X
+  proof
+    let x;
+    assume x in X /\ Y \/ (X \ Y);
+    then x in X /\ Y or x in (X \ Y) by XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 3,def 4;
+  end;
+  let x;
+  assume x in X;
+  then x in X & x in Y or x in (X\Y) by XBOOLE_0:def 4;
+  then x in X /\ Y or x in (X \ Y) by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem Th52: :: BOOLE'81:
+  X \ (Y \ Z) = (X \ Y) \/ X /\ Z
+ proof
+   thus x in X \ (Y \ Z) implies x in (X \ Y) \/ X /\ Z
+     proof
+       assume x in X \ (Y \ Z);
+       then x in X & not x in (Y \ Z) by XBOOLE_0:def 4;
+       then (x in X & not x in Y) or x in X & x in Z by XBOOLE_0:def 4;
+       then x in (X \ Y) or x in X /\ Z by XBOOLE_0:def 3,def 4;
+       hence thesis by XBOOLE_0:def 2;
+     end;
+     thus x in (X \ Y) \/ X /\ Z implies x in X \ (Y \ Z)
+     proof
+       assume x in (X \ Y) \/ X /\ Z;
+       then x in (X \ Y) or x in X /\ Z by XBOOLE_0:def 2;
+       then (x in X & not x in Y) or (x in X & x in Z)
+        by XBOOLE_0:def 3,def 4;
+       then x in X & not x in (Y \ Z) by XBOOLE_0:def 4;
+       hence x in X \ (Y \ Z) by XBOOLE_0:def 4;
+     end;
+ end;
+
+theorem :: BOOLE'85:
+    X \ (Y \/ Z) = (X \ Y) /\ (X \ Z)
+proof
+    Y c= Y \/ Z by Th7;
+  then A1:X \(Y \/ Z) c= X \ Y by Th34;
+    Z c= Y \/ Z by Th7;
+  then X \ (Y \/ Z) c= X \ Z by Th34;
+  hence X \ (Y \/ Z) c= (X \ Y) /\ (X \ Z) by A1,Th19;
+  let x;
+  assume x in (X \ Y) /\ (X \ Z);
+  then x in (X \ Y) & x in (X \ Z) by XBOOLE_0:def 3;
+  then x in X & (not x in Y & not x in Z) by XBOOLE_0:def 4;
+  then x in X & not x in (Y \/ Z) by XBOOLE_0:def 2;
+  hence thesis by XBOOLE_0:def 4;
+end;
+
+theorem  :: BOOLE'86:
+   X \ (Y /\ Z) = (X \ Y) \/ (X \ Z) by Lm2;
+
+theorem Th55: :: BOOLE'87:
+  (X \/ Y) \ (X /\ Y) = (X \ Y) \/ (Y \ X)
+proof
+    x in (X \/ Y) \ (X /\ Y) iff x in (X \ Y) \/ (Y \ X)
+  proof
+    thus x in (X \/ Y) \ (X /\ Y) implies x in (X \ Y) \/ (Y \ X)
+    proof
+      assume x in (X \/ Y) \ (X /\ Y);
+      then x in (X \/ Y) & not x in (X /\ Y) by XBOOLE_0:def 4;
+      then (x in X or x in Y) & (not x in X or not x in Y)
+        by XBOOLE_0:def 2,def 3;
+      then x in (X \ Y) or x in( Y \ X) by XBOOLE_0:def 4;
+      hence thesis by XBOOLE_0:def 2;
+    end;
+    assume x in (X \ Y) \/ (Y \ X);
+    then x in (X \ Y) or x in (Y \ X) by XBOOLE_0:def 2;
+    then (x in X & not x in Y) or (x in Y & not x in X) by XBOOLE_0:def 4;
+    then not x in (X /\ Y) & x in (X \/ Y) by XBOOLE_0:def 2,def 3;
+    hence thesis by XBOOLE_0:def 4;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+:: c<
+
+Lm3:
+  X c= Y & Y c< Z implies X c< Z
+proof assume that
+A1: X c= Y and
+A2: Y c< Z;
+     Y c= Z by A2,XBOOLE_0:def 8;
+ hence X c= Z & X <> Z by A1,A2,Th1,XBOOLE_0:def 10;
+end;
+
+theorem :: BOOLE'123:
+    X c< Y & Y c< Z implies X c< Z
+proof assume that
+A1: X c< Y and
+A2: Y c< Z;
+    X c= Y by A1,XBOOLE_0:def 8;
+  hence thesis by A2,Lm3;
+end;
+
+theorem :: BOOLE'126:
+    not (X c< Y & Y c< X)
+proof assume
+A1: X c< Y & Y c< X;
+  then X c= Y & Y c= X by XBOOLE_0:def 8;
+  hence contradiction by A1,XBOOLE_0:def 10;
+end;
+
+theorem :: BOOLE'121:
+    X c< Y & Y c= Z implies X c< Z
+proof assume that
+A1: X c< Y and
+A2: Y c= Z;
+     X c= Y by A1,XBOOLE_0:def 8;
+  hence X c= Z & X <> Z by A1,A2,Th1,XBOOLE_0:def 10;
+end;
+
+theorem :: BOOLE'122:
+    X c= Y & Y c< Z implies X c< Z by Lm3;
+
+theorem Th60: :: BOOLE'127:
+  X c= Y implies not Y c< X
+proof assume X c= Y & Y c= X & X <> Y;
+  hence contradiction by XBOOLE_0:def 10;
+end;
+
+theorem :: BOOLE'124:
+    X <> {} implies {} c< X
+proof assume
+A1: X <> {};
+  thus {} c= X by Th2;
+  thus thesis by A1;
+end;
+
+theorem :: BOOLE'125:
+    not X c< {}
+proof assume
+A1: X c< {};
+  then X c= {} by XBOOLE_0:def 8;
+  hence contradiction by A1,Th3;
+end;
+
+:: meets & misses
+
+theorem Th63: :: BOOLE'55:
+  X c= Y & Y misses Z implies X misses Z
+proof
+  assume A1: X c= Y & Y /\ Z = {};
+  then X /\ Z c= Y /\ Z by Th26;
+  then X /\ Z = {} by A1,Th3;
+  hence thesis by XBOOLE_0:def 7;
+end;
+
+theorem :: AMI_5'1:
+    A c= X & B c= Y & X misses Y implies A misses B
+  proof
+   assume that A1: A c= X and
+               A2: B c= Y and
+               A3: X misses Y;
+     A misses Y by A1,A3,Th63;
+   hence thesis by A2,Th63;
+  end;
+
+theorem :: BOOLE'104:
+    X misses {}
+proof
+  assume X meets {};
+  then ex x st x in X & x in {} by XBOOLE_0:3;
+  hence contradiction;
+end;
+
+theorem :: BOOLE'110:
+    X meets X iff X <> {}
+proof
+ hereby assume X meets X;
+  then ex x st x in X & x in X by XBOOLE_0:3;
+  hence X <> {};
+ end;
+ assume X <> {};
+   then X /\ X <> {};
+  hence thesis by XBOOLE_0:def 7;
+end;
+
+theorem :: BOOLE'51:
+    X c= Y & X c= Z & Y misses Z implies X = {}
+proof
+  assume that A1:X c= Y and
+              A2:X c= Z and
+              A3:Y /\ Z = {};
+    X c= {} by A1,A2,A3,Th19;
+  hence X = {} by Th3;
+end;
+
+theorem :: JORDAN9'2:
+    for A being non empty set st A c= Y & A c= Z holds Y meets Z
+proof
+  let A be non empty set;
+  assume A1: A c= Y & A c= Z;
+  consider x being set such that A2: x in A by XBOOLE_0:def 1;
+    x in Y & x in Z by A1,A2,TARSKI:def 3;
+  hence thesis by XBOOLE_0:3;
+end;
+
+theorem :: TOPREAL6'27:
+    for A being non empty set st A c= Y holds A meets Y
+proof
+  let A be non empty set;
+  assume A c= Y;
+  hence A /\ Y <> {} by Th28;
+end;
+
+theorem Th70: :: BOOLE'100:
+  X meets Y \/ Z iff X meets Y or X meets Z
+proof
+  thus X meets Y \/ Z implies X meets Y or X meets Z
+  proof
+    assume X meets Y \/ Z;
+    then consider x such that A1:x in X and
+                              A2:x in Y \/ Z by XBOOLE_0:3;
+      x in X & x in Y or x in X & x in Z by A1,A2,XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:3;
+  end;
+A3: X meets Y implies X meets Y \/ Z
+  proof assume X meets Y;
+    then consider x such that A4:x in X & x in Y by XBOOLE_0:3;
+      x in X & x in Y \/ Z by A4,XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:3;
+  end;
+    X meets Z implies X meets Y \/ Z
+  proof assume X meets Z;
+    then consider x such that A5:x in X & x in Z by XBOOLE_0:3;
+      x in X & x in Y \/ Z by A5,XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:3;
+  end;
+  hence thesis by A3;
+end;
+
+theorem :: TOPREAL6'28:
+    X \/ Y = Z \/ Y & X misses Y & Z misses Y implies X = Z
+  proof assume that
+A1: X \/ Y = Z \/ Y and
+A2: X /\ Y = {} and
+A3: Z /\ Y = {};
+   thus X c= Z
+    proof let x be set such that
+A4:   x in X;
+A5:    not x in Y by A2,A4,XBOOLE_0:def 3;
+        X c= Z \/ Y by A1,Th7;
+      then x in Z \/ Y by A4,TARSKI:def 3;
+     hence x in Z by A5,XBOOLE_0:def 2;
+    end;
+   let x be set such that
+A6: x in Z;
+A7:  not x in Y by A3,A6,XBOOLE_0:def 3;
+      Z c= X \/ Y by A1,Th7;
+    then x in X \/ Y by A6,TARSKI:def 3;
+   hence x in X by A7,XBOOLE_0:def 2;
+  end;
+
+theorem :: SETWISEO'9:
+    X' \/ Y' = X \/ Y & X misses X' & Y misses Y' implies X = Y'
+proof assume X' \/ Y' = X \/ Y;
+then A1: X c= X' \/ Y' & Y c= X' \/ Y' & X' c= X \/ Y & Y' c= X \/ Y by Th7;
+  assume X misses X' & Y misses Y';
+then A2: X /\ X' = {} & Y /\ Y' = {} by XBOOLE_0:def 7;
+  thus X = X /\ (X' \/ Y') by A1,Th28
+        .= X /\ X' \/ X /\ Y' by Th23
+        .= (X \/ Y) /\ Y' by A2,Th23
+        .= Y' by A1,Th28;
+end;
+
+theorem :: BOOLE'120:
+    X c= Y \/ Z & X misses Z implies X c= Y
+proof
+   assume that A1: X c= Y \/ Z and
+               A2: X /\ Z = {};
+      X /\ (Y \/ Z)= X by A1,Th28;
+    then Y /\ X \/ {} = X by A2,Th23;
+   hence thesis by Th17;
+end;
+
+theorem Th74: :: BOOLE'102:
+  X meets Y /\ Z implies X meets Y
+proof assume X meets Y /\ Z;
+  then consider x such that A1: x in X & x in Y /\ Z by XBOOLE_0:3;
+    x in X & x in Y by A1,XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:3;
+end;
+
+theorem :: JORDAN9'1:
+    X meets Y implies X /\ Y meets Y
+proof
+  assume X meets Y; then consider x being set such that
+A1:  x in X & x in Y by XBOOLE_0:3;
+    x in X /\ Y by A1,XBOOLE_0:def 3;
+  hence thesis by A1,XBOOLE_0:3;
+end;
+
+theorem :: PROB_2'7:
+    Y misses Z implies X /\ Y misses X /\ Z
+proof
+  assume Y misses Z;
+  then (X /\ Z) misses Y by Th74;
+  hence (X /\ Y) misses (X /\ Z) by Th74;
+end;
+
+theorem :: BORSUK_1'1:
+    X meets Y & X c= Z implies X meets Y /\ Z
+ proof assume that
+A1: X meets Y and
+A2: X c= Z;
+     now assume
+A3:  X /\ (Y /\ Z) = {};
+      X /\ Y = (X /\ Z) /\ Y by A2,Th28
+      .= {} by A3,Th16;
+    hence contradiction by A1,XBOOLE_0:def 7;
+   end;
+  hence X meets Y /\ Z by XBOOLE_0:def 7;
+ end;
+
+theorem :: SPRECT_3'1:
+    X misses Y implies X /\ (Y \/ Z) = X /\ Z
+proof
+  assume X misses Y;
+  then X /\ Y = {} by XBOOLE_0:def 7;
+  hence X /\ (Y \/ Z) = {} \/ X /\ Z by Th23
+    .= X /\ Z;
+end;
+
+theorem Th79: :: BOOLE'78:
+  X \ Y misses Y
+proof
+    not ex x st x in (X \ Y) /\ Y
+  proof
+    given x such that A1:x in (X \ Y) /\ Y;
+      x in X \ Y & x in Y by A1,XBOOLE_0:def 3;
+    hence contradiction by XBOOLE_0:def 4;
+  end;
+  hence (X \ Y) /\ Y = {} by XBOOLE_0:def 1;
+end;
+
+theorem :: BOOLE'113:
+    X misses Y implies X misses Y \ Z
+proof
+  assume A1: X misses Y;
+  assume X meets Y \ Z;
+  then consider x such that A2:x in X & x in Y \ Z by XBOOLE_0:3;
+    x in X & x in Y by A2,XBOOLE_0:def 4;
+  hence thesis by A1,XBOOLE_0:3;
+end;
+
+theorem :: AMI_1'12:
+    X misses Y \ Z implies Y misses X \ Z
+proof
+A1: X /\ (Y \ Z) = Y /\ X \ Z by Th49
+     .= Y /\ (X \ Z) by Th49;
+   (X misses Y \ Z iff X /\ (Y \ Z) = {}) &
+ (Y misses X \ Z iff Y /\ (X \ Z) = {}) by XBOOLE_0:def 7;
+ hence thesis by A1;
+end;
+
+theorem :: RLVECT_2'102:
+    X \ Y misses Y \ X
+proof assume X \ Y meets Y \ X;
+  then consider x such that A1: x in X \ Y & x in Y \ X by XBOOLE_0:3;
+    x in X & not x in X by A1,XBOOLE_0:def 4;
+  hence thesis;
+end;
+
+theorem Th83: :: BOOLE'84:
+  X misses Y iff X \ Y = X
+proof
+  thus X misses Y implies X \ Y = X
+  proof
+    assume A1:X /\ Y = {};
+    thus for x holds x in X \ Y implies x in X by XBOOLE_0:def 4;
+    let x;
+      not x in X /\ Y implies not x in X or not x in Y by XBOOLE_0:def 3;
+    hence x in X implies x in X \ Y by A1,XBOOLE_0:def 4;
+  end;
+  assume
+A2:X \ Y = X;
+    not ex x st x in X /\ Y
+  proof
+    given x such that A3: x in X /\ Y;
+      x in X & x in Y by A3,XBOOLE_0:def 3;
+    hence contradiction by A2,XBOOLE_0:def 4;
+  end;
+  hence thesis by XBOOLE_0:4;
+end;
+
+theorem
+    X meets Y & X misses Z implies X meets Y \ Z
+proof assume that
+A1:X meets Y and
+A2:X misses Z;
+     X /\ (Y \ Z) = X /\ Y \ X /\ Z by Th50
+      .= X /\ Y \ {} by A2,XBOOLE_0:def 7;
+   hence X /\ (Y \ Z) <> {} by A1,XBOOLE_0:def 7;
+end;
+
+theorem :: DYNKIN'3:
+    X c= Y implies X misses Z \ Y
+proof assume
+A1: X c= Y;
+  thus X /\ (Z \ Y) = Z /\ X \ Y by Th49
+                 .= Z /\ (X \ Y) by Th49
+                 .= Z /\ {} by A1,Lm1
+                 .= {};
+end;
+
+theorem Th86: :: JCT_MISC'1:
+  X c= Y & X misses Z implies X c= Y \ Z
+proof assume that
+A1: X c= Y and
+A2: X /\ Z = {};
+  let x;
+  assume
+A3: x in X;
+then A4: x in Y by A1,TARSKI:def 3;
+    not x in Z by A2,A3,XBOOLE_0:def 3;
+  hence thesis by A4,XBOOLE_0:def 4;
+end;
+
+theorem :: CQC_THE3'60:
+    Y misses Z implies (X \ Y) \/ Z = (X \/ Z) \ Y
+proof
+  assume A1: Y misses Z;
+  thus (X \/ Z) \ Y = (X \ Y) \/ (Z \ Y) by Th42
+                   .= (X \ Y) \/ Z by A1,Th83;
+end;
+
+theorem Th88: :: FINSUB_1'2:
+  X misses Y implies (X \/ Y) \ Y = X
+proof assume
+A1: X misses Y;
+  thus (X \/ Y) \ Y = (X \ Y) \/ (Y \ Y) by Th42
+           .= (X \ Y) \/ {} by Lm1
+           .= X by A1,Th83;
+end;
+
+theorem Th89: :: BOOLE'111:
+  X /\ Y misses X \ Y
+proof
+    now let x;
+      not (x in X & x in Y & not x in Y);
+    hence not (x in X /\ Y & x in X \ Y) by XBOOLE_0:def 3,def 4;
+  end;
+  hence thesis by XBOOLE_0:3;
+end;
+
+theorem
+    X \ (X /\ Y) misses Y
+proof
+    X \ (X /\ Y) = X \ Y by Th47;
+  hence X \ (X /\ Y) misses Y by Th79;
+end;
+
+:: \+\
+
+theorem :: BOOLE'99:
+    (X \+\ Y) \+\ Z = X \+\ (Y \+\ Z)
+proof
+  set S1 = X \ (Y \/ Z), S2 = Y \ (X \/ Z),
+      S3 = Z \ (X \/ Y), S4 = X /\ Y /\ Z;
+  thus (X \+\ Y) \+\ Z = ((X \ Y) \/ (Y \ X)) \+\ Z by XBOOLE_0:def 6
+     .= (((X \ Y) \/ (Y \ X)) \ Z) \/ (Z \ ((X \ Y) \/ (Y \ X)))
+      by XBOOLE_0:def 6
+     .= (((X \ Y) \ Z) \/ ((Y \ X) \ Z)) \/ (Z \ ((X \ Y) \/ (Y \ X)))
+       by Th42
+     .= (S1 \/ ((Y \ X) \ Z)) \/ (Z \ ((X \ Y) \/ (Y \ X))) by Th41
+     .= (S1 \/ S2) \/ (Z \ ((X \ Y) \/ (Y \ X))) by Th41
+     .= (S1 \/ S2) \/ (Z \ ((X \/ Y) \ (X /\ Y))) by Th55
+     .= (S1 \/ S2) \/ (S4 \/ S3) by Th52
+     .= (S1 \/ S2 \/ S4) \/ S3 by Th4
+     .= (S1 \/ S4 \/ S2) \/ S3 by Th4
+     .= (S1 \/ S4) \/ (S2 \/ S3) by Th4
+     .= (S1 \/ X /\ (Y /\ Z)) \/ (S2 \/ S3) by Th16
+     .= X \ ((Y \/ Z) \ (Y /\ Z)) \/ (S2 \/ S3) by Th52
+     .= X \ ((Y \ Z) \/ (Z \ Y)) \/ (S2 \/ (Z \ (Y \/ X))) by Th55
+     .= X \ ((Y \ Z) \/ (Z \ Y)) \/ ((Y \ (Z \/ X)) \/ (Z \ Y \ X)) by Th41
+     .= X \ ((Y \ Z) \/ (Z \ Y)) \/ ((Y \ Z \ X) \/ (Z \ Y \ X)) by Th41
+     .= X \ ((Y \ Z) \/ (Z \ Y)) \/ (((Y \ Z) \/ (Z \ Y)) \ X) by Th42
+     .= X \+\ ((Y \ Z) \/ (Z \ Y)) by XBOOLE_0:def 6
+     .= X \+\ (Y \+\ Z) by XBOOLE_0:def 6;
+end;
+
+theorem :: BOOLE'93:
+    X \+\ X = {}
+proof
+  thus X \+\ X = (X \ X) \/ (X \ X) by XBOOLE_0:def 6
+              .= {} by Lm1;
+end;
+
+theorem Th93: :: BOOLE'95:
+  X \/ Y = (X \+\ Y) \/ X /\ Y
+proof
+  thus X \/ Y = ((X \ Y) \/ X /\ Y) \/ Y by Th51
+             .= (X \ Y) \/ (X /\ Y \/ Y) by Th4
+             .= (X \ Y) \/ Y by Th22
+             .= (X \ Y) \/ ((Y \ X) \/ (Y /\ X)) by Th51
+             .= ((X \ Y) \/ (Y \ X)) \/ Y /\ X by Th4
+             .= (X \+\ Y) \/ X /\ Y by XBOOLE_0:def 6;
+end;
+
+Lm4: X /\ Y misses X \+\ Y
+proof
+    X /\ Y misses X \ Y & X /\ Y misses Y \ X by Th89;
+  then X /\ Y misses (X \ Y) \/ (Y \ X) by Th70;
+  hence thesis by XBOOLE_0:def 6;
+end;
+
+Lm5: X \+\ Y = (X \/ Y) \ X /\ Y
+proof
+  thus X \+\ Y = (X \ Y) \/ (Y \ X) by XBOOLE_0:def 6
+            .= (X \ X /\ Y) \/ (Y \ X) by Th47
+            .= (X \ X /\ Y) \/ (Y \ X /\ Y) by Th47
+            .= (X \/ Y) \ X /\ Y by Th42;
+end;
+
+theorem :: FINSUB_1'4:
+    X \/ Y = X \+\ Y \+\ X /\ Y
+proof
+    X /\ Y misses X \+\ Y by Lm4;
+  then (X \+\ Y) \ X /\ Y = X \+\ Y & X /\ Y \ (X \+\ Y) = X /\ Y
+     by Th83;
+  hence X \+\ Y \+\ X /\ Y = (X \+\ Y) \/ X /\ Y by XBOOLE_0:def 6
+           .= X \/ Y by Th93;
+end;
+
+theorem :: FINSUB_1'6:
+    X /\ Y = X \+\ Y \+\ (X \/ Y)
+proof A1: X \+\ Y misses X /\ Y by Lm4;
+    X \/ Y = (X \+\ Y) \/ X /\ Y by Th93;
+then A2: (X \/ Y) \ (X \+\ Y) = X /\ Y by A1,Th88;
+    X \+\ Y = (X \/ Y) \ X /\ Y by Lm5;
+  then X \+\ Y c= X \/ Y by Th36;
+  then (X \+\ Y) \ (X \/ Y) = {} by Lm1;
+  hence X \+\ Y \+\ X \/ Y = {} \/ X /\ Y by A2,XBOOLE_0:def 6
+           .= X /\ Y;
+end;
+
+theorem :: BOOLE'58:
+    X \ Y c= X \+\ Y
+proof
+    X \+\ Y = (X \ Y) \/ (Y \ X) by XBOOLE_0:def 6;
+  hence thesis by Th7;
+end;
+
+theorem :: BOOLE'115:
+    X \ Y c= Z & Y \ X c= Z implies X \+\ Y c= Z
+proof
+  assume X \ Y c= Z & Y \ X c= Z;
+   then (X \ Y) \/ (Y \ X) c= Z by Th8;
+  hence thesis by XBOOLE_0:def 6;
+end;
+
+theorem :: FINSUB_1'3:
+    X \/ Y = X \+\ (Y \ X)
+proof
+A1: Y \ X \ X = Y \ (X \/ X) by Th41
+        .= Y \ X;
+A2: X \ Y c= X by Th36;
+    X \ (Y \ X) = (X \ Y) \/ X /\ X by Th52
+        .= X by A2,Th12;
+  hence X \+\ (Y \ X) = X \/ (Y \ X) by A1,XBOOLE_0:def 6
+        .= X \/ Y by Th39;
+end;
+
+theorem :: BOOLE'97:
+    (X \+\ Y) \ Z = (X \ (Y \/ Z)) \/ (Y \ (X \/ Z))
+proof
+  thus (X \+\ Y) \ Z = ((X \ Y) \/ (Y \ X)) \ Z by XBOOLE_0:def 6
+                   .= (X \ Y \ Z) \/ (Y \ X \ Z) by Th42
+                   .= (X \ (Y \/ Z)) \/ (Y \ X \ Z) by Th41
+                   .= (X \ (Y \/ Z)) \/ (Y \ (X \/ Z)) by Th41;
+end;
+
+theorem :: FINSUB_1'5:
+    X \ Y = X \+\ (X /\ Y)
+proof X /\ Y c= X by Th17;
+  then X \ X /\ Y = X \ Y & X /\ Y \ X = {} by Lm1,Th47;
+  hence X \+\ X /\ Y = (X \ Y) \/ {} by XBOOLE_0:def 6
+           .= X \ Y;
+end;
+
+theorem :: BOOLE'96:
+    X \+\ Y = (X \/ Y) \ X /\ Y by Lm5;
+
+theorem :: BOOLE'98:
+    X \ (Y \+\ Z) = X \ (Y \/ Z) \/ X /\ Y /\ Z
+proof
+  thus X \ (Y \+\ Z) = X \ ((Y \/ Z) \ Y /\ Z) by Lm5
+                  .= X \ (Y \/ Z) \/ X /\ (Y /\ Z) by Th52
+                  .= X \ (Y \/ Z) \/ X /\ Y /\ Z by Th16;
+end;
+
+theorem :: BOOLE'112:
+    X /\ Y misses X \+\ Y by Lm4;
+
+:: comparable
+
+theorem :: TREES_1'20:
+    X c< Y or X = Y or Y c< X iff X,Y are_c=-comparable
+proof
+  thus X c< Y or X = Y or Y c< X implies X,Y are_c=-comparable
+  proof assume X c< Y or X = Y or Y c< X;
+    hence X c= Y or Y c= X by XBOOLE_0:def 8;
+  end;
+  assume X c= Y or Y c= X;
+  hence thesis by XBOOLE_0:def 8;
+end;
+
+begin :: Addenda
+
+theorem
+    for X, Y being set st X c< Y holds Y \ X <> {}
+  proof
+    let X, Y be set;
+    assume
+A1: X c< Y;
+    assume Y \ X = {};
+    then Y c= X by Lm1;
+    hence thesis by A1,Th60;
+  end;
+
+theorem Th106: :: ZFMISC_1:85
+   X c= A \ B implies X c= A & X misses B
+ proof
+    assume
+A1:  X c= A \ B;
+     then X c= A \ B & A \ B c= A by Th36;
+     hence X c= A by Th1;
+       now let x;
+      assume x in X;
+      then x in A \ B by A1,TARSKI:def 3;
+      hence not x in B by XBOOLE_0:def 4;
+     end;
+     hence X misses B by XBOOLE_0:3;
+ end;
+
+theorem :: ZFMISC_1:87
+     X c= A \+\ B iff X c= A \/ B & X misses A /\ B
+ proof A \+\ B = (A \/ B) \ A /\ B by Lm5;
+   hence thesis by Th86,Th106;
+ end;
+
+theorem :: ZFMISC_1:89
+     X c= A implies X /\ Y c= A
+ proof
+    X /\ Y c= X by Th17;
+  hence thesis by Th1;
+ end;
+
+theorem Th109: :: ZFMISC_1:90
+   X c= A implies X \ Y c= A
+ proof
+     X \ Y c= X by Th36;
+   hence thesis by Th1;
+ end;
+
+theorem :: ZFMISC_1:91
+     X c= A & Y c= A implies X \+\ Y c= A
+ proof assume
+      X c= A & Y c= A;
+   then X \ Y c= A & Y \ X c= A by Th109;
+   then (X \ Y) \/ (Y \ X) c= A by Th8;
+  hence thesis by XBOOLE_0:def 6;
+ end;
+
+theorem Th111:
+ (X /\ Z) \ (Y /\ Z) = (X \ Y) /\ Z
+ proof
+  thus (X /\ Z) \ (Y /\ Z)
+     = ((X /\ Z) \ Y) \/ ((X /\ Z) \ Z) by Lm2
+    .= ((X /\ Z) \ Y) \/ (X /\ (Z \ Z)) by Th49
+    .= ((X /\ Z) \ Y) \/ (X /\ {}) by Lm1
+    .= (X \ Y) /\ Z by Th49;
+ end;
+
+theorem
+   (X /\ Z) \+\ (Y /\ Z) = (X \+\ Y) /\ Z
+ proof
+  thus (X /\ Z) \+\ (Y /\ Z)
+     = ((X /\ Z) \ (Y /\ Z)) \/ ((Y /\ Z) \ (X /\ Z)) by XBOOLE_0:def 6
+    .= ((X \ Y) /\ Z) \/ ((Y /\ Z) \ (X /\ Z)) by Th111
+    .= ((X \ Y) /\ Z) \/ ((Y \ X) /\ Z) by Th111
+    .= ((X \ Y) \/ (Y \ X)) /\ Z by Th23
+    .= (X \+\ Y) /\ Z by XBOOLE_0:def 6;
+ end;
+
+begin :: additional
+
+theorem :: from BORSUK_5
+    X \/ Y \/ Z \/ V = X \/ (Y \/ Z \/ V)
+  proof
+     X \/ Y \/ Z \/ V = X \/ Y \/ (Z \/ V) by Th4
+                    .= X \/ (Y \/ (Z \/ V)) by Th4
+                    .= X \/ (Y \/ Z \/ V) by Th4;
+    hence thesis;
+  end;
+

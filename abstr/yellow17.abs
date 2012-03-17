@@ -1,0 +1,217 @@
+:: The Tichonov Theorem
+::  by Bart{\l}omiej Skorulski
+::
+:: Received May 23, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, BORSUK_1, RELAT_1, BOOLE, CARD_3, FUNCT_4, WAYBEL18,
+      WAYBEL_3, PBOOLE, RLVECT_2, SUBSET_1, PRE_TOPC, SETFAM_1, TARSKI,
+      COMPTS_1, FINSET_1, CANTOR_1, YELLOW_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
+      FUNCT_7, FINSET_1, PBOOLE, PRALG_1, PRALG_3, CARD_3, PRE_TOPC, TOPS_2,
+      COMPTS_1, CANTOR_1, YELLOW_1, WAYBEL_3, WAYBEL18;
+ constructors FUNCT_7, PRALG_3, TOPS_2, COMPTS_1, CANTOR_1, WAYBEL18;
+ clusters SUBSET_1, STRUCT_0, RELSET_1, WAYBEL_7, YELLOW_6, FINSET_1, PRALG_1,
+      PRE_TOPC, CANTOR_1, YELLOW_1, WAYBEL18, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin ::Some Properties of Products
+
+theorem :: YELLOW17:1
+for F being Function,
+    i, xi being set,
+    Ai being Subset of F.i holds
+proj(F,i)"({xi}) meets proj(F,i)"Ai implies xi in Ai;
+
+theorem :: YELLOW17:2
+for F,f being Function,
+    i,xi being set
+st xi in F.i & f in product F holds
+f+*(i,xi) in product F;
+
+theorem :: YELLOW17:3
+for F being Function,
+    i being set st i in dom F & product F <> {} holds
+rng proj(F,i) = F.i;
+
+theorem :: YELLOW17:4
+for F being Function,
+    i being set st i in dom F holds
+proj(F,i)"(F.i) = product F;
+
+theorem :: YELLOW17:5
+for F,f being Function,
+    i,xi being set
+st xi in F.i & i in dom F & f in product F holds
+f+*(i,xi) in proj(F,i)"({xi});
+
+theorem :: YELLOW17:6
+for F,f being Function,
+    i1,i2,xi1 being set,
+    Ai2 being Subset of F.i2
+    st xi1 in F.i1 & i1 in dom F & f in product F
+holds i1 <> i2 implies
+(f in proj(F,i2)"Ai2 iff f+*(i1,xi1) in proj(F,i2)"Ai2);
+
+theorem :: YELLOW17:7
+for F being Function,
+    i1,i2,xi1 being set,
+    Ai2 being Subset of F.i2
+st product F <> {} & xi1 in F.i1 & i1 in dom F & i2 in dom F & Ai2<>F.i2
+holds proj(F,i1)"({xi1}) c= proj(F,i2)"Ai2 iff (i1 = i2 & xi1 in Ai2);
+
+scheme ElProductEx { I()->non empty set,
+                      J()->TopSpace-yielding non-Empty ManySortedSet of I(),
+                      P[set,set] }:
+  ex f being Element of product J() st for i being Element of I() holds
+    P[f.i,i]
+  provided
+  for i being Element of I() ex x being Element of J().i st P[x,i];
+
+theorem :: YELLOW17:8
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    f being Element of product J holds
+proj(J,i).f=f.i;
+
+theorem :: YELLOW17:9
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    xi being Element of J.i,
+    Ai being Subset of J.i holds
+proj(J,i)"({xi}) meets proj(J,i)"Ai implies xi in Ai;
+
+theorem :: YELLOW17:10
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I holds
+proj(J,i)"[#](J.i) = [#] product J;
+
+theorem :: YELLOW17:11
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    xi being Element of J.i,
+    f being Element of product J holds
+f+*(i,xi) in proj(J,i)"({xi});
+
+theorem :: YELLOW17:12
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i1,i2 being Element of I,
+    xi1 being Element of J.i1,
+    Ai2 being Subset of J.i2
+st Ai2<>[#](J.i2)
+holds proj(J,i1)"({xi1}) c= proj(J,i2)"Ai2 iff (i1 = i2 & xi1 in Ai2);
+
+theorem :: YELLOW17:13
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i1,i2 being Element of I,
+    xi1 being Element of J.i1,
+    Ai2 being Subset of J.i2,
+    f being Element of product J
+st i1<> i2 holds
+f in proj(J,i2)"Ai2 iff f+*(i1,xi1) in proj(J,i2)"Ai2;
+
+begin
+
+canceled;
+
+theorem :: YELLOW17:15
+for T being non empty TopStruct holds
+T is compact iff
+    for F being Subset-Family of T st
+     F is open & [#](T) c= union(F)
+    ex G being Subset-Family of T
+      st G c= F & [#]T c= union G & G is finite;
+
+theorem :: YELLOW17:16 ::Alexander's Lemma
+
+for T being non empty TopSpace, B being prebasis of T holds
+  T is compact iff
+    for F being Subset of B st [#](T) c= union(F)
+    ex G being finite Subset of F st [#]T c= union G;
+
+begin ::The Tichonov Theorem
+
+theorem :: YELLOW17:17
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    A being set st A in product_prebasis J
+ex i being Element of I, Ai being Subset of J.i st
+   Ai is open & proj(J,i)"Ai = A;
+
+theorem :: YELLOW17:18
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    xi being Element of J.i,
+    A being set
+st A in product_prebasis J & proj(J,i)"({xi}) c= A holds
+A = [#](product J) or
+ex Ai being Subset of J.i
+  st Ai <> [#](J.i) & xi in Ai & Ai is open & A=proj(J,i)"Ai;
+
+theorem :: YELLOW17:19
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    Fi being non empty Subset-Family of J.i st [#](J.i) c= union(Fi) holds
+ [#](product J) c=
+   union {proj(J,i)"Ai where Ai is Element of Fi:not contradiction};
+
+theorem :: YELLOW17:20
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    xi being Element of J.i,
+    G being Subset of product_prebasis J
+st proj(J,i)"({xi}) c= union G &
+(for A being set st
+   A in product_prebasis J & A in G holds
+   not proj(J,i)"({xi}) c= A)
+holds [#](product J) c= union G;
+
+theorem :: YELLOW17:21
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    F being Subset of product_prebasis J holds
+(for G being finite Subset of F holds not [#](product J) c= union G) implies
+ for xi being Element of J.i,
+      G being finite Subset of F st proj(J,i)"({xi}) c= union G
+ ex A being set st A in product_prebasis J & A in G & proj(J,i)"({xi}) c= A;
+
+theorem :: YELLOW17:22
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    F being Subset of product_prebasis J
+holds
+(for G being finite Subset of F holds not [#](product J) c= union G) implies
+ for xi being Element of J.i,
+     G being finite Subset of F st proj(J,i)"({xi}) c= union G holds
+ ex Ai being Subset of J.i
+    st Ai <> [#](J.i) & xi in Ai & proj(J,i)"Ai in G & Ai is open;
+
+theorem :: YELLOW17:23
+for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I,
+    i being Element of I,
+    F being Subset of product_prebasis J
+ st ((for i being Element of I holds J.i is compact) &
+    (for G being finite Subset of F holds not [#](product J) c= union G))
+ ex xi being Element of J.i
+   st for G being finite Subset of F holds not proj(J,i)"({xi}) c= union G;
+
+theorem :: YELLOW17:24::The Tichonov Theorem
+  for I being non empty set,
+    J being TopSpace-yielding non-Empty ManySortedSet of I
+st for i being Element of I holds J.i is compact holds product J is compact;
+

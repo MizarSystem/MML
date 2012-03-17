@@ -1,0 +1,1329 @@
+:: Homeomorphism between [:TOP-REAL i,TOP-REAL j:] and TOP-REAL (i+j)
+::  by Artur Korni{\l}owicz
+::
+:: Received February 21, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, METRIC_1, SQUARE_1, RELAT_1, ARYTM_1, FUNCT_1, FINSEQ_2,
+      RVSUM_1, ABSVALUE, EUCLID, PRE_TOPC, MCART_1, RELAT_2, PCOMPS_1, TARSKI,
+      SETFAM_1, BORSUK_1, T_0TOPSP, SUBSET_1, ARYTM_3, COMPLEX1, RLVECT_1,
+      ORDINAL2, TOPREAL7;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
+      BINOP_1, MCART_1, DOMAIN_1, NUMBERS, XREAL_0, REAL_1, ABSVALUE, SQUARE_1,
+      NAT_1, FINSEQ_1, RVSUM_1, FINSEQOP, STRUCT_0, PRE_TOPC, TOPS_2, PCOMPS_1,
+      BORSUK_1, METRIC_1, EUCLID, FINSEQ_2, T_0TOPSP, GOBOARD1;
+ constructors ABSVALUE, DOMAIN_1, FINSEQOP, GOBOARD1, INT_1, NAT_1, REAL_1,
+      SEQ_1, SQUARE_1, T_0TOPSP, TOPS_2, BORSUK_1, MEMBERED;
+ clusters SUBSET_1, INT_1, METRIC_1, PCOMPS_1, RELSET_1, STRUCT_0, EUCLID,
+      MEMBERED;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, FUNCT_1, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_2, T_0TOPSP,
+      XBOOLE_0;
+ theorems AXIOMS, BINOP_1, BORSUK_1, EUCLID, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      FUNCT_1, FUNCT_2, INT_1, MCART_1, METRIC_1, NAT_1, PCOMPS_1, PRE_TOPC,
+      REAL_1, REAL_2, RFUNCT_3, RLVECT_1, RVSUM_1, SQUARE_1, SPPOL_1, TARSKI,
+      TBSP_1, TOPMETR, TOPREAL3, TOPREAL6, TOPS_2, ZFMISC_1, RELSET_1,
+      XBOOLE_1, XCMPLX_1;
+ schemes FUNCT_2;
+
+begin
+
+reserve i, j, n for Nat,
+        f, g, h, k for FinSequence of REAL,
+        M, N for non empty MetrSpace;
+
+theorem Th1:
+ for a, b being Real st max(a,b) <= a holds max(a,b) = a
+  proof
+    let a, b be Real;
+    assume max(a,b) <= a;
+    then max(a,b) < a or max(a,b) = a by REAL_1:def 5;
+    hence thesis by SQUARE_1:46;
+  end;
+
+theorem Th2:
+ for a, b, c, d being Real holds max(a+c,b+d) <= max(a,b) + max(c,d)
+  proof
+    let a, b, c, d be Real;
+      a <= max(a,b) & c <= max(c,d) & b <= max(a,b) & d <=
+ max(c,d) by SQUARE_1:46;
+    then a+c <= max(a,b) + max(c,d) & b+d <= max(a,b) + max(c,d) by REAL_1:55;
+    hence max(a+c,b+d) <= max(a,b) + max(c,d) by SQUARE_1:50;
+  end;
+
+theorem Th3:
+ for a, b, c, d, e, f being Real st a <= b+c & d <= e+f holds
+  max(a,d) <= max(b,e) + max(c,f)
+  proof
+    let a, b, c, d, e, f be Real;
+    assume a <= b+c & d <= e+f;
+    then max(a,d) <= max(b+c,e+f) & max(b+c,e+f) <= max(b,e) + max(c,f)
+     by Th2,RFUNCT_3:7;
+    hence max(a,d) <= max(b,e) + max(c,f) by AXIOMS:22;
+  end;
+
+theorem
+   for f, g being FinSequence holds dom g c= dom (f^g)
+  proof
+    let f, g be FinSequence;
+      len g <= len f + len g by NAT_1:29;
+    then Seg len g c= Seg (len f + len g) by FINSEQ_1:7;
+    then dom g c= Seg (len f + len g) by FINSEQ_1:def 3;
+    hence thesis by FINSEQ_1:def 7;
+  end;
+
+theorem Th5:
+ for f, g being FinSequence st len f < i & i <= len f + len g holds
+  i - len f in dom g
+  proof
+    let f, g be FinSequence such that
+A1:   len f < i and
+A2:   i <= len f + len g;
+A3: i-len f is Nat by A1,INT_1:18;
+      i-len f > len f-len f by A1,REAL_1:92;
+    then i-len f > 0 by XCMPLX_1:14;
+then A4: 1 <= i-len f by A3,RLVECT_1:99;
+      i-len f <= len f + len g - len f by A2,REAL_1:49;
+    then i-len f <= len f - len f + len g by XCMPLX_1:29;
+    then i-len f <= 0 + len g by XCMPLX_1:14;
+    hence i-len f in dom g by A3,A4,FINSEQ_3:27;
+  end;
+
+theorem Th6:
+ for f, g, h, k being FinSequence st f^g = h^k & len f = len h & len g = len k
+  holds f = h & g = k
+  proof
+    let f, g, h, k be FinSequence such that
+A1:   f^g = h^k and
+A2:   len f = len h and
+A3:   len g = len k;
+A4: for i st 1 <= i & i <= len f holds f.i = h.i
+    proof
+      let i;
+      assume 1 <= i & i <= len f;
+then A5:   i in dom f & i in dom h by A2,FINSEQ_3:27;
+      hence f.i = (f^g).i by FINSEQ_1:def 7
+         .= h.i by A1,A5,FINSEQ_1:def 7;
+    end;
+      for i st 1 <= i & i <= len g holds g.i = k.i
+    proof
+      let i;
+      assume 1 <= i & i <= len g;
+then A6:   i in dom g & i in dom k by A3,FINSEQ_3:27;
+      hence g.i = (f^g).(len f +i) by FINSEQ_1:def 7
+         .= k.i by A1,A2,A6,FINSEQ_1:def 7;
+    end;
+    hence f = h & g = k by A2,A3,A4,FINSEQ_1:18;
+  end;
+
+theorem Th7:
+ len f = len g or dom f = dom g implies len (f+g) = len f & dom (f+g) = dom f
+  proof
+    reconsider f1 = f as Element of (len f)-tuples_on REAL by FINSEQ_2:110;
+    assume len f = len g or dom f = dom g;
+    then len f = len g by FINSEQ_3:31;
+    then reconsider g1 = g as Element of (len f)-tuples_on REAL by FINSEQ_2:110
+;
+      f1+g1 is Element of (len f)-tuples_on REAL;
+    hence len (f+g) = len f by FINSEQ_2:109;
+    hence thesis by FINSEQ_3:31;
+  end;
+
+theorem Th8:
+ len f = len g or dom f = dom g implies len (f-g) = len f & dom (f-g) = dom f
+  proof
+    reconsider f1 = f as Element of (len f)-tuples_on REAL by FINSEQ_2:110;
+    assume len f = len g or dom f = dom g;
+    then len f = len g by FINSEQ_3:31;
+    then reconsider g1 = g as Element of (len f)-tuples_on REAL by FINSEQ_2:110
+;
+      f1-g1 is Element of (len f)-tuples_on REAL;
+    hence len (f-g) = len f by FINSEQ_2:109;
+    hence thesis by FINSEQ_3:31;
+  end;
+
+theorem Th9:
+ len f = len sqr f & dom f = dom sqr f
+  proof
+      rng f c= REAL & dom sqrreal = REAL by FINSEQ_1:def 4,FUNCT_2:def 1;
+    hence len f = len (sqrreal*f) by FINSEQ_2:33
+       .= len sqr f by RVSUM_1:def 8;
+    hence thesis by FINSEQ_3:31;
+  end;
+
+theorem Th10:
+ len f = len abs f & dom f = dom abs f
+  proof
+      rng f c= REAL & dom absreal = REAL by FINSEQ_1:def 4,FUNCT_2:def 1;
+    hence len f = len (absreal*f) by FINSEQ_2:33
+       .= len abs f by EUCLID:def 3;
+    hence thesis by FINSEQ_3:31;
+  end;
+
+theorem Th11:
+ sqr (f^g) = sqr f ^ sqr g
+  proof
+A1: len f = len sqr f by Th9;
+A2: len g = len sqr g by Th9;
+A3: len(f^g) = len f + len g by FINSEQ_1:35;
+A4: len sqr (f^g) = len (f^g) by Th9;
+then A5: len (sqr (f^g)) = len (sqr f ^ sqr g) by A1,A2,A3,FINSEQ_1:35;
+      for i st 1 <= i & i <= len sqr (f^g) holds sqr (f^g).i = (sqr f ^ sqr g).
+i
+    proof
+      let i;
+      assume
+A6:     1 <= i & i <= len sqr (f^g);
+then A7:   i in dom (f^g) by A4,FINSEQ_3:27;
+      per cases;
+      suppose
+A8:     i in dom f;
+then A9:   i in dom sqr f by Th9;
+      thus sqr (f^g).i = (sqrreal*(f^g)).i by RVSUM_1:def 8
+        .= sqrreal.((f^g).i) by A7,FUNCT_1:23
+        .= sqrreal.(f.i) by A8,FINSEQ_1:def 7
+        .= (f.i)^2 by RVSUM_1:def 2
+        .= (sqr f).i by RVSUM_1:78
+        .= (sqr f ^ sqr g).i by A9,FINSEQ_1:def 7;
+      suppose not i in dom f;
+then A10:   len f < i & i <= len(f^g) by A6,Th9,FINSEQ_3:27;
+      then reconsider j = i - len f as Nat by INT_1:18;
+A11:   i <= len(sqr f ^ sqr g) by A1,A2,A3,A4,A6,FINSEQ_1:35;
+      thus sqr (f^g).i = (sqrreal*(f^g)).i by RVSUM_1:def 8
+        .= sqrreal.((f^g).i) by A7,FUNCT_1:23
+        .= sqrreal.(g.j) by A10,FINSEQ_1:37
+        .= (g.j)^2 by RVSUM_1:def 2
+        .= (sqr g).j by RVSUM_1:78
+        .= (sqr f ^ sqr g).i by A1,A10,A11,FINSEQ_1:37;
+    end;
+    hence sqr (f^g) = sqr f ^ sqr g by A5,FINSEQ_1:18;
+  end;
+
+theorem
+   abs (f^g) = abs f ^ abs g
+  proof
+A1: len f = len abs f by Th10;
+A2: len g = len abs g by Th10;
+A3: len(f^g) = len f + len g by FINSEQ_1:35;
+A4: len abs (f^g) = len (f^g) by Th10;
+then A5: len (abs (f^g)) = len (abs f ^ abs g) by A1,A2,A3,FINSEQ_1:35;
+      for i st 1 <= i & i <=
+ len abs (f^g) holds (abs (f^g)).i = (abs f ^ abs g).i
+    proof
+      let i;
+      assume
+A6:     1 <= i & i <= len abs (f^g);
+then A7:   i in dom (f^g) by A4,FINSEQ_3:27;
+      per cases;
+      suppose
+A8:     i in dom f;
+then A9:   i in dom abs f by Th10;
+      thus (abs (f^g)).i = (absreal*(f^g)).i by EUCLID:def 3
+        .= absreal.((f^g).i) by A7,FUNCT_1:23
+        .= absreal.(f.i) by A8,FINSEQ_1:def 7
+        .= abs(f.i) by EUCLID:def 2
+        .= (abs f).i by A9,TOPREAL6:17
+        .= (abs f ^ abs g).i by A9,FINSEQ_1:def 7;
+      suppose not i in dom f;
+then A10:   len f < i & i <= len(f^g) by A6,Th10,FINSEQ_3:27;
+      then reconsider j = i - len f as Nat by INT_1:18;
+A11:   j in dom abs g by A2,A3,A10,Th5;
+A12:   i <= len(abs f ^ abs g) by A1,A2,A3,A4,A6,FINSEQ_1:35;
+      thus (abs (f^g)).i = (absreal*(f^g)).i by EUCLID:def 3
+        .= absreal.((f^g).i) by A7,FUNCT_1:23
+        .= absreal.(g.j) by A10,FINSEQ_1:37
+        .= abs(g.j) by EUCLID:def 2
+        .= (abs g).j by A11,TOPREAL6:17
+        .= (abs f ^ abs g).i by A1,A10,A12,FINSEQ_1:37;
+    end;
+    hence abs (f^g) = abs f ^ abs g by A5,FINSEQ_1:18;
+  end;
+
+theorem
+   len f = len h & len g = len k implies sqr (f^g + h^k) = sqr (f+h) ^ sqr (g+k
+)
+  proof
+    assume that
+A1:   len f = len h and
+A2:   len g = len k;
+A3: len (f^g) = len f + len g by FINSEQ_1:35;
+A4: len (h^k) = len h + len k by FINSEQ_1:35;
+A5: len sqr (f^g + h^k) = len (f^g + h^k) by Th9
+     .= len (f^g) by A1,A2,A3,A4,Th7
+     .= len (f+h) + len g by A1,A3,Th7
+     .= len (f+h) + len (g+k) by A2,Th7
+     .= len sqr (f+h) + len (g+k) by Th9
+     .= len sqr (f+h) + len sqr (g+k) by Th9
+     .= len (sqr (f+h) ^ sqr (g+k)) by FINSEQ_1:35;
+      for i st 1 <= i & i <= len sqr (f^g + h^k) holds
+      (sqr (f^g + h^k)).i = (sqr (f+h) ^ sqr (g+k)).i
+    proof
+      let i;
+      assume
+A6:     1 <= i & i <= len sqr (f^g + h^k);
+   then i in dom sqr (f^g + h^k) by FINSEQ_3:27;
+then A7:   i in dom (f^g + h^k) by Th9;
+      per cases;
+      suppose
+A8:     i in dom f;
+then A9:   i in dom h by A1,FINSEQ_3:31;
+A10:   i in dom (f+h) by A1,A8,Th7;
+then A11:   i in dom sqr (f+h) by Th9;
+      thus (sqr (f^g + h^k)).i = ((f^g + h^k).i)^2 by RVSUM_1:78
+        .= ((f^g).i + (h^k).i)^2 by A7,RVSUM_1:26
+        .= (f.i + (h^k).i)^2 by A8,FINSEQ_1:def 7
+        .= (f.i + h.i)^2 by A9,FINSEQ_1:def 7
+        .= ((f+h).i)^2 by A10,RVSUM_1:26
+        .= (sqr (f+h)).i by RVSUM_1:78
+        .= (sqr (f+h) ^ sqr (g+k)).i by A11,FINSEQ_1:def 7;
+      suppose
+A12:     not i in dom f;
+        i <= len (f^g + h^k) by A6,Th9;
+then A13:   len f < i & i <= len (f^g) by A1,A2,A3,A4,A6,A12,Th7,FINSEQ_3:27;
+      then reconsider j = i - len f as Nat by INT_1:18;
+A14:   len (f+h) < i by A1,A13,Th7;
+        i <= len (f+h) + len g by A1,A3,A13,Th7;
+      then i <= len (f+h) + len (g+k) by A2,Th7;
+      then i - len (f+h) in dom (g+k) by A14,Th5;
+then A15:   j in dom (g+k) by A1,Th7;
+A16:   len sqr (f+h) < i by A14,Th9;
+        len f = len (f+h) by A1,Th7;
+then A17:   j = i - len sqr (f+h) by Th9;
+      thus (sqr (f^g + h^k)).i = ((f^g + h^k).i)^2 by RVSUM_1:78
+        .= ((f^g).i + (h^k).i)^2 by A7,RVSUM_1:26
+        .= (g.j + (h^k).i)^2 by A13,FINSEQ_1:37
+        .= (g.j + k.j)^2 by A1,A2,A3,A4,A13,FINSEQ_1:37
+        .= ((g+k).j)^2 by A15,RVSUM_1:26
+        .= (sqr (g+k)).j by RVSUM_1:78
+        .= (sqr (f+h) ^ sqr (g+k)).i by A5,A6,A16,A17,FINSEQ_1:37;
+    end;
+    hence sqr (f^g + h^k) = sqr (f+h) ^ sqr (g+k) by A5,FINSEQ_1:18;
+  end;
+
+theorem
+   len f = len h & len g = len k implies abs (f^g + h^k) = abs (f+h) ^ abs (g+k
+)
+  proof
+    assume that
+A1:   len f = len h and
+A2:   len g = len k;
+A3: len (f^g) = len f + len g by FINSEQ_1:35;
+A4: len (h^k) = len h + len k by FINSEQ_1:35;
+A5: len abs (f^g + h^k) = len (f^g + h^k) by Th10
+     .= len (f^g) by A1,A2,A3,A4,Th7
+     .= len (f+h) + len g by A1,A3,Th7
+     .= len (f+h) + len (g+k) by A2,Th7
+     .= len abs (f+h) + len (g+k) by Th10
+     .= len abs (f+h) + len abs (g+k) by Th10
+     .= len (abs (f+h) ^ abs (g+k)) by FINSEQ_1:35;
+      for i st 1 <= i & i <= len abs (f^g + h^k) holds
+      (abs (f^g + h^k)).i = (abs (f+h) ^ abs (g+k)).i
+    proof
+      let i;
+      assume
+A6:     1 <= i & i <= len abs (f^g + h^k);
+then A7:   i in dom abs (f^g + h^k) by FINSEQ_3:27;
+then A8:   i in dom (f^g + h^k) by Th10;
+      per cases;
+      suppose
+A9:     i in dom f;
+then A10:   i in dom h by A1,FINSEQ_3:31;
+A11:   i in dom (f+h) by A1,A9,Th7;
+then A12:   i in dom abs (f+h) by Th10;
+      thus (abs (f^g + h^k)).i = abs( (f^g + h^k).i ) by A7,TOPREAL6:17
+        .= abs( (f^g).i + (h^k).i ) by A8,RVSUM_1:26
+        .= abs( f.i + (h^k).i ) by A9,FINSEQ_1:def 7
+        .= abs( f.i + h.i ) by A10,FINSEQ_1:def 7
+        .= abs( (f+h).i ) by A11,RVSUM_1:26
+        .= (abs (f+h)).i by A12,TOPREAL6:17
+        .= (abs (f+h) ^ abs (g+k)).i by A12,FINSEQ_1:def 7;
+      suppose
+A13:     not i in dom f;
+        i <= len (f^g + h^k) by A6,Th10;
+then A14:   len f < i & i <= len (f^g) by A1,A2,A3,A4,A6,A13,Th7,FINSEQ_3:27;
+      then reconsider j = i - len f as Nat by INT_1:18;
+A15:   len (f+h) < i by A1,A14,Th7;
+        i <= len (f+h) + len g by A1,A3,A14,Th7;
+      then i <= len (f+h) + len (g+k) by A2,Th7;
+      then i - len (f+h) in dom (g+k) by A15,Th5;
+then A16:   j in dom (g+k) by A1,Th7;
+then A17:   j in dom abs (g+k) by Th10;
+A18:   len abs (f+h) < i by A15,Th10;
+        len f = len (f+h) by A1,Th7;
+then A19:   j = i - len abs (f+h) by Th10;
+      thus (abs (f^g + h^k)).i = abs( (f^g + h^k).i ) by A7,TOPREAL6:17
+        .= abs( (f^g).i + (h^k).i ) by A8,RVSUM_1:26
+        .= abs( g.j + (h^k).i ) by A14,FINSEQ_1:37
+        .= abs( g.j + k.j ) by A1,A2,A3,A4,A14,FINSEQ_1:37
+        .= abs( (g+k).j ) by A16,RVSUM_1:26
+        .= (abs (g+k)).j by A17,TOPREAL6:17
+        .= (abs (f+h) ^ abs (g+k)).i by A5,A6,A18,A19,FINSEQ_1:37;
+    end;
+    hence abs (f^g + h^k) = abs (f+h) ^ abs (g+k) by A5,FINSEQ_1:18;
+  end;
+
+theorem
+   len f = len h & len g = len k implies sqr (f^g - h^k) = sqr (f-h) ^ sqr (g-k
+)
+  proof
+    assume that
+A1:   len f = len h and
+A2:   len g = len k;
+A3: len (f^g) = len f + len g by FINSEQ_1:35;
+A4: len (h^k) = len h + len k by FINSEQ_1:35;
+A5: len sqr (f^g - h^k) = len (f^g - h^k) by Th9
+     .= len (f^g) by A1,A2,A3,A4,Th8
+     .= len (f-h) + len g by A1,A3,Th8
+     .= len (f-h) + len (g-k) by A2,Th8
+     .= len sqr (f-h) + len (g-k) by Th9
+     .= len sqr (f-h) + len sqr (g-k) by Th9
+     .= len (sqr (f-h) ^ sqr (g-k)) by FINSEQ_1:35;
+      for i st 1 <= i & i <= len sqr (f^g - h^k) holds
+      (sqr (f^g - h^k)).i = (sqr (f-h) ^ sqr (g-k)).i
+    proof
+      let i;
+      assume
+A6:     1 <= i & i <= len sqr (f^g - h^k);
+   then i in dom sqr (f^g - h^k) by FINSEQ_3:27;
+then A7:   i in dom (f^g - h^k) by Th9;
+      per cases;
+      suppose
+A8:     i in dom f;
+then A9:   i in dom h by A1,FINSEQ_3:31;
+A10:   i in dom (f-h) by A1,A8,Th8;
+then A11:   i in dom sqr (f-h) by Th9;
+      thus (sqr (f^g - h^k)).i = ((f^g - h^k).i)^2 by RVSUM_1:78
+        .= ((f^g).i - (h^k).i)^2 by A7,RVSUM_1:47
+        .= (f.i - (h^k).i)^2 by A8,FINSEQ_1:def 7
+        .= (f.i - h.i)^2 by A9,FINSEQ_1:def 7
+        .= ((f-h).i)^2 by A10,RVSUM_1:47
+        .= (sqr (f-h)).i by RVSUM_1:78
+        .= (sqr (f-h) ^ sqr (g-k)).i by A11,FINSEQ_1:def 7;
+      suppose
+A12:     not i in dom f;
+        i <= len (f^g - h^k) by A6,Th9;
+then A13:   len f < i & i <= len (f^g) by A1,A2,A3,A4,A6,A12,Th8,FINSEQ_3:27;
+      then reconsider j = i - len f as Nat by INT_1:18;
+A14:   len (f-h) < i by A1,A13,Th8;
+        i <= len (f-h) + len g by A1,A3,A13,Th8;
+      then i <= len (f-h) + len (g-k) by A2,Th8;
+      then i - len (f-h) in dom (g-k) by A14,Th5;
+then A15:   j in dom (g-k) by A1,Th8;
+A16:   len sqr (f-h) < i by A14,Th9;
+        len f = len (f-h) by A1,Th8;
+then A17:   j = i - len sqr (f-h) by Th9;
+      thus (sqr (f^g - h^k)).i = ((f^g - h^k).i)^2 by RVSUM_1:78
+        .= ((f^g).i - (h^k).i)^2 by A7,RVSUM_1:47
+        .= (g.j - (h^k).i)^2 by A13,FINSEQ_1:37
+        .= (g.j - k.j)^2 by A1,A2,A3,A4,A13,FINSEQ_1:37
+        .= ((g-k).j)^2 by A15,RVSUM_1:47
+        .= (sqr (g-k)).j by RVSUM_1:78
+        .= (sqr (f-h) ^ sqr (g-k)).i by A5,A6,A16,A17,FINSEQ_1:37;
+    end;
+    hence sqr (f^g - h^k) = sqr (f-h) ^ sqr (g-k) by A5,FINSEQ_1:18;
+  end;
+
+theorem Th16:
+ len f = len h & len g = len k implies abs (f^g - h^k) = abs (f-h) ^ abs (g-k)
+  proof
+    assume that
+A1:   len f = len h and
+A2:   len g = len k;
+A3: len (f^g) = len f + len g by FINSEQ_1:35;
+A4: len (h^k) = len h + len k by FINSEQ_1:35;
+A5: len abs (f^g - h^k) = len (f^g - h^k) by Th10
+     .= len (f^g) by A1,A2,A3,A4,Th8
+     .= len (f-h) + len g by A1,A3,Th8
+     .= len (f-h) + len (g-k) by A2,Th8
+     .= len abs (f-h) + len (g-k) by Th10
+     .= len abs (f-h) + len abs (g-k) by Th10
+     .= len (abs (f-h) ^ abs (g-k)) by FINSEQ_1:35;
+      for i st 1 <= i & i <= len abs (f^g - h^k) holds
+      (abs (f^g - h^k)).i = (abs (f-h) ^ abs (g-k)).i
+    proof
+      let i;
+      assume
+A6:     1 <= i & i <= len abs (f^g - h^k);
+then A7:   i in dom abs (f^g - h^k) by FINSEQ_3:27;
+then A8:   i in dom (f^g - h^k) by Th10;
+      per cases;
+      suppose
+A9:     i in dom f;
+then A10:   i in dom h by A1,FINSEQ_3:31;
+A11:   i in dom (f-h) by A1,A9,Th8;
+then A12:   i in dom abs (f-h) by Th10;
+      thus (abs (f^g - h^k)).i = abs( (f^g - h^k).i ) by A7,TOPREAL6:17
+        .= abs( (f^g).i - (h^k).i ) by A8,RVSUM_1:47
+        .= abs( f.i - (h^k).i ) by A9,FINSEQ_1:def 7
+        .= abs( f.i - h.i ) by A10,FINSEQ_1:def 7
+        .= abs( (f-h).i ) by A11,RVSUM_1:47
+        .= (abs (f-h)).i by A12,TOPREAL6:17
+        .= (abs (f-h) ^ abs (g-k)).i by A12,FINSEQ_1:def 7;
+      suppose
+A13:     not i in dom f;
+        i <= len (f^g - h^k) by A6,Th10;
+then A14:   len f < i & i <= len (f^g) by A1,A2,A3,A4,A6,A13,Th8,FINSEQ_3:27;
+      then reconsider j = i - len f as Nat by INT_1:18;
+A15:   len (f-h) < i by A1,A14,Th8;
+        i <= len (f-h) + len g by A1,A3,A14,Th8;
+      then i <= len (f-h) + len (g-k) by A2,Th8;
+      then i - len (f-h) in dom (g-k) by A15,Th5;
+then A16:   j in dom (g-k) by A1,Th8;
+then A17:   j in dom abs (g-k) by Th10;
+A18:   len abs (f-h) < i by A15,Th10;
+        len f = len (f-h) by A1,Th8;
+then A19:   j = i - len abs (f-h) by Th10;
+      thus (abs (f^g - h^k)).i = abs( (f^g - h^k).i ) by A7,TOPREAL6:17
+        .= abs( (f^g).i - (h^k).i ) by A8,RVSUM_1:47
+        .= abs( g.j - (h^k).i ) by A14,FINSEQ_1:37
+        .= abs( g.j - k.j ) by A1,A2,A3,A4,A14,FINSEQ_1:37
+        .= abs( (g-k).j ) by A16,RVSUM_1:47
+        .= (abs (g-k)).j by A17,TOPREAL6:17
+        .= (abs (f-h) ^ abs (g-k)).i by A5,A6,A18,A19,FINSEQ_1:37;
+    end;
+    hence thesis by A5,FINSEQ_1:18;
+  end;
+
+theorem Th17:
+ len f = n implies f in the carrier of Euclid n
+  proof
+    assume
+A1:   len f = n;
+A2: f in REAL* by FINSEQ_1:def 11;
+      n-tuples_on REAL = { s where s is Element of REAL*: len s = n }
+      by FINSEQ_2:def 4;
+    then f in n-tuples_on REAL by A1,A2;
+    then f in REAL n by EUCLID:def 1;
+    then f is Point of Euclid n by SPPOL_1:19;
+    hence thesis;
+  end;
+
+theorem
+   len f = n implies f in the carrier of TOP-REAL n
+  proof
+    assume len f = n;
+    then f in the carrier of Euclid n by Th17;
+    hence thesis by TOPREAL3:13;
+  end;
+
+theorem Th19:
+ for f being FinSequence st f in the carrier of Euclid n holds len f = n
+  proof
+    let f be FinSequence;
+    assume
+A1:   f in the carrier of Euclid n;
+      Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
+    then f is Element of n-tuples_on REAL by A1,EUCLID:def 1;
+    hence len f = n by FINSEQ_2:109;
+  end;
+
+definition let M, N be non empty MetrStruct;
+ func max-Prod2(M,N) -> strict MetrStruct means :Def1:
+  the carrier of it = [:the carrier of M,the carrier of N:] &
+  for x, y being Point of it
+   ex x1, y1 being Point of M,
+      x2, y2 being Point of N st x = [x1,x2] & y = [y1,y2] &
+    (the distance of it).(x,y) =
+      max ((the distance of M).(x1,y1),(the distance of N).(x2,y2));
+existence
+  proof
+    set C = [:the carrier of M,the carrier of N:];
+defpred P[set,set,set] means
+ ex x1, y1 being Point of M,
+    x2, y2 being Point of N st $1 = [x1,x2] & $2 = [y1,y2] &
+  $3 = max ((the distance of M).(x1,y1),(the distance of N).(x2,y2));
+A1: for x, y being Element of C ex u being Element of REAL st P[x,y,u]
+    proof
+      let x, y be Element of C;
+      set x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2;
+      take max ((the distance of M).(x1,y1),(the distance of N).(x2,y2));
+      take x1, y1, x2, y2;
+      thus thesis by MCART_1:23;
+    end;
+    consider f being Function of [:C,C:], REAL such that
+A2:   for x, y being Element of C holds P[x,y,f. [x,y]] from FuncEx2D(A1);
+    take E = MetrStruct(#C,f#);
+    thus the carrier of E = [:the carrier of M,the carrier of N:];
+    let x, y be Point of E;
+    consider x1, y1 being Point of M,
+             x2, y2 being Point of N such that
+A3:   x = [x1,x2] & y = [y1,y2] &
+      f. [x,y] = max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
+       by A2;
+    take x1, y1, x2, y2;
+    thus thesis by A3,BINOP_1:def 1;
+  end;
+uniqueness
+  proof
+    let A, B be strict MetrStruct such that
+A4:  the carrier of A = [:the carrier of M,the carrier of N:] and
+A5:  for x, y being Point of A
+      ex x1, y1 being Point of M,
+         x2, y2 being Point of N st x = [x1,x2] & y = [y1,y2] &
+       (the distance of A).(x,y) =
+         max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) and
+A6:  the carrier of B = [:the carrier of M,the carrier of N:] and
+A7:  for x, y being Point of B
+      ex x1, y1 being Point of M,
+         x2, y2 being Point of N st x = [x1,x2] & y = [y1,y2] &
+       (the distance of B).(x,y) =
+         max ((the distance of M).(x1,y1),(the distance of N).(x2,y2));
+    set f = the distance of A,
+        g = the distance of B;
+      for a, b being set st a in the carrier of A & b in the carrier of A
+      holds f. [a,b] = g. [a,b]
+    proof
+      let a, b be set;
+      assume
+A8:     a in the carrier of A & b in the carrier of A;
+      then consider x1, y1 being Point of M,
+               x2, y2 being Point of N such that
+A9:    a = [x1,x2] & b = [y1,y2] and
+A10:    f.(a,b) = max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
+         by A5;
+      consider m1, n1 being Point of M,
+               m2, n2 being Point of N such that
+A11:    a = [m1,m2] & b = [n1,n2] and
+A12:    g.(a,b) = max ((the distance of M).(m1,n1),(the distance of N).(m2,n2))
+         by A4,A6,A7,A8;
+A13:   x1 = m1 & x2 = m2 & y1 = n1 & y2 = n2 by A9,A11,ZFMISC_1:33;
+      thus f. [a,b]
+        = max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
+          by A10,BINOP_1:def 1
+       .= g. [a,b] by A12,A13,BINOP_1:def 1;
+    end;
+    hence thesis by A4,A6,FUNCT_2:118;
+  end;
+end;
+
+definition let M, N be non empty MetrStruct;
+ cluster max-Prod2(M,N) -> non empty;
+coherence
+  proof
+      the carrier of max-Prod2(M,N) = [:the carrier of M,the carrier of N:]
+      by Def1;
+    hence the carrier of max-Prod2(M,N) is non empty;
+  end;
+end;
+
+definition let M, N be non empty MetrStruct,
+               x be Point of M,
+               y be Point of N;
+ redefine func [x,y] -> Element of max-Prod2(M,N);
+coherence
+  proof
+      [x,y] is Element of max-Prod2(M,N) by Def1;
+    hence thesis;
+  end;
+end;
+
+definition let M, N be non empty MetrStruct,
+               x be Point of max-Prod2(M,N);
+ redefine func x`1 -> Element of M;
+coherence
+  proof
+      the carrier of max-Prod2(M,N) = [:the carrier of M, the carrier of N:]
+     by Def1;
+    then x`1 in the carrier of M by MCART_1:10;
+    hence thesis;
+  end;
+ redefine func x`2 -> Element of N;
+coherence
+  proof
+      the carrier of max-Prod2(M,N) = [:the carrier of M, the carrier of N:]
+     by Def1;
+    then x`2 in the carrier of N by MCART_1:10;
+    hence thesis;
+  end;
+end;
+
+theorem Th20:
+ for M, N being non empty MetrStruct,
+     m1, m2 being Point of M, n1, n2 being Point of N holds
+  dist([m1,n1],[m2,n2]) = max (dist(m1,m2),dist(n1,n2))
+  proof
+    let M, N be non empty MetrStruct,
+        m1, m2 be Point of M,
+        n1, n2 be Point of N;
+    consider x1, y1 being Point of M,
+             x2, y2 being Point of N such that
+A1:   [m1,n1] = [x1,x2] & [m2,n2] = [y1,y2] and
+A2:   (the distance of max-Prod2(M,N)).([m1,n1],[m2,n2]) =
+       max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) by Def1;
+A3: m1 = x1 & n1 = x2 & m2 = y1 & n2 = y2 by A1,ZFMISC_1:33;
+      (the distance of max-Prod2(M,N)).([m1,n1],[m2,n2]) = dist([m1,n1],[m2,n2]
+)
+&
+     (the distance of M).(m1,m2) = dist(m1,m2) &
+      (the distance of N).(n1,n2) = dist(n1,n2) by METRIC_1:def 1;
+    hence dist([m1,n1],[m2,n2]) = max (dist(m1,m2),dist(n1,n2)) by A2,A3;
+  end;
+
+theorem
+   for M, N being non empty MetrStruct,
+     m, n being Point of max-Prod2(M,N) holds
+  dist(m,n) = max (dist(m`1,n`1),dist(m`2,n`2))
+  proof
+    let M, N be non empty MetrStruct,
+        m, n be Point of max-Prod2(M,N);
+    consider x1, y1 being Point of M,
+             x2, y2 being Point of N such that
+A1:   m = [x1,x2] & n = [y1,y2] and
+A2:   (the distance of max-Prod2(M,N)).(m,n) =
+       max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) by Def1;
+A3: m`1 = x1 & n`1 = y1 & m`2 = x2 & n`2 = y2 by A1,MCART_1:7;
+      (the distance of max-Prod2(M,N)).(m,n) = dist(m,n) &
+     (the distance of M).(m`1,n`1) = dist(m`1,n`1) &
+      (the distance of N).(m`2,n`2) = dist(m`2,n`2) by METRIC_1:def 1;
+    hence dist(m,n) = max (dist(m`1,n`1),dist(m`2,n`2)) by A2,A3;
+  end;
+
+theorem Th22:
+ for M, N being Reflexive (non empty MetrStruct) holds
+  max-Prod2(M,N) is Reflexive
+  proof
+    let M, N be Reflexive (non empty MetrStruct);
+    let a be Element of max-Prod2(M,N);
+    consider x1, y1 being Point of M,
+             x2, y2 being Point of N such that
+A1:   a = [x1,x2] & a = [y1,y2] and
+A2:   (the distance of max-Prod2(M,N)).(a,a) =
+       max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) by Def1;
+A3: x1 = y1 & x2 = y2 by A1,ZFMISC_1:33;
+      the distance of M is Reflexive & the distance of N is Reflexive
+      by METRIC_1:def 7;
+    then (the distance of M).(x1,x1) = 0 & (the distance of N).(x2,x2) = 0
+      by METRIC_1:def 3;
+    hence (the distance of max-Prod2(M,N)).(a,a) = 0 by A2,A3;
+  end;
+
+definition let M, N be Reflexive (non empty MetrStruct);
+ cluster max-Prod2(M,N) -> Reflexive;
+coherence by Th22;
+end;
+
+Lm1:
+ for M, N being non empty MetrSpace holds max-Prod2(M,N) is discerning
+  proof
+    let M, N be non empty MetrSpace;
+    let a, b be Element of max-Prod2(M,N);
+    assume
+A1:   (the distance of max-Prod2(M,N)).(a,b) = 0;
+    consider x1, y1 being Point of M,
+             x2, y2 being Point of N such that
+A2:   a = [x1,x2] & b = [y1,y2] and
+A3:   (the distance of max-Prod2(M,N)).(a,b) =
+       max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) by Def1;
+      0 <= dist(x1,y1) & 0 <= dist(x2,y2) by METRIC_1:5;
+    then 0 <= (the distance of M).(x1,y1) & 0 <= (the distance of N).(x2,y2)
+     by METRIC_1:def 1;
+then A4: (the distance of M).(x1,y1) = 0 & (the distance of N).(x2,y2) = 0
+      by A1,A3,Th1;
+      the distance of M is discerning & the distance of N is discerning
+      by METRIC_1:def 8;
+    then x1 = y1 & x2 = y2 by A4,METRIC_1:def 4;
+    hence a = b by A2;
+  end;
+
+theorem Th23:
+ for M, N being symmetric (non empty MetrStruct) holds
+  max-Prod2(M,N) is symmetric
+  proof
+    let M, N be symmetric (non empty MetrStruct);
+    let a, b be Element of max-Prod2(M,N);
+    consider x1, y1 being Point of M,
+             x2, y2 being Point of N such that
+A1:   a = [x1,x2] & b = [y1,y2] and
+A2:   (the distance of max-Prod2(M,N)).(a,b) =
+       max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) by Def1;
+    consider m1, n1 being Point of M,
+             m2, n2 being Point of N such that
+A3:   b = [m1,m2] & a = [n1,n2] and
+A4:   (the distance of max-Prod2(M,N)).(b,a) =
+       max ((the distance of M).(m1,n1),(the distance of N).(m2,n2)) by Def1;
+      the distance of M is symmetric & the distance of N is symmetric
+      by METRIC_1:def 9;
+then A5: (the distance of M).(x1,y1) = (the distance of M).(y1,x1) &
+      (the distance of N).(x2,y2) = (the distance of N).(y2,x2)
+      by METRIC_1:def 5;
+      y1 = m1 & y2 = m2 & x1 = n1 & x2 = n2 by A1,A3,ZFMISC_1:33;
+    hence (the distance of max-Prod2(M,N)).(a,b) =
+     (the distance of max-Prod2(M,N)).(b,a) by A2,A4,A5;
+  end;
+
+definition let M, N be symmetric (non empty MetrStruct);
+ cluster max-Prod2(M,N) -> symmetric;
+coherence by Th23;
+end;
+
+theorem Th24:
+ for M, N being triangle (non empty MetrStruct) holds
+  max-Prod2(M,N) is triangle
+  proof
+    let M, N be triangle (non empty MetrStruct);
+    let a, b, c be Element of max-Prod2(M,N);
+    consider x1, y1 being Point of M,
+             x2, y2 being Point of N such that
+A1:   a = [x1,x2] & b = [y1,y2] and
+A2:   (the distance of max-Prod2(M,N)).(a,b) =
+       max ((the distance of M).(x1,y1),(the distance of N).(x2,y2)) by Def1;
+    consider m1, n1 being Point of M,
+             m2, n2 being Point of N such that
+A3:   b = [m1,m2] & c = [n1,n2] and
+A4:   (the distance of max-Prod2(M,N)).(b,c) =
+       max ((the distance of M).(m1,n1),(the distance of N).(m2,n2)) by Def1;
+    consider p1, q1 being Point of M,
+             p2, q2 being Point of N such that
+A5:   a = [p1,p2] & c = [q1,q2] and
+A6:   (the distance of max-Prod2(M,N)).(a,c) =
+       max ((the distance of M).(p1,q1),(the distance of N).(p2,q2)) by Def1;
+      the distance of M is triangle & the distance of N is triangle
+      by METRIC_1:def 10;
+then A7: (the distance of M).(p1,q1) <= (the distance of M).(p1,y1)
+      + (the distance of M).(y1,q1) &
+    (the distance of N).(p2,q2) <= (the distance of N).(p2,y2)
+      + (the distance of N).(y2,q2) by METRIC_1:def 6;
+      x1 = p1 & x2 = p2 & y1 = m1 & y2 = m2 & q1 = n1 & q2 = n2
+     by A1,A3,A5,ZFMISC_1:33;
+    hence (the distance of max-Prod2(M,N)).(a,c) <=
+     (the distance of max-Prod2(M,N)).(a,b)
+      + (the distance of max-Prod2(M,N)).(b,c)
+     by A2,A4,A6,A7,Th3;
+  end;
+
+definition let M, N be triangle (non empty MetrStruct);
+ cluster max-Prod2(M,N) -> triangle;
+coherence by Th24;
+end;
+
+definition let M, N be non empty MetrSpace;
+ cluster max-Prod2(M,N) -> discerning;
+coherence by Lm1;
+end;
+
+theorem Th25:
+ [:TopSpaceMetr M,TopSpaceMetr N:] = TopSpaceMetr max-Prod2(M,N)
+  proof
+    set S = TopSpaceMetr M,
+        T = TopSpaceMetr N;
+A1: the topology of [:S,T:] =
+     { union A where A is Subset-Family of [:S,T:]:
+      A c= { [:X1,X2:] where X1 is Subset of S,
+                             X2 is Subset of T :
+               X1 in the topology of S & X2 in the topology of T}}
+      by BORSUK_1:def 5;
+A2: TopSpaceMetr max-Prod2(M,N) =
+     TopStruct (#the carrier of max-Prod2(M,N), Family_open_set max-Prod2(M,N)
+#)
+      by PCOMPS_1:def 6;
+A3: TopSpaceMetr M =
+     TopStruct (#the carrier of M, Family_open_set M#) by PCOMPS_1:def 6;
+A4: TopSpaceMetr N =
+     TopStruct (#the carrier of N, Family_open_set N#) by PCOMPS_1:def 6;
+A5: the carrier of [:S,T:] = [:the carrier of S,the carrier of T:]
+       by BORSUK_1:def 5
+     .= the carrier of TopSpaceMetr max-Prod2(M,N) by A2,A3,A4,Def1;
+      the topology of [:S,T:] = the topology of TopSpaceMetr max-Prod2(M,N)
+    proof
+      thus the topology of [:S,T:] c=
+       the topology of TopSpaceMetr max-Prod2(M,N)
+      proof
+        let X be set;
+        assume
+A6:       X in the topology of [:S,T:];
+        then consider A being Subset-Family of [:S,T:] such that
+A7:       X = union A and
+A8:       A c= { [:X1,X2:] where X1 is Subset of S,
+                                 X2 is Subset of T :
+            X1 in the topology of S & X2 in the topology of T} by A1;
+          for x being Point of max-Prod2(M,N) st x in X
+         ex r being Real st r > 0 & Ball(x,r) c= X
+        proof
+          let x be Point of max-Prod2(M,N);
+          assume x in X;
+          then consider Z being set such that
+A9:         x in Z and
+A10:         Z in A by A7,TARSKI:def 4;
+            Z in { [:X1,X2:] where X1 is Subset of S,
+                                X2 is Subset of T :
+             X1 in the topology of S & X2 in the topology of T} by A8,A10;
+          then consider X1 being Subset of S,
+                   X2 being Subset of T such that
+A11:         Z = [:X1,X2:] and
+A12:         X1 in the topology of S and
+A13:         X2 in the topology of T;
+          consider z1, z2 being set such that
+A14:         z1 in X1 and
+A15:         z2 in X2 and
+A16:         x = [z1,z2] by A9,A11,ZFMISC_1:def 2;
+          reconsider z1 as Point of M by A3,A14;
+          reconsider z2 as Point of N by A4,A15;
+          consider r1 being Real such that
+A17:         r1 > 0 and
+A18:         Ball(z1,r1) c= X1 by A3,A12,A14,PCOMPS_1:def 5;
+          consider r2 being Real such that
+A19:         r2 > 0 and
+A20:         Ball(z2,r2) c= X2 by A4,A13,A15,PCOMPS_1:def 5;
+          take r = min(r1,r2);
+          thus r > 0 by A17,A19,SQUARE_1:38;
+          let b be set;
+          assume
+A21:         b in Ball(x,r);
+          then reconsider bb = b as Point of max-Prod2(M,N);
+          consider x1, y1 being Point of M,
+                   x2, y2 being Point of N such that
+A22:         bb = [x1,x2] and
+A23:         x = [y1,y2] and
+A24:         (the distance of max-Prod2(M,N)).(bb,x) =
+              max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
+                by Def1;
+A25:       z1 = y1 & z2 = y2 by A16,A23,ZFMISC_1:33;
+            dist(bb,x) < r by A21,METRIC_1:12;
+then A26:       (the distance of max-Prod2(M,N)).(bb,x) < r by METRIC_1:def 1;
+A27:       min(r1,r2) <= r1 & min(r1,r2) <= r2 by SQUARE_1:35;
+            (the distance of M).(x1,z1) <=
+            max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
+             by A25,SQUARE_1:46;
+          then (the distance of M).(x1,z1) < r by A24,A26,AXIOMS:22;
+          then (the distance of M).(x1,z1) < r1 by A27,AXIOMS:22;
+          then dist(x1,z1) < r1 by METRIC_1:def 1;
+then A28:       x1 in Ball(z1,r1) by METRIC_1:12;
+            (the distance of N).(x2,z2) <=
+            max ((the distance of M).(x1,y1),(the distance of N).(x2,y2))
+             by A25,SQUARE_1:46;
+          then (the distance of N).(x2,z2) < r by A24,A26,AXIOMS:22;
+          then (the distance of N).(x2,z2) < r2 by A27,AXIOMS:22;
+          then dist(x2,z2) < r2 by METRIC_1:def 1;
+          then x2 in Ball(z2,r2) by METRIC_1:12;
+          then b in [:X1,X2:] by A18,A20,A22,A28,ZFMISC_1:106;
+          hence b in X by A7,A10,A11,TARSKI:def 4;
+        end;
+        hence X in the topology of TopSpaceMetr max-Prod2(M,N)
+          by A2,A5,A6,PCOMPS_1:def 5;
+      end;
+      let X be set;
+      assume
+A29:     X in the topology of TopSpaceMetr max-Prod2(M,N);
+      then reconsider Y = X as Subset of [:S,T:] by A5;
+A30:   Base-Appr Y = { [:X1,Y1:] where X1 is Subset of S, Y1 is Subset of T :
+        [:X1,Y1:] c= Y & X1 is open & Y1 is open} by BORSUK_1:def 6;
+A31:   union Base-Appr Y = Y
+      proof
+        thus union Base-Appr Y c= Y by BORSUK_1:53;
+        let u be set;
+        assume
+A32:       u in Y;
+        then reconsider uu = u as Point of max-Prod2(M,N) by A2,A5;
+        consider r being Real such that
+A33:       r > 0 and
+A34:       Ball(uu,r) c= Y by A2,A29,A32,PCOMPS_1:def 5;
+          uu in the carrier of max-Prod2(M,N);
+        then uu in [:the carrier of M,the carrier of N:] by Def1;
+        then consider u1, u2 being set such that
+A35:       u1 in the carrier of M and
+A36:       u2 in the carrier of N and
+A37:       u = [u1,u2] by ZFMISC_1:def 2;
+        reconsider u1 as Point of M by A35;
+        reconsider u2 as Point of N by A36;
+        reconsider B1 = Ball(u1,r) as Subset of S by A3;
+        reconsider B2 = Ball(u2,r) as Subset of T by A4;
+          u1 in Ball(u1,r) & u2 in Ball(u2,r) by A33,TBSP_1:16;
+then A38:     u in [:B1,B2:] by A37,ZFMISC_1:106;
+A39:     [:B1,B2:] c= Y
+        proof
+          let x be set;
+          assume x in [:B1,B2:];
+          then consider x1, x2 being set such that
+A40:         x1 in B1 and
+A41:         x2 in B2 and
+A42:         x = [x1,x2] by ZFMISC_1:def 2;
+          reconsider x1 as Point of M by A40;
+          reconsider x2 as Point of N by A41;
+          consider p1, p2 being Point of M,
+                   q1, q2 being Point of N such that
+A43:         uu = [p1,q1] & [x1,x2] = [p2,q2] and
+A44:         (the distance of max-Prod2(M,N)).(uu,[x1,x2]) =
+             max ((the distance of M).(p1,p2),(the distance of N).(q1,q2))
+              by Def1;
+            u1 = p1 & u2 = q1 & x1 = p2 & x2 = q2 by A37,A43,ZFMISC_1:33;
+          then dist(p1,p2) < r & dist(q1,q2) < r by A40,A41,METRIC_1:12;
+          then (the distance of M).(p1,p2) < r &
+            (the distance of N).(q1,q2) < r by METRIC_1:def 1;
+          then max ((the distance of M).(p1,p2),(the distance of N).(q1,q2)) <
+r
+            by SQUARE_1:49;
+          then dist(uu,[x1,x2]) < r by A44,METRIC_1:def 1;
+          then x in Ball(uu,r) by A42,METRIC_1:12;
+          hence x in Y by A34;
+        end;
+          B1 is open & B2 is open by TOPMETR:21;
+        then [:B1,B2:] in Base-Appr Y by A30,A39;
+        hence u in union Base-Appr Y by A38,TARSKI:def 4;
+      end;
+        Base-Appr Y c= { [:X1,Y1:] where X1 is Subset of S,
+                                       Y1 is Subset of T :
+        X1 in the topology of S & Y1 in the topology of T}
+      proof
+        let A be set;
+        assume A in Base-Appr Y;
+        then consider X1 being Subset of S, Y1 being Subset of T such that
+A45:       A = [:X1,Y1:] and [:X1,Y1:] c= Y and
+A46:       X1 is open & Y1 is open by A30;
+          X1 in the topology of S & Y1 in
+ the topology of T by A46,PRE_TOPC:def 5;
+        hence thesis by A45;
+      end;
+      hence X in the topology of [:S,T:] by A1,A31;
+    end;
+    hence thesis by A5;
+  end;
+
+theorem
+   the carrier of M = the carrier of N &
+ (for m being Point of M, n being Point of N, r being Real st r > 0 & m = n
+   ex r1 being Real st r1 > 0 & Ball(n,r1) c= Ball(m,r)) &
+ (for m being Point of M, n being Point of N, r being Real st r > 0 & m = n
+   ex r1 being Real st r1 > 0 & Ball(m,r1) c= Ball(n,r)) implies
+ TopSpaceMetr M = TopSpaceMetr N
+  proof
+    assume that
+A1:  the carrier of M = the carrier of N and
+A2:  for m being Point of M, n being Point of N, r being Real st r > 0 & m = n
+      ex r1 being Real st r1 > 0 & Ball(n,r1) c= Ball(m,r) and
+A3:  for m being Point of M, n being Point of N, r being Real st r > 0 & m = n
+      ex r1 being Real st r1 > 0 & Ball(m,r1) c= Ball(n,r);
+A4: TopSpaceMetr M = TopStruct (#the carrier of M, Family_open_set M#) &
+      TopSpaceMetr N = TopStruct (#the carrier of N, Family_open_set N#)
+        by PCOMPS_1:def 6;
+      Family_open_set M = Family_open_set N
+    proof
+      thus Family_open_set M c= Family_open_set N
+      proof
+        let X be set;
+        assume
+A5:       X in Family_open_set M;
+          for n being Point of N st n in X
+         ex r being Real st r > 0 & Ball(n,r) c= X
+        proof
+          let n be Point of N such that
+A6:         n in X;
+          reconsider m = n as Point of M by A1;
+          consider r being Real such that
+A7:         r > 0 and
+A8:           Ball(m,r) c= X by A5,A6,PCOMPS_1:def 5;
+          consider r1 being Real such that
+A9:         r1 > 0 & Ball(n,r1) c= Ball(m,r) by A2,A7;
+          take r1;
+          thus thesis by A8,A9,XBOOLE_1:1;
+        end;
+        hence X in Family_open_set N by A1,A5,PCOMPS_1:def 5;
+      end;
+      let X be set;
+      assume
+A10:     X in Family_open_set N;
+        for m being Point of M st m in X
+       ex r being Real st r > 0 & Ball(m,r) c= X
+      proof
+        let m be Point of M such that
+A11:       m in X;
+        reconsider n = m as Point of N by A1;
+        consider r being Real such that
+A12:       r > 0 and
+A13:       Ball(n,r) c= X by A10,A11,PCOMPS_1:def 5;
+        consider r1 being Real such that
+A14:       r1 > 0 & Ball(m,r1) c= Ball(n,r) by A3,A12;
+        take r1;
+        thus thesis by A13,A14,XBOOLE_1:1;
+      end;
+      hence X in Family_open_set M by A1,A10,PCOMPS_1:def 5;
+    end;
+    hence thesis by A1,A4;
+  end;
+
+theorem
+   [:TOP-REAL i,TOP-REAL j:], TOP-REAL (i+j) are_homeomorphic
+  proof
+      TOP-REAL i = TopSpaceMetr Euclid i & TOP-REAL j = TopSpaceMetr Euclid j
+      by EUCLID:def 8;
+then A1: [:TOP-REAL i,TOP-REAL j:] = TopSpaceMetr max-Prod2(Euclid i,Euclid j)
+      by Th25;
+      TopSpaceMetr max-Prod2(Euclid i,Euclid j), TopSpaceMetr Euclid (i+j)
+     are_homeomorphic
+    proof
+      set ci = the carrier of Euclid i,
+          cj = the carrier of Euclid j,
+          cij = the carrier of Euclid (i+j);
+A2:   Euclid (i+j) = MetrStruct(#REAL (i+j),Pitag_dist (i+j)#)
+        by EUCLID:def 7;
+A3:   Euclid i = MetrStruct(#REAL i,Pitag_dist i#) by EUCLID:def 7;
+A4:   Euclid j = MetrStruct(#REAL j,Pitag_dist j#) by EUCLID:def 7;
+defpred P[Element of ci,Element of cj,set] means
+ ex fi, fj being FinSequence of REAL st fi = $1 & fj = $2 & $3 = fi ^ fj;
+A5:   for x being Element of ci, y being Element of cj
+       ex u being Element of cij st P[x,y,u]
+      proof
+        let x be Element of ci,
+            y be Element of cj;
+A6:     x is Element of REAL i & y is Element of REAL j by SPPOL_1:18;
+        then reconsider fi = x, fj = y as FinSequence of REAL;
+          fi is Element of i-tuples_on REAL &
+         fj is Element of j-tuples_on REAL by A6,EUCLID:def 1;
+        then fi ^ fj is Element of (i+j)-tuples_on REAL by FINSEQ_2:127;
+        then reconsider u = fi ^ fj as Element of cij by A2,EUCLID:def 1;
+        take u;
+        thus P[x,y,u];
+      end;
+      consider f being Function of [:ci,cj:], cij such that
+A7:     for x being Element of ci,
+            y being Element of cj holds P[x,y,f. [x,y]] from FuncEx2D(A5);
+A8:   [:ci,cj:] = the carrier of max-Prod2(Euclid i,Euclid j) by Def1;
+A9:   the carrier of TopSpaceMetr Euclid (i+j) = cij by TOPMETR:16;
+A10:   the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j) =
+       the carrier of max-Prod2(Euclid i,Euclid j) by TOPMETR:16;
+      then reconsider f as map of TopSpaceMetr max-Prod2(Euclid i,Euclid j),
+       TopSpaceMetr Euclid (i+j) by A8,A9;
+      take f;
+A11:   dom f = the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
+        by FUNCT_2:def 1;
+      hence dom f = [#]
+TopSpaceMetr max-Prod2(Euclid i,Euclid j) by PRE_TOPC:12;
+      thus
+A12:     rng f = [#]TopSpaceMetr Euclid (i+j)
+      proof
+          rng f c= the carrier of TopSpaceMetr Euclid (i+j)
+        by RELSET_1:12;
+        hence rng f c= [#]TopSpaceMetr Euclid (i+j) by PRE_TOPC:12;
+        let y be set;
+        assume
+A13:       y in [#]TopSpaceMetr Euclid (i+j);
+        then reconsider k = y as Element of REAL (i+j) by A2,TOPMETR:16;
+          len k = i + j by A9,A13,Th19;
+        then consider g, h being FinSequence of REAL such that
+A14:       len g = i & len h = j and
+A15:       k = g^h by FINSEQ_2:26;
+A16:     g in ci & h in cj by A14,Th17;
+then A17:     ex fi, fj being FinSequence of REAL st fi = g & fj = h &
+         f. [g,h] = fi ^ fj by A7;
+          [g,h] in [:ci,cj:] by A16,ZFMISC_1:106;
+        then [g,h] in dom f by FUNCT_2:def 1;
+        hence thesis by A15,A17,FUNCT_1:def 5;
+      end;
+      thus
+A18:     f is one-to-one
+      proof
+        let x1, x2 be set;
+        assume x1 in dom f;
+        then consider x1a, x1b being set such that
+A19:       x1a in ci & x1b in cj and
+A20:       x1 = [x1a,x1b] by A8,A10,A11,ZFMISC_1:def 2;
+        assume x2 in dom f;
+        then consider x2a, x2b being set such that
+A21:       x2a in ci & x2b in cj and
+A22:       x2 = [x2a,x2b] by A8,A10,A11,ZFMISC_1:def 2;
+        consider fi1, fj1 being FinSequence of REAL such that
+A23:       fi1 = x1a & fj1 = x1b & f. [x1a,x1b] = fi1 ^ fj1 by A7,A19;
+        consider fi2, fj2 being FinSequence of REAL such that
+A24:       fi2 = x2a & fj2 = x2b & f. [x2a,x2b] = fi2 ^ fj2 by A7,A21;
+          len fi1 = i & len fj1 = j by A19,A23,Th19;
+then A25:     len fi1 = len fi2 & len fj1 = len fj2 by A21,A24,Th19;
+        assume f.x1 = f.x2;
+        then fi1 = fi2 & fj1 = fj2 by A20,A22,A23,A24,A25,Th6;
+        hence x1 = x2 by A20,A22,A23,A24;
+      end;
+        for P being Subset of TopSpaceMetr Euclid (i+j) st P is open
+        holds f"P is open
+      proof
+        let P be Subset of TopSpaceMetr Euclid (i+j);
+        assume P is open;
+        then P in the topology of TopSpaceMetr Euclid (i+j) by PRE_TOPC:def 5;
+then A26:     P in Family_open_set Euclid (i+j) by TOPMETR:16;
+A27:     f"P is Subset of max-Prod2(Euclid i,Euclid j)
+          by TOPMETR:16;
+          for x being Point of max-Prod2(Euclid i,Euclid j) st x in f"P
+          ex r being Real st r > 0 & Ball(x,r) c= f"P
+        proof
+          let x be Point of max-Prod2(Euclid i,Euclid j);
+          assume
+A28:         x in f"P;
+          then f.x in the carrier of TopSpaceMetr Euclid (i+j) by FUNCT_2:7;
+          then reconsider fx = f.x as Point of Euclid (i+j) by TOPMETR:16;
+            f.x in P by A28,FUNCT_2:46;
+          then consider r being Real such that
+A29:         r > 0 and
+A30:         Ball(fx,r) c= P by A26,PCOMPS_1:def 5;
+          take r1 = r/2;
+          thus r1 > 0 by A29,REAL_2:127;
+          let b be set;
+          assume
+A31:         b in Ball(x,r1);
+          then reconsider bb = b as Point of max-Prod2(Euclid i,Euclid j);
+          consider b1, x1 being Point of Euclid i,
+                   b2, x2 being Point of Euclid j such that
+A32:         bb = [b1,b2] & x = [x1,x2] and
+              (the distance of max-Prod2(Euclid i,Euclid j)).(bb,x) =
+              max ((the distance of Euclid i).(b1,x1),(
+                    the distance of Euclid j).(b2,x2)) by Def1;
+          consider b1f, b2f being FinSequence of REAL such that
+A33:         b1f = b1 & b2f = b2 & f. [b1,b2] = b1f ^ b2f by A7;
+          consider x1f, x2f being FinSequence of REAL such that
+A34:         x1f = x1 & x2f = x2 & f. [x1,x2] = x1f ^ x2f by A7;
+A35:       dist([b1,b2],[x1,x2]) = max (dist(b1,x1),dist(b2,x2)) by Th20;
+A36:       dist(bb,x) < r1 by A31,METRIC_1:12;
+            bb in the carrier of max-Prod2(Euclid i,Euclid j);
+then A37:       bb in the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
+            by TOPMETR:16;
+          then f.bb in the carrier of TopSpaceMetr Euclid (i+j) by FUNCT_2:7;
+          then reconsider fb = f.b as Point of Euclid (i+j) by TOPMETR:16;
+          reconsider fbb = fb, fxx = fx as Element of REAL (i+j) by A2;
+          reconsider b1i = b1, x1i = x1 as Element of REAL i by A3;
+          reconsider x2i = x2, b2i = b2 as Element of REAL j by A4;
+            dist(b1,x1) <= max (dist(b1,x1),dist(b2,x2)) &
+          dist(b2,x2) <= max (dist(b1,x1),dist(b2,x2)) by SQUARE_1:46;
+          then dist(b1,x1) < r1 & dist(b2,x2) < r1 by A32,A35,A36,AXIOMS:22;
+then A38:       (Pitag_dist i).(b1i,x1i) < r1 & (Pitag_dist j).(b2i,x2i) < r1
+            by A3,A4,METRIC_1:def 1;
+A39:       len b1f = i & len x1f = i & len b2f = j & len x2f = j by A33,A34,
+Th19;
+A40:       (Pitag_dist (i+j)).(fbb,fxx) = |.fbb - fxx.| by EUCLID:def 6
+            .= sqrt Sum sqr (fbb - fxx) by EUCLID:def 5
+            .= sqrt Sum sqr abs (fbb - fxx) by EUCLID:29
+            .= sqrt Sum sqr (abs (b1i - x1i) ^ abs (b2i - x2i))
+               by A32,A33,A34,A39,Th16
+            .= sqrt Sum (sqr abs (b1i - x1i) ^ sqr abs (b2i - x2i)) by Th11
+            .= sqrt (Sum sqr abs (b1i - x1i) + Sum sqr abs (b2i - x2i))
+               by RVSUM_1:105
+            .= sqrt (Sum sqr abs (b1i - x1i) + Sum sqr (b2i - x2i))
+               by EUCLID:29
+            .= sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
+               by EUCLID:29;
+            0 <= Sum sqr (b1i - x1i) & 0 <= Sum sqr (b2i - x2i)
+            by RVSUM_1:116;
+          then sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
+            <= sqrt Sum sqr (b1i - x1i) + sqrt Sum sqr (b2i - x2i)
+              by TOPREAL6:6;
+          then sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
+            <= |.b1i - x1i.| + sqrt Sum sqr (b2i - x2i) by EUCLID:def 5;
+          then sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
+            <= |.b1i - x1i.| + |.b2i - x2i.| by EUCLID:def 5;
+          then sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
+            <= (Pitag_dist i).(b1i,x1i) + |.b2i - x2i.| by EUCLID:def 6;
+then A41:       sqrt (Sum sqr (b1i - x1i) + Sum sqr (b2i - x2i))
+            <= (Pitag_dist i).(b1i,x1i) + (Pitag_dist j).(b2i,x2i)
+               by EUCLID:def 6;
+            (Pitag_dist i).(b1i,x1i) + (Pitag_dist j).(b2i,x2i) < r1 + r1
+            by A38,REAL_1:67;
+          then (Pitag_dist (i+j)).(fbb,fxx) < r1 + r1 by A40,A41,AXIOMS:22;
+          then (Pitag_dist (i+j)).(fbb,fxx) < r by XCMPLX_1:66;
+          then dist(fb,fx) < r by A2,METRIC_1:def 1;
+          then f.b in Ball(fx,r) by METRIC_1:12;
+          hence b in f"P by A30,A37,FUNCT_2:46;
+        end;
+        then f"P in Family_open_set max-Prod2(Euclid i,Euclid j)
+          by A27,PCOMPS_1:def 5;
+        hence f"P in the topology of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
+          by TOPMETR:16;
+      end;
+      hence f is continuous by TOPS_2:55;
+        for P being Subset of TopSpaceMetr max-Prod2(Euclid i,Euclid j) st
+       P is open holds f""P is open
+      proof
+        let P be Subset of TopSpaceMetr max-Prod2(Euclid i,Euclid j);
+        assume P is open;
+        then P in the topology of TopSpaceMetr max-Prod2(Euclid i,Euclid j)
+          by PRE_TOPC:def 5;
+then A42:     P in Family_open_set max-Prod2(Euclid i,Euclid j) by TOPMETR:16;
+A43:     f.:P is Subset of Euclid (i+j) by TOPMETR:16;
+          for x being Point of Euclid (i+j) st x in f.:P
+          ex r being Real st r > 0 & Ball(x,r) c= f.:P
+        proof
+          let x be Point of Euclid (i+j);
+          assume x in f.:P;
+          then consider a being set such that
+A44:         a in the carrier of TopSpaceMetr max-Prod2(Euclid i,Euclid j) and
+A45:         a in P and
+A46:         x = f.a by FUNCT_2:115;
+          reconsider a as Point of max-Prod2(Euclid i,Euclid j)
+            by A44,TOPMETR:16;
+          consider r being Real such that
+A47:         r > 0 and
+A48:         Ball(a,r) c= P by A42,A45,PCOMPS_1:def 5;
+          take r;
+          thus r > 0 by A47;
+          let b be set;
+          assume
+A49:         b in Ball(x,r);
+          then reconsider bb = b as Point of Euclid (i+j);
+          reconsider bb2 = bb, xx2 = x as Element of REAL (i+j) by SPPOL_1:18;
+            dist(bb,x) < r by A49,METRIC_1:12;
+then A50:       (the distance of Euclid (i+j)).(bb,x) < r by METRIC_1:def 1;
+          reconsider k = bb as Element of REAL (i+j) by A2;
+            len k = i + j by Th19;
+          then consider g, h being FinSequence of REAL such that
+A51:         len g = i and
+A52:         len h = j and
+A53:         k = g^h by FINSEQ_2:26;
+          consider p, q being set such that
+A54:         p in ci and
+A55:         q in cj and
+A56:         a = [p,q] by A8,ZFMISC_1:def 2;
+          reconsider p as Element of ci by A54;
+          reconsider q as Element of cj by A55;
+          consider fi, fj being FinSequence of REAL such that
+A57:         fi = p & fj = q and
+A58:         f. [p,q] = fi ^ fj by A7;
+          reconsider gg = g as Point of Euclid i by A51,Th17;
+          reconsider hh = h as Point of Euclid j by A52,Th17;
+          consider g, h being FinSequence of REAL such that
+A59:         g = gg & h = hh and
+A60:         f. [gg,hh] = g ^ h by A7;
+          reconsider gg2 = gg, a12 = a`1 as Element of REAL i by SPPOL_1:18;
+          reconsider hh2 = hh, a22 = a`2 as Element of REAL j by SPPOL_1:18;
+A61:       len g = i & len fi = i & len h = j & len fj = j by A57,A59,Th19;
+            |.bb2-xx2.| < r by A2,A50,EUCLID:def 6;
+          then sqrt Sum sqr (bb2-xx2) < r by EUCLID:def 5;
+          then sqrt Sum sqr abs (bb2-xx2) < r by EUCLID:29;
+          then sqrt Sum sqr (abs(g-fi) ^ abs(h-fj)) < r
+            by A46,A53,A56,A58,A59,A61,Th16;
+          then sqrt Sum (sqr abs (g-fi) ^ sqr abs (h-fj)) < r by Th11;
+then A62:      sqrt (Sum sqr abs (g-fi) + Sum sqr abs (h-fj)) < r by RVSUM_1:
+105;
+A63:       dist([gg,hh],[a`1,a`2]) = max (dist(gg,a`1),dist(hh,a`2)) by Th20;
+A64:       a12 = p & a22 = q by A56,MCART_1:7;
+A65:       0 <= Sum sqr abs (gg2-a12) & 0 <= Sum
+ sqr abs (hh2-a22) by RVSUM_1:116;
+            0 <= Sum sqr abs (g-fi) & 0 <= Sum
+ sqr abs (h-fj) by RVSUM_1:116;
+          then Sum sqr abs (gg2-a12) + 0 <= Sum sqr abs (g-fi) + Sum
+ sqr abs (h-fj) &
+           Sum sqr abs (hh2-a22) + 0 <= Sum sqr abs (g-fi) + Sum sqr abs (h-fj)
+            by A57,A59,A64,REAL_1:55;
+          then sqrt Sum sqr abs (gg2-a12) <= sqrt (Sum sqr abs (g-fi) +
+            Sum sqr abs (h-fj)) &
+          sqrt Sum sqr abs (hh2-a22) <= sqrt (Sum sqr abs (g-fi) +
+            Sum sqr abs (h-fj)) by A65,SQUARE_1:94;
+          then sqrt Sum sqr abs (gg2-a12) < r & sqrt Sum sqr abs (hh2-a22) < r
+           by A62,AXIOMS:22;
+          then sqrt Sum sqr (gg2-a12) < r & sqrt Sum sqr (hh2-a22) < r
+           by EUCLID:29;
+          then |.gg2-a12.| < r & |.hh2-a22.| < r by EUCLID:def 5;
+          then (Pitag_dist i).(gg2,a12) < r &
+           (Pitag_dist j).(hh2,a22) < r by EUCLID:def 6;
+then A66:       dist(gg,a`1) < r & dist(hh,a`2) < r by A3,A4,METRIC_1:def 1;
+            max (dist(gg,a`1),dist(hh,a`2)) = dist(gg,a`1) or
+          max (dist(gg,a`1),dist(hh,a`2)) = dist(hh,a`2) by SQUARE_1:49;
+          then dist([gg,hh],a) < r by A8,A63,A66,MCART_1:23;
+          then [g,h] in Ball(a,r) by A59,METRIC_1:12;
+          then [g,h] in P by A48;
+          hence b in f.:P by A53,A59,A60,FUNCT_2:43;
+        end;
+        then f.:P in Family_open_set Euclid (i+j) by A43,PCOMPS_1:def 5;
+        then f.:P in the topology of TopSpaceMetr Euclid (i+j) by TOPMETR:16;
+        hence f""P in the topology of TopSpaceMetr Euclid (i+j)
+          by A12,A18,TOPS_2:67;
+      end;
+      hence f" is continuous by TOPS_2:55;
+    end;
+    hence thesis by A1,EUCLID:def 8;
+  end;

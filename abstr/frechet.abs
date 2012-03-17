@@ -1,0 +1,287 @@
+:: First-countable, Sequential, and { F } rechet Spaces
+::  by Bart{\l}omiej Skorulski
+::
+:: Received May 13, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_3, ARYTM_1, NORMSP_1, RELAT_1, FUNCT_1, PRE_TOPC, CANTOR_1,
+      BOOLE, SUBSET_1, SETFAM_1, TARSKI, METRIC_1, RCOMP_1, ABSVALUE, TOPMETR,
+      PCOMPS_1, CARD_4, FUNCT_4, FUNCOP_1, SEQ_2, ORDINAL2, ORDINAL1, FRECHET,
+      RLVECT_3, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, REAL_1, NAT_1,
+      SETFAM_1, STRUCT_0, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, ORDINAL1,
+      CARD_4, FUNCT_4, ABSVALUE, RCOMP_1, PRE_TOPC, TOPS_2, METRIC_1, PCOMPS_1,
+      TOPMETR, NORMSP_1, CANTOR_1, YELLOW_8;
+ constructors REAL_1, NAT_1, RAT_1, NORMSP_1, YELLOW_8, CARD_4, TOPS_2,
+      TOPMETR, CANTOR_1, FUNCT_4, RCOMP_1, MEMBERED;
+ clusters SUBSET_1, XREAL_0, PRE_TOPC, STRUCT_0, COMPLSP1, NORMSP_1, METRIC_1,
+      PCOMPS_1, TOPMETR, FUNCOP_1, RELSET_1, XBOOLE_0, NAT_1, MEMBERED,
+      ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+::
+:: Preliminaries
+::
+
+theorem :: FRECHET:1
+for T being non empty 1-sorted,S being sequence of T holds
+  rng S is Subset of T;
+
+definition
+ let T be non empty 1-sorted;
+ let S be sequence of T;
+ redefine func rng S -> Subset of T;
+end;
+
+theorem :: FRECHET:2
+for T1 being non empty 1-sorted, T2 being 1-sorted, S being sequence of T1 st
+rng S c= the carrier of T2 holds
+  S is sequence of T2;
+
+theorem :: FRECHET:3
+for T being non empty TopSpace, x being Point of T, B being Basis of x
+holds B <> {};
+
+definition
+ let T be non empty TopSpace;
+ let x be Point of T;
+ cluster -> non empty Basis of x;
+end;
+
+theorem :: FRECHET:4
+for T being TopSpace, A,B being Subset of T st
+    A is open & B is closed holds
+    A \ B is open;
+
+theorem :: FRECHET:5
+for T being TopStruct st
+  {}T is closed & [#]T is closed &
+  (for A,B being Subset of T st A is closed & B is closed
+        holds A \/ B is closed) &
+  for F being Subset-Family of T st F is closed holds meet F is closed
+holds T is TopSpace;
+
+theorem :: FRECHET:6
+ for T being TopSpace, S being non empty TopStruct, f being map of T,S
+  st for A being Subset of S holds A is closed iff f"A is closed
+  holds S is TopSpace;
+
+theorem :: FRECHET:7
+for x being Point of RealSpace, x',r being Real st x' = x & r > 0 holds
+   Ball(x,r) = ].x'-r, x'+r.[;
+
+theorem :: FRECHET:8
+  for A being Subset of R^1 holds A is open iff
+  for x being Real st x in A ex r being Real st r >0 & ].x-r, x+r.[ c= A;
+
+theorem :: FRECHET:9
+for S being sequence of R^1
+  st (for n being Nat holds S.n in ]. n - 1/4 , n + 1/4 .[)
+holds rng S is closed;
+
+theorem :: FRECHET:10
+for B being Subset of R^1 holds B = NAT implies B is closed;
+
+theorem :: FRECHET:11
+for M being non empty MetrSpace,x being Point of TopSpaceMetr(M),
+x' being Point of M st x=x'
+  ex B being Basis of x st
+    B={Ball(x',1/n) where n is Nat:n<>0} &
+    B is countable &
+    ex f being Function of NAT,B st for n being set st n in NAT holds
+      ex n' being Nat st n=n' & f.n = Ball(x',1/(n'+1));
+
+theorem :: FRECHET:12
+for f,g being Function holds
+  rng(f+*g)=f.:(dom f\dom g) \/ rng g;
+
+theorem :: FRECHET:13
+for A,B being set holds
+  B c= A implies (id A).:(B) = B;
+
+canceled;
+
+theorem :: FRECHET:15
+for A,B,x being set holds
+  dom((id A)+*(B --> x)) = A \/ B;
+
+theorem :: FRECHET:16
+for A,B,x being set st B <> {} holds
+  rng((id A)+*(B --> x)) = (A \ B) \/ {x};
+
+theorem :: FRECHET:17
+for A,B,C,x being set holds
+  C c= A implies ((id A)+*(B --> x))"(C \ {x}) = C \ B \ {x};
+
+theorem :: FRECHET:18
+for A,B,x being set holds
+  not x in A implies ((id A)+*(B --> x))"({x}) = B;
+
+theorem :: FRECHET:19
+for A,B,C,x being set holds
+  (C c= A & not x in A) implies ((id A)+*(B --> x))"(C \/ {x}) = C \/ B;
+
+theorem :: FRECHET:20
+for A,B,C,x being set holds
+  C c= A & not x in A implies ((id A)+*(B --> x))"(C \ {x}) = C \ B;
+
+begin
+
+::
+::  Convergent Sequences in Topological Spaces,
+::  FIRST-COUNTABLE, SEQUENTIAL, FRECHET SPACES
+::
+
+definition
+let T be non empty TopStruct;
+attr T is first-countable means
+:: FRECHET:def 1
+  for x be Point of T ex B be Basis of x st B is countable;
+end;
+
+theorem :: FRECHET:21
+for M being non empty MetrSpace holds TopSpaceMetr(M) is first-countable;
+
+theorem :: FRECHET:22
+ R^1 is first-countable;
+
+definition
+cluster R^1 -> first-countable;
+end;
+
+definition
+let T be TopStruct, S be sequence of T, x be Point of T;
+pred S is_convergent_to x means
+:: FRECHET:def 2
+   for U1 being Subset of T st (U1 is open & x in U1)
+   ex n being Nat st for m being Nat st n <= m holds S.m in U1;
+end;
+
+theorem :: FRECHET:23
+for T being non empty TopStruct, x being Point of T, S being sequence of T
+  holds S = (NAT --> x) implies S is_convergent_to x;
+
+definition
+let T be TopStruct, S be sequence of T;
+attr S is convergent means
+:: FRECHET:def 3
+  ex x being Point of T st S is_convergent_to x;
+end;
+
+definition
+let T be non empty TopStruct, S be sequence of T;
+func Lim S -> Subset of T means
+:: FRECHET:def 4
+for x being Point of T holds
+x in it iff S is_convergent_to x;
+end;
+
+definition
+let T be non empty TopStruct;
+attr T is Frechet means
+:: FRECHET:def 5
+  for A being Subset of T,x being Point of T st x in Cl(A)
+     ex S being sequence of T st (rng S c= A & x in Lim S );
+end;
+
+definition
+let T be non empty TopStruct;
+attr T is sequential means
+:: FRECHET:def 6
+    for A being Subset of T holds A is closed iff
+  for S being sequence of T st ( S is convergent & rng S c= A ) holds
+     Lim S c= A;
+end;
+
+theorem :: FRECHET:24
+for T being non empty TopSpace holds
+    T is first-countable implies T is Frechet;
+
+definition
+ cluster first-countable -> Frechet (non empty TopSpace);
+end;
+
+canceled;
+
+theorem :: FRECHET:26
+for T being non empty TopSpace,A being Subset of T holds
+A is closed implies
+  for S being sequence of T st S is convergent & rng S c= A holds Lim S c= A;
+
+theorem :: FRECHET:27
+for T being non empty TopSpace holds
+(for A being Subset of T holds
+(for S being sequence of T st S is convergent & rng S c= A holds Lim S c= A)
+implies A is closed) implies
+T is sequential;
+
+theorem :: FRECHET:28
+for T being non empty TopSpace holds T is Frechet implies T is sequential;
+
+definition
+ cluster Frechet -> sequential (non empty TopSpace);
+end;
+
+begin
+
+::
+::  Not (for T holds T is Frechet implies T is first-countable)
+::
+
+definition
+ func REAL? -> strict non empty TopSpace means
+:: FRECHET:def 7
+  the carrier of it = (REAL \ NAT) \/ {REAL} &
+  ex f being map of R^1, it st
+   f = (id REAL)+*(NAT --> REAL) &
+   for A being Subset of it holds A is closed iff f"A is closed;
+
+end;
+
+canceled;
+
+theorem :: FRECHET:30
+REAL is Point of REAL?;
+
+theorem :: FRECHET:31
+for A being Subset of REAL? holds
+  A is open & REAL in A iff
+  ex O being Subset of R^1 st O is open & NAT c= O & A=(O\NAT) \/ {REAL};
+
+theorem :: FRECHET:32
+for A being set holds
+A is Subset of REAL? & not REAL in A iff
+A is Subset of R^1 & NAT /\ A = {};
+
+theorem :: FRECHET:33
+for A being Subset of R^1,B being Subset of REAL? st A = B holds
+    NAT /\ A = {} & A is open iff not REAL in B & B is open;
+
+theorem :: FRECHET:34
+for A being Subset of REAL? st A = {REAL} holds A is closed;
+
+theorem :: FRECHET:35
+REAL? is not first-countable;
+
+theorem :: FRECHET:36
+REAL? is Frechet;
+
+theorem :: FRECHET:37
+  not (for T being non empty TopSpace holds
+         T is Frechet implies T is first-countable);
+
+begin
+
+::
+:: Auxiliary theorems
+::
+
+canceled 2;
+
+theorem :: FRECHET:40
+    for r being Real st r>0 ex n being Nat st (1/n < r & n<>0);

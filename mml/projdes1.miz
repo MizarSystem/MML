@@ -1,0 +1,506 @@
+:: Desargues Theorem In Projective 3-Space
+::  by Eugeniusz Kusak
+::
+:: Received August 13, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ANPROJ_2, INCSP_1, AFF_2, PROJDES1;
+ notation STRUCT_0, COLLSP, ANPROJ_2;
+ constructors ANPROJ_2, XBOOLE_0;
+ clusters ANPROJ_2, ZFMISC_1, XBOOLE_0;
+ theorems ANPROJ_2, COLLSP;
+
+begin
+
+ reserve FCPS for up-3-dimensional CollProjectiveSpace;
+ reserve a,a',b,b',c,c',d,d',o,p,q,r,s,t,u,x,y,z
+         for Element of FCPS;
+
+theorem
+Th1: a,b,c is_collinear implies b,c,a is_collinear & c,a,b is_collinear &
+b,a,c is_collinear & a,c,b is_collinear & c,b,a is_collinear
+proof assume A1: a,b,c is_collinear; then A2: b,a,c is_collinear by COLLSP:9;
+A3: a,c,b is_collinear by A1,COLLSP:9; b,c,a is_collinear by A2,COLLSP:9;
+hence thesis by A3,COLLSP:9; end;
+
+canceled 3;
+
+theorem
+   ex q,r st not p,q,r is_collinear
+proof consider q such that A1: p<>q & p<>q & p,p,q is_collinear
+ by ANPROJ_2:def 10;
+  ex r st not p,q,r is_collinear by A1,COLLSP:19;
+hence thesis; end;
+
+theorem
+   not a,b,c is_collinear & a,b,b' is_collinear & a<>b' implies
+      not a,b',c is_collinear
+proof assume A1: not a,b,c is_collinear & a,b,b' is_collinear & a<>b'; assume
+  not thesis; then a,b',b is_collinear & a,b',c is_collinear by A1,Th1;
+hence contradiction by A1,COLLSP:11; end;
+
+theorem
+   not a,b,c is_collinear & a,b,d is_collinear & a,c,d is_collinear
+      implies a=d
+proof assume A1: not a,b,c is_collinear & a,b,d is_collinear &
+a,c,d is_collinear; assume A2: not thesis; a,d,a is_collinear &
+a,d,b is_collinear & a,d,c is_collinear by A1,Th1,ANPROJ_2:def 7;
+hence contradiction by A1,A2,ANPROJ_2:def 8; end;
+
+theorem
+Th8: not o,a,d is_collinear & o,d,d' is_collinear & a,d,s is_collinear &
+d<>d' & a',d',s is_collinear & o,a,a' is_collinear & o<>a' implies s<>d
+proof assume A1: not o,a,d is_collinear & o,d,d' is_collinear &
+a,d,s is_collinear & d<>d' & a',d',s is_collinear & o,a,a' is_collinear &
+o<>a'; assume not thesis;
+then A2: d,d',a' is_collinear by A1,Th1; d,d',o is_collinear by A1,Th1;
+then d,o,a' is_collinear by A1,A2,COLLSP:11; then A3: o,a',d is_collinear by
+Th1;
+  o,a',a is_collinear by A1,Th1;
+hence contradiction by A1,A3,COLLSP:11; end;
+
+Lm1: not a,b,c is_collinear & a,b,b' is_collinear & a,c,c' is_collinear &
+       a<>b' implies b'<>c'
+proof assume A1: not a,b,c is_collinear & a,b,b' is_collinear &
+a,c,c' is_collinear & a<>b'; assume not thesis;
+then A2: a,b',c is_collinear by A1,Th1; a,b',b is_collinear by A1,Th1;
+hence contradiction by A1,A2,COLLSP:11; end;
+
+definition let FCPS,a,b,c,d;
+ pred a,b,c,d are_coplanar means
+ :Def1: ex x being Element of FCPS
+ st a,b,x is_collinear & c,d,x is_collinear;
+end;
+
+canceled;
+
+theorem
+Th10: a,b,c is_collinear or b,c,d is_collinear or c,d,a is_collinear or
+d,a,b is_collinear implies a,b,c,d are_coplanar
+proof assume A1: a,b,c is_collinear or b,c,d is_collinear or c,d,a is_collinear
+or d,a,b is_collinear;
+A2: now assume A3: a,b,c is_collinear; c,d,c is_collinear by ANPROJ_2:def 7;
+hence thesis by A3,Def1; end;
+A4: now assume b,c,d is_collinear; then A5: c,d,b is_collinear by Th1;
+  a,b,b is_collinear by ANPROJ_2:def 7; hence thesis by A5,Def1; end;
+A6: now assume A7: c,d,a is_collinear; a,b,a is_collinear by ANPROJ_2:def 7;
+hence thesis by A7,Def1; end;
+   now assume d,a,b is_collinear; then A8: a,b,d is_collinear by Th1;
+  c,d,d is_collinear by ANPROJ_2:def 7; hence thesis by A8,Def1; end;
+hence thesis by A1,A2,A4,A6; end;
+
+Lm2: a,b,c,d are_coplanar implies b,a,c,d are_coplanar
+proof assume a,b,c,d are_coplanar; then consider x such that A1:
+a,b,x is_collinear & c,d,x is_collinear by Def1; b,a,x is_collinear by A1,Th1
+;
+hence thesis by A1,Def1; end;
+
+Lm3: a,b,c,d are_coplanar implies b,c,d,a are_coplanar
+proof assume a,b,c,d are_coplanar; then consider x such that A1:
+a,b,x is_collinear & c,d,x is_collinear by Def1; A2: b,x,a is_collinear
+by A1,Th1; x,c,d is_collinear by A1,Th1; then consider y such that
+A3: b,c,y is_collinear & a,d,y is_collinear by A2,ANPROJ_2:def 9
+; b,c,y is_collinear &
+d,a,y is_collinear by A3,Th1; hence thesis by Def1; end;
+
+theorem
+Th11: a,b,c,d are_coplanar implies b,c,d,a are_coplanar & c,d,a,b are_coplanar
+& d,a,b,c are_coplanar & b,a,c,d are_coplanar & c,b,d,a are_coplanar &
+d,c,a,b are_coplanar & a,d,b,c are_coplanar & a,c,d,b are_coplanar &
+b,d,a,c are_coplanar & c,a,b,d are_coplanar & d,b,c,a are_coplanar &
+c,a,d,b are_coplanar & d,b,a,c are_coplanar & a,c,b,d are_coplanar &
+b,d,c,a are_coplanar & a,b,d,c are_coplanar & a,d,c,b are_coplanar &
+b,c,a,d are_coplanar & b,a,d,c are_coplanar & c,b,a,d are_coplanar &
+c,d,b,a are_coplanar & d,a,c,b are_coplanar & d,c,b,a are_coplanar
+proof assume A1: a,b,c,d are_coplanar;
+then A2: b,a,c,d are_coplanar by Lm2; then a,c,d,b are_coplanar by Lm3;
+then A3: c,d,b,a are_coplanar by Lm3; then A4: d,b,a,c are_coplanar by Lm3;
+then b,d,a,c are_coplanar by Lm2; then A5: d,a,c,b are_coplanar by Lm3;
+then A6: a,c,b,d are_coplanar by Lm3;
+ then c,a,b,d are_coplanar by Lm2; then A7: a,b,d,c are_coplanar by Lm3;
+then A8: b,d,c,a are_coplanar by Lm3; then A9: d,c,a,b are_coplanar by Lm3;
+then c,d,a,b are_coplanar by Lm2; then A10: d,a,b,c are_coplanar by Lm3;
+then a,d,b,c are_coplanar by Lm2; then d,b,c,a are_coplanar by Lm3;
+then b,c,a,d are_coplanar by Lm3;
+hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,Lm2,Lm3; end;
+
+Lm4: not a,b,c is_collinear & a,b,c,p are_coplanar & a,b,c,q are_coplanar
+      implies a,b,p,q are_coplanar
+proof assume A1: not a,b,c is_collinear & a,b,c,p are_coplanar &
+a,b,c,q are_coplanar; then consider x such that A2: a,b,x is_collinear &
+c,p,x is_collinear by Def1;
+consider y such that A3: a,b,y is_collinear & c,q,y is_collinear by A1,Def1;
+A4: now assume a=b; then a,b,p is_collinear by ANPROJ_2:def 7
+; hence thesis by Th10; end;
+   now assume A5: a<>b; then A6: a,x,y is_collinear by A2,A3,COLLSP:11;
+  b,a,x is_collinear & b,a,y is_collinear by A2,A3,Th1; then b,x,y
+is_collinear
+by A5,COLLSP:11; then A7: x,y,a is_collinear & x,y,b is_collinear by A6,Th1;
+A8: now assume x=y; then x,c,p is_collinear & x,c,q is_collinear by A2,A3,Th1
+;
+then x,p,q is_collinear by A1,A2,COLLSP:11; then p,q,x is_collinear by Th1;
+hence
+  thesis by A2,Def1; end;
+   now assume A9: x<>y; p,c,x is_collinear & c,q,y is_collinear by A2,A3,Th1;
+then consider z such that A10: p,q,z is_collinear & x,y,z is_collinear by
+ANPROJ_2:def 9;
+  a,b,z is_collinear by A7,A9,A10,ANPROJ_2:def 8; hence thesis by A10,Def1;
+end
+;
+hence thesis by A8; end; hence thesis by A4; end;
+
+theorem
+Th12: not a,b,c is_collinear & a,b,c,p are_coplanar & a,b,c,q are_coplanar &
+      a,b,c,r are_coplanar & a,b,c,s are_coplanar implies p,q,r,s are_coplanar
+proof assume A1: not a,b,c is_collinear & a,b,c,p are_coplanar &
+a,b,c,q are_coplanar & a,b,c,r are_coplanar & a,b,c,s are_coplanar;
+then A2: a,b,p,q are_coplanar & a,b,p,r are_coplanar & a,b,p,s are_coplanar &
+a,b,q,s are_coplanar & a,b,r,s are_coplanar & a,b,q,r are_coplanar by Lm4;
+A3: a<>b by A1,ANPROJ_2:def 7;
+A4: now assume a,b,p is_collinear & a,b,q is_collinear &
+a,b,r is_collinear; then p,q,r is_collinear by A3,ANPROJ_2:def 8;
+hence thesis by Th10; end;
+A5: now assume A6:
+ not a,b,p is_collinear; then A7: not p,a,b is_collinear by Th1;
+  p,a,b,q are_coplanar & p,a,b,r are_coplanar & p,a,b,s are_coplanar by A2,Th11
+;
+then A8: p,a,q,r are_coplanar & p,a,q,s are_coplanar &
+p,a,r,s are_coplanar by A7,Lm4; A9: p<>a by A6,ANPROJ_2:def 7;
+A10: now assume p,a,q is_collinear & p,a,r is_collinear;
+then p,q,r is_collinear by A9,COLLSP:11; hence thesis by Th10; end;
+A11: now assume not p,a,q is_collinear; then A12: not p,q,a is_collinear by Th1
+; p,q,a,r are_coplanar & p,q,a,s are_coplanar by A8,Th11;
+hence thesis by A12,Lm4; end;
+   now assume not p,a,r is_collinear; then A13: not p,r,a is_collinear by Th1;
+  p,r,a,q are_coplanar & p,r,a,s are_coplanar by A8,Th11;
+then p,r,q,s are_coplanar by A13,Lm4; hence thesis by Th11; end;
+hence thesis by A10,A11; end;
+A14: now assume A15:
+ not a,b,q is_collinear; then A16: not q,a,b is_collinear by Th1;
+  q,a,b,p are_coplanar & q,a,b,r are_coplanar & q,a,b,s are_coplanar by A2,Th11
+;
+then A17: q,a,p,r are_coplanar & q,a,p,s are_coplanar & q,a,r,s are_coplanar
+by A16,Lm4; A18: q<>a by A15,ANPROJ_2:def 7;
+A19: now assume q,a,p is_collinear & q,a,r is_collinear;
+then q,p,r is_collinear by A18,COLLSP:11; then p,q,r is_collinear by Th1;
+hence thesis
+by Th10; end;
+A20: now assume not q,a,p is_collinear; then A21: not q,p,a is_collinear by Th1
+; q,p,a,r are_coplanar & q,p,a,s are_coplanar by A17,Th11;
+then q,p,r,s are_coplanar by A21,Lm4; hence thesis by Th11; end;
+   now assume not q,a,r is_collinear; then A22: not q,r,a is_collinear by Th1;
+  q,r,a,p are_coplanar & q,r,a,s are_coplanar by A17,Th11;
+then q,r,p,s are_coplanar by A22,Lm4; hence thesis by Th11; end;
+hence thesis by A19,A20; end;
+   now assume A23:
+ not a,b,r is_collinear; then A24: not r,a,b is_collinear by Th1;
+  r,a,b,p are_coplanar & r,a,b,q are_coplanar & r,a,b,s are_coplanar by A2,Th11
+;
+then A25: r,a,p,q are_coplanar & r,a,p,s are_coplanar &
+r,a,q,s are_coplanar by A24,Lm4; A26: r<>a by A23,ANPROJ_2:def 7;
+A27: now assume r,a,p is_collinear & r,a,q is_collinear;
+then r,p,q is_collinear by A26,COLLSP:11; then p,q,r is_collinear by Th1;
+hence thesis by Th10; end;
+A28: now assume not r,a,p is_collinear; then A29: not r,p,a is_collinear by Th1
+; r,p,a,q are_coplanar & r,p,a,s are_coplanar by A25,Th11;
+then r,p,q,s are_coplanar by A29,Lm4;hence thesis by Th11; end;
+   now assume not r,a,q is_collinear; then A30: not r,q,a is_collinear by Th1;
+  r,q,a,p are_coplanar & r,q,a,s are_coplanar by A25,Th11;
+then r,q,p,s are_coplanar by A30,Lm4; hence thesis by Th11; end;
+hence thesis by A27,A28; end; hence thesis by A4,A5,A14; end;
+
+Lm5: not a,b,c is_collinear & a,b,c,p are_coplanar & a,b,c,q are_coplanar &
+     a,b,c,r are_coplanar implies a,p,q,r are_coplanar
+proof assume A1: not a,b,c is_collinear & a,b,c,p are_coplanar &
+a,b,c,q are_coplanar & a,b,c,r are_coplanar;
+   now assume A2: not p,q,r is_collinear; a<>b by A1,ANPROJ_2:def 7;
+then A3:
+not a,b,p is_collinear or not a,b,q is_collinear or not a,b,r is_collinear by
+A2,ANPROJ_2:def 8;
+A4: now assume A5: not a,p,b is_collinear; a,b,p,q are_coplanar &
+a,b,p,r are_coplanar by A1,Lm4; then a,p,b,q are_coplanar &
+a,p,b,r are_coplanar by Th11; hence thesis by A5,Lm4; end;
+A6: now assume A7:not a,q,b is_collinear; a,b,q,p are_coplanar &
+a,b,q,r are_coplanar by A1,Lm4; then a,q,b,p are_coplanar &
+a,q,b,r are_coplanar by Th11; then a,q,p,r are_coplanar by A7,Lm4;
+hence thesis by Th11; end;
+   now assume A8: not a,r,b is_collinear; a,b,r,p are_coplanar &
+a,b,r,q are_coplanar by A1,Lm4; then a,r,b,p are_coplanar &
+a,r,b,q are_coplanar by Th11; then a,r,p,q are_coplanar by A8,Lm4;
+hence thesis by Th11; end; hence thesis by A3,A4,A6,Th1; end;
+hence thesis by Th10; end;
+
+theorem
+   not p,q,r is_collinear & a,b,c,p are_coplanar & a,b,c,r are_coplanar &
+       a,b,c,q are_coplanar & p,q,r,s are_coplanar implies a,b,c,s are_coplanar
+proof assume A1: not p,q,r is_collinear & a,b,c,p are_coplanar &
+a,b,c,r are_coplanar & a,b,c,q are_coplanar & p,q,r,s are_coplanar;
+   now assume A2: not a,b,c is_collinear; then A3:
+ a,p,q,r are_coplanar by A1,Lm5;
+ A4: not b,a,c is_collinear by A2,Th1;
+  b,b,a is_collinear by ANPROJ_2:def 7;
+then A5:b,a,c,b are_coplanar & b,a,c,p are_coplanar & b,a,c,q are_coplanar &
+b,a,c,r are_coplanar by A1,Th10,Th11;
+A6:not c,a,b is_collinear by A2,Th1; c,a,b,p are_coplanar &
+c,a,b,q are_coplanar & c,a,b,r are_coplanar by A1,Th11;
+then c,p,q,r are_coplanar by A6,Lm5;
+then p,q,r,a are_coplanar & p,q,r,b are_coplanar & p,q,r,c are_coplanar by A3,
+A4,A5,Th11,Th12; hence thesis by A1,Th12; end; hence thesis by Th10; end;
+
+Lm6: p<>q & p,q,r is_collinear & a,b,p,q are_coplanar implies
+      a,b,p,r are_coplanar
+proof assume A1: p<>q & p,q,r is_collinear & a,b,p,q are_coplanar;
+then consider x such that A2: a,b,x is_collinear & p,q,x is_collinear by Def1;
+  a,b,x is_collinear & p,r,x is_collinear by A1,A2,COLLSP:11;
+hence thesis by Def1; end;
+
+theorem
+Th14: p<>q & p,q,r is_collinear & a,b,c,p are_coplanar & a,b,c,q are_coplanar
+       implies a,b,c,r are_coplanar
+proof assume A1: p<>q & p,q,r is_collinear & a,b,c,p are_coplanar &
+a,b,c,q are_coplanar;
+then A2: a,b,q,c are_coplanar & q,p,r is_collinear by Th1,Th11;
+   now assume not a,b,c is_collinear;
+ then a,b,p,q are_coplanar & a,b,q,p are_coplanar by A1,Lm4;
+then A3: a,b,p,r are_coplanar & a,b,q,r are_coplanar by A1,A2,Lm6;
+A4: now assume a,b,p is_collinear & a,b,q is_collinear; then a,b,r
+is_collinear
+by A1,COLLSP:14; then r,a,b is_collinear by Th1; hence thesis by Th10; end;
+A5: now assume A6:not a,b,p is_collinear; a,a,b is_collinear &
+b,a,b is_collinear by ANPROJ_2:def 7
+; then a,b,p,a are_coplanar & a,b,p,b are_coplanar &
+a,b,p,c are_coplanar by A1,Th10,Th11; hence thesis by A3,A6,Th12; end;
+   now assume A7:not a,b,q is_collinear; a,a,b is_collinear &
+b,a,b is_collinear by ANPROJ_2:def 7
+; then a,b,q,a are_coplanar & a,b,q,b are_coplanar &
+a,b,q,c are_coplanar by A1,Th10,Th11; hence thesis by A3,A7,Th12; end;
+hence thesis by A4,A5; end; hence thesis by Th10; end;
+
+theorem
+   not a,b,c is_collinear & a,b,c,p are_coplanar & a,b,c,q are_coplanar &
+a,b,c,r are_coplanar & a,b,c,s are_coplanar implies ex x st p,q,x is_collinear
+& r,s,x is_collinear
+proof assume not a,b,c is_collinear & a,b,c,p are_coplanar &
+a,b,c,q are_coplanar & a,b,c,r are_coplanar & a,b,c,s are_coplanar;
+then p,q,r,s are_coplanar by Th12; then consider x such that A1: p,q,x
+is_collinear
+& r,s,x is_collinear by Def1; take x; thus thesis by A1; end;
+
+theorem
+Th16: ex a,b,c,d st not a,b,c,d are_coplanar
+proof consider a,b,c,d such that A1: not a,b,x is_collinear or
+not c,d,x is_collinear by ANPROJ_2:def 14
+; take a,b,c,d; thus thesis by A1,Def1; end;
+
+theorem
+Th17: not p,q,r is_collinear implies ex s st not p,q,r,s are_coplanar
+proof assume A1: not p,q,r is_collinear; assume A2: not thesis;
+consider a,b,c,d such that A3: not a,b,c,d are_coplanar by Th16;
+  p,q,r,a are_coplanar & p,q,r,b are_coplanar & p,q,r,c are_coplanar &
+p,q,r,d are_coplanar by A2;
+hence contradiction by A1,A3,Th12; end;
+
+theorem
+Th18: a=b or a=c or b=c or a=d or b=d or d=c implies a,b,c,d are_coplanar
+proof assume A1: a=b or a=c or b=c or a=d or b=d or d=c;
+A2: now assume a=b or a=c or b=c; then a,b,c is_collinear by ANPROJ_2:def 7;
+hence thesis by Th10; end;
+A3: now assume a=d or b=d; then d,a,b is_collinear by ANPROJ_2:def 7;
+hence thesis by Th10; end;
+   now assume d=c; then b,c,d is_collinear by ANPROJ_2:def 7
+; hence thesis by Th10; end;
+hence thesis by A1,A2,A3; end;
+
+theorem
+Th19: not a,b,c,o are_coplanar & o,a,a' is_collinear & a<>a' implies not
+       a,b,c,a' are_coplanar
+proof assume A1: not a,b,c,o are_coplanar & o,a,a' is_collinear & a<>a'; assume
+A2: not thesis; a,a',o is_collinear & a,b,c,a are_coplanar by A1,Th1,Th18;
+hence contradiction by A1,A2,Th14; end;
+
+theorem
+Th20: not a,b,c is_collinear & not a',b',c' is_collinear &
+a,b,c,p are_coplanar & a,b,c,q are_coplanar & a,b,c,r are_coplanar &
+a',b',c',p are_coplanar & a',b',c',q are_coplanar & a',b',c',r are_coplanar &
+not a,b,c,a' are_coplanar implies p,q,r is_collinear
+proof assume A1: not a,b,c is_collinear & not a',b',c' is_collinear &
+a,b,c,p are_coplanar & a,b,c,q are_coplanar & a,b,c,r are_coplanar &
+a',b',c',p are_coplanar & a',b',c',q are_coplanar & a',b',c',r are_coplanar &
+not a,b,c,a' are_coplanar; assume A2: not thesis; a,b,c,a are_coplanar &
+a,b,c,b are_coplanar & a,b,c,c are_coplanar by Th18; then A3:
+p,q,r,a are_coplanar & p,q,r,b are_coplanar & p,q,r,c are_coplanar by A1,Th12;
+  a',b',c',a' are_coplanar by Th18; then p,q,r,a' are_coplanar by A1,Th12;
+hence contradiction by A1,A2,A3,Th12; end;
+
+theorem
+Th21: a<>a' & o,a,a' is_collinear & not a,b,c,o are_coplanar & not
+a',b',c' is_collinear & a,b,p is_collinear & a',b',p is_collinear &
+b,c,q is_collinear & b',c',q is_collinear & a,c,r is_collinear &
+a',c',r is_collinear implies p,q,r is_collinear
+proof assume A1: a<>a' & o,a,a' is_collinear & not a,b,c,o are_coplanar &
+not a',b',c' is_collinear & a,b,p is_collinear & a',b',p is_collinear &
+b,c,q is_collinear & b',c',q is_collinear & a,c,r is_collinear &
+a',c',r is_collinear; then A2: not a,b,c,a' are_coplanar by Th19;
+A3: not a,b,c is_collinear by A1,Th10; p,a,b is_collinear by A1,Th1;
+then A4: a,b,c,p are_coplanar by Th10; A5: a,b,c,q are_coplanar by A1,Th10;
+  c,r,a is_collinear by A1,Th1; then A6: a,b,c,r are_coplanar by Th10;
+  p,a',b' is_collinear by A1,Th1; then A7: a',b',c',p are_coplanar by Th10;
+A8: a',b',c',q are_coplanar by A1,Th10; c',r,a' is_collinear by A1,Th1;
+ then a',b',c',r are_coplanar by Th10;
+hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,Th20; end;
+
+theorem
+Th22: not a,b,c,d are_coplanar & a,b,c,o are_coplanar & not a,b,o is_collinear
+    implies not a,b,d,o are_coplanar
+proof assume A1: not a,b,c,d are_coplanar & a,b,c,o are_coplanar &
+not a,b,o is_collinear; assume not thesis; then A2: a,b,o,d are_coplanar by
+Th11; a,b,o,c are_coplanar by A1,Th11;
+hence contradiction by A1,A2,Lm4; end;
+
+theorem
+Th23: not a,b,c,o are_coplanar & o,a,a' is_collinear & o,b,b' is_collinear
+       & o,c,c' is_collinear & o<>a' & o<>b' & o<>c' implies
+     not a',b',c' is_collinear & not a',b',c',o are_coplanar
+proof assume A1: not a,b,c,o are_coplanar & o,a,a' is_collinear &
+o,b,b' is_collinear & o,c,c' is_collinear & o<>a' & o<>b' & o<>c';
+then a,o,a' is_collinear & not o,b,c,a are_coplanar by Th1,Th11;
+then not o,b,c,a' are_coplanar by A1,Th19; then not o,a',b,c are_coplanar &
+c,o,c' is_collinear by A1,Th1,Th11; then not o,a',b,c' are_coplanar by A1,Th19
+;
+then not o,a',c',b are_coplanar & b,o,b' is_collinear by A1,Th1,Th11;
+then not o,a',c',b' are_coplanar by A1,Th19; then not a',b',c',o
+are_coplanar by Th11; hence thesis by Th10; end;
+
+theorem
+Th24: a,b,c,o are_coplanar & not a,b,c,d are_coplanar & not
+     a,b,d,o are_coplanar & not b,c,d,o are_coplanar & not a,c,d,o are_coplanar
+& o,d,d' is_collinear & o,a,a' is_collinear & o,b,b' is_collinear &
+o,c,c' is_collinear & a,d,s is_collinear & a',d',s is_collinear &
+b,d,t is_collinear & b',d',t is_collinear & c,d,u is_collinear & o<>a' & o<>d'
+& d<>d' & o<>b' implies not s,t,u is_collinear
+proof assume A1: a,b,c,o are_coplanar & not a,b,c,d are_coplanar &
+not a,b,d,o are_coplanar & not b,c,d,o are_coplanar & not a,c,d,o are_coplanar
+& o,d,d' is_collinear & o,a,a' is_collinear & o,b,b' is_collinear &
+o,c,c' is_collinear & a,d,s is_collinear & a',d',s is_collinear &
+b,d,t is_collinear & b',d',t is_collinear & c,d,u is_collinear & o<>a' & o<>d'
+& d<>d' & o<>b'; then not d,o,a is_collinear by Th10;
+ then not o,a,d is_collinear by Th1; then A2: s<>d by A1,Th8;
+A3:not d,b,c,a are_coplanar by A1,Th11; then A4: not d,b,c,s are_coplanar by A1
+,A2,Th19; A5: d,b,c,b are_coplanar & d,b,c,d are_coplanar &
+d,b,c,c are_coplanar by Th18; b<>d by A1,Th18;
+then A6: d,b,c,t are_coplanar by A1,A5,Th14;
+A7: d,b,c,u are_coplanar by A1,A5,Th14; A8: not d,b,c is_collinear by A3,Th10;
+  not b,d,o is_collinear by A1,Th10; then not o,b,d is_collinear by Th1;
+then A9: t<>d by A1,Th8; A10: d,b,t is_collinear by A1,Th1; d,c,u
+is_collinear
+by A1,Th1; then t<>u by A8,A9,A10,Lm1; then not t,u,s is_collinear by A4,A6,A7,
+Th14; hence thesis by Th1; end;
+
+definition let FCPS,o,a,b,c;
+pred o,a,b,c constitute_a_quadrangle means
+:Def2: not a,b,c is_collinear & not o,a,b is_collinear & not o,b,c is_collinear
+ & not o,c,a is_collinear;
+end;
+
+Lm7: o<>a' & o<>b' & o<>c' & a<>a' & b<>b' & o,a,b,c constitute_a_quadrangle
+  & o,a,a' is_collinear & o,b,b' is_collinear & o,c,c' is_collinear &
+  a,b,p is_collinear & a',b',p is_collinear & b,c,q is_collinear &
+  b',c',q is_collinear & a,c,r is_collinear & a',c',r is_collinear
+  implies p,q,r is_collinear
+proof assume that A1: o<>a' & o<>b' & o<>c' & a<>a' & b<>b' and
+A2: o,a,b,c constitute_a_quadrangle and
+A3: o,a,a' is_collinear & o,b,b' is_collinear &
+o,c,c' is_collinear & a,b,p is_collinear & a',b',p is_collinear &
+b,c,q is_collinear & b',c',q is_collinear & a,c,r is_collinear &
+a',c',r is_collinear;
+A4: o<>a' & o<>b' & o<>c' & a<>a' & b<>b' &
+not o,a,b is_collinear & not o,b,c is_collinear & not o,c,a is_collinear &
+not a,b,c is_collinear & o,a,a' is_collinear & o,b,b' is_collinear &
+o,c,c' is_collinear & a,b,p is_collinear & a',b',p is_collinear &
+b,c,q is_collinear & b',c',q is_collinear & a,c,r is_collinear &
+a',c',r is_collinear by A1,A2,A3,Def2;
+A5: now assume A6: not a,b,c,o are_coplanar; then not a',b',c' is_collinear
+by A1,A3,Th23; hence thesis by A1,A3,A6,Th21; end;
+   now assume A7: a,b,c,o are_coplanar; consider d such that
+A8: not a,b,c,d are_coplanar by A4,Th17; consider d' such that A9: o<>d' &
+d<>d' & o,d,d' is_collinear by ANPROJ_2:def 10; A10: a,o,a' is_collinear &
+b,o,b' is_collinear & c,o,c' is_collinear by A3,Th1; then consider s such that
+A11: a,d,s is_collinear & a',d',s is_collinear by A9,ANPROJ_2:def 9;
+consider t such that A12: b,d,t is_collinear & b',d',t is_collinear by A9,A10,
+ANPROJ_2:def 9
+; consider u such that A13: c,d,u is_collinear & c',d',u is_collinear
+by A9,A10,ANPROJ_2:def 9; A14: not a,b,o is_collinear & not b,c,o is_collinear
+&
+not a,c,o is_collinear by A4,Th1;
+then A15: not a,b,d,o are_coplanar by A7,A8,Th22; not b,c,a,d are_coplanar &
+b,c,a,o are_coplanar by A7,A8,Th11; then A16: not b,c,d,o are_coplanar by A14,
+Th22; not a,c,b,d are_coplanar & a,c,b,o are_coplanar by A7,A8,Th11;
+then A17: not a,c,d,o are_coplanar by A14,Th22; then A18: not s,t,u
+is_collinear
+by A1,A3,A7,A8,A9,A11,A12,A13,A15,A16,Th24;
+  not a',b',d' is_collinear by A1,A3,A9,A15,Th23; then p,t,s is_collinear by A1
+,A3,A11,A12,A15,Th21; then A19: t,s,p is_collinear by Th1; not b',c',d'
+is_collinear
+by A1,A3,A9,A16,Th23; then q,u,t is_collinear by A1,A3,A12,A13,A16,Th21;
+then A20:
+u,t,q is_collinear by Th1; not a',c',d' is_collinear by A1,A3,A9,A17,Th23;
+then r,u,s is_collinear by A1,A3,A11,A13,A17,Th21; then A21: s,u,r
+is_collinear by Th1;
+A22: d,a,s is_collinear & d',a',s is_collinear by A11,Th1;
+  not d,o,a is_collinear by A15,Th10; then not o,d,a is_collinear by Th1;
+then s<>a by A1,A3,A9,A22,Th8; then A23: not a,b,c,s are_coplanar by A8,A22,
+Th19;
+A24: a<>b & b<>c & c <>a & s<>t & t<>u & u<>s by A4,A18,ANPROJ_2:def 7;
+A25: a,b,c,a are_coplanar & a,b,c,b are_coplanar & a,b,c,c are_coplanar &
+s,t,u,s are_coplanar & s,t,u,t are_coplanar & s,t,u,u are_coplanar by Th18;
+then A26: a,b,c,p are_coplanar & a,b,c,q are_coplanar & a,b,c,r are_coplanar
+by A3,A24,Th14;
+   s,t,u,p are_coplanar & s,t,u,q are_coplanar & s,t,u,r are_coplanar by A19,
+A20,A21,A24,A25,Th14;
+hence thesis by A4,A18,A23,A26,Th20; end; hence thesis by A5; end;
+
+canceled;
+
+theorem
+Th26: not o,a,b is_collinear & not o,b,c is_collinear & not o,a,c is_collinear
+     & o,a,a' is_collinear & o,b,b' is_collinear & o,c,c' is_collinear &
+     a,b,p is_collinear & a',b',p is_collinear & a<>a' & b,c,r is_collinear &
+     b',c',r is_collinear & a,c,q is_collinear & b<>b' & a',c',q is_collinear &
+     o<>a' & o<>b' & o<>c' implies r,q,p is_collinear
+proof assume A1: not o,a,b is_collinear & not o,b,c is_collinear &
+not o,a,c is_collinear & o,a,a' is_collinear & o,b,b' is_collinear &
+o,c,c' is_collinear & a,b,p is_collinear & a',b',p is_collinear & a<>a' &
+b,c,r is_collinear & b',c',r is_collinear & a,c,q is_collinear & b<>b' &
+a',c',q is_collinear & o<>a' & o<>b' & o<>c';
+then A2: not o,c,a is_collinear by Th1;
+A3: now assume not a,b,c is_collinear;
+ then o,a,b,c constitute_a_quadrangle by A1,A2,Def2;
+then p,r,q is_collinear by A1,Lm7; hence thesis by Th1; end;
+   now assume A4: a,b,c is_collinear; A5: a<>b & b<>c & c <>a
+  by A1,ANPROJ_2:def 7;
+  b,c,a is_collinear & b,c,b is_collinear by A4,Th1,ANPROJ_2:def 7;
+then A6: a,b,r is_collinear by A1,A5,ANPROJ_2:def 8;
+  a,c,a is_collinear & a,c,b is_collinear by A4,Th1,ANPROJ_2:def 7;
+ then a,b,q is_collinear by A1,A5,ANPROJ_2:def 8; hence thesis
+  by A1,A5,A6,ANPROJ_2:def 8; end;
+hence thesis by A3; end;
+
+theorem Th27:
+for CS being up-3-dimensional CollProjectiveSpace holds
+                   CS is Desarguesian
+proof let CS be up-3-dimensional CollProjectiveSpace;
+  for o,a,b,c,a',b',c',r,q,p being Element of CS st
+o<>a' & a<>a' & o<>b' & b<>b' & o<>c' & c <>c' &
+not o,a,b is_collinear & not o,a,c is_collinear &
+not o,b,c is_collinear & a,b,p is_collinear & a',b',p is_collinear &
+b,c,r is_collinear & b',c',r is_collinear & a,c,q is_collinear &
+a',c',q is_collinear & o,a,a' is_collinear & o,b,b' is_collinear &
+o,c,c' is_collinear holds r,q,p is_collinear by Th26;
+hence thesis by ANPROJ_2:def 12; end;
+
+definition
+ cluster -> Desarguesian (up-3-dimensional CollProjectiveSpace);
+correctness by Th27;
+end;

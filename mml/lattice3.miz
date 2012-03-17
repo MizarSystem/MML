@@ -1,0 +1,2092 @@
+:: Complete Lattices
+::  by Grzegorz Bancerek
+::
+:: Received May 13, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary LATTICES, FUNCT_1, BOOLE, BINOP_1, SUBSET_1, FILTER_1, ORDERS_1,
+      RELAT_1, RELAT_2, BHSP_3, FILTER_0, TARSKI, ZF_LANG, LATTICE3, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, STRUCT_0, FUNCT_1,
+      FUNCT_2, BINOP_1, LATTICES, FILTER_0, LATTICE2, FILTER_1, RELAT_1,
+      RELAT_2, RELSET_1, PARTFUN1, ORDERS_1;
+ constructors DOMAIN_1, BINOP_1, LATTICE2, FILTER_1, RELAT_2, ORDERS_1,
+      ORDERS_2, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters LATTICE2, ORDERS_1, RELSET_1, STRUCT_0, RLSUB_2, SUBSET_1, LATTICES,
+      MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions XBOOLE_0, TARSKI, LATTICES, RELAT_1, RELAT_2, ORDERS_1, STRUCT_0;
+ theorems TARSKI, ENUMSET1, ZFMISC_1, FUNCT_1, FUNCT_2, BINOP_1, LATTICES,
+      FILTER_0, FILTER_1, LATTICE2, RELAT_1, RELSET_1, ORDERS_1, STRUCT_0,
+      XBOOLE_0, XBOOLE_1, RELAT_2, PARTFUN1;
+ schemes FRAENKEL, BINOP_1, RELSET_1, FUNCT_2;
+
+begin :: Boolean Lattice of Subsets
+
+ deffunc carr(LattStr) = the carrier of $1;
+ deffunc join(LattStr) = the L_join of $1;
+ deffunc met(LattStr) = the L_meet of $1;
+
+definition let X be set;
+ func BooleLatt X -> strict LattStr means :Def1:
+  the carrier of it = bool X &
+  for Y,Z being Element of bool X holds
+   (the L_join of it).(Y,Z) = Y \/ Z & (the L_meet of it).(Y,Z) = Y /\ Z;
+ existence
+  proof
+   deffunc U(Element of bool X,Element of bool X) =  $1 \/ $2;
+   consider j being BinOp of bool X such that
+A1:  for x,y being Element of bool X holds j.(x,y) = U(x,y)
+      from BinOpLambda;
+   deffunc U(Element of bool X,Element of bool X) =  $1 /\ $2;
+   consider m being BinOp of bool X such that
+A2:  for x,y being Element of bool X holds m.(x,y) = U(x,y)
+      from BinOpLambda;
+   take LattStr(#bool X, j, m#);
+   thus thesis by A1,A2;
+  end;
+ uniqueness
+  proof let L1, L2 be strict LattStr such that
+A3: the carrier of L1 = bool X &
+    for Y,Z being Element of bool X holds
+     join(L1).(Y,Z) = Y \/ Z & met(L1).(Y,Z) = Y /\ Z and
+A4: the carrier of L2 = bool X &
+    for Y,Z being Element of bool X holds
+     join(L2).(Y,Z) = Y \/ Z & met(L2).(Y,Z) = Y /\ Z;
+   reconsider j1 = join(L1), j2 = join(L2), m1 = met(L1), m2 = met(L2) as
+      BinOp of bool X by A3,A4;
+      now let x,y be Element of bool X;
+     thus j1.(x,y) = x \/ y by A3 .= j2.(x,y) by A4;
+    end;
+then A5:  j1 = j2 by BINOP_1:2;
+      now let x,y be Element of bool X;
+     thus m1.(x,y) = x /\ y by A3 .= m2.(x,y) by A4;
+    end;
+   hence thesis by A3,A4,A5,BINOP_1:2;
+  end;
+end;
+
+reserve X for set,
+        x,y,z for Element of BooleLatt X, s for set;
+
+definition let X be set;
+ cluster BooleLatt X -> non empty;
+ coherence
+  proof
+     the carrier of BooleLatt X = bool X by Def1;
+   hence the carrier of BooleLatt X is non empty;
+  end;
+end;
+
+theorem Th1:
+ x "\/" y = x \/ y & x "/\" y = x /\ y
+  proof set B = BooleLatt X;
+   reconsider x' = x, y' = y as Element of bool X by Def1;
+   thus x "\/" y = join(B).(x',y') by LATTICES:def 1 .= x \/ y by Def1;
+   thus x "/\" y = met(B).(x',y') by LATTICES:def 2 .= x /\ y by Def1;
+  end;
+
+theorem Th2:
+ x [= y iff x c= y
+  proof (x [= y iff x "\/" y = y) & x "\/" y = x \/ y by Th1,LATTICES:def 3;
+   hence thesis by XBOOLE_1:7,12;
+  end;
+
+definition let X;
+ cluster BooleLatt X -> Lattice-like;
+  coherence
+   proof
+A1:  now let x,y;
+      thus x"\/"y = y \/ x by Th1 .= y"\/"x by Th1;
+     end;
+A2:  now let x,y,z;
+      thus x"\/"(y"\/"z) = x \/ (y"\/"z) by Th1 .= x \/ (y \/ z) by Th1
+              .= x \/ y \/ z by XBOOLE_1:4 .= (x"\/"y) \/ z by Th1
+              .= (x"\/"y)"\/"z by Th1;
+     end;
+A3:  now let x,y;
+      thus (x"/\"y)"\/"y = (x"/\"y) \/ y by Th1 .= (x /\ y) \/ y by Th1
+              .= y by XBOOLE_1:22;
+     end;
+A4:  now let x,y;
+      thus x"/\"y = y /\ x by Th1 .= y"/\"x by Th1;
+     end;
+A5:  now let x,y,z;
+      thus x"/\"(y"/\"z) = x /\ (y"/\"z) by Th1 .= x /\ (y /\ z) by Th1
+              .= x /\ y /\ z by XBOOLE_1:16 .= (x"/\"y) /\ z by Th1
+              .= (x"/\"y)"/\"z by Th1;
+     end;
+       now let x,y;
+      thus x"/\"(x"\/"y) = x /\ (x"\/"y) by Th1 .= x /\ (x \/ y) by Th1
+              .= x by XBOOLE_1:21;
+     end;
+    then BooleLatt X is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+    by A1,A2,A3,A4,A5,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    hence thesis by LATTICES:def 10;
+   end;
+end;
+
+reserve y for Element of BooleLatt X;
+
+theorem Th3:
+ BooleLatt X is lower-bounded & Bottom BooleLatt X = {}
+  proof {} c= X by XBOOLE_1:2;
+   then reconsider x = {} as Element of BooleLatt X by Def1;
+A1:now let y; thus x"/\"y = x /\ y by Th1 .= x; hence y"/\"x = x; end;
+   thus A2:BooleLatt X is lower-bounded proof take x; thus thesis by A1; end;
+   thus thesis by A1,A2,LATTICES:def 16;
+  end;
+
+theorem Th4:
+ BooleLatt X is upper-bounded & Top BooleLatt X = X
+  proof
+A1:  X in bool X & bool X = carr(BooleLatt X) by Def1,ZFMISC_1:def 1;
+   then reconsider x = X as Element of BooleLatt X;
+A2:  now let y;
+     thus x"\/"y = x \/ y by Th1 .= x by A1,XBOOLE_1:12;
+     hence y"\/"x = x;
+    end;
+   thus BooleLatt X is upper-bounded proof take x; thus thesis by A2; end;
+   hence thesis by A2,LATTICES:def 17;
+  end;
+
+definition let X;
+ cluster BooleLatt X -> Boolean Lattice-like;
+  coherence
+   proof set B = BooleLatt X;
+       B is 0_Lattice & B is 1_Lattice by Th3,Th4;
+    then reconsider B as 01_Lattice by LATTICES:def 15;
+A1:   B is complemented
+      proof let x be Element of B;
+A2:      (X \ x) c= X & carr(B) = bool X by Def1,XBOOLE_1:36;
+       then reconsider y = X \ x as Element of B;
+       take y;
+       thus y"\/"x = y \/ x by Th1 .= X \/ x by XBOOLE_1:39 .= X by A2,XBOOLE_1
+:12
+                .= Top B by Th4;
+       hence x"\/"y = Top B;
+A3:     y misses x by XBOOLE_1:79;
+       thus y"/\"x = y /\ x by Th1 .= {} by A3,XBOOLE_0:def 7
+ .= Bottom B by Th3;
+       hence thesis;
+      end;
+       B is distributive
+      proof let x,y,z be Element of B;
+       thus x"/\"(y"\/"z) = x /\ (y"\/"z) by Th1 .= x /\ (y \/ z) by Th1
+               .= x/\y \/ x/\z by XBOOLE_1:23 .= (x"/\"y)\/(x/\z) by Th1
+               .= (x"/\"y)\/(x"/\"z) by Th1 .= (x"/\"y)"\/"(x"/\"z) by Th1;
+      end;
+    hence thesis by A1,LATTICES:def 20;
+   end;
+end;
+
+theorem
+   for x being Element of BooleLatt X holds x` = X \ x
+  proof set B = BooleLatt X; let x be Element of B;
+A1:  x`"/\"x = Bottom B & x"\/"x` = Top B & Bottom B = {} & Top B = X &
+    x`"/\"x = x` /\ x &
+    x"\/"x` = x \/ x` by Th1,Th3,Th4,LATTICES:47,48;
+    then x` misses x by XBOOLE_0:def 7;
+    then X \ x = (x \ x) \/ (x` \ x) & x \ x = {} & x` \ x = x`
+    by A1,XBOOLE_1:37,42,83;
+   hence thesis;
+  end;
+
+begin :: Correspondence Between Lattices and Posets
+
+definition let L be Lattice;
+ redefine func LattRel L -> Order of the carrier of L;
+  coherence
+   proof
+A1:   LattRel L = { [p,q] where p is Element of L,
+                          q is Element of L: p [= q }
+         by FILTER_1:def 8;
+       LattRel L c= [:carr(L),carr(L):]
+      proof let x be set; assume x in LattRel L;
+        then ex p,q being Element of L st x = [p,q] & p [= q
+                  by A1;
+       hence thesis by ZFMISC_1:106;
+      end;
+    then reconsider R = LattRel L as Relation of carr(L) by RELSET_1:def 1;
+A2:   R is_reflexive_in carr(L)
+      proof let x be set; assume x in carr(L);
+       then reconsider x as Element of L;
+          x [= x;
+       hence thesis by FILTER_1:32;
+      end;
+A3:   R is_antisymmetric_in carr(L)
+      proof let x,y be set; assume x in carr(L) & y in carr(L);
+       then reconsider x' = x, y' = y as Element of L;
+       assume [x,y] in R & [y,x] in R;
+        then x' [= y' & y' [= x' by FILTER_1:32;
+       hence thesis by LATTICES:26;
+      end;
+A4:  R is_transitive_in carr(L)
+      proof let x,y,z be set; assume
+          x in carr(L) & y in carr(L) & z in carr(L);
+       then reconsider x' = x, y' = y, z' = z as Element of L;
+       assume [x,y] in R & [y,z] in R;
+        then x' [= y' & y' [= z' by FILTER_1:32;
+        then x' [= z' by LATTICES:25;
+       hence thesis by FILTER_1:32;
+      end;
+A5:  dom R = carr(L) by A2,ORDERS_1:98;
+A6:  field R = carr(L) by A2,ORDERS_1:98;
+A7:  R is total by A5,PARTFUN1:def 4;
+A8:  R is reflexive by A2,A6,RELAT_2:def 9;
+A9:  R is antisymmetric by A3,A6,RELAT_2:def 12;
+     R is transitive by A4,A6,RELAT_2:def 16;
+    hence thesis by A7,A8,A9;
+   end;
+end;
+
+definition let L be Lattice;
+ func LattPOSet L -> strict Poset equals :Def2:
+    RelStr(#the carrier of L, LattRel L#);
+  correctness;
+end;
+
+definition let L be Lattice;
+  cluster LattPOSet L -> non empty;
+  coherence
+  proof
+     LattPOSet L = RelStr(#the carrier of L, LattRel L#) by Def2;
+   hence the carrier of LattPOSet L is non empty;
+  end;
+end;
+
+theorem Th6:
+ for L1,L2 being Lattice st LattPOSet L1 = LattPOSet L2 holds
+   the LattStr of L1 = the LattStr of L2
+  proof let L1,L2 be Lattice such that
+A1:  LattPOSet L1 = LattPOSet L2;
+A2:  LattPOSet L1 = RelStr(#carr(L1), LattRel L1#) &
+    LattPOSet L2 = RelStr(#carr(L2), LattRel L2#) by Def2;
+   then reconsider j = join(L2), m = met(L2) as BinOp of carr(L1) by A1;
+      now let a,b be Element of L1;
+     reconsider x = a, y = b, xy = a"\/"
+b as Element of L2 by A1,A2;
+     reconsider ab = x"\/"y as Element of L1 by A1,A2;
+        a [= a"\/"b & b [= b"\/"a & b"\/"a = a"\/"b &
+      x [= x"\/"y & y [= y"\/"x & y"\/"x = x"\/"y by LATTICES:22;
+      then [x,xy] in LattRel L2 & [y,xy] in LattRel L2 &
+      [a,ab] in LattRel L1 & [b,ab] in LattRel L1 by A1,A2,FILTER_1:32;
+      then a [= ab & b [= ab & x [= xy & y [= xy by FILTER_1:32;
+then A3:    a"\/"b [= ab & x"\/"y [= xy by FILTER_0:6;
+      then [ab,a"\/"b] in LattRel L1 by A1,A2,FILTER_1:32;
+      then ab [= a"\/"b & join(L1).(a,b) = a"\/"b & j.(x,y) = x"\/"y
+       by FILTER_1:32,LATTICES:def 1;
+     hence join(L1).(a,b) = j.(a,b) by A3,LATTICES:26;
+    end;
+then A4:  join(L1) = j by BINOP_1:2;
+      now let a,b be Element of L1;
+     reconsider x = a, y = b, xy = a"/\"
+b as Element of L2 by A1,A2;
+     reconsider ab = x"/\"y as Element of L1 by A1,A2;
+        a"/\"b [= a & b"/\"a [= b & b"/\"a = a"/\"b &
+      x"/\"y [= x & y"/\"x [= y & y"/\"x = x"/\"y by LATTICES:23;
+      then [xy,x] in LattRel L2 & [xy,y] in LattRel L2 &
+      [ab,a] in LattRel L1 & [ab,b] in LattRel L1 by A1,A2,FILTER_1:32;
+      then ab [= a & ab [= b & xy [= x & xy [= y by FILTER_1:32;
+then A5:    ab [= a"/\"b & xy [= x"/\"y by FILTER_0:7;
+      then [a"/\"b,ab] in LattRel L1 by A1,A2,FILTER_1:32;
+      then a"/\"b [= ab & met(L1).(a,b) = a"/\"b & m.(x,y) = x"/\"y
+       by FILTER_1:32,LATTICES:def 2;
+     hence met(L1).(a,b) = m.(a,b) by A5,LATTICES:26;
+    end;
+   hence thesis by A1,A2,A4,BINOP_1:2;
+  end;
+
+definition let L be Lattice, p be Element of L;
+ func p% -> Element of LattPOSet L equals:
+Def3:   p;
+  correctness
+   proof LattPOSet L = RelStr(#the carrier of L, LattRel L#) by Def2;
+     hence thesis;
+   end;
+end;
+
+definition let L be Lattice, p be Element of LattPOSet L;
+ func %p -> Element of L equals:
+Def4:   p;
+  correctness
+   proof LattPOSet L = RelStr(#the carrier of L, LattRel L#) by Def2;
+    hence thesis;
+   end;
+end;
+
+reserve L for Lattice, p,q for Element of L;
+
+theorem Th7:
+ p [= q iff p% <= q%
+  proof
+      (p [= q iff [p,q] in LattRel L) & p = p% & q = q% &
+    LattPOSet L = RelStr(#carr(L), LattRel L#)
+     by Def2,Def3,FILTER_1:32;
+   hence thesis by ORDERS_1:def 9;
+  end;
+
+ definition let X be set, O be Order of X;
+  redefine func O~ -> Order of X;
+   coherence
+    proof
+A1:    O~ is reflexive by RELAT_2:27;
+      dom O = dom(O~) & dom O = X by PARTFUN1:def 4,RELAT_2:29;
+      then O~ is total by PARTFUN1:def 4;
+     hence thesis by A1,RELAT_2:40,42;
+    end;
+ end;
+
+definition let A be RelStr;
+ func A~ -> strict RelStr equals:
+Def5:
+   RelStr(#the carrier of A, (the InternalRel of A)~#);
+  correctness;
+end;
+
+definition let A be Poset;
+ cluster A~ -> reflexive transitive antisymmetric;
+ coherence
+  proof A~ = RelStr(#the carrier of A, (the InternalRel of A)~#) by Def5;
+   hence thesis;
+  end;
+end;
+
+definition let A be non empty RelStr;
+ cluster A~ -> non empty;
+ coherence
+ proof A~ = RelStr(#the carrier of A, (the InternalRel of A)~#) by Def5;
+  hence the carrier of A~ is non empty;
+ end;
+end;
+
+reserve A for RelStr, a,b,c for Element of A;
+
+theorem
+   A~~ = the RelStr of A
+  proof A~ = RelStr(#the carrier of A, (the InternalRel of A)~#) by Def5;
+   hence A~~ = RelStr(#the carrier of A, (the InternalRel of A)~~#) by Def5
+           .= the RelStr of A;
+  end;
+
+definition let A be RelStr, a be Element of A;
+ func a~ -> Element of A~ equals:
+Def6:    a;
+  correctness
+   proof
+       the RelStr of A = RelStr(#the carrier of A, the InternalRel of A#) &
+     A~ = RelStr(#the carrier of A, (the InternalRel of A)~#) by Def5;
+hence thesis;
+   end;
+end;
+
+definition let A be RelStr, a be Element of A~;
+ func ~a -> Element of A equals:
+Def7:    a;
+  correctness
+   proof
+       the RelStr of A = RelStr(#the carrier of A, the InternalRel of A#) &
+     A~ = RelStr(#the carrier of A, (the InternalRel of A)~#) by Def5;
+     hence thesis;
+   end;
+end;
+
+theorem Th9:
+ a <= b iff b~ <= a~
+  proof
+      the RelStr of A = RelStr(#the carrier of A, the InternalRel of A#) &
+    A~ = RelStr(#the carrier of A, (the InternalRel of A)~#) &
+    (a <= b iff [a,b] in the InternalRel of A) &
+    (b~ <= a~ iff [b~,a~] in the InternalRel of A~) &
+    ([a,b] in the InternalRel of A iff [b,a] in (the InternalRel of A)~) &
+    a = a~ & b = b~ by Def5,Def6,ORDERS_1:def 9,RELAT_1:def 7;
+   hence thesis;
+  end;
+
+definition let A be RelStr, X be set, a be Element of A;
+ pred a is_<=_than X means for b being Element of A st b in X
+   holds a <= b;
+  synonym X is_>=_than a;
+ pred X is_<=_than a means:
+Def9:
+  for b being Element of A st b in X holds b <= a;
+  synonym a is_>=_than X;
+end;
+
+definition let IT be RelStr;
+ attr IT is with_suprema means:
+Def10:
+  for x,y being Element of IT
+   ex z being Element of IT st x <= z & y <= z &
+    for z' being Element of IT st x <= z' & y <= z' holds z <= z';
+ attr IT is with_infima means:
+Def11:
+  for x,y being Element of IT
+   ex z being Element of IT st z <= x & z <= y &
+    for z' being Element of IT st z' <= x & z' <= y holds z' <= z;
+end;
+
+definition
+ cluster with_suprema -> non empty RelStr;
+ coherence
+  proof let A be RelStr such that
+A1:  for x,y being Element of A
+     ex z being Element of A st x <= z & y <= z &
+      for z' being Element of A st x <= z' & y <= z' holds z <= z';
+   consider x,y being Element of A;
+   consider z being Element of A such that
+A2:  x <= z & y <= z and
+      for z' being Element of A st x <= z' & y <= z' holds z <= z'
+      by A1;
+      [x,z] in the InternalRel of A by A2,ORDERS_1:def 9;
+    then x in the carrier of A by ZFMISC_1:106;
+   hence thesis by STRUCT_0:def 1;
+  end;
+ cluster with_infima -> non empty RelStr;
+ coherence
+  proof let A be RelStr such that
+A3:  for x,y being Element of A
+     ex z being Element of A st x >= z & y >= z &
+      for z' being Element of A st x >= z' & y >= z' holds z >= z';
+   consider x,y being Element of A;
+   consider z being Element of A such that
+A4:  x >= z & y >= z and
+      for z' being Element of A st x >= z' & y >= z' holds z >= z'
+      by A3;
+      [z,x] in the InternalRel of A by A4,ORDERS_1:def 9;
+    then x in the carrier of A by ZFMISC_1:106;
+   hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+theorem
+   A is with_suprema iff A~ is with_infima
+  proof
+   thus A is with_suprema implies A~ is with_infima
+     proof assume
+A1:     for a,b ex c st a <= c & b <= c &
+        for c' being Element of A st a <= c' & b <= c'
+          holds c <= c';
+      let x,y be Element of A~;
+      consider c such that
+A2:     ~x <= c & ~y <= c &
+        for c' being Element of A st ~x <= c' & ~y <= c'
+          holds c <= c' by A1;
+      take z = c~;
+A3:     c~ = c & ~(c~) = c~ & ~x = x & (~x)~ = ~x & ~y = y & (~y)~ = ~y
+        by Def6,Def7;
+      hence z <= x & z <= y by A2,Th9;
+      let z' be Element of A~;
+A4:     ~z' = z' & (~z')~ = ~z' by Def6,Def7;
+      assume z' <= x & z' <= y;
+       then ~x <= ~z' & ~y <= ~z' by A3,A4,Th9;
+       then c <= ~z' by A2;
+      hence thesis by A4,Th9;
+     end;
+   assume
+A5:  for x,y being Element of A~
+      ex z being Element of A~ st z <= x & z <= y &
+     for z' being Element of A~ st z' <= x & z' <= y holds z' <= z;
+   let a,b; consider z  being Element of A~ such that
+A6:  z <= a~ & z <= b~ &
+     for z' being Element of A~
+       st z' <= a~ & z' <= b~ holds z' <= z by A5;
+   take c = ~z;
+A7:  ~z = z & (~z)~ = ~z & a~ = a & ~(a~) = a~ & b~ = b & ~(b~) = b~
+     by Def6,Def7;
+   hence a <= c & b <= c by A6,Th9;
+   let c' be Element of A;
+   assume a <= c' & b <= c';
+    then c'~ <= a~ & c'~ <= b~ by Th9;
+    then c'~ <= z by A6;
+   hence thesis by A7,Th9;
+  end;
+
+theorem
+   for L being Lattice holds LattPOSet L is with_suprema with_infima
+  proof let L;
+   thus LattPOSet L is with_suprema
+     proof let x,y be Element of LattPOSet L;
+      take z = (%x"\/"%y)%;
+A1:     %x [= %x"\/"%y & %y [= %y"\/"%x & %y"\/"%x = %x"\/"%y & %x = x &
+       (%x)% = %x & %y = y & (%y)% = %y by Def3,Def4,LATTICES:22;
+      hence x <= z & y <= z by Th7;
+      let z' be Element of LattPOSet L;
+A2:     %z' = z' & (%z')% = %z' by Def3,Def4;
+      assume x <= z' & y <= z';
+       then %x [= %z' & %y [= %z' by A1,A2,Th7;
+       then %x"\/"%y [= %z' by FILTER_0:6;
+      hence thesis by A2,Th7;
+     end;
+   let x,y be Element of LattPOSet L;
+   take z = (%x"/\"%y)%;
+A3:  %x"/\"%y [= %x & %y"/\"%x [= %y & %y"/\"%x = %x"/\"%y & %x = x &
+    (%x)% = %x & %y = y & (%y)% = %y by Def3,Def4,LATTICES:23;
+   hence z <= x & z <= y by Th7;
+   let z' be Element of LattPOSet L;
+A4:  %z' = z' & (%z')% = %z' by Def3,Def4;
+   assume z' <= x & z' <= y;
+    then %z' [= %x & %z' [= %y by A3,A4,Th7;
+    then %z' [= %x"/\"%y by FILTER_0:7;
+   hence thesis by A4,Th7;
+  end;
+
+definition let IT be RelStr;
+ attr IT is complete means:
+Def12:
+  for X being set ex a being Element of IT st X is_<=_than a &
+   for b being Element of IT st X is_<=_than b holds a <= b;
+end;
+
+definition
+ cluster strict complete non empty Poset;
+  existence
+   proof consider s; set D = {s}; consider R being Order of D;
+    take A = RelStr(#D, R#);
+    thus A is strict;
+   hereby
+    let X be set;
+      s is Element of A by TARSKI:def 1;
+    then reconsider s as Element of A;
+    take s;
+    thus X is_<=_than s
+      proof let a be Element of A such that a in
+ X; thus a <= s by TARSKI:def 1;
+      end;
+    let b be Element of A such that X is_<=_than b; thus s <= b by TARSKI:def 1
+;
+   end;
+thus thesis;
+end;
+end;
+
+reserve A for non empty RelStr, a,b,c,c' for Element of A;
+
+theorem Th12:
+ A is complete implies A is with_suprema with_infima
+  proof assume
+A1:  for X being set ex a st X is_<=_than a &
+     for b st X is_<=_than b holds a <= b;
+   thus A is with_suprema
+     proof let a,b; consider c such that
+A2:     {a,b} is_<=_than c & for c' st {a,b} is_<=_than c' holds c <= c'
+        by A1;
+      take c; a in {a,b} & b in {a,b} by TARSKI:def 2;
+      hence a <= c & b <= c by A2,Def9;
+      let c' such that
+A3:     a <= c' & b <= c';
+         {a,b} is_<=_than c'
+        proof let d be Element of A; assume d in {a,b};
+         hence thesis by A3,TARSKI:def 2;
+        end;
+      hence c <= c' by A2;
+     end;
+   let a,b; set X = {c: c <= a & c <= b};
+   consider c such that
+A4:  X is_<=_than c & for c' st X is_<=_than c' holds c <= c' by A1;
+   take c;
+      X is_<=_than a
+     proof let c; assume c in X;
+       then ex c' st c = c' & c' <= a & c' <= b;
+      hence thesis;
+     end;
+   hence c <= a by A4;
+      X is_<=_than b
+     proof let c; assume c in X;
+       then ex c' st c = c' & c' <= a & c' <= b;
+      hence thesis;
+     end;
+   hence c <= b by A4;
+   let c'; assume
+      c' <= a & c' <= b; then c' in X;
+   hence c' <= c by A4,Def9;
+  end;
+
+definition
+ cluster complete with_suprema with_infima strict non empty Poset;
+  existence
+    proof consider A being complete strict non empty Poset;
+     take A; thus thesis by Th12;
+    end;
+end;
+
+definition let A be RelStr such that
+A1: A is antisymmetric;
+ let a,b be Element of A such that
+A2: ex x being Element of A st a <= x & b <= x &
+   for c being Element of A st a <= c & b <= c holds x <= c;
+ func a"\/"b -> Element of A means :Def13:
+   a <= it & b <= it &
+   for c being Element of A st a <= c & b <= c holds it <= c;
+  existence by A2;
+  uniqueness
+   proof let c1,c2 be Element of A such that
+A3:  a <= c1 & b <= c1 &
+      for c being Element of A st a <= c & b <= c holds c1 <= c and
+A4:  a <= c2 & b <= c2 &
+      for c being Element of A st a <= c & b <= c holds c2 <= c;
+       c1 <= c2 & c2 <= c1 by A3,A4;
+    hence thesis by A1,ORDERS_1:25;
+   end;
+end;
+
+Lm1:
+now let A be non empty antisymmetric with_suprema RelStr;
+ let a,b be Element of A;
+    ex x being Element of A st a <= x & b <= x &
+   for c being Element of A st a <= c & b <= c holds x <= c
+     by Def10;
+ hence for c being Element of A holds c = a"\/"b iff
+   a <= c & b <= c & for d being Element of A st a <= d & b <= d
+    holds c <= d
+    by Def13;
+end;
+
+definition let A be RelStr such that
+A1: A is antisymmetric;
+ let a,b be Element of A such that
+A2: ex x being Element of A st a >= x & b >= x &
+   for c being Element of A st a >= c & b >= c holds x >= c;
+ func a"/\"b -> Element of A means:Def14:
+   it <= a & it <= b &
+   for c being Element of A st c <= a & c <= b holds c <= it;
+  existence by A2;
+  uniqueness
+   proof let c1,c2 be Element of A such that
+A3:  c1 <= a & c1 <= b &
+      for c being Element of A st c <= a & c <= b holds c <= c1 and
+A4:  c2 <= a & c2 <= b &
+      for c being Element of A st c <= a & c <= b holds c <= c2;
+       c1 <= c2 & c2 <= c1 by A3,A4;
+    hence thesis by A1,ORDERS_1:25;
+   end;
+end;
+
+Lm2:
+now let A be non empty antisymmetric with_infima RelStr;
+ let a,b be Element of A;
+    ex x being Element of A st a >= x & b >= x &
+   for c being Element of A st a >= c & b >= c holds x >= c
+    by Def11;
+ hence for c being Element of A holds c = a"/\"b iff
+   a >= c & b >= c & for d being Element of A st a >= d & b >= d
+    holds c >= d
+    by Def14;
+end;
+
+reserve V for with_suprema antisymmetric RelStr,
+ u1,u2,u3,u4 for Element of V;
+reserve N for with_infima antisymmetric RelStr,
+ n1,n2,n3,n4 for Element of N;
+reserve K for with_suprema with_infima reflexive antisymmetric RelStr,
+  k1,k2,k3 for Element of K;
+
+theorem Th13:
+ u1 "\/" u2 = u2 "\/" u1
+  proof
+A1:  u1 <= u1"\/"u2 & u2 <= u1"\/"u2 &
+    for u3 st u1 <= u3 & u2 <= u3 holds u1"\/"u2 <= u3 by Lm1;
+      for u3 st u2 <= u3 & u1 <= u3 holds u1"\/"u2 <= u3 by Lm1;
+   hence thesis by A1,Def13;
+  end;
+
+theorem Th14:
+ V is transitive implies (u1 "\/" u2) "\/" u3 = u1 "\/" (u2 "\/" u3)
+  proof assume
+A1:  V is transitive;
+A2:  u1 <= u1"\/"u2 & u2 <= u1"\/"u2 & u2 <= u2"\/"u3 & u3 <= u2"\/"u3 &
+    u1"\/"u2 <= (u1"\/"u2)"\/"u3 & u3 <= (u1"\/"u2)"\/"u3 by Lm1;
+then A3:  u1 <= (u1"\/"u2)"\/"u3 & u2 <= (u1"\/"u2)"\/"u3 by A1,ORDERS_1:26;
+then A4:  u2"\/"u3 <= (u1"\/"u2)"\/"u3 by A2,Lm1;
+      now let u4; assume
+A5:    u1 <= u4 & u2"\/"u3 <= u4;
+then A6:    u2 <= u4 & u3 <= u4 by A1,A2,ORDERS_1:26;
+      then u1"\/"u2 <= u4 by A5,Lm1;
+     hence (u1"\/"u2)"\/"u3 <= u4 by A6,Lm1;
+    end;
+   hence thesis by A3,A4,Def13;
+  end;
+
+theorem Th15:
+ n1 "/\" n2 = n2 "/\" n1
+  proof
+A1:  n1"/\"n2 <= n1 & n1"/\"n2 <= n2 &
+    for n3 st n3 <= n1 & n3 <= n2 holds n3 <= n1"/\"n2 by Lm2;
+      for n3 st n3 <= n2 & n3 <= n1 holds n3 <= n1"/\"n2 by Lm2;
+   hence thesis by A1,Def14;
+  end;
+
+theorem Th16:
+ N is transitive implies (n1 "/\" n2) "/\" n3 = n1 "/\" (n2 "/\" n3)
+  proof assume
+A1:  N is transitive;
+A2:  n1"/\"n2 <= n1 & n1"/\"n2 <= n2 & n2"/\"n3 <= n2 & n2"/\"n3 <= n3 &
+    (n1"/\"n2)"/\"n3 <= n1"/\"n2 & (n1"/\"n2)"/\"n3 <= n3 by Lm2;
+then A3:  (n1"/\"n2)"/\"n3 <= n1 & (n1"/\"n2)"/\"n3 <= n2 by A1,ORDERS_1:26;
+then A4:  (n1"/\"n2)"/\"n3 <= n2"/\"n3 by A2,Lm2;
+      now let n4; assume
+A5:    n4 <= n1 & n4 <= n2"/\"n3;
+then A6:    n4 <= n2 & n4 <= n3 by A1,A2,ORDERS_1:26;
+      then n4 <= n1"/\"n2 by A5,Lm2;
+     hence n4 <= (n1"/\"n2)"/\"n3 by A6,Lm2;
+    end;
+   hence thesis by A3,A4,Def14;
+  end;
+
+definition let L be with_infima antisymmetric RelStr,
+               x, y be Element of L;
+ redefine func x "/\" y;
+ commutativity by Th15;
+end;
+
+definition let L be with_suprema antisymmetric RelStr,
+               x, y be Element of L;
+ redefine func x "\/" y;
+commutativity by Th13;
+end;
+
+theorem Th17:
+ (k1 "/\" k2) "\/" k2 = k2
+  proof
+      k1"/\"k2 <= k2 & k2 <= k2 & for k3 st k1"/\"
+k2 <= k3 & k2 <= k3 holds k2 <= k3
+     by Lm2;
+   hence thesis by Def13;
+  end;
+
+theorem Th18:
+ k1 "/\" (k1 "\/" k2) = k1
+  proof
+      k1 <= k1 & k1 <= k1"\/"k2 & for k3 st k3 <= k1 & k3 <= k1"\/"
+k2 holds k3 <= k1
+     by Lm1;
+   hence thesis by Def14;
+  end;
+
+theorem Th19:
+ for A being with_suprema with_infima Poset
+   ex L being strict Lattice st the RelStr of A = LattPOSet L
+  proof let A be with_suprema with_infima Poset;
+   defpred X[Element of A,Element of A,set] means
+     for x',y' being Element of A st x' = $1 & y' = $2
+         holds $3 = x'"\/"y';
+A1:  for x,y being Element of A
+       ex u being Element of A st X[x,y,u]
+     proof let x,y be Element of A;
+       reconsider x' = x, y' = y as Element of A
+        ;
+       take x'"\/"y';
+       thus thesis;
+     end;
+   consider j being BinOp of the carrier of A such that
+A2:  for x,y being Element of A holds X[x,y,j.[x,y]]
+        from FuncEx2D(A1);
+   defpred X[Element of A,Element of A,set] means
+     for x',y' being Element of A st x' = $1 & y' = $2
+         holds $3 = x'"/\"y';
+A3:  for x,y being Element of A
+       ex u being Element of A st X[x,y,u]
+     proof let x,y be Element of A;
+       reconsider x' = x, y' = y as Element of A
+        ;
+       take x'"/\"y';
+       thus thesis;
+     end;
+   consider m being BinOp of the carrier of A such that
+A4:  for x,y being Element of A holds X[x,y,m.[x,y]]
+        from FuncEx2D(A3);
+   set L = LattStr(#the carrier of A, j, m#);
+A5: now let a,b be Element of L;
+      reconsider x = a, y = b as Element of A;
+      j.(y,x) = j.[y,x] & j.(x,y) = j.[x,y] by BINOP_1:def 1;
+      then x"\/"y = y"\/"x & a"\/"b = j.(a,b) & b"\/"a = j.(b,a) & j.(x,y) = x
+"\/"y &
+      j.(y,x) = y"\/"x by A2,LATTICES:def 1;
+     hence a"\/"b = b"\/"a;
+    end;
+A6: now let a,b,c be Element of L;
+     reconsider x = a, y = b, z = c as Element of A
+      ;
+     thus a"\/"(b"\/"c) = j.(a,b"\/"c) by LATTICES:def 1
+           .= j.(a,j.(b,c)) by LATTICES:def 1
+           .= j.(a,j.[b,c]) by BINOP_1:def 1
+           .= j.(x,y"\/"z) by A2
+           .= j.[x,y"\/"z] by BINOP_1:def 1
+           .= x"\/"(y"\/"z) by A2
+           .= x"\/"y"\/"z by Th14
+           .= j.[x"\/"y,z] by A2
+           .= j.(x"\/"y,z) by BINOP_1:def 1
+           .= j.(j.[x,y],z) by A2
+           .= j.(j.(x,y),z) by BINOP_1:def 1
+           .= j.(a"\/"b,c) by LATTICES:def 1
+           .= (a"\/"b)"\/"c by LATTICES:def 1;
+    end;
+A7: now let a,b be Element of L;
+     reconsider x = a, y = b as Element of A;
+     thus (a"/\"b)"\/"b = j.(a"/\"b,b) by LATTICES:def 1
+           .= j.(m.(x,y),y) by LATTICES:def 2
+           .= j.(m.[x,y],y) by BINOP_1:def 1
+           .= j.(x"/\"y,y) by A4
+           .= j.[x"/\"y,y] by BINOP_1:def 1
+           .= (x"/\"y)"\/"y by A2
+           .= b by Th17;
+    end;
+A8: now let a,b be Element of L;
+      reconsider x = a, y = b as Element of A;
+      m.(y,x) = m.[y,x] & m.(x,y) = m.[x,y] by BINOP_1:def 1;
+      then x"/\"y = y"/\"x & a"/\"b = m.(a,b) & b"/\"a = m.(b,a) & m.(x,y) = x
+"/\"y &
+      m.(y,x) = y"/\"x by A4,LATTICES:def 2;
+     hence a"/\"b = b"/\"a;
+    end;
+A9: now let a,b,c be Element of L;
+     reconsider x = a, y = b, z = c as Element of A;
+     thus a"/\"(b"/\"c) = m.(a,b"/\"c) by LATTICES:def 2
+           .= m.(a,m.(b,c)) by LATTICES:def 2
+           .= m.(a,m.[b,c]) by BINOP_1:def 1
+           .= m.(x,y"/\"z) by A4
+           .= m.[x,y"/\"z] by BINOP_1:def 1
+           .= x"/\"(y"/\"z) by A4
+           .= x"/\"y"/\"z by Th16
+           .= m.[x"/\"y,z] by A4
+           .= m.(x"/\"y,z) by BINOP_1:def 1
+           .= m.(m.[x,y],z) by A4
+           .= m.(m.(x,y),z) by BINOP_1:def 1
+           .= m.(a"/\"b,c) by LATTICES:def 2
+           .= (a"/\"b)"/\"c by LATTICES:def 2;
+    end;
+      now let a,b be Element of L;
+     reconsider x = a, y = b as Element of A;
+     thus a"/\"(a"\/"b) = m.(a,a"\/"b) by LATTICES:def 2
+           .= m.(x,j.(x,y)) by LATTICES:def 1
+           .= m.(x,j.[x,y]) by BINOP_1:def 1
+           .= m.(x,x"\/"y) by A2
+           .= m.[x,x"\/"y] by BINOP_1:def 1
+           .= x"/\"(x"\/"y) by A4
+           .= a by Th18;
+    end;
+    then L is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+    by A5,A6,A7,A8,A9,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+   then reconsider L as strict Lattice by LATTICES:def 10;
+   take L;
+A10:  LattRel L = {[p,q] where p is Element of L,
+                             q is Element of L: p [= q}
+     by FILTER_1:def 8;
+      LattRel L = the InternalRel of A
+     proof let x,y be set;
+      thus [x,y] in LattRel L implies [x,y] in the InternalRel of A
+        proof assume [x,y] in LattRel L;
+         then consider p,q being Element of L such that
+A11:        [x,y] = [p,q] & p [= q by A10;
+         reconsider p' = p, q' = q as Element of A;
+            p'"\/"q' = j.[p',q'] by A2
+                .= j.(p',q') by BINOP_1:def 1
+                .= p"\/"q by LATTICES:def 1
+                .= q by A11,LATTICES:def 3;
+          then p' <= q' by Lm1;
+         hence thesis by A11,ORDERS_1:def 9;
+        end;
+      assume
+A12:     [x,y] in the InternalRel of A;
+      then consider x1,x2 being set such that
+A13:     x1 in the carrier of A & x2 in the carrier of A & [x,y] = [x1,x2]
+        by ZFMISC_1:103;
+      reconsider x1, x2 as Element of A by A13;
+      reconsider y1 = x1, y2 = x2 as Element of L;
+         x1 <= x2 & x2 <= x2 by A12,A13,ORDERS_1:def 9;
+       then x1"\/"x2 <= x2 & x2 <= x1"\/"x2 by Lm1;
+       then x2 = x1"\/"x2 by ORDERS_1:25
+         .= j.[x1,x2] by A2
+         .= j.(x1,x2) by BINOP_1:def 1
+         .= y1"\/"y2 by LATTICES:def 1;
+       then y1 [= y2 by LATTICES:def 3;
+      hence thesis by A10,A13;
+     end;
+   hence thesis by Def2;
+  end;
+
+definition let A be RelStr such that
+A1:  A is with_suprema with_infima Poset;
+ func latt A -> strict Lattice means:
+Def15:
+  the RelStr of A = LattPOSet it;
+  existence by A1,Th19;
+  uniqueness by Th6;
+end;
+
+theorem
+   (LattRel L)~ = LattRel (L.:) & (LattPOSet L)~ = LattPOSet (L.:)
+  proof
+A1:  LattRel L = {[p,q]: p [= q} & LattRel (L.:) = {[p',q']
+       where p' is Element of L.:,
+             q' is Element of L.: : p' [= q'} &
+    L.: = LattStr(#carr(L), met(L), join(L)#) &
+    the LattStr of L = LattStr(#carr(L), join(L), met(L)#)
+      by FILTER_1:def 8,LATTICE2:def 2;
+A2:  LattPOSet L = RelStr(#carr(L), LattRel L#) &
+    LattPOSet (L.:) = RelStr(#carr(L.:), LattRel (L.:)#) by Def2;
+   thus (LattRel L)~ = LattRel (L.:)
+     proof let x,y be set;
+      thus [x,y] in (LattRel L)~ implies [x,y] in LattRel (L.:)
+        proof assume [x,y] in (LattRel L)~;
+          then [y,x] in LattRel L by RELAT_1:def 7;
+         then consider p,q such that
+A3:        [y,x] = [p,q] & p [= q by A1;
+         reconsider p' = p, q' = q as Element of L.: by A1;
+            x = q & y = p & q' [= p' by A3,LATTICE2:53,ZFMISC_1:33;
+         hence [x,y] in LattRel (L.:) by A1;
+        end;
+      assume [x,y] in LattRel (L.:);
+      then consider p', q' being Element of L.: such that
+A4:     [x,y] = [p',q'] & p' [= q' by A1;
+      reconsider p = p', q = q' as Element of L by A1;
+         x = p & y = q & q [= p by A4,LATTICE2:54,ZFMISC_1:33;
+       then [y,x] in LattRel L by A1;
+      hence thesis by RELAT_1:def 7;
+     end;
+   hence thesis by A1,A2,Def5;
+  end;
+
+begin :: Complete Lattice
+
+definition
+ let L be non empty LattStr, p be Element of L, X be set;
+ pred p is_less_than X means :Def16:
+   for q being Element of L st q in X holds p [= q;
+  synonym X is_great_than p;
+
+ pred X is_less_than p means :Def17:
+   for q being Element of L st q in X holds q [= p;
+  synonym p is_great_than X;
+end;
+
+theorem
+   for L being Lattice, p,q,r being Element of L holds
+   p is_less_than {q,r} iff p [= q"/\"r
+  proof let L be Lattice, p,q,r be Element of L;
+A1:  q in {q,r} & r in {q,r} by TARSKI:def 2;
+   thus p is_less_than {q,r} implies p [= q"/\"r
+     proof assume p is_less_than {q,r};
+       then p [= q & p [= r by A1,Def16;
+      hence thesis by FILTER_0:7;
+     end;
+   assume
+A2:  p [= q"/\"r;
+   let a be Element of L; assume a in {q,r};
+    then (a = q or a = r) & q"/\"r [= q & r"/\"q [= r & q"/\"r = r"/\"q
+     by LATTICES:23,TARSKI:def 2;
+   hence thesis by A2,LATTICES:25;
+  end;
+
+theorem
+   for L being Lattice, p,q,r being Element of L holds
+  p is_great_than {q,r} iff q"\/"r [= p
+  proof let L be Lattice, p,q,r be Element of L;
+A1:  q in {q,r} & r in {q,r} by TARSKI:def 2;
+   thus p is_great_than {q,r} implies q"\/"r [= p
+     proof assume p is_great_than {q,r};
+       then q [= p & r [= p by A1,Def17;
+      hence thesis by FILTER_0:6;
+     end;
+   assume
+A2:  q"\/"r [= p;
+   let a be Element of L; assume a in {q,r};
+    then (a = q or a = r) & q [= q"\/"r & r [= r"\/"q & q"\/"r = r"\/"q
+     by LATTICES:22,TARSKI:def 2;
+   hence thesis by A2,LATTICES:25;
+  end;
+
+definition let IT be non empty LattStr;
+ attr IT is complete means :Def18:
+  for X being set ex p being Element of IT st X is_less_than p &
+    for r being Element of IT st X is_less_than r holds p [= r;
+
+ attr IT is \/-distributive means :Def19:
+  for X for a,b,c being Element of IT st X is_less_than a &
+   (for d being Element of IT st X is_less_than d holds a [= d)
+    & {b"/\"a' where a' is Element of IT: a' in
+ X} is_less_than c &
+   for d being Element of IT st
+    {b"/\"a' where a' is Element of IT: a' in X} is_less_than d
+    holds c [= d
+   holds b"/\"a [= c;
+
+ attr IT is /\-distributive means
+    for X for a,b,c being Element of IT st X is_great_than a &
+   (for d being Element of IT st X is_great_than d holds d [= a)
+   & {b"\/"a' where a' is Element of IT: a' in
+ X} is_great_than c &
+   for d being Element of IT st
+    {b"\/"a' where a' is Element of IT: a' in X} is_great_than d
+    holds d [= c
+   holds c [= b"\/"a;
+end;
+
+theorem
+   for B being B_Lattice, a being Element of B holds
+   X is_less_than a iff {b` where b is Element of B: b in X}
+    is_great_than a`
+  proof let B be B_Lattice, a be Element of B;
+   set Y = {b` where b is Element of B: b in X};
+   thus X is_less_than a implies Y is_great_than a`
+     proof assume
+A1:     for b being Element of B st b in X holds b [= a;
+      let b be Element of B; assume
+         b in Y;
+      then consider c being Element of B such that
+A2:     b = c` & c in X;
+         c [= a by A1,A2;
+      hence thesis by A2,LATTICES:53;
+     end;
+   assume
+A3:  for b being Element of B st b in Y holds a` [= b;
+   let b be Element of B; assume
+      b in X;
+    then b` in Y;
+    then a` [= b` & a`` = a & b`` = b by A3,LATTICES:49;
+   hence thesis by LATTICES:53;
+  end;
+
+theorem Th24:
+ for B being B_Lattice, a being Element of B holds
+   X is_great_than a iff {b` where b is Element of B: b in X}
+    is_less_than a`
+  proof let B be B_Lattice, a be Element of B;
+   set Y = {b` where b is Element of B: b in X};
+   thus X is_great_than a implies Y is_less_than a`
+     proof assume
+A1:     for b being Element of B st b in X holds a [= b;
+      let b be Element of B; assume
+         b in Y;
+      then consider c being Element of B such that
+A2:     b = c` & c in X;
+         a [= c by A1,A2;
+      hence thesis by A2,LATTICES:53;
+     end;
+   assume
+A3:  for b being Element of B st b in Y holds b [= a`;
+   let b be Element of B; assume
+      b in X;
+    then b` in Y;
+    then b` [= a` & a`` = a & b`` = b by A3,LATTICES:49;
+   hence thesis by LATTICES:53;
+  end;
+
+theorem Th25:
+ BooleLatt X is complete
+  proof set B = BooleLatt X;
+   let x be set; set p = union (x /\ bool X);
+      x /\ bool X c= bool X by XBOOLE_1:17;
+    then A1: p c= union bool X & union bool X = X by ZFMISC_1:95,99;
+then A2:  p in bool X & carr(B) = bool X by Def1;
+   reconsider p as Element of B by A1,Def1;
+   take p;
+   thus x is_less_than p
+     proof let q be Element of B; assume q in x;
+       then q in x /\ bool X by A2,XBOOLE_0:def 3;
+       then q c= p by ZFMISC_1:92;
+      hence thesis by Th2;
+     end;
+   let r be Element of B such that
+A3:  for q being Element of B st q in x holds q [= r;
+      now let z be set; assume
+A4:    z in x /\ bool X;
+then A5:    z in x & z in bool X by XBOOLE_0:def 3;
+     reconsider z' = z as Element of B by A2,A4,XBOOLE_0:def 3;
+        z' [= r by A3,A5;
+     hence z c= r by Th2;
+    end;
+    then p c= r by ZFMISC_1:94;
+   hence thesis by Th2;
+  end;
+
+theorem Th26:
+ BooleLatt X is \/-distributive
+  proof let x be set; set B = BooleLatt X;
+   let a,b,c be Element of B such that
+A1: x is_less_than a and
+A2: for d being Element of B st x is_less_than d holds a [= d
+     and
+A3: {b"/\"
+a' where a' is Element of B: a' in x} is_less_than c and
+A4: for d being Element of B st
+     {b"/\"a' where a' is Element of B: a' in x} is_less_than d
+     holds c [= d;
+   set Y = {b"/\"a' where a' is Element of B: a' in x};
+A5:  carr(B) = bool X by Def1;
+A6:  Y c= bool X
+     proof let z be set; assume z in Y;
+       then ex a' being Element of B st z = b"/\"a' & a' in x;
+      hence thesis by A5;
+     end;
+      x /\ bool X c= bool X by XBOOLE_1:17;
+    then (union (x /\ bool X)) c= union bool X & (union Y)
+ c= union bool X & union bool X = X
+     by A6,ZFMISC_1:95,99;
+   then reconsider p = union (x /\ bool X),q = union Y
+     as Element of B by Def1;
+      now let y be set; assume
+A7:    y in x /\ bool X;
+then A8:    y in x & y in bool X by XBOOLE_0:def 3;
+     reconsider y' = y as Element of B by A5,A7,XBOOLE_0:def 3;
+        y' [= a by A1,A8,Def17;
+     hence y c= a by Th2;
+    end;
+then A9:  p c= a by ZFMISC_1:94;
+      x is_less_than p
+     proof let q be Element of B; assume q in x;
+       then q in x /\ bool X by A5,XBOOLE_0:def 3;
+       then q c= p by ZFMISC_1:92;
+      hence q [= p by Th2;
+     end;
+    then p [= a & a [= p by A2,A9,Th2;
+then A10:  a = p by LATTICES:26;
+      now let y be set; assume
+A11:    y in Y;
+     then consider a' being Element of B such that
+A12:    y = b"/\"a' & a' in x;
+        b"/\"a' [= c by A3,A11,A12,Def17;
+     hence y c= c by A12,Th2;
+    end;
+then A13:  q c= c by ZFMISC_1:94;
+      Y is_less_than q
+     proof let p be Element of B; assume p in Y;
+       then p c= q by ZFMISC_1:92;
+      hence p [= q by Th2;
+     end;
+    then q [= c & c [= q by A4,A13,Th2;
+then A14:  c = q & b /\ a = b"/\"a by Th1,LATTICES:26;
+      b /\ a c= c
+     proof let z be set; assume z in b /\ a;
+then A15:     z in b & z in a by XBOOLE_0:def 3;
+      then consider y being set such that
+A16:     z in y & y in x /\ bool X by A10,TARSKI:def 4;
+A17:     y in x & y in bool X by A16,XBOOLE_0:def 3;
+      reconsider y as Element of B by A5,A16,XBOOLE_0:def 3;
+         b"/\"y in Y & b"/\"
+y = b /\ y & z in b /\ y by A15,A16,A17,Th1,XBOOLE_0:def 3;
+      hence thesis by A14,TARSKI:def 4;
+     end;
+   hence b"/\"a [= c by A14,Th2;
+  end;
+
+theorem Th27:
+ BooleLatt X is /\-distributive
+  proof let x be set; set B = BooleLatt X;
+   let a,b,c be Element of B such that
+A1: x is_great_than a and
+A2: for d being Element of B st x is_great_than d holds d [= a
+    and
+A3: {b"\/"a' where a' is Element of B: a' in
+ x} is_great_than c and
+A4: for d being Element of B st
+     {b"\/"a' where a' is Element of B: a' in x} is_great_than d
+     holds d [= c;
+   set x' = {e` where e is Element of B: e in x},
+       y = {b"\/"e where e is Element of B: e in x},
+       y' = {e` where e is Element of B: e in y},
+       z = {b`"/\"e where e is Element of B: e in x'};
+A5:  z = y'
+     proof
+      thus z c= y'
+        proof let s; assume s in z;
+         then consider e being Element of B such that
+A6:       s = b`"/\"e & e in x';
+         consider i being Element of B such that
+A7:       e = i` & i in x by A6;
+            b"\/"i in y & (b"\/"i)` = s by A6,A7,LATTICES:51;
+         hence thesis;
+        end;
+      let s; assume s in y';
+      then consider e being Element of B such that
+A8:    s = e` & e in y;
+      consider i being Element of B such that
+A9:    e = b"\/"i & i in x by A8;
+         i` in x' & s = b`"/\"i` by A8,A9,LATTICES:51;
+      hence thesis;
+     end;
+A10: a`` = a & b`` = b & c`` = c by LATTICES:49;
+A11: x' is_less_than a` by A1,Th24;
+A12: for d being Element of B st x' is_less_than d holds a` [= d
+     proof let d be Element of B;
+A13:    d`` = d by LATTICES:49;
+      assume x' is_less_than d;
+       then x is_great_than d` by A13,Th24;
+       then d` [= a by A2;
+      hence thesis by A13,LATTICES:53;
+     end;
+A14: z is_less_than c` by A3,A5,Th24;
+A15: for d being Element of B st z is_less_than d holds c` [= d
+     proof let d be Element of B;
+A16:    d`` = d by LATTICES:49;
+      assume z is_less_than d;
+       then y is_great_than d` by A5,A16,Th24;
+       then d` [= c by A4;
+      hence thesis by A16,LATTICES:53;
+     end;
+      B is \/-distributive by Th26;
+    then b`"/\"a` [= c` & (b`"/\"a`)` = b``"\/"
+a`` by A11,A12,A14,A15,Def19,LATTICES:50;
+   hence c [= b"\/"a by A10,LATTICES:53;
+  end;
+
+definition
+ cluster complete \/-distributive /\-distributive strict Lattice;
+  existence
+   proof consider X;
+       BooleLatt X is complete \/-distributive /\-distributive by Th25,Th26,
+Th27
+;
+    hence thesis;
+   end;
+end;
+
+reserve p',q' for Element of LattPOSet L;
+
+theorem Th28:
+ p is_less_than X iff p% is_<=_than X
+  proof
+   thus p is_less_than X implies p% is_<=_than X
+     proof assume
+A1:     for q st q in X holds p [= q;
+      let p';
+A2:     p' = %p' & (%p')% = %p' by Def3,Def4;
+      assume p' in X; then p [= %p' by A1,A2;
+      hence thesis by A2,Th7;
+     end;
+   assume
+A3:  for q' st q' in X holds p% <= q';
+   let q;
+A4:  q = q% by Def3;
+   assume q in X; then p% <= q% by A3,A4;
+   hence thesis by Th7;
+  end;
+
+theorem
+   p' is_<=_than X iff %p' is_less_than X
+  proof (%p')% = %p' & %p' = p' by Def3,Def4;
+   hence thesis by Th28;
+  end;
+
+theorem Th30:
+ X is_less_than p iff X is_<=_than p%
+  proof
+   thus X is_less_than p implies X is_<=_than p%
+     proof assume
+A1:     for q st q in X holds q [= p;
+      let p';
+A2:     p' = %p' & (%p')% = %p' by Def3,Def4;
+      assume p' in X; then %p' [= p by A1,A2;
+      hence thesis by A2,Th7;
+     end;
+   assume
+A3:  for q' st q' in X holds q' <= p%;
+   let q;
+A4:  q = q% by Def3;
+   assume q in X; then q% <= p% by A3,A4;
+   hence thesis by Th7;
+  end;
+
+theorem Th31:
+ X is_<=_than p' iff X is_less_than %p'
+  proof (%p')% = %p' & %p' = p' by Def3,Def4;
+   hence thesis by Th30;
+  end;
+
+ definition let A be complete (non empty Poset);
+  cluster latt A -> complete;
+   coherence
+    proof A is with_suprema with_infima by Th12;
+then A1:    the RelStr of A = LattPOSet latt A by Def15; set B = LattPOSet latt
+A;
+        latt A is complete
+       proof let X; consider a being Element of A such that
+A2:       X is_<=_than a &
+         for b being Element of A st X is_<=_than b
+          holds a <= b by Def12;
+        reconsider a' = a as Element of B by A1;
+        take p = %a';
+A3:       p% = p & p = a by Def3,Def4;
+        thus X is_less_than p
+          proof let q be Element of latt A;
+A4:          q% = q by Def3;
+           then reconsider b = q as Element of A by A1;
+           assume q in X; then b <= a by A2,Def9;
+            then [b,a] in the InternalRel of A by ORDERS_1:def 9;
+            then q% <= a' by A1,A4,ORDERS_1:def 9;
+           hence q [= p by A3,Th7;
+          end;
+        let q be Element of latt A; assume X is_less_than q;
+        then A5:       X is_<=_than q% by Th30;
+        reconsider b = q% as Element of A by A1;
+           X is_<=_than b
+          proof let c be Element of A;
+           reconsider c' = c as Element of B by A1;
+           assume c in X; then c' <= q% by A5,Def9;
+            then [c,b] in the InternalRel of the RelStr of A by A1,ORDERS_1:def
+9;
+           hence c <= b by ORDERS_1:def 9;
+          end;
+         then a <= b by A2;
+         then [a,b] in the InternalRel of A by ORDERS_1:def 9;
+         then a' <= q% by A1,ORDERS_1:def 9;
+        hence thesis by A3,Th7;
+       end;
+     hence thesis;
+    end;
+ end;
+
+definition let L be non empty LattStr such that
+A1: L is complete Lattice;
+ let X be set;
+ func "\/"(X,L) -> Element of L means:
+Def21:
+  X is_less_than it &
+   for r being Element of L st X is_less_than r holds it [= r;
+  existence by A1,Def18;
+  uniqueness
+   proof let p1, p2 be Element of L such that
+A2:  X is_less_than p1 &
+      for r being Element of L st X is_less_than r
+        holds p1 [= r and
+A3:  X is_less_than p2 &
+      for r being Element of L st X is_less_than r
+        holds p2 [= r;
+       p1 [= p2 & p2 [= p1 by A2,A3;
+    hence thesis by A1,LATTICES:26;
+   end;
+end;
+
+definition let L be non empty LattStr, X be set;
+ func "/\"(X,L) -> Element of L equals :Def22:
+   "\/"({p where p is Element of L: p is_less_than X},L);
+  correctness;
+end;
+
+definition let L be non empty LattStr, X be Subset of L;
+ redefine func "\/"(X,L); synonym "\/" X; func "/\"(X,L); synonym "/\" X;
+end;
+
+reserve C for complete Lattice,
+        a,a',b,b',c,d for Element of C, X,Y for set;
+
+theorem Th32:
+ "\/"({a"/\"b: b in X}, C) [= a"/\""\/"(X,C)
+  proof set Y = {a"/\"b: b in X};
+      Y is_less_than a"/\""\/"(X,C)
+     proof let c; assume c in Y;
+      then consider b such that
+A1:     c = a"/\"b & b in X;
+         X is_less_than "\/"(X,C) by Def21;
+       then b [= "\/"(X,C) by A1,Def17;
+      hence thesis by A1,LATTICES:27;
+     end;
+   hence thesis by Def21;
+  end;
+
+theorem Th33:
+ C is \/-distributive iff for X, a holds a"/\""\/"(X,C) [= "\/"({a"/\"
+b: b in X}, C)
+  proof
+   thus C is \/-distributive implies for X, a holds
+       a"/\""\/"(X,C) [= "\/"({a"/\"b: b in X}, C)
+     proof assume
+A1:     for X for a,b,c st X is_less_than a &
+       (for d st X is_less_than d holds a [= d) &
+       {b"/\"a': a' in X} is_less_than c &
+       for d st {b"/\"b': b' in X} is_less_than d holds c [= d
+        holds b"/\"a [= c;
+      let X, a; set Y = {a"/\"b: b in X};
+         X is_less_than "\/"(X,C) &
+       (for d st X is_less_than d holds "\/"(X,C) [= d) &
+       Y is_less_than "\/"(Y,C) &
+       (for d st Y is_less_than d holds "\/"(Y,C) [= d) by Def21;
+      hence thesis by A1;
+     end;
+   assume
+A2:  for X, a holds a"/\""\/"(X,C) [= "\/"({a"/\"b: b in X}, C);
+   let X; let a,b,c;
+   assume
+      X is_less_than a &
+    (for d st X is_less_than d holds a [= d) &
+    {b"/\"a': a' in X} is_less_than c &
+    for d st {b"/\"b': b' in X} is_less_than d holds c [= d;
+    then a = "\/"(X,C) & c = "\/"({b"/\"a': a' in X}, C) by Def21;
+   hence b"/\"a [= c by A2;
+  end;
+
+theorem Th34:
+ a = "/\"(X,C) iff a is_less_than X & for b st b is_less_than X holds b [= a
+  proof set Y = {b: b is_less_than X};
+A1:    "/\"(X,C) = "\/"(Y, C) by Def22;
+then A2:  a = "/\"(X,C) iff Y is_less_than a &
+     for c st Y is_less_than c holds a [= c by Def21;
+   thus a = "/\"(X,C) implies a is_less_than X &
+      for b st b is_less_than X holds b [= a
+     proof assume A3: a = "/\"(X,C);
+then A4:     Y is_less_than a & for c st Y is_less_than c holds a [= c by A1,
+Def21;
+      thus a is_less_than X
+        proof let b such that
+A5:        b in X;
+            Y is_less_than b
+           proof let c; assume c in Y;
+             then ex d being Element of C st c = d &
+                   d is_less_than X;
+            hence thesis by A5,Def16;
+           end;
+         hence thesis by A1,A3,Def21;
+        end;
+      let b; assume b is_less_than X; then b in Y;
+      hence thesis by A4,Def17;
+     end;
+   assume
+A6:  a is_less_than X & for b st b is_less_than X holds b [= a;
+A7:  Y is_less_than a
+     proof let b; assume b in Y;
+       then ex c st b = c & c is_less_than X;
+      hence thesis by A6;
+     end;
+      a in Y by A6;
+   hence thesis by A2,A7,Def17;
+  end;
+
+theorem Th35:
+ a"\/""/\"(X,C) [= "/\"({a"\/"b: b in X}, C)
+  proof set Y = {a"\/"b: b in X};
+      Y is_great_than a"\/""/\"(X,C)
+     proof let c; assume c in Y;
+      then consider b such that
+A1:     c = a"\/"b & b in X;
+         X is_great_than "/\"(X,C) by Th34;
+       then "/\"(X,C) [= b by A1,Def16;
+      hence thesis by A1,FILTER_0:1;
+     end;
+   hence thesis by Th34;
+  end;
+
+theorem Th36:
+ C is /\-distributive iff for X, a holds "/\"({a"\/"b: b in X}, C) [= a"\/""/\"
+(X,C)
+  proof
+   thus C is /\-distributive implies for X, a holds
+       "/\"({a"\/"b: b in X}, C) [= a"\/""/\"(X,C)
+     proof assume
+A1:     for X for a,b,c st X is_great_than a &
+       (for d st X is_great_than d holds d [= a) &
+       {b"\/"a': a' in X} is_great_than c &
+       for d st {b"\/"b': b' in X} is_great_than d holds d [= c
+        holds c [= b"\/"a;
+      let X, a; set Y = {a"\/"b: b in X};
+         X is_great_than "/\"(X,C) &
+       (for d st X is_great_than d holds d [= "/\"(X,C)) &
+       Y is_great_than "/\"(Y,C) &
+       (for d st Y is_great_than d holds d [= "/\"(Y,C)) by Th34;
+      hence thesis by A1;
+     end;
+   assume
+A2:  for X, a holds "/\"({a"\/"b: b in X}, C) [= a"\/""/\"(X,C);
+   let X; let a,b,c; assume
+      X is_great_than a &
+    (for d st X is_great_than d holds d [= a) &
+    {b"\/"a': a' in X} is_great_than c &
+    for d st {b"\/"b': b' in X} is_great_than d holds d [= c;
+    then a = "/\"(X,C) & c = "/\"({b"\/"a': a' in X}, C) by Th34;
+   hence c [= b"\/"a by A2;
+  end;
+
+theorem
+   "\/"(X,C) = "/\"({a: a is_great_than X}, C)
+  proof set Y = {a: a is_great_than X};
+A1:  "\/"(X,C) is_less_than Y
+     proof let a; assume a in Y;
+       then ex b st a = b & b is_great_than X;
+      hence thesis by Def21;
+     end;
+      X is_less_than "\/"(X,C) by Def21;
+    then "\/"(X,C) in Y;
+    then for b st b is_less_than Y holds b [= "\/"(X,C) by Def16;
+   hence thesis by A1,Th34;
+  end;
+
+theorem Th38:
+ a in X implies a [= "\/"(X,C) & "/\"(X,C) [= a
+  proof assume
+A1:  a in X;
+      X is_less_than "\/"(X,C) by Def21;
+   hence a [= "\/"(X,C) by A1,Def17;
+      {b: b is_less_than X} is_less_than a
+     proof let c; assume c in {b: b is_less_than X};
+       then ex b st c = b & b is_less_than X;
+      hence c [= a by A1,Def16;
+     end;
+    then "\/"({b: b is_less_than X}, C) [= a by Def21;
+   hence thesis by Def22;
+  end;
+
+canceled;
+
+theorem Th40:
+ a is_less_than X implies a [= "/\"(X,C)
+  proof assume a is_less_than X;
+    then a in {b: b is_less_than X};
+    then a [= "\/"({b: b is_less_than X}, C) by Th38;
+   hence thesis by Def22;
+  end;
+
+theorem Th41:
+ a in X & X is_less_than a implies "\/"(X,C) = a
+  proof assume a in X & X is_less_than a;
+    then "\/"(X,C) [= a & a [= "\/"(X,C) by Def21,Th38;
+   hence thesis by LATTICES:26;
+  end;
+
+theorem Th42:
+ a in X & a is_less_than X implies "/\"(X,C) = a
+  proof assume a in X & a is_less_than X;
+    then "/\"(X,C) [= a & a [= "/\"(X,C) by Th38,Th40;
+   hence thesis by LATTICES:26;
+  end;
+
+theorem
+   "\/"{a} = a & "/\"{a} = a
+  proof
+A1:  a in {a} by TARSKI:def 1;
+      {a} is_less_than a
+     proof let b; assume b in {a};
+      hence b [= a by TARSKI:def 1;
+     end;
+   hence "\/"{a} = a by A1,Th41;
+      a is_less_than {a}
+     proof let b; assume b in {a};
+      hence a [= b by TARSKI:def 1;
+     end;
+   hence thesis by A1,Th42;
+  end;
+
+theorem
+    a"\/"b = "\/"{a,b} & a"/\"b = "/\"{a,b}
+  proof
+A1:  {a,b} is_less_than a"\/"b
+     proof let c; assume c in {a,b};
+       then a [= a"\/"b & b [= b"\/"a & b"\/"a = a"\/"b & (c = a or c = b)
+        by LATTICES:22,TARSKI:def 2;
+      hence thesis;
+     end;
+A2:  a in {a,b} & b in {a,b} by TARSKI:def 2;
+      now let c; assume {a,b} is_less_than c;
+      then a [= c & b [= c by A2,Def17;
+     hence a"\/"b [= c by FILTER_0:6;
+    end;
+   hence a"\/"b = "\/"{a,b} by A1,Def21;
+      a"/\"b is_less_than {a,b}
+     proof let c; assume c in {a,b};
+       then c = a or c = b & b"/\"a = a"/\"b by TARSKI:def 2;
+      hence thesis by LATTICES:23;
+     end;
+then A3:  a"/\"b in { c: c is_less_than {a,b}};
+      { c: c is_less_than {a,b}} is_less_than a"/\"b
+     proof let d be Element of C; assume
+         d in { c: c is_less_than {a,b}};
+       then ex c st d = c & c is_less_than {a,b};
+       then d [= a & d [= b by A2,Def16;
+      hence thesis by FILTER_0:7;
+     end;
+   hence a"/\"b = "\/"({c: c is_less_than {a,b}}, C) by A3,Th41
+             .= "/\"{a,b} by Def22;
+  end;
+
+theorem
+   a = "\/"({b: b [= a}, C) & a = "/\"({c: a [= c}, C)
+  proof set X = {b: b [= a}, Y = {c: a [= c};
+A1:  a in X & a in Y;
+      X is_less_than a
+     proof let b; assume b in X;
+       then ex c st b = c & c [= a;
+      hence thesis;
+     end;
+   hence a = "\/"(X,C) by A1,Th41;
+      a is_less_than Y
+     proof let b; assume b in Y;
+       then ex c st b = c & a [= c;
+      hence thesis;
+     end;
+   hence thesis by A1,Th42;
+  end;
+
+theorem Th46:
+ X c= Y implies "\/"(X,C) [= "\/"(Y,C) & "/\"(Y,C) [= "/\"(X,C)
+  proof assume
+A1:  X c= Y;
+      X is_less_than "\/"(Y,C)
+     proof let a; assume a in X;
+       then a in Y & Y is_less_than "\/"(Y,C) by A1,Def21;
+      hence thesis by Def17;
+     end;
+   hence "\/"(X,C) [= "\/"(Y,C) by Def21;
+      "/\"(Y,C) is_less_than X
+     proof let a; assume a in X;
+       then a in Y & "/\"(Y,C) is_less_than Y by A1,Th34;
+      hence thesis by Def16;
+     end;
+   hence thesis by Th34;
+  end;
+
+theorem Th47:
+ "\/"(X,C) = "\/"({a: ex b st a [= b & b in X}, C) &
+   "/\"(X,C) = "/\"({b: ex a st a [= b & a in X}, C)
+  proof set Y = {a: ex b st a [= b & b in X}, Z = {a: ex b st b [= a & b in X};
+      X is_less_than "\/"(Y,C)
+     proof let a;
+      assume a in X; then a in Y;
+      hence thesis by Th38;
+     end;
+then A1:  "\/"(X,C) [= "\/"(Y,C) by Def21;
+      Y is_less_than "\/"(X,C)
+     proof let a; assume a in Y;
+       then ex b st a = b & ex c st b [= c & c in X;
+      then consider c such that
+A2:     a [= c & c in X;
+         c [= "\/"(X,C) by A2,Th38;
+      hence thesis by A2,LATTICES:25;
+     end;
+    then "\/"(Y,C) [= "\/"(X,C) by Def21;
+   hence "\/"(X,C) = "\/"(Y,C) by A1,LATTICES:26;
+      X is_great_than "/\"(Z,C)
+     proof let a;
+      assume a in X; then a in Z;
+      hence thesis by Th38;
+     end;
+then A3:  "/\"(Z,C) [= "/\"(X,C) by Th34;
+      Z is_great_than "/\"(X,C)
+     proof let a; assume a in Z;
+       then ex b st a = b & ex c st c [= b & c in X;
+      then consider c such that
+A4:     c [= a & c in X;
+         "/\"(X,C) [= c by A4,Th38;
+      hence thesis by A4,LATTICES:25;
+     end;
+    then "/\"(X,C) [= "/\"(Z,C) by Th34;
+   hence "/\"(X,C) = "/\"(Z,C) by A3,LATTICES:26;
+  end;
+
+theorem
+    (for a st a in X ex b st a [= b & b in Y) implies "\/"(X,C) [= "\/"(Y,C)
+  proof assume
+A1:  for a st a in X ex b st a [= b & b in Y;
+      X is_less_than "\/"(Y,C)
+     proof let a; assume a in X;
+      then consider b such that
+A2:     a [= b & b in Y by A1;
+         b [= "\/"(Y,C) by A2,Th38;
+      hence thesis by A2,LATTICES:25;
+     end;
+   hence thesis by Def21;
+  end;
+
+theorem
+   X c= bool the carrier of C implies
+   "\/"(union X, C) = "\/"({"\/"
+Y where Y is Subset of C: Y in X}, C)
+  proof set Z = {"\/"Y where Y is Subset of C: Y in X};
+      Z is_less_than "\/"(union X, C)
+     proof let a; assume a in Z;
+      then consider Y being Subset of C such that
+A1:     a = "\/"Y & Y in X;
+         Y c= union X by A1,ZFMISC_1:92;
+      hence thesis by A1,Th46;
+     end;
+then A2:  "\/"(Z,C) [= "\/"(union X, C) by Def21;
+   set V = {a: ex b st a [= b & b in Z};
+   assume
+A3:  X c= bool the carrier of C;
+      union X c= V
+     proof let x be set; assume x in union X;
+      then consider Y such that
+A4:     x in Y & Y in X by TARSKI:def 4;
+      reconsider Y as Subset of C by A3,A4;
+      reconsider a = x as Element of C by A3,A4;
+         a [= "\/"Y & "\/"Y in Z by A4,Th38;
+      hence x in V;
+     end;
+    then "\/"(union X, C) [= "\/"(V,C) by Th46;
+    then "\/"(union X, C) [= "\/"(Z,C) by Th47;
+   hence thesis by A2,LATTICES:26;
+  end;
+
+theorem
+   C is 0_Lattice & Bottom C = "\/"({},C)
+  proof
+A1:  now let a;
+        {} is_less_than ("\/"({},C))"/\"a
+       proof let b; thus thesis; end;
+      then A2: "\/"({},C) [= ("\/"({},C))"/\"a & ("\/"({},C))"/\"a [= "\/"({},C
+)
+      by Def21,LATTICES:23;
+     hence ("\/"({},C))"/\"a = "\/"({},C) by LATTICES:26;
+     thus a"/\"("\/"({},C)) = "\/"({},C) by A2,LATTICES:26;
+    end;
+   then C is lower-bounded by LATTICES:def 13;
+   hence thesis by A1,LATTICES:def 16;
+  end;
+
+theorem
+   C is 1_Lattice & Top C = "\/"(the carrier of C, C)
+  proof set j = "\/"(the carrier of C, C);
+A1: now let a;
+      A2: j [= j"\/"a & j"\/"a [= j by Th38,LATTICES:22;
+     hence j"\/"a = j by LATTICES:26;
+     thus a"\/"j = j by A2,LATTICES:26;
+    end;
+   then C is upper-bounded by LATTICES:def 14;
+   hence thesis by A1,LATTICES:def 17;
+  end;
+
+theorem Th52:
+ C is I_Lattice implies a => b = "\/"({c: a"/\"c [= b}, C)
+  proof set X = {a': a"/\"a' [= b};
+   assume
+A1:  C is I_Lattice;
+    then a"/\"(a=>b) [= b by FILTER_0:def 8;
+then A2:  a=>b in X;
+      X is_less_than a=>b
+     proof let c; assume c in X;
+       then ex a' st c = a' & a"/\"a' [= b;
+      hence c [= a=>b by A1,FILTER_0:def 8;
+     end;
+   hence thesis by A2,Th41;
+  end;
+
+theorem
+   C is I_Lattice implies C is \/-distributive
+  proof assume
+A1:  C is I_Lattice;
+      now let X,a;
+     set Y = {a"/\"a': a' in X}, b = "\/"(X,C), c = "\/"(Y,C), Z = {b': a"/\"
+b' [= c};
+        X is_less_than a=>c
+       proof let b'; assume b' in X;
+         then a"/\"b' in Y;
+         then a"/\"b' [= c by Th38;
+         then b' in Z & a=>c = "\/"(Z,C) by A1,Th52;
+        hence thesis by Th38;
+       end;
+      then b [= a=>c by Def21;
+      then a"/\"b [= a"/\"(a=>c) & a"/\"
+(a=>c) [= c by A1,FILTER_0:def 8,LATTICES:27;
+     hence a"/\"b [= c by LATTICES:25;
+    end;
+   hence thesis by Th33;
+  end;
+
+theorem
+   for D being complete \/-distributive Lattice,
+     a being Element of D holds
+  a "/\" "\/"(X,D) = "\/"({a"/\"
+b1 where b1 is Element of D: b1 in
+ X}, D) &
+  "\/"(X,D) "/\" a = "\/"({b2"/\"
+a where b2 is Element of D: b2 in
+ X}, D)
+ proof let D be complete \/-distributive Lattice,
+           a be Element of D;
+   A1: "\/"({a"/\"b where b is Element of D: b in X}, D) [= a
+"/\"
+"\/"(X,D) &
+   a"/\""\/"(X,D) [= "\/"({a"/\"
+b where b is Element of D: b in X}, D)
+      by Th32,Th33;
+  hence
+  a"/\""\/"(X,D) = "\/"({a"/\"
+b where b is Element of D: b in X}, D)
+    by LATTICES:26;
+  deffunc U(Element of D) = $1"/\"a;
+  deffunc V(Element of D) = a"/\"$1;
+  defpred X[set] means $1 in X;
+A2: for b being Element of D holds V(b) = U(b);
+     {V(b) where b is Element of D: X[b]} =
+     {U(c) where c is Element of D: X[c]}
+       from FraenkelF'(A2);
+  hence thesis by A1,LATTICES:26;
+ end;
+
+theorem
+   for D being complete /\-distributive Lattice,
+     a being Element of D holds
+  a "\/" "/\"(X,D)
+    = "/\"({a"\/"b1 where b1 is Element of D: b1 in X}, D) &
+  "/\"(X,D) "\/" a = "/\"({b2"\/"
+a where b2 is Element of D: b2 in
+ X}, D)
+ proof let D be complete /\-distributive Lattice,
+           a be Element of D;
+  deffunc U(Element of D) = $1"/\"a;
+  deffunc V(Element of D) = a"/\"$1;
+  defpred X[set] means $1 in X;
+   A1: "/\"({a"\/"b where b is Element of D: b in X}, D) [= a
+"\/"
+"/\"(X,D) &
+   a"\/""/\"(X,D) [= "/\"({a"\/"
+b where b is Element of D: b in X}, D)
+    by Th35,Th36;
+  hence
+  a"\/""/\"(X,D) = "/\"({a"\/"b
+       where b is Element of D: b in X}, D)
+   by LATTICES:26;
+  deffunc U(Element of D) = $1"\/"a;
+  deffunc V(Element of D) = a"\/"$1;
+A2: for b being Element of D holds V(b) = U(b);
+     {V(b) where b is Element of D: X[b]} =
+     {U(c) where c is Element of D: X[c]}
+        from FraenkelF'(A2);
+   then {a"\/"b where b is Element of D: b in X} =
+     {c"\/" a where c is Element of D: c in X};
+  hence thesis by A1,LATTICES:26;
+ end;
+
+scheme SingleFraenkel{A()->set, B()->non empty set, P[set]}:
+  {A() where a is Element of B(): P[a]} = {A()}
+  provided
+A1: ex a being Element of B() st P[a]
+  proof
+   thus {A() where a is Element of B(): P[a]} c= {A()}
+     proof let x be set; assume
+         x in {A() where a is Element of B(): P[a]};
+       then ex a being Element of B() st x = A() & P[a];
+      hence thesis by TARSKI:def 1;
+     end;
+   let x be set; assume x in {A()};
+    then x = A() by TARSKI:def 1;
+   hence thesis by A1;
+  end;
+
+scheme FuncFraenkel{B()->non empty set, C()->non empty set,
+        A(set)->Element of C(),f()->Function, P[set]}:
+  f().:{A(x) where x is Element of B(): P[x]} =
+   {f().A(x) where x is Element of B(): P[x]}
+  provided
+A1:  C() c= dom f()
+  proof set f = f();
+   thus f.:{A(x) where x is Element of B(): P[x]} c=
+      {f.A(x) where x is Element of B(): P[x]}
+     proof let y be set; assume
+         y in f.:{A(x) where x is Element of B(): P[x]};
+      then consider z being set such that
+A2:     z in dom f & z in {A(x) where x is Element of B(): P[x]}
+       & y = f.z
+        by FUNCT_1:def 12;
+         ex x being Element of B() st z = A(x) & P[x] by A2;
+      hence thesis by A2;
+     end;
+   let y be set;
+   assume y in {f.A(x) where x is Element of B(): P[x]};
+   then consider x being Element of B() such that
+A3:  y = f.A(x) & P[x];
+      A(x) in dom f & A(x) in {A(z) where z is Element of B(): P[z]}
+     by A1,A3,TARSKI:def 3;
+   hence thesis by A3,FUNCT_1:def 12;
+  end;
+
+  Lm3:
+ now let D be non empty set, f be Function of bool D, D such that
+A1: for a being Element of D holds f.{a} = a and
+A2: for X being Subset of bool D holds f.(f.:X) = f.(union X);
+  defpred X[set,set] means f.{$1,$2} = $2;
+  consider R being Relation of D such that
+A3: for x,y being set holds [x,y] in R iff x in D & y in D & X[x,y]
+     from Rel_On_Set_Ex;
+A4: dom f = bool D by FUNCT_2:def 1;
+A5: now let x,y be Subset of D;
+    thus f.{f.x,f.y} = f.(f.:{x,y}) by A4,FUNCT_1:118
+             .= f.union{x,y} by A2
+             .= f.(x \/ y) by ZFMISC_1:93;
+   end;
+A6: for x,y being Element of D,
+       X being Subset of D st y in X holds
+     f.(X \/ {x}) = f.{f.{t,x} where t is Element of D: t in X}
+    proof let x,y be Element of D,
+              X be Subset of D such that
+A7:   y in X; set Y = {{t,x} where t is Element of D: t in X};
+A8:   X \/ {x} = union Y
+       proof
+        thus X \/ {x} c= union Y
+          proof let s; assume s in X \/ {x};
+            then s in X & X c= D or s in {x} by XBOOLE_0:def 2;
+            then s in X & s is Element of D or s = x
+            by TARSKI:def 1;
+            then s in {s,x} & {s,x} in Y or s in {y,x} & {y,x} in
+ Y by A7,TARSKI:def 2;
+           hence thesis by TARSKI:def 4;
+          end;
+        let s; assume s in union Y;
+        then consider Z being set such that
+A9:      s in Z & Z in Y by TARSKI:def 4;
+        consider t being Element of D such that
+A10:      Z = {t,x} & t in X by A9;
+           s = t or s = x & x in {x} by A9,A10,TARSKI:def 1,def 2;
+        hence thesis by A10,XBOOLE_0:def 2;
+       end;
+        Y c= bool D
+       proof let s; assume s in Y;
+         then s c= X \/ {x} & X \/ {x} c= D by A8,ZFMISC_1:92;
+         then s c= D by XBOOLE_1:1;
+        hence thesis;
+       end;
+     then reconsider Y as Subset of bool D;
+     defpred X[set] means $1 in X;
+     deffunc U(Element of D) = {$1,x};
+A11:   bool D c= dom f by FUNCT_2:def 1;
+        f.:{U(t) where t is Element of D: X[t]} =
+        {f.U(t) where t is Element of D: X[t]}
+        from FuncFraenkel(A11);
+      then f.union Y = f.{f.{t,x} where t is Element of D: t in X}
+       by A2;
+     hence thesis by A8;
+    end;
+A12:   R is_reflexive_in D
+       proof let x be set; assume
+A13:      x in D;
+         then x = f.{x} by A1 .= f.{x,x} by ENUMSET1:69;
+        hence thesis by A3,A13;
+       end;
+A14:   R is_antisymmetric_in D
+       proof let x,y be set;
+        assume x in D & y in D & [x,y] in R & [y,x] in R;
+         then f.{x,y} = y & f.{y,x} = x by A3;
+        hence x = y;
+       end;
+A15:   R is_transitive_in D
+     proof
+     let x,y,z be set; assume
+A16:   x in D & y in D & z in D & [x,y] in R & [y,z] in R;
+     then reconsider a = x, b = y, c = z as Element of D;
+A17:   f.{x,y} = y & f.{y,z} = z by A3,A16;
+      then f.{a,c} = f.{f.{a},f.{b,c}} by A1
+             .= f.({a}\/{b,c}) by A5
+             .= f.{a,b,c} by ENUMSET1:42
+             .= f.({a,b}\/{c}) by ENUMSET1:43
+             .= f.{f.{a,b},f.{c}} by A5
+             .= c by A1,A17;
+     hence thesis by A3;
+    end;
+A18:  dom R = D by A12,ORDERS_1:98;
+A19:  field R = D by A12,ORDERS_1:98;
+A20:  R is total by A18,PARTFUN1:def 4;
+A21:  R is reflexive by A12,A19,RELAT_2:def 9;
+A22:  R is antisymmetric by A14,A19,RELAT_2:def 12;
+     R is transitive by A15,A19,RELAT_2:def 16;
+    then reconsider R as Order of D by A20,A21,A22;
+    set A = RelStr(#D,R#);
+     A is complete
+    proof let X;
+    reconsider Y = X /\ D as Subset of D by XBOOLE_1:17;
+    reconsider a = (f.Y) as Element of A;
+     take a;
+     thus X is_<=_than a
+       proof let b be Element of A;
+        assume b in X; then b in Y by XBOOLE_0:def 3;
+         then {b} \/ Y = Y by ZFMISC_1:46;
+         then a = f.{f.{b},a} by A5 .= f.{b,a} by A1;
+        hence [b,a] in the InternalRel of A by A3;
+       end;
+     let b be Element of A such that
+A23:    X is_<=_than b;
+A24:    f.{a,b} = f.{a,f.{b}} by A1 .= f.(Y \/ {b}) by A5;
+        now per cases; suppose
+A25:    Y <> {};
+        consider s being Element of Y;
+        reconsider s as Element of D by A25,TARSKI:def 3;
+  deffunc U(Element of D) = f.{$1,b};
+  deffunc V(Element of D) = b;
+  defpred X[set] means $1 in Y;
+A26:     for t being Element of D st X[t] holds U(t) = V(t)
+         proof let t be Element of D;
+          reconsider s = t as Element of A;
+          reconsider y = b as Element of D;
+          assume t in Y; then t in X by XBOOLE_0:def 3
+; then s <= b by A23,Def9;
+          then [t,y] in R by ORDERS_1:def 9;
+          hence thesis by A3;
+         end;
+A27:     s in Y by A25;
+then A28:     ex t being Element of D st X[t];
+       {U(t) where t is Element of D: X[t]}
+          = {V(t) where t is Element of D: X[t]} from FraenkelF'R(A26)
+         .= {b where t is Element of D: X[t]}
+         .= {b} from SingleFraenkel(A28);
+       hence f.{a,b} = f.{b} by A6,A24,A27 .= b by A1;
+       suppose Y = {};
+       hence f.{a,b} = b by A1,A24;
+      end;
+     hence [a,b] in the InternalRel of A by A3;
+    end;
+  then reconsider A as complete strict (non empty Poset);
+  take L = latt A;
+A29:   A is with_suprema with_infima by Th12;
+then A30: A = LattPOSet L & LattPOSet L = RelStr(#carr(L), LattRel L#)
+    by Def2,Def15;
+  hence
+  carr(L) = D;
+  let X be Subset of L;
+   reconsider Y = X as Subset of D by A30;
+A31:   the RelStr of A = LattPOSet L by A29,Def15;
+  then reconsider a = f.Y as Element of LattPOSet L
+  ;
+   set p = %a;
+     X is_<=_than a
+    proof let b be Element of LattPOSet L;
+     reconsider y = b as Element of D by A29,Def15;
+     assume b in X;
+then A32:   X = {b} \/ X by ZFMISC_1:46;
+        f.{y,f.Y} = f.{f.{y},f.Y} by A1 .= a by A5,A32;
+     hence [b,a] in the InternalRel of LattPOSet L by A3,A30;
+    end;
+then A33: X is_less_than p by Th31;
+     now let q be Element of L;
+    reconsider y = q as Element of D by A30;
+    reconsider b = y as Element of LattPOSet L by A31;
+    assume X is_less_than q;
+then A34:  X is_<=_than q% & b = q% by Def3,Th30;
+A35:  f.{f.Y,b} = f.{f.Y,f.{y}} by A1 .= f.(Y \/ {b}) by A5;
+       now per cases; suppose
+A36:    Y <> {};
+      consider s being Element of Y;
+      reconsider s as Element of D by A36,TARSKI:def 3;
+  deffunc U(Element of D) = f.{$1,b};
+  deffunc V(Element of D) = b;
+  defpred X[set] means $1 in Y;
+A37:    for t being Element of D st X[t] holds U(t) = V(t)
+        proof let t be Element of D;
+         reconsider s = t as Element of LattPOSet L
+          by A31;
+         assume t in Y; then s <= b by A34,Def9;
+          then [t,y] in R by A30,ORDERS_1:def 9;
+         hence thesis by A3;
+        end;
+A38:    s in Y by A36;
+then A39:    ex t being Element of D st X[t];
+      {U(t) where t is Element of D: X[t]}
+         = {V(t) where t is Element of D: X[t]} from FraenkelF'R(A37)
+        .= {b where t is Element of D: X[t]}
+        .= {b} from SingleFraenkel(A39);
+      hence f.{a,b} = f.{b} by A6,A35,A38 .= b by A1;
+      suppose Y = {};
+      hence f.{a,b} = b by A1,A35;
+     end;
+     then [a,b] in the InternalRel of LattPOSet L by A3,A30;
+     then a <= b & p% = p & a = p & q% = b by Def3,Def4,ORDERS_1:def 9;
+    hence p [= q by Th7;
+   end;
+  hence "\/"X = p by A33,Def21 .= f.X by Def4;
+ end;
+
+theorem
+   for D being non empty set, f being Function of bool D, D st
+   (for a being Element of D holds f.{a} = a) &
+   for X being Subset of bool D holds f.(f.:X) = f.(union X)
+  ex L being complete strict Lattice st the carrier of L = D &
+   for X being Subset of L holds "\/" X = f.X by Lm3;
+

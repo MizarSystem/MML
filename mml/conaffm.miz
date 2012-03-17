@@ -1,0 +1,1712 @@
+:: Metric-Affine Configurations in Metric Affine Planes -  Part I
+::  by Jolanta \'Swierzy\'nska and Bogdan \'Swierzy\'nski
+::
+:: Received October 31, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ANALMETR, DIRAF, ANALOAF, SYMSP_1, CONAFFM;
+ notation SUBSET_1, STRUCT_0, ANALOAF, AFF_1, ANALMETR;
+ constructors AFF_1, ANALMETR, XBOOLE_0;
+ clusters ANALMETR, ZFMISC_1, XBOOLE_0;
+ theorems AFF_1, ANALMETR, DIRAF;
+
+begin
+
+ reserve X for OrtAfPl;
+ reserve o,a,a1,a2,b,b1,b2,c,c1,c2,d,e1,e2
+        for Element of X;
+ reserve b2',c2',d1'
+        for Element of Af(X);
+
+
+
+definition let X;
+  attr X is satisfying_DES means
+     for o,a,a1,b,b1,c,c1 st o<>a & o<>a1 & o<>b & o<>b1 & o<>c & o<>c1 &
+       not LIN b,b1,a & not LIN a,a1,c & LIN o,a,a1 & LIN o,b,b1 &
+       LIN o,c,c1 & a,b // a1,b1 & a,c // a1,c1 holds b,c // b1,c1;
+  synonym DES_holds_in X;
+
+  attr X is satisfying_AH means
+     for o,a,a1,b,b1,c,c1 st o,a _|_ o,a1 & o,b _|_ o,b1
+     & o,c _|_ o,c1 & a,b _|_ a1,b1 & o,a // b,c &
+     a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b holds b,c _|_ b1,c1;
+  synonym AH_holds_in X;
+
+  attr X is satisfying_3H means
+     for a,b,c st not LIN a,b,c holds (ex d st d,a _|_ b,c & d,b _|_ a,c &
+    d,c _|_ a,b);
+  synonym 3H_holds_in X;
+
+  attr X is satisfying_ODES means :Def4:
+   for o,a,a1,b,b1,c,c1 st o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 &
+     a,b _|_ a1,b1 & a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b
+     holds b,c _|_ b1,c1;
+  synonym ODES_holds_in X;
+
+  attr X is satisfying_LIN means :Def5:
+   for o,a,a1,b,b1,c,c1 st o<>a & o<>a1 & o<>b & o<>b1 & o<>c &
+         o<>c1 & a<>b & o,c _|_ o,c1 & o,a _|_ o,a1 & o,b _|_ o,b1 &
+         not LIN o,c,a & LIN o,a,b & LIN
+ o,a1,b1 & a,c _|_ a1,c1 & b,c _|_ b1,c1
+         holds a,a1 // b,b1;
+  synonym LIN_holds_in X;
+
+  attr X is satisfying_LIN1 means :Def6:
+   for o,a,a1,b,b1,c,c1 st o<>a & o<>a1 & o<>b & o<>b1 & o<>c &
+         o<>c1 & a<>b & o,c _|_ o,c1 & o,a _|_ o,a1 & o,b _|_ o,b1 &
+         not LIN o,c,a & LIN o,a,b & LIN o,a1,b1 & a,c _|_ a1,c1 & a,a1 // b,b1
+         holds b,c _|_ b1,c1;
+  synonym LIN1_holds_in X;
+
+  attr X is satisfying_LIN2 means
+     for o,a,a1,b,b1,c,c1 st o<>a & o<>a1 & o<>b & o<>b1 & o<>c &
+         o<>c1 & a<>b & a,a1 // b,b1 & o,a _|_ o,a1 & o,b _|_ o,b1 &
+         not LIN o,c,a & LIN o,a,b & LIN
+ o,a1,b1 & a,c _|_ a1,c1 & b,c _|_ b1,c1
+         holds o,c _|_ o,c1;
+  synonym LIN2_holds_in X;
+end;
+
+theorem ODES_holds_in X implies DES_holds_in X
+   proof
+    assume A1:ODES_holds_in X;
+    let o,a,a1,b,b1,c,c1;
+    assume A2:o<>a & o<>a1 & o<>b & o<>b1 & o<>c & o<>c1 & not LIN b,b1,a
+         & not LIN a,a1,c & LIN o,a,a1 & LIN o,b,b1 & LIN o,c,c1 &
+         a,b // a1,b1 & a,c // a1,c1;
+    consider a2 such that A3:o,a _|_ o,a2 & o<>a2 by ANALMETR:def 10;
+    consider e1 such that A4:o,b _|_ o,e1 & o<>e1 by ANALMETR:def 10;
+    consider e2 such that A5:a,b _|_ a2,e2 & a2<>e2 by ANALMETR:def 10;
+    reconsider o'=o,a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1,a2'=a2,e1'=e1,e2'=e2
+     as Element of Af(X) by ANALMETR:47;
+      not o',e1' // a2',e2'
+     proof assume o',e1' // a2',e2';
+      then o,e1 // a2,e2 by ANALMETR:48;
+      then a2,e2 _|_ o,b by A4,ANALMETR:84;
+      then a,b // o,b by A5,ANALMETR:85;
+then A6:      a',b' // o',b' by ANALMETR:48;
+      then b',a' // b',o' by AFF_1:13;
+      then A7:LIN b',a',o' by AFF_1:def 1;
+        o',b' // b',a' by A6,AFF_1:13;
+      then A8:o,b // b,a by ANALMETR:48;
+      A9:b'<>a'
+       proof assume b'=a';
+        then LIN b',b1',a' by AFF_1:16;
+       hence contradiction by A2,ANALMETR:55;end;
+        o,b // o,b1 by A2,ANALMETR:def 11;
+      then b,a // o,b1 by A2,A8,ANALMETR:82;
+      then b',a' // o',b1' by ANALMETR:48;
+      then LIN b',a',b1' by A7,A9,AFF_1:18;
+      then LIN b',b1',a' by AFF_1:15;
+     hence contradiction by A2,ANALMETR:55;end;
+    then consider b2' such that A10:LIN o',e1',b2' & LIN a2',e2',b2'
+    by AFF_1:74;
+    reconsider b2=b2' as Element of X by ANALMETR:47;
+    A11:o,b _|_ o,b2
+     proof LIN o,e1,b2 by A10,ANALMETR:55;
+      then o,e1 // o,b2 by ANALMETR:def 11;
+     hence thesis by A4,ANALMETR:84;end;
+    A12:a,b _|_ a2,b2
+     proof LIN a2,e2,b2 by A10,ANALMETR:55;
+      then a2,e2 // a2,b2 by ANALMETR:def 11;
+     hence thesis by A5,ANALMETR:84;end;
+    consider e1 such that A13:o,c _|_ o,e1 & o<>e1 by ANALMETR:def 10;
+    consider e2 such that A14:a,c _|_ a2,e2 & a2<>e2 by ANALMETR:def 10;
+    reconsider e1'=e1,e2'=e2 as Element of Af(X) by ANALMETR:47;
+      not o',e1' // a2',e2'
+     proof assume o',e1' // a2',e2';
+      then o,e1 // a2,e2 by ANALMETR:48;
+      then o,c _|_ a2,e2 by A13,ANALMETR:84;
+      then o,c // a,c by A14,ANALMETR:85;
+      then c,o // c,a by ANALMETR:81;
+      then LIN c,o,a by ANALMETR:def 11;
+      then LIN c',o',a' by ANALMETR:55;
+      then LIN a',c',o' by AFF_1:15;
+      then LIN a,c,o by ANALMETR:55;
+      then a,c // a,o by ANALMETR:def 11;
+      then A15:o,a // a,c by ANALMETR:81;
+        LIN o',a',a1' by A2,ANALMETR:55;
+      then LIN a',o',a1' by AFF_1:15;
+      then LIN a,o,a1 by ANALMETR:55;
+      then a,o // a,a1 by ANALMETR:def 11;
+      then o,a // a,a1 by ANALMETR:81;
+      then a,a1 // a,c by A2,A15,ANALMETR:82;
+     hence contradiction by A2,ANALMETR:def 11;end;
+    then consider c2' such that A16:LIN o',e1',c2' & LIN
+ a2',e2',c2' by AFF_1:74;
+    reconsider c2=c2' as Element of X by ANALMETR:47;
+    A17:o,c _|_ o,c2
+     proof LIN o,e1,c2 by A16,ANALMETR:55;
+      then o,e1 // o,c2 by ANALMETR:def 11;
+     hence thesis by A13,ANALMETR:84;end;
+    A18:a,c _|_ a2,c2
+     proof LIN a2,e2,c2 by A16,ANALMETR:55;
+      then a2,e2 // a2,c2 by ANALMETR:def 11;
+     hence thesis by A14,ANALMETR:84;end;
+    A19:not o,c // o,a
+     proof assume o,c // o,a;
+      then LIN o,c,a by ANALMETR:def 11;
+      then LIN o',c',a' by ANALMETR:55;
+      then LIN a',o',c' by AFF_1:15;
+      then LIN a,o,c by ANALMETR:55;
+      then A20:a,o // a,c by ANALMETR:def 11;
+        LIN o',a',a1' by A2,ANALMETR:55;
+      then LIN a',o',a1' by AFF_1:15;
+      then LIN a,o,a1 by ANALMETR:55;
+      then a,o // a,a1 by ANALMETR:def 11;
+      then a,a1 // a,c by A2,A20,ANALMETR:82;
+     hence contradiction by A2,ANALMETR:def 11;end;
+      not o,a // o,b
+     proof assume o,a // o,b;
+     then LIN o,a,b by ANALMETR:def 11;
+     then LIN o',a',b' by ANALMETR:55;
+     then LIN b',o',a' by AFF_1:15;
+     then LIN b,o,a by ANALMETR:55;
+     then A21:b,o // b,a by ANALMETR:def 11;
+       LIN o',b',b1' by A2,ANALMETR:55;
+     then LIN b',o',b1' by AFF_1:15;
+     then LIN b,o,b1 by ANALMETR:55;
+     then b,o // b,b1 by ANALMETR:def 11;
+     then b,b1 // b,a by A2,A21,ANALMETR:82;
+    hence contradiction by A2,ANALMETR:def 11;end;
+    then A22:b,c _|_ b2,c2 by A1,A3,A11,A12,A17,A18,A19,Def4;
+    A23:o,a1 _|_ o,a2
+     proof
+        o,a // o,a1 by A2,ANALMETR:def 11;
+     hence thesis by A2,A3,ANALMETR:84;end;
+    A24:o,b1 _|_ o,b2
+     proof
+        o,b // o,b1 by A2,ANALMETR:def 11;
+     hence thesis by A2,A11,ANALMETR:84;end;
+    A25:o,c1 _|_ o,c2
+     proof
+       o,c // o,c1 by A2,ANALMETR:def 11;
+    hence thesis by A2,A17,ANALMETR:84;end;
+    A26:a1,b1 _|_ a2,b2
+     proof
+        a<>b
+       proof assume a=b;
+        then LIN b',b1',a' by AFF_1:16;
+       hence contradiction by A2,ANALMETR:55;end;
+     hence thesis by A2,A12,ANALMETR:84;end;
+    A27:a1,c1 _|_ a2,c2
+     proof
+        a<>c
+       proof assume a= c;
+        then LIN a',a1',c' by AFF_1:16;
+       hence contradiction by A2,ANALMETR:55;end;
+     hence thesis by A2,A18,ANALMETR:84;end;
+    A28:not o,c1 // o,a1
+     proof assume o,c1 // o,a1;
+      then LIN o,c1,a1 by ANALMETR:def 11;
+      then LIN o',c1',a1' by ANALMETR:55;
+      then LIN a1',o',c1' by AFF_1:15;
+      then LIN a1,o,c1 by ANALMETR:55;
+      then A29:a1,o // a1,c1 by ANALMETR:def 11;
+      A30:a1<> c1
+       proof assume a1 = c1;
+        then LIN o',c',a1' by A2,ANALMETR:55;
+        then LIN a1',c',o' by AFF_1:15;
+        then LIN a1,c,o by ANALMETR:55;
+        then A31:a1,c // a1,o by ANALMETR:def 11;
+          LIN o',a',a1' by A2,ANALMETR:55;
+        then LIN a1',o',a' by AFF_1:15;
+        then LIN a1,o,a by ANALMETR:55;
+        then a1,o // a1,a by ANALMETR:def 11;
+        then a1,c // a1,a by A2,A31,ANALMETR:82;
+        then LIN a1,c,a by ANALMETR:def 11;
+        then LIN a1',c',a' by ANALMETR:55;
+        then LIN a',a1',c' by AFF_1:15;
+       hence contradiction by A2,ANALMETR:55;end;
+        LIN o',a',a1' by A2,ANALMETR:55;
+      then LIN a1',o',a' by AFF_1:15;
+      then LIN a1,o,a by ANALMETR:55;
+      then a1,o // a1,a by ANALMETR:def 11;
+      then a1,c1 // a1,a by A2,A29,ANALMETR:82;
+      then a1,a // a,c by A2,A30,ANALMETR:82;
+      then a,a1 // a,c by ANALMETR:81;
+     hence contradiction by A2,ANALMETR:def 11;end;
+      not o,a1 // o,b1
+     proof assume o,a1 // o,b1;
+      then LIN o,a1,b1 by ANALMETR:def 11;
+      then LIN o',a1',b1' by ANALMETR:55;
+      then LIN b1',a1',o' by AFF_1:15;
+      then LIN b1,a1,o by ANALMETR:55;
+      then A32:b1,a1 // b1,o by ANALMETR:def 11;
+      A33:a1<>b1
+       proof assume a1=b1;
+        then LIN o',a',b1' by A2,ANALMETR:55;
+        then LIN b1',o',a' by AFF_1:15;
+        then LIN b1,o,a by ANALMETR:55;
+        then A34:b1,o // b1,a by ANALMETR:def 11;
+          LIN o',b',b1' by A2,ANALMETR:55;
+        then LIN b1',b',o' by AFF_1:15;
+        then LIN b1,b,o by ANALMETR:55;
+        then b1,b // b1,o by ANALMETR:def 11;
+        then b1,a // b1,b by A2,A34,ANALMETR:82;
+        then LIN b1,a,b by ANALMETR:def 11;
+        then LIN b1',a',b' by ANALMETR:55;
+        then LIN b',b1',a' by AFF_1:15;
+       hence contradiction by A2,ANALMETR:55;end;
+      A35:b1,a1 // a,b by A2,ANALMETR:81;
+        LIN o',b',b1' by A2,ANALMETR:55;
+      then LIN b1',b',o' by AFF_1:15;
+      then LIN b1,b,o by ANALMETR:55;
+      then b1,b // b1,o by ANALMETR:def 11;
+      then b1,a1 // b1,b by A2,A32,ANALMETR:82;
+      then b1,b // a,b by A33,A35,ANALMETR:82;
+      then b,b1 // b,a by ANALMETR:81;
+     hence contradiction by A2,ANALMETR:def 11;end;
+    then A36:b1,c1 _|_ b2,c2 by A1,A23,A24,A25,A26,A27,A28,Def4;
+    A37:now assume A38:not LIN o,b,c;
+      b2<>c2
+     proof assume A39: b2 = c2;
+        o<>b2
+       proof assume A40: o=b2;
+          a2,o _|_ a,o by A3,ANALMETR:83;
+        then a,o // a,b by A3,A12,A40,ANALMETR:85;
+        then LIN a,o,b by ANALMETR:def 11;
+        then LIN a',o',b' by ANALMETR:55;
+        then LIN b',o',a' by AFF_1:15;
+        then LIN b,o,a by ANALMETR:55;
+        then A41:b,o // b,a by ANALMETR:def 11;
+          LIN o',b',b1' by A2,ANALMETR:55;
+        then LIN b',o',b1' by AFF_1:15;
+        then LIN b,o,b1 by ANALMETR:55;
+        then b,o // b,b1 by ANALMETR:def 11;
+        then b,b1 // b,a by A2,A41,ANALMETR:82;
+       hence contradiction by A2,ANALMETR:def 11;end;
+      then o,b // o,c by A11,A17,A39,ANALMETR:85;
+     hence contradiction by A38,ANALMETR:def 11;end;
+   hence thesis by A22,A36,ANALMETR:85;end;
+      now assume A42:LIN o,b,c;
+      now A43:LIN b',c',b1'
+      proof LIN o',b',c' by A42,ANALMETR:55;
+       then LIN b',o',c' by AFF_1:15;
+       then A44:b',o' // b',c' by AFF_1:def 1;
+         LIN o',b',b1' by A2,ANALMETR:55;
+       then LIN b',o',b1' by AFF_1:15;
+       then b',o' // b',b1' by AFF_1:def 1;
+       then b',c' // b',b1' by A2,A44,AFF_1:14;
+      hence thesis by AFF_1:def 1;end;
+       LIN b',c',c1'
+      proof LIN o',b',c' by A42,ANALMETR:55;
+       then LIN c',o',b' by AFF_1:15;
+       then A45:c',o' // c',b' by AFF_1:def 1;
+         LIN o',c',c1' by A2,ANALMETR:55;
+       then LIN c',o',c1' by AFF_1:15;
+       then c',o' // c',c1' by AFF_1:def 1;
+       then c',b' // c',c1' by A2,A45,AFF_1:14;
+       then LIN c',b',c1' by AFF_1:def 1;
+      hence thesis by AFF_1:15;end;
+     then b',c' // b1',c1' by A43,AFF_1:19;
+     hence thesis by ANALMETR:48;end;
+    hence thesis;end;
+   hence thesis by A37;end;
+
+theorem ODES_holds_in X implies AH_holds_in X
+proof
+   assume A1: ODES_holds_in X;
+   let o,a,a1,b,b1,c,c1;
+   assume o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 & a,b _|_ a1,b1 &
+              o,a // b,c & a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b;
+   hence b,c _|_ b1,c1 by A1,Def4;
+end;
+
+theorem Th3:      LIN_holds_in X implies LIN1_holds_in X
+ proof
+   assume A1: LIN_holds_in X;
+   let o,a,a1,b,b1,c,c1;
+   assume A2: o<>a & o<>a1 & o<>b & o<>b1 & o<>c &
+         o<>c1 & a<>b & o,c _|_ o,c1 & o,a _|_ o,a1 & o,b _|_ o,b1 &
+         not LIN o,c,a & LIN o,a,b & LIN
+ o,a1,b1 & a,c _|_ a1,c1 & a,a1 // b,b1;
+   reconsider a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1,o'=o
+        as Element of Af(X) by ANALMETR:47;
+
+   now ex b2 st LIN o,a1,b2 & c1,b2 _|_ b,c & c1<>b2
+      proof
+       consider y be Element of X such that
+       A3: o,a1 // o,y & o<>y by ANALMETR:51;
+       consider x be Element of X such that
+       A4: b,c _|_ c1,x & c1<>x by ANALMETR:51;
+       A5: not o,y // c1,x
+           proof
+            assume A6: o,y // c1,x;
+            reconsider y'=y,x'=x as Element of the carrier
+                                       of Af(X) by ANALMETR:47;
+            A7: o',y' // c1',x' by A6,ANALMETR:48;
+              o',a1' // o',y' & o'<>y' by A3,ANALMETR:48;
+            then o',y' // o',a1' & o'<>y' by AFF_1:13;
+            then c1',x' // o',a1' by A7,DIRAF:47;
+            then c1,x // o,a1 by ANALMETR:48;
+            then o,a1 _|_ b,c by A4,ANALMETR:84;
+            then A8: o,a // b,c by A2,ANALMETR:85;
+              o,a // o,b by A2,ANALMETR:def 11;
+            then b,c // o,b by A2,A8,ANALMETR:82;
+            then b',c' // o',b' by ANALMETR:48;
+            then b',c' // b',o' by AFF_1:13;
+            then LIN b',c',o' by AFF_1:def 1;
+            then LIN o',b',c' by AFF_1:15;
+            then A9: o',b' // o',c' by AFF_1:def 1;
+              LIN o',a',b' & o'<>b' by A2,ANALMETR:55;
+            then LIN o',b',a' & o'<>b' by AFF_1:15;
+            then o',b' // o',a' & o'<>b' by AFF_1:def 1;
+            then o',c' // o',a' by A9,DIRAF:47;
+            then LIN o',c',a' by AFF_1:def 1;
+           hence contradiction by A2,ANALMETR:55; end;
+          reconsider y'=y,x'=x as Element of the carrier
+                                     of Af(X) by ANALMETR:47;
+          not o',y' // c1',x' by A5,ANALMETR:48;
+       then consider b2' be Element of Af(X) such
+               that A10: LIN o',y',b2' & LIN c1',x',b2' by AFF_1:74;
+       reconsider b2=b2' as Element of X by ANALMETR:47;
+          LIN c1,x,b2 by A10,ANALMETR:55;
+       then c1,x // c1,b2 by ANALMETR:def 11;
+       then A11: c1,b2 _|_ b,c by A4,ANALMETR:84;
+         o',a1' // o',y' & o'<>y' by A3,ANALMETR:48;
+       then A12: o',y' // o',a1' & o'<>y' by AFF_1:13;
+         o',y' // o',b2' by A10,AFF_1:def 1;
+       then o',a1' // o',b2' by A12,DIRAF:47;
+       then LIN o',a1',b2' by AFF_1:def 1;
+       then A13: LIN o,a1,b2 by ANALMETR:55;
+          c1<>b2
+            proof
+             assume c1=b2;
+             then o,a1 // o,c1 by A13,ANALMETR:def 11;
+             then o,c1 _|_ o,a by A2,ANALMETR:84;
+             then o,c // o,a by A2,ANALMETR:85;
+            hence contradiction by A2,ANALMETR:def 11; end;
+      hence thesis by A11,A13;end;
+
+  then consider b2 such that A14: LIN o,a1,b2 & c1,b2 _|_ b,c & c1<>b2;
+
+  reconsider b2'=b2 as Element of Af(X) by ANALMETR:47;
+
+  A15: o,b _|_ o,b2 & o<>b2
+      proof
+       A16: o,b _|_ o,b2
+           proof
+               o,a1 // o,b2 by A14,ANALMETR:def 11;
+            then A17: o,a _|_ o,b2 by A2,ANALMETR:84;
+              o,a // o,b by A2,ANALMETR:def 11;
+           hence thesis by A2,A17,ANALMETR:84;end;
+          o<>b2
+           proof
+            assume o=b2;
+            then o,c1 _|_ b,c by A14,ANALMETR:83;
+            then o,c // b,c by A2,ANALMETR:85;
+            then o',c' // b',c' by ANALMETR:48;
+            then c',o' // c',b' by AFF_1:13;
+            then LIN c',o',b' by AFF_1:def 1;
+            then LIN o',b',c' by AFF_1:15;
+            then A18: o',b' // o',c' by AFF_1:def 1;
+              LIN o',a',b' & o'<>b' by A2,ANALMETR:55;
+            then LIN o',b',a' & o'<>b' by AFF_1:15;
+            then o',b' // o',a' & o'<>b' by AFF_1:def 1;
+            then o',c' // o',a' by A18,DIRAF:47;
+            then LIN o',c',a' by AFF_1:def 1;
+           hence contradiction by A2,ANALMETR:55;end;
+      hence thesis by A16;end;
+     b,c _|_ b2,c1 by A14,ANALMETR:83;
+  then A19: a,a1 // b,b2 by A1,A2,A14,A15,Def5;
+     b1=b2
+       proof
+           not LIN o,a,a1
+            proof
+             assume LIN o,a,a1;
+              then o,a // o,a1 by ANALMETR:def 11;
+             then o,a1 _|_ o,a1 by A2,ANALMETR:84;
+            hence contradiction by A2,ANALMETR:51;end;
+        then A20: not LIN o',a',a1' by ANALMETR:55;
+        A21: LIN o',a',b' by A2,ANALMETR:55;
+        A22: LIN o',a1',b1' by A2,ANALMETR:55;
+        A23: LIN o',a1',b2' by A14,ANALMETR:55;
+        A24: a',a1' // b',b1' by A2,ANALMETR:48;
+           a',a1' // b',b2' by A19,ANALMETR:48;
+       hence thesis by A20,A21,A22,A23,A24,AFF_1:70;end;
+       hence thesis by A14,ANALMETR:83;end;
+  hence thesis;end;
+
+ theorem LIN1_holds_in X implies LIN2_holds_in X
+  proof
+   assume A1: LIN1_holds_in X;
+   let o,a,a1,b,b1,c,c1;
+   assume A2: o<>a & o<>a1 & o<>b & o<>b1 & o<>c &
+         o<>c1 & a<>b & a,a1 // b,b1 & o,a _|_ o,a1 & o,b _|_ o,b1 &
+         not LIN o,c,a & LIN o,a,b & LIN
+ o,a1,b1 & a,c _|_ a1,c1 & b,c _|_ b1,c1;
+reconsider a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1,o'=o
+        as Element of Af(X) by ANALMETR:47;
+     ex c2 st LIN a1,c1,c2 & o,c _|_ o,c2 & o<>c2
+    proof
+     consider e1 such that A3:a1,c1 // a1,e1 & a1<>e1 by ANALMETR:51;
+     consider e2 such that A4:o,c _|_ o,e2 & o<>e2 by ANALMETR:51;
+     reconsider e1'=e1,e2'=e2 as Element of Af(X)
+     by ANALMETR:47;
+       not a1',e1' // o',e2' proof assume a1',e1' // o',e2';
+      then a1,e1 // o,e2 by ANALMETR:48;
+      then a1,c1 // o,e2 by A3,ANALMETR:82;
+      then A5:a1,c1 _|_ o,c by A4,ANALMETR:84;
+        a1<>c1 proof assume A6: a1=c1;
+       A7:b1<>a1 proof assume b1=a1;
+        then a1,a // a1,b by A2,ANALMETR:81;
+        then LIN a1,a,b by ANALMETR:def 11;
+        then LIN a1',a',b' by ANALMETR:55;
+        then LIN a',b',a1' by AFF_1:15;
+        then LIN a,b,a1 by ANALMETR:55;
+        then A8:a,b // a,a1 by ANALMETR:def 11;
+          o,a // a,b
+         proof
+            LIN o',a',b' by A2,ANALMETR:55;
+          then LIN a',b',o' by AFF_1:15;
+          then LIN a,b,o by ANALMETR:55;
+          then a,b // a,o by ANALMETR:def 11;
+         hence thesis by ANALMETR:81;end;
+        then a,a1 // o,a by A2,A8,ANALMETR:82;
+        then a,a1 // a,o by ANALMETR:81;
+        then LIN a,a1,o by ANALMETR:def 11;
+        then LIN a',a1',o' by ANALMETR:55;
+        then LIN o',a',a1' by AFF_1:15;
+        then LIN o,a,a1 by ANALMETR:55;
+        then o,a // o,a1 by ANALMETR:def 11;
+        then o,a _|_ o,a by A2,ANALMETR:84;
+       hence contradiction by A2,ANALMETR:51;end;
+
+         b1,a1 _|_ b,a
+        proof
+           LIN o',a',b' & LIN o',a1',b1' by A2,ANALMETR:55;
+         then LIN b',o',a' & LIN b1',o',a1' by AFF_1:15;
+         then LIN b,o,a & LIN b1,o,a1 by ANALMETR:55;
+         then A9:b,o // b,a & b1,o // b1,a1 by ANALMETR:def 11;
+           b,o _|_ b1,o by A2,ANALMETR:83;
+         then b,a _|_ b1,o by A2,A9,ANALMETR:84;
+        hence thesis by A2,A9,ANALMETR:84;end;
+       then b,c // b,a by A2,A6,A7,ANALMETR:85;
+       then LIN b,c,a by ANALMETR:def 11;
+       then LIN b',c',a' by ANALMETR:55;
+       then LIN a',b',c' by AFF_1:15;
+       then LIN a,b,c by ANALMETR:55;
+       then A10:a,b // a,c by ANALMETR:def 11;
+         LIN o',a',b' by A2,ANALMETR:55;
+       then LIN a',b',o' by AFF_1:15;
+       then LIN a,b,o by ANALMETR:55;
+       then a,b // a,o by ANALMETR:def 11;
+       then a,c // a,o by A2,A10,ANALMETR:82;
+       then LIN a,c,o by ANALMETR:def 11;
+       then LIN a',c',o' by ANALMETR:55;
+       then LIN o',c',a' by AFF_1:15;
+      hence contradiction by A2,ANALMETR:55;end;
+
+      then a,c // o,c by A2,A5,ANALMETR:85;
+      then c,a // c,o by ANALMETR:81;
+      then c',a' // c',o' by ANALMETR:48;
+      then LIN c',a',o' by AFF_1:def 1;
+      then LIN o',c',a' by AFF_1:15;
+     hence contradiction by A2,ANALMETR:55;end;
+     then consider c2' such that A11:LIN a1',e1',c2' & LIN
+ o',e2',c2' by AFF_1:74;
+     reconsider c2=c2' as Element of X by ANALMETR:47;take c2;
+       a1',e1' // a1',c2' by A11,AFF_1:def 1;
+     then a1,e1 // a1,c2 by ANALMETR:48;
+then A12:     a1,c1 // a1,c2 by A3,ANALMETR:82;
+       LIN o,e2,c2 by A11,ANALMETR:55;
+then A13:     o,e2 // o,c2 by ANALMETR:def 11;
+       o<>c2 proof assume o=c2;
+      then a1,c1 // o,a1 by A12,ANALMETR:81;
+      then A14:o,a _|_ a1,c1 by A2,ANALMETR:84;
+        a1<>c1 proof assume A15:a1=c1;
+       A16:a1<>b1 proof assume a1=b1;
+        then a1,a // a1,b by A2,ANALMETR:81;
+        then LIN a1,a,b by ANALMETR:def 11;
+        then LIN a1',a',b' by ANALMETR:55;
+        then LIN a',b',a1' by AFF_1:15;
+        then LIN a,b,a1 by ANALMETR:55;
+        then A17:a,b // a,a1 by ANALMETR:def 11;
+          o,a // a,b
+         proof
+            LIN o',a',b' by A2,ANALMETR:55;
+          then LIN a',b',o' by AFF_1:15;
+          then LIN a,b,o by ANALMETR:55;
+          then a,b // a,o by ANALMETR:def 11;
+         hence thesis by ANALMETR:81;end;
+        then a,a1 // o,a by A2,A17,ANALMETR:82;
+        then a,a1 // a,o by ANALMETR:81;
+        then LIN a,a1,o by ANALMETR:def 11;
+        then LIN a',a1',o' by ANALMETR:55;
+        then LIN o',a',a1' by AFF_1:15;
+        then LIN o,a,a1 by ANALMETR:55;
+        then o,a // o,a1 by ANALMETR:def 11;
+        then o,a _|_ o,a by A2,ANALMETR:84;
+       hence contradiction by A2,ANALMETR:51;end;
+         b1,a1 // o,b1
+        proof
+           LIN o',a1',b1' by A2,ANALMETR:55;
+         then LIN b1',a1',o' by AFF_1:15;
+         then LIN b1,a1,o by ANALMETR:55;
+         then b1,a1 // b1,o by ANALMETR:def 11;
+        hence thesis by ANALMETR:81;end;
+       then b,c _|_ o,b1 by A2,A15,A16,ANALMETR:84;
+       then A18:b,c // o,b by A2,ANALMETR:85;
+         LIN o',a',b' by A2,ANALMETR:55;
+       then LIN b',a',o' & LIN a',b',o' by AFF_1:15;
+       then LIN b,a,o & LIN a,b,o by ANALMETR:55;
+       then A19:b,a // b,o & a,b // a,o by ANALMETR:def 11;
+       then o,b // b,a by ANALMETR:81;
+       then b,a // b,c by A2,A18,ANALMETR:82;
+       then LIN b,a,c by ANALMETR:def 11;
+       then LIN b',a',c' by ANALMETR:55;
+       then LIN a',b',c' by AFF_1:15;
+       then LIN a,b,c by ANALMETR:55;
+       then a,b // a,c by ANALMETR:def 11;
+       then a,o // a,c by A2,A19,ANALMETR:82;
+       then LIN a,o,c by ANALMETR:def 11;
+       then LIN a',o',c' by ANALMETR:55;
+       then LIN o',c',a' by AFF_1:15;
+      hence contradiction by A2,ANALMETR:55;end;
+      then o,a // a,c by A2,A14,ANALMETR:85;
+      then a,c // a,o by ANALMETR:81;
+      then LIN a,c,o by ANALMETR:def 11;
+      then LIN a',c',o' by ANALMETR:55;
+      then LIN o',c',a' by AFF_1:15;
+     hence contradiction by A2,ANALMETR:55;end;
+    hence thesis by A4,A12,A13,ANALMETR:84,def 11;end;
+   then consider c2 such that A20: LIN a1,c1,c2 & o,c _|_ o,c2 & o<>c2;
+   reconsider c2'=c2 as Element of Af(X) by ANALMETR:47;
+   A21: b<>c & a1<>b1 & a1<>c1
+    proof assume A22:b=c or a1=b1 or a1=c1;
+     A23:now assume b=c;
+      then LIN o',a',c' by A2,ANALMETR:55;
+      then LIN o',c',a' by AFF_1:15;
+     hence contradiction by A2,ANALMETR:55;end;
+     A24:now assume a1=b1;
+        then a1,a // a1,b by A2,ANALMETR:81;
+        then LIN a1,a,b by ANALMETR:def 11;
+        then LIN a1',a',b' by ANALMETR:55;
+        then LIN a',b',a1' by AFF_1:15;
+        then LIN a,b,a1 by ANALMETR:55;
+        then A25:a,b // a,a1 by ANALMETR:def 11;
+          o,a // a,b
+         proof LIN o',a',b' by A2,ANALMETR:55; then LIN
+ a',b',o' by AFF_1:15;
+          then LIN a,b,o by ANALMETR:55; then a,b // a,o by ANALMETR:def 11;
+         hence thesis by ANALMETR:81;end;
+        then a,a1 // o,a by A2,A25,ANALMETR:82; then a,a1 // a,o by ANALMETR:81
+;
+        then LIN a,a1,o by ANALMETR:def 11; then LIN
+ a',a1',o' by ANALMETR:55;
+        then LIN o',a',a1' by AFF_1:15; then LIN o,a,a1 by ANALMETR:55;
+        then o,a // o,a1 by ANALMETR:def 11; then o,a _|_ o,a by A2,ANALMETR:84
+;
+        hence contradiction by A2,ANALMETR:51;end;
+       now assume A26: a1=c1;
+         b1,a1 // o,b1
+        proof LIN o',a1',b1' by A2,ANALMETR:55; then LIN
+ b1',a1',o' by AFF_1:15;
+         then LIN b1,a1,o by ANALMETR:55; then b1,a1 // b1,o by ANALMETR:def 11
+;
+        hence thesis by ANALMETR:81;end;
+       then b,c _|_ o,b1 by A2,A24,A26,ANALMETR:84;
+       then A27:b,c // o,b by A2,ANALMETR:85;
+         LIN o',a',b' by A2,ANALMETR:55; then LIN b',a',o' & LIN
+ a',b',o' by AFF_1:15;
+       then LIN b,a,o & LIN a,b,o by ANALMETR:55;
+       then A28:b,a // b,o & a,b // a,o by ANALMETR:def 11;
+       then o,b // b,a by ANALMETR:81;
+       then b,a // b,c by A2,A27,ANALMETR:82;
+       then LIN b,a,c by ANALMETR:def 11;
+       then LIN b',a',c' by ANALMETR:55;
+       then LIN a',b',c' by AFF_1:15;
+       then LIN a,b,c by ANALMETR:55;
+       then a,b // a,c by ANALMETR:def 11;
+       then a,o // a,c by A2,A28,ANALMETR:82;
+       then LIN a,o,c by ANALMETR:def 11;
+       then LIN a',o',c' by ANALMETR:55;
+       then LIN o',c',a' by AFF_1:15;
+      hence contradiction by A2,ANALMETR:55;end;
+    hence contradiction by A22,A23,A24;end;
+      a,c _|_ a1,c2
+       proof
+           a1,c1 // a1,c2 by A20,ANALMETR:def 11;
+       hence thesis by A2,A21,ANALMETR:84;end;
+   then b,c _|_ b1,c2 by A1,A2,A20,Def6;
+   then b1,c1 // b1,c2 by A2,A21,ANALMETR:85;
+   then A29: LIN b1,c1,c2 by ANALMETR:def 11;
+      c1 = c2
+       proof
+           not LIN b1,a1,c1
+            proof
+             assume LIN b1,a1,c1;
+             then LIN b1',a1',c1' by ANALMETR:55;
+             then LIN a1',b1',c1' by AFF_1:15;
+             then a1',b1' // a1',c1' by AFF_1:def 1;
+             then A30: a1,b1 // a1,c1 by ANALMETR:48;
+               LIN o',a1',b1' by A2,ANALMETR:55;
+             then LIN a1',b1',o' by AFF_1:15;
+             then LIN a1,b1,o by ANALMETR:55;
+             then a1,b1 // a1,o by ANALMETR:def 11;
+             then a1,c1 // a1,o by A21,A30,ANALMETR:82;
+             then a,c _|_ a1,o by A2,A21,ANALMETR:84;
+             then A31: o,a1 _|_ a,c by ANALMETR:83;
+               o,a1 _|_ a,o by A2,ANALMETR:83;
+             then a,o // a,c by A2,A31,ANALMETR:85;
+             then LIN a,o,c by ANALMETR:def 11;
+             then LIN a',o',c' by ANALMETR:55;
+             then LIN o',c',a' by AFF_1:15;
+            hence contradiction by A2,ANALMETR:55;end;
+        then A32: not LIN b1',a1',c1' by ANALMETR:55;
+        A33: LIN b1',c1',c2' by A29,ANALMETR:55;
+          a1,c1 // a1,c2 by A20,ANALMETR:def 11;
+        then a1',c1' // a1',c2' by ANALMETR:48;
+       hence thesis by A32,A33,AFF_1:23;end;
+ hence thesis by A20;end;
+
+theorem LIN_holds_in X implies ODES_holds_in X
+ proof
+   assume A1: LIN_holds_in X;
+   let o,a,a1,b,b1,c,c1;
+   assume A2: o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 &
+        a,b _|_ a1,b1 & a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b;
+
+   A3:   LIN1_holds_in X by A1,Th3;
+          now let o,a,a1,b,b1,c,c1;
+          assume A4: LIN_holds_in X;
+          assume A5:  o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 &
+          a,b _|_ a1,b1 & a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b;
+          assume A6: not o,b // a,c;
+          reconsider a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1,o'=o
+                    as Element of Af(X) by ANALMETR:47;
+         A7: now assume A8: o=a1;
+             then A9: a1,b1 _|_ b,a1 by A5,ANALMETR:83;
+A10:             a1,b1 _|_ b,a by A5,ANALMETR:83;
+                     not b,a1 // b,a
+                      proof
+                       assume b,a1 // b,a;
+                       then LIN b,o,a by A8,ANALMETR:def 11;
+                       then LIN b',o',a' by ANALMETR:55;
+                       then LIN o',a',b' by AFF_1:15;
+                       then LIN o,a,b by ANALMETR:55;
+                      hence contradiction by A5,ANALMETR:def 11; end;
+             then A11: a1=b1 by A9,A10,ANALMETR:85;
+             A12: a1,c1 _|_ c,a1 by A5,A8,ANALMETR:83;
+               a1,c1 _|_ c,a by A5,ANALMETR:83;
+             then A13: c,a1 // c,a or a1=c1 by A12,ANALMETR:85;
+                     not c,a1 // c,a
+                      proof
+                       assume c,a1 // c,a;
+                       then LIN c,o,a by A8,ANALMETR:def 11;
+                       then LIN c',o',a' by ANALMETR:55;
+                       then LIN o',c',a' by AFF_1:15;
+                       then LIN o,c,a by ANALMETR:55;
+                      hence contradiction by A5,ANALMETR:def 11;end;
+             hence b,c _|_ b1,c1 by A11,A13,ANALMETR:51;end;
+          A14: now assume A15: LIN o,b,c & o<>a1;
+                    A16: o<>b by A5,ANALMETR:51;
+                    A17: o<>c
+                        proof
+                         assume o=c;
+                         then o,a // o,c by ANALMETR:51;
+                         then o',a' // o',c' by ANALMETR:48;
+                         then o',c' // o',a' by AFF_1:13;
+                        hence contradiction by A5,ANALMETR:48;end;
+                    A18: o<>b1
+                        proof
+                         assume A19: o=b1;
+
+                           a1,o _|_ a,o by A5,ANALMETR:83;
+                         then a,o // a,b by A5,A15,A19,ANALMETR:85;
+                         then LIN a,o,b by ANALMETR:def 11;
+                         then LIN a',o',b' by ANALMETR:55;
+                         then LIN o',a',b' by AFF_1:15;
+                         then LIN o,a,b by ANALMETR:55;
+                        hence contradiction by A5,ANALMETR:def 11;end;
+                 o,b // o,c by A15,ANALMETR:def 11;
+               then o,c _|_ o,b1 by A5,A16,ANALMETR:84;
+               then o,b1 // o,c1 by A5,A17,ANALMETR:85;
+               then LIN o,b1,c1 by ANALMETR:def 11;
+               then LIN o',b1',c1' by ANALMETR:55;
+               then LIN b1',o',c1' by AFF_1:15;
+               then LIN b1,o,c1 by ANALMETR:55;
+               then A20: b1,o // b1,c1 by ANALMETR:def 11;
+                 b1,o _|_ b,o by A5,ANALMETR:83;
+               then A21: b,o _|_ b1,c1 by A18,A20,ANALMETR:84;
+                 LIN o',b',c' by A15,ANALMETR:55;
+               then LIN b',o',c' by AFF_1:15;
+               then LIN b,o,c by ANALMETR:55;
+               then b,o // b,c by ANALMETR:def 11;
+              hence b,c _|_ b1,c1 by A16,A21,ANALMETR:84;end;
+          A22: now assume A23: LIN a,b,c & not LIN o,b,c & o<>a1;
+                    A24: a<>c
+                        proof
+                         assume a=c;
+                         then a,o // a,c by ANALMETR:51;
+                         then LIN a,o,c by ANALMETR:def 11;
+                         then LIN a',o',c' by ANALMETR:55;
+                         then LIN o',c',a' by AFF_1:15;
+                         then LIN o,c,a by ANALMETR:55;
+                        hence contradiction by A5,ANALMETR:def 11;end;
+                    A25: a<>b
+                        proof
+                         assume a=b;
+                         then a,o // a,b by ANALMETR:51;
+                         then LIN a,o,b by ANALMETR:def 11;
+                         then LIN a',o',b' by ANALMETR:55;
+                         then LIN o',a',b' by AFF_1:15;
+                         then LIN o,a,b by ANALMETR:55;
+                        hence contradiction by A5,ANALMETR:def 11;end;
+                    A26: a1<>b1 by A5,A23,ANALMETR:85;
+                 a,b // a,c by A23,ANALMETR:def 11;
+               then a,c _|_ a1,b1 by A5,A25,ANALMETR:84;
+               then a1,b1 // a1,c1 by A5,A24,ANALMETR:85;
+               then LIN a1,b1,c1 by ANALMETR:def 11;
+               then LIN a1',b1',c1' by ANALMETR:55;
+               then LIN b1',a1',c1' by AFF_1:15;
+               then LIN b1,a1,c1 by ANALMETR:55;
+               then A27: b1,a1 // b1,c1 by ANALMETR:def 11;
+                 b1,a1 _|_ b,a by A5,ANALMETR:83;
+               then A28: b,a _|_ b1,c1 by A26,A27,ANALMETR:84;
+                 LIN a',b',c' by A23,ANALMETR:55;
+               then LIN b',a',c' by AFF_1:15;
+               then LIN b,a,c by ANALMETR:55;
+               then b,a // b,c by ANALMETR:def 11;
+              hence b,c _|_ b1,c1 by A25,A28,ANALMETR:84;end;
+                 now assume A29: not LIN a,b,c & not LIN o,b,c & o<>a1;
+               A30: o<>a & o<>b & o<>b1 & o<>c & o<>c1 & a<>c & a1<>c1
+                    proof
+                    A31: o<>c
+                        proof
+                         assume o=c;
+                         then o,a // o,c by ANALMETR:51;
+                         then o',a' // o',c' by ANALMETR:48;
+                         then o',c' // o',a' by AFF_1:13;
+                        hence contradiction by A5,ANALMETR:48;end;
+                    A32: o<>b1
+                        proof
+                         assume A33: o=b1;
+
+                           a1,o _|_ a,o by A5,ANALMETR:83;
+                         then a,o // a,b by A5,A29,A33,ANALMETR:85;
+                         then LIN a,o,b by ANALMETR:def 11;
+                         then LIN a',o',b' by ANALMETR:55;
+                         then LIN o',a',b' by AFF_1:15;
+                         then LIN o,a,b by ANALMETR:55;
+                        hence contradiction by A5,ANALMETR:def 11;end;
+                       o<>c1
+                        proof
+                         assume A34: o=c1;
+                           a1,o _|_ a,o by A5,ANALMETR:83;
+                         then a,o // a,c by A5,A29,A34,ANALMETR:85;
+                         then LIN a,o,c by ANALMETR:def 11;
+                         then LIN a',o',c' by ANALMETR:55;
+                         then LIN o',c',a' by AFF_1:15;
+                         then LIN o,c,a by ANALMETR:55;
+                        hence contradiction by A5,ANALMETR:def 11;end;
+                  hence thesis by A5,A31,A32,ANALMETR:51,85;end;
+                     ex e be Element of X st LIN o,e,b &
+                     LIN a,c,e & e<>c & e<>b
+                     proof
+                     consider p be Element of X such that
+                     A35: o,b // o,p & o<>p by ANALMETR:51;
+                     reconsider p'=p as Element of
+                                     the carrier of Af(X) by ANALMETR:47;
+                     consider p1 be Element of X such that
+                     A36: a,c // a,p1 & a<>p1 by ANALMETR:51;
+                     reconsider p1'=p1 as Element of
+                                     the carrier of Af(X) by ANALMETR:47;
+                        not o,p // a,p1
+                         proof
+                          assume o,p // a,p1;
+                          then a,p1 // o,b by A35,ANALMETR:82;
+                         hence contradiction by A6,A36,ANALMETR:82;end;
+                     then not o',p' // a',p1' by ANALMETR:48;
+                     then consider e' be Element of
+                                          the carrier of Af(X) such
+                     that A37: LIN o',p',e' & LIN a',p1',e' by AFF_1:74;
+                     reconsider e=e' as Element of
+                                           the carrier of X by ANALMETR:47;
+                        LIN o,p,e by A37,ANALMETR:55;
+                     then o,p // o,e by ANALMETR:def 11;
+                     then o,e // o,b by A35,ANALMETR:82;
+                     then A38: LIN o,e,b by ANALMETR:def 11;
+                        LIN a,p1,e by A37,ANALMETR:55;
+                     then a,p1 // a,e by ANALMETR:def 11;
+                     then a,c // a,e by A36,ANALMETR:82;
+                     then A39: LIN a,c,e by ANALMETR:def 11;
+                     A40: c <>e
+                          proof
+                           assume c = e;
+                           then LIN o',c',b' by A38,ANALMETR:55;
+                           then LIN o',b',c' by AFF_1:15;
+                          hence contradiction by A29,ANALMETR:55;end;
+                        b<>e
+                          proof
+                           assume b=e;
+                           then LIN a',c',b' by A39,ANALMETR:55;
+                           then LIN a',b',c' by AFF_1:15;
+                          hence contradiction by A29,ANALMETR:55;end;
+                hence thesis by A38,A39,A40;end;
+
+                then consider e be Element of X such that
+                A41: LIN o,e,b & LIN a,c,e & e<>c & e<>b;
+                reconsider e'=e as Element of
+                                     the carrier of Af(X) by ANALMETR:47;
+
+                  ex e1 be Element of X st
+                                          LIN o,e1,b1 & LIN a1,c1,e1
+                   proof
+                    consider p be Element of X such that
+                    A42: o,b1 // o,p & o<>p by ANALMETR:51;
+                    reconsider p'=p as Element of
+                                          the carrier of Af(X) by ANALMETR:47;
+                    consider p1 be Element of X such that
+                    A43: a1,c1 // a1,p1 & a1<>p1 by ANALMETR:51;
+                    reconsider p1'=p1 as Element of
+                                          the carrier of Af(X) by ANALMETR:47;
+                    A44: not o,b1 // a1,c1
+                         proof
+                          assume o,b1 // a1,c1;
+                          then a1,c1 _|_ o,b by A5,A30,ANALMETR:84;
+                         hence contradiction by A5,A6,A30,ANALMETR:85;end;
+                        not o,p // a1,p1
+                         proof
+                          assume o,p // a1,p1;
+                          then a1,p1 // o,b1 by A42,ANALMETR:82;
+                         hence contradiction by A43,A44,ANALMETR:82;end;
+                     then not o',p' // a1',p1' by ANALMETR:48;
+                     then consider e1' be Element of
+                                             the carrier of Af(X) such
+                     that A45: LIN o',p',e1' & LIN a1',p1',e1' by AFF_1:74;
+                     reconsider e1=e1' as Element of
+                                             the carrier of X by ANALMETR:47;
+                        LIN o,p,e1 by A45,ANALMETR:55;
+                     then o,p // o,e1 by ANALMETR:def 11;
+                     then o,e1 // o,b1 by A42,ANALMETR:82;
+                     then A46: LIN o,e1,b1 by ANALMETR:def 11;
+                        LIN a1,p1,e1 by A45,ANALMETR:55;
+                     then a1,p1 // a1,e1 by ANALMETR:def 11;
+                     then a1,c1 // a1,e1 by A43,ANALMETR:82;
+                     then LIN a1,c1,e1 by ANALMETR:def 11;
+                hence thesis by A46;end;
+
+               then consider e1 be Element of X such that
+               A47: LIN o,e1,b1 & LIN a1,c1,e1;
+               reconsider e1'=e1 as Element of
+                                        the carrier of Af(X) by ANALMETR:47;
+
+               A48: o,e _|_ o,e1 & o<>e & o<>e1
+                   proof
+                    A49: o,e _|_ o,e1
+                        proof
+                           o,e // o,b by A41,ANALMETR:def 11;
+                         then o',e' // o',b' by ANALMETR:48;
+                         then o',b' // o',e' by AFF_1:13;
+                         then o,b // o,e by ANALMETR:48;
+                         then A50: o,b1 _|_ o,e by A5,A30,ANALMETR:84;
+                           o,e1 // o,b1 by A47,ANALMETR:def 11;
+                         then o',e1' // o',b1' by ANALMETR:48;
+                         then o',b1' // o',e1' by AFF_1:13;
+                         then o,b1 // o,e1 by ANALMETR:48;
+                       hence thesis by A30,A50,ANALMETR:84;end;
+                   A51: o<>e
+                       proof
+                        assume o=e;
+                        then LIN a',c',o' by A41,ANALMETR:55;
+                        then LIN o',c',a' by AFF_1:15;
+                        then LIN o,c,a by ANALMETR:55;
+                       hence contradiction by A5,ANALMETR:def 11;end;
+                      o<>e1
+                       proof
+                        assume o=e1;
+                        then LIN a1',c1',o' by A47,ANALMETR:55;
+                        then LIN o',a1',c1' by AFF_1:15;
+                        then LIN o,a1,c1 by ANALMETR:55;
+                        then o,a1 // o,c1 by ANALMETR:def 11;
+                        then o,c1 _|_ o,a by A5,A29,ANALMETR:84;
+                      hence contradiction by A5,A30,ANALMETR:85;end;
+                  hence thesis by A49,A51;end;
+              A52: not LIN o,a,e
+                  proof
+                    assume LIN o,a,e;
+                    then o,a // o,e by ANALMETR:def 11;
+                    then o',a' // o',e' by ANALMETR:48;
+                    then o',e' // o',a' by AFF_1:13;
+                    then A53: o,e // o,a by ANALMETR:48;
+                      o,e // o,b by A41,ANALMETR:def 11;
+                   hence contradiction by A5,A48,A53,ANALMETR:82;end;
+               A54: e,a _|_ e1,a1
+                   proof
+                      a,c // a,e by A41,ANALMETR:def 11;
+                    then a',c' // a',e' by ANALMETR:48;
+                    then a',c' // e',a' by AFF_1:13;
+                    then a,c // e,a by ANALMETR:48;
+                    then A55: a1,c1 _|_ e,a by A5,A30,ANALMETR:84;
+                      a1,c1 // a1,e1 by A47,ANALMETR:def 11;
+                    then e,a _|_ a1,e1 by A30,A55,ANALMETR:84;
+                   hence thesis by ANALMETR:83;end;
+               b,a _|_ b1,a1 by A5,ANALMETR:83;
+             then A56: e,e1 // b,b1 by A4,A5,A29,A30,A41,A47,A48,A52,A54,Def5;
+             A57: not LIN o,c,e
+                  proof
+                   assume LIN o,c,e;
+                   then LIN o',c',e' by ANALMETR:55;
+                   then LIN c',e',o' by AFF_1:15;
+                   then c',e' // c',o' by AFF_1:def 1;
+                   then A58: c,e // c,o by ANALMETR:48;
+                     LIN a',c',e' by A41,ANALMETR:55;
+                   then LIN c',e',a' by AFF_1:15;
+                   then c',e' // c',a' by AFF_1:def 1;
+                   then c,e // c,a by ANALMETR:48;
+                   then c,o // c,a by A41,A58,ANALMETR:82;
+                   then LIN c,o,a by ANALMETR:def 11;
+                   then LIN c',o',a' by ANALMETR:55;
+                   then LIN o',c',a' by AFF_1:15;
+                   then LIN o,c,a by ANALMETR:55;
+                  hence contradiction by A5,ANALMETR:def 11;end;
+                e,c _|_ e1,c1
+                  proof
+                     LIN a',c',e' by A41,ANALMETR:55;
+                   then LIN c',a',e' by AFF_1:15;
+                   then c',a' // c',e' by AFF_1:def 1;
+                   then a',c' // e',c' by AFF_1:13;
+                   then a,c // e,c by ANALMETR:48;
+                   then A59: a1,c1 _|_ e,c by A5,A30,ANALMETR:84;
+                     LIN a1',c1',e1' by A47,ANALMETR:55;
+                   then LIN c1',a1',e1' by AFF_1:15;
+                   then c1', a1' // c1', e1' by AFF_1:def 1;
+                   then a1',c1' // e1',c1' by AFF_1:13;
+                   then a1,c1 // e1,c1 by ANALMETR:48;
+                 hence thesis by A30,A59,ANALMETR:84;end;
+            hence b,c _|_ b1,c1 by A3,A5,A30,A41,A47,A48,A56,A57,Def6;end;
+        hence b,c _|_ b1,c1 by A7,A14,A22;end;
+ then A60: not o,b // a,c implies b,c _|_ b1,c1 by A1,A2;
+      A61: now let o,a,a1,b,b1,c,c1;
+          assume A62:  o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 &
+          a,b _|_ a1,b1 & a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b;
+          assume A63: not o,a // c,b;
+          reconsider a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1,o'=o
+                    as Element of Af(X) by ANALMETR:47;
+         A64: now assume A65: o=a1;
+             then A66: a1,b1 _|_ b,a1 by A62,ANALMETR:83;
+A67:             a1,b1 _|_ b,a by A62,ANALMETR:83;
+
+                     not b,a1 // b,a
+                      proof
+                       assume b,a1 // b,a;
+                       then LIN b,o,a by A65,ANALMETR:def 11;
+                       then LIN b',o',a' by ANALMETR:55;
+                       then LIN o',a',b' by AFF_1:15;
+                       then LIN o,a,b by ANALMETR:55;
+                      hence contradiction by A62,ANALMETR:def 11; end;
+             then A68: a1=b1 by A66,A67,ANALMETR:85;
+             A69: a1,c1 _|_ c,a1 by A62,A65,ANALMETR:83;
+               a1,c1 _|_ c,a by A62,ANALMETR:83;
+             then A70: c,a1 // c,a or a1=c1 by A69,ANALMETR:85;
+                     not c,a1 // c,a
+                      proof
+                       assume c,a1 // c,a;
+                       then LIN c,o,a by A65,ANALMETR:def 11;
+                       then LIN c',o',a' by ANALMETR:55;
+                       then LIN o',c',a' by AFF_1:15;
+                       then LIN o,c,a by ANALMETR:55;
+                      hence contradiction by A62,ANALMETR:def 11;end;
+             hence b,c _|_ b1,c1 by A68,A70,ANALMETR:51;end;
+
+          A71: now assume A72: LIN o,b,c & o<>a1;
+                    A73: o<>b by A62,ANALMETR:51;
+                    A74: o<>c
+                        proof
+                         assume o=c;
+                         then o,a // o,c by ANALMETR:51;
+                         then o',a' // o',c' by ANALMETR:48;
+                         then o',c' // o',a' by AFF_1:13;
+                        hence contradiction by A62,ANALMETR:48;end;
+                    A75: o<>b1
+                        proof
+                         assume A76: o=b1;
+
+                           a1,o _|_ a,o by A62,ANALMETR:83;
+                         then a,o // a,b by A62,A72,A76,ANALMETR:85;
+                         then LIN a,o,b by ANALMETR:def 11;
+                         then LIN a',o',b' by ANALMETR:55;
+                         then LIN o',a',b' by AFF_1:15;
+                         then LIN o,a,b by ANALMETR:55;
+                        hence contradiction by A62,ANALMETR:def 11;end;
+                 o,b // o,c by A72,ANALMETR:def 11;
+               then o,c _|_ o,b1 by A62,A73,ANALMETR:84;
+               then o,b1 // o,c1 by A62,A74,ANALMETR:85;
+               then LIN o,b1,c1 by ANALMETR:def 11;
+               then LIN o',b1',c1' by ANALMETR:55;
+               then LIN b1',o',c1' by AFF_1:15;
+               then LIN b1,o,c1 by ANALMETR:55;
+               then A77: b1,o // b1,c1 by ANALMETR:def 11;
+                 b1,o _|_ b,o by A62,ANALMETR:83;
+               then A78: b,o _|_ b1,c1 by A75,A77,ANALMETR:84;
+                 LIN o',b',c' by A72,ANALMETR:55;
+               then LIN b',o',c' by AFF_1:15;
+               then LIN b,o,c by ANALMETR:55;
+               then b,o // b,c by ANALMETR:def 11;
+              hence b,c _|_ b1,c1 by A73,A78,ANALMETR:84;end;
+          A79: now assume A80: LIN a,b,c & not LIN o,b,c & o<>a1;
+                    A81: a<>c
+                        proof
+                         assume a=c;
+                         then a,o // a,c by ANALMETR:51;
+                         then LIN a,o,c by ANALMETR:def 11;
+                         then LIN a',o',c' by ANALMETR:55;
+                         then LIN o',c',a' by AFF_1:15;
+                         then LIN o,c,a by ANALMETR:55;
+                        hence contradiction by A62,ANALMETR:def 11;end;
+                    A82: a<>b
+                        proof
+                         assume a=b;
+                         then a,o // a,b by ANALMETR:51;
+                         then LIN a,o,b by ANALMETR:def 11;
+                         then LIN a',o',b' by ANALMETR:55;
+                         then LIN o',a',b' by AFF_1:15;
+                         then LIN o,a,b by ANALMETR:55;
+                        hence contradiction by A62,ANALMETR:def 11;end;
+                    A83: a1<>b1 by A62,A80,ANALMETR:85;
+                 a,b // a,c by A80,ANALMETR:def 11;
+               then a,c _|_ a1,b1 by A62,A82,ANALMETR:84;
+               then a1,b1 // a1,c1 by A62,A81,ANALMETR:85;
+               then LIN a1,b1,c1 by ANALMETR:def 11;
+               then LIN a1',b1',c1' by ANALMETR:55;
+               then LIN b1',a1',c1' by AFF_1:15;
+               then LIN b1,a1,c1 by ANALMETR:55;
+               then A84: b1,a1 // b1,c1 by ANALMETR:def 11;
+                 b1,a1 _|_ b,a by A62,ANALMETR:83;
+               then A85: b,a _|_ b1,c1 by A83,A84,ANALMETR:84;
+                 LIN a',b',c' by A80,ANALMETR:55;
+               then LIN b',a',c' by AFF_1:15;
+               then LIN b,a,c by ANALMETR:55;
+               then b,a // b,c by ANALMETR:def 11;
+              hence b,c _|_ b1,c1 by A82,A85,ANALMETR:84;end;
+             now assume A86:  not LIN a,b,c & not LIN o,b,c & o<>a1;
+           A87: o<>a & o<>b & o<>c & o<>b1 & o<>c1 & a<>a1 &
+               a<>b & a1<>b1 & a<>c & a1<>c1
+               proof
+                    A88: o<>a by A62,ANALMETR:51;
+                    A89: o<>c
+                        proof
+                         assume o=c;
+                         then o,a // o,c by ANALMETR:51;
+                         then o',a' // o',c' by ANALMETR:48;
+                         then o',c' // o',a' by AFF_1:13;
+                        hence contradiction by A62,ANALMETR:48;end;
+                    A90: o<>b1
+                        proof
+                         assume A91: o=b1;
+
+                           a1,o _|_ a,o by A62,ANALMETR:83;
+                         then a,o // a,b by A62,A86,A91,ANALMETR:85;
+                         then LIN a,o,b by ANALMETR:def 11;
+                         then LIN a',o',b' by ANALMETR:55;
+                         then LIN o',a',b' by AFF_1:15;
+                         then LIN o,a,b by ANALMETR:55;
+                        hence contradiction by A62,ANALMETR:def 11;end;
+                       o<>c1
+                        proof
+                         assume A92: o=c1;
+
+                           a1,o _|_ a,o by A62,ANALMETR:83;
+                         then a,o // a,c by A62,A86,A92,ANALMETR:85;
+                         then LIN a,o,c by ANALMETR:def 11;
+                         then LIN a',o',c' by ANALMETR:55;
+                         then LIN o',c',a' by AFF_1:15;
+                         then LIN o,c,a by ANALMETR:55;
+                        hence contradiction by A62,ANALMETR:def 11;end;
+
+              hence thesis by A62,A88,A89,A90,ANALMETR:51,85;end;
+
+              ex e be Element of X st
+               LIN b,c,e & LIN o,e,a & c <>e & e<>b & a<>e
+               proof
+                 consider p be Element of X such that
+                 A93: o,a // o,p & o<>p by ANALMETR:51;
+            reconsider p'=p as Element of Af(X) by ANALMETR:47;
+                 consider p1 be Element of X such that
+                 A94: b,c // b,p1 & b<>p1 by ANALMETR:51;
+           reconsider p1'=p1 as Element of Af(X) by ANALMETR:47;
+                    not o,p // b,p1
+                     proof
+                      assume o,p // b,p1;
+                      then b,p1 // o,a by A93,ANALMETR:82;
+                      then o,a // b,c by A94,ANALMETR:82;
+                      then o',a' // b',c' by ANALMETR:48;
+                      then o',a' // c',b' by AFF_1:13;
+                     hence contradiction by A63,ANALMETR:48;end;
+                    then not o',p' // b',p1' by ANALMETR:48;
+                    then consider e' be Element of Af(X) such
+                    that A95: LIN o',p',e' & LIN b',p1',e' by AFF_1:74;
+               reconsider e=e' as Element of X by ANALMETR:47;
+                       LIN o,p,e by A95,ANALMETR:55;
+                    then A96: o,p // o,e by ANALMETR:def 11;
+                    then o,e // o,a by A93,ANALMETR:82;
+                    then A97: LIN o,e,a by ANALMETR:def 11;
+                       LIN b,p1,e by A95,ANALMETR:55;
+                    then b,p1 // b,e by ANALMETR:def 11;
+                    then b,c // b,e by A94,ANALMETR:82;
+                    then A98: LIN b,c,e by ANALMETR:def 11;
+                    A99: c <>e by A62,A93,A96,ANALMETR:82;
+                     A100: b<>e
+                          proof
+                           assume b=e;
+                           then LIN o',b',a' by A97,ANALMETR:55;
+                           then LIN o',a',b' by AFF_1:15;
+                           then LIN o,a,b by ANALMETR:55;
+                          hence contradiction by A62,ANALMETR:def 11;end;
+                        a<>e
+                          proof
+                           assume a=e;
+                           then LIN b',c',a' by A98,ANALMETR:55;
+                           then LIN a',b',c' by AFF_1:15;
+                          hence contradiction by A86,ANALMETR:55;end;
+                   hence thesis by A97,A98,A99,A100;end;
+
+              then consider e be Element of X such
+              that A101: LIN b,c,e & LIN o,e,a & e<>b & c <>e & a<>e;
+
+              reconsider e'=e as Element of Af(X)
+              by ANALMETR:47;
+
+               ex e1 be Element of X st LIN o,e1,a1 &
+                e,e1 // a,a1
+                proof
+                 consider p be Element of X such that
+                 A102: o,a1 // o,p & o<>p by ANALMETR:51;
+             reconsider p'=p as Element of Af(X) by ANALMETR:47;
+                 consider p1 be Element of X such that
+                 A103: a,a1 // e,p1 & e<>p1 by ANALMETR:51;
+            reconsider p1'=p1 as Element of Af(X) by ANALMETR:47
+;
+                    not o,p // e,p1
+                     proof
+                      assume o,p // e,p1;
+                      then e,p1 // o,a1 by A102,ANALMETR:82;
+                      then e',p1' // o',a1' by ANALMETR:48;
+                      then o',a1' // e',p1' by AFF_1:13;
+                      then o,a1 // e,p1 by ANALMETR:48;
+                      then e,p1 _|_ o,a by A62,A86,ANALMETR:84;
+                      then o,a _|_ a,a1 by A103,ANALMETR:84;
+                      then A104: o,a _|_ a1,a by ANALMETR:83;
+                        o,a _|_ a1,o by A62,ANALMETR:83;
+                      then a1,o // a1,a by A87,A104,ANALMETR:85;
+                      then LIN a1,o,a by ANALMETR:def 11;
+                      then LIN a1',o',a' by ANALMETR:55;
+                      then LIN a',o',a1' by AFF_1:15;
+                      then a',o' // a',a1' by AFF_1:def 1;
+                      then o',a' // a1',a' by AFF_1:13;
+                      then o,a // a1,a by ANALMETR:48;
+                      then a1,a _|_ a1,a by A87,A104,ANALMETR:84;
+                     hence contradiction by A87,ANALMETR:51;end;
+                 then not o',p' // e',p1' by ANALMETR:48;
+                 then consider e1' be Element of Af(X) such
+                      that A105: LIN o',p',e1' & LIN e',p1',e1' by AFF_1:74;
+             reconsider e1=e1' as Element of X by ANALMETR:47;
+                    LIN o,p,e1 by A105,ANALMETR:55;
+                 then o,p // o,e1 by ANALMETR:def 11;
+                 then o,e1 // o,a1 by A102,ANALMETR:82;
+                 then A106: LIN o,e1,a1 by ANALMETR:def 11;
+                    LIN e,p1,e1 by A105,ANALMETR:55;
+                 then e,p1 // e,e1 by ANALMETR:def 11;
+                 then e,e1 // a,a1 by A103,ANALMETR:82;
+                hence thesis by A106;end;
+              then consider e1 be Element of X such
+              that A107: LIN o,e1,a1 & e,e1 // a,a1;
+
+          reconsider e1'=e1 as Element of Af(X) by ANALMETR:47;
+
+              A108: o,e _|_ o,e1 & o<>e & o<>e1
+                  proof
+                  A109: o,e _|_ o,e1
+                      proof
+                         o,e // o,a by A101,ANALMETR:def 11;
+                       then o',e' // o',a' by ANALMETR:48;
+                       then o',a' // o',e' by AFF_1:13;
+                       then o,a // o,e by ANALMETR:48;
+                       then A110: o,a1 _|_ o,e by A62,A87,ANALMETR:84;
+                         o,e1 // o,a1 by A107,ANALMETR:def 11;
+                       then o',e1' // o',a1' by ANALMETR:48;
+                       then o',a1' // o',e1' by AFF_1:13;
+                       then o,a1 // o,e1 by ANALMETR:48;
+                      hence thesis by A86,A110,ANALMETR:84;end;
+                  A111: o<>e
+                      proof
+                       assume o=e;
+                       then LIN b',c',o' by A101,ANALMETR:55;
+                       then LIN o',b',c' by AFF_1:15;
+                      hence contradiction by A86,ANALMETR:55;end;
+                     o<>e1
+                      proof
+                       assume o=e1;
+                       then e',o' // a',a1' by A107,ANALMETR:48;
+                       then o',e' // a',a1' by AFF_1:13;
+                       then A112: o,e // a,a1 by ANALMETR:48;
+                         o,e // o,a by A101,ANALMETR:def 11;
+                       then A113: o,a // a,a1 by A111,A112,ANALMETR:82;
+                       then A114: o,a1 _|_ a,a1 by A62,A87,ANALMETR:84;
+                         o',a' // a',a1' by A113,ANALMETR:48;
+                       then a',o' // a',a1' by AFF_1:13;
+                       then LIN a',o',a1' by AFF_1:def 1;
+                       then LIN a1',o',a' by AFF_1:15;
+                       then a1',o' // a1',a' by AFF_1:def 1;
+                       then o',a1' // a',a1' by AFF_1:13;
+                       then o,a1 // a,a1 by ANALMETR:48;
+                       then a,a1 _|_ a,a1 by A86,A114,ANALMETR:84;
+                      hence contradiction by A87,ANALMETR:51;end;
+              hence thesis by A109,A111;end;
+              A115: not LIN o,b,a
+                  proof
+                   assume LIN o,b,a;
+                   then o,b // o,a by ANALMETR:def 11;
+                   then o',b' // o',a' by ANALMETR:48;
+                   then o',a' // o',b' by AFF_1:13;
+                  hence contradiction by A62,ANALMETR:48;end;
+                o,e // o,a by A101,ANALMETR:def 11;
+              then o',e' // o',a' by ANALMETR:48;
+              then o',a' // o',e' by AFF_1:13;
+              then o,a // o,e by ANALMETR:48;
+              then A116: LIN o,a,e by ANALMETR:def 11;
+                o,e1 // o,a1 by A107,ANALMETR:def 11;
+              then o',e1' // o',a1' by ANALMETR:48;
+              then o',a1' // o',e1' by AFF_1:13;
+              then o,a1 // o,e1 by ANALMETR:48;
+              then A117: LIN o,a1,e1 by ANALMETR:def 11;
+                e',e1' // a',a1' by A107,ANALMETR:48;
+              then a',a1' // e',e1' by AFF_1:13;
+              then A118: a,a1 // e,e1 by ANALMETR:48;
+              then A119: e,b _|_ e1,b1 by A3,A62,A86,A87,A101,A108,A115,A116,
+A117,Def6;
+                 not LIN o,c,a by A62,ANALMETR:def 11;
+              then A120: e,c _|_ e1,c1 by A3,A62,A86,A87,A101,A108,A116,A117,
+A118,Def6;
+              A121: e1<>c1 & e1<>b1
+                   proof
+                   A122: e1<>c1
+                       proof
+                        assume e1=c1;
+                        then o,c1 // o,a1 by A107,ANALMETR:def 11;
+                        then o,a1 _|_ o,c by A62,A87,ANALMETR:84;
+                       hence contradiction by A62,A86,ANALMETR:85;end;
+                       e1<>b1
+                       proof
+                        assume e1=b1;
+                        then o,b1 // o,a1 by A107,ANALMETR:def 11;
+                        then o,a1 _|_ o,b by A62,A87,ANALMETR:84;
+                       hence contradiction by A62,A86,ANALMETR:85;end;
+              hence thesis by A122;end;
+              A123: c,e _|_ c1,e1 by A120,ANALMETR:83;
+              A124: LIN b',c',e' by A101,ANALMETR:55;
+              then LIN c',e',b' by AFF_1:15;
+              then LIN c,e,b by ANALMETR:55;
+              then c,e // c,b by ANALMETR:def 11;
+              then A125: c,b _|_ c1,e1 by A101,A123,ANALMETR:84;
+              A126: c <>b
+                   proof
+                    assume c = b;
+                    then LIN o',b',c' by AFF_1:16;
+                   hence contradiction by A86,ANALMETR:55;end;
+                b',c' // b',e' by A124,AFF_1:def 1;
+              then c',b' // e',b' by AFF_1:13;
+              then c,b // e,b by ANALMETR:48;
+              then e,b _|_ c1,e1 by A125,A126,ANALMETR:84;
+              then e1,b1 // c1,e1 by A101,A119,ANALMETR:85;
+              then e1',b1' // c1',e1' by ANALMETR:48;
+              then e1',b1' // e1',c1' by AFF_1:13;
+              then LIN e1',b1',c1' by AFF_1:def 1;
+              then LIN b1',e1',c1' by AFF_1:15;
+              then b1',e1' // b1',c1' by AFF_1:def 1;
+              then e1',b1' // b1',c1' by AFF_1:13;
+              then A127: e1,b1 // b1,c1 by ANALMETR:48;
+                LIN b',e',c' by A124,AFF_1:15;
+              then b',e' // b',c' by AFF_1:def 1;
+              then e',b' // b',c' by AFF_1:13;
+              then e,b // b,c by ANALMETR:48;
+              then e1,b1 _|_ b,c by A101,A119,ANALMETR:84;
+          hence b,c _|_ b1,c1 by A121,A127,ANALMETR:84;end;
+        hence b,c _|_ b1,c1 by A64,A71,A79;end;
+
+ then A128: not o,a // c,b implies b,c _|_ b1,c1 by A2;
+
+         now let o,a,a1,b,b1,c,c1;
+          assume LIN_holds_in X;
+          assume A129:  o,a _|_ o,a1 & o,b _|_ o,b1 & o,c _|_ o,c1 &
+          a,b _|_ a1,b1 & a,c _|_ a1,c1 & not o,c // o,a & not o,a // o,b;
+          assume A130: o,a // c,b & o,b // a,c;
+
+          reconsider a'=a,b'=b,c'=c,o'=o
+                    as Element of Af(X) by ANALMETR:47;
+
+         A131: now assume A132: o=a1;
+             then A133: a1,b1 _|_ b,a1 by A129,ANALMETR:83;
+A134:             a1,b1 _|_ b,a by A129,ANALMETR:83;
+
+                     not b,a1 // b,a
+                      proof
+                       assume b,a1 // b,a;
+                       then LIN b,o,a by A132,ANALMETR:def 11;
+                       then LIN b',o',a' by ANALMETR:55;
+                       then LIN o',a',b' by AFF_1:15;
+                       then LIN o,a,b by ANALMETR:55;
+                      hence contradiction by A129,ANALMETR:def 11; end;
+             then A135: a1=b1 by A133,A134,ANALMETR:85;
+             A136: a1,c1 _|_ c,a1 by A129,A132,ANALMETR:83;
+               a1,c1 _|_ c,a by A129,ANALMETR:83;
+             then A137: c,a1 // c,a or a1=c1 by A136,ANALMETR:85;
+                     not c,a1 // c,a
+                      proof
+                       assume c,a1 // c,a;
+                       then LIN c,o,a by A132,ANALMETR:def 11;
+                       then LIN c',o',a' by ANALMETR:55;
+                       then LIN o',c',a' by AFF_1:15;
+                       then LIN o,c,a by ANALMETR:55;
+                      hence contradiction by A129,ANALMETR:def 11;end;
+             hence b,c _|_ b1,c1 by A135,A137,ANALMETR:51;end;
+
+          A138: now assume A139: o,a1 // c1,b1 & o<>a1;
+                  o<>a
+                  proof
+                   assume o=a;
+                   then LIN o',c',a' by AFF_1:16;
+                   then LIN o,c,a by ANALMETR:55;
+                  hence contradiction by A129,ANALMETR:def 11;end;
+                then c,b _|_ o,a1 by A129,A130,ANALMETR:84;
+                then c,b _|_ c1,b1 by A139,ANALMETR:84;
+              hence b,c _|_ b1,c1 by ANALMETR:83;end;
+             now assume A140: not o,a1 // c1,b1 & o<>a1;
+                A141:o,a1 _|_ o,a & o,b1 _|_ o,b & o,c1 _|_ o,c & a1,b1 _|_
+ a,b &
+                   a1,c1 _|_ a,c by A129,ANALMETR:83;
+                A142:not o,c1 // o,a1
+                  proof
+                   assume A143:o,c1 // o,a1;
+                     o<>c1
+                     proof assume o=c1;
+                      then a,c _|_ o,a1 by A129,ANALMETR:83;
+                      then a,c // o,a by A129,A140,ANALMETR:85;
+                      then a,c // a,o by ANALMETR:81;
+                      then LIN a,c,o by ANALMETR:def 11;
+                      then LIN a',c',o' by ANALMETR:55;
+                      then LIN o',c',a' by AFF_1:15;
+                      then LIN o,c,a by ANALMETR:55;
+                      hence contradiction by A129,ANALMETR:def 11;end;
+                   then o,c _|_ o,a1 by A129,A143,ANALMETR:84;
+                  hence contradiction by A129,A140,ANALMETR:85;end;
+                  not o,a1 // o,b1
+                  proof
+                   assume A144:o,a1 // o,b1;
+                   A145:o<>b1
+                     proof
+                      assume o=b1;
+                      then a,b _|_ o,a1 by A129,ANALMETR:83;
+                      then a,b // o,a by A129,A140,ANALMETR:85;
+                      then a,b // a,o by ANALMETR:81;
+                      then LIN a,b,o by ANALMETR:def 11;
+                      then LIN a',b',o' by ANALMETR:55;
+                      then LIN o',a',b' by AFF_1:15;
+                      then LIN o,a,b by ANALMETR:55;
+                     hence contradiction by A129,ANALMETR:def 11;end;
+                     o,a _|_ o,b1 by A129,A140,A144,ANALMETR:84;
+                  hence contradiction by A129,A145,ANALMETR:85;end;
+                then b1,c1 _|_ b,c by A61,A140,A141,A142;
+              hence b,c _|_ b1,c1 by ANALMETR:83;end;
+           hence b,c _|_ b1,c1 by A131,A138;end;
+ hence thesis by A1,A2,A60,A128;end;
+
+theorem LIN_holds_in X implies 3H_holds_in X
+   proof
+    assume A1:LIN_holds_in X;
+    let a,b,c;
+    assume A2:not LIN a,b,c;
+    consider e1 such that A3:b,c _|_ a,e1 & a<>e1 by ANALMETR:def 10;
+    consider e2 such that A4:a,c _|_ b,e2 & b<>e2 by ANALMETR:def 10;
+    reconsider a'=a,b'=b,c' = c,e1'=e1,e2'=e2
+     as Element of Af(X) by ANALMETR:47;
+      not a',e1' // b',e2'
+     proof assume a',e1' // b',e2';
+      then a,e1 // b,e2 by ANALMETR:48;
+      then b,e2 _|_ b,c by A3,ANALMETR:84;
+      then a,c // b,c by A4,ANALMETR:85;
+      then a',c' // b',c' by ANALMETR:48;
+      then c',a' // c',b' by AFF_1:13;
+      then LIN c',a',b' by AFF_1:def 1;
+      then LIN a',b',c' by AFF_1:15;
+     hence contradiction by A2,ANALMETR:55;end;
+    then consider d' be Element of Af(X) such that
+    A5:LIN a',e1',d' & LIN b',e2',d' by AFF_1:74;
+    reconsider d=d' as Element of X by ANALMETR:47;take d;
+      LIN b,e2,d by A5,ANALMETR:55;
+then A6:    b,e2 // b,d by ANALMETR:def 11;
+    then A7:a,c _|_ b,d by A4,ANALMETR:84;
+    then A8:d,b _|_ a,c by ANALMETR:83;
+      LIN a,e1,d by A5,ANALMETR:55;
+then A9:    a,e1 // a,d by ANALMETR:def 11;
+    then A10:b,c _|_ a,d by A3,ANALMETR:84;
+    then A11:d,a _|_ b,c by ANALMETR:83;
+    A12:LIN1_holds_in X by A1,Th3;
+    A13:now assume A14:d<>c;
+      now assume A15:b<>d;
+       not b',d' // a',c'
+      proof assume b',d' // a',c';
+       then a',c' // b',d' by AFF_1:13;
+       then A16:a,c // b,d by ANALMETR:48;
+         a<>c
+        proof assume a= c;
+         then LIN a',b',c' by AFF_1:16;
+        hence contradiction by A2,ANALMETR:55;end;
+       then b,d _|_ b,d by A7,A16,ANALMETR:84;
+      hence contradiction by A15,ANALMETR:51;end;
+     then consider o' be Element of Af(X) such that
+     A17:LIN b',d',o' & LIN a',c',o' by AFF_1:74;
+     reconsider o=o' as Element of X by ANALMETR:47;
+         now assume A18:d<>a;
+
+      A19:o<>a
+      proof assume A20: o = a;
+       then LIN b,d,a by A17,ANALMETR:55;
+       then b,d // b,a by ANALMETR:def 11;
+       then b,a _|_ a,c by A7,A15,ANALMETR:84;
+       then A21:a,b _|_ a,c by ANALMETR:83;
+         LIN a',b',d' by A17,A20,AFF_1:15;
+       then LIN a,b,d by ANALMETR:55;
+       then A22:a,b // a,d by ANALMETR:def 11;
+         a<>b
+        proof assume a=b;
+         then LIN a',b',c' by AFF_1:16;
+        hence contradiction by A2,ANALMETR:55;end;
+       then a,d _|_ a,c by A21,A22,ANALMETR:84;
+       then d,a _|_ a,c by ANALMETR:83;
+       then a,c // b,c by A11,A18,ANALMETR:85;
+       then c,a // c,b by ANALMETR:81;
+       then LIN c,a,b by ANALMETR:def 11;
+       then LIN c',a',b' by ANALMETR:55;
+       then LIN a',b',c' by AFF_1:15;
+      hence contradiction by A2,ANALMETR:55;end;
+       A23:c <>o
+        proof assume A24:c = o;
+         then LIN b,d,c by A17,ANALMETR:55;
+         then b,d // b,c by ANALMETR:def 11;
+         then A25:b,c _|_ a,c by A7,A15,ANALMETR:84;
+           b<>c
+          proof assume b = c;
+           then LIN a',b',c' by AFF_1:16;
+          hence contradiction by A2,ANALMETR:55;end;
+         then a,d // a,c by A10,A25,ANALMETR:85;
+         then LIN a,d,c by ANALMETR:def 11;
+         then LIN a',d',c' by ANALMETR:55;
+         then LIN c',d',a' by AFF_1:15;
+         then LIN c,d,a by ANALMETR:55;
+         then A26:c,d // c,a by ANALMETR:def 11;
+           LIN c',d',b' by A17,A24,AFF_1:15;
+         then LIN c,d,b by ANALMETR:55;
+         then c,d // c,b by ANALMETR:def 11;
+         then c,a // c,b by A14,A26,ANALMETR:82;
+         then LIN c,a,b by ANALMETR:def 11;
+         then LIN c',a',b' by ANALMETR:55;
+         then LIN a',b',c' by AFF_1:15;
+        hence contradiction by A2,ANALMETR:55;end;
+        consider e1 such that A27:a,c // a,e1 & a<>e1 by ANALMETR:51;
+        consider e2 such that A28:b,c // d,e2 & d<>e2 by ANALMETR:51;
+        reconsider e1'=e1,e2'=e2 as Element of the carrier
+         of Af(X) by ANALMETR:47;
+          not a',e1' // d',e2'
+         proof assume a',e1' // d',e2';
+          then a,e1 // d,e2 by ANALMETR:48;
+          then d,e2 // a,c by A27,ANALMETR:82;
+          then a,c // b,c by A28,ANALMETR:82;
+          then c,a // c,b by ANALMETR:81;
+          then LIN c,a,b by ANALMETR:def 11;
+          then LIN c',a',b' by ANALMETR:55;
+          then LIN a',b',c' by AFF_1:15;
+         hence contradiction by A2,ANALMETR:55;end;
+        then consider d1' such that A29:LIN a',e1',d1' & LIN d',e2',d1'
+                 by AFF_1:74;
+        reconsider d1=d1' as Element of X by ANALMETR:47;
+        A30:LIN a,c,d1
+         proof LIN a,e1,d1 by A29,ANALMETR:55;
+          then a,e1 // a,d1 by ANALMETR:def 11;
+          then a,c // a,d1 by A27,ANALMETR:82;
+         hence thesis by ANALMETR:def 11;end;
+A31:        b,c // d,d1
+         proof LIN d,e2,d1 by A29,ANALMETR:55;
+          then d,e2 // d,d1 by ANALMETR:def 11;
+         hence thesis by A28,ANALMETR:82;end;
+
+        A32:o<>d
+         proof assume A33:o = d;
+          then A34:a,o _|_ b,c by A3,A9,ANALMETR:84;
+            LIN a,c,o by A17,ANALMETR:55;
+          then a,c // a,o by ANALMETR:def 11;
+          then A35:a,c _|_ b,c by A19,A34,ANALMETR:84;
+            a<>c
+           proof assume a= c;
+            then LIN a',b',c' by AFF_1:16;
+           hence contradiction by A2,ANALMETR:55;end;
+          then b,o // b,c by A7,A33,A35,ANALMETR:85;
+          then LIN b,o,c by ANALMETR:def 11;
+          then LIN b',o',c' by ANALMETR:55;
+          then LIN c',o',b' by AFF_1:15;
+          then LIN c,o,b by ANALMETR:55;
+          then A36:c,o // c,b by ANALMETR:def 11;
+            LIN c',o',a' by A17,AFF_1:15;
+          then LIN c,o,a by ANALMETR:55;
+          then c,o // c,a by ANALMETR:def 11;
+          then c,b // c,a by A23,A36,ANALMETR:82;
+          then LIN c,b,a by ANALMETR:def 11;
+          then LIN c',b',a' by ANALMETR:55;
+          then LIN a',b',c' by AFF_1:15;
+         hence contradiction by A2,ANALMETR:55;end;
+        A37:o<>d1
+         proof assume A38: o = d1;
+            LIN o',d',b' by A17,AFF_1:15;
+          then LIN o,d,b by ANALMETR:55;
+          then o,d // o,b by ANALMETR:def 11;
+          then d,o // b,o by ANALMETR:81;
+          then b,c //b,o by A31,A32,A38,ANALMETR:82;
+          then LIN b,c,o by ANALMETR:def 11;
+          then LIN b',c',o' by ANALMETR:55;
+          then LIN c',o',b' by AFF_1:15;
+          then LIN c,o,b by ANALMETR:55;
+          then A39:c,o // c,b by ANALMETR:def 11;
+            LIN c',o',a' by A17,AFF_1:15;
+          then LIN c,o,a by ANALMETR:55;
+          then c,o // c,a by ANALMETR:def 11;
+          then c,a // c,b by A23,A39,ANALMETR:82;
+          then LIN c,a,b by ANALMETR:def 11;
+          then LIN c',a',b' by ANALMETR:55;
+          then LIN a',b',c' by AFF_1:15;
+         hence contradiction by A2,ANALMETR:55;end;
+        A40:o<>b
+         proof assume o=b;
+          then LIN a',b',c' by A17,AFF_1:15;
+         hence contradiction by A2,ANALMETR:55;end;
+        A41:d1<>c
+         proof assume A42:d1 = c;
+          A43:b<>c
+           proof assume b = c;
+            then LIN a',b',c' by AFF_1:16;
+           hence contradiction by A2,ANALMETR:55;end;
+            c,b // c,d by A31,A42,ANALMETR:81;
+          then LIN c,b,d by ANALMETR:def 11;
+          then A44:LIN c',b',d' by ANALMETR:55;
+            b,c // c,d by A31,A42,ANALMETR:81;
+          then d,a _|_ c,d by A11,A43,ANALMETR:84;
+          then A45:d,c _|_ d,a by ANALMETR:83;
+            LIN d',c',b' by A44,AFF_1:15;
+          then LIN d,c,b by ANALMETR:55;
+          then d,c // d,b by ANALMETR:def 11;
+          then d,b _|_ d,a by A14,A45,ANALMETR:84;
+          then a,c // d,a by A8,A15,ANALMETR:85;
+          then a,c // a,d by ANALMETR:81;
+          then LIN a,c,d by ANALMETR:def 11;
+          then LIN a',c',d' by ANALMETR:55;
+          then LIN c',a',d' by AFF_1:15;
+          then LIN c,a,d by ANALMETR:55;
+then A46:          c,a // c,d by ANALMETR:def 11;
+            c,d // b,c by A31,A42,ANALMETR:81;
+          then c,a // b,c by A14,A46,ANALMETR:82;
+          then c,a // c,b by ANALMETR:81;
+          then LIN c,a,b by ANALMETR:def 11;
+          then LIN c',a',b' by ANALMETR:55;
+          then LIN a',b',c' by AFF_1:15;
+         hence contradiction by A2,ANALMETR:55;end;
+        A47:o,d _|_ o,a
+         proof LIN d',o',b' by A17,AFF_1:15;
+          then d',o' // d',b' by AFF_1:def 1;
+          then b',d' // o',d' by AFF_1:13;
+          then b,d // o,d by ANALMETR:48;
+          then A48:a,c _|_ o,d by A7,A15,ANALMETR:84;
+            LIN a,c,o by A17,ANALMETR:55;
+          then a,c // a,o by ANALMETR:def 11;
+          then A49:a,c // o,a by ANALMETR:81;
+            a<>c
+           proof assume a= c;
+            then LIN a',b',c' by AFF_1:16;
+           hence contradiction by A2,ANALMETR:55;end;
+         hence thesis by A48,A49,ANALMETR:84;end;
+        A50:o,d1 _|_ o,d
+         proof LIN a,c,o by A17,ANALMETR:55;
+          then A51:a,c // a,o by ANALMETR:def 11;
+          A52:a<>c
+           proof assume a= c;
+            then LIN a',b',c' by AFF_1:16;
+           hence contradiction by A2,ANALMETR:55;end;
+            a,c // a,d1 by A30,ANALMETR:def 11;
+          then a,o // a,d1 by A51,A52,ANALMETR:82;
+          then LIN a,o,d1 by ANALMETR:def 11;
+          then LIN a',o',d1' by ANALMETR:55;
+          then LIN o',a',d1' by AFF_1:15;
+          then LIN o,a,d1 by ANALMETR:55;
+          then A53:o,a // o,d1 by ANALMETR:def 11;
+            LIN a,c,o by A17,ANALMETR:55;
+          then a,c // a,o by ANALMETR:def 11;
+          then o,a // a,c by ANALMETR:81;
+          then a,c // o,d1 by A19,A53,ANALMETR:82;
+          then A54:b,d _|_ o,d1 by A7,A52,ANALMETR:84;
+            LIN d',o',b' by A17,AFF_1:15;
+          then LIN d,o,b by ANALMETR:55;
+          then d,o // d,b by ANALMETR:def 11;
+          then b,d // o,d by ANALMETR:81;
+         hence thesis by A15,A54,ANALMETR:84;end;
+        A55:o,c _|_ o,b
+         proof LIN c',o',a' by A17,AFF_1:15;
+          then c',o' // c',a' by AFF_1:def 1;
+          then a',c' // o',c' by AFF_1:13;
+          then A56:a,c // o,c by ANALMETR:48;
+            a<>c
+           proof assume a= c;
+            then LIN a',b',c' by AFF_1:16;
+           hence contradiction by A2,ANALMETR:55;end;
+          then A57:b,d _|_ o,c by A7,A56,ANALMETR:84;
+            b',d' // b',o' by A17,AFF_1:def 1;
+          then b',d' // o',b' by AFF_1:13;
+          then b,d // o,b by ANALMETR:48;
+         hence thesis by A15,A57,ANALMETR:84;end;
+        A58:not LIN o,d,d1
+         proof assume LIN o,d,d1;
+          then o,d // o,d1 by ANALMETR:def 11;
+          then o,d _|_ o,d by A37,A50,ANALMETR:84;
+         hence contradiction by A32,ANALMETR:51;end;
+        A59:LIN o,d1,c
+         proof
+            LIN a',c',d1' by A30,ANALMETR:55;
+          then LIN c',d1',a' by AFF_1:15;
+          then c',d1' // c',a' by AFF_1:def 1;
+          then a',c' // c',d1' by AFF_1:13;
+          then A60:a,c // c,d1 by ANALMETR:48;
+          A61:a<>c
+           proof assume a= c;
+            then LIN a',b',c' by AFF_1:16;
+           hence contradiction by A2,ANALMETR:55;end;
+            LIN c',a',o' by A17,AFF_1:15;
+          then c',a' // c',o' by AFF_1:def 1;
+          then a',c' // c',o' by AFF_1:13;
+          then a,c // c,o by ANALMETR:48;
+          then c,d1 // c,o by A60,A61,ANALMETR:82;
+          then LIN c,d1,o by ANALMETR:def 11;
+          then LIN c',d1',o' by ANALMETR:55;
+          then LIN o',d1',c' by AFF_1:15;
+         hence thesis by ANALMETR:55;end;
+          LIN o',d',b' by A17,AFF_1:15;
+        then A62:LIN o,d,b by ANALMETR:55;
+        A63:d1,d // c,b by A31,ANALMETR:81;
+          d1,d _|_ d,a
+         proof
+            b<>c
+           proof assume b = c;
+            then LIN a',b',c' by AFF_1:16;
+           hence contradiction by A2,ANALMETR:55;end;
+          then d,d1 _|_ a,d by A10,A31,ANALMETR:84;
+         hence thesis by ANALMETR:83;end;
+        then c,d _|_
+ b,a by A12,A19,A23,A32,A37,A40,A41,A47,A50,A55,A58,A59,A62,A63,Def6;
+       hence thesis by A7,A10,ANALMETR:83;end;
+     hence thesis by A3,A7,A9,ANALMETR:83,84;end;
+    hence thesis by A4,A6,A10,ANALMETR:83,84;end;
+      now assume d = c;
+     then a,b _|_ d,c by ANALMETR:51;
+    hence thesis by A7,A10,ANALMETR:83;end;
+    hence thesis by A13;end;

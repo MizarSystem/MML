@@ -1,0 +1,1281 @@
+:: Full Trees
+::  by Robert Milewski
+::
+:: Received February 25, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, BINTREE1, TREES_1, MARGREL1, BOOLE, ORDINAL1,
+      FUNCT_1, TREES_2, MIDSP_3, TREES_4, CQC_LANG, MCART_1, FINSEQ_5,
+      BINARITH, CAT_1, EUCLID, FINSET_1, POWER, BINARI_3, ARYTM_1, ZF_LANG,
+      CARD_1, FINSEQ_2, TARSKI, NAT_1, MATRIX_2, BINTREE2, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, MCART_1,
+      REAL_1, NAT_1, ABIAN, SERIES_1, RELAT_1, CARD_1, MARGREL1, DOMAIN_1,
+      FUNCT_1, FUNCT_2, FINSET_1, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      FINSEQ_5, BINARITH, BINARI_3, TREES_1, TREES_2, TREES_4, BINTREE1,
+      EUCLID, MIDSP_3;
+ constructors REAL_1, ABIAN, SERIES_1, DOMAIN_1, WELLORD2, TREES_9, CQC_LANG,
+      FINSEQ_5, FINSEQOP, BINARITH, BINARI_3, BINTREE1, EUCLID, FINSEQ_4,
+      INT_1, MEMBERED;
+ clusters SUBSET_1, XREAL_0, RELSET_1, FINSET_1, BINTREE1, TREES_2, TREES_9,
+      BINARITH, MARGREL1, FINSEQ_1, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0;
+ theorems AXIOMS, TARSKI, MCART_1, REAL_1, NAT_1, NAT_2, WELLORD2, MARGREL1,
+      ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_7, CARD_1, ALGSEQ_1, CARD_2, FINSET_1,
+      POWER, CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQ_5, FINSEQ_6,
+      BINARITH, AMI_5, BINARI_3, TREES_1, TREES_2, BINTREE1, QC_LANG4, EUCLID,
+      SCMFSA_7, GR_CY_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, RLVECT_1;
+ schemes FUNCT_2, NAT_1, FINSEQ_2, TREES_2, COMPTS_1;
+
+begin :: Trees and Binary Trees
+
+  theorem Th1:
+   for D be set
+   for p be FinSequence
+   for n be Nat holds
+    p in D* implies p|Seg n in D*
+   proof
+    let D be set;
+    let p be FinSequence;
+    let n be Nat;
+    assume p in D*;
+    then p is FinSequence of D by FINSEQ_1:def 11;
+    then p|Seg n is FinSequence of D by FINSEQ_1:23;
+    hence p|Seg n in D* by FINSEQ_1:def 11;
+   end;
+
+  theorem Th2:
+   for T be binary Tree
+   for t be Element of T holds
+    t is FinSequence of BOOLEAN
+   proof
+    let T be binary Tree;
+    let t be Element of T;
+    defpred _P[FinSequence] means $1 is Element of T implies rng $1 c= BOOLEAN;
+
+      rng <*>NAT = {} by FINSEQ_1:27;
+    then A1: _P[<*>NAT] by XBOOLE_1:2
+;
+    A2: for p be FinSequence of NAT for x be Element of NAT st
+     _P[p] holds _P[p^<*x*>] proof
+     let p be FinSequence of NAT;
+     let x be Element of NAT;
+     assume A3: _P[p];
+     assume A4: p^<*x*> is Element of T;
+     then reconsider p1 = p as Element of T by TREES_1:46;
+       p^<*x*> in { p^<*n*> where n is Nat : p^<*n*> in T } by A4;
+     then A5: p^<*x*> in succ p1 by TREES_2:def 5;
+     then not p in Leaves T by BINTREE1:5;
+     then succ p1 = { p^<* 0 *>, p^<*1*> } by BINTREE1:def 2;
+     then p^<*x*> = p^<* 0 *> or p^<*x*> = p^<*1*> by A5,TARSKI:def 2;
+     then x = 0 or x = 1 by FINSEQ_2:20;
+     then A6: x in {0,1} by TARSKI:def 2;
+     A7: {x} c= BOOLEAN
+     proof
+      let z be set;
+      assume z in {x};
+      hence z in BOOLEAN by A6,MARGREL1:def 12,TARSKI:def 1;
+     end;
+       rng <*x*> = {x} by FINSEQ_1:55;
+     then (rng p) \/ (rng <*x*>) c= BOOLEAN by A3,A4,A7,TREES_1:46,XBOOLE_1:8;
+     hence rng (p^<*x*>) c= BOOLEAN by FINSEQ_1:44;
+    end;
+      for p be FinSequence of NAT holds _P[p] from IndSeqD(A1,A2);
+    then rng t c= BOOLEAN;
+    hence t is FinSequence of BOOLEAN by FINSEQ_1:def 4;
+   end;
+
+  definition
+   let T be binary Tree;
+   redefine mode Element of T -> FinSequence of BOOLEAN;
+   coherence by Th2;
+  end;
+
+  theorem Th3:
+   for T be Tree st T = {0,1}* holds
+    T is binary
+   proof
+    let T be Tree;
+    assume A1: T = {0,1}*;
+      now let t be Element of T;
+     assume not t in Leaves T;
+       { t^<*n*> where n is Nat : t^<*n*> in T } = { t^<* 0 *>, t^<* 1 *> }
+     proof
+      thus {t^<*n*> where n is Nat : t^<*n*> in T} c= { t^<* 0 *>, t^<* 1 *> }
+      proof
+       let x be set;
+       assume x in { t^<*n*> where n is Nat : t^<*n*> in T };
+       then consider n be Nat such that
+        A2: x = t^<*n*> and
+        A3: t^<*n*> in T;
+       reconsider tn = t^<*n*> as FinSequence of ({0,1} qua set)
+                                                   by A1,A3,FINSEQ_1:def 11;
+         len t + 1 in Seg (len t + 1) by FINSEQ_1:6;
+       then len t + 1 in Seg len tn by FINSEQ_2:19;
+       then len t + 1 in dom tn by FINSEQ_1:def 3;
+       then tn/.(len t + 1) = (t^<*n*>).(len t + 1) by FINSEQ_4:def 4
+          .= n by FINSEQ_1:59;
+       then n = 0 or n = 1 by TARSKI:def 2;
+       hence x in { t^<* 0 *>, t^<* 1 *> } by A2,TARSKI:def 2;
+      end;
+      let x be set;
+      A4: t is FinSequence of {0,1} by A1,FINSEQ_1:def 11;
+        rng <* 0 *> c= {0,1}
+      proof
+       let z be set;
+       assume z in rng <* 0 *>;
+       then z in {0} by FINSEQ_1:55;
+       then z = 0 by TARSKI:def 1;
+       hence z in {0,1} by TARSKI:def 2;
+      end;
+      then A5: <* 0 *> is FinSequence of {0,1} by FINSEQ_1:def 4;
+        rng <* 1 *> c= {0,1}
+      proof
+       let z be set;
+       assume z in rng <* 1 *>;
+       then z in {1} by FINSEQ_1:55;
+       then z = 1 by TARSKI:def 1;
+       hence z in {0,1} by TARSKI:def 2;
+      end;
+      then A6: <* 1 *> is FinSequence of {0,1} by FINSEQ_1:def 4;
+        t^<* 0 *> is FinSequence of {0,1} by A4,A5,SCMFSA_7:23;
+      then A7: t^<* 0 *> in T by A1,FINSEQ_1:def 11;
+        t^<* 1 *> is FinSequence of {0,1} by A4,A6,SCMFSA_7:23;
+      then A8: t^<* 1 *> in T by A1,FINSEQ_1:def 11;
+      assume x in { t^<* 0 *>, t^<* 1 *> };
+      then x = t^<* 0 *> or x = t^<* 1 *> by TARSKI:def 2;
+      hence x in { t^<*n*> where n is Nat : t^<*n*> in T } by A7,A8;
+     end;
+     hence succ t = { t^<* 0 *>, t^<* 1 *> } by TREES_2:def 5;
+    end;
+    hence T is binary by BINTREE1:def 2;
+   end;
+
+  theorem Th4:
+   for T be Tree st T = {0,1}* holds
+    Leaves T = {}
+   proof
+    let T be Tree;
+    assume A1: T = {0,1}*;
+    assume Leaves T <> {};
+    then consider x be set such that
+     A2: x in Leaves T by XBOOLE_0:def 1;
+    reconsider x1 = x as Element of T by A2;
+      T is binary by A1,Th3;
+    then A3: x1 is FinSequence of BOOLEAN by Th2;
+    then reconsider x1 = x as FinSequence of NAT;
+    set y1 = x1 ^ <* 0 *>;
+    A4: 0 in {0} by TARSKI:def 1;
+      {0} c= BOOLEAN
+    proof
+     let z be set;
+     assume z in {0};
+     then z = 0 by TARSKI:def 1;
+     hence z in BOOLEAN by MARGREL1:def 13;
+    end;
+    then <* 0 *> is FinSequence of BOOLEAN by A4,SCMFSA_7:22;
+    then y1 is FinSequence of BOOLEAN by A3,SCMFSA_7:23;
+    then A5: y1 in T by A1,FINSEQ_1:def 11,MARGREL1:def 12;
+      x1 is_a_proper_prefix_of y1 by TREES_1:31;
+    hence contradiction by A2,A5,TREES_1:def 8;
+   end;
+
+  theorem
+     for T be binary Tree
+   for n be Nat
+   for t be Element of T st t in T-level n holds
+    t is Tuple of n,BOOLEAN
+   proof
+    let T be binary Tree;
+    let n be Nat;
+    let t be Element of T;
+    assume t in T-level n;
+    then t in { w where w is Element of T : len w = n } by TREES_2:def 6;
+    then ex t2 be Element of T st t2 = t & len t2 = n;
+    hence t is Tuple of n,BOOLEAN by FINSEQ_2:110;
+   end;
+
+  theorem
+     for T be Tree st
+    for t be Element of T holds succ t = { t^<* 0 *>, t^<* 1 *> } holds
+     Leaves T = {}
+   proof
+    let T be Tree;
+    assume A1: for t be Element of T holds succ t = { t^<* 0 *>, t^<* 1 *> };
+    assume Leaves T <> {};
+    then consider x be set such that
+     A2: x in Leaves T by XBOOLE_0:def 1;
+    reconsider t = x as Element of T by A2;
+      succ t = { t^<* 0 *>, t^<* 1 *> } by A1;
+    hence contradiction by A2,BINTREE1:5;
+   end;
+
+  theorem Th7:
+   for T be Tree st
+    for t be Element of T holds succ t = { t^<* 0 *>, t^<* 1 *> } holds
+     T is binary
+   proof
+    let T be Tree;
+    assume for t be Element of T holds succ t = { t^<* 0 *>, t^<* 1 *> };
+    then for t be Element of T st not t in Leaves T holds
+     succ t = { t^<* 0 *>, t^<* 1 *> };
+    hence T is binary by BINTREE1:def 2;
+   end;
+
+  theorem Th8:
+   for T be Tree holds
+    T = {0,1}* iff
+    for t be Element of T holds succ t = { t^<* 0 *>, t^<* 1 *> }
+   proof
+    let T be Tree;
+    thus T = {0,1}* implies
+     for t be Element of T holds succ t = { t^<* 0 *>, t^<* 1 *> }
+    proof
+     assume A1: T = {0,1}*;
+     then A2: T is binary by Th3;
+     let t be Element of T;
+       not t in Leaves T by A1,Th4;
+     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A2,BINTREE1:def 2;
+    end;
+    assume A3: for t be Element of T holds succ t = { t^<* 0 *>, t^<* 1 *> };
+    thus T = {0,1}*
+    proof
+     thus T c= {0,1}*
+     proof
+      let x be set;
+      A4: T is binary by A3,Th7;
+      assume x in T;
+      then x is FinSequence of {0,1} by A4,Th2,MARGREL1:def 12;
+      hence x in {0,1}* by FINSEQ_1:def 11;
+     end;
+     let x be set;
+     assume x in {0,1}*;
+     then A5: x is FinSequence of {0,1} by FINSEQ_1:def 11;
+     defpred _P[FinSequence] means $1 in T;
+     A6: _P[<*> {0,1}] by TREES_1:47;
+     A7: for p be FinSequence of {0,1}
+      for n be Element of {0,1} st _P[p] holds _P[p^<*n*>] proof
+      let p be FinSequence of {0,1};
+      let n be Element of {0,1};
+      assume p in T;
+      then reconsider p1 = p as Element of T;
+      A8: succ p1 = { p1^<* 0 *>, p1^<* 1 *> } by A3;
+        n = 0 or n = 1 by TARSKI:def 2;
+      then p^<*n*> in succ p1 by A8,TARSKI:def 2;
+      hence p^<*n*> in T;
+     end;
+       for p be FinSequence of {0,1} holds _P[p] from IndSeqD(A6,A7);
+     hence x in T by A5;
+    end;
+   end;
+
+  scheme DecoratedBinTreeEx {A() -> non empty set, a() -> Element of A(),
+                             P[set,set,set]}:
+   ex D be binary DecoratedTree of A() st dom D = {0,1}* & D.{} = a() &
+    for x be Node of D holds P[D.x,D.(x ^ <* 0 *>),D.(x ^ <*1*>)]
+   provided
+    A1: for a be Element of A() ex b,c be Element of A() st P[a,b,c]
+   proof
+    defpred Q[set,set] means
+     ex b,c be Element of A() st P[$1,b,c] & $2 = [b,c];
+    A2: for e be set st e in A() ex u be set st u in [:A(),A():] & Q[e,u]
+    proof
+     let e be set;
+     assume e in A();
+     then consider b,c be Element of A() such that
+      A3: P[e,b,c] by A1;
+     take u = [b,c];
+     thus u in [:A(),A():];
+     thus Q[e,u] by A3;
+    end;
+    consider f be Function such that
+     A4: dom f = A() and
+     A5: rng f c= [:A(),A():] and
+     A6: for e be set st e in A() holds Q[e,f.e] from NonUniqBoundFuncEx(A2);
+    deffunc _F(set) = IFEQ($1`2,0,(f.($1`1))`1,(f.($1`1))`2);
+    A7: for x be set st x in [:A(),NAT:] holds _F(x) in A() proof
+     let x be set;
+     assume x in [:A(),NAT:];
+     then x`1 in A() by MCART_1:10;
+     then f.(x`1) in rng f by A4,FUNCT_1:def 5;
+     then A8: (f.(x`1))`1 in A() & (f.(x`1))`2 in A() by A5,MCART_1:10;
+       now per cases;
+      suppose x`2 = 0;
+       hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A() by A8,CQC_LANG:def 1;
+      suppose x`2 <> 0;
+       hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A() by A8,CQC_LANG:def 1;
+     end;
+     hence IFEQ(x`2,0,(f.(x`1))`1,(f.(x`1))`2) in A();
+    end;
+    consider F be Function of [:A(),NAT:],A() such that
+     A9: for x be set st x in [:A(),NAT:] holds F.x = _F(x) from Lambda1(A7);
+    A10: for e be set st e in A() holds P[e,F.[e,0],F.[e,1]]
+    proof
+     let e be set;
+     assume A11: e in A();
+     then consider b,c be Element of A() such that
+      A12: P[e,b,c] and
+      A13: f.e = [b,c] by A6;
+     A14: [e,0]`2 = 0 by MCART_1:7;
+       [e,0] in [:A(),NAT:] by A11,ZFMISC_1:106;
+     then A15: F.[e,0] = IFEQ([e,0]`2,0,(f.([e,0]`1))`1,(f.([e,0]`1))`2) by A9
+        .= (f.([e,0]`1))`1 by A14,CQC_LANG:def 1
+        .= (f.e)`1 by MCART_1:7
+        .= b by A13,MCART_1:7;
+     A16: [e,1]`2 = 1 & 1 <> 0 by MCART_1:7;
+       [e,1] in [:A(),NAT:] by A11,ZFMISC_1:106;
+     then F.[e,1] = IFEQ([e,1]`2,0,(f.([e,1]`1))`1,(f.([e,1]`1))`2) by A9
+        .= (f.([e,1]`1))`2 by A16,CQC_LANG:def 1
+        .= (f.e)`2 by MCART_1:7
+        .= c by A13,MCART_1:7;
+     hence P[e,F.[e,0],F.[e,1]] by A12,A15;
+    end;
+    deffunc _F(set) = 2;
+    consider D be DecoratedTree of A() such that
+     A17: D.{} = a() and
+     A18: for d be Element of dom D holds
+      succ d = { d^<*k*> where k is Nat : k < _F(D.d) } &
+      for n be Nat, x be set st x = D.d & n < _F(x)
+        holds D.(d^<*n*>) = F.[x,n] from DTreeStructFinEx;
+      now let t be Element of dom D;
+     assume not t in Leaves dom D;
+       { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
+     proof
+      thus { t^<*k*> where k is Nat : k < 2 } c= { t^<* 0 *>, t^<* 1 *> }
+      proof
+       let v be set;
+       assume v in { t^<*k*> where k is Nat : k < 2 };
+       then consider k be Nat such that
+        A19: v = t^<*k*> and
+        A20: k < 2;
+         k = 0 or k = 1 by A20,ALGSEQ_1:4;
+       hence v in { t^<* 0 *>, t^<* 1 *> } by A19,TARSKI:def 2;
+      end;
+      let v be set;
+      assume v in { t^<* 0 *>, t^<* 1 *> };
+      then v = t^<* 0 *> or v = t^<* 1 *> by TARSKI:def 2;
+      hence v in { t^<*k*> where k is Nat : k < 2 };
+     end;
+     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A18;
+    end;
+    then dom D is binary by BINTREE1:def 2;
+    then reconsider D as binary DecoratedTree of A() by BINTREE1:def 3;
+    take D;
+      now let t be Element of dom D;
+       { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
+     proof
+      thus { t^<*k*> where k is Nat : k < 2 } c= { t^<* 0 *>, t^<* 1 *> }
+      proof
+       let v be set;
+       assume v in { t^<*k*> where k is Nat : k < 2 };
+       then consider k be Nat such that
+        A21: v = t^<*k*> and
+        A22: k < 2;
+         k = 0 or k = 1 by A22,ALGSEQ_1:4;
+       hence v in { t^<* 0 *>, t^<* 1 *> } by A21,TARSKI:def 2;
+      end;
+      let v be set;
+      assume v in { t^<* 0 *>, t^<* 1 *> };
+      then v = t^<* 0 *> or v = t^<* 1 *> by TARSKI:def 2;
+      hence v in { t^<*k*> where k is Nat : k < 2 };
+     end;
+     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A18;
+    end;
+    hence dom D = {0,1}* by Th8;
+    thus D.{} = a() by A17;
+    let x be Node of D;
+      P[D.x,F.[D.x,0],F.[D.x,1]] by A10;
+    then P[D.x,D.(x ^ <* 0 *>),F.[D.x,1]] by A18;
+    hence P[D.x,D.(x ^ <* 0 *>),D.(x ^ <* 1 *>)] by A18;
+   end;
+
+  scheme DecoratedBinTreeEx1 {A() -> non empty set, a() -> Element of A(),
+                             P[set,set], Q[set,set]}:
+   ex D be binary DecoratedTree of A() st dom D = {0,1}* & D.{} = a() &
+    for x be Node of D holds P[D.x,D.(x ^ <* 0 *>)] & Q[D.x,D.(x ^ <*1*>)]
+   provided
+    A1: for a be Element of A() ex b be Element of A() st P[a,b] and
+    A2: for a be Element of A() ex b be Element of A() st Q[a,b]
+   proof
+    defpred _P[set,set] means
+    ( $1`2 = 0 implies P[$1`1,$2] ) & ( $1`2 = 1 implies Q[$1`1,$2] );
+    A3: for e be set st e in [:A(),NAT:] ex u be set st u in A() & _P[e,u]
+    proof
+     let e be set;
+     assume e in [:A(),NAT:];
+     then reconsider e1 = e`1 as Element of A() by MCART_1:10;
+     consider u1 be Element of A() such that
+      A4: P[e1,u1] by A1;
+     consider u2 be Element of A() such that
+      A5: Q[e1,u2] by A2;
+     take u = IFEQ(e`2,0,u1,u2);
+     thus u in A();
+     thus e`2 = 0 implies P[e`1,u] by A4,CQC_LANG:def 1;
+     thus e`2 = 1 implies Q[e`1,u] by A5,CQC_LANG:def 1;
+    end;
+    consider F be Function such that
+     A6: dom F = [:A(),NAT:] and
+     A7: rng F c= A() and
+     A8: for e be set st e in [:A(),NAT:] holds _P[e,F.e]
+                                                 from NonUniqBoundFuncEx(A3);
+    reconsider F as Function of [:A(),NAT:],A() by A6,A7,FUNCT_2:4;
+    deffunc _F(set) = 2;
+    consider D be DecoratedTree of A() such that
+     A9: D.{} = a() and
+     A10: for d be Element of dom D holds
+      succ d = { d^<*k*> where k is Nat : k < _F(D.d) } &
+      for n be Nat, x be set st x = D.d & n < _F(x) holds D.(d^<*n*>) = F.[x,n]
+                                                       from DTreeStructFinEx;
+      now let t be Element of dom D;
+     assume not t in Leaves dom D;
+       { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
+     proof
+      thus { t^<*k*> where k is Nat : k < 2 } c= { t^<* 0 *>, t^<* 1 *> }
+      proof
+       let v be set;
+       assume v in { t^<*k*> where k is Nat : k < 2 };
+       then consider k be Nat such that
+        A11: v = t^<*k*> and
+        A12: k < 2;
+         k = 0 or k = 1 by A12,ALGSEQ_1:4;
+       hence v in { t^<* 0 *>, t^<* 1 *> } by A11,TARSKI:def 2;
+      end;
+      let v be set;
+      assume v in { t^<* 0 *>, t^<* 1 *> };
+      then v = t^<* 0 *> or v = t^<* 1 *> by TARSKI:def 2;
+      hence v in { t^<*k*> where k is Nat : k < 2 };
+     end;
+     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A10;
+    end;
+    then dom D is binary by BINTREE1:def 2;
+    then reconsider D as binary DecoratedTree of A() by BINTREE1:def 3;
+    take D;
+      now let t be Element of dom D;
+       { t^<*k*> where k is Nat : k < 2 } = { t^<* 0 *>, t^<* 1 *> }
+     proof
+      thus { t^<*k*> where k is Nat : k < 2 } c= { t^<* 0 *>, t^<* 1 *> }
+      proof
+       let v be set;
+       assume v in { t^<*k*> where k is Nat : k < 2 };
+       then consider k be Nat such that
+        A13: v = t^<*k*> and
+        A14: k < 2;
+         k = 0 or k = 1 by A14,ALGSEQ_1:4;
+       hence v in { t^<* 0 *>, t^<* 1 *> } by A13,TARSKI:def 2;
+      end;
+      let v be set;
+      assume v in { t^<* 0 *>, t^<* 1 *> };
+      then v = t^<* 0 *> or v = t^<* 1 *> by TARSKI:def 2;
+      hence v in { t^<*k*> where k is Nat : k < 2 };
+     end;
+     hence succ t = { t^<* 0 *>, t^<* 1 *> } by A10;
+    end;
+    hence dom D = {0,1}* by Th8;
+    thus D.{} = a() by A9;
+    let x be Node of D;
+      [D.x,0]`2 = 0 by MCART_1:7;
+    then P[[D.x,0]`1,F.[D.x,0]] by A8;
+    then P[D.x,F.[D.x,0]] by MCART_1:7;
+    hence P[D.x,D.(x ^ <* 0 *>)] by A10;
+      [D.x,1]`2 = 1 by MCART_1:7;
+    then Q[[D.x,1]`1,F.[D.x,1]] by A8;
+    then Q[D.x,F.[D.x,1]] by MCART_1:7;
+    hence Q[D.x,D.(x ^ <* 1 *>)] by A10;
+   end;
+
+  Lm1:
+   for D be non empty set
+   for f be FinSequence of D holds
+    Rev f is FinSequence of D;
+
+  definition
+   let T be binary Tree;
+   let n be non empty Nat;
+   func NumberOnLevel(n,T) -> Function of T-level n,NAT means :Def1:
+    for t be Element of T st t in T-level n
+    for F be Tuple of n,BOOLEAN st F = Rev t holds
+     it.t = (Absval F) + 1;
+   existence
+   proof
+      defpred _P[set,set] means  ex t be Element of T st t = $1 &
+       for F be Tuple of n,BOOLEAN st F = Rev t holds $2 = (Absval F) + 1;
+    A1: for e be set st e in T-level n ex u be set st u in NAT & _P[e,u] proof
+     let e be set;
+     assume e in T-level n;
+     then e in { w where w is Element of T : len w = n } by TREES_2:def 6;
+     then consider t be Element of T such that
+      A2: t = e and
+      A3: len t = n;
+       len Rev t = n by A3,FINSEQ_5:def 3;
+     then reconsider F1 = Rev t as Tuple of n,BOOLEAN by FINSEQ_2:110;
+     take u = (Absval F1) + 1;
+     thus u in NAT;
+     take t;
+     thus t = e by A2;
+     let F be Tuple of n,BOOLEAN;
+     assume F = Rev t;
+     hence u = (Absval F) + 1;
+    end;
+    consider f be Function such that
+     A4: dom f = T-level n and
+     A5: rng f c= NAT and
+     A6: for e be set st e in T-level n holds _P[e,f.e]
+         from NonUniqBoundFuncEx(A1);
+    reconsider f as Function of T-level n,NAT by A4,A5,FUNCT_2:4;
+    take f;
+    let t be Element of T;
+    assume t in T-level n;
+    then consider t1 be Element of T such that
+     A7: t1 = t and
+     A8: for F be Tuple of n,BOOLEAN st F = Rev t1 holds f.t = (Absval F) + 1
+                                                                       by A6;
+    let F be Tuple of n,BOOLEAN;
+    assume F = Rev t;
+    hence f.t = (Absval F) + 1 by A7,A8;
+   end;
+   uniqueness
+   proof
+    let f1,f2 be Function of T-level n,NAT such that
+     A9: for t be Element of T st t in T-level n
+         for F be Tuple of n,BOOLEAN st F = Rev t holds
+          f1.t = (Absval F) + 1 and
+     A10: for t be Element of T st t in T-level n
+         for F be Tuple of n,BOOLEAN st F = Rev t holds
+          f2.t = (Absval F) + 1;
+      now let x be set;
+     assume A11: x in T-level n;
+     then x in { w where w is Element of T : len w = n } by TREES_2:def 6;
+     then consider t be Element of T such that
+      A12: t = x and
+      A13: len t = n;
+       len Rev t = n by A13,FINSEQ_5:def 3;
+     then reconsider F = Rev t as Tuple of n,BOOLEAN by FINSEQ_2:110;
+     thus f1.x = (Absval F) + 1 by A9,A11,A12
+              .= f2.x by A10,A11,A12;
+    end;
+    hence f1 = f2 by FUNCT_2:18;
+   end;
+  end;
+
+  definition
+   let T be binary Tree;
+   let n be non empty Nat;
+   cluster NumberOnLevel(n,T) -> one-to-one;
+   coherence
+   proof
+      now let x1,x2 be set;
+     assume that
+      A1: x1 in dom NumberOnLevel(n,T) and
+      A2: x2 in dom NumberOnLevel(n,T) and
+      A3: NumberOnLevel(n,T).x1 = NumberOnLevel(n,T).x2;
+     A4: x1 in T-level n by A1,FUNCT_2:def 1;
+     then x1 in { w where w is Element of T : len w = n } by TREES_2:def 6;
+     then consider t1 be Element of T such that
+      A5: t1 = x1 and
+      A6: len t1 = n;
+       len Rev t1 = n by A6,FINSEQ_5:def 3;
+     then reconsider F1 = Rev t1 as Tuple of n,BOOLEAN by FINSEQ_2:110;
+     A7: x2 in T-level n by A2,FUNCT_2:def 1;
+     then x2 in { w where w is Element of T : len w = n } by TREES_2:def 6;
+     then consider t2 be Element of T such that
+      A8: t2 = x2 and
+      A9: len t2 = n;
+       len Rev t2 = n by A9,FINSEQ_5:def 3;
+     then reconsider F2 = Rev t2 as Tuple of n,BOOLEAN by FINSEQ_2:110;
+       (Absval F1) + 1 = NumberOnLevel(n,T).x1 by A4,A5,Def1
+        .= (Absval F2) + 1 by A3,A7,A8,Def1;
+     then Absval F1 = Absval F2 by XCMPLX_1:2;
+     then F1 = F2 by BINARI_3:2;
+     hence x1 = x2 by A5,A8,BINARI_3:3;
+    end;
+    hence NumberOnLevel(n,T) is one-to-one by FUNCT_1:def 8;
+   end;
+  end;
+
+begin :: Full Trees
+
+  definition
+   let T be Tree;
+   attr T is full means :Def2:
+    T = {0,1}*;
+  end;
+
+  theorem Th9:
+   {0,1}* is Tree
+   proof
+    set X = {0,1}*;
+    A1: X c= NAT* by FUNCT_7:21;
+    A2: now let p be FinSequence of NAT;
+     assume A3: p in X;
+     thus ProperPrefixes p c= X
+     proof
+      let y be set;
+      assume y in ProperPrefixes p;
+      then consider q be FinSequence such that
+       A4: y = q and
+       A5: q is_a_proper_prefix_of p by TREES_1:def 4;
+        q is_a_prefix_of p by A5,XBOOLE_0:def 8;
+      then consider n be Nat such that
+       A6: q = p|Seg n by TREES_1:def 1;
+      thus y in X by A3,A4,A6,Th1;
+     end;
+    end;
+      now let p be FinSequence of NAT,
+            k,n be Nat;
+     assume that
+      A7: p^<*k*> in X and
+      A8: n <= k;
+     A9: p^<*k*> is FinSequence of {0,1} by A7,FINSEQ_1:def 11;
+     then A10: p is FinSequence of {0,1} & <*k*> is FinSequence of {0,1}
+                                                              by FINSEQ_1:50;
+     reconsider kk = <*k*> as FinSequence of {0,1} by A9,FINSEQ_1:50;
+       1 in Seg 1 by FINSEQ_1:5;
+     then 1 in dom <*k*> by FINSEQ_1:55;
+     then kk.1 in {0,1} by FINSEQ_2:13;
+     then A11: k in {0,1} by FINSEQ_1:57;
+       now per cases by A11,TARSKI:def 2;
+      suppose k = 0;
+       hence n = 0 or n = 1 by A8,NAT_1:18;
+      suppose A12: k = 1;
+         n = 1 or n = 0
+       proof
+        assume n <> 1;
+        then n < 0 + 1 by A8,A12,REAL_1:def 5;
+        then n <= 0 by NAT_1:38;
+        hence n = 0 by NAT_1:18;
+       end;
+       hence n = 0 or n = 1;
+     end;
+     then n in {0,1} by TARSKI:def 2;
+     then <*n*> is FinSequence of {0,1} by SCMFSA_7:22;
+     then p^<*n*> is FinSequence of {0,1} by A10,SCMFSA_7:23;
+     hence p^<*n*> in X by FINSEQ_1:def 11;
+    end;
+    hence {0,1}* is Tree by A1,A2,TREES_1:def 5;
+   end;
+
+  theorem Th10:
+   for T be Tree st T = {0,1}*
+   for n be Nat holds
+    0*n in T-level n
+   proof
+    let T be Tree;
+    assume A1: T = {0,1}*;
+    let n be Nat;
+    A2: len 0*n = n by EUCLID:2;
+      0*n in T by A1,BINARI_3:5,MARGREL1:def 12;
+    then 0*n in { w where w is Element of T : len w = n } by A2;
+    hence 0*n in T-level n by TREES_2:def 6;
+   end;
+
+  theorem Th11:
+   for T be Tree st T = {0,1}*
+   for n be non empty Nat
+   for y be Tuple of n,BOOLEAN holds
+    y in T-level n
+   proof
+    let T be Tree;
+    assume A1: T = {0,1}*;
+    let n be non empty Nat;
+    let y be Tuple of n,BOOLEAN;
+    A2: len y = n by FINSEQ_2:109;
+      y in T by A1,FINSEQ_1:def 11,MARGREL1:def 12;
+    then y in { w where w is Element of T : len w = n } by A2;
+    hence y in T-level n by TREES_2:def 6;
+   end;
+
+  definition
+   let T be binary Tree;
+   let n be Nat;
+   cluster T-level n -> finite;
+   coherence by QC_LANG4:19;
+  end;
+
+  definition
+   cluster full -> binary Tree;
+   coherence
+   proof
+    let T be Tree;
+    assume T is full;
+    then T = {0,1}* by Def2;
+    hence T is binary by Th3;
+   end;
+  end;
+
+  definition
+   cluster full Tree;
+   existence
+   proof
+    reconsider T = {0,1}* as Tree by Th9;
+    take T;
+    thus T is full by Def2;
+   end;
+  end;
+
+  theorem Th12:
+   for T be full Tree
+   for n be non empty Nat holds
+    Seg (2 to_power n) c= rng NumberOnLevel(n,T)
+   proof
+    let T be full Tree;
+    let n be non empty Nat;
+    let y be set;
+    assume y in Seg (2 to_power n);
+    then y in { k where k is Nat : 1 <= k & k <= 2 to_power n }
+                                                          by FINSEQ_1:def 1;
+    then consider k be Nat such that
+     A1: k = y and
+     A2: 1 <= k and
+     A3: k <= 2 to_power n;
+    set t = Rev (n-BinarySequence (k-'1));
+      T = {0,1}* by Def2;
+    then A4: t in T by FINSEQ_1:def 11,MARGREL1:def 12;
+    A5: len t = len (n-BinarySequence (k-'1)) by FINSEQ_5:def 3
+             .= n by FINSEQ_2:109;
+    then t in { w where w is Element of T : len w = n } by A4;
+    then A6: t in T-level n by TREES_2:def 6;
+    then A7: t in dom NumberOnLevel(n,T) by FUNCT_2:def 1;
+      len Rev t = n by A5,FINSEQ_5:def 3;
+    then reconsider F = Rev t as Tuple of n,BOOLEAN by FINSEQ_2:110;
+    A8: k - 1 >= 1 - 1 by A2,REAL_1:49;
+      k < 2 to_power n + 1 by A3,NAT_1:38;
+    then k - 1 < 2 to_power n by REAL_1:84;
+    then A9: k-'1 < 2 to_power n by A8,BINARITH:def 3;
+      NumberOnLevel(n,T).t = (Absval F) + 1 by A6,Def1
+       .= (Absval (n-BinarySequence (k-'1))) + 1 by FINSEQ_6:29
+       .= k -' 1 + 1 by A9,BINARI_3:36
+       .= k - 1 + 1 by A8,BINARITH:def 3
+       .= y by A1,XCMPLX_1:27;
+    hence y in rng NumberOnLevel(n,T) by A7,FUNCT_1:def 5;
+   end;
+
+  definition
+   let T be full Tree;
+   let n be non empty Nat;
+   func FinSeqLevel(n,T) -> FinSequence of T-level n equals :Def3:
+    NumberOnLevel(n,T)";
+   coherence
+   proof
+      T = {0,1}* by Def2;
+    then A1: T-level n is non empty by Th10;
+    A2: rng (NumberOnLevel(n,T)") = dom NumberOnLevel(n,T) by FUNCT_1:55
+       .= T-level n by FUNCT_2:def 1;
+      for y be set holds y in Seg (2 to_power n) iff
+     ex x be set st x in dom NumberOnLevel(n,T) & y = NumberOnLevel(n,T).x
+    proof
+     let y be set;
+     thus y in Seg (2 to_power n) implies
+      ex x be set st x in dom NumberOnLevel(n,T) & y = NumberOnLevel(n,T).x
+     proof
+      assume A3: y in Seg (2 to_power n);
+      take x = (NumberOnLevel(n,T)").y;
+        Seg (2 to_power n) c= rng NumberOnLevel(n,T) by Th12;
+      hence x in dom NumberOnLevel(n,T) & y = NumberOnLevel(n,T).x
+                                             by A3,FUNCT_1:54;
+     end;
+     given x be set such that
+      A4: x in dom NumberOnLevel(n,T) and
+      A5: y = NumberOnLevel(n,T).x;
+     A6: x in T-level n by A4,FUNCT_2:def 1;
+     then x in { t where t is Element of T : len t = n } by TREES_2:def 6;
+     then consider t be Element of T such that
+      A7: t = x and
+      A8: len t = n;
+       len Rev t = n by A8,FINSEQ_5:def 3;
+     then reconsider F = Rev t as Tuple of n,BOOLEAN by FINSEQ_2:110;
+     A9: y = (Absval F) + 1 by A5,A6,A7,Def1;
+     A10: 1 <= (Absval F) + 1 by NAT_1:29;
+       Absval F < 2 to_power n by BINARI_3:1;
+     then (Absval F) + 1 <= 2 to_power n by NAT_1:38;
+     hence y in Seg (2 to_power n) by A9,A10,FINSEQ_1:3;
+    end;
+    then rng NumberOnLevel(n,T) = Seg (2 to_power n) by FUNCT_1:def 5;
+    then dom (NumberOnLevel(n,T)") = Seg (2 to_power n) by FUNCT_1:55;
+    then NumberOnLevel(n,T)" is Function of Seg (2 to_power n), T-level n
+                                                             by A2,FUNCT_2:4;
+    hence NumberOnLevel(n,T)" is FinSequence of T-level n by A1,FINSEQ_2:28;
+   end;
+  end;
+
+  definition
+   let T be full Tree;
+   let n be non empty Nat;
+   cluster FinSeqLevel(n,T) -> one-to-one;
+   coherence
+   proof
+      NumberOnLevel(n,T)" is one-to-one by FUNCT_1:62;
+    hence FinSeqLevel(n,T) is one-to-one by Def3;
+   end;
+  end;
+
+  theorem Th13:
+   for T be full Tree
+   for n be non empty Nat holds
+    NumberOnLevel(n,T).(0*n) = 1
+   proof
+    let T be full Tree;
+    A1: T = {0,1}* by Def2;
+    let n be non empty Nat;
+    A2: 0*n is Element of T by A1,BINARI_3:5,MARGREL1:def 12;
+    A3: 0*n in T-level n by A1,Th10;
+    A4: Rev (0*n) is FinSequence of BOOLEAN by A2,Lm1;
+      len Rev (0*n) = len 0*n by FINSEQ_5:def 3
+                 .= n by EUCLID:2;
+    then reconsider F = Rev (0*n) as Tuple of n,BOOLEAN by A4,FINSEQ_2:110;
+    A5: Rev (0*n) = 0*n by BINARI_3:9;
+    thus NumberOnLevel(n,T).(0*n) = (Absval F) + 1 by A3,Def1
+       .= 0 + 1 by A5,BINARI_3:7
+       .= 1;
+   end;
+
+  theorem Th14:
+   for T be full Tree
+   for n be non empty Nat
+   for y be Tuple of n,BOOLEAN st y = 0*n holds
+    NumberOnLevel(n,T).'not' y = 2 to_power n
+   proof
+    let T be full Tree;
+    A1: T = {0,1}* by Def2;
+    let n be non empty Nat;
+    let y be Tuple of n,BOOLEAN;
+    assume A2: y = 0*n;
+    A3: 'not' y in T-level n by A1,Th11;
+      len Rev 'not' y = len 'not' y by FINSEQ_5:def 3
+                 .= n by FINSEQ_2:109;
+    then reconsider F = Rev 'not' y as Tuple of n,BOOLEAN by FINSEQ_2:110;
+    A4: Rev 'not' y = 'not' y by A2,BINARI_3:10;
+    thus NumberOnLevel(n,T).'not' y = (Absval F) + 1 by A3,Def1
+       .= 2 to_power n - 1 + 1 by A2,A4,BINARI_3:8
+       .= 2 to_power n by XCMPLX_1:27;
+   end;
+
+  theorem Th15:
+   for T be full Tree
+   for n be non empty Nat holds
+    FinSeqLevel(n,T).1 = 0*n
+   proof
+    let T be full Tree;
+    A1: T = {0,1}* by Def2;
+    let n be non empty Nat;
+      0*n in T-level n by A1,Th10;
+    then A2: 0*n in dom NumberOnLevel(n,T) by FUNCT_2:def 1;
+    A3: 1 = NumberOnLevel(n,T).(0*n) by Th13;
+    thus FinSeqLevel(n,T).1 = NumberOnLevel(n,T)".1 by Def3
+       .= 0*n by A2,A3,FUNCT_1:54;
+   end;
+
+  theorem Th16:
+   for T be full Tree
+   for n be non empty Nat
+   for y be Tuple of n,BOOLEAN st y = 0*n holds
+    FinSeqLevel(n,T).(2 to_power n) = 'not' y
+   proof
+    let T be full Tree;
+    A1: T = {0,1}* by Def2;
+    let n be non empty Nat;
+    let y be Tuple of n,BOOLEAN;
+    assume A2: y = 0*n;
+      'not' y in T-level n by A1,Th11;
+    then A3: 'not' y in dom NumberOnLevel(n,T) by FUNCT_2:def 1;
+    A4: 2 to_power n = NumberOnLevel(n,T).'not' y by A2,Th14;
+    thus FinSeqLevel(n,T).(2 to_power n) = NumberOnLevel(n,T)".(2 to_power n)
+                                                                       by Def3
+       .= 'not' y by A3,A4,FUNCT_1:54;
+   end;
+
+  theorem Th17:
+   for T be full Tree
+   for n be non empty Nat
+   for i be Nat st i in Seg (2 to_power n) holds
+    FinSeqLevel(n,T).i = Rev (n-BinarySequence (i-'1))
+   proof
+    let T be full Tree;
+    let n be non empty Nat;
+    let i be Nat;
+    assume i in Seg (2 to_power n);
+    then A1: 1 <= i & i <= 2 to_power n by FINSEQ_1:3;
+    set nB = n-BinarySequence (i-'1);
+    A2: len Rev nB = len nB by FINSEQ_5:def 3
+       .= n by FINSEQ_2:109;
+    then reconsider RnB = Rev nB as Tuple of n,BOOLEAN by FINSEQ_2:110;
+      RnB in {0,1}* by FINSEQ_1:def 11,MARGREL1:def 12;
+    then RnB is Element of T by Def2;
+    then RnB in { t where t is Element of T : len t = n } by A2;
+    then A3: RnB in T-level n by TREES_2:def 6;
+      nB = Rev RnB by FINSEQ_6:29;
+    then A4: NumberOnLevel(n,T).RnB = (Absval nB) + 1 by A3,Def1;
+    A5: RnB in dom NumberOnLevel(n,T) by A3,FUNCT_2:def 1;
+      i < 2 to_power n + 1 by A1,NAT_1:38;
+    then i - 1 < 2 to_power n by REAL_1:84;
+    then i-'1 < 2 to_power n by A1,SCMFSA_7:3;
+    then A6: (Absval nB) + 1 = i-'1 + 1 by BINARI_3:36
+       .= i - 1 + 1 by A1,SCMFSA_7:3
+       .= i by XCMPLX_1:27;
+    thus FinSeqLevel(n,T).i = NumberOnLevel(n,T)".i by Def3
+       .= Rev (n-BinarySequence (i-'1)) by A4,A5,A6,FUNCT_1:54;
+   end;
+
+  theorem Th18:
+   for T be full Tree
+   for n be Nat holds
+    Card (T-level n) = 2 to_power n
+   proof
+    let T be full Tree;
+    A1: T = {0,1}* by Def2;
+    defpred _R[Nat] means Card (T-level $1) = 2 to_power $1;
+     Card (T-level 0) = card {{}} by QC_LANG4:17 .= 1 by CARD_1:79
+       .= 2 to_power 0 by POWER:29; then
+    A2: _R[0];
+    A3: for n be Nat st _R[n] holds _R[n+1] proof let n be Nat;
+     assume A4: Card (T-level n) = 2 to_power n;
+     set Tn1_0 = { p where p is Element of T : len p = n+1 & p.(n+1) = 0 };
+     set Tn1_1 = { p where p is Element of T : len p = n+1 & p.(n+1) = 1 };
+     A5: len 0*(n+1) = n+1 by EUCLID:2;
+     A6: 0*(n+1) in T by A1,BINARI_3:5,MARGREL1:def 12;
+     A7: n+1 in Seg (n+1) by FINSEQ_1:6;
+       (0*(n+1)).(n+1) = ((n+1) |-> (0 qua Real)).(n+1) by EUCLID:def 4
+        .= 0 by A7,FINSEQ_2:70;
+     then A8: 0*(n+1) in Tn1_0 by A5,A6;
+     A9: len (0*n^<*1*>) = len 0*n + 1 by FINSEQ_2:19
+        .= n+1 by EUCLID:2;
+       0*n in {0,1}* by BINARI_3:5,MARGREL1:def 12;
+     then A10: 0*n is FinSequence of {0,1} by FINSEQ_1:def 11;
+       rng <*1*> c= {0,1}
+     proof
+      let z be set;
+      assume z in rng <*1*>;
+      then z in {1} by FINSEQ_1:55;
+      then z = 1 by TARSKI:def 1;
+      hence z in {0,1} by TARSKI:def 2;
+     end;
+     then A11: <*1*> is FinSequence of {0,1} by FINSEQ_1:def 4;
+     then 0*n^<*1*> is FinSequence of {0,1} by A10,SCMFSA_7:23;
+     then A12: 0*n^<*1*> in T by A1,FINSEQ_1:def 11;
+       len 0*n = n by EUCLID:2;
+     then (0*n^<*1*>).(n+1) = 1 by FINSEQ_1:59;
+     then A13: 0*n^<*1*> in Tn1_1 by A9,A12;
+     A14: Tn1_0 c= T-level (n+1)
+     proof
+      let x be set;
+      assume x in Tn1_0;
+      then consider p be Element of T such that
+       A15: p = x and
+       A16: len p = n+1 and
+         p.(n+1) = 0;
+        p in { w where w is Element of T : len w = n+1 } by A16;
+      hence x in T-level (n+1) by A15,TREES_2:def 6;
+     end;
+     A17: Tn1_1 c= T-level (n+1)
+     proof
+      let x be set;
+      assume x in Tn1_1;
+      then consider p be Element of T such that
+       A18: p = x and
+       A19: len p = n+1 and
+         p.(n+1) = 1;
+        p in { w where w is Element of T : len w = n+1 } by A19;
+      hence x in T-level (n+1) by A18,TREES_2:def 6;
+     end;
+     then reconsider Tn1_0,Tn1_1 as non empty finite set
+                                                    by A8,A13,A14,FINSET_1:13;
+     A20: Tn1_0 \/ Tn1_1 c= T-level (n+1) by A14,A17,XBOOLE_1:8;
+     A21: T-level (n+1) c= Tn1_0 \/ Tn1_1
+     proof
+      let x be set;
+      assume x in T-level (n+1);
+      then x in { w where w is Element of T : len w = n+1 } by TREES_2:def 6;
+      then consider p be Element of T such that
+       A22: p = x and
+       A23: len p = n+1;
+        x in Tn1_0 or x in Tn1_1
+      proof
+       assume A24: not x in Tn1_0;
+         n+1 in Seg (n+1) by FINSEQ_1:6;
+       then n+1 in dom p by A23,FINSEQ_1:def 3;
+       then p.(n+1) in BOOLEAN by FINSEQ_2:13;
+       then p.(n+1) = 0 or p.(n+1) = 1 by MARGREL1:def 12,TARSKI:def 2;
+       hence x in Tn1_1 by A22,A23,A24;
+      end;
+      hence x in Tn1_0 \/ Tn1_1 by XBOOLE_0:def 2;
+     end;
+     A25: Tn1_0 misses Tn1_1
+     proof
+      assume Tn1_0 /\ Tn1_1 <> {};
+      then consider x be set such that
+       A26: x in Tn1_0 /\ Tn1_1 by XBOOLE_0:def 1;
+      A27: x in Tn1_0 & x in Tn1_1 by A26,XBOOLE_0:def 3;
+      then consider p1 be Element of T such that
+       A28: p1 = x and
+         len p1 = n+1 and
+       A29: p1.(n+1) = 0;
+      consider p2 be Element of T such that
+       A30: p2 = x and
+         len p2 = n+1 and
+       A31: p2.(n+1) = 1 by A27;
+      thus contradiction by A28,A29,A30,A31;
+     end;
+     reconsider Tn = T-level n as finite non empty set by A1,Th10;
+     defpred _P[set,set] means ex p be FinSequence st p = $1 & $2 = p^<* 0 *>;
+     A32: for x be Element of Tn ex y be Element of Tn1_0 st _P[x,y] proof
+      let x be Element of Tn;
+        x in T-level n;
+      then x in { w where w is Element of T : len w = n } by TREES_2:def 6;
+      then consider p be Element of T such that
+       A33: p = x and
+       A34: len p = n;
+      set y = p^<* 0 *>;
+        rng <* 0 *> c= {0,1}
+      proof
+       let z be set;
+       assume z in rng <* 0 *>;
+       then z in {0} by FINSEQ_1:55;
+       then z = 0 by TARSKI:def 1;
+       hence z in {0,1} by TARSKI:def 2;
+      end;
+      then <* 0 *> is FinSequence of {0,1} by FINSEQ_1:def 4;
+      then p^<* 0 *> is FinSequence of {0,1} by MARGREL1:def 12,SCMFSA_7:23;
+      then A35: y in T by A1,FINSEQ_1:def 11;
+      A36: len y = n+1 by A34,FINSEQ_2:19;
+        y.(n+1) = 0 by A34,FINSEQ_1:59;
+      then y in { t where t is Element of T : len t = n+1 & t.(n+1) = 0 }
+                                                                  by A35,A36;
+      then reconsider y as Element of Tn1_0;
+      take y,p;
+      thus thesis by A33;
+     end;
+     defpred _P1[set,set] means ex p be FinSequence st p = $1 & $2 = p^<* 1 *>;
+     A37: for x be Element of Tn ex y be Element of Tn1_1 st _P1[x,y]
+     proof
+      let x be Element of Tn;
+        x in T-level n;
+      then x in { w where w is Element of T : len w = n } by TREES_2:def 6;
+      then consider p be Element of T such that
+       A38: p = x and
+       A39: len p = n;
+      set y = p^<*1*>;
+        p^<*1*> is FinSequence of {0,1} by A11,MARGREL1:def 12,SCMFSA_7:23;
+      then A40: y in T by A1,FINSEQ_1:def 11;
+      A41: len y = n+1 by A39,FINSEQ_2:19;
+        y.(n+1) = 1 by A39,FINSEQ_1:59;
+      then y in { t where t is Element of T : len t = n+1 & t.(n+1) = 1 }
+                                                                  by A40,A41;
+      then reconsider y as Element of Tn1_1;
+      take y,p;
+      thus thesis by A38;
+     end;
+     consider f0 be Function of Tn,Tn1_0 such that
+      A42: for x be Element of Tn holds _P[x,f0.x] from FuncExD(A32);
+     consider f1 be Function of Tn,Tn1_1 such that
+      A43: for x be Element of Tn holds _P1[x,f1.x] from FuncExD(A37);
+     A44: Tn c= dom f0 by FUNCT_2:def 1;
+       now let x1,x2 be set;
+      assume that
+       A45: x1 in dom f0 and
+       A46: x2 in dom f0 and
+       A47: f0.x1 = f0.x2;
+      reconsider x1'= x1, x2'= x2 as Element of Tn by A45,A46,FUNCT_2:def 1;
+      consider p1 be FinSequence such that
+       A48: p1 = x1' and
+       A49: f0.x1' = p1^<* 0 *> by A42;
+      consider p2 be FinSequence such that
+       A50: p2 = x2' and
+       A51: f0.x2' = p2^<* 0 *> by A42;
+      thus x1 = x2 by A47,A48,A49,A50,A51,FINSEQ_2:20;
+     end;
+     then f0 is one-to-one by FUNCT_1:def 8;
+     then Tn,f0.:Tn are_equipotent by A44,CARD_1:60;
+     then A52: Tn,rng f0 are_equipotent by FUNCT_2:45;
+       now let y be set;
+      assume y in Tn1_0;
+      then consider t be Element of T such that
+       A53: t = y and
+       A54: len t = n+1 and
+       A55: t.(n+1) = 0;
+      consider p be FinSequence of BOOLEAN,
+                    d be Element of BOOLEAN such that
+       A56: t = p^<*d*> by A54,FINSEQ_2:22;
+      A57: len p + 1 = n+1 by A54,A56,FINSEQ_2:19;
+      then A58: len p = n by XCMPLX_1:2;
+      reconsider x = p as set;
+      take x;
+        p in T by A1,FINSEQ_1:def 11,MARGREL1:def 12;
+      then A59: p in { w where w is Element of T : len w = n } by A58;
+      hence x in Tn by TREES_2:def 6;
+      reconsider x' = x as Element of Tn by A59,TREES_2:def 6;
+      consider q be FinSequence such that
+       A60: q = x' and
+       A61: f0.x' = q^<* 0 *> by A42;
+      thus y = f0.x by A53,A55,A56,A57,A60,A61,FINSEQ_1:59;
+     end;
+     then rng f0 = Tn1_0 by FUNCT_2:16;
+     then A62: card Tn = card Tn1_0 by A52,CARD_1:81;
+     A63: Tn c= dom f1 by FUNCT_2:def 1;
+       now let x1,x2 be set;
+      assume that
+       A64: x1 in dom f1 and
+       A65: x2 in dom f1 and
+       A66: f1.x1 = f1.x2;
+      reconsider x1'= x1, x2'= x2 as Element of Tn by A64,A65,FUNCT_2:def 1;
+      consider p1 be FinSequence such that
+       A67: p1 = x1' and
+       A68: f1.x1' = p1^<*1*> by A43;
+      consider p2 be FinSequence such that
+       A69: p2 = x2' and
+       A70: f1.x2' = p2^<*1*> by A43;
+      thus x1 = x2 by A66,A67,A68,A69,A70,FINSEQ_2:20;
+     end;
+     then f1 is one-to-one by FUNCT_1:def 8;
+     then Tn,f1.:Tn are_equipotent by A63,CARD_1:60;
+     then A71: Tn,rng f1 are_equipotent by FUNCT_2:45;
+       now let y be set;
+      assume y in Tn1_1;
+      then consider t be Element of T such that
+       A72: t = y and
+       A73: len t = n+1 and
+       A74: t.(n+1) = 1;
+      consider p be FinSequence of BOOLEAN,
+                    d be Element of BOOLEAN such that
+       A75: t = p^<*d*> by A73,FINSEQ_2:22;
+      A76: len p + 1 = n+1 by A73,A75,FINSEQ_2:19;
+      then A77: len p = n by XCMPLX_1:2;
+      reconsider x = p as set;
+      take x;
+        p in T by A1,FINSEQ_1:def 11,MARGREL1:def 12;
+      then A78: p in { w where w is Element of T : len w = n } by A77;
+      hence x in Tn by TREES_2:def 6;
+      reconsider x' = x as Element of Tn by A78,TREES_2:def 6;
+      consider q be FinSequence such that
+       A79: q = x' and
+       A80: f1.x' = q^<*1*> by A43;
+      thus y = f1.x by A72,A74,A75,A76,A79,A80,FINSEQ_1:59;
+     end;
+     then A81: rng f1 = Tn1_1 by FUNCT_2:16;
+     thus 2 to_power (n+1) =
+        2 to_power n * 2 to_power 1 by POWER:32
+        .= 2 * 2 to_power n by POWER:30
+        .= card Tn + card Tn by A4,XCMPLX_1:11
+        .= card Tn1_0 + card Tn1_1 by A62,A71,A81,CARD_1:81
+        .= card (Tn1_0 \/ Tn1_1) by A25,CARD_2:53
+        .= Card (T-level (n+1)) by A20,A21,XBOOLE_0:def 10;
+    end;
+    thus for n be Nat holds _R[n] from Ind(A2,A3);
+   end;
+
+  theorem Th19:
+   for T be full Tree
+   for n be non empty Nat holds
+    len FinSeqLevel(n,T) = 2 to_power n
+   proof
+    let T be full Tree;
+    let n be non empty Nat;
+      rng FinSeqLevel(n,T) = rng (NumberOnLevel(n,T)") by Def3
+       .= dom NumberOnLevel(n,T) by FUNCT_1:55
+       .= T-level n by FUNCT_2:def 1;
+    then A1: dom FinSeqLevel(n,T),T-level n are_equipotent by WELLORD2:def 4;
+      Card Seg len FinSeqLevel(n,T) = Card dom FinSeqLevel(n,T)
+                                                           by FINSEQ_1:def 3
+       .= Card (T-level n) by A1,CARD_1:21
+       .= 2 to_power n by Th18;
+    hence thesis by FINSEQ_1:78;
+   end;
+
+  theorem Th20:
+   for T be full Tree
+   for n be non empty Nat holds
+    dom FinSeqLevel(n,T) = Seg (2 to_power n)
+   proof
+    let T be full Tree;
+    let n be non empty Nat;
+    thus dom FinSeqLevel(n,T) = Seg len FinSeqLevel(n,T) by FINSEQ_1:def 3
+       .= Seg (2 to_power n) by Th19;
+   end;
+
+  theorem
+     for T be full Tree
+   for n be non empty Nat holds
+    rng FinSeqLevel(n,T) = T-level n
+   proof
+    let T be full Tree;
+    A1: T = {0,1}* by Def2;
+    let n be non empty Nat;
+      T-level n is non empty by A1,Th10;
+    then reconsider p = FinSeqLevel(n,T) as
+                  Function of dom FinSeqLevel(n,T), T-level n by FINSEQ_2:30;
+      Seg len FinSeqLevel(n,T) is finite;
+    then reconsider dp = dom p as finite set by FINSEQ_1:def 3;
+    reconsider Tln = T-level n as finite set;
+      card dp = Card Seg (2 to_power n) by Th20
+           .= 2 to_power n by FINSEQ_1:78
+           .= card Tln by Th18;
+    hence rng FinSeqLevel(n,T) = T-level n by FINSEQ_4:78;
+   end;
+
+  theorem
+     for T be full Tree holds
+    FinSeqLevel(1,T).1 = <* 0 *>
+   proof
+    let T be full Tree;
+    thus FinSeqLevel(1,T).1 = 0*1 by Th15
+       .= 1 |-> (0 qua Real) by EUCLID:def 4
+       .= <* 0 *> by FINSEQ_2:73;
+   end;
+
+  theorem
+     for T be full Tree holds
+    FinSeqLevel(1,T).2 = <* 1 *>
+   proof
+    let T be full Tree;
+    A1: 0*1 = 1 |-> (0 qua Real) by EUCLID:def 4
+       .= <* FALSE *> by FINSEQ_2:73,MARGREL1:36;
+    thus FinSeqLevel(1,T).2 = FinSeqLevel(1,T).(2 to_power 1) by POWER:30
+       .= <* 1 *> by A1,Th16,BINARI_3:15,MARGREL1:36;
+   end;
+
+  theorem
+     for T be full Tree
+   for n,i be non empty Nat st i <= 2 to_power (n+1)
+   for F be Tuple of n,BOOLEAN st F = FinSeqLevel(n,T).((i+1) div 2) holds
+    FinSeqLevel(n+1,T).i = F^<*(i+1) mod 2*>
+   proof
+    let T be full Tree;
+    let n,i be non empty Nat;
+    assume A1: i <= 2 to_power (n+1);
+    let F be Tuple of n,BOOLEAN;
+    assume A2: F = FinSeqLevel(n,T).((i+1) div 2);
+    A3: 1 <= i by RLVECT_1:99;
+    then 1 + 1 <= i + 1 by AXIOMS:24;
+    then A4: 1 <= (i+1) div 2 by NAT_2:15;
+      2 to_power (n+1)
+       = (2 to_power n) * (2 to_power 1) by POWER:32
+       .= 2 * (2 to_power n) by POWER:30;
+    then (i+1) div 2 <= 2 to_power n by A1,NAT_2:27;
+    then A5: (i+1) div 2 in Seg (2 to_power n) by A4,FINSEQ_1:3;
+    A6: now per cases;
+     suppose i-'1 is odd;
+      then A7: i-'1 mod 2 = 1 by NAT_2:24;
+      then i-'1 + (1+1)*1 mod 2 = 1 by GR_CY_1:1;
+      then i-'1 + 1 + 1 mod 2 = 1 by XCMPLX_1:1;
+      hence (i+1) mod 2 = (i-'1) mod 2 by A3,A7,AMI_5:4;
+     suppose i-'1 is even;
+      then A8: i-'1 mod 2 = 0 by NAT_2:23;
+      then i-'1 + (1 + 1)*1 mod 2 = 0 by GR_CY_1:1;
+      then i-'1 + 1 + 1 mod 2 = 0 by XCMPLX_1:1;
+      hence (i+1) mod 2 = (i-'1) mod 2 by A3,A8,AMI_5:4;
+    end;
+      i + 1 >= 1 + 1 by A3,AXIOMS:24;
+    then A9: 1 <= (i + 1) div 2 by NAT_2:15;
+    A10: (i-'1) div 2 = (i-'1) div 2 + 1 - 1 by XCMPLX_1:26
+       .= (i-'1 + (1 + 1)) div 2 - 1 by NAT_2:16
+       .= ((i-'1 + 1 + 1) div 2) - 1 by XCMPLX_1:1
+       .= ((i + 1) div 2) - 1 by A3,AMI_5:4
+       .= ((i + 1) div 2) -' 1 by A9,SCMFSA_7:3;
+      i in Seg (2 to_power (n+1)) by A1,A3,FINSEQ_1:3;
+    hence FinSeqLevel(n+1,T).i = Rev ((n+1)-BinarySequence (i-'1)) by Th17
+       .= Rev (<*(i-'1) mod 2*> ^ (n-BinarySequence ((i-'1) div 2)))
+                                                            by BINARI_3:35
+       .= (Rev (n-BinarySequence (((i+1) div 2)-'1)))^<*(i+1) mod 2*>
+                                                         by A6,A10,FINSEQ_6:28
+       .= F^<*(i+1) mod 2*> by A2,A5,Th17;
+   end;

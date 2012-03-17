@@ -1,0 +1,318 @@
+:: Mahlo and inaccessible cardinals
+::  by Josef Urban
+::
+:: Received August 28, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, CARD_1, FINSET_1, ORDINAL1, ORDINAL2, CARD_4, CARD_5,
+      LATTICES, PRE_TOPC, SETFAM_1, SUBSET_1, FUNCT_1, RELAT_1, CARD_FIL,
+      CARD_3, WAYBEL11, TARSKI, CARD_2, CLASSES1, PROB_1, ZFMISC_1, CLASSES2,
+      ZF_MODEL, CARD_LAR, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      CLASSES1, FUNCT_1, SETFAM_1, FINSET_1, ORDINAL1, FUNCT_2, ORDINAL2,
+      CARD_1, CARD_2, PROB_1, CARD_3, CARD_5, CARD_FIL, CARD_4, CLASSES2,
+      ZF_MODEL;
+ constructors NAT_1, WELLORD2, CARD_2, CARD_5, ZFREFLE1, CARD_FIL, CARD_4,
+      CLASSES1, PROB_1, CLASSES2, ZF_MODEL, MEMBERED;
+ clusters ORDINAL1, CARD_1, ORDINAL3, CARD_5, RELSET_1, SUBSET_1, CARD_FIL,
+      CLASSES2, SETFAM_1, ARYTM_3, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE;
+
+
+begin
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                   ::
+::             Some initial settings                 ::
+::                                                   ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let S be set; let X be set; let Y be Subset of S;
+  redefine func X /\ Y -> Subset of S;
+end;
+
+definition
+  cluster cardinal infinite -> being_limit_ordinal Ordinal;
+end;
+
+definition
+  cluster non empty being_limit_ordinal -> infinite Ordinal;
+end;
+
+definition
+  cluster non limit -> non countable Aleph;
+end;
+
+definition
+  cluster regular non countable Aleph;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                   ::
+::       Closed, unbounded and stationary sets       ::
+::                                                   ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+reserve A,B for being_limit_ordinal infinite Ordinal;
+reserve B1,B2,B3,B5,B6,D, C for Ordinal;
+reserve X for set;
+
+definition
+  let A,X;
+  pred X is_unbounded_in A means
+:: CARD_LAR:def 1
+  X c= A & sup X = A;
+  pred X is_closed_in A means
+:: CARD_LAR:def 2
+  X c= A & for B st B in A holds sup (X /\ B)=B implies B in X;
+end;
+
+definition
+  let A,X;
+  pred X is_club_in A means
+:: CARD_LAR:def 3
+  X is_closed_in A & X is_unbounded_in A;
+end;
+
+reserve X for Subset of A;
+
+definition
+  let A,X;
+  attr X is unbounded means
+:: CARD_LAR:def 4
+  sup X = A;
+  antonym X is bounded;
+  attr X is closed means
+:: CARD_LAR:def 5
+  for B st B in A holds sup (X /\ B)=B implies B in X;
+end;
+
+canceled;
+
+theorem :: CARD_LAR:2
+   X is_club_in A iff
+  X is closed unbounded;
+
+:: should be probably in ordinal2
+theorem :: CARD_LAR:3
+  X c= sup X;
+
+theorem :: CARD_LAR:4
+  (X is non empty &
+  for B1 st B1 in X ex B2 st (B2 in X & B1 in B2) ) implies sup X is
+  being_limit_ordinal infinite Ordinal;
+
+theorem :: CARD_LAR:5
+  X is bounded iff ex B1 st B1 in A & X c= B1;
+
+theorem :: CARD_LAR:6
+  not sup (X /\ B) = B implies ex B1 st B1 in B & (X /\ B) c= B1;
+
+theorem :: CARD_LAR:7
+  X is unbounded iff for B1 st B1 in A ex C st C in X & B1 c= C;
+
+theorem :: CARD_LAR:8
+  X is unbounded implies X is non empty;
+
+theorem :: CARD_LAR:9
+  X is unbounded & B1 in A implies ex B3 being Element of A st
+  B3 in { B2 where B2 is Element of A: B2 in X & B1 in B2};
+
+definition let A,X,B1;
+  assume  X is unbounded;
+  assume  B1 in A;
+  func LBound(B1,X) -> Element of X equals
+:: CARD_LAR:def 6
+ inf { B2 where B2 is Element of A: B2 in X & B1 in B2};
+end;
+
+theorem :: CARD_LAR:10
+  X is unbounded & B1 in A implies
+  LBound(B1,X) in X & B1 in LBound(B1,X);
+
+theorem :: CARD_LAR:11
+  [#] A is closed unbounded;
+
+:: don't know what to do with this, sometimes "X \ Y -> Subset of X" is more needed;
+definition let A be set; let X be Subset of A; let Y be set;
+  redefine func X \ Y -> Subset of A;
+end;
+
+theorem :: CARD_LAR:12
+  B1 in A & X is closed unbounded implies
+  X \ B1 is closed unbounded;
+
+theorem :: CARD_LAR:13
+  B1 in A implies A \ B1 is closed unbounded;
+
+definition
+  let A,X;
+  attr X is stationary means
+:: CARD_LAR:def 7
+ for Y being Subset of A holds
+  Y is closed unbounded implies X /\ Y is non empty;
+end;
+
+theorem :: CARD_LAR:14
+  for X,Y being Subset of A holds (X is stationary & X c= Y implies
+  Y is stationary);
+
+definition
+  let A;
+  let X be set;
+  pred X is_stationary_in A means
+:: CARD_LAR:def 8
+ X c= A & for Y being Subset of A holds
+  Y is closed unbounded implies X /\ Y is non empty;
+end;
+
+theorem :: CARD_LAR:15
+  for X,Y being set holds (X is_stationary_in A & X c= Y & Y c= A
+  implies Y is_stationary_in A);
+
+:: belongs e.g. to setfam?
+definition let X be set;
+  let S be Subset-Family of X;
+  redefine mode Element of S -> Subset of X;
+end;
+
+theorem :: CARD_LAR:16
+    X is stationary implies X is unbounded;
+
+definition let A,X;
+  func limpoints X -> Subset of A equals
+:: CARD_LAR:def 9
+  {B1 where B1 is Element of A:
+  B1 is infinite being_limit_ordinal & sup (X /\ B1) = B1};
+end;
+
+theorem :: CARD_LAR:17
+  X /\ B3 c= B1 implies B3 /\ limpoints X c= succ B1;
+
+theorem :: CARD_LAR:18
+    X c= B1 implies limpoints X c= succ B1;
+
+theorem :: CARD_LAR:19
+  limpoints X is closed;
+
+:: mainly used for MahloReg, LimUnb says this usually doesnot happen
+theorem :: CARD_LAR:20
+  X is unbounded & limpoints X is bounded implies
+  ex B1 st B1 in A &
+  {succ B2 where B2 is Element of A : B2 in X & B1 in succ B2} is_club_in A;
+
+reserve M for non countable Aleph;
+reserve X for Subset of M;
+
+definition let M;
+  cluster cardinal infinite Element of M;
+end;
+
+reserve N,N1 for cardinal infinite Element of M;
+
+
+theorem :: CARD_LAR:21
+  for M being Aleph for X being Subset of M
+  holds X is unbounded implies cf M <=` Card X;
+
+theorem :: CARD_LAR:22
+  for S being Subset-Family of M st
+  for X being Element of S holds X is closed holds
+  meet S is closed;
+
+theorem :: CARD_LAR:23
+  alef 0 <` cf M implies
+  for f being Function of NAT,X holds sup rng f in M;
+
+theorem :: CARD_LAR:24
+    alef 0 <` cf M implies
+  for S being non empty Subset-Family of M st ( Card S <` cf M &
+  for X being Element of S holds X is closed unbounded ) holds
+  meet S is closed unbounded;
+
+theorem :: CARD_LAR:25
+  (alef 0 <` cf M & X is unbounded) implies
+  for B1 st B1 in M ex B st ( B in M & B1 in B & B in limpoints X );
+
+theorem :: CARD_LAR:26
+    (alef 0 <` cf M & X is unbounded) implies
+  limpoints X is unbounded;
+
+definition let M;
+  attr M is Mahlo means
+:: CARD_LAR:def 10
+ { N : N is regular } is_stationary_in M;
+  synonym M is_Mahlo;
+  attr M is strongly_Mahlo means
+:: CARD_LAR:def 11
+ { N :  N is strongly_inaccessible}
+   is_stationary_in M;
+  synonym M is_strongly_Mahlo;
+end;
+
+theorem :: CARD_LAR:27
+  M is strongly_Mahlo implies M is Mahlo;
+
+theorem :: CARD_LAR:28
+  M is Mahlo implies M is regular;
+
+theorem :: CARD_LAR:29
+  M is Mahlo implies M is limit;
+
+theorem :: CARD_LAR:30
+    M is Mahlo implies M is inaccessible;
+
+theorem :: CARD_LAR:31
+  M is strongly_Mahlo implies M is strong_limit;
+
+theorem :: CARD_LAR:32
+    M is strongly_Mahlo implies M is strongly_inaccessible;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                   ::
+::  Proof that strongly inaccessible is model of ZF  ::
+::                                                   ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+begin
+
+reserve A for Ordinal;
+
+reserve x,y for set;
+reserve X,Y for set;
+
+:: shouldnot be e.g. in CARD_1? or is there st. more general?
+theorem :: CARD_LAR:33
+  (for x st x in X ex y st y in X & x c= y & y is Cardinal) implies
+  union X is Cardinal;
+
+theorem :: CARD_LAR:34
+  for M being Aleph holds
+  (Card X <` cf M & for Y st Y in X holds Card Y <` M) implies
+  Card union X in M;
+
+theorem :: CARD_LAR:35
+  M is strongly_inaccessible & A in M implies Card Rank A <` M;
+
+theorem :: CARD_LAR:36
+  M is strongly_inaccessible implies Card Rank M = M;
+
+reserve X,Y for set;
+
+theorem :: CARD_LAR:37
+  M is strongly_inaccessible implies Rank M is being_Tarski-Class;
+
+theorem :: CARD_LAR:38
+  for A being non empty Ordinal holds Rank A is non empty;
+
+definition let A be non empty Ordinal;
+  cluster Rank A -> non empty;
+end;
+
+theorem :: CARD_LAR:39
+  M is strongly_inaccessible implies Rank M is Universe;
+
+theorem :: CARD_LAR:40
+    M is strongly_inaccessible implies Rank M is being_a_model_of_ZF;

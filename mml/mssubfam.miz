@@ -1,0 +1,1723 @@
+:: Certain Facts about Families of Subsets of Many Sorted Sets
+::  by Artur Korni{\l}owicz
+::
+:: Received October 27, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, SETFAM_1, PRALG_1, FUNCT_1, BOOLE, CANTOR_1, TARSKI,
+      ZF_REFLE, FUNCT_6, RELAT_1, MSUALG_3, CAT_4, NATTRA_1, MATRIX_1,
+      PRE_CIRC, FINSET_1, MSUALG_2, PRALG_2, CAT_1, FUNCT_4, AUTALG_1, FUNCT_2,
+      GRCAT_1, COHSP_1, MSSUBFAM, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      ORDINAL1, FUNCT_2, CQC_LANG, FINSET_1, FUNCT_4, PBOOLE, MSUALG_1,
+      MSUALG_2, MSUALG_3, PRALG_1, PRALG_2, AUTALG_1, PRE_CIRC, EXTENS_1,
+      CANTOR_1, MBOOLEAN, PZFMISC1;
+ constructors CQC_LANG, MSUALG_3, PRALG_2, AUTALG_1, PRE_CIRC, EXTENS_1,
+      CANTOR_1, MBOOLEAN, PZFMISC1;
+ clusters FINSET_1, MBOOLEAN, PBOOLE, PRALG_1, PRE_CIRC, PZFMISC1, CQC_LANG,
+      RELSET_1, RELAT_1, FUNCT_1;
+ requirements SUBSET, BOOLE;
+ definitions XBOOLE_0, MSUALG_1, MSUALG_2, PBOOLE, PRE_CIRC, ORDINAL1;
+ theorems ALI2, AUTALG_1, CANTOR_1, COMPTS_1, CQC_LANG, CQC_THE1, FINSET_1,
+      FIN_TOPO, FRAENKEL, FUNCT_2, FUNCT_4, FUNCT_6, MBOOLEAN, MSUALG_1,
+      MSUALG_2, MSUALG_3, PBOOLE, PRALG_2, PRE_CIRC, PZFMISC1, RLVECT_2,
+      SETFAM_1, TARSKI, RELSET_1, RELAT_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, MSUALG_1;
+
+begin :: Preliminaries
+
+reserve I, G, H, i, x for set,
+        A, B, M for ManySortedSet of I,
+        sf, sg, sh for Subset-Family of I,
+        v, w for Subset of I,
+        F for ManySortedFunction of I;
+
+scheme MSFExFunc { I() -> set,
+                   A, B() -> ManySortedSet of I(),
+                   P[set,set,set] } :
+ ex F be ManySortedFunction of A(), B() st
+  for i be set st i in I() holds
+   ex f be Function of A().i, B().i st f = F.i &
+    for x be set st x in A().i holds P[f.x,x,i]
+provided
+A1:  for i be set st i in I() holds
+   for x be set st x in A().i ex y be set st y in B().i & P[y,x,i]
+  proof
+ defpred Q[set,set] means
+   ex f1 be Function of A().$1, B().$1 st f1 = $2 &
+    for x be set st x in A().$1 holds P[f1.x,x,$1];
+A2: now
+      let i be set such that
+A3:     i in I();
+      per cases;
+      suppose
+          B().i is non empty;
+      then reconsider bb = B().i as non empty set;
+      defpred Z[set,set] means P[ $2,$1,i];
+A4:   for e be set st e in A().i ex u be set st u in bb & Z[e,u] by A1,A3;
+      consider ff be Function of A().i, bb such that
+A5:     for e be set st e in A().i holds Z[e,ff.e] from FuncEx1(A4);
+      reconsider fff = ff as Function of A().i, B().i;
+      reconsider j = fff as set;
+      take j;
+      thus Q[i,j] by A5;
+      suppose
+A6:     B().i is empty;
+A7:   now
+        let x be set;
+          for y be set holds not (y in B().i & P[y,x,i]) by A6;
+        hence not x in A().i by A1,A3;
+      end;
+      then A().i = {} by XBOOLE_0:def 1;
+      then reconsider fff = {} as Function of A().i, B().i
+       by FUNCT_2:55,RELAT_1:60;
+      reconsider j = fff as set;
+      take j;
+      thus Q[i,j]
+      proof
+       take fff;
+       thus fff = j;
+       thus for e be set st e in A().i holds P[fff.e,e,i] by A7;
+      end;
+    end;
+    consider F be ManySortedSet of I() such that
+A8:   for i be set st i in I() holds Q[i,F.i] from MSSEx(A2);
+      F is ManySortedFunction of A(), B()
+    proof
+      let i be set; assume
+       i in I();
+      then consider f be Function of A().i, B().i such that
+A9:     f = F.i and
+          for x be set st x in A().i holds P[f.x,x,i] by A8;
+      thus F.i is Function of A().i, B().i by A9;
+    end;
+    then reconsider F as ManySortedFunction of A(), B();
+    take F;
+    thus thesis by A8;
+  end;
+
+theorem     :: SETFAM_1:3
+  sf <> {} implies Intersect sf c= union sf
+  proof
+    assume sf <> {};
+    then Intersect sf = meet sf by CANTOR_1:def 3;
+    hence thesis by SETFAM_1:3;
+  end;
+
+theorem     :: SETFAM_1:4
+  G in sf implies Intersect sf c= G
+  proof
+    assume
+A1:   G in sf;
+    then meet sf = Intersect sf by CANTOR_1:def 3;
+    hence thesis by A1,SETFAM_1:4;
+  end;
+
+theorem     :: SETFAM_1:5
+  {} in sf implies Intersect sf = {}
+  proof
+    assume
+A1:   {} in sf;
+    then Intersect sf = meet sf by CANTOR_1:def 3;
+    hence thesis by A1,SETFAM_1:5;
+  end;
+
+theorem     :: SETFAM_1:6
+  for Z be Subset of I holds
+  (for Z1 be set st Z1 in sf holds Z c= Z1) implies Z c= Intersect sf
+  proof
+    let Z be Subset of I such that
+A1:  (for Z1 be set st Z1 in sf holds Z c= Z1);
+    per cases;
+    suppose
+A2:     sf <> {};
+      then Intersect sf = meet sf by CANTOR_1:def 3;
+      hence Z c= Intersect sf by A1,A2,SETFAM_1:6;
+    suppose sf = {};
+      then Intersect sf = I by CANTOR_1:def 3;
+      hence Z c= Intersect sf;
+  end;
+
+theorem     :: SETFAM_1:6
+  sf <> {} & (for Z1 be set st Z1 in sf holds G c= Z1) implies G c= Intersect
+sf
+  proof
+    assume that
+A1:   sf <> {} and
+A2:   for Z1 be set st Z1 in sf holds G c= Z1;
+      Intersect sf = meet sf by A1,CANTOR_1:def 3;
+    hence thesis by A1,A2,SETFAM_1:6;
+  end;
+
+theorem     :: SETFAM_1:8
+  G in sf & G c= H implies Intersect sf c= H
+  proof
+    assume
+A1:   G in sf & G c= H;
+    then Intersect sf = meet sf by CANTOR_1:def 3;
+    hence thesis by A1,SETFAM_1:8;
+  end;
+
+theorem     :: SETFAM_1:9
+  G in sf & G misses H implies Intersect sf misses H
+  proof
+    assume
+A1:   G in sf & G misses H;
+    then Intersect sf = meet sf by CANTOR_1:def 3;
+    hence thesis by A1,SETFAM_1:9;
+  end;
+
+theorem     :: SETFAM_1:10
+  sh = sf \/ sg implies Intersect sh = Intersect sf /\ Intersect sg
+  proof
+    assume
+A1:   sh = sf \/ sg;
+    per cases;
+    suppose
+      sf = {} & sg = {};
+      hence thesis by A1;
+    suppose
+A2:     sf <> {} & sg = {};
+      hence Intersect sh = meet sf by A1,CANTOR_1:def 3
+                        .= meet sf /\ I by XBOOLE_1:28
+                        .= Intersect sf /\ I by A2,CANTOR_1:def 3
+                        .= Intersect sf /\ Intersect sg by A2,CANTOR_1:def 3;
+    suppose
+A3:     sf = {} & sg <> {};
+      hence Intersect sh = meet sg by A1,CANTOR_1:def 3
+                        .= I /\ meet sg by XBOOLE_1:28
+                        .= I /\ Intersect sg by A3,CANTOR_1:def 3
+                        .= Intersect sf /\ Intersect sg by A3,CANTOR_1:def 3;
+    suppose
+A4:      sf <> {} & sg <> {};
+      then sh <> {} by A1,XBOOLE_1:15;
+then A5:   Intersect sh = meet sh by CANTOR_1:def 3;
+        Intersect sf = meet sf & Intersect sg = meet sg by A4,CANTOR_1:def 3;
+      hence thesis by A1,A4,A5,SETFAM_1:10;
+  end;
+
+theorem     :: SETFAM_1:11
+  sf = {v} implies Intersect sf = v
+  proof
+    assume
+A1:   sf = {v};
+    then Intersect sf = meet sf by CANTOR_1:def 3;
+    hence thesis by A1,SETFAM_1:11;
+  end;
+
+theorem     :: SETFAM_1:12
+  sf = { v,w } implies Intersect sf = v /\ w
+  proof
+    assume
+A1:   sf = {v,w};
+    then Intersect sf = meet sf by CANTOR_1:def 3;
+    hence thesis by A1,SETFAM_1:12;
+  end;
+
+theorem
+  A in B implies A is Element of B
+  proof
+    assume
+A1:   A in B;
+    let i;
+    assume i in I;
+    hence A.i is Element of B.i by A1,PBOOLE:def 4;
+  end;
+
+theorem
+  for B be non-empty ManySortedSet of I holds
+ A is Element of B implies A in B
+  proof
+    let B be non-empty ManySortedSet of I;
+    assume
+A1:   A is Element of B;
+    let i; assume
+A2:   i in I;
+then A3: A.i is Element of B.i by A1,MSUALG_1:def 1;
+      B.i <> {} by A2,PBOOLE:def 16;
+    hence A.i in B.i by A3;
+  end;
+
+theorem Th13:
+for f be Function st i in I & f = F.i holds (rngs F).i = rng f
+  proof
+    let f be Function such that
+A1:   i in I & f = F.i;
+      dom F = I by PBOOLE:def 3;
+    hence (rngs F).i = rng f by A1,FUNCT_6:31;
+  end;
+
+theorem Th14:
+for f be Function st i in I & f = F.i holds (doms F).i = dom f
+  proof
+    let f be Function such that
+A1:   i in I & f = F.i;
+      dom F = I by PBOOLE:def 3;
+    hence (doms F).i = dom f by A1,FUNCT_6:31;
+  end;
+
+theorem
+  for F, G be ManySortedFunction of I
+ holds G ** F is ManySortedFunction of I
+  proof
+    let F, G be ManySortedFunction of I;
+      dom (G ** F) = (dom F) /\ (dom G) by MSUALG_3:def 4
+                .= I /\ (dom G) by PBOOLE:def 3
+                .= I /\ I by PBOOLE:def 3
+                .= I;
+    hence thesis by PBOOLE:def 3;
+  end;
+
+theorem
+  for A be non-empty ManySortedSet of I
+ for F be ManySortedFunction of A, [0]I holds F = [0]I
+  proof
+    let A be non-empty ManySortedSet of I;
+    let F be ManySortedFunction of A, [0]I;
+      now
+      let i; assume
+A1:     i in I;
+      then reconsider f = F.i as Function of A.i, [0]I.i by MSUALG_1:def 2;
+A2:   A.i <> {} by A1,PBOOLE:def 16;
+        [0]I.i = {} by A1,PBOOLE:5;
+      then f = {} by A2,FUNCT_2:def 1;
+      hence F.i = [0]I.i by A1,PBOOLE:5;
+    end;
+    hence F = [0]I by PBOOLE:3;
+  end;
+
+theorem
+  A is_transformable_to B & F is ManySortedFunction of A, B implies
+ doms F = A & rngs F c= B
+  proof
+    assume that
+A1:   A is_transformable_to B and
+A2:   F is ManySortedFunction of A, B;
+      now let i; assume
+A3:     i in I;
+      then reconsider f = F.i as Function of A.i, B.i by A2,MSUALG_1:def 2;
+A4:   B.i = {} implies A.i = {} by A1,A3,AUTALG_1:def 4;
+      thus (doms F).i = dom f by A3,Th14
+                     .= A.i by A4,FUNCT_2:def 1;
+    end;
+    hence doms F = A by PBOOLE:3;
+    let i; assume
+A5:   i in I;
+    then reconsider f = F.i as Function of A.i, B.i by A2,MSUALG_1:def 2;
+      rng f c= B.i by RELSET_1:12;
+    hence (rngs F).i c= B.i by A5,Th13;
+  end;
+
+begin :: Finite Many Sorted Sets
+
+definition let I;
+ cluster empty-yielding -> locally-finite ManySortedSet of I;
+coherence
+  proof
+    let A be ManySortedSet of I such that
+A1:   A is empty-yielding;
+    let i;
+    assume i in I;
+    then reconsider B = A.i as empty set by A1,PBOOLE:def 15;
+      B is finite;
+    hence A.i is finite;
+  end;
+end;
+
+definition let I;
+ cluster [0]I -> empty-yielding locally-finite;
+coherence
+  proof
+A1:[0]I is empty-yielding by PBOOLE:141;
+     for B be empty-yielding ManySortedSet of I holds B is locally-finite;
+   hence thesis by A1;
+  end;
+end;
+
+definition let I, A;
+ cluster empty-yielding locally-finite ManySortedSubset of A;
+existence
+  proof
+   set x = [0]I;
+     x c= A by PBOOLE:49;
+   then reconsider x as ManySortedSubset of A by MSUALG_2:def 1;
+   take x;
+   thus thesis;
+  end;
+end;
+
+theorem Th18:     :: FINSET_1:13
+A c= B & B is locally-finite implies A is locally-finite
+   proof
+    assume that
+A1:  A c= B and
+A2:  B is locally-finite;
+    let i; assume
+A3:  i in I;
+then A4: A.i c= B.i by A1,PBOOLE:def 5;
+      B.i is finite by A2,A3,PRE_CIRC:def 3;
+    hence thesis by A4,FINSET_1:13;
+   end;
+
+definition let I;
+           let A be locally-finite ManySortedSet of I;
+ cluster -> locally-finite ManySortedSubset of A;
+coherence
+  proof
+   let x be ManySortedSubset of A;
+   reconsider x' = x as ManySortedSet of I;
+     x' c= A by MSUALG_2:def 1;
+   hence x is locally-finite by Th18;
+  end;
+end;
+
+definition let I;
+           let A, B be locally-finite ManySortedSet of I;
+ cluster A \/ B -> locally-finite;
+coherence
+  proof
+   let i; assume
+A1:  i in I;
+   then A.i is finite & B.i is finite by PRE_CIRC:def 3;
+   then A.i \/ B.i is finite by FINSET_1:14;
+   hence (A \/ B).i is finite by A1,PBOOLE:def 7;
+  end;
+end;
+
+definition let I, A;
+           let B be locally-finite ManySortedSet of I;
+ cluster A /\ B -> locally-finite;
+coherence
+  proof
+    let i; assume
+A1:  i in I;
+    then B.i is finite by PRE_CIRC:def 3;
+    then A.i /\ B.i is finite by FINSET_1:15;
+    hence (A /\ B).i is finite by A1,PBOOLE:def 8;
+  end;
+end;
+
+definition let I, B;
+           let A be locally-finite ManySortedSet of I;
+ cluster A /\ B -> locally-finite;
+coherence
+  proof
+    let i; assume
+A1:  i in I;
+    then A.i is finite by PRE_CIRC:def 3;
+    then A.i /\ B.i is finite by FINSET_1:15;
+    hence (A /\ B).i is finite by A1,PBOOLE:def 8;
+  end;
+end;
+
+definition let I, B;
+           let A be locally-finite ManySortedSet of I;
+ cluster A \ B -> locally-finite;
+coherence
+  proof
+    let i; assume
+A1:  i in I;
+    then A.i is finite by PRE_CIRC:def 3;
+    then A.i \ B.i is finite by FINSET_1:16;
+    hence (A \ B).i is finite by A1,PBOOLE:def 9;
+  end;
+end;
+
+definition let I, F;
+           let A be locally-finite ManySortedSet of I;
+ cluster F.:.:A -> locally-finite;
+coherence
+  proof
+    let i such that
+A1:   i in I;
+    reconsider f = F.i as Function;
+      A.i is finite by A1,PRE_CIRC:def 3;
+    then f.:(A.i) is finite by FINSET_1:17;
+    hence (F.:.:A).i is finite by A1,MSUALG_3:def 6;
+  end;
+end;
+
+definition let I;
+           let A, B be locally-finite ManySortedSet of I;
+ cluster [|A,B|] -> locally-finite;
+coherence
+  proof
+   let i; assume
+A1: i in I;
+   then A.i is finite & B.i is finite by PRE_CIRC:def 3;
+   then [:A.i,B.i:] is finite by FINSET_1:19;
+   hence [|A,B|].i is finite by A1,PRALG_2:def 9;
+  end;
+end;
+
+theorem     :: FINSET_1:22
+  B is non-empty & [|A,B|] is locally-finite implies A is locally-finite
+  proof
+   assume
+A1: B is non-empty & [|A,B|] is locally-finite;
+   let i; assume
+A2: i in I;
+   then [|A,B|].i is finite by A1,PRE_CIRC:def 3;
+   then B.i <> {} & [:A.i,B.i:] is finite by A1,A2,PBOOLE:def 16,PRALG_2:def 9
+;
+   hence A.i is finite by FINSET_1:22;
+  end;
+
+theorem     :: FINSET_1:23
+  A is non-empty & [|A,B|] is locally-finite implies B is locally-finite
+  proof
+   assume
+A1: A is non-empty & [|A,B|] is locally-finite;
+   let i; assume
+A2: i in I;
+   then [|A,B|].i is finite by A1,PRE_CIRC:def 3;
+   then A.i <> {} & [:A.i,B.i:] is finite by A1,A2,PBOOLE:def 16,PRALG_2:def 9
+;
+   hence B.i is finite by FINSET_1:23;
+  end;
+
+theorem Th21:     :: FINSET_1:24
+A is locally-finite iff bool A is locally-finite
+  proof
+   thus A is locally-finite implies bool A is locally-finite
+   proof assume
+A1:  A is locally-finite;
+    let i; assume
+A2:  i in I;
+    then A.i is finite by A1,PRE_CIRC:def 3;
+    then bool (A.i) is finite by FINSET_1:24;
+    hence (bool A).i is finite by A2,MBOOLEAN:def 1;
+   end;
+   assume
+A3: bool A is locally-finite;
+   let i; assume
+A4: i in I;
+   then (bool A).i is finite by A3,PRE_CIRC:def 3;
+   then bool (A.i) is finite by A4,MBOOLEAN:def 1;
+   hence A.i is finite by FINSET_1:24;
+  end;
+
+definition let I;
+           let M be locally-finite ManySortedSet of I;
+ cluster bool M -> locally-finite;
+coherence by Th21;
+end;
+
+theorem     :: FINSET_1:25 a
+  for A be non-empty ManySortedSet of I holds
+ A is locally-finite &
+  (for M be ManySortedSet of I st M in A holds M is locally-finite)
+ implies union A is locally-finite
+  proof
+    let A be non-empty ManySortedSet of I;
+    assume that
+A1:     A is locally-finite and
+A2:     (for M be ManySortedSet of I st M in A holds M is locally-finite);
+    let i; assume
+A3:     i in I;
+then A4: A.i is finite by A1,PRE_CIRC:def 3;
+      for X' be set st X' in A.i holds X' is finite
+    proof
+     let X' be set such that
+A5:      X' in A.i;
+     consider M be ManySortedSet of I such that
+A6:      M in A by PBOOLE:146;
+A7:  dom (i .--> X') = {i} by CQC_LANG:5;
+    dom (M +* (i .--> X')) = I by A3,PZFMISC1:1;
+     then reconsider K = M +* (i .--> X') as ManySortedSet of I by PBOOLE:def 3
+;
+       i in {i} by TARSKI:def 1;
+then A8:  K.i = (i .--> X').i by A7,FUNCT_4:14
+        .= X' by CQC_LANG:6;
+       K in A
+     proof
+       let j be set such that
+A9:        j in I;
+         now per cases;
+         case j = i;
+         hence K.j in A.j by A5,A8;
+         case j <> i;
+         then not j in dom (i .--> X') by A7,TARSKI:def 1;
+         then K.j = M.j by FUNCT_4:12;
+         hence K.j in A.j by A6,A9,PBOOLE:def 4;
+       end;
+       hence K.j in A.j;
+     end;
+     then K is locally-finite by A2;
+     hence X' is finite by A3,A8,PRE_CIRC:def 3;
+    end;
+   then union (A.i) is finite by A4,FINSET_1:25;
+   hence thesis by A3,MBOOLEAN:def 2;
+  end;
+
+theorem     :: FINSET_1:25 b
+  union A is locally-finite implies
+ A is locally-finite & for M st M in A holds M is locally-finite
+  proof
+    assume
+A1:   union A is locally-finite;
+    thus A is locally-finite
+    proof
+      let i; assume
+A2:     i in I;
+      then (union A).i is finite by A1,PRE_CIRC:def 3;
+      then union (A.i) is finite by A2,MBOOLEAN:def 2;
+      hence A.i is finite by FINSET_1:25;
+    end;
+    let M such that
+A3:   M in A;
+    let i; assume
+A4:   i in I;
+    then (union A).i is finite by A1,PRE_CIRC:def 3;
+then A5: union (A.i) is finite by A4,MBOOLEAN:def 2;
+      M.i in A.i by A3,A4,PBOOLE:def 4;
+    hence M.i is finite by A5,FINSET_1:25;
+  end;
+
+theorem     :: FINSET_1:26
+  doms F is locally-finite implies rngs F is locally-finite
+  proof
+    assume
+A1:   doms F is locally-finite;
+    let i such that
+A2:   i in I;
+    reconsider f = F.i as Function;
+      (doms F).i is finite by A1,A2,PRE_CIRC:def 3;
+    then dom f is finite by A2,Th14;
+    then rng f is finite by FINSET_1:26;
+    hence (rngs F).i is finite by A2,Th13;
+  end;
+
+theorem     :: FINSET_1:27
+  (A c= rngs F & for i be set for f be Function st i in I & f = F.i
+ holds f"(A.i) is finite)
+  implies A is locally-finite
+  proof
+    assume that
+A1:   A c= rngs F and
+A2:   for i be set for f be Function st i in I & f = F.i
+        holds f"(A.i) is finite;
+    let i such that
+A3:   i in I;
+    reconsider f = F.i as Function;
+      (rngs F).i = rng f by A3,Th13;
+then A4: A.i c= rng f by A1,A3,PBOOLE:def 5;
+      f"(A.i) is finite by A2,A3;
+    hence A.i is finite by A4,FINSET_1:27;
+  end;
+
+definition let I;
+           let A, B be locally-finite ManySortedSet of I;
+ cluster MSFuncs(A,B) -> locally-finite;
+coherence
+  proof
+    let i; assume
+A1:   i in I;
+then A2: MSFuncs(A,B).i = Funcs(A.i, B.i) by AUTALG_1:def 5;
+      A.i is finite & B.i is finite by A1,PRE_CIRC:def 3;
+    hence MSFuncs(A,B).i is finite by A2,FRAENKEL:16;
+  end;
+end;
+
+definition let I;
+           let A, B be locally-finite ManySortedSet of I;
+ cluster A \+\ B -> locally-finite;
+coherence
+  proof
+    let i; assume
+A1:   i in I;
+then A2: (A \+\ B).i = A.i \+\ B.i by PBOOLE:4;
+      A.i is finite & B.i is finite by A1,PRE_CIRC:def 3;
+    hence (A \+\ B).i is finite by A2,RLVECT_2:107;
+  end;
+end;
+
+reserve X, Y, Z for ManySortedSet of I;
+
+theorem     :: CQC_THE1:13
+  X is locally-finite & X c= [|Y,Z|] implies
+ ex A, B st A is locally-finite & A c= Y & B is locally-finite & B c= Z &
+  X c= [|A,B|]
+  proof
+    assume that
+A1:   X is locally-finite and
+A2:   X c= [|Y,Z|];
+    defpred Q[set,set] means ex b be set st
+      $2 is finite & $2 c= Y.$1 & b is finite & b c= Z.$1 &
+       X.$1 c= [:$2,b:];
+A3: for i st i in I ex j be set st Q[i,j]
+  proof
+      let i; assume
+A4:     i in I;
+then A5:   X.i is finite by A1,PRE_CIRC:def 3;
+        X.i c= [|Y,Z|].i by A2,A4,PBOOLE:def 5;
+      then X.i c= [:Y.i,Z.i:] by A4,PRALG_2:def 9;
+      then consider a, b be set such that
+A6:     a is finite & a c= Y.i & b is finite & b c= Z.i & X.i c= [:a,b:]
+                       by A5,CQC_THE1:13;
+      thus ex a, b be set st a is finite & a c= Y.i & b is finite &
+        b c= Z.i & X.i c= [:a,b:] by A6;
+    end;
+    consider A be ManySortedSet of I such that
+A7:  for i st i in I holds Q[i,A.i] from MSSEx(A3);
+    defpred P[set,set] means A.$1 is finite & A.$1 c= Y.$1 & $2 is finite
+        & $2 c= Z.$1 & X.$1 c= [:A.$1,$2:];
+
+    A8: for i st i in I ex j be set st  P[i,j] by A7;
+    consider B be ManySortedSet of I such that
+A9:  for i st i in I holds P[i,B.i] from MSSEx(A8);
+    take A, B;
+    thus A is locally-finite
+    proof
+      let i;
+      assume i in I;
+      hence thesis by A9;
+    end;
+    thus A c= Y
+    proof
+      let i;
+      assume i in I;
+      hence thesis by A9;
+    end;
+    thus B is locally-finite
+    proof
+      let i;
+      assume i in I;
+      hence thesis by A9;
+    end;
+    thus B c= Z
+    proof
+      let i;
+      assume i in I;
+      hence thesis by A9;
+    end;
+    thus X c= [|A,B|]
+    proof
+      let i; assume
+A10:     i in I;
+      then X.i c= [:A.i,B.i:] by A9;
+      hence thesis by A10,PRALG_2:def 9;
+    end;
+  end;
+
+theorem     :: CQC_THE1:14
+  X is locally-finite & Z is locally-finite & X c= [|Y,Z|] implies
+ ex A st A is locally-finite & A c= Y & X c= [|A,Z|]
+  proof
+    assume that
+A1:   X is locally-finite and
+A2:   Z is locally-finite and
+A3:   X c= [|Y,Z|];
+    defpred P[set,set] means $2 is finite & $2 c= Y.$1
+        & X.$1 c= [:$2,Z.$1:];
+A4: for i st i in I ex j be set st P[i,j]
+    proof
+      let i; assume
+A5:     i in I;
+then A6:   X.i is finite by A1,PRE_CIRC:def 3;
+A7:   Z.i is finite by A2,A5,PRE_CIRC:def 3;
+        X.i c= [|Y,Z|].i by A3,A5,PBOOLE:def 5;
+      then X.i c= [:Y.i, Z.i:] by A5,PRALG_2:def 9;
+      then consider A' be set such that
+A8:     A' is finite & A' c= Y.i & X.i c= [:A',Z.i:] by A6,A7,CQC_THE1:14;
+      take A';
+      thus A' is finite & A' c= Y.i & X.i c= [:A',Z.i:] by A8;
+    end;
+
+    consider A such that
+A9:   for i st i in I holds P[i,A.i]  from MSSEx(A4);
+    take A;
+    thus A is locally-finite
+    proof
+      let i;
+      assume i in I;
+      hence A.i is finite by A9;
+    end;
+    thus A c= Y
+    proof
+      let i;
+      assume i in I;
+      hence A.i c= Y.i by A9;
+    end;
+    thus X c= [|A,Z|]
+    proof
+      let i; assume
+A10:     i in I;
+      then X.i c= [:A.i,Z.i:] by A9;
+      hence X.i c= [|A,Z|].i by A10,PRALG_2:def 9;
+    end;
+  end;
+
+theorem     :: ALI2:1
+  for M be non-empty locally-finite ManySortedSet of I st
+  for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A
+ ex m be ManySortedSet of I st m in M & for K be ManySortedSet of I st K in M
+  holds m c= K
+  proof
+    let M be non-empty locally-finite ManySortedSet of I such that
+A1:   for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A;
+    defpred Q[set,set] means $2 in M.$1 & for D' be set st D' in M.$1
+             holds $2 c= D';
+A2:  for i st i in I ex j be set st Q[i,j]
+   proof
+      let i; assume
+A3:     i in I;
+then A4:   M.i is finite by PRE_CIRC:def 3;
+A5:   M.i <> {} by A3,PBOOLE:def 16;
+      M.i is c=-linear
+      proof
+        let B', C' be set such that
+A6:       B' in M.i & C' in M.i;
+        assume
+A7:       not B' c= C';
+       consider b' be ManySortedSet of I such that
+A8:       b' in M by PBOOLE:146;
+        consider c' be ManySortedSet of I such that
+A9:       c' in M by PBOOLE:146;
+        set qb = b' +* (i.-->B');
+        set qc = c' +* (i.-->C');
+       dom qb = I by A3,PZFMISC1:1;
+        then reconsider qb as ManySortedSet of I by PBOOLE:def 3;
+       dom qc = I by A3,PZFMISC1:1;
+        then reconsider qc as ManySortedSet of I by PBOOLE:def 3;
+A10:     dom (i .--> B') = {i} by CQC_LANG:5;
+          i in {i} by TARSKI:def 1;
+then A11:     qb.i = (i .--> B').i by A10,FUNCT_4:14
+            .= B' by CQC_LANG:6;
+A12:     dom (i .--> C') = {i} by CQC_LANG:5;
+          i in {i} by TARSKI:def 1;
+then A13:     qc.i = (i .--> C').i by A12,FUNCT_4:14
+            .= C' by CQC_LANG:6;
+A14:     qb in M
+        proof
+          let j be set such that
+A15:         j in I;
+            now per cases;
+            case j = i;
+            hence qb.j in M.j by A6,A11;
+            case j <> i;
+            then not j in dom (i .--> B') by A10,TARSKI:def 1;
+            then qb.j = b'.j by FUNCT_4:12;
+            hence qb.j in M.j by A8,A15,PBOOLE:def 4;
+          end;
+          hence qb.j in M.j;
+        end;
+          qc in M
+        proof
+          let j be set such that
+A16:         j in I;
+            now per cases;
+            case j = i;
+            hence qc.j in M.j by A6,A13;
+            case j <> i;
+            then not j in dom (i .--> C') by A12,TARSKI:def 1;
+            then qc.j = c'.j by FUNCT_4:12;
+            hence qc.j in M.j by A9,A16,PBOOLE:def 4;
+          end;
+          hence qc.j in M.j;
+        end;
+        then qb c= qc or qc c= qb by A1,A14;
+        hence thesis by A3,A7,A11,A13,PBOOLE:def 5;
+      end;
+      then consider m' be set such that
+A17:  m' in M.i & for D' be set st D' in M.i holds m' c= D' by A4,A5,ALI2:1;
+      take m';
+      thus m' in M.i & for D' be set st D' in M.i holds m' c= D' by A17;
+    end;
+    consider m be ManySortedSet of I such that
+A18:   for i st i in I holds Q[i,m.i] from MSSEx(A2);
+    take m;
+    thus m in M
+    proof
+      let i;
+      assume i in I;
+      hence m.i in M.i by A18;
+    end;
+    thus for C be ManySortedSet of I st C in M holds m c= C
+    proof
+      let C be ManySortedSet of I such that
+A19:        C in M;
+      let i; assume
+A20:     i in I;
+      then C.i in M.i by A19,PBOOLE:def 4;
+      hence m.i c= C.i by A18,A20;
+    end;
+  end;
+
+theorem     :: FIN_TOPO:3
+  for M be non-empty locally-finite ManySortedSet of I st
+  for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A
+ ex m be ManySortedSet of I st m in M & for K be ManySortedSet of I st K in M
+  holds K c= m
+  proof
+    let M be non-empty locally-finite ManySortedSet of I such that
+A1: for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A;
+    defpred Z[set,set] means $2 in M.$1 & for D' be set st D' in M.$1
+            holds D' c= $2;
+A2: for i st i in I ex j be set st Z[i,j]
+   proof
+      let i; assume
+A3:     i in I;
+then A4:   M.i is finite by PRE_CIRC:def 3;
+A5:   M.i <> {} by A3,PBOOLE:def 16;
+        M.i is c=-linear
+      proof
+        let B', C' be set such that
+A6:       B' in M.i & C' in M.i;
+        assume
+A7:       not B' c= C';
+       consider b' be ManySortedSet of I such that
+A8:       b' in M by PBOOLE:146;
+        consider c' be ManySortedSet of I such that
+A9:       c' in M by PBOOLE:146;
+        set qb = b' +* (i.-->B');
+        set qc = c' +* (i.-->C');
+       dom qb = I by A3,PZFMISC1:1;
+        then reconsider qb as ManySortedSet of I by PBOOLE:def 3;
+       dom qc = I by A3,PZFMISC1:1;
+        then reconsider qc as ManySortedSet of I by PBOOLE:def 3;
+A10:     dom (i .--> B') = {i} by CQC_LANG:5;
+          i in {i} by TARSKI:def 1;
+then A11:     qb.i = (i .--> B').i by A10,FUNCT_4:14
+            .= B' by CQC_LANG:6;
+A12:     dom (i .--> C') = {i} by CQC_LANG:5;
+          i in {i} by TARSKI:def 1;
+then A13:     qc.i = (i .--> C').i by A12,FUNCT_4:14
+            .= C' by CQC_LANG:6;
+A14:     qb in M
+        proof
+          let j be set such that
+A15:         j in I;
+            now per cases;
+            case j = i;
+            hence qb.j in M.j by A6,A11;
+            case j <> i;
+            then not j in dom (i .--> B') by A10,TARSKI:def 1;
+            then qb.j = b'.j by FUNCT_4:12;
+            hence qb.j in M.j by A8,A15,PBOOLE:def 4;
+          end;
+          hence qb.j in M.j;
+        end;
+          qc in M
+        proof
+          let j be set such that
+A16:         j in I;
+            now per cases;
+            case j = i;
+            hence qc.j in M.j by A6,A13;
+            case j <> i;
+            then not j in dom (i .--> C') by A12,TARSKI:def 1;
+            then qc.j = c'.j by FUNCT_4:12;
+            hence qc.j in M.j by A9,A16,PBOOLE:def 4;
+          end;
+          hence qc.j in M.j;
+        end;
+        then qb c= qc or qc c= qb by A1,A14;
+        hence thesis by A3,A7,A11,A13,PBOOLE:def 5;
+      end;
+      then consider m' be set such that
+A17:  m' in M.i & for D' be set st D' in M.i holds D' c= m'
+        by A4,A5,FIN_TOPO:3;
+      take m';
+      thus m' in M.i & for D' be set st D' in M.i holds D' c= m' by A17;
+    end;
+    consider m be ManySortedSet of I such that
+A18:   for i st i in I holds Z[i,m.i] from MSSEx(A2);
+    take m;
+    thus m in M
+    proof
+      let i;
+      assume i in I;
+      hence m.i in M.i by A18;
+    end;
+    thus for K be ManySortedSet of I st K in M holds K c= m
+    proof
+      let K be ManySortedSet of I such that
+A19:     K in M;
+      let i; assume
+A20:     i in I;
+      then K.i in M.i by A19,PBOOLE:def 4;
+      hence K.i c= m.i by A18,A20;
+    end;
+  end;
+
+theorem     :: COMPTS_1:1
+  Z is locally-finite & Z c= rngs F implies
+ ex Y st Y c= doms F & Y is locally-finite & F.:.:Y = Z
+  proof
+    assume that
+A1:   Z is locally-finite and
+A2:   Z c= rngs F;
+    defpred P[set,set] means ex f be Function st f = F.$1 &
+      $2 c= (doms F).$1 & $2 is finite & f.:($2) = Z.$1;
+A3: for i st i in I ex j be set st P[i,j]
+    proof
+      let i; assume
+A4:     i in I;
+then A5:   Z.i is finite by A1,PRE_CIRC:def 3;
+      reconsider f = F.i as Function;
+        rng f = (rngs F).i by A4,Th13;
+      then Z.i c= rng f by A2,A4,PBOOLE:def 5;
+      then consider y be set such that
+A6:     y c= dom f & y is finite & f.:y = Z.i by A5,COMPTS_1:1;
+      take y, f;
+      thus f = F.i;
+      thus y c= (doms F).i & y is finite & f.:y = Z.i by A4,A6,Th14;
+    end;
+    consider Y be ManySortedSet of I such that
+A7:   for i st i in I holds P[i,Y.i] from MSSEx(A3);
+    take Y;
+    thus Y c= doms F
+    proof
+      let i;
+      assume i in I;
+      then consider f be Function such that
+A8:     f = F.i & Y.i c= (doms F).i & Y.i is finite &
+          f.:(Y.i) = Z.i by A7;
+      thus Y.i c= (doms F).i by A8;
+    end;
+    thus Y is locally-finite
+    proof
+      let i;
+      assume i in I;
+      then consider f be Function such that
+A9:     f = F.i & Y.i c= (doms F).i & Y.i is finite &
+          f.:(Y.i) = Z.i by A7;
+      thus Y.i is finite by A9;
+    end;
+      now
+      let i; assume
+A10:     i in I;
+      then consider f be Function such that
+A11:     f = F.i & Y.i c= (doms F).i & Y.i is finite &
+          f.:(Y.i) = Z.i by A7;
+      thus (F.:.:Y).i = Z.i by A10,A11,MSUALG_3:def 6;
+    end;
+    hence F.:.:Y = Z by PBOOLE:3;
+  end;
+
+begin :: A Family of Subsets of Many Sorted Sets
+
+definition let I, M;
+ mode MSSubsetFamily of M is ManySortedSubset of bool M;
+ canceled;
+end;
+
+definition let I, M;
+ cluster non-empty MSSubsetFamily of M;
+existence
+  proof
+      bool M is ManySortedSubset of bool M by MSUALG_2:def 1;
+    hence thesis;
+  end;
+end;
+
+definition let I, M;
+ redefine func bool M -> MSSubsetFamily of M;
+coherence by MSUALG_2:def 1;
+end;
+
+definition let I, M;
+ cluster empty-yielding locally-finite MSSubsetFamily of M;
+existence
+  proof
+      [0]I c= bool M by PBOOLE:49;
+    then [0]I is ManySortedSubset of bool M by MSUALG_2:def 1;
+    hence thesis;
+  end;
+end;
+
+theorem
+  [0]I is empty-yielding locally-finite MSSubsetFamily of M
+  proof
+      [0]I c= bool M by PBOOLE:49;
+    hence thesis by MSUALG_2:def 1;
+  end;
+
+definition let I;
+           let M be locally-finite ManySortedSet of I;
+ cluster non-empty locally-finite MSSubsetFamily of M;
+existence
+  proof
+      bool M is MSSubsetFamily of M;
+    hence thesis;
+  end;
+end;
+
+reserve SF, SG, SH for MSSubsetFamily of M,
+        SFe for non-empty MSSubsetFamily of M,
+        V, W for ManySortedSubset of M;
+
+definition let I be non empty set,
+               M be ManySortedSet of I,
+               SF be MSSubsetFamily of M,
+               i be Element of I;
+ redefine func SF.i -> Subset-Family of (M.i);
+coherence
+  proof
+      SF c= bool M by MSUALG_2:def 1;
+    then SF.i c= (bool M).i by PBOOLE:def 5;
+    then SF.i is Subset of bool (M.i) by MBOOLEAN:def 1;
+    hence thesis by SETFAM_1:def 7;
+  end;
+end;
+
+theorem Th32:
+i in I implies SF.i is Subset-Family of (M.i)
+  proof
+    assume
+A1:   i in I;
+      SF c= bool M by MSUALG_2:def 1;
+    then SF.i c= (bool M).i by A1,PBOOLE:def 5;
+    then SF.i is Subset of bool (M.i) by A1,MBOOLEAN:def 1;
+    hence thesis by SETFAM_1:def 7;
+  end;
+
+theorem Th33:
+A in SF implies A is ManySortedSubset of M
+  proof
+    assume
+A1:   A in SF;
+      SF c= bool M by MSUALG_2:def 1;
+    then A in bool M by A1,PBOOLE:9;
+    then A c= M by MBOOLEAN:19;
+    hence thesis by MSUALG_2:def 1;
+  end;
+
+theorem Th34:
+SF \/ SG is MSSubsetFamily of M
+  proof
+      SF \/ SG is ManySortedSubset of bool M
+    proof
+A1:   SF c= bool M by MSUALG_2:def 1;
+        SG c= bool M by MSUALG_2:def 1;
+      hence SF \/ SG c= bool M by A1,PBOOLE:18;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  SF /\ SG is MSSubsetFamily of M
+  proof
+      SF /\ SG is ManySortedSubset of bool M
+    proof
+A1:   SF c= bool M by MSUALG_2:def 1;
+        SG c= bool M by MSUALG_2:def 1;
+      then SF /\ SG c= (bool M) /\ (bool M) by A1,PBOOLE:23;
+      hence SF /\ SG c= bool M;
+    end;
+    hence thesis;
+  end;
+
+theorem Th36:
+SF \ A is MSSubsetFamily of M
+  proof
+      SF \ A is ManySortedSubset of bool M
+    proof
+        SF c= bool M by MSUALG_2:def 1;
+then A1:   SF \ A c= (bool M) \ A by PBOOLE:59;
+        (bool M) \ A c= bool M by PBOOLE:62;
+      hence SF \ A c= bool M by A1,PBOOLE:15;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  SF \+\ SG is MSSubsetFamily of M
+  proof
+      SF \ SG is MSSubsetFamily of M & SG \ SF is MSSubsetFamily of M by Th36;
+    then (SF \ SG) \/ (SG \ SF) is MSSubsetFamily of M by Th34;
+    hence SF \+\ SG is MSSubsetFamily of M by PBOOLE:def 12;
+  end;
+
+theorem Th38:
+A c= M implies {A} is MSSubsetFamily of M
+  proof
+    assume A c= M;
+    then A in bool M by MBOOLEAN:19;
+    then {A} c= bool M by PZFMISC1:36;
+    hence thesis by MSUALG_2:def 1;
+  end;
+
+theorem Th39:
+A c= M & B c= M implies {A,B} is MSSubsetFamily of M
+  proof
+    assume A c= M & B c= M;
+    then {A} is MSSubsetFamily of M & {B} is MSSubsetFamily of M by Th38;
+    then {A} \/ {B} is MSSubsetFamily of M by Th34;
+    hence thesis by PZFMISC1:11;
+  end;
+
+theorem Th40:
+union SF c= M
+  proof
+    let i such that
+A1:   i in I;
+A2: for F be Subset-Family of x holds union F is Subset of x;
+      SF.i is Subset-Family of M.i by A1,Th32;
+    then union (SF.i) is Subset of M.i by A2;
+    then union (SF.i) c= M.i;
+    hence thesis by A1,MBOOLEAN:def 2;
+  end;
+
+begin :: Intersection of a Family of Many Sorted Sets
+
+definition let I, M, SF;
+ func meet SF -> ManySortedSet of I means :Def2:
+  for i be set st i in I holds ex Q be Subset-Family of (M.i) st Q = SF.i &
+   it.i = Intersect Q;
+existence
+  proof
+    defpred Z[set,set] means ex Q be Subset-Family of (M.$1) st Q = SF.$1 &
+       $2 = Intersect Q;
+A1: for i st i in I ex j be set st Z[i,j]
+    proof
+      let i; assume
+A2:     i in I;
+      then reconsider Q = SF.i as Subset-Family of (M.i) by Th32;
+      deffunc F(set) = Intersect Q;
+      consider a be ManySortedSet of I such that
+A3:     for i st i in I holds a.i = F(i) from MSSLambda;
+      take j = a.i;
+      take Q;
+      thus Q = SF.i & j = Intersect Q by A2,A3;
+    end;
+    consider X be ManySortedSet of I such that
+A4:  for i be set st i in I holds Z[i,X.i] from MSSEx(A1);
+    thus thesis by A4;
+  end;
+uniqueness
+  proof
+    let X1, X2 be ManySortedSet of I such that
+A5:   for i st i in I holds ex Q1 be Subset-Family of (M.i) st Q1 = SF.i &
+        X1.i = Intersect Q1 and
+A6:   for i st i in I holds ex Q2 be Subset-Family of (M.i) st Q2 = SF.i &
+        X2.i = Intersect Q2;
+      now
+      let i be set; assume
+A7:     i in I;
+      then consider Q1 be Subset-Family of (M.i) such that
+A8:     Q1 = SF.i & X1.i = Intersect Q1 by A5;
+      consider Q2 be Subset-Family of (M.i) such that
+A9:     Q2 = SF.i & X2.i = Intersect Q2 by A6,A7;
+      thus X1.i = X2.i by A8,A9;
+    end;
+    hence X1 = X2 by PBOOLE:3;
+  end;
+end;
+
+definition let I, M, SF;
+ redefine func meet SF -> ManySortedSubset of M;
+coherence
+  proof
+    let i; assume
+     i in I;
+    then consider Q be Subset-Family of (M.i) such that
+A1:   Q = SF.i & (meet SF).i = Intersect Q by Def2;
+    thus (meet SF).i c= M.i by A1;
+  end;
+end;
+
+theorem Th41:    :: SETFAM_1:2
+SF = [0]I implies meet SF = M
+  proof
+    assume
+A1:   SF = [0]I;
+      now
+      let i; assume
+A2:     i in I;
+      then consider Q be Subset-Family of (M.i) such that
+A3:     Q = SF.i and
+A4:     (meet SF).i = Intersect Q by Def2;
+        Q = {} by A1,A2,A3,PBOOLE:5;
+      hence (meet SF).i = M.i by A4,CANTOR_1:def 3;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem     :: SETFAM_1:3
+  meet SFe c= union SFe
+  proof
+    let i; assume
+A1:   i in I;
+    then consider Q be Subset-Family of (M.i) such that
+A2:   Q = SFe.i and
+A3:   (meet SFe).i = Intersect Q by Def2;
+A4: meet Q c= union Q by SETFAM_1:3;
+      Q <> {} by A1,A2,PBOOLE:def 16;
+    then Intersect Q = meet Q by CANTOR_1:def 3;
+    hence (meet SFe).i c= (union SFe).i by A1,A2,A3,A4,MBOOLEAN:def 2;
+  end;
+
+theorem     :: SETFAM_1:4
+  A in SF implies meet SF c= A
+  proof
+    assume
+A1:   A in SF;
+    let i; assume
+A2:   i in I;
+    then consider Q be Subset-Family of (M.i) such that
+A3:   Q = SF.i and
+A4:   (meet SF).i = Intersect Q by Def2;
+A5: A.i in SF.i by A1,A2,PBOOLE:def 4;
+    then Intersect Q = meet Q by A3,CANTOR_1:def 3;
+    hence (meet SF).i c= A.i by A3,A4,A5,SETFAM_1:4;
+  end;
+
+theorem     :: SETFAM_1:5
+  [0]I in SF implies meet SF = [0]I
+  proof
+    assume
+A1:   [0]I in SF;
+      now
+      let i; assume
+A2:     i in I;
+      then consider Q be Subset-Family of (M.i) such that
+A3:     Q = SF.i and
+A4:     (meet SF).i = Intersect Q by Def2;
+        [0]I.i in SF.i by A1,A2,PBOOLE:def 4;
+then A5:   Intersect Q = meet Q by A3,CANTOR_1:def 3;
+        [0]I.i in Q by A1,A2,A3,PBOOLE:def 4;
+      then {} in Q by A2,PBOOLE:5;
+      then Intersect Q = {} by A5,SETFAM_1:5;
+      hence (meet SF).i = [0]I.i by A2,A4,PBOOLE:5;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem     :: SETFAM_1:6
+  for Z, M be ManySortedSet of I
+ for SF be non-empty MSSubsetFamily of M st
+  (for Z1 be ManySortedSet of I st Z1 in SF holds Z c= Z1) holds Z c= meet SF
+  proof
+    let Z, M be ManySortedSet of I,
+        SF be non-empty MSSubsetFamily of M such that
+A1:   for Z1 be ManySortedSet of I st Z1 in SF holds Z c= Z1;
+    let i; assume
+A2:   i in I;
+    then consider Q be Subset-Family of (M.i) such that
+A3:   Q = SF.i and
+A4:   (meet SF).i = Intersect Q by Def2;
+A5: Q <> {} by A2,A3,PBOOLE:def 16;
+then A6: Intersect Q = meet Q by CANTOR_1:def 3;
+    consider T be ManySortedSet of I such that
+A7:   T in SF by PBOOLE:146;
+  for Z' be set st Z' in Q holds Z.i c= Z'
+    proof
+      let Z' be set such that
+A8:     Z' in Q;
+A9:  dom (i .--> Z') = {i} by CQC_LANG:5;
+    dom (T +* (i .--> Z')) = I by A2,PZFMISC1:1;
+     then reconsider K = T +* (i .--> Z') as ManySortedSet of I by PBOOLE:def 3
+;
+       i in {i} by TARSKI:def 1;
+then A10:  K.i = (i .--> Z').i by A9,FUNCT_4:14
+        .= Z' by CQC_LANG:6;
+        K in SF
+      proof
+        let q be set such that
+A11:       q in I;
+        per cases;
+        suppose q = i;
+          hence K.q in SF.q by A3,A8,A10;
+        suppose q <> i;
+          then not q in dom (i .--> Z') by A9,TARSKI:def 1;
+          then K.q = T.q by FUNCT_4:12;
+          hence K.q in SF.q by A7,A11,PBOOLE:def 4;
+      end;
+      then Z c= K by A1;
+      hence Z.i c= Z' by A2,A10,PBOOLE:def 5;
+    end;
+    hence Z.i c= (meet SF).i by A4,A5,A6,SETFAM_1:6;
+  end;
+
+theorem     :: SETFAM_1:7 :: CANTOR_1:11
+  SF c= SG implies meet SG c= meet SF
+  proof
+    assume
+A1:   SF c= SG;
+    let i; assume
+A2:   i in I;
+    then consider Qf be Subset-Family of (M.i) such that
+A3:   Qf = SF.i and
+A4:   (meet SF).i = Intersect Qf by Def2;
+    consider Qg be Subset-Family of (M.i) such that
+A5:   Qg = SG.i and
+A6:   (meet SG).i = Intersect Qg by A2,Def2;
+      Qf c= Qg by A1,A2,A3,A5,PBOOLE:def 5;
+    hence (meet SG).i c= (meet SF).i by A4,A6,CANTOR_1:11;
+  end;
+
+theorem     :: SETFAM_1:8
+  A in SF & A c= B implies meet SF c= B
+  proof
+    assume that
+A1:   A in SF and
+A2:   A c= B;
+    let i; assume
+A3:   i in I;
+    then consider Q be Subset-Family of (M.i) such that
+A4:   Q = SF.i and
+A5:   (meet SF).i = Intersect Q by Def2;
+A6: A.i in SF.i by A1,A3,PBOOLE:def 4;
+then A7: Intersect Q = meet Q by A4,CANTOR_1:def 3;
+      A.i c= B.i by A2,A3,PBOOLE:def 5;
+    hence (meet SF).i c= B.i by A4,A5,A6,A7,SETFAM_1:8;
+  end;
+
+theorem     :: SETFAM_1:9
+  A in SF & A /\ B = [0]I implies meet SF /\ B = [0]I
+  proof
+    assume that
+A1:   A in SF and
+A2:   A /\ B = [0]I;
+      now
+      let i; assume
+A3:     i in I;
+      then consider Q be Subset-Family of (M.i) such that
+A4:     Q = SF.i and
+A5:     (meet SF).i = Intersect Q by Def2;
+A6:   A.i in SF.i by A1,A3,PBOOLE:def 4;
+then A7:   Intersect Q = meet Q by A4,CANTOR_1:def 3;
+        A.i /\ B.i = [0]I.i by A2,A3,PBOOLE:def 8;
+      then A.i /\ B.i = {} by A3,PBOOLE:5;
+      then A.i misses B.i by XBOOLE_0:def 7;
+      then meet Q misses B.i by A4,A6,SETFAM_1:9;
+      then meet Q /\ B.i = {} by XBOOLE_0:def 7;
+      then meet Q /\ B.i = [0]I.i by A3,PBOOLE:5;
+      hence (meet SF /\ B).i = [0]I.i by A3,A5,A7,PBOOLE:def 8;
+    end;
+    hence meet SF /\ B = [0]I by PBOOLE:3;
+  end;
+
+theorem     :: SETFAM_1:10
+  SH = SF \/ SG implies meet SH = meet SF /\ meet SG
+  proof
+    assume
+A1:  SH = SF \/ SG;
+      now
+      let i; assume
+A2:     i in I;
+      then consider Qf be Subset-Family of (M.i) such that
+A3:     Qf = SF.i and
+A4:     (meet SF).i = Intersect Qf by Def2;
+      consider Qg be Subset-Family of (M.i) such that
+A5:     Qg = SG.i and
+A6:     (meet SG).i = Intersect Qg by A2,Def2;
+      consider Qh be Subset-Family of (M.i) such that
+A7:     Qh = SH.i and
+A8:     (meet SH).i = Intersect Qh by A2,Def2;
+A9:   Qh = Qf \/ Qg by A1,A2,A3,A5,A7,PBOOLE:def 7;
+        now per cases;
+        case
+A10:        Qf <> {} & Qg <> {};
+then Qh <> {} by A9,XBOOLE_1:15;
+         hence (meet SH).i = meet Qh by A8,CANTOR_1:def 3
+                         .= meet Qf /\ meet Qg by A9,A10,SETFAM_1:10
+                         .= (meet SF).i /\ meet Qg
+                                     by A4,A10,CANTOR_1:def 3
+                         .= (meet SF).i /\ (meet SG).i
+                                     by A6,A10,CANTOR_1:def 3
+                         .= (meet SF /\ meet SG).i by A2,PBOOLE:def 8;
+        case
+A11:       Qf <> {} & Qg = {};
+         hence (meet SH).i = (meet SF).i /\ M.i by A4,A8,A9,XBOOLE_1:28
+                         .= (meet SF).i /\ (meet SG).i by A6,A11,CANTOR_1:def 3
+                         .= (meet SF /\ meet SG).i by A2,PBOOLE:def 8;
+        case
+A12:       Qf = {} & Qg <> {};
+         hence (meet SH).i = M.i /\ (meet SG).i by A6,A8,A9,XBOOLE_1:28
+                         .= (meet SF).i /\ (meet SG).i by A4,A12,CANTOR_1:def 3
+                         .= (meet SF /\ meet SG).i by A2,PBOOLE:def 8;
+        case
+        Qf = {} & Qg = {};
+         hence (meet SH).i = Intersect Qf /\ Intersect Qg by A8,A9
+                         .= (meet SF /\ meet SG).i by A2,A4,A6,PBOOLE:def 8;
+      end;
+      hence (meet SH).i = (meet SF /\ meet SG).i;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem     :: SETFAM_1:11
+  SF = {V} implies meet SF = V
+  proof
+    assume
+A1:   SF = {V};
+      now
+      let i be set; assume
+A2:     i in I;
+      then consider Q be Subset-Family of (M.i) such that
+A3:     Q = SF.i and
+A4:     (meet SF).i = Intersect Q by Def2;
+     Q <> {} by A1,A2,A3,PBOOLE:def 16;
+      hence (meet SF).i = meet Q by A4,CANTOR_1:def 3
+                      .= meet {V.i} by A1,A2,A3,PZFMISC1:def 1
+                      .= V.i by SETFAM_1:11;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem Th51:    :: SETFAM_1:12
+SF = { V,W } implies meet SF = V /\ W
+  proof
+    assume
+A1:   SF = { V,W };
+      now
+      let i be set; assume
+A2:     i in I;
+      then consider Q be Subset-Family of (M.i) such that
+A3:     Q = SF.i and
+A4:     (meet SF).i = Intersect Q by Def2;
+     Q <> {} by A1,A2,A3,PBOOLE:def 16;
+      hence (meet SF).i = meet ({V,W}.i) by A1,A3,A4,CANTOR_1:def 3
+                      .= meet {V.i,W.i} by A2,PZFMISC1:def 2
+                      .= V.i /\ W.i by SETFAM_1:12
+                      .= (V /\ W).i by A2,PBOOLE:def 8;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem     :: CANTOR_1:10 a
+  A in meet SF implies for B st B in SF holds A in B
+  proof
+    assume
+A1:   A in meet SF;
+    let B such that
+A2:   B in SF;
+    let i; assume
+A3:   i in I;
+    then consider Q be Subset-Family of (M.i) such that
+A4:   Q = SF.i and
+A5:   (meet SF).i = Intersect Q by Def2;
+A6: A.i in (meet SF).i by A1,A3,PBOOLE:def 4;
+      B.i in SF.i by A2,A3,PBOOLE:def 4;
+    hence A.i in B.i by A4,A5,A6,CANTOR_1:10;
+  end;
+
+theorem     :: CANTOR_1:10 b
+  for A, M be ManySortedSet of I
+ for SF be non-empty MSSubsetFamily of M st
+  (A in M & for B be ManySortedSet of I st B in SF holds A in B)
+ holds A in meet SF
+  proof
+    let A, M be ManySortedSet of I,
+        SF be non-empty MSSubsetFamily of M;
+    assume that
+A1:   A in M and
+A2:   for B be ManySortedSet of I st B in SF holds A in B;
+    let i; assume
+A3:   i in I;
+    then consider Q be Subset-Family of (M.i) such that
+A4:   Q = SF.i and
+A5:   (meet SF).i = Intersect Q by Def2;
+A6: A.i in M.i by A1,A3,PBOOLE:def 4;
+    consider T be ManySortedSet of I such that
+A7:   T in SF by PBOOLE:146;
+      for B' be set st B' in Q holds A.i in B'
+    proof
+      let B' be set such that
+A8:     B' in Q;
+A9:  dom (i .--> B') = {i} by CQC_LANG:5;
+    dom (T +* (i .--> B')) = I by A3,PZFMISC1:1;
+     then reconsider K = T +* (i .--> B') as ManySortedSet of I by PBOOLE:def 3
+;
+       i in {i} by TARSKI:def 1;
+then A10:  K.i = (i .--> B').i by A9,FUNCT_4:14
+        .= B' by CQC_LANG:6;
+        K in SF
+      proof
+        let q be set such that
+A11:       q in I;
+        per cases;
+        suppose q = i;
+          hence K.q in SF.q by A4,A8,A10;
+        suppose q <> i;
+          then not q in dom (i .--> B') by A9,TARSKI:def 1;
+          then K.q = T.q by FUNCT_4:12;
+          hence K.q in SF.q by A7,A11,PBOOLE:def 4;
+      end;
+      then A in K by A2;
+      hence A.i in B' by A3,A10,PBOOLE:def 4;
+    end;
+    hence A.i in (meet SF).i by A5,A6,CANTOR_1:10;
+  end;
+
+definition let I, M;
+ let IT be MSSubsetFamily of M;
+ attr IT is additive means
+    for A, B st A in IT & B in IT holds A \/ B in IT;
+
+ attr IT is absolutely-additive means :Def4:
+  for F be MSSubsetFamily of M st F c= IT holds union F in IT;
+
+ attr IT is multiplicative means
+    for A, B st A in IT & B in IT holds A /\ B in IT;
+
+ attr IT is absolutely-multiplicative means :Def6:
+  for F be MSSubsetFamily of M st F c= IT holds meet F in IT;
+
+ attr IT is properly-upper-bound means :Def7:
+  M in IT;
+
+ attr IT is properly-lower-bound means :Def8:
+  [0]I in IT;
+end;
+
+Lm1:
+bool M is additive absolutely-additive multiplicative
+  absolutely-multiplicative properly-upper-bound properly-lower-bound
+  proof
+    thus bool M is additive
+    proof
+      let A, B;
+      assume A in bool M & B in bool M;
+      then A c= M & B c= M by MBOOLEAN:1;
+      then A \/ B c= M by PBOOLE:18;
+      hence A \/ B in bool M by MBOOLEAN:1;
+    end;
+    thus bool M is absolutely-additive
+    proof
+      let F be MSSubsetFamily of M such that F c= bool M;
+        union F c= M by Th40;
+      hence union F in bool M by MBOOLEAN:19;
+    end;
+    thus bool M is multiplicative
+    proof
+      let A, B;
+      assume A in bool M & B in bool M;
+      then A c= M & B c= M by MBOOLEAN:1;
+      then A /\ B c= M by MBOOLEAN:15;
+      hence A /\ B in bool M by MBOOLEAN:1;
+    end;
+    thus bool M is absolutely-multiplicative
+    proof
+      let F be MSSubsetFamily of M such that F c= bool M;
+        meet F c= M by MSUALG_2:def 1;
+      hence meet F in bool M by MBOOLEAN:19;
+    end;
+    thus bool M is properly-upper-bound
+    proof
+      thus M in bool M by MBOOLEAN:19;
+    end;
+    thus bool M is properly-lower-bound
+    proof
+        [0]I c= M by MBOOLEAN:5;
+      hence [0]I in bool M by MBOOLEAN:1;
+    end;
+  end;
+
+definition let I, M;
+ cluster non-empty additive absolutely-additive
+          multiplicative absolutely-multiplicative
+           properly-upper-bound properly-lower-bound MSSubsetFamily of M;
+existence
+  proof
+    take bool M;
+    thus thesis by Lm1;
+  end;
+end;
+
+definition let I, M;
+ redefine func bool M -> additive absolutely-additive multiplicative
+       absolutely-multiplicative properly-upper-bound
+       properly-lower-bound MSSubsetFamily of M;
+coherence by Lm1;
+end;
+
+definition let I, M;
+ cluster absolutely-additive -> additive MSSubsetFamily of M;
+coherence
+  proof
+    let SF be MSSubsetFamily of M such that
+A1:   SF is absolutely-additive;
+    let A, B; assume
+A2:   A in SF & B in SF;
+    then A is ManySortedSubset of M & B is ManySortedSubset of M by Th33;
+    then A c= M & B c= M by MSUALG_2:def 1;
+then A3: {A,B} is MSSubsetFamily of M by Th39;
+      {A} c= SF & {B} c= SF by A2,PZFMISC1:36;
+    then {A} \/ {B} c= SF by PBOOLE:18;
+    then {A,B} c= SF by PZFMISC1:11;
+    then union {A,B} in SF by A1,A3,Def4;
+    hence A \/ B in SF by PZFMISC1:35;
+  end;
+end;
+
+definition let I, M;
+ cluster absolutely-multiplicative -> multiplicative MSSubsetFamily of M;
+coherence
+  proof
+    let SF be MSSubsetFamily of M such that
+A1:   SF is absolutely-multiplicative;
+    let A, B; assume
+A2:   A in SF & B in SF;
+then A3: A is ManySortedSubset of M & B is ManySortedSubset of M by Th33;
+    then A c= M & B c= M by MSUALG_2:def 1;
+    then reconsider ab = {A,B} as MSSubsetFamily of M by Th39;
+      {A} c= SF & {B} c= SF by A2,PZFMISC1:36;
+    then {A} \/ {B} c= SF by PBOOLE:18;
+    then {A,B} c= SF by PZFMISC1:11;
+    then meet ab in SF by A1,Def6;
+    hence A /\ B in SF by A3,Th51;
+  end;
+end;
+
+definition let I, M;
+ cluster absolutely-multiplicative ->
+                 properly-upper-bound MSSubsetFamily of M;
+coherence
+  proof
+    let SF be MSSubsetFamily of M such that
+A1:   SF is absolutely-multiplicative;
+      [0]I c= bool M by PBOOLE:49;
+    then reconsider a = [0]I as MSSubsetFamily of M by MSUALG_2:def 1;
+A2: meet a = M by Th41;
+      [0]I c= SF by PBOOLE:49;
+    hence M in SF by A1,A2,Def6;
+  end;
+end;
+
+definition let I, M;
+ cluster properly-upper-bound -> non-empty MSSubsetFamily of M;
+coherence
+  proof
+    let SF be MSSubsetFamily of M;
+    assume SF is properly-upper-bound;
+then A1: M in SF by Def7;
+    let i;
+    assume i in I;
+    hence thesis by A1,PBOOLE:def 4;
+  end;
+end;
+
+definition let I, M;
+ cluster absolutely-additive ->
+                 properly-lower-bound MSSubsetFamily of M;
+coherence
+  proof
+    let SF be MSSubsetFamily of M such that
+A1:   SF is absolutely-additive;
+      [0]I c= bool M by PBOOLE:49;
+    then reconsider a = [0]I as MSSubsetFamily of M by MSUALG_2:def 1;
+A2: union a = [0]I by MBOOLEAN:22;
+      [0]I c= SF by PBOOLE:49;
+    hence [0]I in SF by A1,A2,Def4;
+  end;
+end;
+
+definition let I, M;
+ cluster properly-lower-bound -> non-empty MSSubsetFamily of M;
+coherence
+  proof
+    let SF be MSSubsetFamily of M;
+    assume SF is properly-lower-bound;
+then A1: [0]I in SF by Def8;
+    let i;
+    assume i in I;
+    hence thesis by A1,PBOOLE:def 4;
+  end;
+end;
+

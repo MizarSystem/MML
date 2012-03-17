@@ -1,0 +1,858 @@
+:: Analytical Ordered Affine Spaces
+::  by Henryk Oryszczyszyn and Krzysztof Pra\.zmowski
+::
+:: Received April 11, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ARYTM_1, RELAT_1, REALSET1, ANALOAF;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, DOMAIN_1, REAL_1, RELSET_1, STRUCT_0,
+      RLVECT_1, REALSET1;
+ constructors DOMAIN_1, REAL_1, REALSET1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, RELSET_1, STRUCT_0, XREAL_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions STRUCT_0;
+ theorems AXIOMS, REAL_1, RLVECT_1, ZFMISC_1, RELAT_1, FUNCSDOM, SQUARE_1,
+      RLSUB_2, REALSET1, VECTSP_1, XCMPLX_0, XCMPLX_1;
+ schemes RELSET_1;
+
+begin
+
+reserve V for RealLinearSpace;
+reserve p,q,u,v,w,y for VECTOR of V;
+reserve a,b,c,d for Real;
+
+definition let V; let u,v,w,y;
+ pred u,v // w,y means
+ :Def1: u=v or w=y or ex a,b st 0<a & 0<b & a*(v-u)=b*(y-w);
+end;
+
+canceled;
+
+theorem
+Th2: 0<a & 0<b implies 0<a+b proof assume A1: 0<a & 0<b;
+  then 0+b<a+b by REAL_1:53;
+   hence thesis by A1,AXIOMS:22; end;
+
+theorem
+Th3: a<>b implies 0<a-b or 0<b-a proof assume A1: a<>b;
+ A2: now assume a<b; then 0+a<b;
+   hence 0<b-a by REAL_1:86; end;
+    now assume b<a; then 0+b<a;
+   hence 0<a-b by REAL_1:86; end;
+ hence thesis by A1,A2,AXIOMS:21; end;
+
+theorem
+Th4: (w-v)+(v-u) = w-u
+proof
+ thus (w-v)+(v-u) = w-(v-(v-u)) by RLVECT_1:43 .= w-((v-v)+u)
+ by RLVECT_1:43 .= w-(0.V+u) by RLVECT_1:28 .= w-u by RLVECT_1:10;
+end;
+
+canceled;
+
+theorem
+Th6: w-(u-v) = w+(v-u)
+proof
+ thus w-(u-v) = w+(-(u-v)) by RLVECT_1:def 11 .=w+(v-u) by VECTSP_1:81;
+end;
+
+canceled 2;
+
+theorem
+Th9: y+u = v+w implies y-w = v-u proof assume A1: y+u=v+w;
+ thus y-w = (y+0.V)-w by RLVECT_1:10 .= (y+(u-u))-w by RLVECT_1:28
+  .= (y+(u+(-u)))-w by RLVECT_1:def 11 .=((v+w)+(-u))-w by A1,RLVECT_1:def 6
+ .= ((-u)+(v+w))+(-w) by RLVECT_1:def 11 .= (-u)+((v+w)+(-w))
+  by RLVECT_1:def 6 .= (-u)+((v+w)-w) by RLVECT_1:def 11
+ .= v+(-u) by RLSUB_2:78 .= v-u by RLVECT_1:def 11; end;
+
+theorem
+Th10: a*(u-v) = -(a*(v-u))
+  proof a*(v-u) + a*(u-v) = a*(v-u) + a*(-(v-u)) by VECTSP_1:81
+  .= a*(v-u) + (-(a*(v-u))) by RLVECT_1:39 .= a*(v-u)-a*(v-u)
+  by RLVECT_1:def 11 .= 0.V by RLVECT_1:28;
+ hence thesis by RLVECT_1:def 10; end;
+
+theorem
+Th11: (a-b)*(u-v) = (b-a)*(v-u)
+proof
+ thus (a-b)*(u-v)=(-(b-a))*(u-v) by XCMPLX_1:143 .=(-(b-a))*(-(v-u)) by
+VECTSP_1:81
+ .=(b-a)*(v-u) by RLVECT_1:40;
+end;
+
+theorem
+Th12: a<>0 & a*u=v implies u=a"*v proof assume that A1: a<>0
+ and A2: a*u=v;
+ thus u=1*u by RLVECT_1:def 9 .=(a"*a)*u by A1,XCMPLX_0:def 7
+      .=a"*v by A2,RLVECT_1:def 9; end;
+
+theorem
+Th13: (a<>0 & a*u=v implies u=a"*v) &
+      (a<>0 & u=a"*v implies a*u=v) proof
+    now assume that A1:a<>0 and A2: u=a"*v;
+      a"<>0 by A1,XCMPLX_1:203; hence
+     v=(a")"*u by A2,Th12 .=a*u; end;
+ hence thesis by Th12; end;
+
+canceled 2;
+
+theorem
+ Th16: u,v // w,y & u<>v & w<>y implies ex a,b st
+                                   a*(v-u)=b*(y-w) & 0<a & 0<b
+ proof assume that A1: u,v // w,y and A2: u<>v & w<>y;
+    u=v or w=y or ex a,b st 0<a & 0<b & a*(v-u)=b*(y-w) by A1,Def1;
+  hence thesis by A2; end;
+
+theorem
+ Th17: u,v // u,v
+ proof 1*(v-u)=1*(v-u) & 0<1;
+  hence thesis by Def1; end;
+
+theorem
+   u,v // w,w & u,u // v,w by Def1;
+
+theorem
+ Th19: u,v // v,u implies u=v
+ proof assume A1: u,v // v,u; assume A2: u<>v;
+  then consider a,b such that
+                   A3: a*(v-u)=b*(u-v) & 0<a & 0<b by A1,Th16;
+    a*(v-u)=-b*(v-u) by A3,Th10; then b*(v-u)+a*(v-u)=0.V
+  by RLVECT_1:16; then (b+a)*(v-u)=0.V by RLVECT_1:def 9;
+   then v-u=0.V or b+a=0 by RLVECT_1:24;
+then   0.V=(-u)+v by A3,Th2,RLVECT_1:def 11;
+  then v=-(-u) by RLVECT_1:def 10
+  .=u by RLVECT_1:30; hence contradiction by A2; end;
+
+theorem
+ Th20: p<>q & p,q // u,v & p,q // w,y implies u,v // w,y
+ proof assume that A1: p<>q and A2: p,q // u,v and A3: p,q // w,y;
+    now assume A4: u<>v & w<>y;
+  then consider a,b such that
+        A5: a*(q-p)=b*(v-u) & 0<a & 0<b by A1,A2,Th16;
+  consider c,d such that
+        A6: c*(q-p)=d*(y-w) & 0<c & 0<d by A1,A3,A4,Th16;
+  A7: q-p=(a")*(b*(v-u)) by A5,Th13 .=(a"*b)*(v-u) by RLVECT_1:def 9;
+   A8: q-p=(c")*(d*(y-w)) by A6,Th13 .=(c"*d)*(y-w) by RLVECT_1:def 9;
+    0<a" & 0<c" by A5,A6,REAL_1:72;
+  then 0<a"*b & 0<c"*d by A5,A6,SQUARE_1:21;
+  hence thesis by A7,A8,Def1; end;
+ hence thesis by Def1; end;
+
+theorem
+ Th21: u,v // w,y implies v,u // y,w & w,y // u,v
+ proof assume A1: u,v // w,y;
+    now assume u<>v & w<>y; then consider a,b such that
+        A2: a*(v-u)=b*(y-w) & 0<a & 0<b by A1,Th16;
+   a*(u-v)=-b*(y-w) by A2,Th10 .=b*(w-y) by Th10;
+  hence thesis by A2,Def1; end;
+ hence thesis by Def1; end;
+
+theorem
+ Th22: u,v // v,w implies u,v // u,w
+ proof assume A1: u,v // v,w;
+    now assume u<>v & v<>w; then consider a,b such that
+        A2:  a*(v-u)=b*(w-v) & 0<a & 0<b by A1,Th16;
+  A3: b*(w-u)=b*((w-v)+(v-u)) by Th4 .=a*(v-u)+b*(v-u) by A2,RLVECT_1:def 9
+ .=(a+b)*(v-u) by RLVECT_1:def 9;
+    0<a+b by A2,Th2; hence thesis by A2,A3,Def1; end;
+ hence thesis by Def1,Th17; end;
+
+theorem
+ Th23: u,v // u,w implies u,v // v,w or u,w // w,v
+ proof assume A1: u,v // u,w;
+    now assume u<>v & u<>w; then consider a,b such that
+        A2: a*(v-u)=b*(w-u) & 0<a & 0<b by A1,Th16;
+     v-w=(v-u)+(u-w) by Th4 .=(v-u)-(w-u) by Th6;
+  then A3: b*(v-w)=b*(v-u)-a*(v-u) by A2,RLVECT_1:48 .=(b-a)*(v-u) by RLVECT_1:
+49
+        .=(a-b)*(u-v) by Th11;
+     w-v=(w-u)+(u-v) by Th4 .=(w-u)-(v-u) by Th6;
+  then A4: a*(w-v)=a*(w-u)-b*(w-u) by A2,RLVECT_1:48 .=(a-b)*(w-u) by RLVECT_1:
+49
+        .=(b-a)*(u-w) by Th11;
+  A5: now assume A6: a=b; (-u)+v=
+v-u by RLVECT_1:def 11 .=w-u by A2,A6,RLVECT_1:50
+     .=(-u)+w by RLVECT_1:def 11; then v=w
+     by RLVECT_1:21; hence thesis by Def1; end;
+     now assume a<>b; then 0<a-b or 0<b-a by Th3;
+     then v,u // w,v or w,u // v,w by A2,A3,A4,Def1; hence thesis by Th21;
+end;
+  hence thesis by A5; end;
+ hence thesis by Def1; end;
+
+theorem
+ Th24: v-u=y-w implies u,v // w,y
+ proof assume v-u=y-w; then 1*(v-u)=1*(y-w);
+ hence thesis by Def1; end;
+
+theorem
+ Th25: y=(v+w)-u implies u,v // w,y & u,w // v,y
+ proof set y=(v+w)-u; y+u=v+w & y+u=w+v by RLSUB_2:78;
+ then y-v=w-u & y-w=v-u by Th9; hence thesis by Th24; end;
+
+theorem Th26:
+ (ex p,q st p<>q) implies
+  (for u,v,w ex y st u,v // w,y & u,w // v,y & v<>y)
+  proof given p,q such that A1: p<>q;
+   let u,v,w;
+   A2: now assume A3: u=w;
+    then A4: u,v // w,u & u,w // v,u by Def1;
+      now assume u=v;
+     then (v<>p or v<>q) & u,v // w,p & u,w // v,p &
+               u,v // w,q & u,w // v,q by A1,A3,Def1;
+     hence thesis; end;
+    hence thesis by A4; end;
+      now assume A5: u<>w; take y=(v+w)-u;
+    A6: u,v // w,y & u,w // v,y by Th25;
+      now assume v=y; then v=v+(w-u) by RLVECT_1:42;
+     then w-u=0.V by RLVECT_1:22;
+     hence contradiction by A5,RLVECT_1:35;
+    end;
+    hence thesis by A6; end;
+   hence thesis by A2;
+  end;
+
+theorem
+ Th27: p<>v & v,p // p,w implies ex y st u,p // p,y & u,v // w,y
+ proof assume that A1: p<>v and A2: v,p // p,w;
+ A3: now assume A4: p=w; take y=p;
+    thus u,p // p,y & u,v // w,y by A4,Def1; end;
+    now assume p<>w; then consider a,b such that
+    A5: a*(p-v)=b*(w-p) & 0<a & 0<b by A1,A2,Th16;
+    set y=(b"*a)*(p-u)+p;
+    A6: 1*(y-p)=y-p by RLVECT_1:def 9 .=(b"*a)*(p-u) by RLSUB_2:78;
+      0<b" by A5,REAL_1:72; then 0<b"*a & 0<1 by A5,SQUARE_1:21;
+   then A7: u,p // p,y by A6,Def1;
+A8:    y-p=(b"*a)*(p-u) by RLSUB_2:78 .=b"*(a*(p-u)) by RLVECT_1:def 9;
+    A9: v-u=(p-u)+(v-p) by Th4
+          .=(p-u)-(p-v) by Th6;
+    A10: y-w=(y-p)+(p-w) by Th4 .=(y-p)-(w-p) by Th6;
+      a*(v-u)=a*(p-u)-a*(p-v) by A9,RLVECT_1:48
+       .=b*(y-p)-b*(w-p) by A5,A8,Th13 .=b*(y-w) by A10,RLVECT_1:48
+; then u,v // w,y by A5,Def1;
+    hence thesis by A7; end;
+ hence thesis by A3; end;
+
+theorem Th28:
+ (for a,b st a*u + b*v=0.V holds a=0 & b=0) implies u<>v & u<>0.V & v<>0.V
+  proof assume A1: for a,b st a*u + b*v=0.V holds a=0 & b=0;
+   thus u<>v
+    proof assume u=v; then u - v = 0.V by RLVECT_1:28;
+    then u + (-v) = 0.V by RLVECT_1:def 11;
+     then 1*u + (-v) = 0.V by RLVECT_1:def 9;
+     then 1*u + ((-1)*v) = 0.V & 1<>0 by RLVECT_1:29;
+     hence contradiction by A1;
+    end;
+   thus u<>0.V
+    proof assume u=0.V; then 1*u = 0.V by RLVECT_1:23;
+     then 1*u + 0.V = 0.V by RLVECT_1:10;
+     then 1*u + 0*v =0.V & 1<>0 by RLVECT_1:23;
+     hence contradiction by A1;
+    end;
+   thus v<>0.V
+    proof assume v=0.V; then 1*v = 0.V by RLVECT_1:23;
+     then 0.V + 1*v = 0.V by RLVECT_1:10;
+     then 0*u + 1*v =0.V & 1<>0 by RLVECT_1:23;
+     hence contradiction by A1;
+    end;
+   end;
+
+theorem Th29:
+  (ex u,v st (for a,b st a*u + b*v=0.V holds a=0 & b=0)) implies
+    (ex u,v,w,y st not u,v // w,y & not u,v // y,w)
+ proof given u,v such that A1: for a,b st a*u + b*v=0.V holds a=0 & b=0;
+  A2: u<>v & u<>0.V & v<>0.V by A1,Th28;
+  A3: not 0.V,u // v,0.V
+   proof assume A4: 0.V,u // v,0.V;
+      now given a,b such that A5: 0<a & 0<b & a*(u-0.V) = b*(0.V-v);
+      a*u = a*(u-0.V) & b*(0.V-v)=b*(-v) by RLVECT_1:26,27;
+    then a*u = -(b*v) by A5,RLVECT_1:39; then a*u + b*v = 0.V by RLVECT_1:16;
+  hence contradiction by A1,A5; end;
+    hence contradiction by A2,A4,Def1; end;
+      not 0.V,u // 0.V,v
+    proof assume A6: 0.V,u // 0.V,v;
+      now given a,b such that A7: 0<a & 0<b & a*(u-0.V) = b*(v-0.V);
+      a*u = a*(u-0.V) & b*(v-0.V)=b*v by RLVECT_1:26;
+    then 0.V = a*u - (b*v) by A7,RLVECT_1:28 .= a*u + (-(b*v)) by RLVECT_1:def
+11
+       .= a*u + (b*(-v)) by RLVECT_1:39 .= a*u + ((-b)*v) by RLVECT_1:38;
+    hence contradiction by A1,A7; end;
+    hence contradiction by A2,A6,Def1; end;
+  hence thesis by A3;
+ end;
+
+Lm1: a*(v-u) = b*(w-y) & (a<>0 or b<>0)
+  implies u,v // w,y or u,v // y,w proof
+  assume that A1: a*(v-u) = b*(w-y) and A2: a<>0 or b<>0;
+  A3: now assume A4: a=0;
+   then 0.V = b*(w-y) by A1,RLVECT_1:23;
+   then w-y = 0.V by A2,A4,RLVECT_1:24; then w=y by RLVECT_1:35;
+   hence u,v // w,y by Def1; end;
+  A5: now assume A6: b=0;
+   then 0.V = a*(v-u) by A1,RLVECT_1:23;
+   then v-u = 0.V by A2,A6,RLVECT_1:24; then u=v by RLVECT_1:35;
+   hence u,v // w,y by Def1; end;
+     now assume A7: a<>0 & b<>0;
+   A8: now assume a<0 & b<0; then A9: 0<-a & 0<-b by REAL_1:66;
+      (-a)*(v-u) = a*(-(v-u)) by RLVECT_1:38 .= -(b*(w-y)) by A1,RLVECT_1:39
+ .=b*(-(w-y)) by RLVECT_1:39
+    .= (-b)*(w-y) by RLVECT_1:38; hence u,v // y,w by A9,Def1; end;
+   A10: now assume a<0 & 0<b; then A11: 0<-a & 0<b by REAL_1:66;
+      (-a)*(v-u) = a*(-(v-u)) by RLVECT_1:38 .= -(b*(w-y)) by A1,RLVECT_1:39
+ .=b*(-(w-y)) by RLVECT_1:39
+    .= b*(y-w) by VECTSP_1:81; hence u,v // w,y by A11,Def1; end;
+       now assume 0<a & b<0; then A12: 0<a & 0<-b by REAL_1:66;
+      a*(v-u) = -(-(b*(w-y))) by A1,RLVECT_1:30
+    .= -(b*(-(w-y))) by RLVECT_1:39 .= -(b*(y-w)) by VECTSP_1:81
+    .= b*(-(y-w)) by RLVECT_1:39
+    .= (-b)*(y-w) by RLVECT_1:38; hence u,v // w,y by A12,Def1; end;
+    hence thesis by A1,A7,A8,A10,Def1; end;
+hence thesis by A3,A5; end;
+
+canceled;
+
+ theorem Th31:
+  (ex p,q st (for w ex a,b st a*p + b*q=w)) implies
+  (for u,v,w,y st not u,v // w,y & not u,v // y,w
+    ex z being VECTOR of V st
+      (u,v // u,z or u,v // z,u) & (w,y // w,z or w,y // z,w))
+ proof
+   given p,q such that A1: for w ex a,b st a*p + b*q=w;
+  let u,v,w,y such that A2: not u,v // w,y & not u,v // y,w;
+   consider r1,s1 being Real such that A3: r1*p + s1*q = v-u by A1;
+   consider r2,s2 being Real such that A4: r2*p + s2*q = y-w by A1;
+   consider r3,s3 being Real such that A5: r3*p + s3*q = u-w by A1;
+     set r = r1*s2 - r2*s1;
+A6:  now assume A7: r = 0; then A8: r1*s2 =r2*s1 by XCMPLX_1:15;
+   A9: now assume A10: r1=0;
+      A11: s1<>0 proof assume s1=0; then v-u = 0.V + 0*q by A3,A10,RLVECT_1:23
+ .= 0.V + 0.V by RLVECT_1:23
+       .= 0.V by RLVECT_1:10; then u=v by RLVECT_1:35;
+       hence contradiction by A2,Def1; end;
+      then A12: r2=0 by A8,A10,XCMPLX_1:6;
+      A13: s2<>0 proof assume s2=0; then y-w = 0.V + 0*q by A4,A12,RLVECT_1:23
+ .= 0.V + 0.V by RLVECT_1:23
+       .= 0.V by RLVECT_1:10; then y=w by RLVECT_1:35;
+       hence contradiction by A2,Def1; end;
+      A14: v-u = 0.V + s1*q by A3,A10,RLVECT_1:23
+              .= s1*q by RLVECT_1:10;
+      A15: y-w = 0.V + s2*q by A4,A12,RLVECT_1:23
+              .= s2*q by RLVECT_1:10;
+      A16: (s1)"*(v-u) = ((s1)"*s1)*q by A14,RLVECT_1:def 9
+          .= 1*q by A11,XCMPLX_0:def 7 .= q by RLVECT_1:def 9;
+         (s2)"*(y-w) = ((s2)"*s2)*q by A15,RLVECT_1:def 9
+          .= 1*q by A13,XCMPLX_0:def 7 .= q by RLVECT_1:def 9;
+      then (s1)"*(v-u) = (s2)"*(y-w) & s1"<>0 & s2"<>0 by A11,A13,A16,XCMPLX_1:
+203
+;
+      hence contradiction by A2,Lm1; end;
+    A17: now assume A18: r1<>0 & r2=0;
+        s2<>0 proof assume s2=0; then y-w = 0.V + 0*q by A4,A18,RLVECT_1:23
+ .= 0.V + 0.V by RLVECT_1:23
+       .= 0.V by RLVECT_1:10; then y=w by RLVECT_1:35;
+       hence contradiction by A2,Def1; end;
+        hence contradiction by A7,A18,XCMPLX_1:6; end;
+     A19: now assume A20: r1<>0 & r2<>0 & s1 = 0;
+     then A21: s2 = 0 by A7,XCMPLX_1:6;
+      A22: v-u = r1*p + 0.V by A3,A20,RLVECT_1:23
+              .= r1*p by RLVECT_1:10;
+      A23: y-w = r2*p + 0.V by A4,A21,RLVECT_1:23
+              .= r2*p by RLVECT_1:10;
+      A24: (r1)"*(v-u) = ((r1)"*r1)*p by A22,RLVECT_1:def 9
+          .= 1*p by A20,XCMPLX_0:def 7 .= p by RLVECT_1:def 9;
+         (r2)"*(y-w) = ((r2)"*r2)*p by A23,RLVECT_1:def 9
+          .= 1*p by A20,XCMPLX_0:def 7 .= p by RLVECT_1:def 9;
+      then (r1)"*(v-u) = (r2)"*(y-w) & r1"<>0 & r2"<>0 by A20,A24,XCMPLX_1:203
+;
+      hence contradiction by A2,Lm1; end;
+        now assume A25: r1<>0 & r2<>0 & s1<>0 & s2<>0;
+        r2*(v-u) = r2*(r1*p) + r2*(s1*q)
+       by A3,RLVECT_1:def 9 .=(r2*r1)*p + r2*(s1*q) by RLVECT_1:def 9
+       .= (r1*r2)*p + (r1*s2)*q
+       by A8,RLVECT_1:def 9 .= r1*(r2*p) + (r1*s2)*q by RLVECT_1:def 9
+       .= r1*(r2*p) + r1*(s2*q) by RLVECT_1:def 9 .= r1*(y-w) by A4,RLVECT_1:
+def 9;
+       hence contradiction by A2,A25,Lm1; end;
+  hence contradiction by A8,A9,A17,A19,XCMPLX_1:6; end;
+
+  set a= r2*s3 - r3*s2, b= r1*s3 - r3*s1;
+     (r1*s3)*r2 = (r1*s3)*r2 - 0
+       .= (r1*s3)*r2 - (r1*(s2*r3) - r1*(s2*r3)) by XCMPLX_1:14
+       .= ((r1*s3)*r2 - r1*(s2*r3)) + r1*(s2*r3) by XCMPLX_1:37
+       .= (r1*(s3*r2) - r1*(s2*r3)) + r1*(s2*r3) by XCMPLX_1:4
+       .= r1*(r2*s3 - r3*s2) + r1*(s2*r3) by XCMPLX_1:40
+       .= r1*(r2*s3 - r3*s2) + r3*(s2*r1) by XCMPLX_1:4;
+  then A26: b*r2 = r1*a + r3*(s2*r1) - (r3*s1)*r2 by XCMPLX_1:40
+          .= r1*a + (r3*(s2*r1) - (r3*s1)*r2) by XCMPLX_1:29
+          .= r1*a + (r3*(s2*r1) - r3*(s1*r2)) by XCMPLX_1:4
+          .= r1*a + r3*r by XCMPLX_1:40;
+     (r1*s3)*s2 = (r1*s3)*s2 - 0
+       .= (r1*s3)*s2 - (s3*(r2*s1) - s3*(r2*s1)) by XCMPLX_1:14
+       .= ((s3*r1)*s2 - s3*(r2*s1)) + s3*(r2*s1) by XCMPLX_1:37
+       .= (s3*(r1*s2) - s3*(r2*s1)) + s3*(r2*s1) by XCMPLX_1:4
+       .= s3*r + s3*(r2*s1) by XCMPLX_1:40;
+  then A27: b*s2 = s3*r + s3*(r2*s1) - (r3*s1)*s2 by XCMPLX_1:40
+          .= s3*r + (s3*(r2*s1) - (r3*s1)*s2) by XCMPLX_1:29
+          .= s3*r + (s1*(s3*r2) - (s1*r3)*s2) by XCMPLX_1:4
+          .= s3*r + (s1*(s3*r2) - s1*(r3*s2)) by XCMPLX_1:4
+          .= s1*a + s3*r by XCMPLX_1:40;
+  A28: now assume a=0 & b=0; then r3=0 & s3=0 by A6,A26,A27,XCMPLX_1:6;
+   then 0.V + 0*q = u-w by A5,RLVECT_1:23;
+   then 0.V + 0.V = u-w by RLVECT_1:23;
+   then 0.V=u-w by RLVECT_1:10; then u=w by RLVECT_1:35;
+   then u,v // u,u & w,y // w,u by Def1;
+   hence thesis; end;
+  set z = u + (r"*a)*(v-u);
+  A29: r*(z-u) = r*z - r*u by RLVECT_1:48
+             .= r*u + r*((r"*a)*(v-u)) - r*u by RLVECT_1:def 9
+             .= r*u + (r*(r"*a))*(v-u) - r*u by RLVECT_1:def 9
+             .= r*u + ((r*r")*a)*(v-u) - r*u by XCMPLX_1:4
+             .= r*u + (1*a)*(v-u) - r*u by A6,XCMPLX_0:def 7
+             .= a*(v-u) + (r*u - r*u) by RLVECT_1:42
+             .= a*(v-u) + 0.V by RLVECT_1:28
+             .= a*(v-u) by RLVECT_1:10;
+  A30: r*(z-w) = r*z - r*w by RLVECT_1:48
+             .= r*u + r*((r"*a)*(v-u)) - r*w by RLVECT_1:def 9
+             .= r*u + (r*(r"*a))*(v-u) - r*w by RLVECT_1:def 9
+             .= r*u + ((r*r")*a)*(v-u) - r*w by XCMPLX_1:4
+             .= r*u + (1*a)*(v-u) - r*w by A6,XCMPLX_0:def 7
+             .= a*(v-u) + (r*u - r*w) by RLVECT_1:42
+             .= a*(r1*p + s1*q) + r*(r3*p + s3*q) by A3,A5,RLVECT_1:48
+             .= a*(r1*p) + a*(s1*q) + r*(r3*p + s3*q) by RLVECT_1:def 9
+             .= a*(r1*p) + a*(s1*q) + (r*(r3*p) + r*(s3*q)) by RLVECT_1:def 9
+             .= (a*r1)*p + a*(s1*q) + (r*(r3*p) + r*(s3*q)) by RLVECT_1:def 9
+             .= (a*r1)*p + (a*s1)*q + (r*(r3*p) + r*(s3*q)) by RLVECT_1:def 9
+             .= (a*r1)*p + (a*s1)*q + ((r*r3)*p + r*(s3*q)) by RLVECT_1:def 9
+             .= (a*r1)*p + (a*s1)*q + ((r*s3)*q + (r*r3)*p) by RLVECT_1:def 9
+             .= (a*r1)*p + (a*s1)*q + (r*s3)*q + (r*r3)*p by RLVECT_1:def 6
+             .= ((a*s1)*q + (r*s3)*q) + (a*r1)*p + (r*r3)*p by RLVECT_1:def 6
+             .= ((a*s1)*q + (r*s3)*q) + ((a*r1)*p + (r*r3)*p) by RLVECT_1:def 6
+             .= (a*s1 + r*s3)*q + ((a*r1)*p + (r*r3)*p) by RLVECT_1:def 9
+             .= (b*s2)*q + (b*r2)*p by A26,A27,RLVECT_1:def 9
+             .= b*(s2*q) + (b*r2)*p by RLVECT_1:def 9
+             .= b*(s2*q) + b*(r2*p) by RLVECT_1:def 9
+             .= b*(y-w) by A4,RLVECT_1:def 9;
+  A31: now assume A32: a=0 & b<>0; then r*(z-u)=0.V by A29,RLVECT_1:23;
+   then z-u=0.V by A6,RLVECT_1:24; then z=u by RLVECT_1:35;
+   then u,v // u,z & (w,y // w,z or w,y // z,w) by A30,A32,Def1,Lm1;
+   hence thesis; end;
+  A33: now assume A34: a<>0 & b=0; then r*(z-w)=0.V by A30,RLVECT_1:23;
+   then z-w=0.V by A6,RLVECT_1:24; then z=w by RLVECT_1:35;
+   then (u,v // u,z or u,v // z,u) & w,y // w,z by A29,A34,Def1,Lm1;
+   hence thesis; end;
+     now assume a<>0 & b<>0;
+   then (u,v // u,z or u,v // z,u) & (w,y // w,z or w,y // z,w)
+                                         by A29,A30,Lm1;
+      hence thesis; end;
+hence thesis by A28,A31,A33; end;
+
+definition
+  struct(1-sorted) AffinStruct (#carrier -> set,
+                   CONGR -> Relation of [:the carrier,the carrier:]#);
+end;
+
+definition
+ cluster non empty strict AffinStruct;
+ existence
+  proof
+    consider A being non empty set, R be Relation of [:A,A:];
+   take AffinStruct(#A,R#);
+   thus the carrier of AffinStruct(#A,R#) is non empty;
+   thus thesis;
+  end;
+end;
+
+reserve AS for non empty AffinStruct;
+reserve a,b,c,d for Element of AS;
+reserve x,z for set;
+
+definition let AS,a,b,c,d;
+  pred a,b // c,d means
+:Def2: [[a,b],[c,d]] in the CONGR of AS;
+end;
+
+definition let V;
+ func DirPar(V) -> Relation of [:the carrier of V,the carrier of V:]
+means
+:Def3: [x,z] in it iff ex u,v,w,y st x=[u,v] & z=[w,y] & u,v // w,y;
+existence
+ proof set VV = [:the carrier of V,the carrier of V:];
+  defpred P[set,set] means ex u,v,w,y st $1=[u,v] & $2=[w,y] & u,v // w,y;
+  consider P being Relation of VV,VV such that
+A1: [x,z] in P iff x in VV & z in VV & P[x,z] from Rel_On_Set_Ex;
+  take P; let x,z;
+  thus [x,z] in P implies ex u,v,w,y st x=[u,v] & z=[w,y] & u,v // w,y by A1;
+  assume
+    ex u,v,w,y st x=[u,v] & z=[w,y] & u,v // w,y;
+  hence [x,z] in P by A1;
+ end;
+uniqueness
+ proof let P,Q be Relation of [:the carrier of V,the carrier of V:]
+   such that
+  A2:  [x,z] in P iff ex u,v,w,y st x=[u,v] & z=[w,y] & u,v // w,y and
+  A3:  [x,z] in Q iff ex u,v,w,y st x=[u,v] & z=[w,y] & u,v // w,y;
+    for x,z holds [x,z] in P iff [x,z] in Q
+   proof let x,z;
+      [x,z] in P iff ex u,v,w,y st x=[u,v] & z=[w,y] & u,v // w,y by A2;
+    hence thesis by A3;
+   end;
+  hence thesis by RELAT_1:def 2;
+ end;
+end;
+
+canceled;
+
+theorem Th33:
+   [[u,v],[w,y]] in DirPar(V) iff u,v // w,y
+ proof
+   thus [[u,v],[w,y]] in DirPar(V) implies u,v // w,y
+    proof assume [[u,v],[w,y]] in DirPar(V);
+     then consider u',v',w',y' being VECTOR of V such that
+A1:     [u,v]=[u',v'] & [w,y]=[w',y'] and
+A2:     u',v' // w',y' by Def3;
+       u = u' & v = v' & w = w' & y = y' by A1,ZFMISC_1:33;
+     hence u,v // w,y by A2;
+    end;
+   thus u,v // w,y implies [[u,v],[w,y]] in DirPar(V) by Def3;
+ end;
+
+definition let V; func OASpace(V) -> strict AffinStruct equals
+ :Def4:  AffinStruct (#the carrier of V, DirPar(V)#);
+correctness;
+end;
+
+definition let V;
+ cluster OASpace V -> non empty;
+ coherence
+  proof
+      OASpace V = AffinStruct (#the carrier of V, DirPar(V)#) by Def4;
+   hence the carrier of OASpace V is non empty;
+  end;
+end;
+
+canceled;
+
+theorem Th35:
+    (ex u,v st
+     for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0)
+ implies
+  ((ex a,b being Element of OASpace(V) st a<>b) &
+   (for a,b,c,d,p,q,r,s being Element of OASpace(V) holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of OASpace(V)
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of OASpace(V)
+      ex d  being Element of OASpace(V)
+         st a,b // c,d & a,c // b,d & b<>d) &
+    (for p,a,b,c  being Element of OASpace(V)
+      st p<>b & b,p // p,c
+       ex d being Element of OASpace(V)
+                         st a,p // p,d & a,b // c,d))
+ proof given u,v such that
+    A1: for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0;
+    A2: u<>v by A1,Th28;
+   set S = OASpace(V);
+A3:  S = AffinStruct (#the carrier of V, DirPar(V)#) by Def4;
+ hence ex a,b being Element of S st a<>b by A2;
+  thus for a,b,c,d,p,q,r,s being Element of S holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)
+     proof let a,b,c,d,p,q,r,s be Element of S;
+      reconsider a'=a,b'=b,c'=c,d'=d,p'=p,q'=q,r'=r,s'=s
+        as Element of V by A3;
+      thus [[a,b],[c,c]] in the CONGR of S
+       proof a',b' // c',c' by Def1; hence thesis by A3,Th33; end;
+      thus a,b // b,a implies a=b
+       proof assume [[a,b],[b,a]] in the CONGR of S;
+        then a',b' // b',a' by A3,Th33;
+        hence a=b by Th19;
+       end;
+      thus a<>b & a,b // p,q & a,b // r,s implies p,q // r,s
+       proof assume a<>b & [[a,b],[p,q]] in the CONGR of S &
+                           [[a,b],[r,s]] in the CONGR of S;
+        then a'<>b' & a',b' // p',q' & a',b' // r',s' by A3,Th33;
+        then p',q' // r',s' by Th20;
+        then [[p,q],[r,s]] in the CONGR of S by A3,Th33;
+        hence thesis by Def2;
+       end;
+      thus a,b // c,d implies b,a // d,c
+       proof assume [[a,b],[c,d]] in the CONGR of S;
+        then a',b' // c',d' by A3,Th33;
+        then b',a' // d',c' by Th21;
+        then [[b,a],[d,c]] in the CONGR of S by A3,Th33;
+        hence b,a // d,c by Def2;
+       end;
+      thus a,b // b,c implies a,b // a,c
+       proof assume [[a,b],[b,c]] in the CONGR of S;
+        then a',b' // b',c' by A3,Th33;
+        then a',b' // a',c' by Th22;
+        then [[a,b],[a,c]] in the CONGR of S by A3,Th33;
+        hence a,b // a,c by Def2;
+       end;
+      thus a,b // a,c implies a,b // b,c or a,c // c,b
+       proof assume [[a,b],[a,c]] in the CONGR of S;
+        then a',b' // a',c' by A3,Th33;
+        then a',b' // b',c' or a',c' // c',b' by Th23;
+        then [[a,b],[b,c]] in the CONGR of S or
+            [[a,c],[c,b]] in the CONGR of S by A3,Th33;
+        hence a,b // b,c or a,c // c,b by Def2;
+       end;
+     end;
+   thus ex a,b,c,d  being Element of S
+           st not a,b // c,d & not a,b // d,c
+    proof consider a',b',c',d' being VECTOR of V such that
+     A4: not a',b' // c',d' & not a',b' // d',c' by A1,Th29;
+     reconsider a=a',b=b',c = c',d=d' as Element of S by A3;
+        not [[a,b],[c,d]] in the CONGR of S &
+                 not [[a,b],[d,c]] in the CONGR of S by A3,A4,Th33;
+     then not a,b // c,d & not a,b // d,c by Def2;
+     hence thesis;
+    end;
+   thus for a,b,c  being Element of S
+          ex d  being Element of S
+            st a,b // c,d & a,c // b,d & b<>d
+     proof let a,b,c be Element of S;
+      reconsider a'=a,b'=b,c'=c as Element of V by A3;
+     consider d' being VECTOR of V such that
+      A5: a',b' // c',d' & a',c' // b',d' & b'<>d' by A2,Th26;
+      reconsider d=d' as Element of S by A3;
+        [[a,b],[c,d]] in the CONGR of S &
+                   [[a,c],[b,d]] in the CONGR of S by A3,A5,Th33;
+      then a,b // c,d & a,c // b,d & b<>d by A5,Def2;
+      hence thesis;
+     end;
+
+   thus for p,a,b,c being Element of S
+          st p<>b & b,p // p,c holds
+            ex d being Element of S
+             st a,p // p,d & a,b // c,d
+     proof let p,a,b,c be Element of S;
+      assume A6: p<>b & [[b,p],[p,c]] in the CONGR of S;
+      reconsider p'=p,a'=a,b'=b,c'=c as Element of V by A3;
+
+        p'<>b' & b',p' // p',c' by A3,A6,Th33;
+      then consider d' being VECTOR of V such that
+      A7: a',p' // p',d' & a',b' // c',d' by Th27;
+
+      reconsider d=d' as Element of S by A3;
+        [[a,p],[p,d]] in the CONGR of S &
+                   [[a,b],[c,d]] in the CONGR of S by A3,A7,Th33;
+      then a,p // p,d & a,b // c,d by Def2;
+      hence thesis;
+     end;
+ end;
+
+theorem
+Th36: (ex p,q being VECTOR of V st
+  (for w being VECTOR of V ex a,b being Real st a*p + b*q=w))
+  implies
+  (for a,b,c,d being Element of OASpace(V) st
+                               not a,b // c,d & not a,b // d,c
+    ex t being Element of OASpace(V) st
+      (a,b // a,t or a,b // t,a) & (c,d // c,t or c,d // t,c))
+ proof assume A1: ex p,q being VECTOR of V st
+   (for w being VECTOR of V ex a,b being Real st a*p + b*q=w);
+ let a,b,c,d be Element of OASpace(V);
+   set S = OASpace(V);
+A2:  S = AffinStruct (#the carrier of V, DirPar(V)#) by Def4;
+ assume A3: not [[a,b],[c,d]] in the CONGR of S &
+                           not [[a,b],[d,c]] in the CONGR of S;
+ reconsider a'=a,b'=b,c' = c,d'=d as Element of V by A2;
+   not a',b' // c',d' & not a',b' // d',c' by A2,A3,Th33;
+ then consider t' being VECTOR of V such that
+   A4: (a',b' // a',t' or a',b' // t',a') &
+           (c',d' // c',t' or c',d' // t',c') by A1,Th31;
+  reconsider t=t' as Element of S by A2;
+     ([[a,b],[a,t]] in the CONGR of S or [[a,b],[t,a]] in the CONGR of S) &
+   ([[c,d],[c,t]] in the CONGR of S or [[c,d],[t,c]] in the CONGR of S)
+   by A2,A4,Th33;
+   then (a,b // a,t or a,b // t,a) & (c,d // c,t or c,d // t,c) by Def2;
+   hence thesis;
+ end;
+
+definition let IT be non empty AffinStruct;
+ attr IT is OAffinSpace-like means :Def5:
+   (for a,b,c,d,p,q,r,s being Element of IT holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of IT
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of IT
+      ex d  being Element of IT
+         st a,b // c,d & a,c // b,d & b<>d) &
+    for p,a,b,c  being Element of IT
+      st p<>b & b,p // p,c
+       ex d being Element of IT st a,p // p,d & a,b // c,d;
+end;
+
+definition
+ cluster strict non trivial OAffinSpace-like (non empty AffinStruct);
+  existence
+  proof consider V,u,v such that A1:
+     for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0 and
+        for w ex a,b being Real st w = a*u + b*v by FUNCSDOM:37;
+     (ex a,b being Element of OASpace(V) st a<>b) &
+   (for a,b,c,d,p,q,r,s being Element of OASpace(V) holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of OASpace(V)
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of OASpace(V)
+      ex d  being Element of OASpace(V)
+         st a,b // c,d & a,c // b,d & b<>d) &
+    for p,a,b,c  being Element of OASpace(V)
+      st p<>b & b,p // p,c
+       ex d being Element of OASpace(V) st
+        a,p // p,d & a,b // c,d by A1,Th35;
+    then OASpace(V) is non trivial OAffinSpace-like by Def5,REALSET1:def 20;
+   hence thesis;
+  end;
+end;
+
+definition
+ mode OAffinSpace is non trivial OAffinSpace-like (non empty AffinStruct);
+end;
+
+theorem
+    ((ex a,b being Element of AS st a<>b) &
+   (for a,b,c,d,p,q,r,s being Element of AS holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of AS
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of AS
+      ex d  being Element of AS
+         st a,b // c,d & a,c // b,d & b<>d) &
+    (for p,a,b,c  being Element of AS
+      st p<>b & b,p // p,c ex d being
+             Element of AS st a,p // p,d & a,b // c,d))
+      iff AS is OAffinSpace by Def5,REALSET1:def 20;
+
+theorem
+Th38: (ex u,v st
+   for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0)
+    implies OASpace(V) is OAffinSpace
+ proof assume
+    (ex u,v st
+   for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0);
+  then (ex a,b being Element of OASpace(V) st a<>b) &
+   (for a,b,c,d,p,q,r,s being Element of OASpace(V) holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of OASpace(V)
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of OASpace(V)
+      ex d  being Element of OASpace(V)
+         st a,b // c,d & a,c // b,d & b<>d) &
+    (for p,a,b,c  being Element of OASpace(V)
+      st p<>b & b,p // p,c
+       ex d being Element of OASpace(V)
+                         st a,p // p,d & a,b // c,d) by Th35;
+     hence thesis by Def5,REALSET1:def 20;
+ end;
+
+
+
+
+definition let IT be OAffinSpace;
+ attr IT is 2-dimensional means
+  :Def6: for a,b,c,d being Element of IT st
+     not a,b // c,d & not a,b // d,c holds
+      ex p being Element of IT st
+      (a,b // a,p or a,b // p,a) & (c,d // c,p or c,d // p,c);
+ end;
+
+definition
+ cluster strict 2-dimensional OAffinSpace;
+  existence
+   proof consider V such that A1: ex u,v st
+      (for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0) &
+      (for w ex a,b being Real st w = a*u + b*v) by FUNCSDOM:37;
+    consider u,v such that A2: for a,b being Real st a*u + b*v = 0.V
+     holds a=0 & b=0 and
+     A3: for w ex a,b being Real st w = a*u + b*v by A1;
+    reconsider S = OASpace(V) as OAffinSpace by A2,Th38;
+      for a,b,c,d being Element of S st
+      not a,b // c,d & not a,b // d,c holds
+       ex p being Element of S st
+       (a,b // a,p or a,b // p,a) & (c,d // c,p or c,d // p,c)
+     by A3,Th36;
+     then S is 2-dimensional by Def6;
+    hence thesis;
+   end;
+end;
+
+definition
+ mode OAffinPlane is 2-dimensional OAffinSpace;
+end;
+
+canceled 11;
+
+theorem
+    ((ex a,b being Element of AS st a<>b) &
+   (for a,b,c,d,p,q,r,s being Element of AS holds
+     a,b // c,c &
+     (a,b // b,a implies a=b) &
+     (a<>b & a,b // p,q & a,b // r,s implies p,q // r,s) &
+     (a,b // c,d implies b,a // d,c) &
+     (a,b // b,c implies a,b // a,c) &
+     (a,b // a,c implies a,b // b,c or a,c // c,b)) &
+    (ex a,b,c,d  being Element of AS
+         st not a,b // c,d & not a,b // d,c) &
+    (for a,b,c  being Element of AS
+      ex d  being Element of AS
+         st a,b // c,d & a,c // b,d & b<>d) &
+    (for p,a,b,c  being Element of AS
+      st p<>b & b,p // p,c
+       ex d being Element of AS st a,p // p,d & a,b // c,d) &
+    (for a,b,c,d being Element of AS st
+     not a,b // c,d & not a,b // d,c holds
+      ex p being Element of AS st
+      (a,b // a,p or a,b // p,a) & (c,d // c,p or c,d // p,c)) )
+   iff AS is OAffinPlane by Def5,Def6,REALSET1:def 20;
+
+theorem
+   (ex u,v st
+     (for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0) &
+     (for w ex a,b being Real st w = a*u + b*v))
+     implies OASpace(V) is OAffinPlane
+  proof assume A1: ex u,v st
+     (for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0) &
+     (for w ex a,b being Real st w = a*u + b*v); set S=OASpace(V);
+     consider u,v such that
+     A2: for a,b being Real st a*u + b*v = 0.V holds a=0 & b=0
+     and A3: for w ex a,b being Real st w = a*u + b*v by A1;
+        for a,b,c,d being Element of S st
+      not a,b // c,d & not a,b // d,c holds ex p being
+        Element of S st (a,b // a,p or a,b // p,a) &
+        (c,d // c,p or c,d // p,c) by A3,Th36;
+   hence thesis by A2,Def6,Th38;
+  end;

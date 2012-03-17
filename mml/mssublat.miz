@@ -1,0 +1,1857 @@
+:: The Correspondence Between Lattices of Subalgebras of Universal
+:: Algebras and Many Sorted Algebras
+::  by Adam Naumowicz and Agnieszka Julia Marasik
+::
+:: Received September 22, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary MSUALG_1, FUNCT_1, BOOLE, FINSEQ_2, FINSEQ_1, RELAT_1, FUNCOP_1,
+      UNIALG_1, UNIALG_2, CQC_SIM1, PRALG_1, MSUALG_2, TDGROUP, QC_LANG1,
+      PARTFUN1, FINSEQ_4, ZF_REFLE, AMI_1, PBOOLE, CARD_3, FUNCT_2, REALSET1,
+      CAT_1, LATTICES, INCPROJ, WELLORD1, GROUP_6;
+ notation TARSKI, XBOOLE_0, SUBSET_1, BINOP_1, CARD_3, NAT_1, CQC_LANG,
+      LATTICES, LATTICE4, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0,
+      PBOOLE, UNIALG_1, UNIALG_2, REALSET1, PRALG_1, NUMBERS, FINSEQ_1,
+      FINSEQ_2, MSUALG_1, MSUALG_2;
+ constructors BINOP_1, CQC_LANG, LATTICE4, ALG_1, MSUALG_2, PRALG_1, FINSEQOP,
+      FILTER_1, MEMBERED;
+ clusters FUNCT_1, MSUALG_1, MSUALG_2, RELSET_1, PRALG_1, STRUCT_0, UNIALG_1,
+      UNIALG_2, FINSEQ_2, MSAFREE, CQC_LANG, ARYTM_3, XBOOLE_0, MEMBERED,
+      NUMBERS, ORDINAL2, SUBSET_1;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0, MSUALG_2, PBOOLE, LATTICE4, UNIALG_1, UNIALG_2,
+      PRALG_1;
+ theorems MSUALG_1, MSUALG_2, PBOOLE, TARSKI, UNIALG_1, UNIALG_2, FUNCT_1,
+      RELAT_1, FUNCOP_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      PRALG_1, ZFMISC_1, REALSET1, CARD_3, ALG_1, LATTICES, CQC_LANG, MSUHOM_1,
+      RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2;
+
+begin
+
+:: Preliminaries
+
+reserve a for set, i for Nat;
+
+theorem Th1:
+ (*-->a).0 = {}
+  proof
+    thus (*-->a).0 = 0 |-> a by MSUALG_1:def 4
+                  .= {} by FINSEQ_2:72;
+end;
+
+theorem
+   (*-->a).1 = <*a*>
+  proof
+    thus (*-->a).1 = 1 |-> a by MSUALG_1:def 4
+                  .= <*a*> by FINSEQ_2:73;
+end;
+
+theorem
+   (*-->a).2 = <*a,a*>
+  proof
+    thus (*-->a).2 = 2 |-> a by MSUALG_1:def 4
+                  .= <*a,a*> by FINSEQ_2:75;
+end;
+
+theorem
+   (*-->a).3 = <*a,a,a*>
+  proof
+    thus (*-->a).3 = 3 |-> a by MSUALG_1:def 4
+                  .= <*a,a,a*> by FINSEQ_2:76;
+end;
+
+theorem Th5:
+ for f being FinSequence of {0} holds
+  f = i |-> 0 iff len f = i
+   proof
+    let f be FinSequence of {0};
+    thus f = i |-> 0 implies len f = i by FINSEQ_2:69;
+     assume
+    len f = i;
+then A1:  dom f = Seg i by FINSEQ_1:def 3;
+     per cases;
+     suppose
+A2:   Seg i = {};
+     hence f = {} by A1,RELAT_1:64
+            .= 0 |-> 0 by FINSEQ_2:72
+            .= i |-> 0 by A2,FINSEQ_1:5;
+     suppose
+A3:  Seg i <> {};
+       rng f c= {0} by FINSEQ_1:def 4;
+     then rng f = {0} or rng f = {} by ZFMISC_1:39;
+     then f = Seg i --> 0 by A1,A3,FUNCOP_1:15,RELAT_1:65;
+     hence f = i |-> 0 by FINSEQ_2:def 2;
+end;
+
+theorem Th6:
+ for f be FinSequence st f = (*-->0).i holds len f = i
+  proof
+     let p be FinSequence;
+     assume
+       p = (*-->0).i;
+  then p = i |-> 0 by MSUALG_1:def 4;
+     hence thesis by FINSEQ_2:69;
+end;
+
+begin
+
+:: Some Properties of Subalgebras of Universal and Many Sorted Algebras
+
+theorem Th7:
+ for U1,U2 being Universal_Algebra st U1 is SubAlgebra of U2 holds
+  MSSign U1 = MSSign U2
+  proof
+    let U1,U2 be Universal_Algebra; assume
+    U1 is SubAlgebra of U2;
+then A1:  U1,U2 are_similar by UNIALG_2:16;
+       set ff2 = dom signature(U1)-->0,
+           gg2 = dom signature(U2)-->0;
+    reconsider ff1 = (*-->0)*(signature U1) as
+      Function of dom signature(U1), {0}* by MSUALG_1:7;
+    reconsider gg1 = (*-->0)*(signature U2) as
+      Function of dom signature(U2), {0}* by MSUALG_1:7;
+
+A2: MSSign U1 = ManySortedSign (#{0},dom signature(U1),ff1,ff2#)
+ by MSUALG_1:16;
+A3: MSSign U2 = ManySortedSign (#{0},dom signature(U2),gg1,gg2#)
+ by MSUALG_1:16;
+then the OperSymbols of MSSign U1
+            = the OperSymbols of MSSign U2 by A1,A2,UNIALG_2:def 2;
+    hence thesis by A1,A2,A3,UNIALG_2:def 2;
+   end;
+
+definition
+let U0 be Universal_Algebra;
+cluster the charact of U0 -> Function-yielding;
+ coherence
+  proof
+   let x be set; assume
+   x in dom (the charact of U0);
+   hence (the charact of U0).x is Function by UNIALG_1:5;
+  end;
+end;
+
+theorem Th8:
+ for U1,U2 being Universal_Algebra st U1 is SubAlgebra of U2
+  for B being MSSubset of MSAlg U2 st B = the Sorts of MSAlg U1
+   for o being OperSymbol of MSSign U2
+    for a being OperSymbol of MSSign U1 st a = o holds
+     Den(a,MSAlg U1) = Den(o,MSAlg U2)|Args(a,MSAlg U1)
+      proof
+       let U1,U2 be Universal_Algebra such that
+A1:      U1 is SubAlgebra of U2;
+        let B be MSSubset of MSAlg U2 such that
+A2:     B = the Sorts of MSAlg U1;
+A3:     the Sorts of MSAlg U2 is MSSubset of MSAlg U2 by MSUALG_2:def 1;
+A4:     MSSign U1 = MSSign U2 by A1,Th7;
+        let o be OperSymbol of MSSign U2;
+        reconsider a = o as Element of the OperSymbols of MSSign U1 by A1,Th7;
+A5:     dom Den(o,MSAlg U2) = Args(o,MSAlg U2) by FUNCT_2:def 1;
+A6:     Args(o,MSAlg U2) =
+        ((the Sorts of MSAlg U2)#*the Arity of MSSign U2).o by MSUALG_1:def 9;
+          (B# * the Arity of MSSign U1).a c=
+        ((the Sorts of MSAlg U2)#* the Arity of MSSign U2).o
+         proof
+          A7: MSSign U1 = MSSign U2 by A1,Th7;
+            B c= the Sorts of MSAlg U2 by MSUALG_2:def 1;
+          hence thesis by A3,A7,MSUALG_2:3;
+         end;
+        then Args(a,MSAlg U1) c= dom Den(o,MSAlg U2) by A2,A4,A5,A6,MSUALG_1:
+def 9;
+        then dom (Den(o,MSAlg U2)|Args(a,MSAlg U1)) = Args(a,MSAlg U1)
+                                               by RELAT_1:91;
+then A8:     dom (Den(o,MSAlg U2)|Args(a,MSAlg U1)) = dom Den(a,MSAlg U1)
+        by FUNCT_2:def 1;
+
+        set X = Args(a,MSAlg U1);
+        set Y = dom Den(a,MSAlg U1);
+A9:      Y = dom Den(o,MSAlg U2) /\ X by A8,RELAT_1:90;
+
+       for x being set st x in Y holds (Den(o,MSAlg U2)).x = (Den(a,MSAlg U1)).
+x
+         proof
+          let x be set; assume
+          x in Y;
+          then x in X by A9,XBOOLE_0:def 3;
+then A10:        x in (len the_arity_of a)-tuples_on the_sort_of MSAlg U1
+                                             by MSUALG_1:11;
+A11:        MSAlg U1 = MSAlgebra(#MSSorts U1,MSCharact U1#)
+          & MSAlg U2 = MSAlgebra(#MSSorts U2,MSCharact U2#)
+ by MSUALG_1:def 16;
+
+          reconsider cc = the carrier of U1
+            as non empty Subset of U2 by A1,UNIALG_2:def 8;
+            now
+           let n be set;
+           assume
+A12:       n in dom Opers(U2,cc);
+A13:       rng Opers(U2,cc) c= PFuncs(cc*,cc) by FINSEQ_1:def 4;
+             (Opers(U2,cc)).n in rng Opers(U2,cc) by A12,FUNCT_1:def 5;
+           hence (Opers(U2,cc)).n is Function by A13,PARTFUN1:120;
+          end;
+          then reconsider f = Opers(U2,cc) as Function-yielding Function
+                                                    by PRALG_1:def 15;
+
+       set ff1 = (*-->0)*(signature U1), ff2 = dom signature(U1)-->0,
+           gg2 = dom signature(U2)-->0;
+    reconsider gg1 = (*-->0)*(signature U2) as
+     Function of dom signature(U2), {0}* by MSUALG_1:7;
+
+A14:      MSSign U2 = ManySortedSign (#{0},dom signature(U2),gg1,gg2#)
+                           by MSUALG_1:16;
+A15:      dom (the charact of U2) =
+                        Seg (len(the charact of U2)) by FINSEQ_1:def 3
+                     .= Seg (len(signature (U2))) by UNIALG_1:def 11
+                     .= dom signature(U2) by FINSEQ_1:def 3;
+          then (the charact of U2).a in rng the charact of U2 by A14,FUNCT_1:
+def 5;
+          then reconsider op = (the charact of U2).a as operation of U2
+          by UNIALG_2:def 3;
+        MSAlg U1 = MSAlgebra(#MSSorts U1,MSCharact U1#) by MSUALG_1:def 16;
+          then the Sorts of MSAlg U1 = {0}-->the carrier of U1
+          by MSUALG_1:def 14;
+          then rng(the Sorts of MSAlg U1) = {the carrier of U1} by FUNCOP_1:14
+;
+          then the carrier of U1 is Component of the Sorts of MSAlg U1
+                                         by TARSKI:def 1;
+then A16:      x in (len the_arity_of a)-tuples_on the carrier of U1
+                   by A10,MSUALG_1:def 17;
+    reconsider ff1 as Function of dom signature(U1), {0}* by MSUALG_1:7;
+A17:     MSSign U1= ManySortedSign (#{0},dom signature(U1),ff1,ff2#)
+                                       by MSUALG_1:16;
+          consider n being Nat such that
+A18:     dom (signature (U2)) = Seg n by FINSEQ_1:def 2;
+            a in Seg n by A14,A18;
+          then reconsider a as Nat;
+            U1,U2 are_similar by A1,UNIALG_2:16;
+then A19:    signature(U1)=signature(U2) by UNIALG_2:def 2;
+then A20:     (signature U1).a in rng (signature U1) by A14,FUNCT_1:def 5;
+A21:     rng (signature U1) c= NAT by FINSEQ_1:def 4;
+            dom (*-->0) = NAT by FUNCT_2:def 1;
+          then a in dom ((*-->0)*(signature U1)) by A14,A19,A20,A21,FUNCT_1:21
+;
+          then A22:     (the Arity of MSSign U1).a = (*-->0).((signature U1).a)
+                                   by A17,FUNCT_1:22;
+          reconsider sig=(signature U1).a as Nat by A20,A21;
+A23:     (the Arity of MSSign U1).a = sig |-> 0 by A22,MSUALG_1:def 4;
+
+            U1,U2 are_similar by A1,UNIALG_2:16;
+then A24:     signature(U1)=signature(U2) by UNIALG_2:def 2;
+          reconsider ar = (the Arity of MSSign U1).a as FinSequence by A23;
+            x in (len ar)-tuples_on the carrier of U1 by A16,MSUALG_1:def 6;
+          then x in (sig)-tuples_on the carrier of U1 by A23,FINSEQ_2:69;
+then A25:        x in ((arity op)-tuples_on the carrier of U1)
+                                    by A14,A24,UNIALG_1:def 11;
+            a in dom the charact of U2 by A14,A15;
+then A26:       o in dom(Opers(U2,cc)) by UNIALG_2:def 7;
+            cc is opers_closed by A1,UNIALG_2:def 8;
+then A27:       cc is_closed_on op by UNIALG_2:def 5;
+          reconsider a as OperSymbol of MSSign U1;
+            (Den(a,MSAlg U1)).x = ((MSCharact U1).o).x by A11,MSUALG_1:def 11
+          .= ((the charact of U1).o).x by MSUALG_1:def 15
+          .= (f.o).x by A1,UNIALG_2:def 8
+          .= (op/.cc).x by A26,UNIALG_2:def 7
+          .= (op|(arity op)-tuples_on cc).x by A27,UNIALG_2:def 6
+          .= ((the charact of U2).o).x by A25,FUNCT_1:72
+          .= ((the Charact of MSAlg U2).o).x by A11,MSUALG_1:def 15
+          .= (Den(o,MSAlg U2)).x by MSUALG_1:def 11;
+          hence thesis;
+         end;
+       hence thesis by A9,FUNCT_1:68;
+      end;
+
+theorem Th9:
+ for U1,U2 being Universal_Algebra st U1 is SubAlgebra of U2 holds
+  the Sorts of MSAlg U1 is MSSubset of MSAlg U2
+  proof
+   let U1,U2 be Universal_Algebra;
+   assume
+A1: U1 is SubAlgebra of U2;
+then A2: the carrier of U1 is Subset of U2 by UNIALG_2:def 8;
+     MSSign U1 = MSSign U2 by A1,Th7;
+   then reconsider A = MSAlg U1 as non-empty MSAlgebra over MSSign U2;
+A3: MSAlg U2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+   MSAlg U1 = MSAlgebra(#MSSorts U1,MSCharact U1#) by MSUALG_1:def 16;
+then A4: the Sorts of A = {0} --> the carrier of U1 by MSUALG_1:def 14;
+A5: the Sorts of MSAlg U2 = {0} --> the carrier of U2 by A3,MSUALG_1:def 14;
+
+    set gg1 = (*-->0)*(signature U2), gg2 = dom signature(U2)-->0;
+
+    reconsider gg1 as Function of dom signature(U2), {0}* by MSUALG_1:7;
+A6: MSSign U2 = ManySortedSign (#{0},dom signature(U2),gg1,gg2#)
+                                          by MSUALG_1:16;
+A7: 0 in {0} by TARSKI:def 1;
+       the Sorts of A is MSSubset of MSAlg U2
+      proof
+       thus the Sorts of A c= the Sorts of MSAlg U2
+        proof
+         let i be set; assume
+          i in the carrier of MSSign U2;
+       then A8: i = 0 by A6,TARSKI:def 1;
+       A9: (the Sorts of A).0 = the carrier of U1 by A4,A7,FUNCOP_1:13;
+           (the Sorts of MSAlg U2).0 = the carrier of U2 by A5,A7,FUNCOP_1:13;
+         hence (the Sorts of A).i c= (the Sorts of MSAlg U2).i by A2,A8,A9;
+        end;
+       end;
+       hence thesis;
+      end;
+
+theorem Th10:
+ for U1,U2 being Universal_Algebra st U1 is SubAlgebra of U2
+  for B being MSSubset of MSAlg U2 st B = the Sorts of MSAlg U1 holds
+   B is opers_closed
+    proof
+     let U1,U2 be Universal_Algebra such that
+A1:   U1 is SubAlgebra of U2;
+     let B be MSSubset of MSAlg U2 such that
+A2:  B = the Sorts of MSAlg U1;
+A3:  MSSign U1 = MSSign U2 by A1,Th7;
+     let o be OperSymbol of MSSign U2;
+     reconsider a = o as Element of the OperSymbols of MSSign U1 by A1,Th7;
+A4:  rng Den(a,MSAlg U1) c= Result(a,MSAlg U1) by RELSET_1:12;
+     set Z = rng ((Den(o,MSAlg U2))|((B# * the Arity of MSSign U2).a));
+A5:  Z = rng ((Den(o,MSAlg U2))|(Args(a,MSAlg U1)))
+                           by A2,A3,MSUALG_1:def 9;
+     set S = (B * the ResultSort of MSSign U2).a;
+       S = ((the Sorts of MSAlg U1) * the ResultSort of MSSign U1).a by A1,A2,
+Th7
+;
+     then A6:  S = Result(a,MSAlg U1) by MSUALG_1:def 10;
+       Z c= Result (a,MSAlg U1) by A1,A2,A4,A5,Th8;
+     hence B is_closed_on o by A6,MSUALG_2:def 6;
+    end;
+
+theorem Th11:
+ for U1,U2 being Universal_Algebra st U1 is SubAlgebra of U2
+  for B being MSSubset of MSAlg U2 st B = the Sorts of MSAlg U1 holds
+   the Charact of MSAlg U1 = Opers(MSAlg U2,B)
+    proof
+     let U1,U2 be Universal_Algebra such that
+A1:   U1 is SubAlgebra of U2;
+     let B be MSSubset of MSAlg U2;
+     assume
+A2:   B = the Sorts of MSAlg U1;
+     set f1 = the Charact of MSAlg U1, f2 = Opers(MSAlg U2,B);
+
+   the OperSymbols of MSSign U1 = the OperSymbols of MSSign U2
+      proof
+A3:   U1,U2 are_similar by A1,UNIALG_2:16;
+       set ff1 = (*-->0)*(signature U1), ff2 = dom signature(U1)-->0,
+           gg1 = (*-->0)*(signature U2), gg2 = dom signature(U2)-->0;
+
+    reconsider ff1 as Function of dom signature(U1), {0}* by MSUALG_1:7;
+    reconsider gg1 as Function of dom signature(U2), {0}* by MSUALG_1:7;
+ A4:  MSSign U1 = ManySortedSign (#{0},dom signature(U1),ff1,ff2#)
+       by MSUALG_1:16;
+    MSSign U2 = ManySortedSign (#{0},dom signature(U2),gg1,gg2#)
+       by MSUALG_1:16;
+       hence the OperSymbols of MSSign U1 = the OperSymbols of MSSign U2 by A3,
+A4,UNIALG_2:def 2;
+      end;
+
+     then reconsider f1 as ManySortedSet of the OperSymbols of MSSign U2;
+
+       for x being set st x in the OperSymbols of MSSign U2 holds f1.x = f2.x
+      proof
+       let x be set; assume
+A5:    x in (the OperSymbols of MSSign U2);
+       then reconsider y = x as OperSymbol of MSSign U2;
+       reconsider x as OperSymbol of MSSign U1 by A1,A5,Th7;
+A6:    f1.x = Den(x,MSAlg U1) by MSUALG_1:def 11;
+A7:    f2.y = y/.B by MSUALG_2:def 9;
+         B is opers_closed by A1,A2,Th10;
+       then B is_closed_on y by MSUALG_2:def 7;
+       then A8:    f2.y = Den(y,MSAlg U2) | ((B# * the Arity of MSSign U2).y)
+                                              by A7,MSUALG_2:def 8;
+      (B# * the Arity of MSSign U1).x =
+       ((the Sorts of MSAlg U1)# * the Arity of MSSign U1).x by A1,A2,Th7;
+then f2.y =
+       Den(y,MSAlg U2)| (((the Sorts of MSAlg U1)# * the Arity of MSSign U1).x)
+                                   by A1,A8,Th7;
+       then f2.y = (Den(y,MSAlg U2))|(Args(x,MSAlg U1)) by MSUALG_1:def 9;
+       hence thesis by A1,A2,A6,Th8;
+      end;
+     hence thesis by PBOOLE:3;
+    end;
+
+theorem Th12:
+ for U1,U2 being Universal_Algebra st U1 is SubAlgebra of U2 holds
+  MSAlg U1 is MSSubAlgebra of MSAlg U2
+  proof
+   let U1,U2 be Universal_Algebra;
+   assume
+A1: U1 is SubAlgebra of U2;
+   then MSSign U1 = MSSign U2 by Th7;
+   then reconsider A = MSAlg U1 as non-empty MSAlgebra over MSSign U2;
+     A is MSSubAlgebra of MSAlg U2
+    proof
+     thus the Sorts of A is MSSubset of MSAlg U2 by A1,Th9;
+     let B be MSSubset of MSAlg U2; assume
+A2:  B = the Sorts of A;
+     hence B is opers_closed by A1,Th10;
+     thus the Charact of A = Opers(MSAlg U2,B) by A1,A2,Th11;
+    end;
+   hence thesis;
+  end;
+
+theorem Th13:
+ for U1,U2 being Universal_Algebra st MSAlg U1 is MSSubAlgebra of MSAlg U2
+  holds the carrier of U1 is Subset of U2
+   proof
+    let U1,U2 be Universal_Algebra;
+    set MU1 = MSAlg U1, MU2 = MSAlg U2;
+    assume
+A1:  MU1 is MSSubAlgebra of MU2;
+    then reconsider MU1 as MSAlgebra over MSSign U2;
+A2: MU1 = MSAlgebra(#MSSorts U1,MSCharact U1#) by MSUALG_1:def 16;
+A3: MU2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+    set gg1 = (*-->0)*(signature U2), gg2 = dom signature(U2)-->0;
+    reconsider gg1 as Function of dom signature(U2), {0}* by MSUALG_1:7;
+A4:  MSSign U2 = ManySortedSign (#{0},dom signature(U2),gg1,gg2#)
+    by MSUALG_1:16;
+    reconsider C = the Sorts of MU1 as MSSubset of MU2 by A1,MSUALG_2:def 10;
+A5: MSSorts U2 = {0}-->the carrier of U2 &
+    MSSorts U1 = {0}-->the carrier of U1 by MSUALG_1:def 14;
+    reconsider C1 = C as ManySortedSet of the carrier of MSSign U2;
+A6: C1 c= MSSorts U2 by A3,MSUALG_2:def 1;
+      0 in the carrier of MSSign U2 by A4,TARSKI:def 1;
+then A7: C1.0 c= ({0}-->the carrier of U2).0 by A5,A6,PBOOLE:def 5;
+A8: 0 in {0} by TARSKI:def 1;
+    then (MSSorts U1).0 c= the carrier of U2 by A2,A7,FUNCOP_1:13;
+    then ({0}-->the carrier of U1).0 c= the carrier of U2 by MSUALG_1:def 14;
+    hence the carrier of U1 is Subset of U2 by A8,FUNCOP_1:13;
+   end;
+
+theorem Th14:
+ for U1,U2 being Universal_Algebra st MSAlg U1 is MSSubAlgebra of MSAlg U2
+  for B being non empty Subset of U2
+   st B=the carrier of U1 holds B is opers_closed
+   proof
+    let U1,U2 be Universal_Algebra;
+    set MU1 = MSAlg U1, MU2 = MSAlg U2;
+    assume
+A1:  MU1 is MSSubAlgebra of MU2;
+    then reconsider MU1 as MSAlgebra over MSSign U2;
+
+A2: MU1 = MSAlgebra(#MSSorts U1,MSCharact U1#) by MSUALG_1:def 16;
+A3: MU2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+
+    set gg1 = (*-->0)*(signature U2), gg2 = dom signature(U2)-->0;
+
+    reconsider gg1 as Function of dom signature(U2), {0}* by MSUALG_1:7;
+A4:  MSSign U2 = ManySortedSign (#{0},dom signature(U2),gg1,gg2#)
+    by MSUALG_1:16;
+
+    reconsider C = the Sorts of MU1 as MSSubset of MU2 by A1,MSUALG_2:def 10;
+      let B be non empty Subset of U2;
+      assume
+A5:  B = the carrier of U1;
+
+A6:  C is opers_closed &
+    the Charact of MU1 = Opers(MU2,C) by A1,MSUALG_2:def 10;
+
+        let o be operation of U2;
+        thus B is_closed_on o
+         proof
+          let s be FinSequence of B;
+          assume
+A7:      len s = arity o;
+            o in Operations(U2);
+          then o in rng the charact of U2 by UNIALG_2:def 3;
+          then consider n being set such that
+A8:        n in
+ dom the charact of U2 & o = (the charact of U2).n by FUNCT_1:def 5;
+A9:      dom the charact of U2 = Seg (len (the charact of U2)) &
+          dom signature U2 = Seg (len (signature U2)) by FINSEQ_1:def 3;
+          then A10:       n in dom signature U2 by A8,UNIALG_1:def 11;
+
+          reconsider n as OperSymbol of MSSign U2 by A4,A8,A9,UNIALG_1:def 11;
+
+            C is_closed_on n by A6,MSUALG_2:def 7;
+          then A11:      rng ((Den(n,MU2))|((C# * the Arity of MSSign U2).n))
+c=
+          (C * the ResultSort of MSSign U2).n by MSUALG_2:def 6;
+
+A12:       o.s in rng ((Den(n,MU2))|((C# * the Arity of MSSign U2).n))
+           proof
+              ex y being set st
+            y in dom ((Den(n,MU2))|((C# * the Arity of MSSign U2).n)) &
+            ((Den(n,MU2))|((C# * the Arity of MSSign U2).n)).y = o.s
+             proof
+              take s;
+              thus
+            s in dom ((Den(n,MU2))|((C# * the Arity of MSSign U2).n))
+               proof
+A13:         dom the Arity of MSSign U2 = the OperSymbols of MSSign U2
+                by FUNCT_2:def 1;
+                  dom Den (n,MU2) = Args(n,MU2) by FUNCT_2:def 1;
+                then A14:          dom Den(n,MU2) =
+                ((the Sorts of MU2)# * the Arity of MSSign U2).n
+                                                        by MSUALG_1:def 9
+                .=(the Sorts of MU2)#.(((*-->0)*(signature U2)).n) by A4,A13,
+FUNCT_1:23
+                .=(the Sorts of MU2)#.((*-->0).((signature U2).n))
+                by A10,FUNCT_1:23
+                .=(the Sorts of MU2)#.((*-->0).(arity(o)))
+                                                 by A8,A10,UNIALG_1:def 11
+                .=(the Sorts of MU2)#.(arity(o) |-> 0) by MSUALG_1:def 4;
+
+A15:            arity(o) |-> 0 = Seg arity(o) --> 0 by FINSEQ_2:def 2;
+
+A16:            now
+                 assume Seg arity(o) = {};
+                 then arity(o) = 0 by FINSEQ_1:5;
+                 then (arity(o) |-> 0) = {} by FINSEQ_2:72;
+                 hence (arity(o) |-> 0) is
+                 FinSequence of the carrier of MSSign U2 by FINSEQ_1:29;
+                end;
+                  Seg arity(o) <> {} implies
+                dom (arity(o) |-> 0) = Seg arity(o) &
+                rng (arity(o) |-> 0) c= the carrier of MSSign U2
+                                            by A4,A15,FUNCOP_1:19;
+                then arity(o) |-> 0 is FinSequence of the carrier of MSSign U2
+                                            by A16,FINSEQ_1:def 4;
+                then reconsider aro = arity(o) |-> 0
+                as Element of (the carrier of MSSign U2)* by FINSEQ_1:def 11;
+
+A17:            dom Den(n,MU2) = product((the Sorts of MU2)*aro)
+                                                   by A14,MSUALG_1:def 3;
+A18:             dom s = dom ((the Sorts of MU2)*aro)
+                 proof
+A19:               dom s = Seg arity(o) by A7,FINSEQ_1:def 3;
+                    the Sorts of MU2 = {0}-->the carrier of U2
+                  by A3,MSUALG_1:def 14;
+                  then (the Sorts of MU2)*aro = arity(o) |-> the carrier of U2
+                                                           by MSUALG_1:4
+                                        .= Seg arity(o) --> the carrier of U2
+                                                   by FINSEQ_2:def 2;
+                  hence thesis by A19,FUNCOP_1:19;
+                 end;
+                  for x being set st x in dom ((the Sorts of MU2)*aro)
+                holds s.x in ((the Sorts of MU2)*aro).x
+                 proof
+                  let x be set;
+                  assume
+A20:                x in dom ((the Sorts of MU2)*aro);
+then A21:               x in Seg arity(o) by A7,A18,FINSEQ_1:def 3;
+A22:                0 in {0} by TARSKI:def 1;
+A23:              ((the Sorts of MU2)*aro).x = (the Sorts of MU2).(aro.x)
+                                                         by A20,FUNCT_1:22
+                   .= (MSSorts U2).0 by A3,A21,FINSEQ_2:70
+                   .= ({0} --> the carrier of U2).0 by MSUALG_1:def 14;
+                    rng s c= B by FINSEQ_1:def 4;
+                  then A24:             rng s c= the carrier of U2 by XBOOLE_1:
+1;
+                    s.x in rng s by A18,A20,FUNCT_1:def 5;
+                  then s.x in the carrier of U2 by A24;
+                  hence thesis by A22,A23,FUNCOP_1:13;
+                 end;
+                then A25:             s in dom Den(n,MU2) by A17,A18,CARD_3:def
+5;
+
+A26:             s is Element of (len s)-tuples_on B &
+                (len s)-tuples_on B is non empty by FINSEQ_2:110;
+A27:            n in dom signature U2 & (signature U2).n in dom (*-->0)
+                 proof
+                  thus n in dom signature U2 by A8,A9,UNIALG_1:def 11;
+A28:              dom *-->0 = NAT by FUNCT_2:def 1;
+                    (signature U2).n = arity o by A8,A10,UNIALG_1:def 11;
+                  hence thesis by A28;
+                 end;
+                then A29:             n in dom ((*-->0)*(signature U2)) by
+FUNCT_1:21;
+
+then A30:            (C# * the Arity of MSSign U2).n =
+ C#.(((*-->0)*(signature U2)).n) by A4,FUNCT_1:23
+                       .= C#.((*-->0).((signature U2).n)) by A29,FUNCT_1:22
+                       .= C#.((*-->0).(arity o)) by A8,A27,UNIALG_1:def 11
+                       .= C#.((arity o) |-> 0) by MSUALG_1:def 4;
+                  0 in {0} by TARSKI:def 1;
+                then (arity o) |-> 0 is FinSequence of the carrier of MSSign
+U2
+                by A4,FINSEQ_2:77;
+                then reconsider ao0 = (arity o) |-> 0 as Element of
+                             (the carrier of MSSign U2)* by FINSEQ_1:def 11;
+A31:           C = {0} --> the carrier of U1 by A2,MSUALG_1:def 14;
+                then dom C = {0} by FUNCOP_1:19;
+then A32:             0 in dom C by TARSKI:def 1;
+A33:             0 in {0} by TARSKI:def 1;
+                  (C# * the Arity of MSSign U2).n =
+                           product(C*ao0) by A30,MSUALG_1:def 3
+                        .= product(C*(Seg (arity o) --> 0)) by FINSEQ_2:def 2
+                        .= product(Seg (arity o) --> C.0) by A32,FUNCOP_1:23
+                        .= product(Seg (arity o) --> B)
+                                         by A5,A31,A33,FUNCOP_1:13
+                        .= Funcs(Seg (arity o),B) by CARD_3:20
+                        .= (arity o)-tuples_on B by FINSEQ_2:111;
+                then s in (dom Den(n,MU2)) /\ (C# * the Arity of MSSign U2).n
+                by A7,A25,A26,XBOOLE_0:def 3;
+                hence thesis by RELAT_1:90;
+               end;
+              hence ((Den(n,MU2))|((C# * the Arity of MSSign U2).n)).s =
+                           Den(n,MU2).s by FUNCT_1:70
+                        .= ((MSCharact U2).n).s by A3,MSUALG_1:def 11
+                        .= o.s by A8,MSUALG_1:def 15;
+             end;
+            hence thesis by FUNCT_1:def 5;
+           end;
+A34:       0 in {0} by TARSKI:def 1;
+        n in dom (dom signature(U2)-->0) by A10,FUNCOP_1:19;
+          then (C * the ResultSort of MSSign U2).n
+                = C.((dom signature(U2)-->0).n) by A4,FUNCT_1:23
+               .= (the Sorts of MU1).0 by A10,FUNCOP_1:13
+               .= ({0}-->the carrier of U1).0 by A2,MSUALG_1:def 14
+               .= B by A5,A34,FUNCOP_1:13;
+          hence o.s in B by A11,A12;
+       end;
+   end;
+
+theorem Th15:
+ for U1,U2 being Universal_Algebra st MSAlg U1 is MSSubAlgebra of MSAlg U2
+  for B being non empty Subset of U2
+   st B=the carrier of U1 holds the charact of U1 = Opers(U2,B)
+   proof
+    let U1,U2 be Universal_Algebra;
+    set MU1 = MSAlg U1, MU2 = MSAlg U2;
+    assume
+A1:  MU1 is MSSubAlgebra of MU2;
+    then reconsider MU1 as MSAlgebra over MSSign U2;
+
+A2: MU1 = MSAlgebra(#MSSorts U1,MSCharact U1#) by MSUALG_1:def 16;
+A3: MU2 = MSAlgebra(#MSSorts U2,MSCharact U2#) by MSUALG_1:def 16;
+
+    set gg1 = (*-->0)*(signature U2), gg2 = dom signature(U2)-->0;
+
+    reconsider gg1 as Function of dom signature(U2), {0}* by MSUALG_1:7;
+A4:  MSSign U2 = ManySortedSign (#{0},dom signature(U2),gg1,gg2#)
+    by MSUALG_1:16;
+
+    reconsider C = the Sorts of MU1 as MSSubset of MU2 by A1,MSUALG_2:def 10;
+      let B be non empty Subset of U2;
+      assume
+A5:  B = the carrier of U1;
+
+A6:  C is opers_closed &
+    the Charact of MU1 = Opers(MU2,C) by A1,MSUALG_2:def 10;
+
+        reconsider ch1 = the charact of U1 as PFuncFinSequence of B by A5;
+A7:      dom ch1 = dom (the Charact of MU1) by A2,MSUALG_1:def 15
+               .= the OperSymbols of MSSign U2 by PBOOLE:def 3
+               .= Seg (len signature (U2)) by A4,FINSEQ_1:def 3
+               .= Seg (len the charact of U2) by UNIALG_1:def 11
+               .= dom the charact of U2 by FINSEQ_1:def 3;
+          for n being set,o being operation of U2 st
+        n in dom ch1 & o =(the charact of U2).n holds ch1.n = o/.B
+         proof
+          let n be set;
+          let o be operation of U2;
+          assume
+A8:       n in dom ch1 & o =(the charact of U2).n;
+            B is opers_closed by A1,A5,Th14;
+          then A9:       B is_closed_on o by UNIALG_2:def 5;
+            n in dom the Charact of MU2 by A3,A7,A8,MSUALG_1:def 15;
+          then reconsider N=n as OperSymbol of MSSign U2 by PBOOLE:def 3;
+A10:      C is_closed_on N by A6,MSUALG_2:def 7;
+
+A11:       dom the charact of U2 = Seg (len (the charact of U2)) &
+          dom signature U2 = Seg (len (signature U2)) by FINSEQ_1:def 3;
+
+A12:            N in dom signature U2 & (signature U2).N in dom (*-->0)
+                 proof
+                  thus
+A13:               N in dom signature U2 by A7,A8,A11,UNIALG_1:def 11;
+A14:              dom *-->0 = NAT by FUNCT_2:def 1;
+                    (signature U2).N = arity o by A8,A13,UNIALG_1:def 11;
+                  hence thesis by A14;
+                 end;
+                then A15:             N in dom ((*-->0)*(signature U2)) by
+FUNCT_1:21;
+
+then A16:            (C# * the Arity of MSSign U2).N =
+ C#.(((*-->0)*(signature U2)).N) by A4,FUNCT_1:23
+                       .= C#.((*-->0).((signature U2).N)) by A15,FUNCT_1:22
+                       .= C#.((*-->0).(arity o)) by A8,A12,UNIALG_1:def 11
+                       .= C#.((arity o) |-> 0) by MSUALG_1:def 4;
+                  0 in {0} by TARSKI:def 1;
+                then (arity o) |-> 0 is FinSequence of the carrier of MSSign
+U2
+                by A4,FINSEQ_2:77;
+                then reconsider ao0 = (arity o) |-> 0 as Element of
+                             (the carrier of MSSign U2)* by FINSEQ_1:def 11;
+
+A17:     C = {0} --> the carrier of U1 by A2,MSUALG_1:def 14;
+          then dom C = {0} by FUNCOP_1:19;
+          then A18:       0 in dom C by TARSKI:def 1;
+A19:       0 in {0} by TARSKI:def 1;
+A20:       (C# * the Arity of MSSign U2).N =
+                         product(C*ao0) by A16,MSUALG_1:def 3
+                    .= product(C*(Seg (arity o) --> 0)) by FINSEQ_2:def 2
+                    .= product(Seg (arity o) --> C.0) by A18,FUNCOP_1:23
+                    .= product(Seg (arity o) --> B) by A5,A17,A19,FUNCOP_1:13
+                    .= Funcs(Seg (arity o),B) by CARD_3:20
+                    .= (arity o)-tuples_on B by FINSEQ_2:111;
+
+            ch1.N = (the Charact of MU1).N by A2,MSUALG_1:def 15
+               .= N/.C by A6,MSUALG_2:def 9
+               .= (Den(N,MU2)) | ((C# * the Arity of MSSign U2).N)
+                                    by A10,MSUALG_2:def 8
+               .= ((MSCharact U2).N) | ((C# * the Arity of MSSign U2).N) by A3,
+MSUALG_1:def 11
+               .= o|((arity o)-tuples_on B) by A8,A20,MSUALG_1:def 15;
+          hence ch1.n = o/.B by A9,UNIALG_2:def 6;
+         end;
+        hence thesis by A7,UNIALG_2:def 7;
+       end;
+
+theorem Th16:
+ for U1,U2 being Universal_Algebra st MSAlg U1 is MSSubAlgebra of MSAlg U2
+  holds U1 is SubAlgebra of U2
+   proof
+    let U1,U2 be Universal_Algebra;
+    assume
+A1:  MSAlg U1 is MSSubAlgebra of MSAlg U2;
+    hence the carrier of U1 is Subset of U2 by Th13;
+    let B be non empty Subset of U2;
+    assume B=the carrier of U1;
+    hence the charact of U1 = Opers(U2,B) & B is opers_closed by A1,Th14,Th15;
+   end;
+
+reserve MS for segmental trivial non void non empty ManySortedSign,
+        A for non-empty MSAlgebra over MS;
+
+theorem Th17:
+ for B being non-empty MSSubAlgebra of A holds
+  the carrier of 1-Alg B is Subset of 1-Alg A
+  proof
+   let B be non-empty MSSubAlgebra of A;
+A1: the Sorts of B is MSSubset of A &
+   for T being MSSubset of A st T = the Sorts of B holds
+   T is opers_closed & the Charact of B = Opers(A,T) by MSUALG_2:def 10;
+
+A2: dom the Sorts of A = the carrier of MS by PBOOLE:def 3;
+then A3: dom the Sorts of A = dom the Sorts of B by PBOOLE:def 3;
+A4:    1-Alg A = UAStr(#the_sort_of A, the_charact_of A#) by MSUALG_1:def 19;
+      1-Alg B = UAStr(#the_sort_of B, the_charact_of B#) by MSUALG_1:def 19;
+
+        then consider c being Component of the Sorts of B such that
+  A5:    c = the carrier of 1-Alg B by MSUALG_1:def 17;
+
+        consider d being Component of the Sorts of A such that
+  A6:    d = the carrier of 1-Alg A by A4,MSUALG_1:def 17;
+  A7:    the Sorts of B c= the Sorts of A by A1,MSUALG_2:def 1;
+          dom the Sorts of B <> {} by PBOOLE:def 3;
+        then rng the Sorts of B <> {} by RELAT_1:65;
+        then consider cr being set such that
+  A8:    cr in the carrier of MS & c = (the Sorts of B).cr by A2,A3,FUNCT_1:def
+5;
+          dom the Sorts of A <> {} by PBOOLE:def 3;
+        then rng the Sorts of A <> {} by RELAT_1:65;
+        then consider dr being set such that
+  A9:    dr in the carrier of MS & d = (the Sorts of A).dr by A2,FUNCT_1:def 5;
+          cr = dr by A8,A9,REALSET1:def 20;
+        hence the carrier of 1-Alg B is Subset of 1-Alg A
+        by A5,A6,A7,A8,A9,PBOOLE:def 5;
+       end;
+
+theorem Th18:
+ for B being non-empty MSSubAlgebra of A holds
+  for S being non empty Subset of 1-Alg A st
+   S = the carrier of 1-Alg B holds S is opers_closed
+  proof
+   let B be non-empty MSSubAlgebra of A;
+
+A1: dom the Sorts of A = the carrier of MS by PBOOLE:def 3;
+then A2: dom the Sorts of A = dom the Sorts of B by PBOOLE:def 3;
+
+   reconsider C = the Sorts of B as MSSubset of A by MSUALG_2:def 10;
+A3: C is opers_closed & the Charact of B = Opers(A,C) by MSUALG_2:def 10;
+
+A4:    1-Alg A = UAStr(#the_sort_of A, the_charact_of A#) by MSUALG_1:def 19;
+A5:    1-Alg B = UAStr(#the_sort_of B, the_charact_of B#) by MSUALG_1:def 19;
+
+        let S be non empty Subset of 1-Alg A such that
+  A6:    S = the carrier of 1-Alg B;
+        set 1A = 1-Alg A;
+          let o be operation of 1A;
+          thus S is_closed_on o
+           proof
+            let s be FinSequence of S;
+            assume
+A7:        len s = arity o;
+              o in Operations(1A);
+            then o in rng the charact of 1A by UNIALG_2:def 3;
+            then consider n being set such that
+A8:          n in dom the charact of 1A & o = (the charact of 1A).n
+            by FUNCT_1:def 5;
+           n in dom the Charact of A by A4,A8,MSUALG_1:def 18;
+            then reconsider n as OperSymbol of MS by PBOOLE:def 3;
+A9:     dom the Arity of MS = the OperSymbols of MS by FUNCT_2:def 1;
+A10:    dom the ResultSort of MS = the OperSymbols of MS by FUNCT_2:def 1;
+              C is_closed_on n by A3,MSUALG_2:def 7;
+            then A11:        rng ((Den(n,A))|((C# * the Arity of MS).n)) c=
+            (C * the ResultSort of MS).n by MSUALG_2:def 6;
+A12:         o.s in rng ((Den(n,A))|((C# * the Arity of MS).n))
+             proof
+                ex y being set st
+              y in dom ((Den(n,A))|((C# * the Arity of MS).n)) &
+              ((Den(n,A))|((C# * the Arity of MS).n)).y = o.s
+               proof
+                take s;
+                thus
+A13:             s in dom ((Den(n,A))|((C# * the Arity of MS).n))
+                 proof
+                    dom Den (n,A) = Args(n,A) by FUNCT_2:def 1;
+                  then A14:            dom Den(n,A) =
+                  ((the Sorts of A)# * the Arity of MS).n
+                                                        by MSUALG_1:def 9
+                  .=(the Sorts of A)#.((the Arity of MS).n)
+                  by A9,FUNCT_1:23;
+
+                  reconsider An=(the Arity of MS).n as
+                  Element of (the carrier of MS)*;
+
+A15:               dom Den(n,A) = product((the Sorts of A)*(An))
+                                                by A14,MSUALG_1:def 3;
+                  set f = (the Sorts of A)*An;
+
+                    dom o <> {} by UNIALG_1:1;
+                  then consider d being set such that
+A16:                d in dom o by XBOOLE_0:def 1;
+                    o in PFuncs((the carrier of 1A)*,the carrier of 1A)
+                  by PARTFUN1:119;
+                  then consider o1 being Function such that
+A17:               o1=o & dom o1 c= (the carrier of 1A)* &
+                  rng o1 c= the carrier of 1A by PARTFUN1:def 5;
+                  reconsider d as FinSequence of the carrier of 1A
+                                                 by A16,A17,FINSEQ_1:def 11;
+                    rng s c= S & S c= the carrier of 1A by FINSEQ_1:def 4;
+                  then rng s c= the carrier of 1A by XBOOLE_1:1;
+                  then reconsider s1=s as FinSequence of the carrier of 1A
+                                                 by FINSEQ_1:def 4;
+
+A18:              o is quasi_total & len d = len s1 & d in dom o
+                                   by A7,A16,UNIALG_1:def 10;
+
+A19:              o = (the Charact of A).n by A4,A8,MSUALG_1:def 18
+                          .= Den(n,A) by MSUALG_1:def 11;
+                    dom Den(n,A) = Args(n,A) by FUNCT_2:def 1
+                      .= (len the_arity_of n)-tuples_on the carrier of 1A by A4
+,MSUALG_1:11
+;
+
+                  then len s = len the_arity_of n
+                  by A18,A19,FINSEQ_2:109;
+                  then A20:             dom s = Seg len the_arity_of n by
+FINSEQ_1:def 3
+                           .= dom the_arity_of n by FINSEQ_1:def 3
+                           .= dom An by MSUALG_1:def 6;
+A21:               dom s = dom f
+                   proof
+                    thus dom s c= dom f
+                     proof
+                      let x be set;
+                      assume
+A22:                  x in dom s;
+A23:                 rng An c= the carrier of MS by FINSEQ_1:def 4;
+                        An.x in rng An by A20,A22,FUNCT_1:def 5;
+                      then An.x in the carrier of MS by A23;
+                      then An.x in dom (the Sorts of A) by PBOOLE:def 3;
+                      hence x in dom f by A20,A22,FUNCT_1:21;
+                     end;
+                    thus dom f c= dom s
+                     proof
+                      let x be set;
+                      assume x in dom f;
+                      hence x in dom s by A20,FUNCT_1:21;
+                     end;
+                   end;
+                    for x being set st x in dom f holds s.x in f.x
+                   proof
+                    let x be set;
+                    assume
+A24:                 x in dom f;
+                    then f.x in rng f by FUNCT_1:def 5;
+                    then reconsider fx=f.x as Component of the Sorts of A
+                                         by FUNCT_1:25;
+A25:                 fx = the_sort_of A by MSUALG_1:def 17;
+                      s.x in rng s & rng s c= S
+                    by A21,A24,FINSEQ_1:def 4,FUNCT_1:def 5;
+                    then s.x in S;
+                    hence s.x in f.x by A4,A25;
+                   end;
+                  then A26:               s in dom Den(n,A) by A15,A21,CARD_3:
+18;
+                    s in (C# * the Arity of MS).n
+                   proof
+                      dom the Arity of MS = the OperSymbols of MS
+                                                 by FUNCT_2:def 1;
+                    then A27:                 (C# * the Arity of MS).n =C#.An
+by FUNCT_1:23
+                              .=product(C*An) by MSUALG_1:def 3;
+A28:                 dom s = dom (C*An)
+                     proof
+                      thus dom s c= dom (C*An)
+                       proof
+                        let x be set;
+                        assume
+A29:                        x in dom s;
+A30:                   rng An c= the carrier of MS by FINSEQ_1:def 4;
+                          An.x in rng An by A20,A29,FUNCT_1:def 5;
+                        then An.x in the carrier of MS by A30;
+                        then An.x in dom C by PBOOLE:def 3;
+                        hence x in dom (C*An) by A20,A29,FUNCT_1:21;
+                       end;
+                      thus dom (C*An) c= dom s by A20,RELAT_1:44;
+                     end;
+                      for x being set st x in dom s holds s.x in (C*An).x
+                     proof
+                      let x be set;
+                      assume
+A31:                  x in dom s;
+then A32:                  s.x in rng s & rng s c= S by FINSEQ_1:def 4,FUNCT_1:
+def 5;
+A33:                  x in dom s & dom s c= dom An by A28,A31,RELAT_1:44;
+A34:                 rng An c= the carrier of MS by FINSEQ_1:def 4;
+                        An.x in rng An by A33,FUNCT_1:def 5;
+                      then An.x in the carrier of MS by A34;
+                      then An.x in dom C & (C*An).x = C.(An.x)
+                      by A28,A31,FUNCT_1:22,PBOOLE:def 3;
+                      then reconsider canx = (C*An).x as Component of C
+                                 by FUNCT_1:def 5;
+
+                        (C*An).x = canx
+                              .= S by A5,A6,MSUALG_1:def 17;
+                      hence s.x in (C*An).x by A32;
+                     end;
+                    hence thesis by A27,A28,CARD_3:18;
+                   end;
+                  then s in
+ dom Den(n,A)/\(C# * the Arity of MS).n by A26,XBOOLE_0:def 3;
+                  hence thesis by RELAT_1:90;
+                 end;
+A35:           (the Charact of A).n = (the charact of 1A).n by A4,MSUALG_1:def
+18;
+                thus ((Den(n,A))|((C# * the Arity of MS).n)).s =
+                           Den(n,A).s by A13,FUNCT_1:70
+                        .= o.s by A8,A35,MSUALG_1:def 11;
+               end;
+              hence thesis by FUNCT_1:def 5;
+             end;
+             reconsider crn = C.((the ResultSort of MS).n) as Component of
+             the Sorts of B by A1,A2,FUNCT_1:def 5;
+             consider com being Component of the Sorts of B such that
+A36:         S = com by A5,A6,MSUALG_1:def 17;
+
+               (C * the ResultSort of MS).n = crn by A10,FUNCT_1:23
+                                         .= S by A36,MSUALG_1:10;
+             hence o.s in S by A11,A12;
+            end;
+  end;
+
+theorem Th19:
+ for B being non-empty MSSubAlgebra of A holds
+  for S being non empty Subset of 1-Alg A st
+   S = the carrier of 1-Alg B holds
+    the charact of(1-Alg B) = Opers(1-Alg A,S)
+  proof
+   let B be non-empty MSSubAlgebra of A;
+
+   reconsider C = the Sorts of B as MSSubset of A by MSUALG_2:def 10;
+A1: C is opers_closed & the Charact of B = Opers(A,C) by MSUALG_2:def 10;
+
+A2:    1-Alg A = UAStr(#the_sort_of A, the_charact_of A#) by MSUALG_1:def 19;
+A3:    1-Alg B = UAStr(#the_sort_of B, the_charact_of B#) by MSUALG_1:def 19;
+
+        let S be non empty Subset of 1-Alg A such that
+  A4:    S = the carrier of 1-Alg B;
+        set 1B = 1-Alg B,1A = 1-Alg A;
+          set f1 = the charact of 1B;
+          reconsider f1 as PFuncFinSequence of S by A4;
+A5:        f1 = the Charact of B by A3,MSUALG_1:def 18;
+then A6:       dom f1 = the OperSymbols of MS by PBOOLE:def 3
+                .= dom the Charact of A by PBOOLE:def 3
+                .= dom the charact of(1A) by A2,MSUALG_1:def 18;
+            for n being set,o being operation of 1A
+          st n in dom f1 & o =(the charact of(1A)).n holds f1.n = o/.S
+           proof
+            let n be set,o be operation of 1A;
+            assume
+A7:         n in dom f1 & o =(the charact of(1A)).n;
+            then reconsider y = n as OperSymbol of MS by A5,PBOOLE:def 3;
+A8:        C is_closed_on y by A1,MSUALG_2:def 7;
+              S is opers_closed by A4,Th18;
+then A9:         S is_closed_on o by UNIALG_2:def 5;
+
+A10:       arity o = len the_arity_of y
+             proof
+                now
+               let x be FinSequence of the carrier of 1A;
+               assume
+A11:             x in dom o;
+               o = (the Charact of A).y by A2,A7,MSUALG_1:def 18
+                .= Den(y,A) by MSUALG_1:def 11;
+               then dom o = Args(y,A) by FUNCT_2:def 1
+                    .= (len the_arity_of y)-tuples_on the_sort_of A
+                                         by MSUALG_1:11;
+               then x in {s where s is Element of (the_sort_of A)* :
+               len s = len the_arity_of y} by A11,FINSEQ_2:def 4;
+               then consider s being Element of (the_sort_of A)* such that
+A12:             x=s & len s = len the_arity_of y;
+               thus (len the_arity_of y) = len x by A12;
+              end;
+              hence thesis by UNIALG_1:def 10;
+             end;
+A13:         (C# * the Arity of MS).y = Args(y,B) by MSUALG_1:def 9
+             .= (arity o)-tuples_on S by A3,A4,A10,MSUALG_1:11;
+
+              f1.n = (the Charact of B).y by A3,MSUALG_1:def 18
+                .= y/.C by A1,MSUALG_2:def 9
+                .= (Den(y,A)) | ((C# * the Arity of MS).y)
+                                          by A8,MSUALG_2:def 8
+                .= ((the Charact of A).y) | ((C# * the Arity of MS).y)
+                                          by MSUALG_1:def 11
+                .= o | ((arity o)-tuples_on S) by A2,A7,A13,MSUALG_1:def 18;
+
+            hence f1.n = o/.S by A9,UNIALG_2:def 6;
+           end;
+          hence thesis by A6,UNIALG_2:def 7;
+  end;
+
+theorem Th20:
+ for B being non-empty MSSubAlgebra of A holds
+  1-Alg B is SubAlgebra of 1-Alg A
+  proof
+   let B be non-empty MSSubAlgebra of A;
+A1: the carrier of 1-Alg B is Subset of 1-Alg A by Th17;
+     for S being non empty Subset of 1-Alg A st
+   S = the carrier of 1-Alg B holds
+   the charact of(1-Alg B) = Opers(1-Alg A,S) & S is opers_closed
+   by Th18,Th19;
+   hence thesis by A1,UNIALG_2:def 8;
+  end;
+
+theorem Th21:
+ for S being non empty non void ManySortedSign,
+  A,B being MSAlgebra over S holds
+   A is MSSubAlgebra of B iff A is MSSubAlgebra of the MSAlgebra of B
+  proof
+    let S be non empty non void ManySortedSign,
+        A,B be MSAlgebra over S;
+    thus A is MSSubAlgebra of B implies
+         A is MSSubAlgebra of the MSAlgebra of B
+    proof
+      assume
+A1:      A is MSSubAlgebra of B;
+      hence the Sorts of A is MSSubset of the MSAlgebra of B
+        by MSUALG_2:def 10;
+      thus for BB be MSSubset of the MSAlgebra of B st BB = the Sorts of A
+        holds BB is opers_closed &
+        the Charact of A = Opers(the MSAlgebra of B,BB)
+         proof
+           let BB be MSSubset of the MSAlgebra of B such that
+A2:          BB = the Sorts of A;
+           reconsider bb = BB as MSSubset of B;
+A3:        bb is opers_closed & the Charact of A = Opers(B,bb)
+               by A1,A2,MSUALG_2:def 10;
+A4:      BB is opers_closed
+            proof
+              let o be OperSymbol of S;
+A5:          Den(o,B) = (the Charact of the MSAlgebra of B).o by MSUALG_1:def
+11
+                      .= Den(o,the MSAlgebra of B) by MSUALG_1:def 11;
+                bb is_closed_on o by A3,MSUALG_2:def 7;
+              then rng ((Den(o,the MSAlgebra of B))|((BB# * the Arity of S).o)
+)
+                  c= (BB * the ResultSort of S).o by A5,MSUALG_2:def 6;
+              hence BB is_closed_on o by MSUALG_2:def 6;
+            end;
+             the Charact of A = Opers(the MSAlgebra of B,BB)
+            proof
+               for o be set st o in the OperSymbols of S holds
+               (the Charact of A).o = (Opers(the MSAlgebra of B,BB)).o
+               proof
+                 let o be set; assume
+                  o in the OperSymbols of S;
+                 then reconsider o as OperSymbol of S;
+A6:             Den(o,B) = (the Charact of the MSAlgebra of B).o by MSUALG_1:
+def 11
+                      .= Den(o,the MSAlgebra of B) by MSUALG_1:def 11;
+A7:             bb is_closed_on o by A3,MSUALG_2:def 7;
+A8:              BB is_closed_on o by A4,MSUALG_2:def 7;
+                   (Opers(B,bb)).o = o/.bb by MSUALG_2:def 9
+                   .= (Den(o,the MSAlgebra of B))|((BB# * the Arity of S).o)
+                        by A6,A7,MSUALG_2:def 8
+                   .= o/.BB by A8,MSUALG_2:def 8
+                   .= (Opers(the MSAlgebra of B,BB)).o by MSUALG_2:def 9;
+                 hence thesis by A1,A2,MSUALG_2:def 10;
+              end;
+              hence thesis by PBOOLE:3;
+           end;
+           hence thesis by A4;
+         end;
+      thus thesis;
+     end;
+     assume
+A9:     A is MSSubAlgebra of the MSAlgebra of B;
+     hence the Sorts of A is MSSubset of B by MSUALG_2:def 10;
+     let C be MSSubset of B such that
+A10:    C = the Sorts of A;
+     reconsider CC = C as MSSubset of the MSAlgebra of B;
+A11:  CC is opers_closed & the Charact of A = Opers(the MSAlgebra of B,CC)
+       by A9,A10,MSUALG_2:def 10;
+A12: C is opers_closed
+      proof
+        let o be OperSymbol of S;
+A13:    Den(o,B) = (the Charact of the MSAlgebra of B).o by MSUALG_1:def 11
+                .= Den(o,the MSAlgebra of B) by MSUALG_1:def 11;
+          CC is_closed_on o by A11,MSUALG_2:def 7;
+        then rng ((Den(o,B))|((C# * the Arity of S).o))
+           c= (C * the ResultSort of S).o by A13,MSUALG_2:def 6;
+        hence C is_closed_on o by MSUALG_2:def 6;
+      end;
+       the Charact of A = Opers(B,C)
+      proof
+          for o be set st o in the OperSymbols of S holds
+          (the Charact of A).o = (Opers(B,C)).o
+         proof
+           let o be set; assume
+            o in the OperSymbols of S;
+           then reconsider o as OperSymbol of S;
+A14:       Den(o,B) = (the Charact of the MSAlgebra of B).o by MSUALG_1:def 11
+                   .= Den(o,the MSAlgebra of B) by MSUALG_1:def 11;
+A15:       CC is_closed_on o by A11,MSUALG_2:def 7;
+A16:        C is_closed_on o by A12,MSUALG_2:def 7;
+             (Opers(the MSAlgebra of B,CC)).o = o/.CC by MSUALG_2:def 9
+                   .= (Den(o,B))|((C# * the Arity of S).o) by A14,A15,MSUALG_2:
+def 8
+                   .= o/.C by A16,MSUALG_2:def 8
+                   .= (Opers(B,C)).o by MSUALG_2:def 9;
+           hence thesis by A9,A10,MSUALG_2:def 10;
+          end;
+         hence thesis by PBOOLE:3;
+        end;
+      hence thesis by A12;
+end;
+
+theorem
+   for A,B being Universal_Algebra holds
+  signature A = signature B iff MSSign A = MSSign B
+     proof
+A1:   for A,B be Universal_Algebra st signature A = signature B holds
+      MSSign A = MSSign B
+       proof
+        let A,B be Universal_Algebra;
+        assume
+          signature A = signature B;
+        then A, B are_similar by UNIALG_2:def 2;
+        hence thesis by MSUHOM_1:10;
+       end;
+        for A, B be Universal_Algebra st MSSign A = MSSign B holds
+      signature A = signature B
+       proof
+        let A,B be Universal_Algebra; assume
+A2:      MSSign A = MSSign B;
+    reconsider ff1 = (*-->0)*(signature A)
+       as Function of dom signature A, {0}* by MSUALG_1:7;
+    reconsider gg1 = (*-->0)*(signature B)
+       as Function of dom signature B, {0}* by MSUALG_1:7;
+A3:     MSSign A = ManySortedSign
+         (#{0},dom signature(A),ff1,dom signature(A)-->0#)
+          by MSUALG_1:16;
+A4:     MSSign B = ManySortedSign
+         (#{0},dom signature(B),gg1,dom signature(B)-->0#)
+           by MSUALG_1:16;
+      now let i; assume
+A5:      i in dom signature A;
+then A6:      i in dom ((*-->0)*(signature A)) by ALG_1:1;
+then A7:      (*-->0).((signature B).i)= ((*-->0)*(signature A)).i by A2,A3,A4,
+ALG_1:1
+          .= (*-->0).((signature A).i) by A6,ALG_1:1;
+         reconsider m = (signature B).i as Nat by A2,A3,A4,A5,PARTFUN1:27;
+         reconsider k= (signature A).i as Nat by A5,PARTFUN1:27;
+           (*-->0).m is Element of {0}*;
+         then reconsider q = (*-->0).m as FinSequence;
+           (*-->0).k is Element of {0}*;
+         then reconsider p = (*-->0).k as FinSequence;
+         thus (signature A).i = len p by Th6
+          .= len q by A7
+          .= (signature B).i by Th6;
+       end;
+       hence thesis by A2,A3,A4,FINSEQ_1:17;
+      end;
+      hence thesis by A1;
+end;
+
+theorem Th23:
+ for A being non-empty MSAlgebra over MS st the carrier of MS = {0}
+  holds MSSign 1-Alg A = the ManySortedSign of MS
+     proof
+      let A be non-empty MSAlgebra over MS;
+      assume
+A1:   the carrier of MS = {0};
+    reconsider ff1 = (*-->0)*(signature 1-Alg A)
+       as Function of dom signature 1-Alg A, {0}* by MSUALG_1:7;
+A2:   MSSign 1-Alg A = ManySortedSign
+        (#{0},dom signature(1-Alg A),ff1,dom signature(1-Alg A)-->0#)
+          by MSUALG_1:16;
+A3:   1-Alg A = UAStr(#the_sort_of A, the_charact_of A#) by MSUALG_1:def 19;
+      consider k be Nat such that
+A4:  the OperSymbols of MS = Seg k by MSUALG_1:def 12;
+A5: len signature (1-Alg A) = len the charact of 1-Alg A
+        by UNIALG_1:def 11;
+then A6:  dom signature (1-Alg A) = dom (the charact of 1-Alg A) by FINSEQ_3:31
+       .= dom the Charact of A by A3,MSUALG_1:def 18
+       .= the OperSymbols of MS by PBOOLE:def 3;
+then A7:  the OperSymbols of MS = dom ff1 &
+      the OperSymbols of MS = dom the Arity of MS
+            by FUNCT_2:def 1;
+A8:  (for x being set st x in the OperSymbols of MS holds
+      ((*-->0)*(signature (1-Alg A))).x = (the Arity of MS).x)
+       proof
+        let x be set; assume
+        x in the OperSymbols of MS;
+        then reconsider x as OperSymbol of MS;
+          x in Seg k by A4;
+        then reconsider n = x as Nat;
+          n in dom(signature (1-Alg A)) by A6;
+then A9:     n in dom the charact of 1-Alg A by A5,FINSEQ_3:31;
+        then reconsider h = (the charact of 1-Alg A).n
+          as PartFunc of (the carrier of 1-Alg A)*,the carrier of 1-Alg A
+          by UNIALG_1:5;
+        reconsider h as homogeneous quasi_total non empty
+         PartFunc of (the carrier of 1-Alg A)*,the carrier of 1-Alg A
+          by A9,UNIALG_1:def 4,def 5,def 6;
+A10:    h = (the Charact of A).x by A3,MSUALG_1:def 18
+         .= Den(x,A) by MSUALG_1:def 11;
+        consider aa being Element of dom h;
+A11:     dom h <> {} by RELAT_1:64;
+          dom h c= (the carrier of 1-Alg A)* by RELSET_1:12;
+        then aa in (the carrier of 1-Alg A)* by A11,TARSKI:def 3;
+        then reconsider bb = aa as FinSequence of the carrier of 1-Alg A
+               by FINSEQ_1:def 11;
+       bb in dom h by A11;
+        then bb in Args(x,A) by A10,FUNCT_2:def 1;
+then A12:    bb in (len the_arity_of x)-tuples_on the_sort_of A by MSUALG_1:11;
+        set ah = arity h;
+A13:     len the_arity_of x = len bb by A12,FINSEQ_2:109
+                          .= ah by A11,UNIALG_1:def 10;
+          ((*-->0)*(signature (1-Alg A))).x =
+         (*-->0).((signature (1-Alg A)).x) by A6,FUNCT_1:23
+         .= (*-->0).ah by A6,UNIALG_1:def 11
+         .= ah |-> 0 by MSUALG_1:def 4
+         .= the_arity_of x by A1,A13,Th5
+         .= (the Arity of MS).x by MSUALG_1:def 6;
+        hence thesis;
+       end;
+     dom (the ResultSort of MS) = the OperSymbols of MS by FUNCT_2:def 1;
+then A14:   rng (the ResultSort of MS) <> {} by RELAT_1:65;
+A15:  the OperSymbols of MS = dom (the ResultSort of MS) by FUNCT_2:def 1;
+         rng (the ResultSort of MS) c= {0} by A1,RELSET_1:12;
+then rng (the ResultSort of MS) = {0} by A14,ZFMISC_1:39;
+       then the ResultSort of MSSign 1-Alg A = the ResultSort of MS by A2,A6,
+A15,FUNCOP_1:15;
+       hence thesis by A1,A2,A6,A7,A8,FUNCT_1:9;
+end;
+
+theorem Th24:
+ for A,B being non-empty MSAlgebra over MS
+  st the carrier of MS ={0} & 1-Alg A = 1-Alg B
+   holds the MSAlgebra of A = the MSAlgebra of B
+  proof
+     let A,B be non-empty MSAlgebra over MS such that
+       the carrier of MS = {0} and
+A1:   1-Alg A = 1-Alg B;
+A2:  1-Alg A = UAStr(#the_sort_of A, the_charact_of A#) by MSUALG_1:def 19;
+A3:  1-Alg B = UAStr(#the_sort_of B, the_charact_of B#) by MSUALG_1:def 19;
+A4:  the Sorts of A = the Sorts of B
+      proof
+         now
+        let i be set such that
+A5:     i in the carrier of MS;
+A6:     ex c being Component of the Sorts of B st (the Sorts of B).i = c
+         proof
+          reconsider c = (the Sorts of B).i as Component of the Sorts of B
+            by A5,MSUALG_1:3;
+          take c;
+          thus thesis;
+         end;
+          ex c being Component of the Sorts of A st (the Sorts of A).i = c
+         proof
+          reconsider c = (the Sorts of A).i as Component of the Sorts of A
+            by A5,MSUALG_1:3;
+          take c;
+          thus thesis;
+         end;
+         then (the Sorts of A).i = the_sort_of B by A1,A2,A3,MSUALG_1:def 17
+          .= (the Sorts of B).i by A6,MSUALG_1:def 17;
+         hence (the Sorts of A).i = (the Sorts of B).i;
+        end;
+       hence thesis by PBOOLE:3;
+      end;
+        the Charact of A = the charact of 1-Alg A by A2,MSUALG_1:def 18
+        .= the Charact of B by A1,A3,MSUALG_1:def 18;
+      hence the MSAlgebra of A = the MSAlgebra of B by A4;
+end;
+
+theorem
+   for A being non-empty MSAlgebra over MS st the carrier of MS = {0} holds
+  the Sorts of A = the Sorts of MSAlg (1-Alg A)
+   proof
+     let A be non-empty MSAlgebra over MS;
+     assume
+A1:   the carrier of MS = {0};
+A2:  MSAlg (1-Alg A) =
+      MSAlgebra(#MSSorts (1-Alg A),MSCharact (1-Alg A)#) by MSUALG_1:def 16;
+  1-Alg A = UAStr(#the_sort_of A, the_charact_of A#) by MSUALG_1:def 19;
+then A3:  MSSorts (1-Alg A) = {0}--> (the_sort_of A) by MSUALG_1:def 14;
+       dom ({0} --> (the_sort_of A)) = {0} by FUNCOP_1:19;
+then A4:  {0} --> (the_sort_of A) is ManySortedSet of the carrier of MS
+       by A1,PBOOLE:def 3;
+       now
+      let i be set; assume
+A5:   i in the carrier of MS;
+then A6:   ({0} --> (the_sort_of A)).i = the_sort_of A by A1,FUNCOP_1:13;
+        ex c being Component of the Sorts of A st (the Sorts of A).i = c
+       proof
+        reconsider c = (the Sorts of A).i as Component of the Sorts of A
+          by A5,MSUALG_1:3;
+        take c;
+        thus thesis;
+       end;
+       hence (the Sorts of A).i = ({0} --> (the_sort_of A)).i
+         by A6,MSUALG_1:def 17;
+     end;
+     hence thesis by A2,A3,A4,PBOOLE:3;
+end;
+
+theorem Th26:
+ for A being non-empty MSAlgebra over MS st the carrier of MS = {0}
+  holds MSAlg (1-Alg A) = the MSAlgebra of A
+    proof
+     let A be non-empty MSAlgebra over MS; assume
+A1:   the carrier of MS = {0};
+then MSSign 1-Alg A = the ManySortedSign of MS by Th23;
+     then reconsider M1A = MSAlg (1-Alg A) as MSAlgebra over MS;
+       the Sorts of M1A = the Sorts of MSAlg (1-Alg A);
+     then reconsider M1A as non-empty MSAlgebra over MS by MSUALG_1:def 8;
+
+A2: the Sorts of M1A = the Sorts of MSAlg (1-Alg A) &
+     the Charact of M1A = the Charact of MSAlg (1-Alg A);
+
+A3:  1-Alg(MSAlg (1-Alg A)) =
+     UAStr(#the_sort_of (MSAlg (1-Alg A)), the_charact_of (MSAlg (1-Alg A))#)
+     by MSUALG_1:def 19;
+A4:  1-Alg M1A = UAStr(#the_sort_of M1A, the_charact_of M1A#)
+     by MSUALG_1:def 19;
+
+     consider c being Component of the Sorts of MSAlg (1-Alg A) such that
+A5:   c = the_sort_of MSAlg (1-Alg A) by MSUALG_1:def 17;
+     reconsider c as Component of the Sorts of M1A;
+  c = the_sort_of M1A by MSUALG_1:def 17;
+
+then A6: the carrier of 1-Alg A = the carrier of 1-Alg M1A by A3,A4,A5,MSUALG_1
+:15;
+
+       the charact of 1-Alg A = the_charact_of MSAlg (1-Alg A) by A3,MSUALG_1:
+15
+     .= the Charact of M1A by MSUALG_1:def 18
+     .= the charact of 1-Alg M1A by A4,MSUALG_1:def 18;
+     hence
+       the MSAlgebra of A = the MSAlgebra of M1A by A1,A6,Th24
+                       .= the MSAlgebra of MSAlg (1-Alg A) by A2
+                       .= MSAlg (1-Alg A);
+end;
+
+theorem
+   for A being Universal_Algebra,
+  B being strict non-empty MSSubAlgebra of MSAlg A
+   st the carrier of MSSign A = {0}
+    holds 1-Alg B is SubAlgebra of A
+    proof
+     let A be Universal_Algebra ,
+          B be strict non-empty MSSubAlgebra of MSAlg A; assume
+            the carrier of MSSign A = {0};
+     then MSAlg (1-Alg B) = the MSAlgebra of B by Th26;
+     hence 1-Alg B is SubAlgebra of A by Th16;
+end;
+
+begin
+
+::  The Correspondence Between Lattices of Subalgebras of
+::  Universal and Many Sorted Algebras
+
+theorem Th28:
+ for A being Universal_Algebra,
+  a1,b1 being strict non-empty SubAlgebra of A,
+   a2,b2 being strict non-empty
+    MSSubAlgebra of MSAlg A st a2 = MSAlg a1 & b2 = MSAlg b1
+     holds (the Sorts of a2) \/ (the Sorts of b2) =
+      0 .--> ((the carrier of a1) \/ (the carrier of b1))
+   proof
+     let A be Universal_Algebra;
+     let a1,b1 be strict non-empty SubAlgebra of A;
+     let a2,b2 be strict non-empty MSSubAlgebra of MSAlg A such that
+A1:   a2 = MSAlg a1 & b2 = MSAlg b1;
+    reconsider ff1 = (*-->0)*(signature A)
+       as Function of dom signature A, {0}* by MSUALG_1:7;
+A2: MSSign A = ManySortedSign
+      (#{0},dom signature(A),ff1,dom signature(A)-->0#)
+        by MSUALG_1:16;
+  a2 = MSAlgebra(#MSSorts a1,MSCharact a1#) by A1,MSUALG_1:def 16;
+then A3: the Sorts of a2 = {0} --> (the carrier of a1) by MSUALG_1:def 14;
+  b2 = MSAlgebra(#MSSorts b1,MSCharact b1#) by A1,MSUALG_1:def 16;
+then A4: the Sorts of b2 = {0} --> the carrier of b1 by MSUALG_1:def 14;
+       dom(0 .--> ((the carrier of a1) \/ (the carrier of b1))) = {0}
+       by CQC_LANG:5;
+     then reconsider W = 0 .--> ((the carrier of a1) \/ (the carrier of b1))
+       as ManySortedSet of the carrier of MSSign A by A2,PBOOLE:def 3;
+       now let x be set;
+      assume
+A5:    x in the carrier of MSSign A;
+then A6:   x = 0 by A2,TARSKI:def 1;
+         W.x = (0 .--> ((the carrier of a1) \/ (the carrier of b1))).0 by A2,A5
+,TARSKI:def 1
+        .= (the carrier of a1) \/ (the carrier of b1) by CQC_LANG:6
+        .= (0 .--> the carrier of a1).0 \/ ( the carrier of b1) by CQC_LANG:6
+        .= (0 .--> the carrier of a1).0 \/ (0 .--> the carrier of b1).0
+            by CQC_LANG:6
+        .= (0 .--> the carrier of a1).0 \/ (the Sorts of b2).0
+            by A4,CQC_LANG:def 2
+        .= (the Sorts of a2).x \/ (the Sorts of b2).x by A3,A6,CQC_LANG:def 2;
+       hence W.x = (the Sorts of a2).x \/ (the Sorts of b2).x;
+     end;
+    hence thesis by PBOOLE:def 7;
+end;
+
+theorem Th29:
+ for A being Universal_Algebra,
+  a1,b1 being strict non-empty SubAlgebra of A,
+   a2,b2 being strict non-empty
+    MSSubAlgebra of MSAlg A st a2 = MSAlg a1 & b2 = MSAlg b1
+     holds (the Sorts of a2) /\ (the Sorts of b2) =
+      0 .--> ((the carrier of a1) /\ (the carrier of b1))
+    proof
+     let A be Universal_Algebra;
+     let a1,b1 be strict non-empty SubAlgebra of A;
+     let a2,b2 be strict non-empty MSSubAlgebra of MSAlg A such that
+A1:   a2 = MSAlg a1 & b2 = MSAlg b1;
+    reconsider ff1 = (*-->0)*(signature A)
+       as Function of dom signature A, {0}* by MSUALG_1:7;
+A2: MSSign A = ManySortedSign
+      (#{0},dom signature(A),ff1,dom signature(A)-->0#)
+        by MSUALG_1:16;
+  a2 = MSAlgebra(#MSSorts a1,MSCharact a1#) by A1,MSUALG_1:def 16;
+then A3: the Sorts of a2 = {0} --> (the carrier of a1) by MSUALG_1:def 14;
+  b2 = MSAlgebra(#MSSorts b1,MSCharact b1#) by A1,MSUALG_1:def 16;
+then A4:  the Sorts of b2 = {0} --> the carrier of b1 by MSUALG_1:def 14;
+       dom(0 .--> ((the carrier of a1) /\ (the carrier of b1))) = {0}
+       by CQC_LANG:5;
+     then reconsider W = 0 .--> ((the carrier of a1) /\ (the carrier of b1))
+       as ManySortedSet of the carrier of MSSign A by A2,PBOOLE:def 3;
+       now let x be set;
+      assume
+        x in the carrier of MSSign A;
+then A5:   x = 0 by A2,TARSKI:def 1;
+      then W.x = (the carrier of a1) /\ (the carrier of b1) by CQC_LANG:6
+       .= (0 .--> the carrier of a1).0 /\ ( the carrier of b1) by CQC_LANG:6
+       .= (0 .--> the carrier of a1).0 /\ (0 .--> the carrier of b1).0
+          by CQC_LANG:6
+       .= (0 .--> the carrier of a1).0 /\ (the Sorts of b2).0
+                                 by A4,CQC_LANG:def 2
+       .= (the Sorts of a2).x /\ (the Sorts of b2).x by A3,A5,CQC_LANG:def 2;
+      hence W.x = (the Sorts of a2).x /\ (the Sorts of b2).x;
+     end;
+      hence thesis by PBOOLE:def 8;
+ end;
+
+theorem Th30:
+ for A being strict Universal_Algebra,
+  a1,b1 be strict non-empty SubAlgebra of A,
+   a2,b2 being strict non-empty MSSubAlgebra of MSAlg A
+    st a2 = MSAlg a1 & b2 = MSAlg b1
+     holds MSAlg (a1 "\/" b1) = a2 "\/" b2
+    proof
+     let A be strict Universal_Algebra;
+     let a1,b1 be strict non-empty SubAlgebra of A;
+     let a2,b2 be strict non-empty MSSubAlgebra of MSAlg A such that
+A1:   a2 = MSAlg a1 & b2 = MSAlg b1;
+     reconsider MSA = MSAlg (a1"\/"b1) as MSSubAlgebra of MSAlg A by Th12;
+       MSSign (a1"\/"b1) = MSSign A by Th7;
+     then reconsider MSA as strict non-empty MSSubAlgebra of MSAlg A;
+       for B be MSSubset of MSAlg A st
+        B = (the Sorts of a2) \/ (the Sorts of b2) holds MSA = GenMSAlg(B)
+      proof
+       let B be MSSubset of MSAlg A such that
+A2:    B = (the Sorts of a2) \/ (the Sorts of b2);
+
+       set X = MSA;
+
+    X = MSAlgebra(#MSSorts (a1"\/"b1),MSCharact (a1"\/"b1)#) by MSUALG_1:def 16
+;
+then A3:   the Sorts of X = {0} --> the carrier of a1"\/"b1
+           by MSUALG_1:def 14;
+    reconsider ff1 = (*-->0)*(signature A)
+       as Function of dom signature A, {0}* by MSUALG_1:7;
+A4:   MSSign A = ManySortedSign
+       (#{0},dom signature(A),ff1,dom signature(A)-->0#)
+             by MSUALG_1:16;
+A5:   the carrier of a1 is Subset of A by UNIALG_2:def 8;
+     the carrier of b1 is Subset of A by UNIALG_2:def 8;
+
+       then reconsider K = (the carrier of a1) \/ (the carrier of b1)
+           as non empty Subset of A by A5,XBOOLE_1:8;
+
+   reconsider M1 = the Sorts of X as ManySortedSet of the carrier of MSSign A;
+       reconsider x = 0 as Element of MSSign A
+                  by A4,TARSKI:def 1;
+
+A6:    B is MSSubset of X
+        proof
+           (the Sorts of a2) \/ (the Sorts of b2) c= M1
+          proof
+           let x be set;
+           assume
+A7:        x in the carrier of MSSign A;
+then A8:        ((the Sorts of a2) \/ (the Sorts of b2)).x
+            = ((the Sorts of a2) \/ (the Sorts of b2)).0 by A4,TARSKI:def 1
+           .= (0 .--> ((the carrier of a1) \/
+ (the carrier of b1))).0 by A1,Th28
+           .= (the carrier of a1) \/ (the carrier of b1) by CQC_LANG:6;
+A9:        M1.x = (0 .--> the carrier of a1"\/"b1).x by A3,CQC_LANG:def 2
+               .= (0 .--> the carrier of a1"\/"b1).0 by A4,A7,TARSKI:def 1
+               .= the carrier of a1"\/"b1 by CQC_LANG:6;
+             a1"\/"b1 = GenUnivAlg K by UNIALG_2:def 14;
+           hence thesis by A8,A9,UNIALG_2:def 13;
+          end;
+          hence thesis by A2,MSUALG_2:def 1;
+         end;
+
+         for U1 be MSSubAlgebra of MSAlg A st B is MSSubset of U1 holds
+       X is MSSubAlgebra of U1
+        proof
+         let U1 be MSSubAlgebra of MSAlg A;
+         assume
+A10:      B is MSSubset of U1;
+         per cases;
+         suppose U1 is non-empty;
+         then reconsider U11=U1 as non-empty MSSubAlgebra of MSAlg A;
+
+A11:     1-Alg U11 is SubAlgebra of 1-Alg MSAlg A by Th20;
+then 1-Alg U11 is SubAlgebra of A by MSUALG_1:15;
+then A12:       MSSign A = MSSign 1-Alg U11 by Th7;
+
+           B c= the Sorts of U11 by A10,MSUALG_2:def 1;
+         then A13:     B.x c= (the Sorts of U11).x by PBOOLE:def 5;
+A14:      the MSAlgebra of U11 = MSAlg (1-Alg U11) by A4,Th26;
+           MSAlg (1-Alg U11) =
+              MSAlgebra(#MSSorts (1-Alg U11),MSCharact (1-Alg U11)#)
+              by MSUALG_1:def 16;
+      then the Sorts of MSAlg (1-Alg U11) = {0} --> the carrier of 1-Alg U11
+              by MSUALG_1:def 14;
+then A15:     (the Sorts of U11).0 = (0 .--> the carrier of 1-Alg U11).0
+              by A14,CQC_LANG:def 2;
+A16:       B.0 = (0.--> K).0 by A1,A2,Th28
+            .= K by CQC_LANG:6;
+
+         reconsider A1 = 1-Alg U11 as strict SubAlgebra of A
+                         by A11,MSUALG_1:15;
+           (the carrier of a1) \/ the carrier of b1 c= the carrier of A1
+                         by A13,A15,A16,CQC_LANG:6;
+         then GenUnivAlg K is SubAlgebra of 1-Alg U11 by UNIALG_2:def 13;
+         then a1"\/"b1 is SubAlgebra of 1-Alg U11 by UNIALG_2:def 14;
+         then MSA is MSSubAlgebra of MSAlg(1-Alg U11) by Th12;
+         then X is MSSubAlgebra of the MSAlgebra of U11 by A4,A12,Th26;
+         hence X is MSSubAlgebra of U1 by Th21;
+
+         suppose not U1 is non-empty;
+         then the Sorts of U1 is non non-empty by MSUALG_1:def 8;
+         then consider i be set such that
+A17:      i in the carrier of MSSign A and
+A18:      (the Sorts of U1).i is empty by PBOOLE:def 16;
+           B c= the Sorts of U1 by A10,MSUALG_2:def 1;
+then A19:     B.x c= (the Sorts of U1).x by PBOOLE:def 5;
+         consider e being Element of a1;
+           dom ({0}-->the carrier of a1) = {0} by FUNCOP_1:19;
+         then reconsider 0a1={0}-->the carrier of a1
+                    as ManySortedSet of the carrier of MSSign A
+                    by A4,PBOOLE:def 3;
+           a2=MSAlgebra(#MSSorts a1,MSCharact a1#) by A1,MSUALG_1:def 16;
+         then B = 0a1 \/ (the Sorts of b2) by A2,MSUALG_1:def 14;
+then A20:     B.x = 0a1.x \/ (the Sorts of b2).x by PBOOLE:def 7;
+           x in {0} by TARSKI:def 1;
+         then 0a1.x = the carrier of a1 by FUNCOP_1:13;
+         then e in B.x by A20,XBOOLE_0:def 2;
+         hence thesis by A4,A17,A18,A19,TARSKI:def 1;
+        end;
+       hence MSA = GenMSAlg(B) by A6,MSUALG_2:def 18;
+      end;
+     hence thesis by MSUALG_2:def 19;
+    end;
+
+definition
+let A be with_const_op Universal_Algebra;
+cluster MSSign(A) -> non void strict segmental trivial all-with_const_op;
+ coherence
+     proof
+    reconsider ff1 = (*-->0)*(signature A)
+       as Function of dom signature A, {0}* by MSUALG_1:7;
+A1:   MSSign(A) = ManySortedSign
+       (#{0},dom signature(A),ff1,dom signature(A)-->0#)
+         by MSUALG_1:16;
+        MSSign(A) is all-with_const_op
+       proof
+        let s be SortSymbol of MSSign(A);
+        consider OO being operation of A such that
+A2:      arity OO=0 by UNIALG_2:def 12;
+          OO in Operations(A);
+then A3:    OO in rng the charact of A by UNIALG_2:def 3;
+       Seg len the charact of A = dom the charact of A by FINSEQ_1:def 3;
+        then consider i such that
+A4:     i in Seg len the charact of A & (the charact of A).i = OO
+           by A3,FINSEQ_2:11;
+A5:    len signature(A) = len the charact of A by UNIALG_1:def 11;
+        then A6:     i in dom signature(A) by A4,FINSEQ_1:def 3;
+        reconsider i as OperSymbol of MSSign(A)
+                   by A1,A4,A5,FINSEQ_1:def 3;
+        take i;
+        thus (the Arity of MSSign(A)).i = {}
+         proof
+            (*-->0).((signature A).i) = (*-->0).0 by A2,A4,A6,UNIALG_1:def 11
+                                   .= {} by Th1;
+          hence thesis by A1,FUNCT_1:23;
+         end;
+        thus (the ResultSort of MSSign(A)).i = s
+       proof
+          (the ResultSort of MSSign(A)).i = 0 by A1,TARSKI:def 1;
+        hence thesis by A1,TARSKI:def 1;
+       end;
+      end;
+      hence thesis;
+    end;
+end;
+
+theorem Th31:
+ for A being with_const_op Universal_Algebra,
+  a1,b1 being strict non-empty SubAlgebra of A,
+   a2,b2 being strict non-empty MSSubAlgebra of MSAlg A
+    st a2 = MSAlg a1 & b2 = MSAlg b1
+     holds MSAlg (a1 /\ b1) = a2 /\ b2
+     proof
+       let A be with_const_op Universal_Algebra;
+       let a1,b1 be strict non-empty SubAlgebra of A;
+       let a2,b2 be strict non-empty MSSubAlgebra of MSAlg A such that
+A1:     a2 = MSAlg a1 & b2 = MSAlg b1;
+A2:    MSSign (a1/\ b1) = MSSign A by Th7;
+      MSAlg (a1/\b1) = MSAlgebra(#MSSorts (a1/\b1),MSCharact (a1/\b1)#)
+          by MSUALG_1:def 16;
+then A3:    the Sorts of MSAlg (a1/\b1) = {0} --> the carrier of a1 /\ b1
+          by MSUALG_1:def 14
+          .= 0 .--> the carrier of a1/\b1 by CQC_LANG:def 2;
+    reconsider ff1 = (*-->0)*(signature A)
+       as Function of dom signature A, {0}* by MSUALG_1:7;
+A4:    MSSign A = ManySortedSign
+       (#{0},dom signature(A),ff1,dom signature(A)-->0#)
+           by MSUALG_1:16;
+       then dom the Sorts of MSAlg (a1/\b1) = the carrier of MSSign A by A3,
+CQC_LANG:5;
+       then reconsider D = the Sorts of MSAlg (a1 /\ b1) as
+          ManySortedSet of the carrier of MSSign A by PBOOLE:def 3;
+A5:    D = (the Sorts of a2) /\ (the Sorts of b2)
+        proof
+            now
+           let x be set;
+           assume
+A6:        x in the carrier of MSSign A;
+A7:       (the carrier of a1) meets (the carrier of b1) by UNIALG_2:20;
+           thus D.x = ( 0 .--> the carrier of a1/\ b1).0
+             by A3,A4,A6,TARSKI:def 1
+             .= the carrier of a1 /\ b1 by CQC_LANG:6
+             .= (the carrier of a1) /\ (the carrier of b1)
+                 by A7,UNIALG_2:def 10
+             .= (0 .--> ((the carrier of a1) /\ (the carrier of b1))).0
+                 by CQC_LANG:6
+             .= ((the Sorts of a2) /\ (the Sorts of b2)).0 by A1,Th29
+             .= ((the Sorts of a2) /\ (the Sorts of b2)).x
+                            by A4,A6,TARSKI:def 1;
+          end;
+         hence thesis by PBOOLE:3;
+        end;
+       reconsider AA = MSAlg (a1 /\ b1)
+          as strict non-empty MSSubAlgebra of MSAlg A by A2,Th12;
+         for B be MSSubset of MSAlg A st B = the Sorts of AA holds
+           B is opers_closed & the Charact of AA = Opers(MSAlg A,B)
+                        by MSUALG_2:def 10;
+       hence MSAlg (a1 /\ b1) = a2 /\ b2 by A5,MSUALG_2:def 17;
+end;
+
+definition let A be quasi_total UAStr;
+cluster the UAStr of A -> quasi_total;
+coherence
+ proof
+    thus the charact of the UAStr of A is quasi_total;
+ end;
+end;
+
+definition let A be partial UAStr;
+cluster the UAStr of A -> partial;
+coherence
+ proof
+   thus the charact of the UAStr of A is homogeneous;
+ end;
+end;
+
+definition let A be non-empty UAStr;
+cluster the UAStr of A -> non-empty;
+coherence
+  proof
+    thus the charact of the UAStr of A <> {} &
+         the charact of the UAStr of A is non-empty;
+  end;
+end;
+
+definition let A be with_const_op Universal_Algebra;
+cluster the UAStr of A -> with_const_op;
+coherence
+ proof
+   consider o be operation of A such that
+A1:   arity o = 0 by UNIALG_2:def 12;
+     o is Element of rng the charact of the UAStr of A by UNIALG_2:def 3;
+   then reconsider oo = o as operation of the UAStr of A by UNIALG_2:def 3;
+   take oo;
+   thus thesis by A1;
+ end;
+end;
+
+theorem
+   for A being with_const_op Universal_Algebra holds
+  UnSubAlLattice the UAStr of A, MSSubAlLattice MSAlg the UAStr of A
+   are_isomorphic
+   proof
+     let Z be with_const_op Universal_Algebra;
+     set A = the UAStr of Z;
+    reconsider ff1 = (*-->0)*(signature A)
+       as Function of dom signature A, {0}* by MSUALG_1:7;
+A1: MSSign A = ManySortedSign
+      (#{0},dom signature(A),ff1,dom signature(A)-->0#)
+       by MSUALG_1:16;
+A2:  MSSubAlLattice MSAlg A = LattStr
+      (# MSSub MSAlg A, MSAlg_join(MSAlg A), MSAlg_meet(MSAlg A) #)
+        by MSUALG_2:def 23;
+A3:  UnSubAlLattice(A) = LattStr
+      (# Sub A, UniAlg_join(A), UniAlg_meet(A) #) by UNIALG_2:def 18;
+     defpred P[set,set] means ex A1 be strict SubAlgebra of A st
+       A1= $1 & $2= MSAlg A1;
+A4:  for x being Element of Sub A ex y being Element of MSSub MSAlg A
+       st P[x,y]
+      proof
+       let x be Element of Sub A;
+       reconsider B = x as strict SubAlgebra of A by UNIALG_2:def 15;
+         MSSign A = MSSign B by Th7;
+       then MSAlg B is strict non-empty MSSubAlgebra of MSAlg A by Th12;
+       then reconsider y = MSAlg B as Element of MSSub MSAlg A by MSUALG_2:def
+20;
+       take y, B;
+       thus B = x & y = MSAlg B;
+      end;
+      consider f being Function of Sub A,MSSub MSAlg A such that
+A5:    for x being Element of Sub A holds P[x,f.x] from FuncExD(A4);
+      reconsider f as Function of the carrier of UnSubAlLattice A,
+        the carrier of MSSubAlLattice MSAlg A by A2,A3;
+        f is Homomorphism of UnSubAlLattice A, MSSubAlLattice MSAlg A
+       proof
+        let a1,b1 be Element of UnSubAlLattice A;
+        reconsider a2=a1,b2=b1 as Element of Sub A by A3;
+        reconsider a3=a2,b3=b2 as strict non-empty SubAlgebra of A
+          by UNIALG_2:def 15;
+        reconsider s=a3"\/"b3 as Element of Sub A by UNIALG_2:def 15;
+        consider A1 be strict non-empty SubAlgebra of A such that
+A6:      A1= s & f.s = MSAlg A1 by A5;
+        consider A3 be strict non-empty SubAlgebra of A such that
+A7:      A3=a3 & f.a3= MSAlg A3 by A5;
+        consider A4 be strict non-empty SubAlgebra of A such that
+A8:      A4=b3 & f.b3= MSAlg A4 by A5;
+      MSSign A3 = MSSign A by Th7;
+        then reconsider g4= MSAlg A3 as strict non-empty MSSubAlgebra of MSAlg
+A
+          by Th12;
+      MSSign A4 = MSSign A by Th7;
+        then reconsider g3= MSAlg A4 as strict non-empty MSSubAlgebra of MSAlg
+A
+         by Th12;
+A9:     f.(a1 "\/" b1)
+         = f.((UniAlg_join A).(a2,b2)) by A3,LATTICES:def 1
+        .= MSAlg (a3"\/"b3) by A6,UNIALG_2:def 16
+        .= g4 "\/" g3 by A7,A8,Th30
+        .= (the L_join of MSSubAlLattice MSAlg A).(f.a1,f.b1) by A2,A7,A8,
+MSUALG_2:def 21
+        .= f.a1 "\/" f.b1 by LATTICES:def 1;
+        reconsider m= a3 /\ b3 as Element of Sub A by UNIALG_2:def 15;
+      MSSign a3 = MSSign A by Th7;
+        then reconsider g1 = MSAlg a3 as strict non-empty MSSubAlgebra of
+MSAlg A
+           by Th12;
+      MSSign b3 = MSSign A by Th7;
+        then reconsider g2 = MSAlg b3 as strict non-empty MSSubAlgebra of
+MSAlg A
+          by Th12;
+        consider A1 be strict non-empty SubAlgebra of A such that
+A10:      A1=m & f.m = MSAlg A1 by A5;
+       f.(a1 "/\" b1) = f.((UniAlg_meet A).(a2,b2)) by A3,LATTICES:def 2
+        .= MSAlg (a3 /\ b3) by A10,UNIALG_2:def 17
+        .= g1 /\ g2 by Th31
+        .= (the L_meet of MSSubAlLattice MSAlg A).(f.a1,f.b1) by A2,A7,A8,
+MSUALG_2:def 22
+        .= (f.a1) "/\" (f.b1) by LATTICES:def 2;
+        hence thesis by A9;
+       end;
+       then reconsider f as Homomorphism of UnSubAlLattice A,
+           MSSubAlLattice MSAlg A;
+       take f;
+A11:   dom f = Sub A by FUNCT_2:def 1;
+       thus f is one-to-one
+        proof
+           now let x1,x2 be set such that
+A12:       x1 in dom f and
+A13:       x2 in dom f and
+A14:       f.x1 = f.x2;
+         reconsider y1 = x1, y2 = x2 as Element of Sub A by A12,A13,FUNCT_2:def
+1;
+         consider A1 be strict SubAlgebra of A such that
+A15:       A1= y1 & f.y1= MSAlg A1 by A5;
+         consider A2 be strict SubAlgebra of A such that
+A16:       A2= y2 & f.y2= MSAlg A2 by A5;
+A17:      MSSign A1 = MSSign A by Th7
+                  .= MSSign A2 by Th7;
+         thus x1 = 1-Alg MSAlg A1 by A15,MSUALG_1:15
+         .= x2 by A14,A15,A16,A17,MSUALG_1:15;
+        end;
+       hence thesis by FUNCT_1:def 8;
+      end;
+      thus rng f = the carrier of MSSubAlLattice MSAlg A
+       proof
+        thus rng f c= the carrier of MSSubAlLattice MSAlg A by RELSET_1:12;
+        let x be set;
+        assume
+          x in the carrier of MSSubAlLattice MSAlg A;
+        then reconsider y = x as strict MSSubAlgebra of MSAlg A
+          by A2,MSUALG_2:def 20;
+        reconsider C=Constants(MSAlg A) as MSSubset of y by MSUALG_2:11;
+          C c= the Sorts of y & C is non-empty by MSUALG_2:def 1;
+        then (the Sorts of y) is non-empty by PBOOLE:143;
+        then reconsider y as strict non-empty MSSubAlgebra of MSAlg A
+        by MSUALG_1:def 8;
+          1-Alg y is SubAlgebra of 1-Alg MSAlg A by Th20;
+        then 1-Alg y is SubAlgebra of A by MSUALG_1:15;
+        then reconsider y1=(1-Alg y) as Element of Sub A by UNIALG_2:def 15;
+A18:     y1 in dom f by A11;
+        consider A1 be strict SubAlgebra of A such that
+A19:      A1= y1 & f.y1 = MSAlg A1 by A5;
+          f.(1-Alg y) = x by A1,A19,Th26;
+        hence x in rng f by A18,FUNCT_1:def 5;
+      end;
+      thus thesis;
+end;
+

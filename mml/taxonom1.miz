@@ -1,0 +1,1301 @@
+:: Lower Tolerance. {P}reliminaries to {W}roclaw Taxonomy
+::  by Mariusz Giero and Roman Matuszewski
+::
+:: Received December 5, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary PARTFUN1, ARYTM, ZF_LANG, FINSEQ_1, RELAT_1, FUNCT_1, RELAT_2,
+      REWRITE1, FINSEQ_5, ARYTM_1, EQREL_1, SETFAM_1, PUA2MSS1, PARTIT1,
+      METRIC_1, TOLER_1, BOOLE, SUPINF_2, FINSET_1, SQUARE_1, LATTICES, TBSP_1,
+      SUBSET_1, TAXONOM1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, PARTFUN1, STRUCT_0, RELAT_1, RELAT_2, FUNCT_1, RELSET_1,
+      FUNCT_2, PARTIT1, PRE_TOPC, METRIC_1, TBSP_1, FINSET_1, EQREL_1, ALG_1,
+      REWRITE1, FINSEQ_1, PRE_CIRC, NAT_1, LANG1, FINSEQ_5;
+ constructors PARTIT1, PUA2MSS1, ALG_1, REWRITE1, NAT_1, LANG1, FINSEQ_5,
+      PRE_CIRC, TBSP_1, PRE_TOPC;
+ clusters XREAL_0, EQREL_1, RELSET_1, ARYTM_3, STRUCT_0, SUBSET_1, FINSET_1,
+      TBSP_1, MEMBERED, PARTFUN1;
+ requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
+ definitions TARSKI, SETFAM_1;
+ theorems EQREL_1, T_1TOPSP, ZFMISC_1, PARTIT1, TARSKI, SETFAM_1, PUA2MSS1,
+      RELAT_2, METRIC_1, RELAT_1, AXIOMS, REWRITE1, FINSEQ_1, LANG1, FINSEQ_5,
+      REAL_1, RELSET_1, NAT_1, REAL_2, PRE_CIRC, FUNCT_1, BINOP_1, FUNCT_2,
+      FINSET_1, FINSEQ_3, RLVECT_1, TBSP_1, PRE_TOPC, MSUALG_9, XBOOLE_0,
+      XBOOLE_1, XCMPLX_0, XCMPLX_1, PARTFUN1, ORDERS_1;
+ schemes RELSET_1, LMOD_7, NAT_1, XBOOLE_0;
+
+begin
+
+::Preliminaries
+
+reserve A,X for non empty set;
+reserve f for PartFunc of [:X,X:],REAL;
+reserve a for real number;
+
+
+definition
+ cluster non negative (real number);
+existence
+  proof
+   take 0;
+   thus thesis;
+  end;
+end;
+
+theorem Th1:
+ for p being FinSequence, k being Nat st k+1 in dom p & not k in dom p
+   holds k = 0
+proof
+ let p being FinSequence, k being Nat such that
+A1: k+1 in dom p and
+A2: not k in dom p;
+ assume k <> 0;
+then A3:k >= 1 by RLVECT_1:99;
+A4:k <= k+1 by NAT_1:37;
+   k+1 <= len p by A1,FINSEQ_3:27;
+ then k <= len p by A4,AXIOMS:22;
+ hence thesis by A2,A3,FINSEQ_3:27;
+end;
+
+theorem Th2:
+for p being FinSequence, i,j being Nat st
+        i in dom p & j in dom p &
+        for k be Nat st k in dom p & k + 1 in dom p holds p.k = p.(k + 1)
+    holds p.i = p.j
+proof
+let p be FinSequence, i,j be Nat such that
+A1:     i in dom p & j in dom p and
+A2:     for k be Nat st k in dom p & k + 1 in dom p holds p.k = p.(k + 1);
+defpred P[Nat] means
+ for j being Nat st $1 in dom p & j in dom p holds p.$1 = p.j;
+A3: P[0] by FINSEQ_3:26;
+A4: for k being Nat st P[k] holds P[k+1]
+    proof
+      let k be Nat such that
+A5:     P[k];
+      let j be Nat such that
+A6:     k+1 in dom p and
+A7:     j in dom p;
+      per cases;
+      suppose
+A8:     k in dom p;
+      hence p.(k+1) = p.k by A2,A6
+         .= p.j by A5,A7,A8;
+      suppose not k in dom p;
+then A9:   k = 0 by A6,Th1;
+defpred R[Nat] means
+ $1 in dom p implies p.$1 = p.1;
+A10:   R[0] by FINSEQ_3:26;
+A11:   for w being Nat st R[w] holds R[w+1]
+      proof
+        let w be Nat such that
+A12:       R[w];
+        assume
+A13:       w+1 in dom p;
+        per cases;
+        suppose w in dom p;
+        hence p.(w+1) = p.1 by A2,A12,A13;
+        suppose not w in dom p;
+        then w = 0 by A13,Th1;
+        hence p.(w+1) = p.1;
+      end;
+        for k being Nat holds R[k] from Ind(A10,A11);
+      hence p.(k+1) = p.j by A7,A9;
+    end;
+      for k being Nat holds P[k] from Ind(A3,A4);
+    hence p.i = p.j by A1;
+end;
+
+theorem Th3:
+   for X being set, R being Relation of X st R is_reflexive_in X
+     holds dom R = X
+     proof
+   let X being set, R being Relation of X
+      such that A1: R is_reflexive_in X;
+      for x be set st x in X ex y be set st [x,y] in R
+    proof
+    let x be set such that A2: x in X;
+    consider x1 be set such that A3: x1 = x;
+    take x1;
+    thus thesis by A1,A2,A3,RELAT_2:def 1;
+    end;
+  hence thesis by RELSET_1:22;
+    end;
+
+theorem
+     for X being set, R being Relation of X st R is_reflexive_in X
+     holds rng R = X
+     proof
+   let X be set, R be Relation of X such that A1:R is_reflexive_in X;
+      for x be set st x in X ex y be set st [y,x] in R
+    proof
+    let x be set such that A2: x in X;
+    consider x1 be set such that A3: x1 = x;
+    take x1;
+    thus thesis by A1,A2,A3,RELAT_2:def 1;
+    end;
+    hence thesis by RELSET_1:23;
+  end;
+
+theorem Th5:
+for X being set,
+    R being Relation of X st R is_reflexive_in X
+    holds R* is_reflexive_in X
+    proof
+      let X being set,
+      R being Relation of X such that A1:R is_reflexive_in X;
+        now
+        let x be set;
+        assume x in X;
+        then A2:[x,x] in R by A1,RELAT_2:def 1;
+          R c= R* by LANG1:18;
+        hence [x,x] in R* by A2;
+      end;
+      hence thesis by RELAT_2:def 1;
+    end;
+
+theorem Th6:
+  for X,x,y be set
+  for R be Relation of X st R is_reflexive_in X holds
+  R reduces x,y & x in X implies [x,y] in R*
+proof
+  let X,x,y be set;
+  let R be Relation of X such that A1: R is_reflexive_in X;
+  assume A2: R reduces x,y & x in X;
+          now per cases by A2,REWRITE1:21;
+          suppose [x,y] in R*;
+          hence [x,y] in R*;
+          suppose A3: x = y;
+            R* is_reflexive_in X by A1,Th5;
+          hence [x,y] in R* by A2,A3,RELAT_2:def 1;
+        end;
+       hence thesis;
+end;
+
+theorem Th7:
+for X being set,
+    R being Relation of X st R is_reflexive_in X & R is_symmetric_in X
+    holds R* is_symmetric_in X
+    proof
+      let X being set,
+      R being Relation of X such that
+A1:               R is_reflexive_in X & R is_symmetric_in X;
+        now
+        let x,y be set;
+        assume A2: x in X & y in X & [x,y] in R*;
+then A3:     x in field R & y in field R by LANG1:def 13;
+        consider p being FinSequence such that
+A4:             len p >= 1 & p.1 = x & p.len p = y and
+A5:     for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R
+          by A2,LANG1:def 13;
+        consider r being FinSequence such that A6: r = Rev p;
+A7:     len r >= 1 by A4,A6,FINSEQ_5:def 3;
+A8:     r.1 = y by A4,A6,FINSEQ_5:65;
+A9:     r.len r = r. len p by A6,FINSEQ_5:def 3
+               .= x by A4,A6,FINSEQ_5:65;
+          now
+          let j be Nat such that A10: j >= 1 & j < len r;
+A11:      j < len p by A6,A10,FINSEQ_5:def 3;
+            j <= len p by A6,A10,FINSEQ_5:def 3;
+          then j in Seg len p by A10,FINSEQ_1:3;
+then A12:      j in dom p by FINSEQ_1:def 3;
+A13:      j + 1 >= 1 by NAT_1:29;
+A14:      len p >= j + 1 by A11,NAT_1:38;
+          then j + 1 in Seg len p by A13,FINSEQ_1:3;
+then A15:      j + 1 in dom p by FINSEQ_1:def 3;
+            len p - j is Nat by A11,EQREL_1:1;
+          then consider j1 being Nat such that A16: j1 = len p - j;
+A17:      j1 >= 1 by A14,A16,REAL_1:84;
+            j > 0 by A10,AXIOMS:22;
+          then len p - 0 > len p - j by REAL_2:105;
+then A18: [p.(len p - j),p.((len p - j) + 1)] in R by A5,A16,A17;
+then A19:p.(len p - j) in X & p.(len p - j + 1) in X by ZFMISC_1:106;
+            (len p - (j+1)) + 1 = (len p - j - 1) + 1 by XCMPLX_1:36
+                             .= ((len p +(-j)) - 1) + 1 by XCMPLX_0:def 8
+                             .= ((len p +(-j)) +(-1)) + 1 by XCMPLX_0:def 8
+                             .= (len p + (-j)) + ((-1) + 1) by XCMPLX_1:1
+                             .= len p - j by XCMPLX_0:def 8;
+then A20:[p.(len p - j + 1),p.(len p - (j+1) + 1)] in R by A1,A18,A19,RELAT_2:
+def 3;
+       r.j = p.(len p - j + 1) by A6,A12,FINSEQ_5:61;
+          hence [r.j,r.(j+1)] in R by A6,A15,A20,FINSEQ_5:61;
+        end;
+        hence [y,x] in R* by A3,A7,A8,A9,LANG1:def 13;
+      end;
+      hence thesis by RELAT_2:def 3;
+    end;
+
+theorem Th8:
+for X being set,
+    R being Relation of X st R is_reflexive_in X
+    holds R* is_transitive_in X
+    proof
+      let X being set,
+      R being Relation of X such that A1:R is_reflexive_in X;
+        now
+        let x,y,z be set;
+        assume A2: x in X & y in X & z in X &
+                     [x,y] in R* & [y,z] in R*;
+then A3:        R reduces x,y by REWRITE1:21;
+          R reduces y,z by A2,REWRITE1:21;
+        then R reduces x,z by A3,REWRITE1:17;
+        hence [x,z] in R* by A1,A2,Th6;
+      end;
+      hence thesis by RELAT_2:def 8;
+    end;
+
+theorem Th9:
+for X being non empty set,
+    R being Relation of X st R is_reflexive_in X & R is_symmetric_in X
+holds R* is Equivalence_Relation of X
+proof
+let X being non empty set,
+    R being Relation of X such that
+A1:               R is_reflexive_in X & R is_symmetric_in X;
+ R* is_reflexive_in X by A1,Th5;
+   then
+A2:  dom(R*) = X & field(R*) = X by ORDERS_1:98;
+   then
+A3: R* is total by PARTFUN1:def 4;
+A4: R* is_symmetric_in X by A1,Th7;
+  R* is_transitive_in X by A1,Th8;
+    hence thesis by A2,A3,A4,RELAT_2:def 11,def 16;
+end;
+
+theorem Th10:
+for R1,R2 being Relation of X holds
+R1 c= R2 implies R1* c= R2*
+proof
+  let R1,R2 be Relation of X;
+  assume A1:R1 c= R2;
+    now
+    let p be set such that A2: p in R1*;
+        consider x,y being set such that
+A3:       p = [x,y] by A2,RELAT_1:def 1;
+        consider r being FinSequence such that
+A4:     len r >= 1 and
+A5:             r.1 = x & r.(len r) = y and
+A6:     for i being Nat st i >= 1 & i < len r
+        holds [r.i, r.(i+1)] in R1 by A2,A3,LANG1:def 13;
+A7:     x in field R1 & y in field R1 by A2,A3,LANG1:def 13;
+A8:   field R1 c= field R2 by A1,RELAT_1:31;
+       now
+       let i be Nat such that A9: i >= 1 & i < len r;
+         [r.i, r.(i+1)] in R1 by A6,A9;
+       hence [r.i, r.(i+1)] in R2 by A1;
+     end;
+       hence p in R2* by A3,A4,A5,A7,A8,LANG1:def 13;
+  end;
+  hence thesis by TARSKI:def 3;
+end;
+
+Lm1:
+now
+  let A;
+  let X,Y be a_partition of A;
+  assume X in {{A}} & Y in {{A}};
+  then X = {A} & Y = {A} by TARSKI:def 1;
+  hence X is_finer_than Y or Y is_finer_than X;
+end;
+
+theorem Th11:
+SmallestPartition A is_finer_than {A}
+proof
+  let X be set;
+  assume A1:X in SmallestPartition A;
+  take A;
+  thus thesis by A1,TARSKI:def 1;
+end;
+
+begin
+::The notion of classification
+
+definition let A be non empty set;
+mode Classification of A -> Subset of PARTITIONS(A) means
+:Def1:
+for X,Y being a_partition of A st X in it & Y in it holds
+X is_finer_than Y or Y is_finer_than X;
+existence
+  proof
+      {A} is a_partition of A by T_1TOPSP:7;
+    then {A} in PARTITIONS(A) by PARTIT1:def 3;
+    then reconsider S = {{A}} as Subset of PARTITIONS(A) by ZFMISC_1:37;
+    take S;
+    thus thesis by Lm1;
+  end;
+end;
+
+theorem
+  {{A}} is Classification of A
+  proof
+      {A} is a_partition of A by T_1TOPSP:7;
+    then {A} in PARTITIONS(A) by PARTIT1:def 3;
+    then reconsider S = {{A}} as Subset of PARTITIONS(A) by ZFMISC_1:37;
+      S is Classification of A
+    proof
+      let X be a_partition of A;
+      thus thesis by Lm1;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  {SmallestPartition A} is Classification of A
+proof
+  SmallestPartition A in PARTITIONS(A) by PARTIT1:def 3;
+then reconsider S = {SmallestPartition A}
+              as Subset of PARTITIONS(A) by ZFMISC_1:37;
+  S is Classification of A
+proof
+let X,Y being a_partition of A;
+assume X in S & Y in S;
+then X = SmallestPartition A & Y = SmallestPartition A by TARSKI:def 1;
+hence thesis;
+end;
+hence thesis;
+end;
+
+theorem Th14:
+for S being Subset of PARTITIONS(A) st S = {{A},SmallestPartition A}
+holds S is Classification of A
+     proof
+       let S be Subset of PARTITIONS(A);
+       assume A1:S = {{A},SmallestPartition A};
+         S is Classification of A
+       proof
+       let X,Y being a_partition of A such that
+A2:    X in S and
+A3:    Y in S;
+         now per cases by A1,A2,TARSKI:def 2;
+         suppose A4:X = {A};
+             now per cases by A1,A3,TARSKI:def 2;
+           suppose Y = {A};
+           hence X is_finer_than Y or Y is_finer_than X by A4;
+           suppose Y = SmallestPartition A;
+           hence X is_finer_than Y or Y is_finer_than X by A4,Th11;
+         end;
+       hence X is_finer_than Y or Y is_finer_than X;
+       suppose A5:X = SmallestPartition A;
+          now per cases by A1,A3,TARSKI:def 2;
+           suppose Y = SmallestPartition A;
+           hence X is_finer_than Y or Y is_finer_than X by A5;
+           suppose Y = {A};
+           hence X is_finer_than Y or Y is_finer_than X by A5,Th11;
+         end;
+       hence X is_finer_than Y or Y is_finer_than X;
+       end;
+       hence thesis;
+       end;
+       hence thesis;
+     end;
+
+definition let A be non empty set;
+mode Strong_Classification of A -> Subset of PARTITIONS(A) means
+:Def2:
+it is Classification of A & {A} in it & SmallestPartition A in it;
+existence
+   proof
+     {A} is a_partition of A by T_1TOPSP:7;
+then A1:{A} in PARTITIONS(A) by PARTIT1:def 3;
+     SmallestPartition A in PARTITIONS(A) by PARTIT1:def 3;
+   then reconsider S = {{A},SmallestPartition A}
+                        as Subset of PARTITIONS(A) by A1,ZFMISC_1:38;
+   take S;
+   thus thesis by Th14,TARSKI:def 2;
+end;
+end;
+
+theorem
+  for S being Subset of PARTITIONS(A) st S = {{A},SmallestPartition A}
+holds S is Strong_Classification of A
+proof
+  let S be Subset of PARTITIONS(A) such that A1:S = {{A},SmallestPartition A};
+A2:  S is Classification of A by A1,Th14;
+A3:  {A} in S by A1,TARSKI:def 2;
+    SmallestPartition A in S by A1,TARSKI:def 2;
+  hence thesis by A2,A3,Def2;
+end;
+
+begin
+::The tolerance on a non empty set
+
+definition let X be non empty set, f be PartFunc of [:X,X:], REAL,
+           a be real number;
+func low_toler(f,a) -> Relation of X means
+:Def3:
+for x,y being Element of X holds [x,y] in it iff f.(x,y) <= a;
+existence
+  proof
+    defpred X[Element of X,Element of X] means f.($1,$2) <= a;
+    consider R being Relation of X,X such that
+A1: for x, y being Element of X
+    holds [x,y] in R iff X[x,y] from Rel_On_Dom_Ex;
+    take R;
+    thus thesis by A1;
+  end;
+uniqueness
+  proof
+    let R1, R2 be Relation of X such that
+A2:for x,y being Element of X holds [x,y] in R1 iff f.(x,y) <= a
+ and
+A3:for x,y being Element of X holds [x,y] in R2 iff f.(x,y) <= a;
+     for c,d be set holds [c,d] in R1 iff [c,d] in R2
+   proof
+A4:for c,d be set holds [c,d] in R1 implies [c,d] in R2
+     proof
+       let c,d be set;
+       assume A5: [c,d] in R1;
+       then reconsider c1 = c , d1 = d as Element of X
+               by ZFMISC_1:106;
+         f.(c1,d1) <= a by A2,A5;
+       hence [c,d] in R2 by A3;
+     end;
+     for c,d be set holds [c,d] in R2 implies [c,d] in R1
+     proof
+       let c,d be set;
+       assume A6: [c,d] in R2;
+       then reconsider c1 = c , d1 = d as Element of X
+               by ZFMISC_1:106;
+         f.(c1,d1) <= a by A3,A6;
+       hence [c,d] in R1 by A2;
+     end;
+     hence thesis by A4;
+   end;
+   hence thesis by RELAT_1:def 2;
+  end;
+end;
+
+theorem Th16:
+  f is Reflexive & a >= 0 implies low_toler(f,a) is_reflexive_in X
+  proof
+    assume A1:  f is Reflexive & a >= 0;
+      now
+      let x be set such that A2:x in X;
+      reconsider x1 = x as Element of X by A2;
+        f.(x1,x1) <= a by A1,METRIC_1:def 3;
+      hence [x,x] in low_toler(f,a) by Def3;
+     end;
+    hence thesis by RELAT_2:def 1;
+  end;
+
+theorem Th17:
+  f is symmetric implies low_toler(f,a) is_symmetric_in X
+  proof
+    assume A1: f is symmetric;
+      now
+      let x,y be set such that
+A2:       x in X & y in X & [x,y] in low_toler(f,a);
+      reconsider x1 = x, y1 = y as Element of X by A2;
+        f.(x1,y1) <= a by A2,Def3;
+      then f.(y1,x1) <= a by A1,METRIC_1:def 5;
+      hence [y,x] in low_toler(f,a) by Def3;
+    end;
+    hence thesis by RELAT_2:def 3;
+  end;
+
+theorem Th18:
+a >= 0 & f is Reflexive symmetric implies low_toler(f,a) is Tolerance of X
+proof
+ set T = low_toler(f,a);
+ assume
+A1: a >= 0 & f is Reflexive symmetric;
+then A2: low_toler(f,a) is_reflexive_in X by Th16;
+A3: dom T = X  by A2,Th3;
+   then
+A4: field T = X \/ (rng low_toler(f,a)) by RELAT_1:def 6
+           .= X by XBOOLE_1:12;
+then A5:  T is reflexive by A2,RELAT_2:def 9;
+A6:  T is total by A3,PARTFUN1:def 4;
+    T is_symmetric_in field T by A1,A4,Th17;
+  then T is symmetric by RELAT_2:def 11;
+  hence thesis by A5,A6;
+end;
+
+theorem Th19:
+for X being non empty set,
+    f being PartFunc of [:X,X:], REAL,
+    a1,a2 be real number st a1 <= a2 holds
+    low_toler(f,a1) c= low_toler(f,a2)
+    proof
+      let X be non empty set,
+          f be PartFunc of [:X,X:], REAL,
+      a1,a2 be real number such that A1: a1 <= a2;
+        now
+        let p being set such that A2:p in low_toler(f,a1);
+        consider x,y being set such that
+A3:         x in X & y in X & p = [x,y]
+                    by A2,ZFMISC_1:def 2;
+        reconsider x1 = x, y1 = y as Element of X by A3;
+          f.(x1,y1) <= a1 by A2,A3,Def3;
+        then f.(x1,y1) <= a2 by A1,AXIOMS:22;
+        hence p in low_toler(f,a2) by A3,Def3;
+      end;
+      hence thesis by TARSKI:def 3;
+    end;
+
+definition let X be set; let f be PartFunc of [:X,X:], REAL;
+  attr f is nonnegative means
+:Def4:
+   for x,y being Element of X holds f.(x,y) >= 0;
+end;
+
+theorem Th20:
+for X being non empty set,
+    f being PartFunc of [:X,X:],REAL,
+    x,y being set st f is nonnegative Reflexive discerning holds
+   [x,y] in low_toler(f,0) implies x = y
+  proof
+    let X be non empty set,
+        f be PartFunc of [:X,X:],REAL,
+        x,y be set such that A1:f is nonnegative Reflexive discerning;
+     assume A2: [x,y] in low_toler(f,0);
+     then reconsider x1 = x, y1 = y as Element of X by ZFMISC_1:106;
+  f.(x1,y1) <= 0 by A2,Def3;
+     then f.(x1,y1) = 0 by A1,Def4;
+     hence x = y by A1,METRIC_1:def 4;
+  end;
+
+theorem Th21:
+for X being non empty set,
+    f being PartFunc of [:X,X:],REAL,
+    x being Element of X st f is Reflexive discerning holds
+    [x,x] in low_toler(f,0)
+  proof
+    let X be non empty set,
+        f be PartFunc of [:X,X:],REAL,
+        x be Element of X;
+    assume f is Reflexive discerning;
+    then f.(x,x) = 0 by METRIC_1:def 3;
+    hence [x,x] in low_toler(f,0) by Def3;
+  end;
+
+theorem Th22:
+for X being non empty set,
+    f being PartFunc of [:X,X:],REAL,
+    a being real number st low_toler(f,a) is_reflexive_in X & f is symmetric
+holds low_toler(f,a)* is Equivalence_Relation of X
+proof
+  let X be non empty set,
+      f be PartFunc of [:X,X:],REAL,
+      a be real number such that
+A1:low_toler(f,a) is_reflexive_in X & f is symmetric;
+     now
+     let x,y be set such that
+A2:  x in X & y in X & [x,y] in low_toler(f,a);
+     reconsider x1 = x , y1 = y as Element of X by A2;
+       f.(x1,y1) <= a by A2,Def3;
+     then f.(y1,x1) <= a by A1,METRIC_1:def 5;
+     hence [y,x] in low_toler(f,a) by Def3;
+   end;
+   then low_toler(f,a) is_symmetric_in X by RELAT_2:def 3;
+  hence thesis by A1,Th9;
+end;
+
+Lm2:
+for x be set,
+    X being non empty set,
+    a1,a2 being non negative (real number) st a1 <= a2
+for f being PartFunc of [:X,X:],REAL,
+    R1,R2 being Equivalence_Relation of X
+                  st R1 = low_toler(f,a1)* & R2 = low_toler(f,a2)*
+    holds Class(R1,x) c= Class(R2,x)
+    proof
+    let x be set,
+        X be non empty set,
+        a1,a2 be non negative (real number) such that
+            A1: a1 <= a2;
+    let f be PartFunc of [:X,X:],REAL,
+        R1,R2 being Equivalence_Relation of X
+            such that A2: R1 = low_toler(f,a1)* & R2 = low_toler(f,a2)*;
+      now
+      let z1 be set such that A3: z1 in Class(R1,x);
+        low_toler(f,a1) c= low_toler(f,a2) by A1,Th19;
+then A4:   R1 c= R2 by A2,Th10;
+        [z1,x] in R1 by A3,EQREL_1:27;
+      hence z1 in Class(R2,x) by A4,EQREL_1:27;
+    end;
+    hence thesis by TARSKI:def 3;
+    end;
+
+begin
+::The partitions defined by lower tolerance
+
+theorem Th23:
+for X being non empty set,
+    f being PartFunc of [:X,X:],REAL st
+    f is nonnegative Reflexive discerning holds
+    low_toler(f,0)* = low_toler(f,0)
+proof
+  let X be non empty set,
+      f be PartFunc of [:X,X:],REAL
+      such that A1:f is nonnegative Reflexive discerning;
+A2:  low_toler(f,0) c= low_toler(f,0)* by LANG1:18;
+      now
+      let p be set such that A3: p in low_toler(f,0)*;
+      consider x,y being set such that A4: p = [x,y] by A3,RELAT_1:def 1;
+        low_toler(f,0) reduces x,y by A3,A4,REWRITE1:21;
+      then consider r being RedSequence of low_toler(f,0) such that
+A5:         r.1 = x & r.len r = y by REWRITE1:def 3;
+        0 < len r by REWRITE1:def 2;
+      then 0+1 <= len r by NAT_1:38;
+then A6:   1 in dom r & len r in dom r by FINSEQ_3:27;
+        now
+        let i be Nat such that A7:i in dom r & i+1 in dom r;
+          [r.i,r.(i+1)] in low_toler(f,0) by A7,REWRITE1:def 2;
+        hence r.i = r.(i+1) by A1,Th20;
+      end;
+then A8:  r.1 = r. len r by A6,Th2;
+        x is Element of X by A3,A4,ZFMISC_1:106;
+      hence p in low_toler(f,0) by A1,A4,A5,A8,Th21;
+    end;
+  then low_toler(f,0)* c= low_toler(f,0) by TARSKI:def 3;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th24:
+for X being non empty set,
+    f being PartFunc of [:X,X:],REAL,
+    R being Equivalence_Relation of X
+     st R = low_toler(f,0)* & f is nonnegative Reflexive discerning holds
+    R = id X
+proof
+let X be non empty set,
+    f be PartFunc of [:X,X:],REAL,
+    R be Equivalence_Relation of X
+     such that A1: R = low_toler(f,0)*
+ & f is nonnegative Reflexive discerning;
+A2:  for x,y being set holds ([x,y] in low_toler(f,0)* implies
+           x in X & x = y)
+      proof
+        let x,y being set;
+        assume [x,y] in low_toler(f,0)*;
+then [x,y] in low_toler(f,0) by A1,Th23;
+        hence thesis by A1,Th20,ZFMISC_1:106;
+      end;
+    for x,y being set holds
+         (x in X & x = y implies [x,y] in low_toler(f,0)*)
+       proof
+         let x,y be set;
+         assume x in X & x = y;
+         then [x,y] in low_toler(f,0) by A1,Th21;
+         hence [x,y] in low_toler(f,0)* by A1,Th23;
+       end;
+hence thesis by A1,A2,RELAT_1:def 10;
+end;
+
+theorem Th25:
+for X being non empty set,
+    f being PartFunc of [:X,X:],REAL,
+    R being Equivalence_Relation of X
+     st R = low_toler(f,0)* & f is nonnegative Reflexive discerning holds
+    Class R = SmallestPartition X
+   proof
+     let X be non empty set,
+         f be PartFunc of [:X,X:],REAL,
+         R be Equivalence_Relation of X
+         such that A1: R = low_toler(f,0)* &
+         f is nonnegative Reflexive discerning;
+           R = id X by A1,Th24;
+         hence thesis by PUA2MSS1:def 2;
+   end;
+
+theorem Th26:
+  for X being finite non empty Subset of REAL,
+      f being Function of [:X,X:],REAL,
+      z being finite non empty Subset of REAL,
+      A being real number st z = rng f & A >= max z holds
+    (for x,y being Element of X holds f.(x,y) <= A)
+proof
+  let X be finite non empty Subset of REAL,
+      f be Function of [:X,X:],REAL,
+      z be finite non empty Subset of REAL,
+      A be real number such that A1: z = rng f & A >= max z;
+      now
+    let x,y be Element of X;
+A2: dom f = [:X,X:] by FUNCT_2:def 1;
+A3: f.[x,y] = f.(x,y) by BINOP_1:def 1;
+    then reconsider c = f.[x,y] as real number;
+      [x,y] in dom f by A2,ZFMISC_1:def 2;
+    then c in z by A1,FUNCT_1:def 5;
+    then f.(x,y) <= max z by A3,PRE_CIRC:def 1;
+    hence f.(x,y) <= A by A1,AXIOMS:22;
+    end;
+    hence thesis;
+end;
+
+theorem Th27:
+  for X being finite non empty Subset of REAL,
+      f being Function of [:X,X:],REAL,
+      z being finite non empty Subset of REAL,
+      A being real number st z = rng f & A >= max z holds
+    (for R being Equivalence_Relation of X st R = low_toler(f,A)*
+           holds Class R = {X})
+proof
+  let X be finite non empty Subset of REAL,
+      f be Function of [:X,X:],REAL,
+      z be finite non empty Subset of REAL,
+      A be real number such that A1: z = rng f & A >= max z;
+    now
+      let R being Equivalence_Relation of X such that A2: R = low_toler(f,A)*;
+A3: for x being set st x in X holds X = Class(R,x)
+     proof
+       let x be set such that A4:x in X;
+        reconsider x' = x as Element of X by A4;
+          now
+          let x1 be set;
+          assume x1 in X;
+          then reconsider x1' = x1 as Element of X;
+            f.(x1',x') <= A by A1,Th26;
+then A5:       [x1,x] in low_toler(f,A) by Def3;
+            low_toler(f,A) c= low_toler(f,A)* by LANG1:18;
+          hence x1 in Class(R,x) by A2,A5,EQREL_1:27;
+        end;
+then X c= Class(R,x) by TARSKI:def 3;
+        hence thesis by XBOOLE_0:def 10;
+     end;
+        now
+        let a be set such that A6:a in {X};
+A7:     a = X by A6,TARSKI:def 1;
+        consider x be set such that A8: x in X by XBOOLE_0:def 1;
+          X = Class(R,x) by A3,A8;
+        hence a in Class R by A7,A8,EQREL_1:def 5;
+      end;
+then A9:   {X} c= Class R by TARSKI:def 3;
+        now
+      let a be set such that A10: a in Class R;
+      consider x being set such that
+A11:  x in X & a = Class(R,x) by A10,EQREL_1:def 5;
+        a = X by A3,A11;
+      hence a in {X} by TARSKI:def 1;
+      end;
+      then Class R c= {X} by TARSKI:def 3;
+      hence Class R = {X} by A9,XBOOLE_0:def 10;
+  end;
+  hence thesis;
+end;
+
+theorem
+    for X being finite non empty Subset of REAL,
+      f being Function of [:X,X:],REAL,
+      z being finite non empty Subset of REAL,
+      A being real number st z = rng f &
+                       A >= max z holds low_toler(f,A)* = low_toler(f,A)
+proof
+  let X be finite non empty Subset of REAL,
+      f be Function of [:X,X:],REAL,
+      z be finite non empty Subset of REAL,
+      A be real number such that A1: z = rng f & A >= max z;
+A2:   low_toler(f,A) c= low_toler(f,A)* by LANG1:18;
+    now
+    let p be set such that A3: p in low_toler(f,A)*;
+    consider x,y being set such that
+A4:    x in X & y in X & p = [x,y] by A3,ZFMISC_1:def 2;
+  reconsider x' = x, y' = y as Element of X by A4;
+    f.(x',y') <= A by A1,Th26;
+  hence p in low_toler(f,A) by A4,Def3;
+  end;
+  then low_toler(f,A)* c= low_toler(f,A) by TARSKI:def 3;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+begin
+::The classification on a non empty set
+
+definition let X be non empty set,
+           f being PartFunc of [:X,X:],REAL;
+func fam_class(f) -> Subset of PARTITIONS(X) means
+:Def5:
+ for x being set holds x in it iff
+ ex a being non negative (real number),R be Equivalence_Relation of X st
+    R = low_toler(f,a)* & Class(R) = x;
+existence
+   proof
+     defpred X[set] means ex a being non negative (real number),
+                R being Equivalence_Relation of X
+                st R = low_toler(f,a)* & Class(R) = $1;
+     consider A be set such that
+A1:    for x being set holds
+       x in A iff x in PARTITIONS(X) & X[x] from Separation;
+     A c= PARTITIONS(X)
+   proof
+     let a be set;
+     assume a in A;
+     hence thesis by A1;
+   end;
+   then reconsider A1 = A as Subset of PARTITIONS(X);
+   take A1;
+   let x be set;
+   thus x in A1 implies
+   ex a being non negative (real number),R be Equivalence_Relation of X st
+      R = low_toler(f,a)* & Class(R) = x by A1;
+   given a being non negative (real number),
+         R be Equivalence_Relation of X such that
+A2:         R = low_toler(f,a)* & Class(R) = x;
+     Class R is a_partition of X by EQREL_1:42;
+   then Class(R) in PARTITIONS(X) by PARTIT1:def 3;
+   hence thesis by A1,A2;
+end;
+uniqueness
+ proof
+   defpred X[set] means
+    ex a being non negative (real number),R be Equivalence_Relation of X st
+     R = low_toler(f,a)* & Class(R) = $1;
+  let X1,X2 be Element of bool PARTITIONS X such that
+A3: (for x being set holds x in X1 iff
+ ex a being non negative (real number),R be Equivalence_Relation of X st
+    R = low_toler(f,a)* & Class(R) = x) &
+  (for x being set holds x in X2 iff
+ ex a being non negative (real number),R be Equivalence_Relation of X st
+    R = low_toler(f,a)* & Class(R) = x);
+
+A4: for X1,X2 being Element of bool PARTITIONS X st
+   (for x being set holds x in X1 iff X[x]) &
+  (for x being set holds x in X2 iff X[x])
+  holds X1 = X2 from ElementEq;
+  thus X1 = X2 by A3,A4;
+ end;
+end;
+
+theorem
+  for X being non empty set,
+    f being PartFunc of [:X,X:],REAL,
+    a being non negative (real number)
+    st low_toler(f,a) is_reflexive_in X & f is symmetric holds
+fam_class(f) is non empty set
+proof
+  let X being non empty set,
+      f be PartFunc of [:X,X:],REAL,
+      a being non negative (real number)
+      such that A1: low_toler(f,a) is_reflexive_in X & f is symmetric;
+  reconsider R = low_toler(f,a)* as Equivalence_Relation of X by A1,Th22;
+  reconsider x = Class(R) as set;
+    x in fam_class(f) by Def5;
+  hence thesis;
+end;
+
+theorem Th30:
+  for X being finite non empty Subset of REAL,
+      f being Function of [:X,X:],REAL st f is symmetric nonnegative
+      holds {X} in fam_class(f)
+proof
+  let X be finite non empty Subset of REAL,
+      f be Function of [:X,X:],REAL such that
+A1: f is symmetric nonnegative;
+      dom f = [:X,X:] by FUNCT_2:def 1;
+    then reconsider rn = rng f as finite non empty Subset of REAL
+                        by FINSET_1:26,RELAT_1:65;
+    reconsider A1 = max rn as real number;
+      now
+      assume A2: A1 is negative;
+      consider x being Element of X;
+   f.(x,x) <= A1 by Th26;
+      hence contradiction by A1,A2,Def4;
+    end;
+    then reconsider A1' = A1 as non negative (real number);
+      now
+      let x be set; assume x in X;
+      then reconsider x1 = x as Element of X;
+        f.(x1,x1) <= A1 by Th26;
+      hence [x,x] in low_toler(f,A1) by Def3;
+    end;
+    then low_toler(f,A1') is_reflexive_in X by RELAT_2:def 1;
+    then reconsider R = low_toler(f,A1')* as Equivalence_Relation of X by A1,
+Th22;
+      Class R in fam_class(f) by Def5;
+    hence thesis by Th27;
+end;
+
+theorem Th31:
+for X being non empty set,
+    f being PartFunc of [:X,X:],REAL
+    holds fam_class(f) is Classification of X
+proof
+let X be non empty set,f being PartFunc of [:X,X:],REAL;
+  for A,B being a_partition of X st
+A in fam_class(f) & B in fam_class(f) holds
+A is_finer_than B or B is_finer_than A
+proof
+let A,B being a_partition of X;
+assume A1: A in fam_class(f) & B in fam_class(f);
+ then consider a1 being non negative (real number),
+          R1 being Equivalence_Relation of X such that
+A2:R1 = low_toler(f,a1)* and
+A3: Class R1 = A by Def5;
+ consider a2 being non negative (real number),
+          R2 being Equivalence_Relation of X such that
+A4:R2 = low_toler(f,a2)* and
+A5: Class R2 = B by A1,Def5;
+       now per cases;
+     suppose A6: a1 <= a2;
+         now
+         let x being set such that A7:x in A;
+         consider c being set such that
+ A8:     c in X & x = Class(R1,c)
+                          by A3,A7,EQREL_1:def 5;
+         consider y being set such that A9: y = Class(R2,c);
+         take y;
+         thus y in B by A5,A8,A9,EQREL_1:def 5;
+         thus x c= y by A2,A4,A6,A8,A9,Lm2;
+       end;
+     hence A is_finer_than B or B is_finer_than A by SETFAM_1:def 2;
+     suppose A10: a1 > a2;
+         now
+         let y being set such that A11:y in B;
+         consider c being set such that
+A12:      c in X & y = Class(R2,c) by A5,A11,EQREL_1:def 5;
+         consider x being set such that A13: x = Class(R1,c);
+         take x;
+         thus x in A by A3,A12,A13,EQREL_1:def 5;
+         thus y c= x by A2,A4,A10,A12,A13,Lm2;
+       end;
+     hence A is_finer_than B or B is_finer_than A by SETFAM_1:def 2;
+     end;
+hence A is_finer_than B or B is_finer_than A;
+end;
+hence thesis by Def1;
+end;
+
+theorem
+    for X being finite non empty Subset of REAL,
+      f being Function of [:X,X:],REAL st
+      (SmallestPartition X) in fam_class(f) & f is symmetric nonnegative holds
+      fam_class(f) is Strong_Classification of X
+proof
+  let X be finite non empty Subset of REAL,
+      f be Function of [:X,X:],REAL such that
+A1:      (SmallestPartition X) in fam_class(f) & f is symmetric nonnegative;
+A2:  {X} in fam_class(f) by A1,Th30;
+    fam_class(f) is Classification of X by Th31;
+  hence thesis by A1,A2,Def2;
+end;
+
+begin
+::The classification on a metric space
+
+definition
+let M be MetrStruct,a be real number, x,y be Element of M;
+pred x,y are_in_tolerance_wrt a means
+:Def6:
+dist(x,y) <= a;
+end;
+
+definition
+let M be non empty MetrStruct, a be real number;
+func dist_toler(M,a) -> Relation of M means
+:Def7:
+for x,y being Element of M holds [x,y] in it iff
+x,y are_in_tolerance_wrt a;
+existence
+  proof
+    defpred X[Element of M,Element of M]
+         means $1,$2 are_in_tolerance_wrt a;
+   consider R being Relation of the carrier of M, the carrier of M such that
+A1: for x, y being Element of M
+    holds [x,y] in R iff X[x,y] from Rel_On_Dom_Ex;
+    reconsider R as Relation of M;
+    take R;
+    thus thesis by A1;
+  end;
+uniqueness
+  proof
+    let A, B be Relation of M such that
+A2:for x,y being Element of M holds [x,y] in A iff
+x,y are_in_tolerance_wrt a and
+A3:for x,y being Element of M holds [x,y] in B iff
+x,y are_in_tolerance_wrt a;
+     for c,d be set holds [c,d] in A iff [c,d] in B
+   proof
+A4:for c,d be set holds [c,d] in A implies [c,d] in B
+     proof
+       let c,d be set;
+       assume A5: [c,d] in A;
+       then reconsider c1 = c , d1 = d as Element of M
+               by ZFMISC_1:106;
+         c1,d1 are_in_tolerance_wrt a by A2,A5;
+       hence [c,d] in B by A3;
+     end;
+     for c,d be set holds [c,d] in B implies [c,d] in A
+     proof
+       let c,d be set;
+       assume A6: [c,d] in B;
+       then reconsider c1 = c , d1 = d as Element of M
+               by ZFMISC_1:106;
+         c1,d1 are_in_tolerance_wrt a by A3,A6;
+       hence [c,d] in A by A2;
+     end;
+     hence thesis by A4;
+   end;
+   hence thesis by RELAT_1:def 2;
+  end;
+end;
+
+theorem Th33:
+for M being non empty MetrStruct,
+    a being real number
+    holds dist_toler(M,a) = low_toler(the distance of M,a)
+    proof
+      let M being non empty MetrStruct,
+      a being real number;
+        now
+        let z be set such that A1: z in dist_toler(M,a);
+        consider x,y being set such that
+A2:         x in the carrier of M & y in the carrier of M & z = [x,y]
+                    by A1,ZFMISC_1:def 2;
+        reconsider x1 = x, y1 = y as Element of M by A2;
+A3:     (the distance of M).(x1,y1) = dist(x1,y1) by METRIC_1:def 1;
+          x1,y1 are_in_tolerance_wrt a by A1,A2,Def7;
+        then (the distance of M).(x1,y1) <= a by A3,Def6;
+        hence z in low_toler(the distance of M,a) by A2,Def3;
+      end;
+then A4:   dist_toler(M,a) c= low_toler(the distance of M,a) by TARSKI:def 3;
+        now
+        let z be set such that A5: z in low_toler(the distance of M,a);
+        consider x,y being set such that
+A6:         x in the carrier of M & y in the carrier of M & z = [x,y]
+                    by A5,ZFMISC_1:def 2;
+        reconsider x1 = x, y1 = y as Element of M by A6;
+      dist(x1,y1) = (the distance of M).(x1,y1) by METRIC_1:def 1;
+        then dist(x1,y1) <= a by A5,A6,Def3;
+        then x1,y1 are_in_tolerance_wrt a by Def6;
+        hence z in dist_toler(M,a) by A6,Def7;
+      end;
+      then low_toler(the distance of M,a) c= dist_toler(M,a) by TARSKI:def 3;
+      hence thesis by A4,XBOOLE_0:def 10;
+    end;
+
+theorem
+  for M being non empty Reflexive symmetric MetrStruct, a being real number,
+    T being Relation of the carrier of M,the carrier of M
+      st T = dist_toler(M,a) & a >= 0 holds T is Tolerance of the carrier of M
+proof
+  let M being non empty Reflexive symmetric MetrStruct, a being real number,
+  T being Relation of the carrier of M,the carrier of M
+  such that
+A1:  T = dist_toler(M,a) & a >= 0;
+A2: the distance of M is symmetric by METRIC_1:def 9;
+A3: the distance of M is Reflexive by METRIC_1:def 7;
+       T = low_toler(the distance of M,a) by A1,Th33;
+     hence thesis by A1,A2,A3,Th18;
+end;
+
+definition let M be Reflexive symmetric non empty MetrStruct;
+func fam_class_metr(M) -> Subset of PARTITIONS(the carrier of M) means
+:Def8:
+ for x being set holds x in it iff
+ ex a being non negative (real number),R be Equivalence_Relation of M st
+    R = dist_toler(M,a)* & Class(R) = x;
+existence
+   proof
+     defpred X[set] means ex a being non negative (real number),
+                R being Equivalence_Relation of M
+                st R = dist_toler(M,a)* & Class(R) = $1;
+     consider X be set such that
+A1:    for x being set holds
+       x in X iff x in PARTITIONS(the carrier of M)
+           & X[x] from Separation;
+     X c= PARTITIONS(the carrier of M)
+   proof
+     let a be set;
+     assume a in X;
+     hence thesis by A1;
+   end;
+   then reconsider X1 = X as Subset of PARTITIONS(the carrier of M);
+   take X1;
+   let x be set;
+   thus x in X1 implies
+   ex a being non negative (real number),R be Equivalence_Relation of M st
+    R = dist_toler(M,a)* & Class(R) = x by A1;
+   given a being non negative (real number),
+         R be Equivalence_Relation of M such that
+A2:  R = dist_toler(M,a)* & Class(R) = x;
+     Class R is a_partition of the carrier of M by EQREL_1:42;
+   then Class(R) in PARTITIONS(the carrier of M) by PARTIT1:def 3;
+   hence thesis by A1,A2;
+end;
+uniqueness
+ proof
+   defpred X[set] means
+     ex a being non negative (real number),R be Equivalence_Relation of M st
+      R = dist_toler(M,a)* & Class(R) = $1;
+  let X1,X2 be Element of bool PARTITIONS the carrier of M such that
+A3: (for x being set holds x in X1 iff
+ ex a being non negative (real number),R be Equivalence_Relation of M st
+    R = dist_toler(M,a)* & Class(R) = x) &
+  (for x being set holds x in X2 iff
+ ex a being non negative (real number),R be Equivalence_Relation of M st
+    R = dist_toler(M,a)* & Class(R) = x);
+A4: for X1,X2 being Element of bool PARTITIONS the carrier of M st
+   (for x being set holds x in X1 iff X[x]) &
+  (for x being set holds x in X2 iff X[x])
+  holds X1 = X2 from ElementEq;
+  thus X1 = X2 by A3,A4;
+ end;
+end;
+
+theorem Th35:
+for M being Reflexive symmetric non empty MetrStruct
+    holds fam_class_metr(M) = fam_class(the distance of M)
+    proof
+      let M be Reflexive symmetric non empty MetrStruct;
+        now
+        let z be set such that A1: z in fam_class_metr(M);
+        consider a being non negative (real number),
+                 R be Equivalence_Relation of M such that
+A2:              R = dist_toler(M,a)* & Class(R) = z by A1,Def8;
+          R = low_toler(the distance of M,a)* by A2,Th33;
+        hence z in fam_class(the distance of M) by A2,Def5;
+      end;
+then A3:   fam_class_metr(M) c= fam_class(the distance of M) by TARSKI:def 3;
+        now
+        let z be set such that A4: z in fam_class(the distance of M);
+        consider a being non negative (real number),
+                 R be Equivalence_Relation of the carrier of M such that
+A5:              R = low_toler(the distance of M,a)*
+ & Class(R) = z by A4,Def5;
+        reconsider R1 = R as Equivalence_Relation of M;
+          R1 = dist_toler(M,a)* by A5,Th33;
+        hence z in fam_class_metr(M) by A5,Def8;
+      end;
+      then fam_class(the distance of M) c= fam_class_metr(M) by TARSKI:def 3;
+      hence thesis by A3,XBOOLE_0:def 10;
+    end;
+
+theorem Th36:
+for M being non empty MetrSpace
+for R being Equivalence_Relation of M st R = dist_toler(M,0)*
+ holds Class R = SmallestPartition the carrier of M
+ proof
+   let M being non empty MetrSpace;
+   let R being Equivalence_Relation of M such that A1: R = dist_toler(M,0)*;
+     now
+     let x,y be Element of M;
+       dist(x,y) >= 0 by METRIC_1:5;
+     hence (the distance of M).(x,y) >= 0 by METRIC_1:def 1;
+   end;
+then A2:   the distance of M is nonnegative by Def4;
+A3:  the distance of M is Reflexive discerning by METRIC_1:def 7,def 8;
+     low_toler(the distance of M,0)* = R by A1,Th33;
+   hence thesis by A2,A3,Th25;
+ end;
+
+theorem Th37:
+for M being Reflexive symmetric bounded (non empty MetrStruct)
+st a >= diameter [#]M holds dist_toler(M,a) = nabla the carrier of M
+proof
+  let M be Reflexive symmetric bounded (non empty MetrStruct)
+  such that A1: a >= diameter [#]M;
+    dist_toler(M,a) c= [:the carrier of M, the carrier of M:];
+  then A2: dist_toler(M,a) c= nabla the carrier of M by EQREL_1:def 1;
+    now
+   let z be set such that A3: z in nabla the carrier of M;
+   consider x,y being set such that
+A4:x in the carrier of M & y in the carrier of M and
+A5:z = [x,y] by A3,ZFMISC_1:def 2;
+   reconsider x1=x, y1=y as Element of M by A4;
+A6:x1 in [#]M by A4,PRE_TOPC:12;
+     y1 in [#]M by A4,PRE_TOPC:12;
+   then dist(x1,y1) <= diameter [#]M by A6,TBSP_1:def 10;
+   then dist(x1,y1) <= a by A1,AXIOMS:22;
+   then x1, y1 are_in_tolerance_wrt a by Def6;
+   hence z in dist_toler(M,a) by A5,Def7;
+  end;
+  then nabla the carrier of M c= dist_toler(M,a) by TARSKI:def 3;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th38:
+for M being Reflexive symmetric bounded (non empty MetrStruct)
+st a >= diameter [#]M holds dist_toler(M,a) = dist_toler(M,a)*
+proof
+  let M be Reflexive symmetric bounded (non empty MetrStruct)
+  such that A1: a >= diameter [#]M;
+A2:dist_toler(M,a) c= dist_toler(M,a)* by LANG1:18;
+    dist_toler(M,a)* c= [:the carrier of M, the carrier of M:];
+  then dist_toler(M,a)* c= nabla the carrier of M by EQREL_1:def 1;
+  then dist_toler(M,a)* c= dist_toler(M,a) by A1,Th37;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th39:
+for M being Reflexive symmetric bounded (non empty MetrStruct)
+st a >= diameter [#]M holds dist_toler(M,a)* = nabla the carrier of M
+proof
+  let M be Reflexive symmetric bounded (non empty MetrStruct)
+  such that A1: a >= diameter [#]M;
+    dist_toler(M,a) = dist_toler(M,a)* by A1,Th38;
+  hence thesis by A1,Th37;
+end;
+
+theorem Th40:
+for M being Reflexive symmetric bounded (non empty MetrStruct),
+R being Equivalence_Relation of M, a being non negative (real number)
+st a >= diameter [#]M & R = dist_toler(M,a)*
+ holds Class R = {the carrier of M}
+proof
+  let M be Reflexive symmetric bounded (non empty MetrStruct),
+      R be Equivalence_Relation of M, a be non negative (real number)
+      such that A1: a >= diameter [#]M & R = dist_toler(M,a)*;
+    Class(nabla the carrier of M) = {the carrier of M} by MSUALG_9:5;
+  hence thesis by A1,Th39;
+end;
+
+definition let M be Reflexive symmetric triangle (non empty MetrStruct),
+               C be non empty bounded Subset of M;
+cluster diameter C -> non negative;
+coherence by TBSP_1:29;
+end;
+
+theorem Th41:
+for M being bounded (non empty MetrSpace)
+      holds {the carrier of M} in fam_class_metr(M)
+    proof
+      let M be bounded (non empty MetrSpace);
+      set a = diameter [#]M;
+        the distance of M is Reflexive by METRIC_1:def 7;
+   then low_toler(the distance of M,a) is_reflexive_in the carrier of M
+                by Th16;
+then A1:   dist_toler(M,a) is_reflexive_in the carrier of M by Th33;
+        the distance of M is symmetric by METRIC_1:def 9;
+      then low_toler(the distance of M,a) is_symmetric_in the carrier of M
+                by Th17;
+      then dist_toler(M,a) is_symmetric_in the carrier of M by Th33;
+      then dist_toler(M,a)* is Equivalence_Relation of the carrier of M
+              by A1,Th9;
+      then reconsider R = dist_toler(M,a)* as Equivalence_Relation of M;
+        Class R = {the carrier of M} by Th40;
+      hence thesis by Def8;
+    end;
+
+theorem Th42:
+for M being Reflexive symmetric non empty MetrStruct
+    holds fam_class_metr(M) is Classification of the carrier of M
+    proof
+      let M being Reflexive symmetric non empty MetrStruct;
+     fam_class_metr(M) = fam_class(the distance of M) by Th35;
+      hence thesis by Th31;
+    end;
+
+theorem
+  for M being bounded (non empty MetrSpace) holds
+fam_class_metr(M) is Strong_Classification of the carrier of M
+proof
+let M being bounded (non empty MetrSpace);
+A1: fam_class_metr(M) is Classification of the carrier of M by Th42;
+A2: {the carrier of M} in fam_class_metr(M) by Th41;
+reconsider a = 0 as non negative (real number);
+  the distance of M is Reflexive by METRIC_1:def 7;
+then low_toler(the distance of M,a) is_reflexive_in the carrier of M by Th16;
+then A3: dist_toler(M,a) is_reflexive_in the carrier of M by Th33;
+  the distance of M is symmetric by METRIC_1:def 9;
+then low_toler(the distance of M,a) is_symmetric_in the carrier of M by Th17;
+     then dist_toler(M,a) is_symmetric_in the carrier of M by Th33;
+     then dist_toler(M,a)* is Equivalence_Relation of the carrier of M
+          by A3,Th9;
+then reconsider R = dist_toler(M,a)* as Equivalence_Relation of M;
+  Class R in fam_class_metr(M) by Def8;
+then SmallestPartition (the carrier of M) in fam_class_metr(M) by Th36;
+hence thesis by A1,A2,Def2;
+end;

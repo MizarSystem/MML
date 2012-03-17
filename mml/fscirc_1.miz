@@ -1,0 +1,821 @@
+:: Full Subtracter Circuit. Part { I }
+::  by Katsumi Wasaki and Noboru Endou
+::
+:: Received March 13, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, FINSEQ_1, BOOLE, MSAFREE2, FACIRC_1, BINARITH,
+      LATTICES, CIRCCOMB, CIRCUIT1, AMI_1, MSUALG_1, TWOSCOMP, FUNCT_4,
+      PARTFUN1, MARGREL1, ZF_LANG, CIRCUIT2, FSCIRC_1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, RELAT_1, FUNCT_1, STRUCT_0,
+      MARGREL1, NAT_1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB,
+      TWOSCOMP, FACIRC_1, BINARITH;
+ constructors BINARITH, CIRCUIT1, CIRCUIT2, ENUMSET1, FACIRC_1, TWOSCOMP;
+ clusters STRUCT_0, RELSET_1, MSUALG_1, PRE_CIRC, CIRCCOMB, FACIRC_1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions CIRCUIT2, FACIRC_1;
+ theorems TARSKI, ENUMSET1, RELAT_1, FUNCT_1, FINSEQ_2, MSAFREE2, CIRCUIT1,
+      CIRCUIT2, CIRCCOMB, FACIRC_1, TWOSCOMP, XBOOLE_0, XBOOLE_1;
+
+begin :: Bit Subtract and Borrow Circuit
+
+reserve x,y,c for set;
+
+definition
+ let x,y,c be set;
+ func BitSubtracterOutput(x,y,c) ->
+      Element of InnerVertices 2GatesCircStr(x,y,c, 'xor') equals:
+Def1:
+   2GatesCircOutput(x,y,c, 'xor');
+  coherence;
+end;
+
+definition
+ let x,y,c be set;
+ func BitSubtracterCirc(x,y,c) ->
+      strict Boolean gate`2=den Circuit of 2GatesCircStr(x,y,c, 'xor') equals:
+Def2:
+   2GatesCircuit(x,y,c, 'xor');
+  coherence;
+end;
+
+definition
+ let x,y,c be set;
+ func BorrowIStr(x,y,c) ->
+    unsplit gate`1=arity gate`2isBoolean
+    non void strict non empty ManySortedSign equals:
+Def3:
+   1GateCircStr(<*x,y*>, and2a) +* 1GateCircStr(<*y,c*>, and2) +*
+       1GateCircStr(<*x,c*>, and2a);
+  correctness;
+end;
+
+definition
+ let x,y,c be set;
+ func BorrowStr(x,y,c) ->
+    unsplit gate`1=arity gate`2isBoolean
+    non void strict non empty ManySortedSign equals:
+Def4:
+   BorrowIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>, and2a], [<*y,c*>, and2], [<*x,c*>, and2a]*>, or3);
+  correctness;
+end;
+
+definition
+ let x,y,c be set;
+A1:  BorrowIStr(x,y,c) = 1GateCircStr(<*x,y*>, and2a) +*
+      1GateCircStr(<*y,c*>, and2) +* 1GateCircStr(<*x,c*>, and2a) by Def3;
+ func BorrowICirc(x,y,c) ->
+      strict Boolean gate`2=den Circuit of BorrowIStr(x,y,c) equals:
+Def5:
+   1GateCircuit(x,y, and2a) +* 1GateCircuit(y,c, and2) +*
+       1GateCircuit(x,c, and2a);
+  coherence by A1;
+end;
+
+
+theorem Th1:
+ InnerVertices BorrowStr(x,y,c) is Relation
+  proof
+A1:  BorrowStr(x,y,c) = BorrowIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>, and2a], [<*y,c*>, and2], [<*x,c*>, and2a]*>, or3)
+     by Def4;
+A2:  BorrowIStr(x,y,c) = 1GateCircStr(<*x,y*>, and2a) +*
+      1GateCircStr(<*y,c*>, and2) +* 1GateCircStr(<*x,c*>, and2a) by Def3;
+A3:  InnerVertices 1GateCircStr(<*x,y*>,and2a) is Relation &
+    InnerVertices 1GateCircStr(<*x,c*>,and2a) is Relation &
+    InnerVertices 1GateCircStr(<*y,c*>,and2) is Relation by FACIRC_1:38;
+    then InnerVertices (1GateCircStr(<*x,y*>,and2a)+*1GateCircStr(<*y,c*>,and2
+))
+     is Relation by FACIRC_1:3;
+    then InnerVertices 1GateCircStr(<*[<*x,y*>, and2a], [<*y,c*>, and2],
+                   [<*x,c*>, and2a]*>, or3) is Relation &
+    InnerVertices BorrowIStr(x,y,c) is Relation by A2,A3,FACIRC_1:3,38;
+   hence thesis by A1,FACIRC_1:3;
+  end;
+
+theorem Th2:
+ for x,y,c being non pair set holds
+  InputVertices BorrowStr(x,y,c) is without_pairs
+  proof let x,y,c be non pair set;
+   set M = BorrowStr(x,y,c), MI = BorrowIStr(x,y,c);
+   set S = 1GateCircStr(<*[<*x,y*>, and2a], [<*y,c*>, and2],
+                          [<*x,c*>, and2a]*>, or3);
+A1:  M = MI +* S by Def4;
+A2:  MI = 1GateCircStr(<*x,y*>, and2a) +*
+      1GateCircStr(<*y,c*>, and2) +* 1GateCircStr(<*x,c*>, and2a) by Def3;
+A3:  InputVertices 1GateCircStr(<*x,y*>,and2a) is without_pairs &
+    InputVertices 1GateCircStr(<*x,c*>,and2a) is without_pairs &
+    InputVertices 1GateCircStr(<*y,c*>,and2) is without_pairs
+       by FACIRC_1:41;
+    then InputVertices (1GateCircStr(<*x,y*>,and2a)+*1GateCircStr(<*y,c*>,and2
+))
+     is without_pairs by FACIRC_1:9;
+then A4:  InputVertices MI is without_pairs by A2,A3,FACIRC_1:9;
+      InnerVertices S is Relation by FACIRC_1:38;
+then A5:  InputVertices M =
+        (InputVertices MI) \/ (InputVertices S \ InnerVertices MI)
+          by A1,A4,FACIRC_1:6;
+   given xx being pair set such that
+A6:  xx in InputVertices M;
+A7:  InputVertices S = {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]}
+       by FACIRC_1:42;
+A8:  InnerVertices 1GateCircStr(<*x,y*>, and2a) = {[<*x,y*>, and2a]} &
+    InnerVertices 1GateCircStr(<*y,c*>, and2) = {[<*y,c*>, and2]} &
+    InnerVertices 1GateCircStr(<*x,c*>, and2a) = {[<*x,c*>, and2a]}
+        by CIRCCOMB:49;
+
+   1GateCircStr(<*x,y*>, and2a) tolerates 1GateCircStr(<*y,c*>, and2) &
+    1GateCircStr(<*x,y*>, and2a) tolerates 1GateCircStr(<*x,c*>, and2a) &
+    1GateCircStr(<*y,c*>, and2) tolerates 1GateCircStr(<*x,c*>, and2a)
+     by CIRCCOMB:55;
+
+then A9:  InnerVertices (1GateCircStr(<*x,y*>,and2a) +*
+     1GateCircStr(<*y,c*>,and2)) = {[<*x,y*>,and2a]} \/ {[<*y,c*>,and2]}
+       by A8,CIRCCOMB:15;
+
+      1GateCircStr(<*x,y*>,and2a) +* 1GateCircStr(<*y,c*>,and2)
+       tolerates 1GateCircStr(<*x,c*>,and2a) by CIRCCOMB:55;
+
+    then InnerVertices MI = {[<*x,y*>,and2a]} \/ {[<*y,c*>,and2]} \/
+ {[<*x,c*>,and2a]}
+       by A2,A8,A9,CIRCCOMB:15
+     .= {[<*x,y*>,and2a], [<*y,c*>,and2]} \/ {[<*x,c*>,and2a]} by ENUMSET1:41
+     .= {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} by ENUMSET1:43;
+    then InputVertices S \ InnerVertices MI = {} by A7,XBOOLE_1:37;
+   hence thesis by A4,A5,A6,FACIRC_1:def 2;
+  end;
+
+theorem
+   for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
+   st a = s.x & b = s.y holds (Following s).[<*x,y*>,and2a] = 'not' a '&' b
+  proof set xy = <*x,y*>, yc = <*y,c*>, xc = <*x,c*>;
+   set S1 = 1GateCircStr(xy, and2a), A1 = 1GateCircuit(x,y, and2a);
+   set S2 = 1GateCircStr(yc, and2 ), A2 = 1GateCircuit(y,c, and2 );
+   set S3 = 1GateCircStr(xc, and2a), A3 = 1GateCircuit(x,c, and2a);
+   set S = BorrowIStr(x,y,c), A = BorrowICirc(x,y,c);
+   set v1 = [xy, and2a];
+   let s be State of A; let a,b be Element of BOOLEAN such that
+A1:  a = s.x & b = s.y;
+   reconsider v1 as Element of InnerVertices S1 by FACIRC_1:47;
+      S = S1+*S2+*S3 by Def3;
+then A2:  S = S1+*(S2+*S3) by CIRCCOMB:10;
+   then reconsider v = v1 as Element of InnerVertices S by FACIRC_1:21;
+      A = A1+*A2+*A3 by Def5;
+then A3:  A = A1+*(A2+*A3) by FACIRC_1:25;
+   then reconsider s1 = s|the carrier of S1 as State of A1 by FACIRC_1:26;
+A4:  dom s1 = the carrier of S1 by CIRCUIT1:4;
+   reconsider xx = x, yy = y as Vertex of S1 by FACIRC_1:43;
+   reconsider xx, yy as Vertex of S by A2,FACIRC_1:20;
+   thus (Following s).[xy, and2a] = (Following s1).v by A2,A3,CIRCCOMB:72
+      .= and2a.<*s1.xx,s1.yy*> by FACIRC_1:50
+      .= and2a.<*s.xx,s1.yy*> by A4,FUNCT_1:70
+      .= and2a.<*s.xx,s.yy*> by A4,FUNCT_1:70
+      .= 'not' a '&' b by A1,TWOSCOMP:def 2;
+  end;
+
+theorem
+   for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
+   st a = s.y & b = s.c holds (Following s).[<*y,c*>, and2] = a '&' b
+  proof set xy = <*x,y*>, yc = <*y,c*>, xc = <*x,c*>;
+   set S1 = 1GateCircStr(xy, and2a), A1 = 1GateCircuit(x,y, and2a);
+   set S2 = 1GateCircStr(yc, and2 ), A2 = 1GateCircuit(y,c, and2 );
+   set S3 = 1GateCircStr(xc, and2a), A3 = 1GateCircuit(x,c, and2a);
+   set S = BorrowIStr(x,y,c), A = BorrowICirc(x,y,c);
+   set v2 = [yc, and2];
+   let s be State of A; let a,b be Element of BOOLEAN such that
+A1:  a = s.y & b = s.c;
+   reconsider v2 as Element of InnerVertices S2 by FACIRC_1:47;
+A2:  S = S1+*S2+*S3 & S1+*S2 = S2+*S1 by Def3,FACIRC_1:23;
+then A3:  S = S2+*(S1+*S3) by CIRCCOMB:10;
+   then reconsider v = v2 as Element of InnerVertices S by FACIRC_1:21;
+      A = A1+*A2+*A3 & A1+*A2 = A2+*A1 by Def5,FACIRC_1:24;
+then A4:  A = A2+*(A1+*A3) by A2,FACIRC_1:25;
+   then reconsider s2 = s|the carrier of S2 as State of A2 by FACIRC_1:26;
+A5:  dom s2 = the carrier of S2 by CIRCUIT1:4;
+   reconsider yy = y, cc = c as Vertex of S2 by FACIRC_1:43;
+   reconsider yy, cc as Vertex of S by A3,FACIRC_1:20;
+   thus (Following s).[yc, and2] = (Following s2).v by A3,A4,CIRCCOMB:72
+      .= and2.<*s2.yy,s2.cc*> by FACIRC_1:50
+      .= and2.<*s.yy,s2.cc*> by A5,FUNCT_1:70
+      .= and2.<*s.yy,s.cc*> by A5,FUNCT_1:70
+      .= a '&' b by A1,TWOSCOMP:def 1;
+  end;
+
+theorem
+   for s being State of BorrowICirc(x,y,c), a,b being Element of BOOLEAN
+   st a = s.x & b = s.c holds (Following s).[<*x,c*>, and2a] = 'not' a '&' b
+  proof set xy = <*x,y*>, yc = <*y,c*>, xc = <*x,c*>;
+   set S1 = 1GateCircStr(xy, and2a), A1 = 1GateCircuit(x,y, and2a);
+   set S2 = 1GateCircStr(yc, and2 ), A2 = 1GateCircuit(y,c, and2 );
+   set S3 = 1GateCircStr(xc, and2a), A3 = 1GateCircuit(x,c, and2a);
+   set S = BorrowIStr(x,y,c), A = BorrowICirc(x,y,c);
+   set v3 = [xc, and2a];
+   let s be State of A; let a,b be Element of BOOLEAN such that
+A1:  a = s.x & b = s.c;
+   reconsider v3 as Element of InnerVertices S3 by FACIRC_1:47;
+A2:  S = S1+*S2+*S3 by Def3;
+   then reconsider v = v3 as Element of InnerVertices S by FACIRC_1:21;
+A3:  A = A1+*A2+*A3 by Def5;
+   then reconsider s3 = s|the carrier of S3 as State of A3 by FACIRC_1:26;
+A4:  dom s3 = the carrier of S3 by CIRCUIT1:4;
+   reconsider xx = x, cc = c as Vertex of S3 by FACIRC_1:43;
+   reconsider xx, cc as Vertex of S by A2,FACIRC_1:20;
+   thus (Following s).[xc, and2a] = (Following s3).v by A2,A3,CIRCCOMB:72
+      .= and2a.<*s3.xx,s3.cc*> by FACIRC_1:50
+      .= and2a.<*s.xx,s3.cc*> by A4,FUNCT_1:70
+      .= and2a.<*s.xx,s.cc*> by A4,FUNCT_1:70
+      .= 'not' a '&' b by A1,TWOSCOMP:def 2;
+  end;
+
+definition
+ let x,y,c be set;
+A1:  BorrowStr(x,y,c) = BorrowIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]*>, or3)
+     by Def4;
+ func BorrowOutput(x,y,c) -> Element of InnerVertices BorrowStr(x,y,c)
+  equals:
+Def6:
+   [<*[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]*>, or3];
+  coherence
+   proof
+       [<*[<*x,y*>,and2a],[<*y,c*>,and2],[<*x,c*>,and2a]*>,or3] in
+InnerVertices
+     1GateCircStr(<*[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]*>,or3)
+       by FACIRC_1:47; hence thesis by A1,FACIRC_1:21;
+   end;
+  correctness;
+end;
+
+definition
+ let x,y,c be set;
+A1:  BorrowStr(x,y,c) = BorrowIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]*>, or3)
+     by Def4;
+ func BorrowCirc(x,y,c) ->
+      strict Boolean gate`2=den Circuit of BorrowStr(x,y,c) equals
+     BorrowICirc(x,y,c) +*
+       1GateCircuit([<*x,y*>,and2a],[<*y,c*>,and2],[<*x,c*>,and2a],or3);
+  coherence by A1;
+end;
+
+theorem Th6:
+ x in the carrier of BorrowStr(x,y,c) &
+ y in the carrier of BorrowStr(x,y,c) &
+ c in the carrier of BorrowStr(x,y,c)
+  proof
+A1:  BorrowStr(x,y,c) = BorrowIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]*>, or3)
+     by Def4;
+A2:  BorrowIStr(x,y,c) = 1GateCircStr(<*x,y*>, and2a) +*
+      1GateCircStr(<*y,c*>,and2) +* 1GateCircStr(<*x,c*>, and2a) by Def3;
+      y in the carrier of 1GateCircStr(<*x,y*>,and2a) by FACIRC_1:43;
+then A3:  y in
+ the carrier of 1GateCircStr(<*x,y*>,and2a)+*1GateCircStr(<*y,c*>,and2)
+     by FACIRC_1:20;
+      x in the carrier of 1GateCircStr(<*x,c*>,and2a) &
+    c in the carrier of 1GateCircStr(<*x,c*>,and2a) by FACIRC_1:43;
+    then x in the carrier of BorrowIStr(x,y,c) &
+    y in the carrier of BorrowIStr(x,y,c) &
+    c in the carrier of BorrowIStr(x,y,c)
+     by A2,A3,FACIRC_1:20;
+   hence thesis by A1,FACIRC_1:20;
+  end;
+
+theorem Th7:
+ [<*x,y*>,and2a] in InnerVertices BorrowStr(x,y,c) &
+ [<*y,c*>,and2 ] in InnerVertices BorrowStr(x,y,c) &
+ [<*x,c*>,and2a] in InnerVertices BorrowStr(x,y,c)
+  proof
+A1:  BorrowStr(x,y,c) = BorrowIStr(x,y,c) +*
+    1GateCircStr(<*[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]*>, or3)
+     by Def4;
+A2:  BorrowIStr(x,y,c) = 1GateCircStr(<*x,y*>, and2a) +*
+      1GateCircStr(<*y,c*>,and2) +* 1GateCircStr(<*x,c*>, and2a) by Def3;
+
+      [<*x,y*>,and2a] in InnerVertices 1GateCircStr(<*x,y*>,and2a) &
+    [<*y,c*>,and2 ] in InnerVertices 1GateCircStr(<*y,c*>,and2 )
+       by FACIRC_1:47;
+    then [<*x,c*>,and2a] in InnerVertices 1GateCircStr(<*x,c*>,and2a) &
+    [<*x,y*>,and2a] in InnerVertices
+      (1GateCircStr(<*x,y*>,and2a)+*1GateCircStr(<*y,c*>,and2)) &
+    [<*y,c*>,and2 ] in InnerVertices
+      (1GateCircStr(<*x,y*>,and2a)+*1GateCircStr(<*y,c*>,and2))
+       by FACIRC_1:21,47;
+    then [<*x,y*>,and2a] in InnerVertices BorrowIStr(x,y,c) &
+    [<*y,c*>,and2 ] in InnerVertices BorrowIStr(x,y,c) &
+    [<*x,c*>,and2a] in InnerVertices BorrowIStr(x,y,c) by A2,FACIRC_1:21;
+   hence thesis by A1,FACIRC_1:21;
+  end;
+
+theorem Th8:
+ for x,y,c being non pair set holds
+  x in InputVertices BorrowStr(x,y,c) &
+  y in InputVertices BorrowStr(x,y,c) &
+  c in InputVertices BorrowStr(x,y,c)
+  proof let x,y,c be non pair set;
+      InputVertices BorrowStr(x,y,c) = (the carrier of BorrowStr(x,y,c)) \
+      rng the ResultSort of BorrowStr(x,y,c) by MSAFREE2:def 2;
+then A1:  InputVertices BorrowStr(x,y,c) =
+      (the carrier of BorrowStr(x,y,c)) \ InnerVertices BorrowStr(x,y,c)
+       by MSAFREE2:def 3;
+A2:  x in the carrier of BorrowStr(x,y,c) &
+    y in the carrier of BorrowStr(x,y,c) &
+    c in the carrier of BorrowStr(x,y,c) by Th6;
+A3:  InnerVertices BorrowStr(x,y,c) is Relation by Th1;
+   assume not thesis;
+    then x in InnerVertices BorrowStr(x,y,c) or
+    y in InnerVertices BorrowStr(x,y,c) or
+    c in InnerVertices BorrowStr(x,y,c) by A1,A2,XBOOLE_0:def 4;
+    then (ex a1,b1 being set st x = [a1,b1]) or
+    (ex a1,b1 being set st y = [a1,b1]) or
+    (ex a1,b1 being set st c = [a1,b1]) by A3,RELAT_1:def 1;
+   hence contradiction;
+  end;
+
+theorem Th9:
+ for x,y,c being non pair set holds
+  InputVertices BorrowStr(x,y,c) = {x,y,c} &
+  InnerVertices BorrowStr(x,y,c) =
+    {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)}
+  proof let x,y,c be non pair set;
+   set xy = <*x,y*>, yc = <*y,c*>, xc = <*x,c*>;
+   set x_y =[xy,and2a], y_c = [yc,and2], x_c = [xc,and2a];
+   set MI = BorrowIStr(x,y,c), S = 1GateCircStr(<*x_y, y_c, x_c*>, or3);
+   set M = BorrowStr(x,y,c);
+A1:  M = MI +* S by Def4;
+A2:  MI = 1GateCircStr(<*x,y*>, and2a) +*
+      1GateCircStr(<*y,c*>,and2) +* 1GateCircStr(<*x,c*>, and2a) by Def3;
+A3:  InputVertices 1GateCircStr(<*x,y*>,and2a) is without_pairs &
+    InputVertices 1GateCircStr(<*x,c*>,and2a) is without_pairs &
+    InputVertices 1GateCircStr(<*y,c*>,and2) is without_pairs
+       by FACIRC_1:41;
+then A4: InputVertices (1GateCircStr(<*x,y*>,and2a)+*1GateCircStr(<*y,c*>,and2)
+)
+     is without_pairs by FACIRC_1:9;
+then A5:  InputVertices MI is without_pairs by A2,A3,FACIRC_1:9;
+A6: InputVertices 1GateCircStr(<*x,y*>,and2a) = {x,y} &
+    InputVertices 1GateCircStr(<*x,c*>,and2a) = {x,c} &
+    InputVertices 1GateCircStr(<*y,c*>,and2 ) = {y,c} by FACIRC_1:40;
+      InnerVertices S is Relation by FACIRC_1:38;
+then A7:  InputVertices M =
+        (InputVertices MI) \/ (InputVertices S \ InnerVertices MI)
+          by A1,A5,FACIRC_1:6;
+A8:  InputVertices S = {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]}
+        by FACIRC_1:42;
+A9:  InnerVertices 1GateCircStr(<*x,y*>,and2a) = {[<*x,y*>,and2a]} &
+    InnerVertices 1GateCircStr(<*y,c*>,and2) = {[<*y,c*>,and2]} &
+    InnerVertices 1GateCircStr(<*x,c*>,and2a)= {[<*x,c*>,and2a]}
+      by CIRCCOMB:49;
+   1GateCircStr(<*x,y*>,and2a) tolerates 1GateCircStr(<*y,c*>,and2) &
+    1GateCircStr(<*x,y*>,and2a) tolerates 1GateCircStr(<*x,c*>,and2a) &
+    1GateCircStr(<*y,c*>,and2) tolerates 1GateCircStr(<*x,c*>,and2a)
+     by CIRCCOMB:55;
+then A10:
+   InnerVertices (1GateCircStr(<*x,y*>,and2a) +* 1GateCircStr(<*y,c*>,and2)) =
+     {[<*x,y*>,and2a]} \/ {[<*y,c*>,and2]} by A9,CIRCCOMB:15;
+   then A11: InnerVertices (1GateCircStr(<*x,y*>,and2a) +* 1GateCircStr(<*y,c*>
+,and2)) =
+     {[<*x,y*>,and2a], [<*y,c*>,and2]} by ENUMSET1:41;
+      1GateCircStr(<*x,y*>,and2a) +* 1GateCircStr(<*y,c*>,and2)
+       tolerates 1GateCircStr(<*x,c*>,and2a) by CIRCCOMB:55;
+then A12:  InnerVertices MI = {[<*x,y*>,and2a]} \/ {[<*y,c*>,and2]}
+       \/ {[<*x,c*>,and2a]} by A2,A9,A10,CIRCCOMB:15
+     .= {[<*x,y*>,and2a], [<*y,c*>,and2]} \/ {[<*x,c*>,and2a]} by ENUMSET1:41
+     .= {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} by ENUMSET1:43;
+    then InputVertices S \ InnerVertices MI = {} by A8,XBOOLE_1:37;
+   hence InputVertices M =
+ (InputVertices(1GateCircStr(<*x,y*>,and2a)+*1GateCircStr(<*y,c*>,and2)))
+        \/ InputVertices 1GateCircStr(<*x,c*>,and2a) by A2,A3,A4,A7,A9,A11,
+FACIRC_1:7
+    .= (InputVertices 1GateCircStr(<*x,y*>,and2a)) \/
+         (InputVertices 1GateCircStr(<*y,c*>,and2)) \/
+         (InputVertices 1GateCircStr(<*x,c*>,and2a)) by A3,A9,FACIRC_1:7
+      .= {x,y,y,c} \/ {c,x} by A6,ENUMSET1:45
+      .= {y,y,x,c} \/ {c,x} by ENUMSET1:110
+      .= {y,x,c} \/ {c,x} by ENUMSET1:71
+      .= {x,y,c} \/ {c,x} by ENUMSET1:99
+      .= {x,y,c} \/ ({c}\/{x}) by ENUMSET1:41
+      .= {x,y,c} \/ {c} \/ {x} by XBOOLE_1:4
+      .= {c,x,y} \/ {c} \/ {x} by ENUMSET1:100
+      .= {c,c,x,y} \/ {x} by ENUMSET1:44
+      .= {c,x,y} \/ {x} by ENUMSET1:71
+      .= {x,y,c} \/ {x} by ENUMSET1:100
+      .= {x,x,y,c} by ENUMSET1:44
+      .= {x,y,c} by ENUMSET1:71;
+      MI tolerates S by CIRCCOMB:55;
+   hence InnerVertices M = (InnerVertices MI) \/ (InnerVertices S)
+      by A1,CIRCCOMB:15
+    .= {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/
+       {[<*x_y, y_c, x_c*>, or3]} by A12,CIRCCOMB:49
+    .= {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/
+       {BorrowOutput(x,y,c)} by Def6;
+  end;
+
+Lm1:
+ for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c
+  holds
+   (Following s).[<*x,y*>,and2a] = 'not' a1 '&' a2 &
+   (Following s).[<*y,c*>,and2 ] = a2 '&' a3 &
+   (Following s).[<*x,c*>,and2a] = 'not' a1 '&' a3
+  proof let x,y,c be non pair set;
+   let s be State of BorrowCirc(x,y,c);
+   let a1,a2,a3 be Element of BOOLEAN such that
+A1:  a1 = s.x & a2 = s.y & a3 = s.c;
+   set S = BorrowStr(x,y,c);
+A2:  InnerVertices S = the OperSymbols of S by FACIRC_1:37;
+A3:  dom s = the carrier of S by CIRCUIT1:4;
+A4:  x in the carrier of S & y in the carrier of S & c in the carrier of S
+     by Th6;
+      [<*x,y*>,and2a] in InnerVertices BorrowStr(x,y,c) by Th7;
+   hence (Following s).[<*x,y*>,and2a]
+      = and2a.(s*<*x,y*>) by A2,FACIRC_1:35
+     .= and2a.<*a1,a2*> by A1,A3,A4,FINSEQ_2:145
+     .= 'not' a1 '&' a2 by TWOSCOMP:def 2;
+      [<*y,c*>,and2] in InnerVertices BorrowStr(x,y,c) by Th7;
+   hence (Following s).[<*y,c*>,and2]
+      = and2.(s*<*y,c*>) by A2,FACIRC_1:35
+     .= and2.<*a2,a3*> by A1,A3,A4,FINSEQ_2:145
+     .= a2 '&' a3 by TWOSCOMP:def 1;
+
+      [<*x,c*>,and2a] in InnerVertices BorrowStr(x,y,c) by Th7;
+   hence (Following s).[<*x,c*>,and2a]
+      = and2a.(s*<*x,c*>) by A2,FACIRC_1:35
+     .= and2a.<*a1,a3*> by A1,A3,A4,FINSEQ_2:145
+     .= 'not' a1 '&' a3 by TWOSCOMP:def 2;
+  end;
+
+theorem
+   for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.y
+  holds (Following s).[<*x,y*>,and2a] = 'not' a1 '&' a2
+   proof let x,y,c be non pair set; let s be State of BorrowCirc(x,y,c);
+    reconsider a = c as Vertex of BorrowStr(x,y,c) by Th6;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm1;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a2,a3 being Element of BOOLEAN st a2 = s.y & a3 = s.c
+  holds (Following s).[<*y,c*>,and2] = a2 '&' a3
+   proof let x,y,c be non pair set; let s be State of BorrowCirc(x,y,c);
+    reconsider a = x as Vertex of BorrowStr(x,y,c) by Th6;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm1;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a1,a3 being Element of BOOLEAN st a1 = s.x & a3 = s.c
+  holds (Following s).[<*x,c*>,and2a] = 'not' a1 '&' a3
+   proof let x,y,c be non pair set; let s be State of BorrowCirc(x,y,c);
+    reconsider a = y as Vertex of BorrowStr(x,y,c) by Th6;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm1;
+   end;
+
+theorem Th13:
+ for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st
+    a1 = s.[<*x,y*>,and2a] & a2 = s.[<*y,c*>,and2] & a3 = s.[<*x,c*>,and2a]
+  holds (Following s).BorrowOutput(x,y,c) = a1 'or' a2 'or' a3
+  proof let x,y,c be non pair set;
+   let s be State of BorrowCirc(x,y,c);
+   let a1,a2,a3 be Element of BOOLEAN such that
+A1:  a1 = s.[<*x,y*>,and2a] & a2 = s.[<*y,c*>,and2] & a3 = s.[<*x,c*>,and2a];
+   set xy = <*x,y*>, yc = <*y,c*>, xc = <*x,c*>;
+   set x_y =[xy,and2a], y_c = [yc,and2], x_c = [xc,and2a];
+   set S = BorrowStr(x,y,c);
+A2:  InnerVertices S = the OperSymbols of S by FACIRC_1:37;
+A3:  dom s = the carrier of S by CIRCUIT1:4;
+   reconsider x_y, y_c, x_c as Element of InnerVertices S by Th7;
+      BorrowOutput(x,y,c) = [<*x_y, y_c, x_c*>, or3] by Def6;
+   hence (Following s).BorrowOutput(x,y,c)
+      = or3.(s*<*x_y, y_c, x_c*>) by A2,FACIRC_1:35
+     .= or3.<*a1,a2,a3*> by A1,A3,FINSEQ_2:146
+     .= a1 'or' a2 'or' a3 by FACIRC_1:def 7;
+  end;
+
+Lm2:
+ for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c
+  holds
+   Following(s,2).BorrowOutput(x,y,c) =
+        'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3 &
+   Following(s,2).[<*x,y*>,and2a] = 'not' a1 '&' a2 &
+   Following(s,2).[<*y,c*>,and2 ] = a2 '&' a3 &
+   Following(s,2).[<*x,c*>,and2a] = 'not' a1 '&' a3
+  proof let x,y,c be non pair set;
+   let s be State of BorrowCirc(x,y,c);
+   let a1,a2,a3 be Element of BOOLEAN such that
+A1:  a1 = s.x & a2 = s.y & a3 = s.c;
+   set xy = <*x,y*>, yc = <*y,c*>, xc = <*x,c*>;
+   set x_y =[xy,and2a], y_c = [yc,and2], x_c = [xc,and2a];
+   set S = BorrowStr(x,y,c);
+   reconsider x' = x, y' = y, c' = c as Vertex of S by Th6;
+    x in InputVertices S & y in InputVertices S & c in InputVertices S
+     by Th8;
+then A2:  (Following s).x' = s.x & (Following s).y' = s.y & (Following s).c' =
+s.c
+     by CIRCUIT2:def 5;
+A3:  Following(s,2) = Following Following s by FACIRC_1:15;
+    (Following s).x_y = 'not' a1 '&' a2 & (Following s).y_c = a2 '&' a3 &
+    (Following s).x_c = 'not' a1 '&' a3 by A1,Lm1;
+   hence Following(s,2).BorrowOutput(x,y,c) =
+         'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3 by A3,Th13;
+   thus thesis by A1,A2,A3,Lm1;
+  end;
+
+theorem
+   for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a1,a2 being Element of BOOLEAN st a1 = s.x & a2 = s.y
+  holds Following(s,2).[<*x,y*>,and2a] = 'not' a1 '&' a2
+   proof let x,y,c be non pair set; let s be State of BorrowCirc(x,y,c);
+    reconsider a = c as Vertex of BorrowStr(x,y,c) by Th6;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm2;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a2,a3 being Element of BOOLEAN st a2 = s.y & a3 = s.c
+  holds Following(s,2).[<*y,c*>,and2] = a2 '&' a3
+   proof let x,y,c be non pair set; let s be State of BorrowCirc(x,y,c);
+    reconsider a = x as Vertex of BorrowStr(x,y,c) by Th6;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm2;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a1,a3 being Element of BOOLEAN st a1 = s.x & a3 = s.c
+  holds Following(s,2).[<*x,c*>,and2a] = 'not' a1 '&' a3
+   proof let x,y,c be non pair set; let s be State of BorrowCirc(x,y,c);
+    reconsider a = y as Vertex of BorrowStr(x,y,c) by Th6;
+       s.a is Element of BOOLEAN;
+    hence thesis by Lm2;
+   end;
+
+theorem
+   for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c
+  holds
+   Following(s,2).BorrowOutput(x,y,c) =
+        'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3 by Lm2;
+
+theorem Th18:
+ for x,y,c being non pair set for s being State of BorrowCirc(x,y,c)
+  holds Following(s,2) is stable
+  proof let x,y,c be non pair set; set S = BorrowStr(x,y,c);
+   let s be State of BorrowCirc(x,y,c);
+A1:  dom Following Following(s,2) = the carrier of S &
+    dom Following(s,2) = the carrier of S by CIRCUIT1:4;
+   reconsider xx = x, yy = y, cc = c as Vertex of S by Th6;
+   set a1 = s.xx, a2 = s.yy, a3 = s.cc;
+   set ffs = Following(s,2), fffs = Following ffs;
+      a1 = s.x & a2 = s.y & a3 = s.c;
+then A2:  ffs.BorrowOutput(x,y,c) = 'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not'
+a1 '&' a3 &
+     ffs.[<*x,y*>,and2a] = 'not' a1 '&' a2 &
+     ffs.[<*y,c*>,and2 ] = a2 '&' a3 &
+     ffs.[<*x,c*>,and2a] = 'not' a1 '&' a3 by Lm2;
+A3:  ffs = Following Following s by FACIRC_1:15;
+A4:  x in InputVertices S & y in InputVertices S & c in InputVertices S
+     by Th8;
+    then (Following s).x = a1 & (Following s).y = a2 & (Following s).c = a3
+     by CIRCUIT2:def 5;
+  then A5: ffs.x = a1 & ffs.y = a2 & ffs.c = a3 by A3,A4,CIRCUIT2:def 5;
+      now let a be set; assume
+A6:   a in the carrier of S;
+     then reconsider v = a as Vertex of S;
+A7:    v in InputVertices S \/ InnerVertices S by A6,MSAFREE2:3;
+     thus ffs.a = (fffs).a
+      proof per cases by A7,XBOOLE_0:def 2;
+       suppose v in InputVertices S;
+        hence thesis by CIRCUIT2:def 5;
+       suppose v in InnerVertices S;
+         then v in {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/
+             {BorrowOutput(x,y,c)} by Th9;
+         then v in {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} or
+         v in {BorrowOutput(x,y,c)} by XBOOLE_0:def 2;
+         then v = [<*x,y*>,and2a] or v = [<*y,c*>,and2] or v = [<*x,c*>,and2a]
+or
+         v = BorrowOutput(x,y,c) by ENUMSET1:13,TARSKI:def 1;
+        hence thesis by A2,A5,Lm1,Th13;
+      end;
+    end;
+   hence ffs = fffs by A1,FUNCT_1:9;
+  end;
+
+begin :: Bit Subtracter with Borrow Circuit
+
+definition
+ let x,y,c be set;
+ func BitSubtracterWithBorrowStr(x,y,c) ->
+      unsplit gate`1=arity gate`2isBoolean
+      non void strict non empty ManySortedSign
+  equals:
+Def8:
+    2GatesCircStr(x,y,c, 'xor') +* BorrowStr(x,y,c);
+  coherence;
+end;
+
+theorem Th19:
+ for x,y,c being non pair set holds
+   InputVertices BitSubtracterWithBorrowStr(x,y,c) = {x,y,c}
+  proof let x,y,c be non pair set;
+   set S = BitSubtracterWithBorrowStr(x,y,c);
+   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = BorrowStr(x,y,c);
+A1:  S = S1 +* S2 by Def8;
+A2:  InputVertices S1 is without_pairs & InnerVertices S1 is Relation
+      by FACIRC_1:58,59;
+A3:  InputVertices S2 is without_pairs & InnerVertices S2 is Relation
+      by Th1,Th2;
+      c <> [<*x,y*>, 'xor'];
+    then InputVertices S1 = {x,y,c} & InputVertices S2 = {x,y,c}
+        by Th9,FACIRC_1:57;
+   hence InputVertices S = {x,y,c} \/ {x,y,c} by A1,A2,A3,FACIRC_1:7
+                        .= {x,y,c};
+  end;
+
+theorem
+   for x,y,c being non pair set holds
+   InnerVertices BitSubtracterWithBorrowStr(x,y,c) =
+     {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+     {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/
+ {BorrowOutput(x,y,c)}
+  proof let x,y,c be non pair set;
+   set S = BitSubtracterWithBorrowStr(x,y,c);
+   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = BorrowStr(x,y,c);
+A1:  S = S1 +* S2 by Def8;
+A2:  {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+    {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)}
+    = {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} \/
+    ({[<*x,y*>,and2a],[<*y,c*>,and2],[<*x,c*>,and2a]} \/ {BorrowOutput(x,y,c)})
+     by XBOOLE_1:4;
+      InnerVertices S1 = {[<*x,y*>, 'xor'], 2GatesCircOutput(x,y,c,'xor')} &
+    InnerVertices S2 = {[<*x,y*>,and2a], [<*y,c*>,and2], [<*x,c*>,and2a]} \/
+      {BorrowOutput(x,y,c)} by Th9,FACIRC_1:56;
+   hence thesis by A1,A2,FACIRC_1:27;
+  end;
+
+theorem
+   for S being non empty ManySortedSign st S = BitSubtracterWithBorrowStr(x,y,c
+)
+   holds x in the carrier of S & y in the carrier of S & c in the carrier of S
+  proof set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = BorrowStr(x,y,c);
+   let S be non empty ManySortedSign;
+   assume S = BitSubtracterWithBorrowStr(x,y,c);
+    then x in the carrier of S1 & y in the carrier of S1 & c in the carrier of
+S1 &
+    S = S1 +* S2 by Def8,FACIRC_1:60;
+   hence thesis by FACIRC_1:20;
+  end;
+
+definition
+ let x,y,c be set;
+A1:   BitSubtracterWithBorrowStr(x,y,c)
+      = 2GatesCircStr(x,y,c, 'xor') +* BorrowStr(x,y,c) by Def8;
+ func BitSubtracterWithBorrowCirc(x,y,c) ->
+   strict Boolean gate`2=den Circuit of BitSubtracterWithBorrowStr(x,y,c)
+ equals:
+Def9:
+   BitSubtracterCirc(x,y,c) +* BorrowCirc(x,y,c);
+  coherence by A1;
+end;
+
+theorem
+   InnerVertices BitSubtracterWithBorrowStr(x,y,c) is Relation
+  proof
+A1:  BitSubtracterWithBorrowStr(x,y,c) =
+      2GatesCircStr(x,y,c, 'xor') +* BorrowStr(x,y,c) by Def8;
+      InnerVertices 2GatesCircStr(x,y,c, 'xor') is Relation &
+    InnerVertices BorrowStr(x,y,c) is Relation by Th1,FACIRC_1:58;
+   hence thesis by A1,FACIRC_1:3;
+  end;
+
+theorem
+   for x,y,c being non pair set holds
+  InputVertices BitSubtracterWithBorrowStr(x,y,c) is without_pairs
+  proof let x,y,c be non pair set;
+      InputVertices BitSubtracterWithBorrowStr(x,y,c) = {x,y,c} by Th19;
+   hence thesis;
+  end;
+
+theorem
+   BitSubtracterOutput(x,y,c) in
+ InnerVertices BitSubtracterWithBorrowStr(x,y,c) &
+ BorrowOutput(x,y,c) in InnerVertices BitSubtracterWithBorrowStr(x,y,c)
+  proof
+      BitSubtracterWithBorrowStr(x,y,c)
+     = 2GatesCircStr(x,y,c, 'xor') +* BorrowStr(x,y,c) by Def8;
+   hence thesis by FACIRC_1:21;
+  end;
+
+theorem
+   for x,y,c being non pair set
+ for s being State of BitSubtracterWithBorrowCirc(x,y,c)
+ for a1,a2,a3 being Element of BOOLEAN st a1 = s.x & a2 = s.y & a3 = s.c holds
+   Following(s,2).BitSubtracterOutput(x,y,c) = a1 'xor' a2 'xor' a3 &
+   Following(s,2).BorrowOutput(x,y,c)
+           = 'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3
+  proof let x,y,c be non pair set;
+   set f = 'xor';
+   set S = BitSubtracterWithBorrowStr(x,y,c);
+   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = BorrowStr(x,y,c);
+   set A = BitSubtracterWithBorrowCirc(x,y,c);
+   set A1 = BitSubtracterCirc(x,y,c), A2 = BorrowCirc(x,y,c);
+   let s be State of A;
+   let a1,a2,a3 be Element of BOOLEAN; assume
+A1:  a1 = s.x & a2 = s.y & a3 = s.c;
+A2: x in the carrier of S1 & y in the carrier of S1 & c in the carrier of S1
+     by FACIRC_1:60;
+A3: x in the carrier of S2 & y in the carrier of S2 & c in the carrier of S2
+     by Th6;
+A4:  A = A1 +* A2 & S = S1+*S2 by Def8,Def9;
+   then reconsider s1 = s|the carrier of S1 as State of A1 by FACIRC_1:26;
+   reconsider s2 = s|the carrier of S2 as State of A2 by A4,FACIRC_1:26;
+   reconsider t = s as State of A1+*A2 by A4;
+      InputVertices S1 is without_pairs & InnerVertices S1 is Relation &
+    InputVertices S2 is without_pairs & InnerVertices S2 is Relation
+      by Th1,Th2,FACIRC_1:58,59;
+then A5:  InnerVertices S1 misses InputVertices S2 &
+    InnerVertices S2 misses InputVertices S1 by FACIRC_1:5;
+A6:  BitSubtracterOutput(x,y,c) = 2GatesCircOutput(x,y,c, f) &
+    BitSubtracterCirc(x,y,c) = 2GatesCircuit(x,y,c, f) by Def1,Def2;
+      dom s1 = the carrier of S1 by CIRCUIT1:4;
+then A7:  a1 = s1.x & a2 = s1.y & a3 = s1.c by A1,A2,FUNCT_1:70;
+      c <> [<*x,y*>, f];
+    then Following(t,2).2GatesCircOutput(x,y,c, f)
+      = Following(s1,2).2GatesCircOutput(x,y,c, f) &
+    Following(s1,2).2GatesCircOutput(x,y,c,f) = a1 'xor' a2 'xor' a3
+     by A5,A6,A7,FACIRC_1:32,64;
+   hence Following(s,2).BitSubtracterOutput(x,y,c) = a1 'xor' a2 'xor' a3
+      by A4,Def1;
+      dom s2 = the carrier of S2 by CIRCUIT1:4;
+  then a1 = s2.x & a2 = s2.y & a3 = s2.c by A1,A3,FUNCT_1:70;
+    then Following(t,2).BorrowOutput(x,y,c)
+      = Following(s2,2).BorrowOutput(x,y,c) &
+    Following(s2,2).BorrowOutput(x,y,c)
+      = 'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not'
+a1 '&' a3 by A5,Lm2,FACIRC_1:33;
+   hence Following(s,2).BorrowOutput(x,y,c)
+           = 'not' a1 '&' a2 'or' a2 '&' a3 'or' 'not' a1 '&' a3 by A4;
+  end;
+
+theorem
+   for x,y,c being non pair set
+ for s being State of BitSubtracterWithBorrowCirc(x,y,c)
+  holds Following(s,2) is stable
+  proof let x,y,c be non pair set;
+   set f = 'xor';
+   set S = BitSubtracterWithBorrowStr(x,y,c);
+   set S1 = 2GatesCircStr(x,y,c, 'xor'), S2 = BorrowStr(x,y,c);
+   set A = BitSubtracterWithBorrowCirc(x,y,c);
+   set A1 = BitSubtracterCirc(x,y,c), A2 = BorrowCirc(x,y,c);
+   let s be State of A;
+A1:  A = A1 +* A2 & S = S1+*S2 by Def8,Def9;
+   then reconsider s1 = s|the carrier of S1 as State of A1 by FACIRC_1:26;
+   reconsider s2 = s|the carrier of S2 as State of A2 by A1,FACIRC_1:26;
+   reconsider t = s as State of A1+*A2 by A1;
+      InputVertices S1 is without_pairs & InnerVertices S1 is Relation &
+    InputVertices S2 is without_pairs & InnerVertices S2 is Relation
+      by Th1,Th2,FACIRC_1:58,59;
+    then InnerVertices S1 misses InputVertices S2 &
+    InnerVertices S2 misses InputVertices S1 by FACIRC_1:5;
+then A2:  Following(s1,2) = Following(t,2)|the carrier of S1 &
+    Following(s1,3) = Following(t,3)|the carrier of S1 &
+    Following(s2,2) = Following(t,2)|the carrier of S2 &
+    Following(s2,3) = Following(t,3)|the carrier of S2 by FACIRC_1:30,31;
+      c <> [<*x,y*>, f] & A1 = 2GatesCircuit(x,y,c, f) by Def2;
+    then Following(s1,2) is stable by FACIRC_1:63;
+then A3:  Following(s1,2) = Following Following(s1,2) by CIRCUIT2:def 6
+                   .= Following(s1,2+1) by FACIRC_1:12;
+      Following(s2,2) is stable by Th18;
+then A4:  Following(s2,2) = Following Following(s2,2) by CIRCUIT2:def 6
+                   .= Following(s2,2+1) by FACIRC_1:12;
+A5:  Following(s,2+1) = Following Following(s,2) by FACIRC_1:12;
+A6:  dom Following(s,2) = the carrier of S &
+    dom Following(s,3) = the carrier of S &
+    dom Following(s1,2) = the carrier of S1 &
+    dom Following(s2,2) = the carrier of S2 by CIRCUIT1:4;
+      S = S1+*S2 by Def8;
+then A7:  the carrier of S = (the carrier of S1) \/ the carrier of S2
+     by CIRCCOMB:def 2;
+      now let a be set; assume a in the carrier of S;
+      then a in the carrier of S1 or a in the carrier of S2 by A7,XBOOLE_0:def
+2
+;
+      then Following(s,2).a = Following(s1,2).a &
+      Following(s,3).a = Following(s1,3).a or
+      Following(s,2).a = Following(s2,2).a &
+      Following(s,3).a = Following(s2,3).a by A1,A2,A3,A4,A6,FUNCT_1:70;
+     hence Following(s,2).a = (Following Following(s,2)).a by A3,A4,FACIRC_1:12
+;
+    end;
+   hence Following(s,2) = Following Following(s,2) by A5,A6,FUNCT_1:9;
+  end;

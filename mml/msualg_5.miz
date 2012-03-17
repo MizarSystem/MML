@@ -1,0 +1,2241 @@
+:: Lattice of Congruences in a Many Sorted Algebra
+::  by Robert Milewski
+::
+:: Received January 11, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, RELAT_1, EQREL_1, LATTICES, BOOLE, FUNCT_1, BINOP_1,
+      MSUALG_4, CARD_3, MSUALG_1, AMI_1, ZF_REFLE, FINSEQ_1, QC_LANG1, TDGROUP,
+      RELAT_2, ARYTM_1, NAT_LAT, PRALG_2, MSUALG_5, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, RELAT_2,
+      FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1, EQREL_1, BINOP_1, PBOOLE,
+      MSUALG_1, MSUALG_3, MSUALG_4, LATTICES, NAT_LAT, CARD_3, PRALG_2,
+      FINSEQ_1, FINSEQ_4, REAL_1, NAT_1;
+ constructors BINOP_1, MSUALG_3, MSUALG_4, NAT_LAT, REAL_1, NAT_1, FINSEQ_4,
+      MEMBERED, EQREL_1;
+ clusters SUBSET_1, STRUCT_0, MSUALG_1, LATTICES, NAT_LAT, RELSET_1, MSUALG_4,
+      MSUALG_3, PRALG_1, PBOOLE, FINSEQ_1, NAT_1, EQREL_1, PARTFUN1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET;
+ definitions PBOOLE;
+ theorems BINOP_1, PBOOLE, MSUALG_4, EQREL_1, TARSKI, NAT_LAT, LATTICES,
+      RELAT_1, RELAT_2, RELSET_1, STRUCT_0, FUNCT_2, CARD_3, ZFMISC_1,
+      MSUALG_1, FINSEQ_4, FUNCT_1, MSUALG_3, FINSEQ_1, REAL_1, NAT_1, AXIOMS,
+      MSAFREE2, PRALG_2, XBOOLE_0, XBOOLE_1, FINSEQ_3, XCMPLX_1, ORDERS_1;
+ schemes MSUALG_1, BINOP_1, NAT_1, FINSEQ_1, PRALG_2, XBOOLE_0;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::                MORE  OF  EQUIVALENCE  RELATIONS               ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  reserve I,X,x,y,z,d,i for set;
+  reserve M for ManySortedSet of I;
+  reserve R1 for Relation of X;
+  reserve EqR1,EqR2,EqR3,EqR4 for Equivalence_Relation of X;
+
+  theorem Th1:
+   (EqR1 "\/" EqR2) "\/" EqR3 = EqR1 "\/" (EqR2 "\/" EqR3)
+  proof
+     for EqR4 holds EqR4 = (EqR1 "\/" EqR2) "\/" EqR3 implies
+    EqR1 "\/" (EqR2 "\/" EqR3) c= EqR4
+   proof
+    let EqR4;
+    A1: EqR1 "\/" EqR2 c= (EqR1 "\/" EqR2) \/ EqR3 by XBOOLE_1:7;
+    A2: EqR3 c= (EqR1 "\/" EqR2) \/ EqR3 by XBOOLE_1:7;
+    A3: EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by EQREL_1:def 3;
+    A4: EqR1 c= EqR1 \/ EqR2 & EqR2 c= EqR1 \/ EqR2 by XBOOLE_1:7;
+    assume EqR4 = (EqR1 "\/" EqR2) "\/" EqR3;
+    then A5: (EqR1 "\/" EqR2) \/ EqR3 c= EqR4 by EQREL_1:def 3;
+    then EqR1 "\/" EqR2 c= EqR4 by A1,XBOOLE_1:1;
+    then EqR1 \/ EqR2 c= EqR4 by A3,XBOOLE_1:1;
+    then A6: EqR1 c= EqR4 & EqR2 c= EqR4 & EqR3 c= EqR4 by A2,A4,A5,XBOOLE_1:1;
+    then EqR2 \/ EqR3 c= EqR4 by XBOOLE_1:8;
+    then EqR2 "\/" EqR3 c= EqR4 by EQREL_1:def 3;
+    then EqR1 \/ (EqR2 "\/" EqR3) c= EqR4 by A6,XBOOLE_1:8;
+    hence EqR1 "\/" (EqR2 "\/" EqR3) c= EqR4 by EQREL_1:def 3;
+   end;
+   then A7: EqR1 "\/" (EqR2 "\/" EqR3) c= (EqR1 "\/" EqR2) "\/" EqR3;
+     for EqR4 holds EqR4 = EqR1 "\/" (EqR2 "\/" EqR3) implies
+    (EqR1 "\/" EqR2) "\/" EqR3 c= EqR4
+   proof
+    let EqR4;
+    A8: EqR2 "\/" EqR3 c= EqR1 \/ (EqR2 "\/" EqR3) by XBOOLE_1:7;
+    A9: EqR1 c= EqR1 \/ (EqR2 "\/" EqR3) by XBOOLE_1:7;
+    A10: EqR2 \/ EqR3 c= EqR2 "\/" EqR3 by EQREL_1:def 3;
+    A11: EqR2 c= EqR2 \/ EqR3 & EqR3 c= EqR2 \/ EqR3 by XBOOLE_1:7;
+    assume EqR4 = EqR1 "\/" (EqR2 "\/" EqR3);
+    then A12: EqR1 \/ (EqR2 "\/" EqR3) c= EqR4 by EQREL_1:def 3;
+    then EqR2 "\/" EqR3 c= EqR4 by A8,XBOOLE_1:1;
+    then EqR2 \/ EqR3 c= EqR4 by A10,XBOOLE_1:1;
+    then A13: EqR1 c= EqR4 & EqR2 c= EqR4 & EqR3 c= EqR4 by A9,A11,A12,XBOOLE_1
+:1
+;
+    then EqR1 \/ EqR2 c= EqR4 by XBOOLE_1:8;
+    then EqR1 "\/" EqR2 c= EqR4 by EQREL_1:def 3;
+    then (EqR1 "\/" EqR2) \/ EqR3 c= EqR4 by A13,XBOOLE_1:8;
+    hence (EqR1 "\/" EqR2) "\/" EqR3 c= EqR4 by EQREL_1:def 3;
+   end;
+   then (EqR1 "\/" EqR2) "\/" EqR3 c= EqR1 "\/" (EqR2 "\/" EqR3);
+   hence thesis by A7,XBOOLE_0:def 10;
+  end;
+
+  definition
+   let X be set, R be Relation of X;
+   func EqCl R -> Equivalence_Relation of X means
+    :Def1: R c= it & for EqR2 be Equivalence_Relation of X st R c= EqR2 holds
+      it c= EqR2;
+   existence by EQREL_1:20;
+   uniqueness
+   proof
+    let C1,C2 be Equivalence_Relation of X such that
+     A1: R c= C1 and
+     A2: for EqR2 be Equivalence_Relation of X st R c= EqR2 holds
+      C1 c= EqR2 and
+     A3: R c= C2 and
+     A4: for EqR2 be Equivalence_Relation of X st R c= EqR2 holds
+      C2 c= EqR2;
+     A5: C1 c= C2 by A2,A3;
+       C2 c= C1 by A1,A4;
+     hence C1 = C2 by A5,XBOOLE_0:def 10;
+   end;
+  end;
+
+  theorem Th2:
+   EqR1 "\/" EqR2 = EqCl (EqR1 \/ EqR2)
+   proof
+      EqR1 \/ EqR2 c= EqR1 "\/" EqR2 & for EqR3 be Equivalence_Relation of X st
+    EqR1 \/ EqR2 c= EqR3 holds EqR1 "\/" EqR2 c= EqR3 by EQREL_1:def 3;
+    hence thesis by Def1;
+   end;
+
+   theorem Th3:
+    EqCl EqR1 = EqR1
+    proof
+       EqR1 c= EqR1 & for EqR2 be Equivalence_Relation of X st EqR1 c= EqR2
+      holds EqR1 c= EqR2;
+     hence thesis by Def1;
+    end;
+
+   theorem Th4:
+    nabla X \/ R1 = nabla X
+    proof
+       now let z;
+      assume z in R1;
+      then consider x,y such that A1: z = [x,y] & x in X & y in
+ X by RELSET_1:6;
+        z in [:X,X:] by A1,ZFMISC_1:106;
+      hence z in nabla X by EQREL_1:def 1;
+     end;
+     then R1 c= nabla X by TARSKI:def 3;
+     hence thesis by XBOOLE_1:12;
+    end;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::               LATTICE  OF  EQUIVALENCE  RELATIONS             ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let X be set;
+   func EqRelLatt X -> strict Lattice means
+      the carrier of it = {x where x is Relation of X,X :
+                         x is Equivalence_Relation of X} &
+    for x,y being Equivalence_Relation of X holds
+     (the L_meet of it).(x,y) = x /\ y &
+     (the L_join of it).(x,y) = x "\/" y;
+   existence
+   proof
+    set B = {x where x is Relation of X,X : x is Equivalence_Relation of X};
+      id X in B;
+    then reconsider B as non empty set;
+    defpred Z[Element of B,Element of B,Element of B] means
+      ( $1 \/ $2 c= $3 & for x' be Element of B st $1 \/ $2 c= x' holds
+        $3 c= x' );
+    A1: for x,y being Element of B ex z being Element of B st Z[x,y,z]
+    proof
+     let x,y be Element of B;
+     A2: x in B & y in B;
+     then A3: ex x'' be Relation of X,X st x = x'' &
+      x'' is Equivalence_Relation of X;
+       ex y'' be Relation of X,X st y = y'' &
+      y'' is Equivalence_Relation of X by A2;
+     then reconsider x1 = x , y1 = y as Equivalence_Relation of X by A3;
+     consider z being Equivalence_Relation of X such that A4: x1 \/ y1 c= z &
+      for x' be Equivalence_Relation of X st x1 \/ y1 c= x' holds z c= x'
+                                                               by EQREL_1:20;
+       z in B;
+     then reconsider z' = z as Element of B;
+     take z';
+     thus x \/ y c= z' by A4;
+     hereby let x' be Element of B such that A5: x \/ y c= x';
+        x' in B;
+      then ex x'' be Relation of X,X st x' = x'' &
+       x'' is Equivalence_Relation of X;
+      then reconsider x1' = x' as Equivalence_Relation of X;
+        x \/ y c= x1' by A5;
+      hence z' c= x' by A4;
+     end;
+    end;
+    consider B1 being BinOp of B such that A6:
+     for x,y being Element of B holds Z[x,y,B1.(x,y)] from BinOpEx(A1);
+    A7: now let x,y be Equivalence_Relation of X;
+       x in B & y in B;
+     then reconsider x1 = x , y1 = y as Element of B;
+     reconsider B1' = B1.(x1,y1) as Element of B;
+       B1' in B;
+     then ex B1'' be Relation of X,X st B1' = B1'' &
+      B1'' is Equivalence_Relation of X;
+     then reconsider B1' as Equivalence_Relation of X;
+     A8: x1 \/ y1 c= B1.(x1,y1) & for x' be Element of B st
+      x1 \/ y1 c= x' holds B1.(x1,y1) c= x' by A6;
+       now let x' be Equivalence_Relation of X such that A9: x \/ y c= x';
+        x' in B;
+      then reconsider x1' = x' as Element of B;
+        x \/ y c= x1' by A9;
+      hence B1.(x,y) c= x' by A8;
+     end;
+     then B1' = x "\/" y by A8,EQREL_1:def 3;
+     hence B1.(x,y) = x "\/" y;
+    end;
+    defpred Z[Element of B,Element of B,Element of B] means  $3 = $1 /\ $2;
+    A10: for x,y being Element of B ex z being Element of B st Z[x,y,z]
+    proof
+     let x,y be Element of B;
+     A11: x in B & y in B;
+     then A12: ex x1 being Relation of X,X st x = x1 &
+      x1 is Equivalence_Relation of X;
+       ex y1 being Relation of X,X st y = y1 &
+      y1 is Equivalence_Relation of X by A11;
+     then reconsider x' = x , y' = y as Equivalence_Relation of X by A12;
+     set z = x' /\ y';
+       z in B;
+     then reconsider z as Element of B;
+     take z;
+     thus z = x /\ y;
+    end;
+    consider B2 be BinOp of B such that A13:
+     for x,y being Element of B holds Z[x,y,B2.(x,y)] from BinOpEx(A10);
+    A14: now let x,y be Equivalence_Relation of X;
+       x in B & y in B;
+     then reconsider x' = x , y' = y as Element of B;
+       B2.(x',y') = x' /\ y' by A13;
+     hence B2.(x,y) = x /\ y;
+    end;
+    reconsider L = LattStr (# B,B1,B2 #) as non empty LattStr
+      by STRUCT_0:def 1;
+    A15: B1 is commutative
+    proof
+       now let a,b be Element of B;
+      A16: a in B & b in B;
+      then A17: ex x1 be Relation of X,X st a = x1 &
+       x1 is Equivalence_Relation of X;
+        ex x2 be Relation of X,X st b = x2 &
+       x2 is Equivalence_Relation of X by A16;
+      then reconsider U1 = a , U2 = b as Equivalence_Relation of X by A17;
+      thus B1.(a,b) = U2 "\/" U1 by A7
+                    .= B1.(b,a) by A7;
+     end;
+     hence thesis by BINOP_1:def 2;
+    end;
+    A18: B1 is associative
+    proof
+       now let a,b,c be Element of B;
+      A19: a in B & b in B & c in B;
+      then A20: ex x1 be Relation of X,X st a = x1 &
+       x1 is Equivalence_Relation of X;
+      A21: ex x2 be Relation of X,X st b = x2 &
+       x2 is Equivalence_Relation of X by A19;
+        ex x3 be Relation of X,X st c = x3 &
+       x3 is Equivalence_Relation of X by A19;
+      then reconsider U1 = a , U2 = b , U3 = c as Equivalence_Relation of X
+                                                                    by A20,A21;
+      thus B1.(a,B1.(b,c)) = B1.(a,U2 "\/" U3) by A7
+                            .= U1 "\/" (U2 "\/" U3) by A7
+                            .= (U1 "\/" U2) "\/" U3 by Th1
+                            .= B1.(U1 "\/" U2,c) by A7
+                            .= B1.(B1.(a,b),c) by A7;
+     end;
+     hence thesis by BINOP_1:def 3;
+    end;
+    A22:B2 is commutative
+    proof
+       now let a,b be Element of B;
+      A23: a in B & b in B;
+      then A24: ex x1 be Relation of X,X st a = x1 &
+       x1 is Equivalence_Relation of X;
+        ex x2 be Relation of X,X st b = x2 &
+       x2 is Equivalence_Relation of X by A23;
+      then reconsider U1 = a , U2 = b as Equivalence_Relation of X by A24;
+      thus B2.(a,b) = U2 /\ U1 by A14
+                    .= B2.(b,a) by A14;
+     end;
+     hence thesis by BINOP_1:def 2;
+    end;
+    A25: B2 is associative
+    proof
+       now let a,b,c be Element of B;
+      A26: a in B & b in B & c in B;
+      then A27: ex x1 be Relation of X,X st a = x1 &
+       x1 is Equivalence_Relation of X;
+      A28: ex x2 be Relation of X,X st b = x2 &
+       x2 is Equivalence_Relation of X by A26;
+        ex x3 be Relation of X,X st c = x3 &
+       x3 is Equivalence_Relation of X by A26;
+      then reconsider U1 = a , U2 = b , U3 = c as Equivalence_Relation of X
+                                                                    by A27,A28;
+      thus B2.(a,B2.(b,c)) = B2.(a,U2 /\ U3) by A14
+                            .= U1 /\ (U2 /\ U3) by A14
+                            .= (U1 /\ U2) /\ U3 by XBOOLE_1:16
+                            .= B2.(U1 /\ U2,c) by A14
+                            .= B2.(B2.(a,b),c) by A14;
+     end;
+     hence thesis by BINOP_1:def 3;
+    end;
+    A29:for a,b being Element of L holds a"\/"b = b"\/"a
+     proof let a,b be Element of L;
+      reconsider x=a,y=b as Element of B;
+      thus a"\/"b = B1.(x,y) by LATTICES:def 1
+               .= (the L_join of L).(b,a) by A15,BINOP_1:def 2
+               .=b"\/"a by LATTICES:def 1;
+     end;
+    A30:for a,b,c being Element of L
+                                       holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+     proof let a,b,c be Element of L;
+      reconsider x=a,y=b,z=c as Element of B;
+      A31: (the L_join of L).(a,b) = a"\/"b by LATTICES:def 1;
+      thus a"\/"(b"\/"c) = (the L_join of L).(a,(b"\/"c)) by LATTICES:def 1
+               .=B1.(x,B1.(y,z)) by LATTICES:def 1
+               .= (the L_join of L).((the L_join of L).(a,b),c) by A18,BINOP_1:
+def 3
+               .=(a"\/"b)"\/"c by A31,LATTICES:def 1;
+     end;
+    A32:for a,b being Element of L holds (a"/\"b)"\/"b = b
+     proof let a,b be Element of L;
+      reconsider x=a,y=b as Element of B;
+      A33:B1.(B2.(x,y),y)= y
+       proof
+        A34: x in B & y in B;
+        then A35: ex x1 be Relation of X,X st x = x1 &
+         x1 is Equivalence_Relation of X;
+          ex x2 be Relation of X,X st y = x2 &
+         x2 is Equivalence_Relation of X by A34;
+        then reconsider U1 = x , U2 = y as Equivalence_Relation of X by A35;
+          B2.(x,y) = U1 /\ U2 by A14;
+        hence B1.(B2.(x,y),y) = (U2 "\/" (U1 /\ U2)) by A7
+                             .= y by EQREL_1:25;
+       end;
+      thus (a"/\"b)"\/"b = (the L_join of L).((a"/\"b),b) by LATTICES:def 1
+            .= b by A33,LATTICES:def 2;
+     end;
+    A36:for a,b being Element of L holds a"/\"b = b"/\"a
+     proof let a,b be Element of L;
+      reconsider x=a,y=b as Element of B;
+      thus a"/\"b = B2.(x,y) by LATTICES:def 2
+               .= (the L_meet of L).(b,a) by A22,BINOP_1:def 2
+               .=b"/\"a by LATTICES:def 2;
+     end;
+    A37:for a,b,c being Element of L
+                                       holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+     proof let a,b,c be Element of L;
+      reconsider x=a,y=b,z=c as Element of B;
+      A38: (the L_meet of L).(a,b) = a"/\"b by LATTICES:def 2;
+      thus a"/\"(b"/\"c) = (the L_meet of L).(a,(b"/\"c)) by LATTICES:def 2
+               .=B2.(x,B2.(y,z)) by LATTICES:def 2
+               .= (the L_meet of L).((the L_meet of L).(a,b),c) by A25,BINOP_1:
+def 3
+               .=(a"/\"b)"/\"c by A38,LATTICES:def 2;
+     end;
+      for a,b being Element of L holds a"/\"(a"\/"b)=a
+     proof let a,b be Element of L;
+      reconsider x=a,y=b as Element of B;
+      A39:B2.(x,B1.(x,y))= x
+       proof
+        A40: x in B & y in B;
+        then A41: ex x1 be Relation of X,X st x = x1 &
+         x1 is Equivalence_Relation of X;
+          ex x2 be Relation of X,X st y = x2 &
+         x2 is Equivalence_Relation of X by A40;
+        then reconsider U1= x,U2=y as Equivalence_Relation of X by A41;
+          B1.(x,y) = U1 "\/" U2 by A7;
+        hence B2.(x,B1.(x,y)) = (U1 /\( U1 "\/" U2)) by A14
+                             .= x by EQREL_1:24;
+       end;
+      thus a"/\"(a"\/"b) = (the L_meet of L).(a,(a"\/"b)) by LATTICES:def 2
+            .= a by A39,LATTICES:def 1;
+     end;
+    then L is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+     by A29,A30,A32,A36,A37,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    then reconsider L as strict Lattice by LATTICES:def 10;
+    take L;
+    thus the carrier of L = {x where x is Relation of X,X :
+                          x is Equivalence_Relation of X};
+    thus for x,y be Equivalence_Relation of X holds
+     (the L_meet of L).(x,y) = x /\ y &
+     (the L_join of L).(x,y) = x "\/" y by A7,A14;
+   end;
+   uniqueness
+   proof
+    let P1,P2 be strict Lattice such that
+     A42: the carrier of P1 = {x where x is Relation of X,X :
+          x is Equivalence_Relation of X} and
+     A43: for x,y being Equivalence_Relation of X holds
+          (the L_meet of P1).(x,y) = x /\ y &
+          (the L_join of P1).(x,y) = x "\/" y and
+     A44: the carrier of P2 = {x where x is Relation of X,X :
+          x is Equivalence_Relation of X} and
+     A45: for x,y being Equivalence_Relation of X holds
+          (the L_meet of P2).(x,y) = x /\ y &
+          (the L_join of P2).(x,y) = x "\/" y;
+     reconsider Z = the carrier of P1 as non empty set;
+     A46: now let x,y be Element of Z;
+      A47: x in Z & y in Z;
+      then A48: ex x2 be Relation of X,X st x = x2 &
+       x2 is Equivalence_Relation of X by A42;
+        ex x3 be Relation of X,X st y = x3 &
+       x3 is Equivalence_Relation of X by A42,A47;
+      then reconsider x1 = x , y1 = y as Equivalence_Relation of X by A48;
+      thus (the L_join of P1).(x,y) = x1 "\/" y1 by A43
+                                   .= (the L_join of P2).(x,y) by A45;
+     end;
+       now let x,y be Element of Z;
+      A49: x in Z & y in Z;
+      then A50: ex x2 be Relation of X,X st x = x2 &
+       x2 is Equivalence_Relation of X by A42;
+        ex x3 be Relation of X,X st y = x3 &
+       x3 is Equivalence_Relation of X by A42,A49;
+      then reconsider x1 = x , y1 = y as Equivalence_Relation of X by A50;
+      thus (the L_meet of P1).(x,y) = x1 /\ y1 by A43
+                                   .= (the L_meet of P2).(x,y) by A45;
+     end;
+     then the L_meet of P1 = the L_meet of P2 by A42,A44,BINOP_1:2;
+     hence P1 = P2 by A42,A44,A46,BINOP_1:2;
+   end;
+  end;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::              MANY  SORTED  EQUIVALENCE  RELATIONS             ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let I,M;
+   cluster MSEquivalence_Relation-like ManySortedRelation of M;
+   existence
+   proof
+    deffunc F(set)=id (M.$1);
+    consider f be ManySortedSet of I such that A1:
+     for d st d in I holds
+      f.d = F(d) from MSSLambda;
+    A2: dom f = I by PBOOLE:def 3;
+      for x be set st x in dom f holds f.x is Relation
+    proof
+     let x be set;
+     assume x in dom f;
+     then f.x = id (M.x) by A1,A2;
+     hence thesis;
+    end;
+    then reconsider f as ManySortedRelation of I by MSUALG_4:def 1;
+      for i be set st i in I holds f.i is Relation of M.i,M.i
+    proof
+     let i be set;
+     assume i in I;
+     then f.i = id (M.i) by A1;
+     hence thesis;
+    end;
+    then reconsider f as ManySortedRelation of M,M by MSUALG_4:def 2;
+    reconsider f as ManySortedRelation of M;
+    A3: for i be set, R be Relation of M.i st
+     i in I & f.i = R holds
+      R is Equivalence_Relation of M.i
+    proof
+     let i be set,R be Relation of M.i;
+     assume i in I & f.i = R;
+     then R = id (M.i) by A1;
+     hence thesis;
+    end;
+    take f;
+    thus thesis by A3,MSUALG_4:def 3;
+   end;
+  end;
+
+  definition
+   let I,M;
+   mode Equivalence_Relation of M is
+       MSEquivalence_Relation-like ManySortedRelation of M;
+  end;
+
+  reserve I for non empty set;
+  reserve M for ManySortedSet of I;
+  reserve EqR,EqR1,EqR2,EqR3,EqR4 for Equivalence_Relation of M;
+
+  definition
+   let I be non empty set;
+   let M be ManySortedSet of I, R be ManySortedRelation of M;
+   func EqCl R -> Equivalence_Relation of M means
+    :Def3: for i being Element of I holds it.i = EqCl(R.i);
+   existence
+   proof
+    deffunc F(Element of I) = EqCl(R.$1);
+    consider EqR be ManySortedSet of I such that A1:
+     for i being Element of I holds EqR.i = F(i) from LambdaDMS;
+      for i be set st i in I holds EqR.i is Relation of M.i
+    proof
+     let i be set; assume i in I;
+     then reconsider i' = i as Element of I;
+       EqR.i = EqCl(R.i') by A1;
+     hence thesis;
+    end;
+    then reconsider EqR as ManySortedRelation of M by MSUALG_4:def 2;
+      for i be set, R be Relation of M.i st i in I & EqR.i = R holds
+     R is Equivalence_Relation of M.i
+    proof
+     let i be set;
+     let R1 be Relation of M.i; assume A2: i in I & EqR.i = R1;
+     then reconsider i' = i as Element of I;
+       R1 = EqCl(R.i') by A1,A2;
+     hence R1 is Equivalence_Relation of M.i;
+    end;
+    then reconsider EqR as Equivalence_Relation of M by MSUALG_4:def 3;
+    take EqR;
+    thus thesis by A1;
+   end;
+   uniqueness
+   proof
+    let C1,C2 be Equivalence_Relation of M such that
+     A3: for i being Element of I holds C1.i = EqCl(R.i) and
+     A4: for i being Element of I holds C2.i = EqCl(R.i);
+       now let i; assume i in I;
+      then reconsider i1 = i as Element of I;
+      thus C1.i = EqCl(R.i1) by A3
+               .= C2.i by A4;
+     end;
+     hence C1 = C2 by PBOOLE:3;
+   end;
+  end;
+
+  theorem
+     EqCl EqR = EqR
+   proof
+      now let i be Element of I;
+     reconsider ER = EqR.i as Equivalence_Relation of M.i by MSUALG_4:def 3;
+     thus EqR.i = EqCl ER by Th3
+               .= EqCl (EqR.i);
+    end;
+    hence thesis by Def3;
+   end;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::       LATTICE  OF  MANY  SORTED  EQUIVALENCE  RELATIONS       ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let I be non empty set,
+       M be ManySortedSet of I;
+   let EqR1,EqR2 be Equivalence_Relation of M;
+   func EqR1 "\/" EqR2 -> Equivalence_Relation of M means
+    :Def4: ex EqR3 being ManySortedRelation of M st EqR3 = EqR1 \/ EqR2 &
+      it = EqCl EqR3;
+   existence
+   proof
+    deffunc F(set) = (EqR1 \/ EqR2).$1;
+    consider E be ManySortedSet of I such that A1:
+     for i st i in I holds E.i = F(i) from MSSLambda;
+      for i be set st i in I holds E.i is Relation of M.i
+    proof
+     let i be set; assume A2: i in I;
+     then reconsider i' = i as Element of I;
+       E.i = (EqR1 \/ EqR2).i by A1,A2
+        .= EqR1.i' \/ EqR2.i' by PBOOLE:def 7;
+     hence thesis;
+    end;
+    then reconsider E as ManySortedRelation of M by MSUALG_4:def 2;
+    take EqCl E;
+    take E;
+    thus thesis by A1,PBOOLE:3;
+   end;
+   uniqueness;
+   commutativity;
+  end;
+
+  theorem Th6:
+   EqR1 \/ EqR2 c= EqR1 "\/" EqR2
+   proof
+    consider EqR3 being ManySortedRelation of M such that A1:
+     EqR3 = EqR1 \/ EqR2 & EqR1 "\/" EqR2 = EqCl EqR3 by Def4;
+      now let i; assume i in I;
+     then reconsider i' = i as Element of I;
+       EqR3.i c= EqCl(EqR3.i') by Def1;
+     hence EqR3.i c= (EqR1 "\/" EqR2).i by A1,Def3;
+    end;
+    hence thesis by A1,PBOOLE:def 5;
+   end;
+
+  theorem Th7:
+   for EqR be Equivalence_Relation of M st
+    EqR1 \/ EqR2 c= EqR holds EqR1 "\/" EqR2 c= EqR
+   proof
+    let EqR be Equivalence_Relation of M such that A1: EqR1 \/ EqR2 c= EqR;
+    consider EqR3 being ManySortedRelation of M such that A2:
+     EqR3 = EqR1 \/ EqR2 & EqR1 "\/" EqR2 = EqCl EqR3 by Def4;
+      now let i; assume A3: i in I;
+     then reconsider i' = i as Element of I;
+       EqR.i' is Relation of M.i;
+     then reconsider E = EqR.i as Equivalence_Relation of M.i
+                                                          by MSUALG_4:def 3;
+       EqR3.i c= E by A1,A2,A3,PBOOLE:def 5;
+     then EqCl(EqR3.i') c= E by Def1;
+     hence (EqR1 "\/" EqR2).i c= EqR.i by A2,Def3;
+    end;
+    hence EqR1 "\/" EqR2 c= EqR by PBOOLE:def 5;
+   end;
+
+  theorem Th8:
+   ( EqR1 \/ EqR2 c= EqR3 & for EqR be Equivalence_Relation of M st
+       EqR1 \/ EqR2 c= EqR holds EqR3 c= EqR ) implies
+        EqR3 = EqR1 "\/" EqR2
+   proof
+    assume that
+    A1: EqR1 \/ EqR2 c= EqR3 and
+    A2: for EqR be Equivalence_Relation of M st EqR1 \/ EqR2 c= EqR holds
+        EqR3 c= EqR;
+      EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Th6;
+    then A3: EqR3 c= EqR1 "\/" EqR2 by A2;
+      EqR1 "\/" EqR2 c= EqR3 by A1,Th7;
+    hence EqR3 = EqR1 "\/" EqR2 by A3,PBOOLE:def 13;
+   end;
+
+  theorem
+     EqR "\/" EqR = EqR
+   proof
+      for EqR3 st EqR \/ EqR c= EqR3 holds EqR c= EqR3;
+    hence thesis by Th8;
+   end;
+
+  theorem Th10:
+   (EqR1 "\/" EqR2) "\/" EqR3 = EqR1 "\/" (EqR2 "\/" EqR3)
+   proof
+      for EqR4 holds EqR4 = (EqR1 "\/" EqR2) "\/" EqR3 implies
+     EqR1 "\/" (EqR2 "\/" EqR3) c= EqR4
+    proof
+     let EqR4;
+     A1: EqR1 "\/" EqR2 c= (EqR1 "\/" EqR2) \/ EqR3 by PBOOLE:16;
+     A2: EqR3 c= (EqR1 "\/" EqR2) \/ EqR3 by PBOOLE:16;
+     A3: EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Th6;
+     A4: EqR1 c= EqR1 \/ EqR2 & EqR2 c= EqR1 \/ EqR2 by PBOOLE:16;
+     assume EqR4 = (EqR1 "\/" EqR2) "\/" EqR3;
+     then A5: (EqR1 "\/" EqR2) \/ EqR3 c= EqR4 by Th6;
+     then EqR1 "\/" EqR2 c= EqR4 by A1,PBOOLE:15;
+     then EqR1 \/ EqR2 c= EqR4 by A3,PBOOLE:15;
+     then A6: EqR1 c= EqR4 & EqR2 c= EqR4 & EqR3 c= EqR4
+                                                       by A2,A4,A5,PBOOLE:15;
+     then EqR2 \/ EqR3 c= EqR4 by PBOOLE:18;
+     then EqR2 "\/" EqR3 c= EqR4 by Th7;
+     then EqR1 \/ (EqR2 "\/" EqR3) c= EqR4 by A6,PBOOLE:18;
+     hence EqR1 "\/" (EqR2 "\/" EqR3) c= EqR4 by Th7;
+    end;
+    then A7: EqR1 "\/" (EqR2 "\/" EqR3) c= (EqR1 "\/" EqR2) "\/" EqR3;
+      for EqR4 holds EqR4 = EqR1 "\/" (EqR2 "\/" EqR3) implies
+     (EqR1 "\/" EqR2) "\/" EqR3 c= EqR4
+    proof
+     let EqR4;
+     A8: EqR2 "\/" EqR3 c= EqR1 \/ (EqR2 "\/" EqR3) by PBOOLE:16;
+     A9: EqR1 c= EqR1 \/ (EqR2 "\/" EqR3) by PBOOLE:16;
+     A10: EqR2 \/ EqR3 c= EqR2 "\/" EqR3 by Th6;
+     A11: EqR2 c= EqR2 \/ EqR3 & EqR3 c= EqR2 \/ EqR3 by PBOOLE:16;
+     assume EqR4 = EqR1 "\/" (EqR2 "\/" EqR3);
+     then A12: EqR1 \/ (EqR2 "\/" EqR3) c= EqR4 by Th6;
+     then EqR2 "\/" EqR3 c= EqR4 by A8,PBOOLE:15;
+     then EqR2 \/ EqR3 c= EqR4 by A10,PBOOLE:15;
+     then A13: EqR1 c= EqR4 & EqR2 c= EqR4 & EqR3 c= EqR4
+                                                       by A9,A11,A12,PBOOLE:15;
+     then EqR1 \/ EqR2 c= EqR4 by PBOOLE:18;
+     then EqR1 "\/" EqR2 c= EqR4 by Th7;
+     then (EqR1 "\/" EqR2) \/ EqR3 c= EqR4 by A13,PBOOLE:18;
+     hence (EqR1 "\/" EqR2) "\/" EqR3 c= EqR4 by Th7;
+    end;
+    then (EqR1 "\/" EqR2) "\/" EqR3 c= EqR1 "\/" (EqR2 "\/" EqR3);
+    hence thesis by A7,PBOOLE:def 13;
+   end;
+
+  theorem Th11:
+   EqR1 /\ (EqR1 "\/" EqR2) = EqR1
+   proof
+    thus EqR1 /\ (EqR1 "\/" EqR2) c= EqR1 by PBOOLE:17;
+    A1: EqR1 c= EqR1 \/ EqR2 by PBOOLE:16;
+      EqR1 \/ EqR2 c= EqR1 "\/" EqR2 by Th6;
+    then EqR1 c= EqR1 "\/" EqR2 by A1,PBOOLE:15;
+    hence EqR1 c= EqR1 /\ (EqR1 "\/" EqR2) by PBOOLE:19;
+   end;
+
+  theorem Th12:
+   for EqR be Equivalence_Relation of M st EqR = EqR1 /\ EqR2 holds
+    EqR1 "\/" EqR = EqR1
+   proof
+    let EqR be Equivalence_Relation of M such that A1: EqR = EqR1 /\ EqR2;
+    A2: EqR1 = EqR1 \/ (EqR1 /\ EqR2) by PBOOLE:37;
+      for EqR4 st EqR1 \/ (EqR1 /\ EqR2) c= EqR4 holds EqR1 c= EqR4 by PBOOLE:
+37
+;
+    hence thesis by A1,A2,Th8;
+   end;
+
+  theorem Th13:
+   for EqR1,EqR2 be Equivalence_Relation of M holds
+                                     EqR1 /\ EqR2 is Equivalence_Relation of M
+   proof
+    let EqR1,EqR2 be Equivalence_Relation of M;
+      for i be set st i in I holds (EqR1 /\ EqR2).i is Relation of M.i,M.i
+    proof
+     let i be set; assume A1: i in I;
+     then reconsider U1' = EqR1.i as Relation of M.i,M.i by MSUALG_4:def 2;
+     reconsider U2' = EqR2.i as Relation of M.i,M.i by A1,MSUALG_4:def 2;
+       (EqR1 /\ EqR2).i = U1' /\ U2' by A1,PBOOLE:def 8;
+     hence (EqR1 /\ EqR2).i is Relation of M.i,M.i;
+    end;
+    then reconsider U3 = EqR1 /\ EqR2 as ManySortedRelation of M
+                                                          by MSUALG_4:def 2;
+      for i be set, R be Relation of M.i st i in I & U3.i = R holds
+     R is Equivalence_Relation of M.i
+    proof
+     let i be set;
+     let R be Relation of M.i; assume A2: i in I & U3.i = R;
+     then reconsider U1' = EqR1.i as Relation of M.i by MSUALG_4:def 2;
+     reconsider U1' as Equivalence_Relation of M.i by A2,MSUALG_4:def 3;
+     reconsider U2' = EqR2.i as Relation of M.i by A2,MSUALG_4:def 2;
+     reconsider U2' as Equivalence_Relation of M.i by A2,MSUALG_4:def 3;
+       U1' /\ U2' is Equivalence_Relation of M.i;
+     hence R is Equivalence_Relation of M.i by A2,PBOOLE:def 8;
+    end;
+    hence EqR1 /\ EqR2 is Equivalence_Relation of M by MSUALG_4:def 3;
+   end;
+
+  definition
+   let I be non empty set;
+   let M be ManySortedSet of I;
+   func EqRelLatt M -> strict Lattice means
+    :Def5: (for x being set holds x in the carrier of it
+     iff x is Equivalence_Relation of M) &
+    for x,y being Equivalence_Relation of M holds
+     (the L_meet of it).(x,y) = x /\ y &
+     (the L_join of it).(x,y) = x "\/" y;
+   existence
+   proof
+    deffunc F(Element of I)=bool [:M.$1,M.$1:];
+    consider M2 being ManySortedSet of I such that A1:
+     for i be Element of I holds M2.i = F(i) from LambdaDMS;
+    defpred P[set] means $1 is Equivalence_Relation of M;
+    consider B be set such that A2: for x being set holds
+     x in B iff x in product M2 & P[x] from Separation;
+    A3: for EqR be Equivalence_Relation of M holds EqR in product M2
+    proof
+     let EqR be Equivalence_Relation of M;
+     A4: dom EqR = I by PBOOLE:def 3
+                .= dom M2 by PBOOLE:def 3;
+       for x be set st x in dom M2 holds EqR.x in M2.x
+     proof
+      let x be set; assume x in dom M2;
+      then reconsider x' = x as Element of I by PBOOLE:def 3;
+      A5: M2.x' = bool [:M.x',M.x':] by A1;
+        EqR.x' is Element of bool [:M.x',M.x':];
+      hence EqR.x in M2.x by A5;
+     end;
+     hence EqR in product M2 by A4,CARD_3:18;
+    end;
+    consider f be Equivalence_Relation of M;
+      f in product M2 by A3;
+    then reconsider B as non empty set by A2;
+    defpred Z[Element of B,Element of B,Element of B] means
+     (for x1,y1 be Equivalence_Relation of M st x1 = $1 & y1 = $2
+      ex EqR3 being ManySortedRelation of M st EqR3 = x1 \/ y1 &
+       $3 = EqCl EqR3);
+    A6: for x,y being Element of B ex z being Element of B st Z[x,y,z]
+    proof
+     let x,y be Element of B;
+     reconsider x' = x , y' = y as Equivalence_Relation of M by A2;
+     set z = x' "\/" y';
+       z in product M2 by A3;
+     then reconsider z as Element of B by A2;
+     take z;
+     let x1,y1 be Equivalence_Relation of M; assume x1 = x & y1 = y;
+     hence ex EqR3 being ManySortedRelation of M st EqR3 = x1 \/ y1 &
+       z = EqCl EqR3 by Def4;
+    end;
+    consider B1 be BinOp of B such that A7:
+     for x,y being Element of B
+      holds Z[x,y,B1.(x,y)] from BinOpEx(A6);
+    A8: now let x,y be Equivalence_Relation of M;
+       x in product M2 & y in product M2 by A3;
+     then reconsider x' = x , y' = y as Element of B by A2;
+     consider EqR3 being ManySortedRelation of M such that A9:
+      EqR3 = x \/ y & B1.(x',y') = EqCl EqR3 by A7;
+     thus B1.(x,y) = x "\/" y by A9,Def4;
+    end;
+    defpred Q[Element of B,Element of B,Element of B] means
+     for x1,y1 be Equivalence_Relation of M st x1 = $1 & y1 = $2 holds
+      $3 = x1 /\ y1;
+    A10: for x,y being Element of B ex z being Element of B st Q[x,y,z]
+    proof
+     let x,y be Element of B;
+     reconsider x' = x , y' = y as Equivalence_Relation of M by A2;
+     set z = x' /\ y';
+       for i be set st i in I holds z.i is Relation of M.i
+     proof
+      let i be set; assume i in I;
+      then reconsider i' = i as Element of I;
+        z.i = x'.i' /\ y'.i' by PBOOLE:def 8;
+      hence thesis;
+     end;
+     then reconsider z as ManySortedRelation of M by MSUALG_4:def 2;
+       for i be set, R be Relation of M.i st i in I & z.i = R holds
+      R is Equivalence_Relation of M.i
+     proof
+      let i be set;
+      let R be Relation of M.i; assume A11: i in I & z.i = R;
+      then reconsider i' = i as Element of I;
+      reconsider x1'' = x'.i' , y1'' = y'.i' as Relation of M.i;
+      reconsider x'' = x1'' , y'' = y1'' as Equivalence_Relation of M.i
+                                                       by MSUALG_4:def 3;
+        R = x'' /\ y'' by A11,PBOOLE:def 8;
+      hence thesis;
+     end;
+     then reconsider z as Equivalence_Relation of M by MSUALG_4:def 3;
+       z in product M2 by A3;
+     then reconsider z as Element of B by A2;
+     take z;
+     thus thesis;
+    end;
+    consider B2 be BinOp of B such that A12:
+     for x,y being Element of B holds Q[x,y,B2.(x,y)] from BinOpEx(A10);
+    A13: now let x,y be Equivalence_Relation of M;
+       x in product M2 & y in product M2 by A3;
+     then reconsider x' = x , y' = y as Element of B by A2;
+       x' = x & y' = y;
+     hence B2.(x,y) = x /\ y by A12;
+    end;
+    reconsider L = LattStr (# B,B1,B2 #) as non empty LattStr
+      by STRUCT_0:def 1;
+    A14: B1 is commutative
+    proof
+       now let a,b be Element of B;
+      reconsider U1 = a , U2 = b as Equivalence_Relation of M by A2;
+      thus B1.(a,b) = U1 "\/" U2 by A8
+                   .= B1.(b,a) by A8;
+     end;
+     hence thesis by BINOP_1:def 2;
+    end;
+    A15: B1 is associative
+    proof
+       now let a,b,c be Element of B;
+      reconsider U1 = a , U2 = b , U3 = c as Equivalence_Relation of M by A2;
+      thus B1.(a,B1.(b,c)) = B1.(a,U2 "\/" U3) by A8
+                          .= U1 "\/" (U2 "\/" U3) by A8
+                          .= (U1 "\/" U2) "\/" U3 by Th10
+                          .= B1.(U1 "\/" U2,c) by A8
+                          .= B1.(B1.(a,b),c) by A8;
+     end;
+     hence thesis by BINOP_1:def 3;
+    end;
+    A16:B2 is commutative
+    proof
+       now let a,b be Element of B;
+      reconsider U1 = a , U2 = b as Equivalence_Relation of M by A2;
+      thus B2.(a,b) = U2 /\ U1 by A13
+                   .= B2.(b,a) by A13;
+     end;
+     hence thesis by BINOP_1:def 2;
+    end;
+    A17: B2 is associative
+    proof
+       now let a,b,c be Element of B;
+      reconsider U1 = a , U2 = b , U3 = c as Equivalence_Relation of M by A2;
+      reconsider EQR1 = U2 /\ U3 as Equivalence_Relation of M by Th13;
+      reconsider EQR2 = U1 /\ U2 as Equivalence_Relation of M by Th13;
+      thus B2.(a,B2.(b,c)) = B2.(a,EQR1) by A13
+                          .= U1 /\ (U2 /\ U3) by A13
+                          .= (U1 /\ U2) /\ U3 by PBOOLE:35
+                          .= B2.(EQR2,c) by A13
+                          .= B2.(B2.(a,b),c) by A13;
+     end;
+     hence thesis by BINOP_1:def 3;
+    end;
+    A18: for a,b being Element of L holds a"\/"b = b"\/"a
+    proof let a,b be Element of L;
+     reconsider x=a,y=b as Element of B;
+     thus a"\/"b = B1.(x,y) by LATTICES:def 1
+              .= (the L_join of L).(b,a) by A14,BINOP_1:def 2
+              .=b"\/"a by LATTICES:def 1;
+    end;
+    A19: for a,b,c being Element of L holds
+                                                       a"\/"(b"\/"c) = (a"\/"b)
+"\/"c
+    proof let a,b,c be Element of L;
+     reconsider x=a,y=b,z=c as Element of B;
+     A20: (the L_join of L).(a,b) = a"\/"b by LATTICES:def 1;
+     thus a"\/"(b"\/"c) = (the L_join of L).(a,(b"\/"c)) by LATTICES:def 1
+              .=B1.(x,B1.(y,z)) by LATTICES:def 1
+              .= (the L_join of L).((the L_join of L).(a,b),c) by A15,BINOP_1:
+def 3
+              .=(a"\/"b)"\/"c by A20,LATTICES:def 1;
+    end;
+    A21: for a,b being Element of L holds (a"/\"b)"\/"b = b
+    proof let a,b be Element of L;
+     reconsider x=a,y=b as Element of B;
+     A22:B1.(B2.(x,y),y)= y
+     proof
+      reconsider U1 = x , U2 = y as Equivalence_Relation of M by A2;
+      reconsider EQR = U1 /\ U2 as Equivalence_Relation of M by Th13;
+        B2.(x,y) = U1 /\ U2 by A13;
+      hence B1.(B2.(x,y),y) = EQR "\/" U2 by A8
+                           .= y by Th12;
+     end;
+     thus (a"/\"b)"\/"b = (the L_join of L).((a"/\"b),b) by LATTICES:def 1
+           .= b by A22,LATTICES:def 2;
+    end;
+    A23: for a,b being Element of L holds a"/\"b = b"/\"a
+    proof let a,b be Element of L;
+     reconsider x=a,y=b as Element of B;
+     thus a"/\"b = B2.(x,y) by LATTICES:def 2
+              .= (the L_meet of L).(b,a) by A16,BINOP_1:def 2
+              .=b"/\"a by LATTICES:def 2;
+    end;
+    A24: for a,b,c being Element of L holds
+                                                       a"/\"(b"/\"c) = (a"/\"b)
+"/\"c
+    proof let a,b,c be Element of L;
+     reconsider x=a,y=b,z=c as Element of B;
+     A25: (the L_meet of L).(a,b) = a"/\"b by LATTICES:def 2;
+     thus a"/\"(b"/\"c) = (the L_meet of L).(a,(b"/\"c)) by LATTICES:def 2
+              .=B2.(x,B2.(y,z)) by LATTICES:def 2
+              .= (the L_meet of L).((the L_meet of L).(a,b),c) by A17,BINOP_1:
+def 3
+              .=(a"/\"b)"/\"c by A25,LATTICES:def 2;
+    end;
+      for a,b being Element of L holds a"/\"(a"\/"b)=a
+    proof let a,b be Element of L;
+     reconsider x=a,y=b as Element of B;
+     A26:B2.(x,B1.(x,y))= x
+     proof
+      reconsider U1= x,U2=y as Equivalence_Relation of M by A2;
+        B1.(x,y) = U1 "\/" U2 by A8;
+      hence B2.(x,B1.(x,y)) = (U1 /\( U1 "\/" U2)) by A13
+                           .= x by Th11;
+     end;
+     thus a"/\"(a"\/"b) = (the L_meet of L).(a,(a"\/"b)) by LATTICES:def 2
+           .= a by A26,LATTICES:def 1;
+    end;
+    then L is join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+    by A18,A19,A21,A23,A24,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    then reconsider L as strict Lattice by LATTICES:def 10;
+    take L;
+    thus for x being set holds x in the carrier of L
+     iff x is Equivalence_Relation of M
+    proof
+     let x be set;
+     thus x in the carrier of L implies x is Equivalence_Relation of M by A2;
+     thus x is Equivalence_Relation of M implies x in the carrier of L
+     proof
+      assume A27: x is Equivalence_Relation of M;
+      then x in product M2 by A3;
+      hence x in the carrier of L by A2,A27;
+     end;
+    end;
+    thus thesis by A8,A13;
+   end;
+   uniqueness
+   proof
+    let S1,S2 be strict Lattice such that
+    A28: for x being set holds x in the carrier of S1
+      iff x is Equivalence_Relation of M and
+    A29: for x,y being Equivalence_Relation of M holds
+      (the L_meet of S1).(x,y) = x /\ y &
+      (the L_join of S1).(x,y) = x "\/" y and
+    A30: for x being set holds x in the carrier of S2
+      iff x is Equivalence_Relation of M and
+    A31: for x,y being Equivalence_Relation of M holds
+      (the L_meet of S2).(x,y) = x /\ y &
+      (the L_join of S2).(x,y) = x "\/" y;
+    A32: now let x be set;
+       x is Equivalence_Relation of M iff x in the carrier of S2 by A30;
+     hence x in the carrier of S1 iff x in the carrier of S2 by A28;
+    end;
+    then A33: the carrier of S1 = the carrier of S2 by TARSKI:2;
+    reconsider Z = the carrier of S1 as non empty set;
+      now let x,y be Element of Z;
+     reconsider x1 = x , y1 = y as Equivalence_Relation of M by A28;
+     thus (the L_meet of S1).(x,y) = x1 /\ y1 by A29
+                                  .= (the L_meet of S2).(x,y) by A31;
+     thus (the L_join of S1).(x,y) = x1 "\/" y1 by A29
+                                  .= (the L_join of S2).(x,y) by A31;
+    end;
+    then the L_meet of S1 = the L_meet of S2 &
+         the L_join of S1 = the L_join of S2 by A33,BINOP_1:2;
+    hence S1 = S2 by A32,TARSKI:2;
+   end;
+  end;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::    LATTICE  OF  CONGRUENCES  IN  A  MANY  SORTED  ALGEBRA     ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let S be non empty ManySortedSign;
+   let A be MSAlgebra over S;
+   cluster MSEquivalence-like ->
+          MSEquivalence_Relation-like ManySortedRelation of A;
+   coherence by MSUALG_4:def 5;
+  end;
+
+  reserve S for non void non empty ManySortedSign;
+  reserve A for non-empty MSAlgebra over S;
+
+  theorem Th14:
+   for o be OperSymbol of S
+   for C1,C2 being MSCongruence of A
+   for x1,y1 be set
+   for a1,b1 be FinSequence holds
+    [x1,y1] in C1.((the_arity_of o)/.(len a1 + 1)) \/
+                             C2.((the_arity_of o)/.(len a1 + 1)) implies
+     for x,y be Element of Args(o,A) st x = (a1 ^ <*x1*> ^ b1) &
+      y = (a1 ^ <*y1*> ^ b1) holds
+       [Den(o,A).x,Den(o,A).y] in
+       C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o)
+   proof
+    let o be OperSymbol of S;
+    let C1,C2 be MSCongruence of A;
+    let x1,y1 be set;
+    let a1,b1 be FinSequence;
+    assume A1: [x1,y1] in C1.((the_arity_of o)/.(len a1 + 1)) \/
+                              C2.((the_arity_of o)/.(len a1 + 1));
+    let x,y be Element of Args(o,A); assume A2:
+     x = (a1 ^ <*x1*> ^ b1) & y = (a1 ^ <*y1*> ^ b1);
+    then A3: x = a1 ^ (<*x1*> ^ b1) & y = a1 ^ (<*y1*> ^ b1) by FINSEQ_1:45;
+      now per cases by A1,XBOOLE_0:def 2;
+     suppose A4: [x1,y1] in C1.((the_arity_of o)/.(len a1 + 1));
+        for n be Nat st n in dom x holds [x.n,y.n] in C1.((the_arity_of o)/.n)
+      proof
+       let n be Nat; assume A5: n in dom x;
+       then A6: n in dom (a1 ^ <*x1*>) or (ex k be Nat st k in dom b1 &
+        n = len (a1 ^ <*x1*>) + k) by A2,FINSEQ_1:38;
+       A7: the OperSymbols of S is non empty set by MSUALG_1:def 5;
+       A8: n in dom (the_arity_of o) by A5,MSUALG_3:6;
+       then A9: n in dom ((the Sorts of A) * (the_arity_of o))
+                                              by PBOOLE:def 3;
+       reconsider dz = dom (the_arity_of o) as non empty set by A5,MSUALG_3:6;
+       reconsider so = (the Sorts of A) * (the_arity_of o) as
+                                               non-empty ManySortedSet of dz;
+       A10: product so is non empty;
+         pi(Args(o,A),n) = pi(((the Sorts of A)# * the Arity of S).o,n)
+                                                           by MSUALG_1:def 9
+         .= pi((the Sorts of A)# . ((the Arity of S).o),n) by A7,FUNCT_2:21
+         .= pi((the Sorts of A)# . (the_arity_of o),n) by MSUALG_1:def 6
+         .= pi(product((the Sorts of A) * (the_arity_of o)),n)
+                                                           by MSUALG_1:def 3
+         .= ((the Sorts of A) * (the_arity_of o)).n by A9,A10,CARD_3:22
+         .= (the Sorts of A) . ((the_arity_of o).n) by A8,FUNCT_1:23
+         .= (the Sorts of A) . ((the_arity_of o)/.n) by A8,FINSEQ_4:def 4;
+    then A11: x.n in (the Sorts of A).((the_arity_of o)/.n) by CARD_3:def 6;
+         now per cases by A6,FINSEQ_1:38;
+        suppose A12: n in dom a1;
+         then A13: x.n = a1.n by A3,FINSEQ_1:def 7;
+            y.n = a1.n by A3,A12,FINSEQ_1:def 7;
+         hence [x.n,y.n] in C1.((the_arity_of o)/.n) by A11,A13,EQREL_1:11;
+        suppose ex m be Nat st m in dom <*x1*> & n = len a1 + m;
+         then consider m be Nat such that A14: m in
+ dom <*x1*> & n = len a1 + m;
+         A15: m in Seg 1 by A14,FINSEQ_1:55;
+         then A16: m = 1 by FINSEQ_1:4,TARSKI:def 1;
+         then A17: n in Seg (len a1 + 1) by A14,FINSEQ_1:6;
+         then n in Seg (len a1 + len <*x1*>) by FINSEQ_1:57;
+         then n in Seg len (a1 ^ <*x1*>) by FINSEQ_1:35;
+         then A18: n in dom (a1 ^ <*x1*>) by FINSEQ_1:def 3;
+           n in Seg (len a1 + len <*y1*>) by A17,FINSEQ_1:57;
+         then n in Seg len (a1 ^ <*y1*>) by FINSEQ_1:35;
+         then A19: n in dom (a1 ^ <*y1*>) by FINSEQ_1:def 3;
+         A20: x.n = (a1 ^ <*x1*>).(len a1 + 1) by A2,A14,A16,A18,FINSEQ_1:def 7
+                .= x1 by FINSEQ_1:59;
+           y.n = (a1 ^ <*y1*>).(len a1 + 1) by A2,A14,A16,A19,FINSEQ_1:def 7
+            .= y1 by FINSEQ_1:59;
+         hence [x.n,y.n] in C1.((the_arity_of o)/.n)
+                                   by A4,A14,A15,A20,FINSEQ_1:4,TARSKI:def 1;
+        suppose ex k be Nat st k in dom b1 & n = len (a1 ^ <*x1*>) + k;
+         then consider k be Nat such that A21:
+          k in dom b1 & n = len (a1 ^ <*x1*>) + k;
+         A22: x.n = b1.k by A2,A21,FINSEQ_1:def 7;
+           n = len a1 + len <*x1*> + k by A21,FINSEQ_1:35;
+         then n = len a1 + 1 + k by FINSEQ_1:57;
+         then n = len a1 + len <*y1*> + k by FINSEQ_1:57;
+         then n = len (a1 ^ <*y1*>) + k by FINSEQ_1:35;
+         then y.n = b1.k by A2,A21,FINSEQ_1:def 7;
+         hence [x.n,y.n] in C1.((the_arity_of o)/.n) by A11,A22,EQREL_1:11;
+       end;
+       hence thesis;
+      end;
+      then [Den(o,A).x,Den(o,A).y] in
+                                C1.(the_result_sort_of o) by MSUALG_4:def 6;
+      hence [Den(o,A).x,Den(o,A).y] in
+            C1.(the_result_sort_of o) \/
+ C2.(the_result_sort_of o) by XBOOLE_0:def 2;
+     suppose A23: [x1,y1] in C2.((the_arity_of o)/.(len a1 + 1));
+        for n be Nat st n in dom x holds [x.n,y.n] in C2.((the_arity_of o)/.n)
+      proof
+       let n be Nat; assume A24: n in dom x;
+       then A25: n in dom (a1 ^ <*x1*>) or (ex k be Nat st k in dom b1 &
+        n = len (a1 ^ <*x1*>) + k) by A2,FINSEQ_1:38;
+       A26: the OperSymbols of S is non empty set by MSUALG_1:def 5;
+       A27: n in dom (the_arity_of o) by A24,MSUALG_3:6;
+       then A28: n in dom ((the Sorts of A) * (the_arity_of o))
+                                              by PBOOLE:def 3;
+       reconsider dz = dom (the_arity_of o) as non empty set by A24,MSUALG_3:6;
+       reconsider so = (the Sorts of A) * (the_arity_of o) as
+                                               non-empty ManySortedSet of dz;
+       A29: product so is non empty;
+         pi(Args(o,A),n) = pi(((the Sorts of A)# * the Arity of S).o,n)
+                                                           by MSUALG_1:def 9
+         .= pi((the Sorts of A)# . ((the Arity of S).o),n) by A26,FUNCT_2:21
+         .= pi((the Sorts of A)# . (the_arity_of o),n) by MSUALG_1:def 6
+         .= pi(product((the Sorts of A) * (the_arity_of o)),n)
+                                                           by MSUALG_1:def 3
+         .= ((the Sorts of A) * (the_arity_of o)).n by A28,A29,CARD_3:22
+         .= (the Sorts of A) . ((the_arity_of o).n) by A27,FUNCT_1:23
+         .= (the Sorts of A) . ((the_arity_of o)/.n) by A27,FINSEQ_4:def 4;
+       then A30: x.n in (the Sorts of A).((the_arity_of o)/.n) by CARD_3:def 6;
+         now per cases by A25,FINSEQ_1:38;
+        suppose A31: n in dom a1;
+         then A32: x.n = a1.n by A3,FINSEQ_1:def 7;
+            y.n = a1.n by A3,A31,FINSEQ_1:def 7;
+         hence [x.n,y.n] in C2.((the_arity_of o)/.n) by A30,A32,EQREL_1:11;
+        suppose ex m be Nat st m in dom <*x1*> & n = len a1 + m;
+         then consider m be Nat such that A33: m in
+ dom <*x1*> & n = len a1 + m;
+         A34: m in Seg 1 by A33,FINSEQ_1:55;
+         then A35: m = 1 by FINSEQ_1:4,TARSKI:def 1;
+         then A36: n in Seg (len a1 + 1) by A33,FINSEQ_1:6;
+         then n in Seg (len a1 + len <*x1*>) by FINSEQ_1:57;
+         then n in Seg len (a1 ^ <*x1*>) by FINSEQ_1:35;
+         then A37: n in dom (a1 ^ <*x1*>) by FINSEQ_1:def 3;
+           n in Seg (len a1 + len <*y1*>) by A36,FINSEQ_1:57;
+         then n in Seg len (a1 ^ <*y1*>) by FINSEQ_1:35;
+         then A38: n in dom (a1 ^ <*y1*>) by FINSEQ_1:def 3;
+         A39: x.n = (a1 ^ <*x1*>).(len a1 + 1) by A2,A33,A35,A37,FINSEQ_1:def 7
+                .= x1 by FINSEQ_1:59;
+           y.n = (a1 ^ <*y1*>).(len a1 + 1) by A2,A33,A35,A38,FINSEQ_1:def 7
+            .= y1 by FINSEQ_1:59;
+         hence [x.n,y.n] in C2.((the_arity_of o)/.n)
+                                   by A23,A33,A34,A39,FINSEQ_1:4,TARSKI:def 1;
+        suppose ex k be Nat st k in dom b1 & n = len (a1 ^ <*x1*>) + k;
+         then consider k be Nat such that A40:
+          k in dom b1 & n = len (a1 ^ <*x1*>) + k;
+         A41: x.n = b1.k by A2,A40,FINSEQ_1:def 7;
+           n = len a1 + len <*x1*> + k by A40,FINSEQ_1:35;
+         then n = len a1 + 1 + k by FINSEQ_1:57;
+         then n = len a1 + len <*y1*> + k by FINSEQ_1:57;
+         then n = len (a1 ^ <*y1*>) + k by FINSEQ_1:35;
+         then y.n = b1.k by A2,A40,FINSEQ_1:def 7;
+         hence [x.n,y.n] in C2.((the_arity_of o)/.n) by A30,A41,EQREL_1:11;
+       end;
+       hence thesis;
+      end;
+      then [Den(o,A).x,Den(o,A).y] in C2.(the_result_sort_of o)
+                                                          by MSUALG_4:def 6;
+      hence [Den(o,A).x,Den(o,A).y] in C1.(the_result_sort_of o) \/
+ C2.(the_result_sort_of o) by XBOOLE_0:def 2;
+    end;
+    hence [Den(o,A).x,Den(o,A).y] in
+                       C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o);
+   end;
+
+  theorem Th15:
+   for o be OperSymbol of S
+   for C1,C2 being MSCongruence of A
+   for C being MSEquivalence-like ManySortedRelation of A st C = C1 "\/" C2
+   for x1,y1 be set
+   for n be Nat
+   for a1,a2,b1 being FinSequence st len a1 = n & len a1 = len a2 &
+    for k be Nat st k in dom a1 holds [a1.k,a2.k] in
+ C.((the_arity_of o)/.k) holds
+    ( [Den(o,A).(a1 ^ <*x1*> ^ b1),Den(o,A).(a2 ^ <*x1*> ^ b1)] in
+    C.(the_result_sort_of o) & [x1,y1] in C.((the_arity_of o)/.(n+1)) implies
+     for x be Element of Args(o,A) st x = a1 ^ <*x1*> ^ b1 holds
+      [Den(o,A).x,Den(o,A).(a2 ^ <*y1*> ^ b1)] in C.(the_result_sort_of o))
+  proof
+   let o be OperSymbol of S;
+   let C1,C2 be MSCongruence of A;
+   let C be MSEquivalence-like ManySortedRelation of A such that
+    A1: C = C1 "\/" C2;
+   let x1,y1 be set;
+   let n be Nat;
+   let a1,a2,b1 be FinSequence such that A2:
+    len a1 = n & len a1 = len a2 &
+    for k be Nat st k in dom a1 holds [a1.k,a2.k] in C.((the_arity_of o)/.k);
+   assume that A3: [Den(o,A).(a1 ^ <*x1*> ^ b1),Den(o,A).(a2 ^ <*x1*> ^ b1)] in
+                                                 C.(the_result_sort_of o) and
+               A4: [x1,y1] in C.((the_arity_of o)/.(n+1));
+   let x be Element of Args(o,A) such that A5: x = a1 ^ <*x1*> ^ b1;
+   set y = a2 ^ <*y1*> ^ b1;
+   A6: the OperSymbols of S is non empty set by MSUALG_1:def 5;
+   A7: dom x = Seg len (a1 ^ <*x1*> ^ b1) by A5,FINSEQ_1:def 3
+            .= Seg len (a1 ^ (<*x1*> ^ b1)) by FINSEQ_1:45
+            .= Seg (len a2 + len (<*x1*> ^ b1)) by A2,FINSEQ_1:35
+            .= Seg len (a2 ^ (<*x1*> ^ b1)) by FINSEQ_1:35
+            .= Seg len (a2 ^ <*x1*> ^ b1) by FINSEQ_1:45
+            .= dom (a2 ^ <*x1*> ^ b1) by FINSEQ_1:def 3;
+   consider C' being ManySortedRelation of the Sorts of A such that A8:
+    C' = C1 \/ C2 & C1 "\/" C2 = EqCl C' by Def4;
+   A9: C1.(the_result_sort_of o) "\/" C2.(the_result_sort_of o) =
+         EqCl (C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o)) by Th2
+      .= EqCl (C'.(the_result_sort_of o)) by A8,PBOOLE:def 7
+      .= (C1 "\/" C2).(the_result_sort_of o) by A8,Def3;
+   A10: (the Sorts of A).(the_result_sort_of o) =
+                (the Sorts of A).((the ResultSort of S).o) by MSUALG_1:def 7
+             .= ((the Sorts of A) * the ResultSort of S).o by A6,FUNCT_2:21
+             .= Result(o,A) by MSUALG_1:def 10;
+   then Den(o,A).x in (the Sorts of A).(the_result_sort_of o);
+   then consider p be FinSequence such that A11: 1 <= len p &
+   Den(o,A).(a1 ^ <*x1*> ^ b1) = p.1 & Den(o,A).(a2 ^ <*x1*> ^ b1) = p.(len p)
+    & for i be Nat st 1 <= i & i < len p holds
+       [p.i,p.(i+1)] in C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o)
+                                                   by A1,A3,A5,A9,EQREL_1:36;
+   consider D' being ManySortedRelation of the Sorts of A such that A12:
+    D' = C1 \/ C2 & C1 "\/" C2 = EqCl D' by Def4;
+   A13: C1.((the_arity_of o)/.(n+1)) "\/" C2.((the_arity_of o)/.(n+1)) =
+            EqCl (C1.((the_arity_of o)/.(n+1)) \/
+ C2.((the_arity_of o)/.(n+1))) by Th2
+         .= EqCl (D'.((the_arity_of o)/.(n+1))) by A12,PBOOLE:def 7
+         .= (C1 "\/" C2).((the_arity_of o)/.(n+1)) by A12,Def3;
+     x1 in (the Sorts of A).((the_arity_of o)/.(n+1)) by A4,ZFMISC_1:106;
+   then consider f be FinSequence such that A14: 1 <= len f & x1 = f.1 &
+   y1 = f.(len f) & for i be Nat st 1 <= i & i < len f holds [f.i,f.(i+1)] in
+   C1.((the_arity_of o)/.(n+1)) \/ C2.((the_arity_of o)/.(n+1))
+                                                     by A1,A4,A13,EQREL_1:36;
+   deffunc G(Nat)=Den(o,A).(a2 ^ <*f.$1*> ^ b1);
+   consider g be FinSequence such that A15: len g = len f &
+    for i be Nat st i in Seg len f holds g.i = G(i)
+                                                              from SeqLambda;
+     ex q being FinSequence st 1 <= len q & Den(o,A).x = q.1 &
+    Den(o,A).y = q.(len q) & for i be Nat st 1 <= i & i < len q holds
+     [q.i,q.(i+1)] in C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o)
+   proof
+    take q = p ^ g;
+    A16: len q = len p + len g by FINSEQ_1:35;
+    hence 1 <= len q by A11,NAT_1:37;
+      1 in dom p by A11,FINSEQ_3:27;
+    hence q.1 = Den(o,A).x by A5,A11,FINSEQ_1:def 7;
+    A17: len g in Seg len f by A14,A15,FINSEQ_1:3;
+    then len g in dom g by A15,FINSEQ_1:def 3;
+    hence q.(len q) = g.len g by A16,FINSEQ_1:def 7
+                  .= Den(o,A).y by A14,A15,A17;
+    A18: len p <> 0 by A11;
+    hereby let i be Nat such that A19: 1 <= i & i < len q;
+     A20: (1 <= i & i < len p) or (len p + 1 <= i & i < len q) or i = len p
+     proof
+      assume that A21: not (1 <= i & i < len p) and
+                  A22: not (len p + 1 <= i & i < len q);
+        i <= len p by A19,A22,NAT_1:38;
+      hence i = len p by A19,A21,AXIOMS:21;
+     end;
+     consider i1 be Nat such that A23: len p = i1 + 1 by A18,NAT_1:22;
+     A24: Seg len (a1 ^ <*x1*> ^ b1) = dom x by A5,FINSEQ_1:def 3
+                 .= dom (the_arity_of o) by MSUALG_3:6
+                 .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+     A25: len (a2 ^ <*x1*> ^ b1) = len (a2 ^ (<*x1*> ^ b1)) by FINSEQ_1:45
+                 .= len a2 + len (<*x1*> ^ b1) by FINSEQ_1:35
+                 .= len (a1 ^ (<*x1*> ^ b1)) by A2,FINSEQ_1:35
+                 .= len (a1 ^ <*x1*> ^ b1) by FINSEQ_1:45
+                 .= len the_arity_of o by A24,FINSEQ_1:8;
+     A26: now let k be Nat; assume k in dom x;
+      then A27: k in Seg len (the_arity_of o) by A7,A25,FINSEQ_1:def 3;
+      then A28: k in dom (the_arity_of o) by FINSEQ_1:def 3;
+      then A29: k in dom ((the Sorts of A) * (the_arity_of o))
+                                              by PBOOLE:def 3;
+      reconsider dz = dom (the_arity_of o) as non empty set
+                                                      by A27,FINSEQ_1:def 3;
+      reconsider so = (the Sorts of A) * (the_arity_of o) as
+                                               non-empty ManySortedSet of dz;
+      A30: product so is non empty;
+        pi(Args(o,A),k) = pi(((the Sorts of A)# * the Arity of S).o,k)
+                                                           by MSUALG_1:def 9
+          .= pi((the Sorts of A)# . ((the Arity of S).o),k) by A6,FUNCT_2:21
+          .= pi((the Sorts of A)# . (the_arity_of o),k) by MSUALG_1:def 6
+          .= pi(product((the Sorts of A) * (the_arity_of o)),k)
+                                                           by MSUALG_1:def 3
+          .= ((the Sorts of A) * (the_arity_of o)).k by A29,A30,CARD_3:22
+          .= (the Sorts of A) . ((the_arity_of o).k) by A28,FUNCT_1:23
+          .= (the Sorts of A) . ((the_arity_of o)/.k) by A28,FINSEQ_4:def 4;
+      hence x.k in (the Sorts of A).((the_arity_of o)/.k) by CARD_3:def 6;
+     end;
+       now per cases by A20;
+      suppose A31: 1 <= i & i < len p;
+       then i in dom p by FINSEQ_3:27;
+       then A32: q.i = p.i by FINSEQ_1:def 7;
+         1 <= i+1 & i+1 <= len p by A31,NAT_1:38;
+       then i+1 in dom p by FINSEQ_3:27;
+       then q.(i+1) = p.(i+1) by FINSEQ_1:def 7;
+       hence [q.i,q.(i+1)] in C1.(the_result_sort_of o) \/
+                               C2.(the_result_sort_of o) by A11,A31,A32;
+      suppose A33: i = len p;
+       then i in Seg len p by A23,FINSEQ_1:6;
+       then i in dom p by FINSEQ_1:def 3;
+       then A34: q.i = Den(o,A).(a2 ^ <*x1*> ^ b1) by A11,A33,FINSEQ_1:def 7;
+       A35: 1 in Seg len g by A14,A15,FINSEQ_1:3;
+       then 1 in dom g by FINSEQ_1:def 3;
+       then A36: q.(i+1) = g.1 by A33,FINSEQ_1:def 7
+                        .= Den(o,A).(a2 ^ <*x1*> ^ b1) by A14,A15,A35;
+         for k be Nat st k in dom (a2 ^ <*x1*> ^ b1)
+        holds (a2 ^ <*x1*> ^ b1).k in (the Sorts of A).((the_arity_of o)/.k)
+       proof
+        let k be Nat; assume A37: k in dom (a2 ^ <*x1*> ^ b1);
+        then A38: k in dom (a2 ^ (<*x1*> ^ b1)) by FINSEQ_1:45;
+          now per cases by A38,FINSEQ_1:38;
+         suppose A39: k in dom a2;
+          then k in Seg len a2 by FINSEQ_1:def 3;
+          then k in dom a1 by A2,FINSEQ_1:def 3;
+          then A40: [a1.k,a2.k] in C.((the_arity_of o)/.k) by A2;
+            (a2 ^ <*x1*> ^ b1).k = (a2 ^ (<*x1*> ^ b1)).k by FINSEQ_1:45
+                 .= a2.k by A39,FINSEQ_1:def 7;
+          hence (a2 ^ <*x1*> ^ b1).k in (the Sorts of A).((the_arity_of o)/.k)
+                                                  by A40,ZFMISC_1:106;
+         suppose ex n1 be Nat st n1 in dom (<*x1*> ^ b1) & k = len a2 + n1;
+          then consider n1 be Nat such that
+           A41: n1 in dom (<*x1*> ^ b1) & k = len a2 + n1;
+            (a2 ^ <*x1*> ^ b1).k = (a2 ^ (<*x1*> ^ b1)).k by FINSEQ_1:45
+                           .= (<*x1*> ^ b1).n1 by A41,FINSEQ_1:def 7
+                           .= (a1 ^ (<*x1*> ^ b1)).k by A2,A41,FINSEQ_1:def 7
+                           .= x.k by A5,FINSEQ_1:45;
+         hence (a2 ^ <*x1*> ^ b1).k in (the Sorts of A).((the_arity_of o)/.k)
+                                                               by A7,A26,A37;
+        end;
+        hence (a2 ^ <*x1*> ^ b1).k in (the Sorts of A).((the_arity_of o)/.k);
+       end;
+       then reconsider de = (a2 ^ <*x1*> ^ b1) as Element of Args(o,A)
+         by A25,MSAFREE2:7;
+       A42: Den(o,A).de in (the Sorts of A).(the_result_sort_of o) by A10;
+         field (C1.(the_result_sort_of o)) =
+                                    (the Sorts of A).(the_result_sort_of o) &
+       field (C2.(the_result_sort_of o)) =
+                       (the Sorts of A).(the_result_sort_of o) by EQREL_1:16;
+       then A43: field (C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o))
+=
+ (the Sorts of A).(the_result_sort_of o) \/
+                               (the Sorts of A).(the_result_sort_of o) by
+RELAT_1:33
+           .= (the Sorts of A).(the_result_sort_of o);
+       C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o)
+                                                  is reflexive by RELAT_2:31;
+       then C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o)
+        is_reflexive_in (the Sorts of A).(the_result_sort_of o)
+                                                       by A43,RELAT_2:def 9;
+       hence [q.i,q.(i+1)] in C1.(the_result_sort_of o) \/
+                      C2.(the_result_sort_of o) by A34,A36,A42,RELAT_2:def 1;
+      suppose A44: len p + 1 <= i & i < len q;
+       then A45: len p + 1 <= i+1 by NAT_1:37;
+       A46: i+1 <= len q by A44,NAT_1:38;
+         len p < i by A44,NAT_1:38;
+       then reconsider j = i - len p as Nat by EQREL_1:1;
+       A47: 1 <= j by A44,REAL_1:84;
+         len f = len q - len p by A15,A16,XCMPLX_1:26;
+       then A48: j < len f by A44,REAL_1:54;
+         1 <= j & j <= len f by A15,A16,A44,REAL_1:84;
+       then A49: i - len p in Seg len f by FINSEQ_1:3;
+         1 <= j+1 & j+1 <= len f by A48,NAT_1:37,38;
+       then j+1 in Seg len f by FINSEQ_1:3;
+       then A50: i + 1 - len p in Seg len f by XCMPLX_1:29;
+       A51: [f.j,f.(j + 1)] in C1.((the_arity_of o)/.(n+1)) \/
+ C2.((the_arity_of o)/.(n+1)) by A14,A47,A48;
+       then A52: f.(i - len p) in (the Sorts of A).((the_arity_of o)/.(n+1))
+                                            by ZFMISC_1:106;
+       A53: f.(i - len p + 1) in (the Sorts of A).((the_arity_of o)/.(n+1))
+                                        by A51,ZFMISC_1:106;
+       A54: for k be Nat st k in dom (a2 ^ <*f.(i - len p)*> ^ b1) holds
+         (a2 ^ <*f.(i - len p)*> ^ b1).k in
+                                       (the Sorts of A).((the_arity_of o)/.k)
+       proof
+        let k be Nat; assume A55: k in dom (a2 ^ <*f.(i - len p)*> ^ b1);
+        then A56: k in dom (a2 ^ <*f.(i - len p)*>) or (ex n1 be Nat st n1 in
+dom b1 &
+                    k = len (a2 ^ <*f.(i - len p)*>) + n1) by FINSEQ_1:38;
+          now per cases by A56,FINSEQ_1:38;
+         suppose A57: k in dom a2;
+          then k in Seg len a2 by FINSEQ_1:def 3;
+          then k in dom a1 by A2,FINSEQ_1:def 3;
+          then A58: [a1.k,a2.k] in C.((the_arity_of o)/.k) by A2;
+            (a2 ^ <*f.(i - len p)*> ^ b1).k =
+                          (a2 ^ (<*f.(i - len p)*> ^ b1)).k by FINSEQ_1:45
+                          .= a2.k by A57,FINSEQ_1:def 7;
+          hence (a2 ^ <*f.(i - len p)*> ^ b1).k in
+             (the Sorts of A).((the_arity_of o)/.k) by A58,ZFMISC_1:106;
+         suppose ex n2 be Nat st n2 in dom <*f.(i - len p)*> & k = len a2 + n2
+;
+          then consider n2 be Nat such that
+           A59: n2 in dom <*f.(i - len p)*> & k = len a2 + n2;
+          A60: n2 in Seg 1 by A59,FINSEQ_1:55;
+          then A61: k = len a1 + 1 by A2,A59,FINSEQ_1:4,TARSKI:def 1;
+          then k in Seg (len a2 + 1) by A2,FINSEQ_1:6;
+          then k in Seg (len a2 + len <*f.(i - len p)*>) by FINSEQ_1:57;
+          then k in Seg len (a2 ^ <*f.(i - len p)*>) by FINSEQ_1:35;
+          then k in dom (a2 ^ <*f.(i - len p)*>) by FINSEQ_1:def 3;
+          then (a2 ^ <*f.(i - len p)*> ^ b1).k = (a2 ^ <*f.(i - len p)*>).k
+                                                           by FINSEQ_1:def 7
+                                       .= f.(i - len p) by A2,A61,FINSEQ_1:59;
+          hence (a2 ^ <*f.(i - len p)*> ^ b1).k in
+                             (the Sorts of A).((the_arity_of o)/.k)
+                                    by A2,A52,A59,A60,FINSEQ_1:4,TARSKI:def 1;
+         suppose ex n1 be Nat st n1 in dom b1 &
+                                       k = len (a2 ^ <*f.(i - len p)*>) + n1;
+          then consider n1 be Nat such that
+           A62: n1 in dom b1 & k = len (a2 ^ <*f.(i - len p)*>) + n1;
+          A63: len (a1 ^ <*x1*>) = len a1 + len <*x1*> by FINSEQ_1:35
+                .= len a2 + 1 by A2,FINSEQ_1:57
+                .= len a2 + len <*f.(i - len p)*> by FINSEQ_1:57
+                .= len (a2 ^ <*f.(i - len p)*>) by FINSEQ_1:35;
+          A64: dom x = Seg len (a1 ^ <*x1*> ^ b1) by A5,FINSEQ_1:def 3
+            .= Seg (len (a1 ^ <*x1*>) + len b1) by FINSEQ_1:35
+            .= Seg ((len a1 + len <*x1*>) + len b1) by FINSEQ_1:35
+            .= Seg ((len a2 + 1) + len b1) by A2,FINSEQ_1:57
+            .= Seg ((len a2 + len <*f.(i - len p)*>) + len b1) by FINSEQ_1:57
+            .= Seg (len (a2 ^ <*f.(i - len p)*>) + len b1) by FINSEQ_1:35
+            .= Seg len (a2 ^ <*f.(i - len p)*> ^ b1) by FINSEQ_1:35
+            .= dom (a2 ^ <*f.(i - len p)*> ^ b1) by FINSEQ_1:def 3;
+            (a2 ^ <*f.(i - len p)*> ^ b1).k = b1.n1 by A62,FINSEQ_1:def 7
+                .= x.k by A5,A62,A63,FINSEQ_1:def 7;
+          hence (a2 ^ <*f.(i - len p)*> ^ b1).k in
+               (the Sorts of A).((the_arity_of o)/.k) by A26,A55,A64;
+        end;
+        hence (a2 ^ <*f.(i - len p)*> ^ b1).k in
+                                       (the Sorts of A).((the_arity_of o)/.k);
+       end;
+       A65: for k be Nat st k in dom (a2 ^ <*f.(i + 1 - len p)*> ^ b1) holds
+         (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k in
+                                       (the Sorts of A).((the_arity_of o)/.k)
+       proof
+        let k be Nat; assume A66: k in dom (a2 ^ <*f.(i + 1 - len p)*> ^ b1);
+        then A67: k in dom (a2 ^ <*f.(i + 1 - len p)*>) or (ex n1 be Nat st
+         n1 in dom b1 & k = len (a2 ^ <*f.(i + 1 - len p)*>) + n1)
+                                                           by FINSEQ_1:38;
+          now per cases by A67,FINSEQ_1:38;
+         suppose A68: k in dom a2;
+          then k in Seg len a2 by FINSEQ_1:def 3;
+          then k in dom a1 by A2,FINSEQ_1:def 3;
+          then A69: [a1.k,a2.k] in C.((the_arity_of o)/.k) by A2;
+            (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k =
+                         (a2 ^ (<*f.(i + 1 - len p)*> ^ b1)).k by FINSEQ_1:45
+                          .= a2.k by A68,FINSEQ_1:def 7;
+          hence (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k in
+                      (the Sorts of A).
+((the_arity_of o)/.k) by A69,ZFMISC_1:106;
+         suppose ex n2 be Nat st n2 in dom <*f.(i + 1 - len p)*> & k =
+                                                                 len a2 + n2;
+          then consider n2 be Nat such that
+           A70: n2 in dom <*f.(i + 1 - len p)*> & k = len a2 + n2;
+            n2 in Seg 1 by A70,FINSEQ_1:55;
+          then A71: k = len a1 + 1 by A2,A70,FINSEQ_1:4,TARSKI:def 1;
+          then k in Seg (len a2 + 1) by A2,FINSEQ_1:6;
+          then k in Seg (len a2 + len <*f.(i + 1 - len p)*>) by FINSEQ_1:57;
+          then k in Seg len (a2 ^ <*f.(i + 1 - len p)*>) by FINSEQ_1:35;
+          then k in dom (a2 ^ <*f.(i + 1 - len p)*>) by FINSEQ_1:def 3;
+          then (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k =
+                            (a2 ^ <*f.(i + 1 - len p)*>).k by FINSEQ_1:def 7
+                         .= f.(i + 1 - len p) by A2,A71,FINSEQ_1:59;
+          hence (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k in
+             (the Sorts of A).((the_arity_of o)/.k) by A2,A53,A71,XCMPLX_1:29
+;
+         suppose ex n1 be Nat st n1 in dom b1 &
+                                   k = len (a2 ^ <*f.(i + 1 - len p)*>) + n1;
+          then consider n1 be Nat such that
+           A72: n1 in dom b1 & k = len (a2 ^ <*f.(i + 1 - len p)*>) + n1;
+          A73: len (a1 ^ <*x1*>) = len a1 + len <*x1*> by FINSEQ_1:35
+                .= len a2 + 1 by A2,FINSEQ_1:57
+                .= len a2 + len <*f.(i + 1 - len p)*> by FINSEQ_1:57
+                .= len (a2 ^ <*f.(i + 1 - len p)*>) by FINSEQ_1:35;
+          A74: dom x = Seg len (a1 ^ <*x1*> ^ b1) by A5,FINSEQ_1:def 3
+            .= Seg (len (a1 ^ <*x1*>) + len b1) by FINSEQ_1:35
+            .= Seg ((len a1 + len <*x1*>) + len b1) by FINSEQ_1:35
+            .= Seg ((len a2 + 1) + len b1) by A2,FINSEQ_1:57
+            .= Seg ((len a2 + len <*f.(i + 1 - len p)*>) + len b1)
+                                                               by FINSEQ_1:57
+            .= Seg (len (a2 ^ <*f.(i + 1 - len p)*>) + len b1) by FINSEQ_1:35
+            .= Seg len (a2 ^ <*f.(i + 1 - len p)*> ^ b1) by FINSEQ_1:35
+            .= dom (a2 ^ <*f.(i + 1 - len p)*> ^ b1) by FINSEQ_1:def 3;
+            (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k = b1.n1 by A72,FINSEQ_1:def 7
+                .= x.k by A5,A72,A73,FINSEQ_1:def 7;
+          hence (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k in
+                           (the Sorts of A).
+((the_arity_of o)/.k) by A26,A66,A74;
+        end;
+        hence (a2 ^ <*f.(i + 1 - len p)*> ^ b1).k in
+                                (the Sorts of A).((the_arity_of o)/.k);
+       end;
+       A75: Seg len (a1 ^ <*x1*> ^ b1) = dom x by A5,FINSEQ_1:def 3
+                 .= dom (the_arity_of o) by MSUALG_3:6
+                 .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+         len (a2 ^ <*f.(i - len p)*> ^ b1) = len the_arity_of o &
+        len (a2 ^ <*f.(i + 1 - len p)*> ^ b1) = len the_arity_of o
+       proof
+        thus len (a2 ^ <*f.(i - len p)*> ^ b1) =
+                   len (a2 ^ <*f.(i - len p)*>) + len b1 by FINSEQ_1:35
+                .= len a2 + len <*f.(i - len p)*> + len b1 by FINSEQ_1:35
+                .= len a2 + 1 + len b1 by FINSEQ_1:57
+                .= len a1 + len <*x1*> + len b1 by A2,FINSEQ_1:57
+                .= len (a1 ^ <*x1*>) + len b1 by FINSEQ_1:35
+                .= len (a1 ^ <*x1*> ^ b1) by FINSEQ_1:35
+                .= len the_arity_of o by A75,FINSEQ_1:8;
+        thus len (a2 ^ <*f.(i + 1 - len p)*> ^ b1) =
+                   len (a2 ^ <*f.(i + 1 - len p)*>) + len b1 by FINSEQ_1:35
+                .= len a2 + len <*f.(i + 1 - len p)*> + len b1 by FINSEQ_1:35
+                .= len a2 + 1 + len b1 by FINSEQ_1:57
+                .= len a1 + len <*x1*> + len b1 by A2,FINSEQ_1:57
+                .= len (a1 ^ <*x1*>) + len b1 by FINSEQ_1:35
+                .= len (a1 ^ <*x1*> ^ b1) by FINSEQ_1:35
+                .= len the_arity_of o by A75,FINSEQ_1:8;
+       end;
+       then reconsider d1 = a2 ^ <*f.(i - len p)*> ^ b1,
+               d2 = a2 ^ <*f.(i + 1 - len p)*> ^ b1 as Element of Args(o,A)
+                                                         by A54,A65,MSAFREE2:7;
+       A76: q.i = g.(i - len p) by A16,A44,FINSEQ_1:36
+              .= Den(o,A).d1 by A15,A49;
+       A77: q.(i+1) = g.(i + 1 - len p) by A16,A45,A46,FINSEQ_1:36
+                  .= Den(o,A).d2 by A15,A50;
+         i + 1 - len p = i - len p + 1 by XCMPLX_1:29;
+       then [f.(i - len p),f.(i + 1 - len p)] in
+          C1.((the_arity_of o)/.(n+1)) \/
+ C2.((the_arity_of o)/.(n+1)) by A14,A47,A48;
+       hence [q.i,q.(i+1)] in C1.(the_result_sort_of o) \/
+                                 C2.(the_result_sort_of o) by A2,A76,A77,Th14;
+     end;
+     hence [q.i,q.(i+1)] in C1.(the_result_sort_of o) \/
+                                                   C2.(the_result_sort_of o);
+    end;
+   end;
+   hence [Den(o,A).x,Den(o,A).(a2 ^ <*y1*> ^ b1)] in C.(the_result_sort_of o)
+                                                      by A1,A9,A10,EQREL_1:36;
+  end;
+
+  theorem Th16:
+   for o be OperSymbol of S
+   for C1,C2 being MSCongruence of A
+   for C being MSEquivalence-like ManySortedRelation of A st C = C1 "\/" C2
+   for x,y be Element of Args(o,A) holds
+    (( for n be Nat st n in dom x holds [x.n,y.n] in C.((the_arity_of o)/.n))
+     implies
+    [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o))
+  proof
+   let o be OperSymbol of S;
+   let C1,C2 be MSCongruence of A;
+   let C be MSEquivalence-like ManySortedRelation of A such that
+    A1: C = C1 "\/" C2;
+   let x,y be Element of Args(o,A);
+   assume A2: for n be Nat st n in dom x holds
+                                  [x.n,y.n] in C.((the_arity_of o)/.n);
+   defpred P[Nat] means for a1,a2,b1 being FinSequence holds
+    ((len a1 = $1 & len a1 = len a2 & x = a1 ^ b1 &
+     for n be Nat st n in dom a1 holds [x.n,(a2 ^ b1).n]
+       in C.((the_arity_of o)/.n)) implies
+     [Den(o,A).x,Den(o,A).(a2 ^ b1)] in C.(the_result_sort_of o));
+   A3: P[0]
+   proof
+    let a1,a2,b1 be FinSequence;
+    assume that
+     A4: len a1 = 0 and
+     A5: len a1 = len a2 and
+     A6: x = a1 ^ b1 and
+       for n be Nat st n in dom a1 holds [x.n,(a2 ^ b1).n]
+                                              in C.((the_arity_of o)/.n);
+     A7: a1 = {} & a2 = {} by A4,A5,FINSEQ_1:25;
+    A8: the OperSymbols of S is non empty set by MSUALG_1:def 5;
+    A9: (the Sorts of A).(the_result_sort_of o) =
+                (the Sorts of A).((the ResultSort of S).o) by MSUALG_1:def 7
+             .= ((the Sorts of A) * the ResultSort of S).o by A8,FUNCT_2:21
+             .= Result(o,A) by MSUALG_1:def 10;
+     field(C.(the_result_sort_of o))
+          = (the Sorts of A).(the_result_sort_of o) by ORDERS_1:97;
+      then C.(the_result_sort_of o) is_reflexive_in
+                        (the Sorts of A).(the_result_sort_of o)
+                 by RELAT_2:def 9;
+    hence [Den(o,A).x,Den(o,A).(a2 ^ b1)] in C.(the_result_sort_of o)
+                                                     by A6,A7,A9,RELAT_2:def 1;
+   end;
+   A10: for l be Nat st P[l] holds P[l+1]
+   proof
+    let l be Nat such that A11:
+     for a1,a2,b1 being FinSequence holds
+      ((len a1 = l & len a1 = len a2 & x = a1 ^ b1 &
+       for n be Nat st n in dom a1 holds
+        [x.n,(a2 ^ b1).n] in C.((the_arity_of o)/.n)) implies
+         [Den(o,A).x,Den(o,A).(a2 ^ b1)] in C.(the_result_sort_of o));
+    let a1,a2,b1 be FinSequence;
+    assume that
+     A12: len a1 = l+1 and
+     A13: len a1 = len a2 and
+     A14: x = a1 ^ b1 and
+     A15: for n be Nat st n in dom a1 holds [x.n,(a2 ^ b1).n]
+                                                in C.((the_arity_of o)/.n);
+    set y = a2 ^ b1;
+      a1 <> {} by A12,FINSEQ_1:25;
+    then consider q1 be FinSequence, x1 be set such that A16: a1 = q1 ^ <*x1*>
+                                                              by FINSEQ_1:63;
+      a2 <> {} by A12,A13,FINSEQ_1:25;
+    then consider q2 be FinSequence, y1 be set such that A17: a2 = q2 ^ <*y1*>
+                                                              by FINSEQ_1:63;
+    A18: l+1 = len q1 + len <*x1*> by A12,A16,FINSEQ_1:35
+            .= len q1 + 1 by FINSEQ_1:57;
+    then A19: len q1 = l by XCMPLX_1:2;
+    A20: l+1 = len q2 + len <*y1*> by A12,A13,A17,FINSEQ_1:35
+       .= len q2 + 1 by FINSEQ_1:57;
+    then A21: len q1 = len q2 by A18,XCMPLX_1:2;
+    A22: dom q1 = Seg len q1 by FINSEQ_1:def 3
+              .= dom q2 by A21,FINSEQ_1:def 3;
+    A23: for n be Nat st n in dom q1 holds [q1.n,q2.n] in
+      C.((the_arity_of o)/.n)
+    proof
+     let n be Nat; assume A24: n in dom q1;
+     then A25: n in Seg len q1 by FINSEQ_1:def 3;
+       len q1 <= len a1 by A12,A18,NAT_1:29;
+     then Seg len q1 c= Seg len a1 by FINSEQ_1:7;
+     then n in Seg len a1 by A25;
+     then A26: n in dom a1 by FINSEQ_1:def 3;
+     then A27: x.n = a1.n by A14,FINSEQ_1:def 7
+        .= q1.n by A16,A24,FINSEQ_1:def 7;
+       dom a1 = Seg len a1 by FINSEQ_1:def 3
+           .= dom a2 by A13,FINSEQ_1:def 3;
+     then y.n = a2.n by A26,FINSEQ_1:def 7
+             .= q2.n by A17,A22,A24,FINSEQ_1:def 7;
+     hence [q1.n,q2.n] in C.((the_arity_of o)/.n) by A15,A26,A27;
+    end;
+    A28: [Den(o,A).x,Den(o,A).(q2 ^ <*x1*> ^ b1)] in C.(the_result_sort_of o)
+    proof
+     A29: q1 ^ <*x1*> ^ b1 = q1 ^ (<*x1*> ^ b1) by FINSEQ_1:45;
+     A30: q2 ^ <*x1*> ^ b1 = q2 ^ (<*x1*> ^ b1) by FINSEQ_1:45;
+       for n be Nat st n in dom q1 holds
+         [x.n,(q2 ^ <*x1*> ^ b1).n] in C.((the_arity_of o)/.n)
+     proof
+      let n be Nat; assume A31: n in dom q1;
+      then A32: x.n = q1.n by A14,A16,A29,FINSEQ_1:def 7;
+        (q2 ^ <*x1*> ^ b1).n = q2.n by A22,A30,A31,FINSEQ_1:def 7;
+      hence [x.n,(q2 ^ <*x1*> ^ b1).n] in
+      C.((the_arity_of o)/.n) by A23,A31,A32;
+     end;
+     hence [Den(o,A).x,Den(o,A).(q2 ^ <*x1*> ^ b1)] in
+           C.(the_result_sort_of o) by A11,A14,A16,A19,A21,A29,A30;
+    end;
+    A33: l+1 in Seg len a1 by A12,FINSEQ_1:6;
+    then A34: l+1 in dom a1 by FINSEQ_1:def 3;
+    A35: l+1 in dom a2 by A13,A33,FINSEQ_1:def 3;
+    A36: x1 = a1.(l + 1) by A16,A18,FINSEQ_1:59
+          .= x.(l + 1) by A14,A34,FINSEQ_1:def 7;
+       y1 = a2.(l + 1) by A17,A20,FINSEQ_1:59
+           .= y.(l + 1) by A35,FINSEQ_1:def 7;
+    then [x1,y1] in C.((the_arity_of o)/.(l+1)) by A15,A34,A36;
+    hence [Den(o,A).x,Den(o,A).(a2 ^ b1)] in C.(the_result_sort_of o)
+                                 by A1,A14,A16,A17,A18,A21,A23,A28,Th15;
+   end;
+   A37: for l be Nat holds P[l] from Ind(A3,A10);
+   A38: dom x = dom (the_arity_of o) by MSUALG_3:6
+            .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+     dom y = dom (the_arity_of o) by MSUALG_3:6
+        .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+   then reconsider a1 = x , a2 = y as FinSequence by A38,FINSEQ_1:def 2;
+   set b1 = {};
+   A39: Seg len a1 = dom a1 by FINSEQ_1:def 3
+                 .= dom (the_arity_of o) by MSUALG_3:6
+                 .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+     Seg len a2 = dom a2 by FINSEQ_1:def 3
+             .= dom (the_arity_of o) by MSUALG_3:6
+             .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+   then A40: len a1 = len a2 by A39,FINSEQ_1:8;
+   A41: x = a1 ^ b1 by FINSEQ_1:47;
+     y = a2 ^ b1 by FINSEQ_1:47;
+   hence [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o) by A2,A37,A40,A41
+;
+  end;
+
+  theorem Th17:
+   for C1,C2 being MSCongruence of A holds C1 "\/" C2 is MSCongruence of A
+  proof
+   let C1,C2 be MSCongruence of A;
+   reconsider C = C1 "\/" C2 as MSEquivalence_Relation-like
+                     ManySortedRelation of the Sorts of A;
+   reconsider C as ManySortedRelation of A ;
+   reconsider C as MSEquivalence-like ManySortedRelation of A
+                                                          by MSUALG_4:def 5;
+     for o be OperSymbol of S, x,y be Element of Args(o,A) st
+    (for n be Nat st n in dom x holds [x.n,y.n] in C.((the_arity_of o)/.n))
+     holds [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o) by Th16;
+   hence C1 "\/" C2 is MSCongruence of A by MSUALG_4:def 6;
+  end;
+
+  theorem Th18:
+   for C1,C2 being MSCongruence of A holds C1 /\ C2 is MSCongruence of A
+  proof
+   let C1,C2 be MSCongruence of A;
+   reconsider C = C1 /\ C2 as Equivalence_Relation of the Sorts of A by Th13;
+   reconsider C as MSEquivalence_Relation-like
+                     ManySortedRelation of the Sorts of A;
+   reconsider C as ManySortedRelation of A ;
+   reconsider C as MSEquivalence-like ManySortedRelation of A
+                                                          by MSUALG_4:def 5;
+     for o be OperSymbol of S, x,y be Element of Args(o,A) st
+    (for n be Nat st n in dom x holds
+     [x.n,y.n] in C.((the_arity_of o)/.n))
+    holds [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o)
+   proof
+    let o be OperSymbol of S;
+    let x,y be Element of Args(o,A) such that A1:
+     for n be Nat st n in dom x holds [x.n,y.n] in C.((the_arity_of o)/.n);
+A2: for n be Nat st n in dom x holds [x.n,y.n] in C1.((the_arity_of o)/.n)
+    proof
+     let n be Nat; assume n in dom x;
+     then [x.n,y.n] in C.((the_arity_of o)/.n) by A1;
+     then [x.n,y.n] in C1.((the_arity_of o)/.n) /\
+                                   C2.((the_arity_of o)/.n) by PBOOLE:def 8;
+     hence thesis by XBOOLE_0:def 3;
+    end;
+A3: for n be Nat st n in dom x holds [x.n,y.n] in C2.((the_arity_of o)/.n)
+    proof
+     let n be Nat; assume n in dom x;
+     then [x.n,y.n] in C.((the_arity_of o)/.n) by A1;
+     then [x.n,y.n] in C1.((the_arity_of o)/.n) /\
+                                  C2.((the_arity_of o)/.n) by PBOOLE:def 8;
+     hence thesis by XBOOLE_0:def 3;
+    end;
+    A4: [Den(o,A).x,Den(o,A).y] in C1.(the_result_sort_of o)
+                                                        by A2,MSUALG_4:def 6;
+    A5: [Den(o,A).x,Den(o,A).y] in C2.(the_result_sort_of o)
+                                                       by A3,MSUALG_4:def 6;
+      C1.(the_result_sort_of o) /\ C2.(the_result_sort_of o) =
+                                   C.(the_result_sort_of o) by PBOOLE:def 8;
+    hence [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o)
+                                          by A4,A5,XBOOLE_0:def 3;
+   end;
+   hence C1 /\ C2 is MSCongruence of A by MSUALG_4:def 6;
+  end;
+
+  definition
+   let S;
+   let A be non-empty MSAlgebra over S;
+   func CongrLatt A -> strict SubLattice of EqRelLatt the Sorts of A means
+    :Def6: for x being set holds x in the carrier of it iff
+      x is MSCongruence of A;
+   existence
+   proof
+    deffunc F(Element of S)
+        = bool [:(the Sorts of A).$1,(the Sorts of A).$1:];
+    consider M2 being ManySortedSet of (the carrier of S) such that A1:
+     for i be Element of (the carrier of S) holds M2.i =F(i) from LambdaDMS;
+    defpred P[set] means $1  is MSCongruence of A;
+    consider B be set such that A2: for x being set holds
+     x in B iff x in product M2 & P[x] from Separation;
+    A3: for C1 be MSCongruence of A holds C1 in product M2
+    proof
+     let C1 be MSCongruence of A;
+     A4: dom C1 = the carrier of S by PBOOLE:def 3
+               .= dom M2 by PBOOLE:def 3;
+       now let x be set; assume x in dom M2;
+      then reconsider x' = x as Element of (the carrier of S) by PBOOLE:def 3;
+      A5: M2.x' = bool [:(the Sorts of A).x',(the Sorts of A).x':] by A1;
+        C1.x' is Element of bool [:(the Sorts of A).x',(the Sorts of A).x':];
+      hence C1.x in M2.x by A5;
+     end;
+     hence C1 in product M2 by A4,CARD_3:18;
+    end;
+    A6: for x being set holds x in B iff x is MSCongruence of A
+    proof
+     let x be set;
+     thus x in B implies x is MSCongruence of A by A2;
+     thus x is MSCongruence of A implies x in B
+     proof
+      assume A7: x is MSCongruence of A;
+      then x in product M2 by A3;
+      hence x in B by A2,A7;
+     end;
+    end;
+    consider f be MSCongruence of A;
+      f in B by A6;
+    then reconsider B as non empty set;
+    set D = the carrier of EqRelLatt the Sorts of A;
+    set B1 = (the L_join of (EqRelLatt the Sorts of A)) | [:B,B:];
+    set B2 = (the L_meet of (EqRelLatt the Sorts of A)) | [:B,B:];
+    A8: B c= D
+    proof
+       now let x; assume x in B;
+      then x is MSCongruence of A by A6;
+      hence x in the carrier of EqRelLatt the Sorts of A by Def5;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+    then [:B,B:] c= [:D,D:] by ZFMISC_1:119;
+    then reconsider B1,B2 as Function of [:B,B:],D by FUNCT_2:38;
+    A9: dom B1 = [:B,B:] by FUNCT_2:def 1;
+      now let x be set; assume A10: x in [:B,B:];
+     then consider x1,x2 be set such that A11: x = [x1,x2] by ZFMISC_1:102;
+       x1 in B & x2 in B by A10,A11,ZFMISC_1:106;
+     then reconsider x1' = x1 , x2' = x2 as MSCongruence of A by A6;
+       x1' in B & x2' in B by A6;
+     then [x1,x2] in [:B,B:] by ZFMISC_1:106;
+     then B1.x = (the L_join of (EqRelLatt the Sorts of A)).[x1,x2] by A11,
+FUNCT_1:72
+     .= (the L_join of (EqRelLatt the Sorts of A)).(x1,x2) by BINOP_1:def 1
+     .= x1' "\/" x2' by Def5;
+     then B1.x is MSCongruence of A by Th17;
+     hence B1.x in B by A6;
+    end;
+    then reconsider B1 as BinOp of B by A9,FUNCT_2:5;
+    A12: dom B2 = [:B,B:] by FUNCT_2:def 1;
+      now let x be set; assume A13: x in [:B,B:];
+     then consider x1,x2 be set such that A14: x = [x1,x2] by ZFMISC_1:102;
+       x1 in B & x2 in B by A13,A14,ZFMISC_1:106;
+     then reconsider x1' = x1 , x2' = x2 as MSCongruence of A by A6;
+       x1' in B & x2' in B by A6;
+     then [x1,x2] in [:B,B:] by ZFMISC_1:106;
+     then B2.x = (the L_meet of (EqRelLatt the Sorts of A)).[x1,x2] by A14,
+FUNCT_1:72
+     .= (the L_meet of (EqRelLatt the Sorts of A)).(x1,x2) by BINOP_1:def 1
+     .= x1' /\ x2' by Def5;
+     then B2.x is MSCongruence of A by Th18;
+     hence B2.x in B by A6;
+    end;
+    then reconsider B2 as BinOp of B by A12,FUNCT_2:5;
+    reconsider L = LattStr (# B,B1,B2 #) as non empty LattStr
+      by STRUCT_0:def 1;
+    A15: for a,b being MSCongruence of A holds
+     B1.(a,b) = a "\/" b & B2.(a,b) = a /\ b
+    proof
+     let a,b be MSCongruence of A;
+       a in B & b in B by A6;
+     then A16: [a,b] in [:B,B:] by ZFMISC_1:106;
+     thus B1.(a,b) = B1.[a,b] by BINOP_1:def 1
+       .= (the L_join of (EqRelLatt the Sorts of A)).[a,b] by A16,FUNCT_1:72
+       .= (the L_join of (EqRelLatt the Sorts of A)).(a,b) by BINOP_1:def 1
+       .= a "\/" b by Def5;
+     thus B2.(a,b) = B2.[a,b] by BINOP_1:def 1
+       .= (the L_meet of (EqRelLatt the Sorts of A)).[a,b] by A16,FUNCT_1:72
+       .= (the L_meet of (EqRelLatt the Sorts of A)).(a,b) by BINOP_1:def 1
+       .= a /\ b by Def5;
+    end;
+    A17: B1 is commutative
+    proof
+       now let a,b be Element of B;
+      reconsider a' = a , b' = b as MSCongruence of A by A6;
+      thus B1.(a,b) = a' "\/" b' by A15
+                   .= B1.(b,a) by A15;
+     end;
+     hence thesis by BINOP_1:def 2;
+    end;
+    A18: B1 is associative
+    proof
+       now let a,b,c be Element of B;
+      reconsider a' = a , b' = b , c' = c as MSCongruence of A by A6;
+      reconsider d = b' "\/" c' as MSCongruence of A by Th17;
+      reconsider e = a' "\/" b' as MSCongruence of A by Th17;
+      thus B1.(a,B1.(b,c)) = B1.(a,d) by A15
+                          .= a' "\/" (b' "\/" c') by A15
+                          .= (a' "\/" b') "\/" c' by Th10
+                          .= B1.(e,c) by A15
+                          .= B1.(B1.(a,b),c) by A15;
+     end;
+     hence thesis by BINOP_1:def 3;
+    end;
+    A19:B2 is commutative
+    proof
+       now let a,b be Element of B;
+      reconsider a' = a , b' = b as MSCongruence of A by A6;
+      thus B2.(a,b) = b' /\ a' by A15
+                   .= B2.(b,a) by A15;
+     end;
+     hence thesis by BINOP_1:def 2;
+    end;
+    A20: B2 is associative
+    proof
+       now let a,b,c be Element of B;
+      reconsider a' = a , b' = b , c' = c as MSCongruence of A by A6;
+      reconsider e1 = b' /\ c' as MSCongruence of A by Th18;
+      reconsider e2 = a' /\ b' as MSCongruence of A by Th18;
+      thus B2.(a,B2.(b,c)) = B2.(a,e1) by A15
+                          .= a' /\ (b' /\ c') by A15
+                          .= (a' /\ b') /\ c' by PBOOLE:35
+                          .= B2.(e2,c) by A15
+                          .= B2.(B2.(a,b),c) by A15;
+     end;
+     hence thesis by BINOP_1:def 3;
+    end;
+    A21: for a,b being Element of L holds a"\/"b = b"\/"a
+    proof
+     let a,b be Element of L;
+     thus a"\/"b = B1.(a,b) by LATTICES:def 1
+              .= (the L_join of L).(b,a) by A17,BINOP_1:def 2
+              .= b"\/"a by LATTICES:def 1;
+    end;
+    A22: for a,b,c being Element of L
+                                      holds a"\/"(b"\/"c) = (a"\/"b)"\/"c
+    proof let a,b,c be Element of L;
+     thus a"\/"(b"\/"c) = (the L_join of L).(a,(b"\/"c)) by LATTICES:def 1
+              .= B1.(a,B1.(b,c)) by LATTICES:def 1
+              .= (the L_join of L).((the L_join of L).(a,b),c) by A18,BINOP_1:
+def 3
+              .= (the L_join of L).(a"\/"b,c) by LATTICES:def 1
+              .= (a"\/"b)"\/"c by LATTICES:def 1;
+    end;
+    A23: for a,b being Element of L holds (a"/\"b)"\/"b = b
+    proof let a,b be Element of L;
+     A24: B1.(B2.(a,b),b)= b
+     proof
+      reconsider a' = a , b' = b as MSCongruence of A by A6;
+      reconsider EQR = a' /\ b' as MSCongruence of A by Th18;
+      thus B1.(B2.(a,b),b) = B1.(a' /\ b',b') by A15
+                           .= EQR "\/" b' by A15
+                           .= b by Th12;
+     end;
+     thus (a"/\"b)"\/"b = (the L_join of L).((a"/\"b),b) by LATTICES:def 1
+           .= b by A24,LATTICES:def 2;
+    end;
+    A25: for a,b being Element of L holds a"/\"b = b"/\"a
+    proof let a,b be Element of L;
+     thus a"/\"b = B2.(a,b) by LATTICES:def 2
+              .= (the L_meet of L).(b,a) by A19,BINOP_1:def 2
+              .= b"/\"a by LATTICES:def 2;
+    end;
+    A26: for a,b,c being Element of L
+                                      holds a"/\"(b"/\"c) = (a"/\"b)"/\"c
+    proof let a,b,c be Element of L;
+     thus a"/\"(b"/\"c) = (the L_meet of L).(a,(b"/\"c)) by LATTICES:def 2
+              .= B2.(a,B2.(b,c)) by LATTICES:def 2
+              .= (the L_meet of L).((the L_meet of L).(a,b),c) by A20,BINOP_1:
+def 3
+              .= (the L_meet of L).(a"/\"b,c) by LATTICES:def 2
+              .= (a"/\"b)"/\"c by LATTICES:def 2;
+    end;
+      for a,b being Element of L holds a"/\"(a"\/"b)=a
+    proof let a,b be Element of L;
+     A27:B2.(a,B1.(a,b))= a
+     proof
+      reconsider a' = a , b' = b as MSCongruence of A by A6;
+      reconsider d = a' "\/" b' as MSCongruence of A by Th17;
+      thus B2.(a,B1.(a,b)) = B2.(a, d) by A15
+                          .= (a' /\ ( a' "\/" b')) by A15
+                          .= a by Th11;
+     end;
+     thus a"/\"(a"\/"b) = (the L_meet of L).(a,(a"\/"b)) by LATTICES:def 2
+           .= a by A27,LATTICES:def 1;
+    end;
+    then L is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+    by A21,A22,A23,A25,A26,LATTICES:def 4,def 5,def 6,def 7,def 8,def 9;
+    then reconsider L as Lattice by LATTICES:def 10;
+    reconsider L as strict SubLattice of EqRelLatt the Sorts of A
+                                                 by A8,NAT_LAT:def 16;
+    take L;
+    thus for x being set holds x in the carrier of L iff
+     x is MSCongruence of A by A6;
+   end;
+   uniqueness
+   proof
+    let C1,C2 be strict SubLattice of EqRelLatt the Sorts of A such that
+    A28: for x being set holds x in the carrier of C1 iff
+      x is MSCongruence of A and
+    A29: for x being set holds x in the carrier of C2 iff
+      x is MSCongruence of A;
+    A30: now let x be set;
+       x in the carrier of C2 iff x is MSCongruence of A by A29;
+     hence x in the carrier of C1 iff x in the carrier of C2 by A28;
+    end;
+    then A31: the carrier of C1 = the carrier of C2 by TARSKI:2;
+    then A32: the L_meet of C1 = (the L_meet of EqRelLatt the Sorts of A) |
+                  [:the carrier of C2,the carrier of C2:] by NAT_LAT:def 16
+             .= the L_meet of C2 by NAT_LAT:def 16;
+      the L_join of C1 = (the L_join of EqRelLatt the Sorts of A) |
+                  [:the carrier of C2,the carrier of C2:] by A31,NAT_LAT:def 16
+             .= the L_join of C2 by NAT_LAT:def 16;
+    hence C1 = C2 by A30,A32,TARSKI:2;
+   end;
+  end;
+
+  theorem Th19:
+   id (the Sorts of A) is MSCongruence of A
+   proof
+    set J = id (the Sorts of A);
+      for i be set st i in the carrier of S holds J.i is
+                                               Relation of (the Sorts of A).i
+    proof
+     let i be set; assume i in the carrier of S;
+     then J.i = id ((the Sorts of A).i) by MSUALG_3:def 1;
+     hence J.i is Relation of (the Sorts of A).i;
+    end;
+    then reconsider J as ManySortedRelation of the Sorts of A
+                                                          by MSUALG_4:def 2;
+      for i be set, R be Relation of (the Sorts of A).i st i in the carrier of
+S
+     & J.i = R holds R is Equivalence_Relation of (the Sorts of A).i
+    proof
+     let i be set;
+     let R be Relation of (the Sorts of A).i; assume
+      A1: i in the carrier of S & J.i = R;
+     then J.i = id ((the Sorts of A).i) by MSUALG_3:def 1;
+     hence R is Equivalence_Relation of (the Sorts of A).i by A1;
+    end;
+    then reconsider J as MSEquivalence_Relation-like
+                     ManySortedRelation of the Sorts of A by MSUALG_4:def 3;
+    reconsider J as ManySortedRelation of A ;
+    reconsider J as MSEquivalence-like ManySortedRelation of A
+                                                          by MSUALG_4:def 5;
+      for o be OperSymbol of S, x,y be Element of Args(o,A) st
+     (for n be Nat st n in dom x holds
+      [x.n,y.n] in J.((the_arity_of o)/.n))
+       holds [Den(o,A).x,Den(o,A).y] in J.(the_result_sort_of o)
+    proof
+     let o be OperSymbol of S;
+     let x,y be Element of Args(o,A) such that
+      A2: for n be Nat st n in dom x holds [x.n,y.n] in
+        J.((the_arity_of o)/.n);
+     A3: dom x = dom (the_arity_of o) by MSUALG_3:6
+              .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+     A4: dom y = dom (the_arity_of o) by MSUALG_3:6
+              .= Seg len (the_arity_of o) by FINSEQ_1:def 3;
+     then reconsider x' = x , y' = y as FinSequence by A3,FINSEQ_1:def 2;
+       now let n be Nat such that A5: n in dom x;
+        J.((the_arity_of o)/.n) = id ((the Sorts of A).((the_arity_of o)/.n))
+                                                          by MSUALG_3:def 1;
+      then [x.n,y.n] in id ((the Sorts of A).((the_arity_of o)/.n)) by A2,A5;
+      hence x'.n = y'.n by RELAT_1:def 10;
+     end;
+     then A6: x = y by A3,A4,FINSEQ_1:17;
+       the OperSymbols of S <> {} by MSUALG_1:def 5;
+     then o in the OperSymbols of S;
+     then A7: o in dom (the ResultSort of S) by FUNCT_2:def 1;
+       Den(o,A).x in Result(o,A);
+     then Den(o,A).x in ((the Sorts of A) * the ResultSort of S).o
+                                                         by MSUALG_1:def 10;
+     then Den(o,A).x in (the Sorts of A).((the ResultSort of S).o)
+                                                            by A7,FUNCT_1:23;
+     then A8: Den(o,A).x in (the Sorts of A).(the_result_sort_of o)
+                                                          by MSUALG_1:def 7;
+       J.(the_result_sort_of o) = id ((the Sorts of A).(the_result_sort_of o))
+                                                          by MSUALG_3:def 1;
+     hence [Den(o,A).x,Den(o,A).y] in J.(the_result_sort_of o)
+                                                         by A6,A8,RELAT_1:def
+10;
+    end;
+    hence thesis by MSUALG_4:def 6;
+   end;
+
+  theorem Th20:
+   [|the Sorts of A,the Sorts of A|] is MSCongruence of A
+   proof
+    set J = [|the Sorts of A,the Sorts of A|];
+      for i be set st i in the carrier of S holds J.i is
+                                               Relation of (the Sorts of A).i
+    proof
+     let i be set; assume i in the carrier of S;
+     then J.i = [:(the Sorts of A).i,(the Sorts of A).i:] by PRALG_2:def 9;
+     hence J.i is Relation of (the Sorts of A).i by RELSET_1:def 1;
+    end;
+    then reconsider J as ManySortedRelation of the Sorts of A
+                                                          by MSUALG_4:def 2;
+      for i be set, R be Relation of (the Sorts of A).i st i in the carrier of
+S
+     & J.i = R holds R is Equivalence_Relation of (the Sorts of A).i
+    proof
+     let i be set;
+     let R be Relation of (the Sorts of A).i; assume
+      A1: i in the carrier of S & J.i = R;
+     then J.i = [:(the Sorts of A).i,(the Sorts of A).i:] by PRALG_2:def 9
+        .= nabla (the Sorts of A).i by EQREL_1:def 1;
+     hence R is Equivalence_Relation of (the Sorts of A).i by A1;
+    end;
+    then reconsider J as MSEquivalence_Relation-like
+                     ManySortedRelation of the Sorts of A by MSUALG_4:def 3;
+    reconsider J as ManySortedRelation of A ;
+    reconsider J as MSEquivalence-like ManySortedRelation of A
+                                                          by MSUALG_4:def 5;
+      for o be OperSymbol of S, x,y be Element of Args(o,A) st
+     (for n be Nat st n in dom x holds
+      [x.n,y.n] in J.((the_arity_of o)/.n))
+       holds [Den(o,A).x,Den(o,A).y] in J.(the_result_sort_of o)
+    proof
+     let o be OperSymbol of S;
+     let x,y be Element of Args(o,A) such that
+        for n be Nat st n in dom x holds [x.n,y.n] in J.((the_arity_of o)/.n);
+       the OperSymbols of S <> {} by MSUALG_1:def 5;
+     then o in the OperSymbols of S;
+     then A2: o in dom (the ResultSort of S) by FUNCT_2:def 1;
+       Den(o,A).x in Result(o,A);
+     then Den(o,A).x in ((the Sorts of A) * the ResultSort of S).o
+                                                         by MSUALG_1:def 10;
+     then Den(o,A).x in (the Sorts of A).((the ResultSort of S).o)
+                                                            by A2,FUNCT_1:23;
+     then A3: Den(o,A).x in (the Sorts of A).(the_result_sort_of o)
+                                                          by MSUALG_1:def 7;
+       Den(o,A).y in Result(o,A);
+     then Den(o,A).y in ((the Sorts of A) * the ResultSort of S).o
+                                                         by MSUALG_1:def 10;
+     then Den(o,A).y in (the Sorts of A).((the ResultSort of S).o)
+                                                            by A2,FUNCT_1:23;
+     then A4: Den(o,A).y in (the Sorts of A).(the_result_sort_of o)
+                                                          by MSUALG_1:def 7;
+       J.(the_result_sort_of o) = [:(the Sorts of A).(the_result_sort_of o),
+                 (the Sorts of A).(the_result_sort_of o):] by PRALG_2:def 9;
+     hence [Den(o,A).x,Den(o,A).y] in J.(the_result_sort_of o)
+                                                       by A3,A4,ZFMISC_1:106;
+    end;
+    hence thesis by MSUALG_4:def 6;
+   end;
+
+  definition
+   let S, A;
+   cluster CongrLatt A -> bounded;
+   coherence
+   proof
+      ex c being Element of CongrLatt A st
+     for a being Element of CongrLatt A holds
+       c"/\"a = c & a"/\"c = c
+    proof
+     reconsider c' = id (the Sorts of A) as MSCongruence of A by Th19;
+     reconsider c = c' as Element of CongrLatt A by Def6;
+     take c;
+     let a be Element of CongrLatt A;
+     reconsider a' = a as MSCongruence of A by Def6;
+     A1: the L_meet of CongrLatt A = (the L_meet of EqRelLatt the Sorts of A) |
+                    [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                          by NAT_LAT:def 16;
+     A2: [c,a] in [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                             by ZFMISC_1:106;
+     A3: now let i be set; assume A4: i in the carrier of S;
+      then reconsider i' = i as Element of S;
+      reconsider a2 = a'.i' as Equivalence_Relation of (the Sorts of A).i;
+      thus (c' /\ a').i = c'.i /\ a'.i by A4,PBOOLE:def 8
+         .= id ((the Sorts of A).i) /\ a2 by MSUALG_3:def 1
+         .= id ((the Sorts of A).i) by EQREL_1:17
+         .= c'.i by A4,MSUALG_3:def 1;
+     end;
+     thus c"/\"a = (the L_meet of CongrLatt A).(c,a) by LATTICES:def 2
+       .= (the L_meet of CongrLatt A).[c,a] by BINOP_1:def 1
+       .= (the L_meet of EqRelLatt the Sorts of A).[c,a] by A1,A2,FUNCT_1:72
+       .= (the L_meet of EqRelLatt the Sorts of A).(c,a) by BINOP_1:def 1
+       .= c' /\ a' by Def5
+       .= c by A3,PBOOLE:3;
+     hence a "/\" c = c;
+    end;
+    then A5: CongrLatt A is lower-bounded by LATTICES:def 13;
+      ex c being Element of CongrLatt A st
+     for a being Element of CongrLatt A holds
+      c"\/"a = c & a"\/"c = c
+    proof
+     reconsider c' = [|the Sorts of A,the Sorts of A|] as MSCongruence of A
+       by Th20;
+     reconsider c = c' as Element of CongrLatt A by Def6;
+     take c;
+     let a be Element of CongrLatt A;
+     reconsider a' = a as MSCongruence of A by Def6;
+     A6: the L_join of CongrLatt A = (the L_join of EqRelLatt the Sorts of A) |
+                   [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                          by NAT_LAT:def 16;
+     A7: [c,a] in [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                             by ZFMISC_1:106;
+     A8: now let i be set; assume A9: i in the carrier of S;
+      then reconsider i' = i as Element of S;
+      consider K1 be ManySortedRelation of the Sorts of A such that
+       A10: K1 = c' \/ a' & c' "\/" a' = EqCl K1 by Def4;
+      reconsider K2 = c'.i' , a2 = a'.i' as
+                                  Equivalence_Relation of (the Sorts of A).i;
+        (c' \/ a').i = c'.i \/ a'.i by A9,PBOOLE:def 7
+           .= [:(the Sorts of A).i,(the Sorts of A).i:] \/ a'.i
+                                                         by A9,PRALG_2:def 9
+           .= nabla (the Sorts of A).i \/ a2 by EQREL_1:def 1
+           .= nabla (the Sorts of A).i by Th4
+           .= [:(the Sorts of A).i,(the Sorts of A).i:] by EQREL_1:def 1
+           .= c'.i by A9,PRALG_2:def 9;
+      hence (c' "\/" a').i = EqCl K2 by A10,Def3
+         .= c'.i by Th3;
+     end;
+     thus c"\/"a = (the L_join of CongrLatt A).(c,a) by LATTICES:def 1
+           .= (the L_join of CongrLatt A).[c,a] by BINOP_1:def 1
+           .= (the L_join of EqRelLatt the Sorts of A).[c,a]
+                                                        by A6,A7,FUNCT_1:72
+           .= (the L_join of EqRelLatt the Sorts of A).(c,a) by BINOP_1:def 1
+           .= c' "\/" a' by Def5
+           .= c by A8,PBOOLE:3;
+      hence a"\/"c = c;
+    end;
+    then CongrLatt A is upper-bounded by LATTICES:def 14;
+    hence CongrLatt A is bounded by A5,LATTICES:def 15;
+   end;
+  end;
+
+  theorem
+     Bottom CongrLatt A = id (the Sorts of A)
+   proof
+    set K = id (the Sorts of A);
+      K is MSCongruence of A by Th19;
+    then reconsider K as Element of CongrLatt A by Def6;
+    A1: the L_meet of CongrLatt A = (the L_meet of EqRelLatt the Sorts of A) |
+                   [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                          by NAT_LAT:def 16;
+      now let a be Element of CongrLatt A;
+     reconsider K' = K , a' = a as Equivalence_Relation of the Sorts of A
+                                                                by Def6;
+     A2: [K,a] in [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                             by ZFMISC_1:106;
+     A3: now let i be set; assume A4: i in the carrier of S;
+      then reconsider i' = i as Element of S;
+      reconsider a2 = a'.i' as
+               Equivalence_Relation of (the Sorts of A).i by MSUALG_4:def 3;
+      thus (K' /\ a').i = K'.i /\ a'.i by A4,PBOOLE:def 8
+         .= id ((the Sorts of A).i) /\ a2 by MSUALG_3:def 1
+         .= id ((the Sorts of A).i) by EQREL_1:17
+         .= K'.i by A4,MSUALG_3:def 1;
+     end;
+     thus K "/\" a = (the L_meet of CongrLatt A).(K,a) by LATTICES:def 2
+       .= (the L_meet of CongrLatt A).[K,a] by BINOP_1:def 1
+       .= (the L_meet of EqRelLatt the Sorts of A).[K,a] by A1,A2,FUNCT_1:72
+       .= (the L_meet of EqRelLatt the Sorts of A).(K,a) by BINOP_1:def 1
+       .= K' /\ a' by Def5
+       .= K by A3,PBOOLE:3;
+     hence a "/\" K = K;
+    end;
+    hence thesis by LATTICES:def 16;
+   end;
+
+  theorem
+     Top CongrLatt A = [|the Sorts of A,the Sorts of A|]
+   proof
+    set K = [|the Sorts of A,the Sorts of A|];
+      K is MSCongruence of A by Th20;
+    then reconsider K as Element of CongrLatt A by Def6;
+    A1: the L_join of CongrLatt A = (the L_join of EqRelLatt the Sorts of A) |
+                   [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                          by NAT_LAT:def 16;
+  now let a be Element of CongrLatt A;
+     reconsider K' = K , a' = a as Equivalence_Relation of the Sorts of A
+                                                                       by Def6;
+     A2: [K,a] in [:the carrier of CongrLatt A,the carrier of CongrLatt A:]
+                                                             by ZFMISC_1:106;
+     A3: now let i be set; assume A4: i in the carrier of S;
+      then reconsider i' = i as Element of S;
+      consider K1 be ManySortedRelation of the Sorts of A such that
+       A5: K1 = K' \/ a' & K' "\/" a' = EqCl K1 by Def4;
+      reconsider K2 = K'.i' , a2 = a'.i' as
+               Equivalence_Relation of (the Sorts of A).i by MSUALG_4:def 3;
+        (K' \/ a').i = K'.i \/ a'.i by A4,PBOOLE:def 7
+           .= [:(the Sorts of A).i,(the Sorts of A).i:] \/ a'.i
+                                                         by A4,PRALG_2:def 9
+           .= nabla (the Sorts of A).i \/ a2 by EQREL_1:def 1
+           .= nabla (the Sorts of A).i by Th4
+           .= [:(the Sorts of A).i,(the Sorts of A).i:] by EQREL_1:def 1
+           .= K'.i by A4,PRALG_2:def 9;
+      hence (K' "\/" a').i = EqCl K2 by A5,Def3
+         .= K'.i by Th3;
+     end;
+     thus K "\/" a = (the L_join of CongrLatt A).(K,a) by LATTICES:def 1
+       .= (the L_join of CongrLatt A).[K,a] by BINOP_1:def 1
+       .= (the L_join of EqRelLatt the Sorts of A).[K,a] by A1,A2,FUNCT_1:72
+       .= (the L_join of EqRelLatt the Sorts of A).(K,a) by BINOP_1:def 1
+       .= K' "\/" a' by Def5
+       .= K by A3,PBOOLE:3;
+     hence a "\/" K = K;
+    end;
+    hence thesis by LATTICES:def 17;
+   end;
+

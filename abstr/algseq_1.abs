@@ -1,0 +1,174 @@
+:: Construction of Finite Sequences over Ring and Left-, Right-,
+:: and Bi-Modules over a Ring
+::  by Micha{\l} Muzalewski and Les{\l}aw W. Szczerba
+::
+:: Received September 13, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, NORMSP_1, FUNCT_1, RLVECT_1, RELAT_1, FINSEQ_1, ALGSEQ_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, NAT_1, RELAT_1,
+      FUNCT_1, RLVECT_1, STRUCT_0, FUNCT_2, NORMSP_1;
+ constructors NAT_1, NORMSP_1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve i,k,l,m,n for Nat,
+         x for set;
+
+canceled;
+
+theorem :: ALGSEQ_1:2
+ m<n+1 implies m<n or m=n;
+
+canceled;
+
+theorem :: ALGSEQ_1:4
+ k<2 implies k=0 or k=1;
+
+ definition let n;
+  func PSeg n -> set equals
+:: ALGSEQ_1:def 1
+ { k : k < n };
+ end;
+
+ definition let n;
+  redefine func PSeg n -> Subset of NAT;
+ end;
+
+canceled 5;
+
+theorem :: ALGSEQ_1:10
+  k in PSeg n iff k < n;
+
+theorem :: ALGSEQ_1:11
+  PSeg 0 = {} & PSeg 1 = { 0 } & PSeg 2 = { 0,1 };
+
+theorem :: ALGSEQ_1:12
+  n in PSeg(n+1);
+
+theorem :: ALGSEQ_1:13
+  n <= m iff PSeg n c= PSeg m;
+
+theorem :: ALGSEQ_1:14
+  PSeg n = PSeg m implies n = m;
+
+theorem :: ALGSEQ_1:15
+   k <= n implies
+    PSeg k = PSeg k /\ PSeg n & PSeg k = PSeg n /\ PSeg k;
+
+theorem :: ALGSEQ_1:16
+    (PSeg k = PSeg k /\ PSeg n or PSeg k = PSeg n /\ PSeg k )
+    implies k <= n;
+
+theorem :: ALGSEQ_1:17
+     PSeg n \/ { n } = PSeg (n+1);
+
+::
+::    Algebraic Sequences
+::
+
+reserve R for non empty ZeroStr;
+
+ definition let R;
+  let F be sequence of R;
+  attr F is finite-Support means
+:: ALGSEQ_1:def 2
+ ex n st for i st i >= n holds F.i = 0.R;
+ end;
+
+ definition let R;
+  cluster finite-Support sequence of R;
+ end;
+
+ definition let R;
+  mode AlgSequence of R is finite-Support sequence of R;
+ end;
+
+reserve p,q for AlgSequence of R;
+
+definition let R,p,k;
+  pred k is_at_least_length_of p means
+:: ALGSEQ_1:def 3
+  for i st i>=k holds p.i=0.R;
+end;
+
+ definition let R,p;
+  func len p -> Nat means
+:: ALGSEQ_1:def 4
+   it is_at_least_length_of p
+    & for m st m is_at_least_length_of p holds it<=m;
+ end;
+
+canceled 4;
+
+theorem :: ALGSEQ_1:22
+ i>=len p implies p.i=0.R;
+
+canceled;
+
+theorem :: ALGSEQ_1:24
+  (for i st i < k holds p.i<>0.R) implies len p>=k;
+
+theorem :: ALGSEQ_1:25
+  len p=k+1 implies p.k<>0.R;
+
+::
+:: SUPPORT
+::
+
+definition let R,p;
+  func support p -> Subset of NAT equals
+:: ALGSEQ_1:def 5
+   PSeg (len p);
+end;
+
+canceled;
+
+theorem :: ALGSEQ_1:27
+    k = len p iff PSeg k = support p;
+
+ scheme AlgSeqLambdaF{R()->non empty ZeroStr,A()->Nat,
+                      F(Nat)->Element of R()}:
+   ex p being AlgSequence of R()
+     st len p <= A() & for k st k < A() holds p.k=F(k);
+
+theorem :: ALGSEQ_1:28
+  len p = len q & (for k st k < len p holds p.k = q.k)
+   implies p=q;
+
+theorem :: ALGSEQ_1:29
+    the carrier of R <> {0.R} implies
+    for k ex p being AlgSequence of R st len p = k;
+
+::
+::      The SHORT AlgSequence of R
+::
+
+reserve x for Element of R;
+
+ definition let R,x;
+  func <%x%> -> AlgSequence of R means
+:: ALGSEQ_1:def 6
+  len it <= 1 & it.0 = x;
+ end;
+
+canceled;
+
+theorem :: ALGSEQ_1:31
+  p=<%0.R%> iff len p = 0;
+
+theorem :: ALGSEQ_1:32
+    p=<%0.R%> iff support p = {};
+
+theorem :: ALGSEQ_1:33
+  <%0.R%>.i=0.R;
+
+theorem :: ALGSEQ_1:34
+    p=<%0.R%> iff rng p = {0.R};
+

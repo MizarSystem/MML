@@ -1,0 +1,275 @@
+:: The Fundamental Properties of Natural Numbers
+::  by Grzegorz Bancerek
+::
+:: Received January 11, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM, ARYTM_1, ARYTM_3, ORDINAL1, NAT_1, XREAL_0;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1;
+ constructors REAL_1, XREAL_0, XCMPLX_0, XBOOLE_0;
+ clusters REAL_1, NUMBERS, ORDINAL2, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+definition
+  mode Nat is Element of NAT;
+end;
+
+ reserve x for Real,
+         k,l,m,n for Nat,
+         h,i,j for natural number,
+         X for Subset of REAL;
+
+:: The results of axioms of natural numbers
+
+canceled;
+
+theorem :: NAT_1:2                       :: axiom of induction
+  for X st 0 in X & for x st x in X holds x + 1 in X
+  for k holds k in X;
+
+:: Addition and multiplication
+
+:: The natural numbers are real numbers therefore some theorems of real
+:: numbers are translated for natural numbers.
+
+ definition let n,k be Nat;
+ redefine func n + k -> Nat;
+ end;
+
+ definition let n,k be natural number;
+  cluster n + k -> natural;
+ end;
+
+:: Now we can form and prove the scheme of induction.
+
+scheme Ind { P[Nat] } :
+ for k being Nat holds P[k]
+   provided
+   P[0] and
+   for k being Nat st P[k] holds P[k + 1];
+
+scheme Nat_Ind { P[natural number] } :
+ for k being natural number holds P[k]
+   provided
+   P[0] and
+   for k be natural number st P[k] holds P[k + 1];
+
+:: Like addition, the result of multiplication of two natural numbers is
+:: a natural number.
+
+ definition let n,k be Nat;
+ redefine func n * k -> Nat;
+ end;
+
+ definition let n,k be natural number;
+  cluster n * k -> natural;
+ end;
+
+                ::::::::::::::::::::
+                :: Order relation ::
+                ::::::::::::::::::::
+
+:: Some theorems of not great relation "<=" in real numbers are translated
+:: to natural number easy and it is necessary to have them here.
+
+canceled 15;
+
+theorem :: NAT_1:18
+  0 <= i;
+
+theorem :: NAT_1:19
+  0 <> i implies 0 < i;
+
+theorem :: NAT_1:20
+  i <= j implies i * h <= j * h;
+
+theorem :: NAT_1:21
+0 <> i + 1;
+
+theorem :: NAT_1:22
+  i = 0 or ex k st i = k + 1;
+
+theorem :: NAT_1:23
+  i + j = 0 implies i = 0 & j = 0;
+
+definition
+  cluster non zero (natural number);
+end;
+
+definition let m be natural number, n be non zero (natural number);
+  cluster m + n -> non zero;
+  cluster n + m -> non zero;
+end;
+
+scheme Def_by_Ind { N()->Nat, F(Nat,Nat)->Nat, P[Nat,Nat] } :
+  (for k ex n st P[k,n] ) &
+    for k,n,m st P[k,n] & P[k,m] holds n = m
+     provided
+    for k,n holds P[k,n] iff
+       k = 0 & n = N() or ex m,l st k = m + 1 & P[m,l] & n = F(k,l);
+
+canceled 2;
+
+theorem :: NAT_1:26
+  for i,j st i <= j + 1 holds i <= j or i = j + 1;
+
+theorem :: NAT_1:27
+    i <= j & j <= i + 1 implies i = j or j = i + 1;
+
+theorem :: NAT_1:28
+  for i,j st i <= j ex k st j = i + k;
+
+theorem :: NAT_1:29
+  i <= i + j;
+
+scheme Comp_Ind { P[Nat] } :
+ for k holds P[k]
+   provided
+   for k st for n st n < k holds P[n] holds P[k];
+
+:: Principle of minimum
+
+scheme Min { P[Nat] } :
+ ex k st P[k] & for n st P[n] holds k <= n
+  provided
+  ex k st P[k];
+
+:: Principle of maximum
+
+scheme Max { P[Nat],N()->Nat } :
+  ex k st P[k] & for n st P[n] holds n <= k
+   provided
+   for k st P[k] holds k <= N() and
+   ex k st P[k];
+
+canceled 7;
+
+theorem :: NAT_1:37
+  i <= j implies i <= j + h;
+
+theorem :: NAT_1:38
+  i < j + 1 iff i <= j;
+
+canceled;
+
+theorem :: NAT_1:40
+  i * j = 1 implies i = 1 & j = 1;
+
+scheme Regr { P[Nat] } :
+ P[0]
+  provided
+  ex k st P[k] and
+  for k st k <> 0 & P[k] ex n st n < k & P[n];
+
+:: Exact division and rest of division
+
+ reserve k1,t,t1 for Nat;
+
+canceled;
+
+theorem :: NAT_1:42
+   for m st 0 < m for n ex k,t st n = (m*k)+t & t < m;
+
+theorem :: NAT_1:43
+ for n,m,k,k1,t,t1 being natural number
+     st n = m*k+t & t < m & n = m*k1+t1 & t1 < m holds
+      k = k1 & t = t1;
+
+definition let k,l be natural number;
+  func k div l -> Nat means
+:: NAT_1:def 1       :: the exact division
+  ( ex t st k = l * it + t & t < l ) or it = 0 & l = 0;
+
+  func k mod l -> Nat means
+:: NAT_1:def 2         :: the rest of division
+ ( ex t st k = l * t + it & it < l ) or it = 0 & l = 0;
+end;
+
+canceled 2;
+
+theorem :: NAT_1:46
+  0 < i implies j mod i < i;
+
+theorem :: NAT_1:47
+  0 < i implies j = i * (j div i) + (j mod i);
+
+:: The divisibility relation
+
+definition let k,l be natural number;
+  pred k divides l means
+:: NAT_1:def 3
+  ex t st l = k * t;
+  reflexivity;
+end;
+
+canceled;
+
+theorem :: NAT_1:49
+  j divides i iff i = j * (i div j);
+
+canceled;
+
+theorem :: NAT_1:51
+   i divides j & j divides h implies i divides h;
+
+theorem :: NAT_1:52
+  i divides j & j divides i implies i = j;
+
+theorem :: NAT_1:53
+  i divides 0 & 1 divides i;
+
+theorem :: NAT_1:54
+  0 < j & i divides j implies i <= j;
+
+theorem :: NAT_1:55
+  i divides j & i divides h implies i divides j+h;
+
+theorem :: NAT_1:56
+  i divides j implies i divides j * h;
+
+theorem :: NAT_1:57
+  i divides j & i divides j + h implies i divides h;
+
+theorem :: NAT_1:58
+  i divides j & i divides h implies i divides j mod h;
+
+:: The least common multiple and the greatest common divisor
+
+ definition let k,n be Nat;
+  func k lcm n -> Nat means
+:: NAT_1:def 4
+  k divides it & n divides it & for m st k divides m & n divides
+ m holds it divides m;
+    idempotence;
+    commutativity;
+ end;
+
+ definition let k,n be Nat;
+  func k hcf n -> Nat means
+:: NAT_1:def 5
+  it divides k & it divides n & for m st m divides k & m divides
+ n holds m divides it;
+    idempotence;
+    commutativity;
+ end;
+
+scheme Euklides { Q(Nat)->Nat, a,b()->Nat } :
+  ex n st Q(n) = a() hcf b() & Q(n + 1) = 0
+   provided
+   0 < b() & b() < a() and
+   Q(0) = a() & Q(1) = b() and
+   for n holds Q(n + 2) = Q(n) mod Q(n + 1);
+
+definition
+ cluster -> ordinal Nat;
+end;
+
+definition
+ cluster non empty ordinal Subset of REAL;
+end;

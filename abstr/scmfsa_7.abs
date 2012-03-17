@@ -1,0 +1,280 @@
+:: Some Multi-instructions defined by sequence of instructions of SCM+FSA
+::  by Noriko Asamoto
+::
+:: Received April 24, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_3, FINSET_1, AMI_1, SCMFSA_2, FINSEQ_1, FUNCT_4, RELAT_1,
+      ABSVALUE, ARYTM_1, INT_1, TARSKI, BOOLE, FUNCT_1, DTCONSTR, BINOP_1,
+      FINSOP_1, SETWISEO, CARD_1, FINSEQ_2, AMI_2, SCMFSA_7, ORDINAL2,
+      FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, NAT_1, ABSVALUE, BINARITH, ORDINAL2, INT_1, RELAT_1, BINOP_1,
+      CARD_1, SETWISEO, FINSEQ_1, FINSET_1, FINSEQ_4, DTCONSTR, FINSOP_1,
+      FUNCT_1, FUNCT_7, STRUCT_0, AMI_1, SCMFSA_2;
+ constructors WELLORD2, REAL_1, BINARITH, BINOP_1, FINSOP_1, FUNCT_7, SETWISEO,
+      AMI_2, SCMFSA_2, FINSEQ_4, MEMBERED;
+ clusters XBOOLE_0, AMI_1, RELSET_1, PRELAMB, FINSEQ_5, FINSEQ_6, SCMFSA_2,
+      INT_1, DTCONSTR, FINSEQ_1, NAT_1, FRAENKEL, XREAL_0, MEMBERED, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+reserve m for Nat;
+
+definition
+ cluster -> finite FinPartState of SCM+FSA;
+end;
+
+definition
+ let p be FinSequence, x,y be set;
+ cluster p +*(x,y) -> FinSequence-like;
+end;
+
+theorem :: SCMFSA_7:1
+ for k being natural number holds abs(k) = k;
+
+theorem :: SCMFSA_7:2
+ for a,b,c being Nat st
+     a >= c & b >= c & a -' c = b -' c holds a = b;
+
+theorem :: SCMFSA_7:3
+ for a,b being natural number st
+     a >= b holds a -' b = a - b;
+
+theorem :: SCMFSA_7:4
+ for a,b being Integer st a < b holds a <= b - 1;
+
+scheme CardMono''{ A() -> set, D() -> non empty set, G(set) -> set }:
+ A(),{ G(d) where d is Element of D() : d in A() } are_equipotent
+provided
+ A() c= D() and
+ for d1,d2 being Element of D() st d1 in A() & d2 in A() & G(d1) = G(d2)
+     holds d1 = d2;
+
+theorem :: SCMFSA_7:5
+   for p1,p2,q being FinSequence st
+     p1 c= q & p2 c= q & len p1 = len p2 holds p1 = p2;
+
+canceled 2;
+
+theorem :: SCMFSA_7:8
+ for p,q being FinSequence st
+     p c= q holds len p <= len q;
+
+theorem :: SCMFSA_7:9
+ for p,q being FinSequence, i being Nat st
+     1 <= i & i <= len p holds (p ^ q).i = p.i;
+
+theorem :: SCMFSA_7:10
+ for p,q being FinSequence, i being Nat st
+     1 <= i & i <= len q holds (p ^ q).(len p + i) = q.i;
+
+canceled;
+
+theorem :: SCMFSA_7:12
+   for p being FinSequence st
+     p <> {} holds len p in dom p;
+
+theorem :: SCMFSA_7:13
+ for D being set holds
+     FlattenSeq <*>(D*) = <*>D;
+
+theorem :: SCMFSA_7:14
+ for D being set, F,G be FinSequence of D* holds
+     FlattenSeq (F ^ G) = FlattenSeq F ^ FlattenSeq G;
+
+theorem :: SCMFSA_7:15
+   for D being set, p,q be Element of D* holds
+     FlattenSeq <* p,q *> = p ^ q;
+
+theorem :: SCMFSA_7:16
+   for D being set, p,q,r be Element of D* holds
+     FlattenSeq <* p,q,r *> = p ^ q ^ r;
+
+theorem :: SCMFSA_7:17
+ for D being non empty set, p,q being FinSequence of D st
+     p c= q holds ex p' being FinSequence of D st p ^ p' = q;
+
+theorem :: SCMFSA_7:18
+ for D being non empty set, p,q being FinSequence of D, i being Nat st
+     p c= q & 1 <= i & i <= len p holds q.i = p.i;
+
+theorem :: SCMFSA_7:19
+ for D being set, F,G be FinSequence of D* holds
+     F c= G implies FlattenSeq F c= FlattenSeq G;
+
+theorem :: SCMFSA_7:20
+ for p being FinSequence holds
+     p | Seg 0 = {};
+
+theorem :: SCMFSA_7:21
+ for f,g being FinSequence holds
+     f | Seg 0 = g | Seg 0;
+
+theorem :: SCMFSA_7:22
+ for D being non empty set, x being Element of D holds
+     <* x *> is FinSequence of D;
+
+theorem :: SCMFSA_7:23
+ for D being set, p,q being FinSequence of D holds
+     p ^ q is FinSequence of D;
+
+definition
+ let f be FinSequence of the Instructions of SCM+FSA;
+ func Load f->FinPartState of SCM+FSA means
+:: SCMFSA_7:def 1
+ dom it = {insloc (m-'1): m in dom f} &
+     for k being Nat st insloc k in dom it holds it.insloc k = f/.(k+1);
+ end;
+
+canceled;
+
+theorem :: SCMFSA_7:25
+   for f being FinSequence of the Instructions of SCM+FSA holds
+     card Load f = len f;
+
+theorem :: SCMFSA_7:26
+ for p being FinSequence of the Instructions of SCM+FSA, k being Nat holds
+     insloc k in dom Load p iff k + 1 in dom p;
+
+theorem :: SCMFSA_7:27
+   for k,n being Nat holds
+     k < n iff 0 < k + 1 & k + 1 <= n;
+
+theorem :: SCMFSA_7:28
+ for k, n being Nat holds
+     k < n iff 1 <= k + 1 & k + 1 <= n;
+
+theorem :: SCMFSA_7:29
+ for p being FinSequence of the Instructions of SCM+FSA, k being Nat holds
+     insloc k in dom Load p iff k < len p;
+
+theorem :: SCMFSA_7:30
+   for f being non empty FinSequence of the Instructions of SCM+FSA holds
+     1 in dom f & insloc 0 in dom Load f;
+
+theorem :: SCMFSA_7:31
+ for p,q being FinSequence of the Instructions of SCM+FSA holds
+     Load p c= Load (p ^ q);
+
+theorem :: SCMFSA_7:32
+   for p,q being FinSequence of the Instructions of SCM+FSA holds
+     p c= q implies Load p c= Load q;
+
+definition
+ let a be Int-Location;
+ let k be Integer;
+ func a := k -> FinPartState of SCM+FSA means
+:: SCMFSA_7:def 2
+   ex k1 being Nat st k1 + 1 = k &
+   it = Load(<* a:= intloc 0 *> ^
+             ( k1 |-> AddTo(a,intloc 0) ) ^
+             <* halt SCM+FSA *> )
+ if k > 0
+ otherwise
+   ex k1 being Nat st k1 + k = 1 &
+   it = Load(<* a:= intloc 0 *> ^
+             ( k1 |-> SubFrom(a,intloc 0) ) ^
+             <* halt SCM+FSA *> );
+end;
+
+definition
+ let a be Int-Location;
+ let k be Integer;
+ func aSeq(a,k) -> FinSequence of the Instructions of SCM+FSA means
+:: SCMFSA_7:def 3
+   ex k1 being Nat st k1 + 1 = k &
+   it = <* a:= intloc 0 *> ^ (k1 |-> AddTo(a,intloc 0))
+ if k > 0
+ otherwise
+   ex k1 being Nat st k1 + k = 1 &
+   it = <* a:= intloc 0 *> ^ (k1 |-> SubFrom(a,intloc 0));
+end;
+
+theorem :: SCMFSA_7:33
+   for a being Int-Location, k being Integer holds
+     a:=k = Load (aSeq(a,k) ^ <* halt SCM+FSA *>);
+
+definition
+ let f be FinSeq-Location;
+ let p be FinSequence of INT;
+ func aSeq(f,p) -> FinSequence of the Instructions of SCM+FSA means
+:: SCMFSA_7:def 4
+ ex pp being FinSequence of (the Instructions of SCM+FSA)* st
+     len pp = len p &
+     (for k being Nat st 1 <= k & k <= len p holds
+         ex i being Integer st
+         i = p.k &
+         pp.k = (aSeq(intloc 1,k) ^
+                aSeq(intloc 2,i) ^
+                <* (f,intloc 1):=intloc 2 *>)) &
+     it = FlattenSeq pp;
+ end;
+
+definition
+ let f be FinSeq-Location;
+ let p be FinSequence of INT;
+ func f := p -> FinPartState of SCM+FSA equals
+:: SCMFSA_7:def 5
+ Load (aSeq(intloc 1,len p) ^
+            <* f:=<0,...,0>intloc 1 *> ^
+            aSeq(f,p) ^
+            <* halt SCM+FSA *> );
+end;
+
+theorem :: SCMFSA_7:34
+   for a being Int-Location holds
+     a:=1 = Load ( <* a:= intloc 0 *> ^ <* halt SCM+FSA *> );
+
+theorem :: SCMFSA_7:35
+   for a being Int-Location holds
+     a:=0 = Load (<* a:= intloc 0 *>^<*SubFrom(a,intloc 0)*>^<*halt SCM+FSA*>);
+
+theorem :: SCMFSA_7:36
+ for s being State of SCM+FSA st s.intloc 0 = 1
+ for c0 being Nat st IC s = insloc c0
+ for a being Int-Location,
+     k being Integer st
+     a <> intloc 0 &
+     (for c being Nat st c in dom aSeq(a,k) holds
+         aSeq(a,k).c = s.insloc (c0 + c -' 1))
+ holds
+     (for i being Nat st i <= len aSeq(a,k) holds
+         IC (Computation s).i = insloc (c0 + i) &
+         (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+         (for f being FinSeq-Location holds (Computation s).i.f = s.f)) &
+     (Computation s).(len aSeq(a,k)).a = k;
+
+theorem :: SCMFSA_7:37
+ for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1
+ for a being Int-Location
+ for k being Integer st Load aSeq(a,k) c= s & a<>intloc 0
+ holds
+     (for i being Nat st i <= len aSeq(a,k) holds
+         IC (Computation s).i = insloc i &
+         (for b being Int-Location st b <> a holds (Computation s).i.b = s.b) &
+         (for f being FinSeq-Location holds (Computation s).i.f = s.f)) &
+     (Computation s).(len aSeq(a,k)).a = k;
+
+:: Users' guide
+
+theorem :: SCMFSA_7:38
+   for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1
+ for a being Int-Location, k being Integer st a:=k c= s & a<>intloc 0 holds
+     s is halting &
+     (Result s).a = k &
+     (for b being Int-Location st b <> a holds (Result s).b = s.b) &
+     (for f being FinSeq-Location holds (Result s).f = s.f);
+
+theorem :: SCMFSA_7:39
+   for s being State of SCM+FSA st IC s = insloc 0 & s.intloc 0 = 1
+ for f being FinSeq-Location, p being FinSequence of INT st f:=p c= s holds
+     s is halting &
+     (Result s).f = p &
+     (for b being Int-Location st b <> intloc 1 & b <> intloc 2
+         holds (Result s).b = s.b) &
+     (for g being FinSeq-Location st g <> f holds (Result s).g = s.g);

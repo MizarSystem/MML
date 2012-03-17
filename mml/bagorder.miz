@@ -1,0 +1,3898 @@
+:: On Ordering of Bags
+::  by Gilbert Lee and Piotr Rudnicki
+::
+:: Received March 12, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary DICKSON, BAGORDER, TARSKI, ARYTM_1, ARYTM_3, RELAT_1, WELLORD1,
+      RELAT_2, MCART_1, CAT_1, ORDINAL2, ORDERS_1, FUNCT_1, RLVECT_1, RLVECT_2,
+      FUNCOP_1, SEQM_3, ALGSEQ_1, BOOLE, PBOOLE, ORDINAL1, CARD_1, CARD_3,
+      FINSET_1, FINSUB_1, NORMSP_1, POLYNOM1, FINSEQ_1, FINSEQ_2, GRAPH_2,
+      WAYBEL_4, WELLFND1, FUNCT_4, WELLORD2, TRIANG_1, SQUARE_1, ORDERS_2,
+      FINSEQ_4, PROB_1, FUNCT_2, RFINSEQ, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, RELAT_2,
+      RELSET_1, FINSET_1, FINSUB_1, CQC_LANG, ORDINAL1, MCART_1, WELLORD1,
+      ORDERS_1, ORDERS_2, WELLFND1, NUMBERS, XREAL_0, REAL_1, NAT_1, FUNCT_1,
+      SEQM_3, WAYBEL_0, CARD_1, NORMSP_1, PBOOLE, PRALG_1, CARD_3, DICKSON,
+      BINARITH, FINSEQ_1, WSIERP_1, POLYNOM1, RVSUM_1, PRE_CIRC, YELLOW_1,
+      WAYBEL_4, PARTFUN1, FUNCT_2, FUNCT_4, TRIANG_1, POLYNOM2, FINSEQ_4,
+      CQC_SIM1, DOMAIN_1, FINSEQOP, RFINSEQ;
+ constructors WELLFND1, PRE_CIRC, REAL_1, FINSEQOP, DOMAIN_1, BINARITH,
+      DICKSON, WSIERP_1, WAYBEL_4, TRIANG_1, POLYNOM2, ORDERS_2, CQC_SIM1;
+ clusters DICKSON, YELLOW_1, ORDERS_1, CARD_1, POLYNOM1, BINARITH, STRUCT_0,
+      RELSET_1, SUBSET_1, WAYBEL_0, FINSET_1, FINSUB_1, CARD_5, CQC_LANG,
+      ORDINAL1, FUNCT_1, FINSEQ_1, XREAL_0, MEMBERED, RELAT_1, FUNCT_2,
+      NUMBERS, ORDINAL2;
+ requirements SUBSET, NUMERALS, REAL, BOOLE, ARITHM;
+ definitions TARSKI, RELAT_2, WELLFND1;
+ theorems WELLORD1, TARSKI, RELAT_2, RELSET_1, ZFMISC_1, ORDERS_1, NAT_1,
+      FUNCT_1, REAL_1, FINSET_1, AXIOMS, CARD_3, PBOOLE, YELLOW_1, PRALG_1,
+      FUNCOP_1, POLYNOM1, BINARITH, PARTIT_2, WELLFND1, SEQM_3, RELAT_1,
+      DICKSON, FINSEQ_1, RLVECT_2, INTEGRA5, RVSUM_1, FINSEQ_2, CARD_1,
+      WAYBEL_0, WAYBEL_4, ORDINAL1, FUNCT_2, CARD_2, INT_2, NORMSP_1, MCART_1,
+      FINSUB_1, JORDAN3, ORDERS_2, FUNCT_7, FUNCT_4, CARD_4, CQC_LANG,
+      TRIANG_1, WELLORD2, FINSEQ_3, FINSEQ_4, FINSEQ_5, CQC_SIM1, FINSEQOP,
+      RFINSEQ, VECTSP_9, EULER_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
+      PARTFUN1;
+ schemes NAT_1, RELSET_1, FUNCT_1, FINSET_1, RECDEF_1, FUNCT_2, ORDINAL1;
+
+begin :: Preliminaries
+
+theorem Th1:
+for x,y,z being set st z in x & z in y holds x \ {z} = y \ {z} iff x = y
+proof let x,y,z be set; assume A1: z in x & z in y;
+    hereby assume A2: x \ {z} = y \ {z};
+        thus x = x \/ {z} by A1,ZFMISC_1:46
+         .= (y \ {z}) \/ {z} by A2,XBOOLE_1:39
+         .= y \/ {z} by XBOOLE_1:39
+         .= y by A1,ZFMISC_1:46;
+    end;
+    thus thesis;
+end;
+
+theorem
+  for n, k being Nat holds k in Seg n iff k-1 is Nat & k-1 < n
+proof
+    let n, k be Nat;
+    A1: Seg n = {x where x is Nat : 1 <= x & x <= n} by FINSEQ_1:def 1;
+    hereby assume
+      k in Seg n;
+        then consider x being Nat such that
+    A2: k = x & 1 <= x & x <= n by A1;
+        set x1 = k - 1, n1 = n-1;
+     0 < x by A2,NAT_1:19;
+        then reconsider x1 as Nat by A2,RLVECT_2:103;
+          x1 = k-1;
+        hence k-1 is Nat;
+          0 < n by A2,NAT_1:19;
+        then reconsider n1 as Nat by RLVECT_2:103;
+    A3: k-1 = k+(-1) by XCMPLX_0:def 8;
+          k+(-1) <= n+(-1) by A2,AXIOMS:24;
+        then x1 <= n1 by A3,XCMPLX_0:def 8;
+        then k-1 < n1+1 by NAT_1:38;
+        then k-1 < n+1-1 by XCMPLX_1:29;
+        hence k-1 < n by XCMPLX_1:26;
+    end;
+    assume A4: k-1 is Nat & k-1 < n;
+    then reconsider k1 = k-1 as Nat;
+      0 <= k1 by NAT_1:18;
+    then 0+1 <= k-1+1 by AXIOMS:24;
+    then 1 <= k+1-1 by XCMPLX_1:29;
+then A5: 1 <= k by XCMPLX_1:26;
+    reconsider n1 = n-1 as Nat by A4,RLVECT_2:103;
+      k-1 < n + 1 - 1 by A4,XCMPLX_1:26;
+    then k-1 < n1 + 1 by XCMPLX_1:29;
+    then k-1+1 <= n-1+1 by A4,NAT_1:38;
+    then k+1-1 <= n-1+1 by XCMPLX_1:29;
+    then k+1-1 <= n+1-1 by XCMPLX_1:29;
+    then k <= n+1-1 by XCMPLX_1:26;
+    then k <= n by XCMPLX_1:26;
+    hence k in Seg n by A1,A5;
+end;
+
+definition
+  let f be natural-yielding Function, X be set;
+  cluster f|X -> natural-yielding;
+  coherence proof
+  A1: rng f c= NAT by SEQM_3:def 8;
+       rng(f|X) c= rng f by RELAT_1:99;
+     then rng(f|X) c= NAT by A1,XBOOLE_1:1;
+   hence thesis by SEQM_3:def 8;
+  end;
+end;
+
+definition
+  let f be finite-support Function, X be set;
+  cluster f|X -> finite-support;
+  coherence proof
+       support (f|X) c= support f proof let x be set; assume
+     A1: x in support (f|X);
+     then A2: (f|X).x <> 0 by POLYNOM1:def 7;
+           support (f|X) c= dom (f|X) by POLYNOM1:41;
+         then f.x <> 0 by A1,A2,FUNCT_1:70;
+      hence x in support f by POLYNOM1:def 7;
+     end;
+     then support (f|X) is finite by FINSET_1:13;
+    hence thesis by POLYNOM1:def 8;
+  end;
+end;
+
+theorem Th3:
+for f being Function, x being set st x in dom f holds f*<*x*> = <*f.x*>
+ proof let f be Function; let x be set; assume
+A1: x in dom f;
+   then f.x in rng f by FUNCT_1:def 5;
+  then reconsider D = dom f, E = rng f as non empty set by A1;
+  reconsider g = f as Function of D,E by FUNCT_2:def 1,RELSET_1:11;
+     rng <*x*> = {x} by FINSEQ_1:55;
+   then rng <*x*> c= D by A1,ZFMISC_1:37;
+  then reconsider p = <*x*> as FinSequence of D by FINSEQ_1:def 4;
+  thus f*<*x*> = g*p .= <*f.x*> by FINSEQ_2:39;
+ end;
+
+theorem Th4:
+for f, g, h being Function
+ st dom f = dom g & rng f c= dom h & rng g c= dom h &
+    f, g are_fiberwise_equipotent
+  holds h*f, h*g are_fiberwise_equipotent
+proof let f, g, h be Function such that
+A1: dom f = dom g and
+A2: rng f c= dom h and
+A3: rng g c= dom h and
+A4: f, g are_fiberwise_equipotent;
+   consider p being Permutation of dom f such that
+A5: f = g*p by A1,A4,RFINSEQ:6;
+A6: dom (h*f) = dom f by A2,RELAT_1:46;
+A7: dom (h*g) = dom g by A3,RELAT_1:46; h*f = h*g*p by A5,RELAT_1:55;
+  hence h*f, h*g are_fiberwise_equipotent by A1,A6,A7,RFINSEQ:6;
+end;
+
+theorem Th5:
+for fs being FinSequence of NAT holds Sum fs = 0 iff fs = (len fs) |-> 0
+proof
+    let fs be FinSequence of NAT;
+      rng fs c= NAT by FINSEQ_1:def 4;
+    then rng fs c= REAL by XBOOLE_1:1;
+    then reconsider fs'=fs as FinSequence of REAL by FINSEQ_1:def 4;
+    hereby assume A1: Sum fs = 0;
+    A2: Seg len fs = dom fs by FINSEQ_1:def 3;
+    A3: (len fs) |-> 0 = Seg len fs --> 0 by FINSEQ_2:def 2;
+    then A4: Seg len fs = dom ((len fs) |-> 0) by FUNCOP_1:19;
+          now let k be Nat such that
+        A5: k in Seg len fs;
+              now assume fs.k <> 0;
+                then 0 < fs.k by NAT_1:19;
+            then A6: ex k being Nat
+                 st k in dom fs' & 0 < fs.k by A2,A5;
+                  for k being Nat st k in dom fs holds 0 <= fs.k by NAT_1:19;
+                hence contradiction by A1,A6,RVSUM_1:115;
+            end;
+            hence fs.k = ((len fs) |-> 0).k by A3,A5,FUNCOP_1:13;
+        end;
+        hence fs = (len fs) |-> 0 by A2,A4,FINSEQ_1:17;
+    end;
+    assume fs = (len fs) |-> 0;
+    hence Sum fs = 0 by RVSUM_1:111;
+end;
+
+definition
+  let n,i,j be Nat, b be ManySortedSet of n;
+  func (i,j)-cut b -> ManySortedSet of j-'i means :Def1:
+    for k being Nat st k in j-'i holds it.k = b.(i+k);
+existence proof
+    defpred _P[set,set] means ex k1 being Nat st k1 = $1 & $2 = b.(i+k1);
+A1: for x,y1,y2 being set st x in j-'i & _P[x,y1] & _P[x,y2] holds y1 = y2;
+      now let x be set such that
+    A2: x in j-'i;
+          j-'i = {k where k is Nat : k < j-'i} by AXIOMS:30;
+        then consider k being Nat such that
+    A3: x = k & k < j-'i by A2;
+        reconsider x'=x as Nat by A3;
+        consider y being set such that
+    A4: y = b.(i+x');
+        take y;
+        thus _P[x,y] by A4; :: ex k' being Nat st k'=x & y = b.(i+k') by A4;
+    end;
+then A5: for x being set st x in j-'i ex y being set st _P[x,y];
+    consider f being Function such that
+A6: dom f = j-'i and
+A7: for k being set st k in j-'i holds _P[k,f.k]  from FuncEx(A1, A5);
+    reconsider f as ManySortedSet of j-'i by A6,PBOOLE:def 3;
+    take f;
+    let k be Nat such that
+A8: k in j-'i;
+    consider k' being Nat such that
+A9: k' = k & f.k = b.(i+k') by A7,A8;
+    thus f.k = b.(i+k) by A9;
+end;
+uniqueness proof
+    let IT1, IT2 be ManySortedSet of j-'i such that
+A10: for k being Nat st k in j-'i holds IT1.k = b.(i+k) and
+A11: for k being Nat st k in j-'i holds IT2.k = b.(i+k);
+A12: j-'i = dom IT1 & j-'i = dom IT2 by PBOOLE:def 3;
+      now let x be set such that
+    A13: x in j-'i;
+          j-'i = {k where k is Nat : k < j-'i} by AXIOMS:30;
+        then consider k being Nat such that
+    A14: x = k & k < j-'i by A13;
+        reconsider x'=x as Nat by A14;
+          IT1.x = b.(i+x') by A10,A13;
+        hence IT1.x = IT2.x by A11,A13;
+    end;
+    hence IT1 = IT2 by A12,FUNCT_1:9;
+end;
+end;
+
+definition
+  let n,i,j be Nat, b be natural-yielding ManySortedSet of n;
+  cluster (i,j)-cut b -> natural-yielding;
+coherence proof
+      now let y be set such that
+    A1: y in rng (i,j)-cut b;
+        consider x being set such that
+    A2: x in dom ((i,j)-cut b) and
+    A3: ((i,j)-cut b).x = y by A1,FUNCT_1:def 5;
+    A4: x in j-'i by A2,PBOOLE:def 3;
+          j-'i = {k where k is Nat : k < j-'i} by AXIOMS:30;
+        then consider k being Nat such that
+    A5: k = x & k < j-'i by A4;
+        reconsider x as Nat by A5;
+          y = b.(i+x) by A3,A4,Def1;
+        hence y in NAT;
+    end;
+    then rng (i,j)-cut b c= NAT by TARSKI:def 3;
+    hence (i,j)-cut b is natural-yielding by SEQM_3:def 8;
+end;
+end;
+
+definition
+  let n,i,j be Nat, b be finite-support ManySortedSet of n;
+  cluster (i,j)-cut b -> finite-support;
+coherence;
+end;
+
+theorem Th6:
+  for n,i being Nat, a,b being ManySortedSet of n holds
+      a = b iff ((0,i+1)-cut a = (0,i+1)-cut b &
+                 (i+1,n)-cut a = (i+1,n)-cut b)
+proof
+    let n, i be Nat, a, b be ManySortedSet of n;
+    set CUTA1 = (0,i+1)-cut a, CUTA2 = (i+1,n)-cut a;
+    set CUTB1 = (0,i+1)-cut b, CUTB2 = (i+1,n)-cut b;
+    thus a = b implies CUTA1 = CUTB1 & CUTA2 = CUTB2;
+    assume A1: CUTA1 = CUTB1 & CUTA2 = CUTB2;
+    A2: now let k be Nat such that
+    A3: k in i+1;
+          (i+1)-'0 = i+1+0-'0;
+    then A4: k in ((i+1)-'0) by A3,BINARITH:39;
+        then CUTB1.k = b.(0+k) by Def1;
+        hence a.k = b.k by A1,A4,Def1;
+    end;
+    A5: now let x be Nat such that
+    A6: x >= i+1 & x < n;
+        set k = x-'(i+1);
+          x - (i+1) >= (i+1) - (i+1) by A6,REAL_1:49;
+        then x - (i+1) >= 0 by XCMPLX_1:14;
+    then A7: k = x-(i+1) by BINARITH:def 3;
+          n >= i+1 by A6,AXIOMS:22;
+        then n - (i+1) >= (i+1)-(i+1) by REAL_1:49;
+        then n - (i+1) >= 0 by XCMPLX_1:14;
+    then A8: (n-'(i+1)) = n - (i+1) by BINARITH:def 3;
+          x-(i+1) < n - (i+1) by A6,REAL_1:92;
+    then A9: k in (n-'(i+1)) by A7,A8,EULER_1:1;
+        then CUTA2.k = a.(x-(i+1)+(i+1)) by A7,Def1;
+        then CUTA2.k = a.(x+(i+1)-(i+1)) by XCMPLX_1:29;
+    then A10: CUTB2.k = a.x by A1,XCMPLX_1:26;
+          CUTB2.k = b.((i+1)+k) by A9,Def1;
+        then CUTB2.k = b.(x+(i+1)-(i+1)) by A7,XCMPLX_1:29;
+        hence a.x = b.x by A10,XCMPLX_1:26;
+    end;
+      now let x' be set such that
+    A11: x' in n;
+          n = {k where k is Nat : k < n} by AXIOMS:30;
+        then consider k being Nat such that
+    A12: k = x' & k < n by A11;
+        reconsider x = x' as Nat by A12;
+        per cases;
+        suppose x in i+1;
+            hence a.x' = b.x' by A2;
+        suppose not x in i+1;
+           then x >= i+1 & x < n by A12,EULER_1:1;
+           hence a.x' = b.x' by A5;
+    end;
+    hence a = b by PBOOLE:3;
+end;
+
+definition
+  let x be non empty set, n be non empty Nat;
+  func Fin (x,n) equals :Def2:
+    {y where y is Element of bool x : y is finite & y is non empty &
+                                      Card y <=` n};
+coherence;
+end;
+
+definition
+  let x be non empty set, n be non empty Nat;
+  cluster Fin (x,n) -> non empty;
+coherence proof
+    consider y being Element of x;
+      0 < n by NAT_1:19;
+    then A1: 0+1 < n+1 by REAL_1:67;
+    A2: now per cases by ORDINAL1:26;
+        suppose 1 c= n;
+            hence Card {y} <=`n by CARD_1:79;
+        suppose A3: n in 1;
+              1 = {k where k is Nat : k < 1} by AXIOMS:30;
+            then consider k being Nat such that
+        A4: k = n & k < 1 by A3;
+            thus Card {y} <=`n by A1,A4,NAT_1:38;
+    end;
+      Fin (x,n) = {k where k is Element of bool x:
+                 k is finite & k is non empty & Card k <=` n} by Def2;
+    then {y} in Fin (x,n) by A2;
+    hence thesis;
+end;
+end;
+
+theorem Th7:
+for R being antisymmetric transitive non empty RelStr,
+    X being finite Subset of R
+ st X <> {} holds
+  ex x being Element of R st x in X & x is_maximal_wrt X, the InternalRel of R
+proof
+    let R be antisymmetric transitive non empty RelStr,
+        X be finite Subset of R;
+    set IR = the InternalRel of R, CR = the carrier of R;
+A1: IR is_transitive_in CR by ORDERS_1:def 5;
+A2: IR is_antisymmetric_in CR by ORDERS_1:def 6;
+A3: X is finite;
+    defpred _P[set] means (($1 <> {}) implies (ex x being Element of R
+                            st x in $1 & x is_maximal_wrt $1, IR));
+A4: _P[{}];
+      now let y,B be set such that
+    A5: y in X & B c= X and
+    A6: ((B <> {}) implies (ex x being Element of R
+                            st x in B & x is_maximal_wrt B, IR));
+        reconsider y'=y as Element of R by A5;
+        assume (B \/ {y}) <> {};
+        per cases;
+        suppose A7: B = {};
+            take y';
+            thus y' in B \/ {y} by A7,TARSKI:def 1;
+              y' in (B \/ {y}) & not ex z being set
+              st z in (B \/ {y'}) & z <> y' & [y',z] in IR by A7,TARSKI:def 1;
+            hence y' is_maximal_wrt (B \/ {y}), IR by WAYBEL_4:def 24;
+        suppose B <> {};
+            then consider x being Element of R such that
+        A8: x in B & x is_maximal_wrt B, IR by A6;
+              now per cases;
+                suppose A9: [x,y] in IR;
+                   take y';
+                   A10: y in {y} by TARSKI:def 1;
+                   hence y' in B \/ {y} by XBOOLE_0:def 2;
+                     now thus y' in B \/ {y} by A10,XBOOLE_0:def 2;
+                         now assume ex z being set st
+                              z in (B \/ {y}) & z <> y & [y,z] in IR;
+                           then consider z being set such that
+                       A11: z in (B \/ {y}) & z <> y & [y,z] in IR;
+                             x in CR & y' in CR & z in CR by A11,ZFMISC_1:106;
+                       then A12: [x,z] in IR by A1,A9,A11,RELAT_2:def 8;
+                           per cases by A11,XBOOLE_0:def 2;
+                           suppose A13: z in B;
+                                  now per cases;
+                                    suppose A14: z = x;
+                                        then x = y' by A2,A9,A11,RELAT_2:def 4
+;
+                                        hence contradiction by A11,A14;
+                                    suppose z <> x;
+                                        hence contradiction by A8,A12,A13,
+WAYBEL_4:def 24;
+                                end;
+                                hence contradiction;
+                           suppose z in {y};
+                               hence contradiction by A11,TARSKI:def 1;
+                       end;
+                       hence not ex z being set
+                                 st z in (B \/ {y}) & z <> y & [y,z] in IR;
+                   end;
+                   hence y' is_maximal_wrt (B \/ {y}), IR by WAYBEL_4:def 24;
+                suppose A15: [y,x] in IR;
+                    take x;
+                    thus x in (B \/ {y}) by A8,XBOOLE_0:def 2;
+                      now thus x in (B \/ {y}) by A8,XBOOLE_0:def 2;
+                          now assume ex z being set
+                                 st z in B \/ {y} & z <> x & [x,z] in IR;
+                            then consider z being set such that
+                        A16: z in B \/ {y} & z <> x & [x,z] in IR;
+                            per cases by A16,XBOOLE_0:def 2;
+                              suppose z in B;
+                                  hence contradiction by A8,A16,WAYBEL_4:def 24
+;
+                             suppose z in {y};
+                           then A17:  z = y by TARSKI:def 1;
+                                  z in CR by A16,ZFMISC_1:106;
+                                hence contradiction
+                                  by A2,A15,A16,A17,RELAT_2:def 4;
+                        end;
+                        hence not ex z being set
+                                  st z in B \/ {y} & z <> x & [x,z] in IR;
+                    end;
+                    hence x is_maximal_wrt (B \/ {y}), IR by WAYBEL_4:def 24;
+                suppose A18: not [x,y] in IR & not [y,x] in IR;
+                    take x;
+                    thus x in (B \/ {y}) by A8,XBOOLE_0:def 2;
+                      now thus x in (B \/ {y}) by A8,XBOOLE_0:def 2;
+                          now assume ex z being set
+                                  st z in B \/ {y} & z <> x & [x,z] in IR;
+                            then consider z being set such that
+                        A19: z in B \/ {y} & z <> x & [x,z] in IR;
+                            per cases by A19,XBOOLE_0:def 2;
+                            suppose z in B;
+                                hence contradiction by A8,A19,WAYBEL_4:def 24;
+                            suppose z in {y};
+                                hence contradiction by A18,A19,TARSKI:def 1;
+                        end;
+                        hence not ex z being set
+                                  st z in B \/ {y} & z <> x & [x,z] in IR;
+                    end;
+                    hence x is_maximal_wrt (B \/ {y}), IR by WAYBEL_4:def 24;
+             end;
+            hence ex x being Element of R
+                  st x in (B \/ {y}) & x is_maximal_wrt (B \/ {y}), IR;
+    end;
+then A20: for y,B being set st y in X & B c= X & _P[B] holds _P[B \/ {y}];
+    thus _P[X] from Finite(A3, A4, A20);
+end;
+
+theorem Th8:
+for R being antisymmetric transitive non empty RelStr,
+    X being finite Subset of R
+ st X <> {} holds
+  ex x being Element of R st x in X & x is_minimal_wrt X, the InternalRel of R
+proof
+    let R be antisymmetric transitive non empty RelStr,
+        X be finite Subset of R;
+    set IR = the InternalRel of R, CR = the carrier of R;
+A1: IR is_transitive_in CR by ORDERS_1:def 5;
+A2: IR is_antisymmetric_in CR by ORDERS_1:def 6;
+A3: X is finite;
+    defpred _P[set] means (($1 <> {}) implies (ex x being Element of R
+                            st x in $1 & x is_minimal_wrt $1, IR));
+A4: _P[{}];
+      now let y,B be set such that
+    A5: y in X & B c= X and
+    A6: ((B <> {}) implies (ex x being Element of R
+                            st x in B & x is_minimal_wrt B, IR));
+        reconsider y'=y as Element of R by A5;
+        assume (B \/ {y}) <> {};
+        per cases;
+        suppose A7: B = {};
+            take y';
+            thus y' in B \/ {y} by A7,TARSKI:def 1;
+              y' in (B \/ {y}) & not ex z being set
+            st z in (B \/ {y'}) & z <> y' & [z,y'] in IR by A7,TARSKI:def 1;
+            hence y' is_minimal_wrt (B \/ {y}), IR by WAYBEL_4:def 26;
+        suppose B <> {};
+            then consider x being Element of R such that
+        A8: x in B & x is_minimal_wrt B, IR by A6;
+              now per cases;
+                suppose A9: [y,x] in IR;
+                   take y';
+                   A10: y in {y} by TARSKI:def 1;
+                   hence y' in B \/ {y} by XBOOLE_0:def 2;
+                     now thus y' in B \/ {y} by A10,XBOOLE_0:def 2;
+                         now assume ex z being set st
+                                  z in (B \/ {y}) & z <> y & [z,y] in IR;
+                           then consider z being set such that
+                       A11: z in (B \/ {y}) & z <> y & [z,y] in IR;
+                             x in CR & y' in CR & z in CR by A11,ZFMISC_1:106;
+                       then A12: [z,x] in IR by A1,A9,A11,RELAT_2:def 8;
+                           per cases by A11,XBOOLE_0:def 2;
+                           suppose A13: z in B;
+                                  now per cases;
+                                    suppose A14: z = x;
+                                        then x = y' by A2,A9,A11,RELAT_2:def 4
+;
+                                        hence contradiction by A11,A14;
+                                    suppose z <> x;
+                                        hence contradiction by A8,A12,A13,
+WAYBEL_4:def 26;
+                                end;
+                                hence contradiction;
+                           suppose z in {y};
+                               hence contradiction by A11,TARSKI:def 1;
+                       end;
+                       hence not ex z being set
+                                 st z in (B \/ {y}) & z <> y & [z,y] in IR;
+                   end;
+                   hence y' is_minimal_wrt (B \/ {y}), IR by WAYBEL_4:def 26;
+                suppose A15: [x,y] in IR;
+                    take x;
+                    thus x in (B \/ {y}) by A8,XBOOLE_0:def 2;
+                      now thus x in (B \/ {y}) by A8,XBOOLE_0:def 2;
+                          now assume ex z being set
+                                 st z in B \/ {y} & z <> x & [z,x] in IR;
+                            then consider z being set such that
+                        A16: z in B \/ {y} & z <> x & [z,x] in IR;
+                            per cases by A16,XBOOLE_0:def 2;
+                            suppose z in B;
+                                hence contradiction by A8,A16,WAYBEL_4:def 26;
+                            suppose z in {y};
+                            then A17: z = y by TARSKI:def 1;
+                                  z in CR by A16,ZFMISC_1:106;
+                                hence contradiction
+                                  by A2,A15,A16,A17,RELAT_2:def 4;
+                        end;
+                        hence not ex z being set
+                                  st z in B \/ {y} & z <> x & [z,x] in IR;
+                    end;
+                    hence x is_minimal_wrt (B \/ {y}), IR by WAYBEL_4:def 26;
+                suppose A18: not [x,y] in IR & not [y,x] in IR;
+                    take x;
+                    thus x in (B \/ {y}) by A8,XBOOLE_0:def 2;
+                      now thus x in (B \/ {y}) by A8,XBOOLE_0:def 2;
+                          now assume ex z being set
+                                 st z in B \/ {y} & z <> x & [z,x] in IR;
+                            then consider z being set such that
+                        A19: z in B \/ {y} & z <> x & [z,x] in IR;
+                            per cases by A19,XBOOLE_0:def 2;
+                            suppose z in B;
+                                hence contradiction by A8,A19,WAYBEL_4:def 26;
+                            suppose z in {y};
+                                hence contradiction by A18,A19,TARSKI:def 1;
+                        end;
+                        hence not ex z being set
+                                  st z in B \/ {y} & z <> x & [z,x] in IR;
+                    end;
+                    hence x is_minimal_wrt (B \/ {y}), IR by WAYBEL_4:def 26;
+             end;
+            hence ex x being Element of R
+                  st x in (B \/ {y}) & x is_minimal_wrt (B \/ {y}), IR;
+    end;
+then A20: for y,B being set
+     st y in X & B c= X & _P[B] holds _P[B \/ {y}];
+    thus _P[X] from Finite(A3, A4, A20);
+end;
+
+theorem
+  for R being non empty antisymmetric transitive RelStr, f being sequence of R
+ st f is descending
+  holds for j, i being Nat st i<j
+          holds f.i<>f.j & [f.j,f.i] in the InternalRel of R
+proof let R be non empty antisymmetric transitive RelStr,
+          f be sequence of R such that
+A1: f is descending;
+    set IR = the InternalRel of R, CR = the carrier of R;
+A2: IR is_transitive_in CR by ORDERS_1:def 5;
+A3: IR is_antisymmetric_in CR by ORDERS_1:def 6;
+    defpred _P[Nat] means (for i being Nat st i < $1
+          holds f.i <> f.$1 & [f.$1, f.i] in IR);
+
+A4: _P[0] by NAT_1:18;
+      now let j be Nat such that
+    A5: for i being Nat st i < j
+         holds f.i <> f.j & [f.j, f.i] in IR;
+        let i be Nat such that
+    A6: i < j+1;
+          now per cases by REAL_1:def 5;
+            suppose i > j;
+                 hence f.i <> f.(j+1) & [f.(j+1), f.i] in IR by A6,NAT_1:38;
+            suppose i = j;
+                hence f.i <> f.(j+1) & [f.(j+1), f.i] in IR
+                 by A1,WELLFND1:def 7;
+            suppose i < j;
+            then A7: f.i <> f.j & [f.j, f.i] in IR by A5;
+              f.(j+1)<>f.j & [f.(j+1), f.j] in IR by A1,WELLFND1:def 7;
+                hence f.i <> f.(j+1) & [f.(j+1), f.i] in IR by A2,A3,A7,RELAT_2
+:def 4,def 8;
+        end;
+        hence f.i <> f.(j+1) & [f.(j+1), f.i] in IR;
+    end;
+then A8: for j being Nat st _P[j] holds _P[j+1];
+    thus for j being Nat holds _P[j] from Ind(A4,A8);
+end;
+
+definition
+  let R be non empty RelStr, s be sequence of R;
+  attr s is non-increasing means :Def3:
+  for i being Nat holds [s.(i+1),s.i] in the InternalRel of R;
+end;
+
+theorem Th10:
+for R being non empty transitive RelStr, f being sequence of R
+ st f is non-increasing
+  holds for j, i being Nat st i<j holds [f.j,f.i] in the InternalRel of R
+proof let R be non empty transitive RelStr, f be sequence of R such that
+A1: f is non-increasing;
+    set IR = the InternalRel of R, CR = the carrier of R;
+A2: IR is_transitive_in CR by ORDERS_1:def 5;
+    defpred _P[Nat] means (for i being Nat st i < $1 holds [f.$1, f.i] in IR);
+A3: _P[0] by NAT_1:18;
+      now let j be Nat such that
+    A4: for i being Nat st i < j holds [f.j, f.i] in IR;
+        let i be Nat such that
+    A5: i < j+1;
+          now per cases by REAL_1:def 5;
+            suppose i > j;
+             hence [f.(j+1), f.i] in IR by A5,NAT_1:38;
+            suppose i = j;
+             hence [f.(j+1), f.i] in IR by A1,Def3;
+            suppose i < j;
+            then A6: [f.j, f.i] in IR by A4;
+                [f.(j+1), f.j] in IR by A1,Def3;
+             hence [f.(j+1), f.i] in IR by A2,A6,RELAT_2:def 8;
+        end;
+        hence [f.(j+1), f.i] in IR;
+    end;
+then A7: for j being Nat st _P[j] holds _P[j+1];
+    thus for j being Nat holds _P[j] from Ind(A3,A7);
+end;
+
+theorem Th11:
+for R being non empty transitive RelStr, s being sequence of R
+ st R is well_founded & s is non-increasing
+  holds ex p being Nat st for r being Nat st p <= r holds s.p = s.r
+proof let R be non empty transitive RelStr, s be sequence of R such that
+A1: R is well_founded and
+A2: s is non-increasing;
+   set cr = the carrier of R, ir = the InternalRel of R;
+A3: ir is_well_founded_in cr by A1,WELLFND1:def 2;
+A4: dom s = NAT by FUNCT_2:def 1;
+     rng s c= cr by RELSET_1:12;
+   then consider a being set such that
+A5: a in rng s and
+A6: ir-Seg(a) misses rng s by A3,WELLORD1:def 3;
+A7: ir-Seg(a) /\ rng s = {} by A6,XBOOLE_0:def 7;
+   consider i being set such that
+A8: i in dom s and
+A9: s.i = a by A5,FUNCT_1:def 5;
+   reconsider i as Nat by A8;
+   assume not thesis;
+   then consider r being Nat such that
+A10: i <= r and
+A11: s.i <> s.r;
+     i < r by A10,A11,REAL_1:def 5;
+   then [s.r,s.i] in ir by A2,Th10;
+then A12: s.r in ir-Seg(a) by A9,A11,WELLORD1:def 1;
+     s.r in rng s by A4,FUNCT_1:12;
+  hence contradiction by A7,A12,XBOOLE_0:def 3;
+end;
+
+theorem Th12:
+for X being set, a be Element of X, A being finite Subset of X,
+    R being Order of X st A = {a} & R linearly_orders A
+  holds SgmX (R, A) = <*a*>
+proof let X be set, a be Element of X, A be finite Subset of X,
+          R be Order of X such that
+A1: A = {a} and
+A2: R linearly_orders A;
+A3: len SgmX (R, A) = Card A by A2,TRIANG_1:9 .= 1 by A1,CARD_1:50,CARD_2:20;
+       rng SgmX (R, A) = A by A2,TRIANG_1:def 2;
+  hence SgmX (R, A) = <*a*> by A1,A3,FINSEQ_1:56;
+end;
+
+begin :: More about bags
+
+definition
+  let n be Ordinal, b be bag of n;
+func TotDegree b -> Nat means :Def4:
+ex f being FinSequence of NAT
+ st it = Sum f & f = b*SgmX(RelIncl n, support b);
+existence proof
+    set f = b*SgmX(RelIncl n, support b);
+A1: dom b = n by PBOOLE:def 3;
+  rng b c= NAT by SEQM_3:def 8;
+   then reconsider bb = b as Function of n,NAT by A1,FUNCT_2:4;
+     bb = b; then reconsider f as FinSequence of NAT by FINSEQ_2:36;
+   take Sum f; thus thesis;
+end;
+uniqueness;
+end;
+
+theorem Th13:
+for n being Ordinal, b being bag of n, s being finite Subset of n,
+    f, g being FinSequence of NAT
+ st f = b*SgmX(RelIncl n, support b) & g = b*SgmX(RelIncl n, support b \/ s)
+  holds Sum f = Sum g
+proof let n be Ordinal, b be bag of n, s be finite Subset of n,
+          f, g be FinSequence of NAT such that
+A1: f = b*SgmX(RelIncl n, support b) and
+A2: g = b*SgmX(RelIncl n, support b \/ s);
+   set sb = support b; set sbs = sb \/ s; set sbs'b = sbs\sb;
+   set xsb = SgmX(RelIncl n, sb), xsbs = SgmX(RelIncl n, sbs);
+   set xsbs'b = SgmX(RelIncl n, sbs'b); set xs = xsb^xsbs'b;
+   set h = b*xs;
+A3: dom b = n by PBOOLE:def 3;
+A4: field(RelIncl n) = n by WELLORD2:def 1;
+      RelIncl n is well-ordering by WELLORD2:7;
+    then RelIncl n is_linear-order by ORDERS_2:9;
+then A5: RelIncl n linearly_orders n by A4,ORDERS_2:35;
+then A6: RelIncl n linearly_orders sbs by ORDERS_2:36;
+A7: RelIncl n linearly_orders sb by A5,ORDERS_2:36;
+A8: RelIncl n linearly_orders sbs'b by A5,ORDERS_2:36;
+A9: rng xsbs = sbs by A6,TRIANG_1:def 2;
+A10: rng xsb = sb & rng xsbs'b = sbs'b by A7,A8,TRIANG_1:def 2;
+then A11: rng xs = sb \/ sbs'b by FINSEQ_1:44;
+    then reconsider h as FinSequence by A3,FINSEQ_1:20;
+  per cases;
+  suppose n = {}; then b = {} by A3,RELAT_1:64;
+   then f = {} & g = {} by A1,A2,RELAT_1:62;
+   hence Sum f = Sum g;
+  suppose n <> {};
+   then reconsider n as non empty Ordinal;
+   reconsider xsb, xsbs'b as FinSequence of n;
+     rng b c= NAT by SEQM_3:def 8;
+then A12: rng b c= REAL by XBOOLE_1:1;
+   then reconsider b as Function of n,REAL by A3,FUNCT_2:4;
+     rng h c= rng b by RELAT_1:45; then rng h c= REAL by A12,XBOOLE_1:1;
+   then reconsider h as FinSequence of REAL by FINSEQ_1:def 4;
+   reconsider gr = g as FinSequence of REAL by FINSEQ_2:27;
+A13: sb misses sbs'b by XBOOLE_1:79;
+A14: sbs = sb \/ sb \/ s .= sb \/ sbs by XBOOLE_1:4
+       .= sb \/ sbs'b by XBOOLE_1:39;
+      len xs = len xsb + len xsbs'b by FINSEQ_1:35
+ .= Card sb + len xsbs'b by A7,TRIANG_1:9
+ .= Card sb + Card sbs'b by A8,TRIANG_1:9 .= Card sbs by A13,A14,CARD_2:53
+ .= len xsbs by A6,TRIANG_1:9;
+then A15: dom xsbs = dom xs by FINSEQ_3:31;
+A16: xsbs is one-to-one by A6,TRIANG_1:8;
+A17: rng xsb = sb & rng xsbs'b = sbs'b by A7,A8,TRIANG_1:def 2;
+A18: xsb is one-to-one by A7,TRIANG_1:8;
+      xsbs'b is one-to-one by A8,TRIANG_1:8;
+    then xs is one-to-one by A13,A17,A18,FINSEQ_3:98;
+    then xsbs,xs are_fiberwise_equipotent by A9,A11,A14,A16,VECTSP_9:4;
+   then A19: gr,h are_fiberwise_equipotent by A2,A3,A9,A11,A15,Th4;
+     now
+    thus dom xsbs'b = dom (b*xsbs'b) by A3,A10,RELAT_1:46;
+    A20: dom xsbs'b = Seg len xsbs'b by FINSEQ_1:def 3;
+    hence dom xsbs'b = dom ((len xsbs'b) |-> 0) by FINSEQ_2:68;
+    let x be set; assume
+    A21: x in dom xsbs'b;
+      then xsbs'b.x in rng xsbs'b by FUNCT_1:12;
+      then not xsbs'b.x in sb by A10,XBOOLE_0:def 4;
+      then b.(xsbs'b.x) = 0 by POLYNOM1:def 7;
+    hence (b*xsbs'b).x = 0 by A21,FUNCT_1:23
+       .= ((len xsbs'b) |-> 0).x by A20,A21,FINSEQ_2:70;
+   end;
+then A22: b*xsbs'b = (len xsbs'b) |-> (0 qua Real) by FUNCT_1:9;
+     h = (b*xsb)^(b*xsbs'b) by FINSEQOP:10;
+   then Sum h = Sum (b*xsb) + Sum (b*xsbs'b) by RVSUM_1:105
+        .= Sum f + 0 by A1,A22,RVSUM_1:111;
+  hence Sum f = Sum g by A19,RFINSEQ:22;
+end;
+
+theorem Th14:
+for n being Ordinal, a, b being bag of n
+  holds TotDegree (a+b) = TotDegree a + TotDegree b
+proof let n be Ordinal, a, b be bag of n;
+A1: field(RelIncl n) = n by WELLORD2:def 1;
+      RelIncl n is well-ordering by WELLORD2:7;
+    then RelIncl n is_linear-order by ORDERS_2:9;
+then A2: RelIncl n linearly_orders n by A1,ORDERS_2:35;
+    consider fab being FinSequence of NAT such that
+A3: TotDegree (a+b) = Sum fab and
+A4: fab = (a+b)*SgmX(RelIncl n, support(a+b)) by Def4;
+    consider fa being FinSequence of NAT such that
+A5: TotDegree a = Sum fa and
+A6: fa = a*SgmX(RelIncl n, support a) by Def4;
+    consider fb being FinSequence of NAT such that
+A7: TotDegree b = Sum fb and
+A8: fb = b*SgmX(RelIncl n, support b) by Def4;
+    reconsider fab'=fab as FinSequence of REAL by FINSEQ_2:27;
+    set sasb = support a \/ support b;
+    reconsider sasb as finite Subset of n;
+    set s = SgmX(RelIncl n, sasb);
+    set fa'b = a*s, fb'a = b*s;
+      RelIncl n linearly_orders sasb by A2,ORDERS_2:36;
+then A9: rng s = sasb by TRIANG_1:def 2;
+A10: support (a+b) = sasb by POLYNOM1:42;
+A11: dom a = n & dom b = n by PBOOLE:def 3;
+    then reconsider fa'b, fb'a as FinSequence by A9,FINSEQ_1:20;
+A12: rng a c= NAT & rng b c= NAT by SEQM_3:def 8;
+      rng fa'b c= rng a & rng fb'a c= rng b by RELAT_1:45;
+then A13: rng fa'b c= NAT & rng fb'a c= NAT by A12,XBOOLE_1:1;
+then rng fa'b c= REAL & rng fb'a c= REAL by XBOOLE_1:1;
+    then reconsider fa'b, fb'a as FinSequence of REAL by FINSEQ_1:def 4;
+    reconsider fa'bn = fa'b, fb'an = fb'a as FinSequence of NAT
+       by A13,FINSEQ_1:def 4;
+    set ln = len fab;
+A14: dom (a+b) = n by PBOOLE:def 3;
+A15: Seg ln = dom fab by FINSEQ_1:def 3
+           .= dom s by A4,A9,A10,A14,RELAT_1:46;
+then A16: Seg ln = dom fa'b by A9,A11,RELAT_1:46;
+A17: Seg ln = dom fb'a by A9,A11,A15,RELAT_1:46;
+A18: Sum fa = Sum fa'bn by A6,Th13;
+A19: Sum fb = Sum fb'an by A8,Th13;
+A20: len fa'b = len fb'a by A16,A17,FINSEQ_3:31;
+    then A21: len (fa'b+fb'a) = len fa'b by INTEGRA5:2;
+then A22: Seg ln = dom (fa'b+fb'a) by A16,FINSEQ_3:31;
+    reconsider fa'b' = fa'b as natural-yielding
+      ManySortedSet of Seg ln by A13,A16,PBOOLE:def 3,SEQM_3:def 8;
+      now thus Seg ln = dom fab' by FINSEQ_1:def 3;
+        thus Seg ln = dom (fa'b+fb'a) by A16,A21,FINSEQ_3:31;
+        let k be Nat such that
+    A23: k in Seg ln;
+        reconsider fa'bk = fa'b.k, fb'ak = fb'a.k
+               as Real by A16,A17,A23,FINSEQ_2:13;
+        thus fab'.k
+         = (a+b).(SgmX(RelIncl n, support(a+b)).k) by A4,A10,A15,A23,FUNCT_1:23
+        .= a.(SgmX(RelIncl n, support(a+b)).k) +
+           b.(SgmX(RelIncl n, support(a+b)).k) by POLYNOM1:def 5
+        .= fa'b'.k +
+           b.(SgmX(RelIncl n, support(a+b)).k) by A10,A15,A23,FUNCT_1:23
+        .= fa'bk+fb'ak by A10,A15,A23,FUNCT_1:23
+        .= (fa'b+fb'a).k by A22,A23,RVSUM_1:26;
+    end;
+    then fab' = fa'b + fb'a by FINSEQ_1:17;
+    hence thesis by A3,A5,A7,A18,A19,A20,INTEGRA5:2;
+end;
+
+theorem
+  for n be Ordinal, a,b being bag of n
+ st b divides a holds TotDegree(a-'b) = TotDegree(a) - TotDegree(b)
+proof let n be Ordinal, a, b be bag of n; assume b divides a;
+then A1: a -' b + b = a by POLYNOM1:51;
+     TotDegree(a-'b+b) = TotDegree (a-'b) + TotDegree b by Th14;
+  hence TotDegree(a-'b) = TotDegree a - TotDegree b by A1,XCMPLX_1:26;
+end;
+
+theorem Th16:
+for n being Ordinal, b being bag of n holds TotDegree b = 0 iff b = EmptyBag n
+proof let n be Ordinal, b be bag of n;
+A1: field(RelIncl n) = n by WELLORD2:def 1;
+      RelIncl n is well-ordering by WELLORD2:7;
+    then RelIncl n is_linear-order by ORDERS_2:9;
+then RelIncl n linearly_orders n by A1,ORDERS_2:35;
+then A2: RelIncl n linearly_orders support b by ORDERS_2:36;
+A3: dom b = n by PBOOLE:def 3;
+ hereby assume A4: TotDegree b = 0;
+    consider f being FinSequence of NAT such that
+A5: TotDegree b = Sum f and
+A6: f = b*SgmX(RelIncl n, support b) by Def4;
+    A7: f = len f |-> 0 by A4,A5,Th5;
+          now let z be set such that z in dom b and
+        A8: b.z <> 0;
+        A9: rng SgmX(RelIncl n, support b) = support b by A2,TRIANG_1:def 2;
+              z in support b by A8,POLYNOM1:def 7;
+            then consider x being set such that
+        A10: x in dom SgmX(RelIncl n, support b) and
+        A11: SgmX(RelIncl n, support b).x = z by A9,FUNCT_1:def 5;
+              x in dom f by A3,A6,A9,A10,RELAT_1:46;
+            then x in Seg len f by A7,FINSEQ_2:68;
+            then f.x = 0 by A7,FINSEQ_2:70;
+         hence contradiction by A6,A8,A10,A11,FUNCT_1:23;
+        end;
+        then b = n --> 0 by A3,FUNCOP_1:17;
+        hence b = EmptyBag n by POLYNOM1:def 15;
+    end;
+    assume b = EmptyBag n;
+then A12: b = n --> 0 by POLYNOM1:def 15;
+    consider f being FinSequence of NAT such that
+A13: TotDegree b = Sum f and
+A14: f = b*SgmX(RelIncl n, support b) by Def4;
+      now assume support b <> {}; then consider x being set such that
+    A15: x in support b by XBOOLE_0:def 1; b.x = 0 by A12,A15,FUNCOP_1:13;
+     hence contradiction by A15,POLYNOM1:def 7;
+    end;
+    then rng SgmX(RelIncl n, support b) = {} by A2,TRIANG_1:def 2;
+then A16: dom SgmX(RelIncl n, support b) = {} by RELAT_1:65;
+      dom (b*SgmX(RelIncl n, support b)) c= dom SgmX(RelIncl n, support b)
+       by RELAT_1:44;
+    then dom (b*SgmX(RelIncl n, support b)) = {} by A16,XBOOLE_1:3;
+   hence TotDegree b = 0 by A13,A14,RELAT_1:64,RVSUM_1:102;
+end;
+
+theorem Th17:
+for i,j,n being Nat holds (i,j)-cut EmptyBag n = EmptyBag (j-'i)
+proof
+    let i,j,n be Nat;
+    set CUT1 = (i,j)-cut EmptyBag n;
+A1: dom CUT1 = j-'i by PBOOLE:def 3;
+      now let k be set;
+        per cases;
+        suppose A2: k in dom CUT1;
+              j-'i = {x where x is Nat : x < j-'i} by AXIOMS:30;
+            then consider x being Nat such that
+        A3: k = x & x < j-'i by A1,A2;
+            reconsider k'=k as Nat by A3;
+              CUT1.k = (EmptyBag n).(i+k') by A1,A2,Def1
+                  .= 0 by POLYNOM1:56;
+            hence CUT1.k <= (EmptyBag (j-'i)).k by NAT_1:18;
+        suppose not k in dom CUT1;
+            then CUT1.k = {} by FUNCT_1:def 4;
+            hence CUT1.k <= (EmptyBag (j-'i)).k by NAT_1:18;
+    end;
+    then CUT1 divides EmptyBag (j-'i) by POLYNOM1:def 13;
+    hence CUT1 = EmptyBag (j-'i) by POLYNOM1:62;
+end;
+
+theorem Th18:
+for i,j,n being Nat, a,b being bag of n
+ holds (i,j)-cut (a+b) = (i,j)-cut(a) + (i,j)-cut(b)
+proof
+    let i,j,n be Nat, a,b be bag of n;
+    set CUTAB = (i,j)-cut(a+b), CUTA = (i,j)-cut(a), CUTB=(i,j)-cut(b);
+      now let x be set such that
+    A1: x in j-'i;
+          j-'i = {k where k is Nat : k < j-'i } by AXIOMS:30;
+        then consider k being Nat such that
+    A2: k = x & k < j-'i by A1;
+        reconsider x' = x as Nat by A2;
+          CUTAB.x = (a+b).(i+x') by A1,Def1;
+    then A3: CUTAB.x = a.(i+x') + b.(i+x') by POLYNOM1:def 5;
+          CUTA.x = a.(i+x') & CUTB.x = b.(i+x') by A1,Def1;
+        hence CUTAB.x = (CUTA + CUTB).x by A3,POLYNOM1:def 5;
+    end;
+    hence CUTAB = CUTA + CUTB by PBOOLE:3;
+end;
+
+theorem
+  for X being set holds support EmptyBag X = {} proof
+let n be set;
+assume not thesis; then consider x being set such that
+A1: x in support EmptyBag n by XBOOLE_0:def 1;
+     (EmptyBag n).x <> 0 by A1,POLYNOM1:def 7;
+hence contradiction by POLYNOM1:56;
+end;
+
+theorem Th20:
+for X being set, b be bag of X st support b = {} holds b = EmptyBag X proof
+let n be set, b be bag of n such that
+A1: support b = {} and
+A2: b <> EmptyBag n;
+     dom b = n & dom EmptyBag n = n by PBOOLE:def 3;
+   then consider x being set such that
+A3: x in n & b.x <> (EmptyBag n).x by A2,FUNCT_1:9;
+     b.x <> 0 by A3,POLYNOM1:56;
+   hence contradiction by A1,POLYNOM1:def 7;
+end;
+
+theorem Th21:
+for n, m being Ordinal, b being bag of n st m in n holds b|m is bag of m
+proof let n, m be Ordinal, b be bag of n such that
+A1: m in n;
+A2: m c= n by A1,ORDINAL1:def 2;
+     dom b = n by PBOOLE:def 3;
+   then dom (b|m) = m by A2,RELAT_1:91;
+ hence b|m is bag of m by PBOOLE:def 3;
+end;
+
+theorem
+  for n being Ordinal, a, b being bag of n
+ st b divides a holds support b c= support a
+proof let n be Ordinal, a, b be bag of n such that
+A1: b divides a;
+  let x be set;
+  assume x in support b;
+then A2: b.x <> 0 by POLYNOM1:def 7;
+     now assume a.x = 0; then b.x <= 0 & 0 <= b.x by A1,NAT_1:18,POLYNOM1:def
+13
+;
+    hence contradiction by A2;
+   end;
+  hence x in support a by POLYNOM1:def 7;
+end;
+
+begin :: Some Special Orders (Section 4.4)
+
+definition
+  let n be set;
+  mode TermOrder of n is Order of Bags n;
+  canceled;
+end;
+
+definition
+  let n be Ordinal;
+  redefine func BagOrder n;
+  synonym LexOrder n;
+  canceled;
+end;
+
+definition :: Definition 4.59 - admissible (specific for Bags)
+  let n be Ordinal, T be TermOrder of n;
+  attr T is admissible means :Def7:
+  T is_strongly_connected_in Bags n &
+  (for a being bag of n holds [EmptyBag n, a] in T) &
+  for a, b, c being bag of n st [a, b] in T holds [a+c, b+c] in T;
+end;
+
+theorem Th23: :: 4.61 i) Lexicographical order is admissible
+for n being Ordinal holds LexOrder n is admissible
+proof
+    let n be Ordinal;
+      now let a,b be set such that
+    A2: a in Bags n & b in Bags n;
+        reconsider a'=a, b'=b as bag of n by A2,POLYNOM1:def 14;
+          a' <=' b' or b' <=' a' by POLYNOM1:49;
+        hence [a,b] in BagOrder n or [b,a] in BagOrder n by POLYNOM1:def 16;
+    end;
+    hence LexOrder n is_strongly_connected_in Bags n by RELAT_2:def 7;
+      now let a be bag of n;
+          EmptyBag n <=' a by POLYNOM1:64;
+        hence [EmptyBag n, a] in BagOrder n by POLYNOM1:def 16;
+    end;
+    hence for a being bag of n holds [EmptyBag n, a] in LexOrder n;
+      now let a,b,c be bag of n such that
+    A3: [a,b] in BagOrder n;
+        A4: a <=' b by A3,POLYNOM1:def 16;
+          now per cases by A4,POLYNOM1:def 12;
+            suppose a < b;
+                then consider k being Ordinal such that
+            A5: a.k < b.k and
+            A6: for l being Ordinal st l in k holds a.l=b.l by POLYNOM1:def 11;
+                  now take k;
+                A7: (a.k+c.k) <= (b.k+c.k) by A5,AXIOMS:24;
+                    A8: a.k+c.k <> b.k+c.k by A5,XCMPLX_1:2;
+                      (a+c).k = a.k+c.k & (b+c).k = (b.k+c.k) by POLYNOM1:def 5
+;
+                    hence (a+c).k < (b+c).k by A7,A8,REAL_1:def 5;
+                    let l be Ordinal such that
+                A9: l in k;
+                      (a+c).l = a.l+c.l & (b+c).l = b.l+c.l by POLYNOM1:def 5;
+                    hence (a+c).l = (b+c).l by A6,A9;
+                end;
+                then a+c < b+c by POLYNOM1:def 11;
+                hence a+c <=' b+c by POLYNOM1:def 12;
+            suppose a = b;
+                hence a+c <=' b+c;
+        end;
+        hence [a+c, b+c] in BagOrder n by POLYNOM1:def 16;
+    end;
+    hence thesis;
+end;
+
+definition
+  let n be Ordinal;
+  cluster admissible TermOrder of n;
+  existence proof LexOrder n is admissible by Th23; hence thesis; end;
+end;
+
+definition
+  let n be Ordinal;
+  cluster LexOrder n -> admissible;
+  coherence by Th23;
+end;
+
+theorem
+  for o being infinite Ordinal holds LexOrder o is non well-ordering
+proof
+  let o be infinite Ordinal;
+  set R = LexOrder o; set r = RelStr(# Bags o, R#);
+  set ir = the InternalRel of r, cr = the carrier of r;
+  assume R is well-ordering;
+then A2: R is well_founded by WELLORD1:def 4;
+     cr = field ir by ORDERS_2:2;
+   then ir is_well_founded_in cr by A2,WELLORD1:5;
+then A3: r is well_founded by WELLFND1:def 2;
+    defpred _P[set,set] means $2 = (o-->0)+*($1,1);
+A4: now let n be Element of NAT; set y = (o-->0)+*(n,1);
+    A5: dom (o-->0) = o by FUNCOP_1:19;
+        reconsider y as ManySortedSet of o;
+    A6: n in omega & omega c= o by CARD_4:8;
+        then y = (o-->0) +* (n .--> 1) by A5,FUNCT_7:def 3;
+        then rng y c= rng (o-->0) \/ rng (n .--> 1) by FUNCT_4:18;
+        then rng y c= {0} \/ rng (n .--> 1) by FUNCOP_1:14;
+    then rng y c= {0} \/ {1} by CQC_LANG:5;
+        then rng y c= NAT by XBOOLE_1:1;
+    then A7: y is natural-yielding by SEQM_3:def 8;
+          now let x be set;
+          hereby assume x in {n}; then x = n by TARSKI:def 1;
+            hence y.x <> 0 by A5,A6,FUNCT_7:33;
+          end;
+          assume that
+        A8: y.x <> 0 and
+        A9: not x in {n};
+              x <> n by A9,TARSKI:def 1;
+        then A10: y.x = (o-->0).x by FUNCT_7:34;
+            per cases;
+            suppose x in dom (o-->0);
+            hence contradiction by A5,A8,A10,FUNCOP_1:13;
+            suppose not x in dom (o-->0);
+            hence contradiction by A8,A10,FUNCT_1:def 4;
+        end;
+        then support y = {n} by POLYNOM1:def 7;
+        then y is finite-support by POLYNOM1:def 8;
+      then reconsider y as Element of cr by A7,POLYNOM1:def 14;
+    take y;
+    thus _P[n,y];
+    end;
+  consider f being Function of NAT, cr such that
+A11: for n being Element of NAT holds _P[n,f.n] from FuncExD(A4);
+  reconsider f as sequence of r by NORMSP_1:def 3;
+    f is descending proof let n be Nat;
+  set fn1 = f.(n+1), fn = f.n;
+  A12: fn1 = (o-->0)+*((n+1),1) by A11;
+  A13: fn = (o-->0)+*(n,1) by A11;
+      reconsider fn1 as bag of o by POLYNOM1:def 14;
+      reconsider fn as bag of o by POLYNOM1:def 14;
+      A14: n in omega & omega c= o by CARD_4:8;
+        n <> n+1 by NAT_1:38;
+  then A15: fn1.n = (o-->0).n by A12,FUNCT_7:34 .= 0 by A14,FUNCOP_1:13;
+      A16: dom (o-->0) = o by FUNCOP_1:19;
+  then A17: fn.n = 1 by A13,A14,FUNCT_7:33;
+      now let l be Ordinal; assume
+    A18: l in n;
+    then A19: l <> n;
+          n < n+1 by NAT_1:38;
+        then n in {i where i is Nat : i < n+1};
+        then n in n+1 by AXIOMS:30;
+        then n c= n+1 by ORDINAL1:def 2; then l in n+1 by A18;
+    then l <> n+1;
+     hence fn1.l = (o-->0).l by A12,FUNCT_7:34 .= fn.l by A13,A19,FUNCT_7:34;
+    end;
+  then A20: fn1 < fn by A15,A17,POLYNOM1:def 11;
+    thus f.(n+1) <> f.n by A13,A14,A15,A16,FUNCT_7:33; fn1 <=' fn by A20,
+POLYNOM1:def 12;
+    hence [f.(n+1), f.n] in ir by POLYNOM1:def 16;
+  end;
+  hence contradiction by A3,WELLFND1:15;
+end;
+
+definition
+  let n be Ordinal;
+  func InvLexOrder n -> TermOrder of n means :Def8:
+  for p,q being bag of n holds [p,q] in it iff
+      p = q or
+      ex i being Ordinal st i in n & p.i < q.i &
+       for k being Ordinal st i in k & k in n holds p.k = q.k;
+existence proof
+   defpred _P[set,set] means ($1 = $2 or
+   ex p,q being Element of Bags n st $1 = p & $2 = q &
+    ex i being Ordinal st i in n & p.i < q.i &
+     for k being Ordinal st i in k & k in n holds p.k = q.k);
+    consider ILO being Relation of Bags n, Bags n such that
+A1: for x, y being set holds [x,y] in ILO iff
+    x in Bags n & y in Bags n & _P[x,y] from Rel_On_Set_Ex;
+A2: ILO is_reflexive_in Bags n proof
+        let x be set; assume
+          x in Bags n;
+        hence thesis by A1;
+    end;
+A3: ILO is_antisymmetric_in Bags n proof
+        let x,y be set;
+        assume A4: x in Bags n & y in Bags n & [x,y] in ILO &[y,x] in ILO;
+    per cases;
+    suppose x = y;
+        hence thesis;
+    suppose A5: not x = y;
+        then consider p, q being Element of Bags n such that
+    A6: x = p & y = q & ex i being Ordinal st i in n & p.i < q.i &
+         for k being Ordinal st i in k & k in n holds p.k = q.k by A1,A4;
+         consider q',p' being Element of Bags n such that
+    A7: y = q'& x = p'& ex i being Ordinal st i in n & q'.i< p'.i &
+      for k being Ordinal st i in k & k in n holds q'.k = p'.k by A1,A4,A5;
+         consider i being Ordinal such that
+    A8: i in n & q.i < p.i and
+    A9: for k being Ordinal st i in k & k in n holds q.k = p.k by A6,A7;
+         consider j being Ordinal such that
+    A10: j in n & p.j < q.j and
+    A11: for k being Ordinal st j in k & k in n holds p.k = q.k by A6;
+          now per cases by ORDINAL1:24;
+            suppose i in j;
+                hence i = j by A9,A10;
+            suppose i = j;
+                hence i = j;
+            suppose j in i;
+                hence i = j by A8,A11;
+        end;
+        hence x = y by A8,A10;
+    end;
+A12:  ILO is_transitive_in Bags n proof
+        let x, y, z be set such that
+           x in Bags n & y in Bags n & z in Bags n and
+    A13: [x,y] in ILO & [y,z] in ILO;
+        per cases;
+        suppose x = y;
+           hence [x,z] in ILO by A13;
+        suppose x <> y;
+            then consider p,q being Element of Bags n such that
+        A14: x = p & y = q & ex i being Ordinal st i in n & p.i < q.i &
+            for k being Ordinal st i in k & k in n holds p.k = q.k by A1,A13;
+            consider i being Ordinal such that
+        A15: i in n & p.i < q.i and
+        A16: for k being Ordinal st i in k & k in n holds p.k = q.k by A14;
+              now per cases;
+                suppose y = z;
+                    hence [x,z] in ILO by A13;
+                suppose y <> z;
+                    then consider q',r being Element of Bags n such that
+            A17: y = q' & z = r & ex i being Ordinal st i in n & q'.i < r.i &
+                     for k being Ordinal st i in k & k in n holds q'.k = r.k
+                      by A1,A13;
+                    consider j being Ordinal such that
+                A18: j in n & q'.j < r.j and
+            A19: for k being Ordinal st j in k & k in n holds q'.k = r.k by A17
+;
+                  now per cases by ORDINAL1:24;
+                    suppose A20: i in j;
+                    then A21: p.j < r.j by A14,A16,A17,A18;
+                          now let k be Ordinal such that
+                        A22: j in k & k in n;
+                        A23: q.k = r.k by A14,A17,A19,A22;
+                              i in k by A20,A22,ORDINAL1:19;
+                            hence p.k = r.k by A16,A22,A23;
+                        end;
+                        hence [x,z] in ILO by A1,A14,A17,A18,A21;
+                    suppose A24: i = j;
+                          now take p, r;
+                            thus x = p & z = r by A14,A17;
+                            take j;
+                            thus j in n by A18;
+                            thus p.j < r.j by A14,A15,A17,A18,A24,AXIOMS:22;
+                              now let k be Ordinal such that
+                            A25: j in k & k in n;
+                                  p.k = q.k by A16,A24,A25;
+                                hence p.k = r.k by A14,A17,A19,A25;
+                            end;
+                            hence for k being Ordinal st j in k & k in n
+                                  holds p.k = r.k;
+                        end;
+                        hence [x,z] in ILO by A1;
+                    suppose A26: j in i;
+                    then A27: p.i < r.i by A14,A15,A17,A19;
+                          now let k be Ordinal such that
+                        A28: i in k & k in n;
+                        A29: p.k = q.k by A16,A28;
+                              j in k by A26,A28,ORDINAL1:19;
+                            hence p.k = r.k by A14,A17,A19,A28,A29;
+                        end;
+                        hence [x,z] in ILO by A1,A14,A15,A17,A27;
+                end;
+                hence [x,z] in ILO;
+            end;
+            hence [x,z] in ILO;
+    end;
+A30:  dom ILO = Bags n & field ILO = Bags n by A2,ORDERS_1:98;
+    then ILO is total by PARTFUN1:def 4;
+    then reconsider ILO as TermOrder of n
+                     by A2,A3,A12,A30,RELAT_2:def 9,def 12,def 16;
+    take ILO;
+    let x, y be bag of n;
+    hereby assume A31: [x,y] in ILO;
+          now assume x <> y;
+            then consider p,q being Element of Bags n such that
+        A32: x = p & y = q & ex i being Ordinal st i in n & p.i < q.i &
+            for k being Ordinal st i in k & k in n holds p.k = q.k by A1,A31;
+            thus ex i being Ordinal st i in n & x.i < y.i &
+            for k being Ordinal st i in k & k in n holds x.k = y.k by A32;
+        end;
+        hence x = y or ex i being Ordinal st i in n & x.i < y.i &
+             for k being Ordinal st i in k & k in n holds x.k = y.k;
+    end;
+    assume A33: x = y or ex i being Ordinal st i in n & x.i < y.i &
+            for k being Ordinal st i in k & k in n holds x.k = y.k;
+      now
+        thus x in Bags n & y in Bags n by POLYNOM1:def 14;
+          now assume A34: x <> y;
+            thus ex p,q being Element of Bags n st x = p & y = q &
+                  ex i being Ordinal st i in n & p.i < q.i &
+                  for k being Ordinal st i in k & k in n holds p.k = q.k
+            proof
+                reconsider x'=x, y'=y as Element of Bags n by POLYNOM1:def 14;
+                take x', y';
+                thus x = x' & y = y';
+                thus ex i being Ordinal st i in n & x'.i < y'.i &
+            for k being Ordinal st i in k & k in n holds x'.k = y'.k by A33,A34
+;
+            end;
+        end;
+        hence (x = y or ex p,q being Element of Bags n st x = p & y = q &
+               ex i being Ordinal st i in n & p.i < q.i &
+               for k being Ordinal st i in k & k in n holds p.k = q.k);
+    end;
+    hence [x,y] in ILO by A1;
+end;
+uniqueness proof
+    let IT1, IT2 be TermOrder of n such that
+A35: for p,q being bag of n holds [p,q] in IT1 iff
+        p = q or ex i being Ordinal st i in n & p.i < q.i &
+        for k being Ordinal st i in k & k in n holds p.k = q.k and
+A36: for p,q being bag of n holds [p,q] in IT2 iff
+        p = q or ex i being Ordinal st i in n & p.i < q.i &
+        for k being Ordinal st i in k & k in n holds p.k = q.k;
+      now let a, b be set;
+        hereby assume
+        A37: [a,b] in IT1;
+            then consider p, q being set such that
+        A38: [a,b] = [p,q] & p in Bags n & q in Bags n by RELSET_1:6;
+            reconsider p, q as bag of n by A38,POLYNOM1:def 14;
+            per cases;
+            suppose p = q;
+                hence [a,b] in IT2 by A36,A38;
+            suppose p <> q;
+                then ex i being Ordinal st i in n & p.i < q.i &
+           for k being Ordinal st i in k & k in n holds p.k = q.k by A35,A37,
+A38;
+                hence [a,b] in IT2 by A36,A38;
+        end;
+        assume A39: [a,b] in IT2;
+        then consider p,q being set such that
+    A40: [a,b] = [p,q] & p in Bags n & q in Bags n by RELSET_1:6;
+        reconsider p, q as bag of n by A40,POLYNOM1:def 14;
+        per cases;
+        suppose p = q;
+            hence [a,b] in IT1 by A35,A40;
+        suppose p <> q;
+            then ex i being Ordinal st i in n & p.i < q.i &
+          for k being Ordinal st i in k & k in n holds p.k = q.k by A36,A39,A40
+;
+            hence [a,b] in IT1 by A35,A40;
+    end;
+    hence IT1 = IT2 by RELAT_1:def 2;
+end;
+end;
+
+theorem Th25: :: Ex 4.61 ii
+for n being Ordinal holds InvLexOrder n is admissible
+proof let n be Ordinal; set ILO = InvLexOrder n;
+      now let x, y be set such that
+       A1: x in Bags n & y in Bags n;
+       reconsider p=x,q=y as bag of n by A1,POLYNOM1:def 14;
+         now assume A2: not [p,q] in ILO;
+          then A3: p <> q &
+          not (ex i being Ordinal st i in n & p.i < q.i &
+      for k being Ordinal st i in k & k in n holds p.k = q.k) by Def8;
+          set s = SgmX(RelIncl n, support p \/ support q);
+      A4: dom p = n & dom q = n by PBOOLE:def 3;
+      A5: field(RelIncl n) = n by WELLORD2:def 1;
+            RelIncl n is well-ordering by WELLORD2:7;
+          then RelIncl n is_linear-order by ORDERS_2:9;
+      then RelIncl n linearly_orders n by A5,ORDERS_2:35;
+   then A6: RelIncl n linearly_orders support p \/ support q by ORDERS_2:36;
+      then A7: rng s = support p \/ support q by TRIANG_1:def 2;
+          defpred P[Nat] means
+            $1 in dom s & q.(s.$1) <> p.(s.$1);
+          A8: for k being Nat st P[k] holds k <= len s by FINSEQ_3:27;
+          A9: ex k being Nat st P[k] proof assume
+              A10: not thesis;
+                    now let x be set; assume x in n;
+                      per cases;
+                      suppose p.x <> 0; then x in support p by POLYNOM1:def 7
+;
+                        then x in support p \/ support q by XBOOLE_0:def 2;
+                        then consider k being Nat such that
+                      A11: k in dom s & s.k = x by A7,FINSEQ_2:11;
+                       thus p.x = q.x by A10,A11;
+                      suppose q.x <> 0; then x in support q by POLYNOM1:def 7
+;
+                        then x in support p \/ support q by XBOOLE_0:def 2;
+                        then consider k being Nat such that
+                      A12: k in dom s & s.k = x by A7,FINSEQ_2:11;
+                       thus p.x = q.x by A10,A12;
+                      suppose p.x = 0 & q.x = 0;
+                       hence p.x = q.x;
+                  end;
+            hence contradiction by A3,A4,FUNCT_1:9;
+          end;
+          consider j being Nat such that
+          A13: P[j] and
+          A14: for k being Nat st P[k] holds k <= j from Max(A8,A9);
+              A15: s.j in rng s by A13,FUNCT_1:12;
+              then reconsider J = s.j as Ordinal by A7,ORDINAL1:23;
+            now
+          take J;
+          thus J in n by A7,A15;
+          A16: now let k be Ordinal such that
+              A17: J in k and
+              A18: k in n and
+              A19: q.k <> p.k;
+                  now assume not k in support p & not k in support q;
+                   then p.k = 0 & q.k = 0 by POLYNOM1:def 7;
+                  hence contradiction by A19;
+                end;
+                then k in support p \/ support q by XBOOLE_0:def 2;
+                then consider m being Nat such that
+              A20: m in dom s & s.m = k by A7,FINSEQ_2:11;
+              A21: m <= j by A14,A19,A20;
+                    m <> j by A17,A20;
+                  then m < j by A21,REAL_1:def 5;
+                  then [s/.m,s/.j] in RelIncl n by A6,A13,A20,TRIANG_1:def 2;
+                  then [s.m,s/.j] in RelIncl n by A20,FINSEQ_4:def 4;
+                  then [s.m,s.j] in RelIncl n by A13,FINSEQ_4:def 4;
+                  then s.m c= s.j by A7,A15,A18,A20,WELLORD2:def 1;
+              hence contradiction by A17,A20,ORDINAL1:7;
+              end;
+              then q.J <= p.J by A2,A7,A15,Def8;
+          hence q.J < p.J by A13,REAL_1:def 5;
+          thus for k being Ordinal st J in k & k in n holds q.k = p.k by A16;
+          end;
+          hence [q,p] in ILO by Def8;
+       end;
+       hence [x,y] in ILO or [y,x] in ILO;
+    end;
+    hence ILO is_strongly_connected_in Bags n by RELAT_2:def 7;
+      now let a be bag of n;
+      per cases;
+      suppose EmptyBag n = a;
+        hence [EmptyBag n, a] in ILO by Def8;
+      suppose A22: EmptyBag n <> a;
+          set s = SgmX(RelIncl n, support a);
+      A23: field(RelIncl n) = n by WELLORD2:def 1;
+            RelIncl n is well-ordering by WELLORD2:7;
+          then RelIncl n is_linear-order by ORDERS_2:9;
+      then RelIncl n linearly_orders n by A23,ORDERS_2:35;
+      then A24: RelIncl n linearly_orders support a by ORDERS_2:36;
+      then A25: rng s = support a by TRIANG_1:def 2;
+          then rng s <> {} by A22,Th20;
+      then A26: len s in dom s by FINSEQ_5:6,RELAT_1:60;
+      then A27: s.len s in rng s by FUNCT_1:12;
+          then reconsider j = s.len s as Ordinal by A25,ORDINAL1:23;
+         now take j;
+          thus j in n by A25,A27;
+       A28: a.j <> 0 by A25,A27,POLYNOM1:def 7;
+            (EmptyBag n).j = 0 by POLYNOM1:56;
+          hence (EmptyBag n).j < a.j by A28,NAT_1:19;
+          let k be Ordinal such that
+          A29: j in k & k in n;
+          A30: j c= k by A29,ORDINAL1:def 2;
+            now assume (EmptyBag n).k <> a.k;
+              then a.k <> 0 by POLYNOM1:56;
+              then k in support a by POLYNOM1:def 7;
+              then consider i being Nat such that
+          A31: i in dom s & s.i = k by A25,FINSEQ_2:11;
+          A32: i <= len s by A31,FINSEQ_3:27;
+              per cases by A32,REAL_1:def 5;
+              suppose i = len s;
+               hence contradiction by A29,A31;
+              suppose i < len s;
+                 then [s/.i,s/.len s] in RelIncl n by A24,A26,A31,TRIANG_1:def
+2;
+                 then [s.i,s/.len s] in RelIncl n by A31,FINSEQ_4:def 4;
+                 then [s.i,s.len s] in RelIncl n by A26,FINSEQ_4:def 4;
+                 then k c= j by A25,A27,A29,A31,WELLORD2:def 1;
+                 then j = k by A30,XBOOLE_0:def 10;
+             hence contradiction by A29;
+          end;
+          hence (EmptyBag n).k = a.k;
+       end;
+       hence [EmptyBag n,a] in ILO by Def8;
+    end;
+    hence for a being bag of n holds [EmptyBag n, a] in ILO;
+      now let a,b,c be bag of n such that
+       A33: [a,b] in ILO;
+       per cases;
+       suppose A34: a = b;
+         a+c in Bags n by POLYNOM1:def 14;
+       hence [a+c, b+c] in ILO by A34,ORDERS_1:12;
+       suppose a <> b;
+       then consider i being Ordinal such that
+       A35: i in n & a.i < b.i and
+   A36: for k being Ordinal st i in k & k in n holds a.k = b.k by A33,Def8;
+         now take i;
+          thus i in n by A35;
+          A37: (a+c).i = a.i+c.i & (b+c).i = b.i+c.i by POLYNOM1:def 5;
+          A38: a.i+c.i <= b.i+c.i by A35,AXIOMS:24;
+            a.i+c.i <> b.i+c.i by A35,XCMPLX_1:2;
+          hence (a+c).i < (b+c).i by A37,A38,REAL_1:def 5;
+          let k be Ordinal such that
+          A39: i in k & k in n;
+            (a+c).k = a.k+c.k & (b+c).k = b.k + c.k by POLYNOM1:def 5;
+          hence (a+c).k = (b+c).k by A36,A39;
+       end;
+       hence [a+c, b+c] in ILO by Def8;
+    end;
+    hence for a,b,c being bag of n st [a,b] in ILO holds [a+c, b+c] in ILO;
+ end;
+
+definition
+  let n be Ordinal;
+  cluster InvLexOrder n -> admissible;
+  coherence by Th25;
+end;
+
+theorem Th26:
+for o being Ordinal holds InvLexOrder o is well-ordering proof
+    defpred _P[Ordinal] means InvLexOrder $1 is well-ordering;
+A1: now let o be Ordinal such that
+A2:   for n being Ordinal st n in o holds _P[n];
+     set ilo = InvLexOrder o;
+A3:     ilo is_strongly_connected_in Bags o by Def7;
+       then ilo is_reflexive_in Bags o by ORDERS_1:92;
+   then A4: field(ilo) = Bags o by PARTIT_2:9;
+A5:   now assume ilo is non well_founded;
+     then A6: not ilo is_well_founded_in Bags o by A4,WELLORD1:5;
+        set R = RelStr(# Bags o, ilo #);
+        set ir = the InternalRel of R;
+          R is non well_founded by A6,WELLFND1:def 2;
+        then consider f being sequence of R such that
+     A7: f is descending by WELLFND1:15;
+         reconsider a = f.0 as bag of o by POLYNOM1:def 14;
+         set s = SgmX(RelIncl o, support a);
+     A8: field(RelIncl o) = o by WELLORD2:def 1;
+           RelIncl o is well-ordering by WELLORD2:7;
+         then RelIncl o is_linear-order by ORDERS_2:9;
+     then RelIncl o linearly_orders o by A8,ORDERS_2:35;
+     then A9: RelIncl o linearly_orders support a by ORDERS_2:36;
+     then A10: rng s = support a by TRIANG_1:def 2;
+           now assume rng s = {};
+         then A11: a = EmptyBag o by A10,Th20;
+             reconsider b = f.(0+1) as bag of o by POLYNOM1:def 14;
+         A12: b <> a by A7,WELLFND1:def 7;
+               [b,a] in ir by A7,WELLFND1:def 7;
+             then consider i being Ordinal such that
+               i in o and
+         A13: b.i < a.i and
+               for k being Ordinal st i in k & k in o holds b.k = a.k
+               by A12,Def8;
+               b.i < 0 by A11,A13,POLYNOM1:56;
+          hence contradiction by NAT_1:18;
+         end;
+     then A14: len s in dom s by FINSEQ_5:6,RELAT_1:60;
+         then A15: s.len s in rng s by FUNCT_1:12;
+         then reconsider j = s.len s as Ordinal by A10,ORDINAL1:23;
+         defpred _P[set,set] means ex b being bag of o st f.$1 = b & $2 = b.j;
+         A16: now let x be Nat;
+             reconsider b = f.x as bag of o by POLYNOM1:def 14;
+             take y = b.j;
+             thus _P[x,y];
+         end;
+         consider t being Function of NAT, NAT such that
+     A17: for i being Nat holds _P[i,t.i] from FuncExD(A16);
+     defpred _P[Nat] means for i being Ordinal, b being bag of o
+          st j in i & i in o & f.$1 = b holds b.i = 0;
+     A18: for n being Nat holds _P[n] proof
+         A19: _P[0] proof let i be Ordinal, b be bag of o such that
+             A20: j in i & i in o & f.0 = b;
+              assume b.i <> 0;
+                then i in support a by A20,POLYNOM1:def 7;
+              then consider k being Nat such that
+             A21: k in dom s & s.k = i by A10,FINSEQ_2:11;
+             A22: k <= len s by A21,FINSEQ_3:27;
+              per cases by A22,REAL_1:def 5;
+              suppose k = len s;
+               hence contradiction by A20,A21;
+              suppose k < len s;
+               then [s/.k,s/.len s] in RelIncl o by A9,A14,A21,TRIANG_1:def 2;
+               then [s.k,s/.len s] in RelIncl o by A21,FINSEQ_4:def 4;
+               then [s.k,s.len s] in RelIncl o by A14,FINSEQ_4:def 4;
+               then s.k c= s.len s by A10,A15,A20,A21,WELLORD2:def 1;
+              hence contradiction by A20,A21,ORDINAL1:7;
+             end;
+         A23: for n being Nat st _P[n] holds _P[n+1] proof let n be Nat; assume
+             A24: for i being Ordinal, b being bag of o
+                  st j in i & i in o & f.n = b holds b.i = 0;
+              let i be Ordinal, b1 be bag of o such that
+             A25: j in i & i in o & f.(n+1) = b1;
+                 reconsider b = f.n as bag of o by POLYNOM1:def 14;
+             A26: b.i = 0 by A24,A25;
+               b1<>b & [b1,b] in ilo by A7,A25,WELLFND1:def 7;
+                 then consider i1 being Ordinal such that
+             A27: i1 in o and
+             A28: b1.i1 < b.i1 and
+             A29: for k being Ordinal st i1 in k & k in o holds b1.k = b.k
+                  by Def8;
+               per cases by ORDINAL1:24;
+               suppose i1 in i;
+                 hence b1.i = 0 by A25,A26,A29;
+               suppose i1 = i;
+                 hence b1.i = 0 by A26,A28,NAT_1:18;
+               suppose A30: i in i1; assume b1.i <> 0;
+                     j in i1 by A25,A30,ORDINAL1:19;
+                   then b.i1 = 0 by A24,A27;
+                hence contradiction by A28,NAT_1:18;
+             end;
+          thus thesis from Ind(A19,A23);
+         end;
+        reconsider t as sequence of OrderedNAT
+          by DICKSON:def 15,NORMSP_1:def 3;
+     A31: t is non-increasing proof let n be Nat;
+           reconsider tn = t.n, tn1 = t.(n+1) as Element of NAT by DICKSON:def
+15;
+           reconsider fn = f.n, fn1 = f.(n+1) as bag of o by POLYNOM1:def 14;
+        A32: fn1 <> fn by A7,WELLFND1:def 7;
+              [fn1, fn] in ilo by A7,WELLFND1:def 7;
+            then consider i being Ordinal such that
+        A33: i in o and
+        A34: fn1.i < fn.i and
+        A35: for k being Ordinal st i in k & k in o holds fn1.k = fn.k
+             by A32,Def8;
+        A36: fn.i <> 0 by A34,NAT_1:18;
+            consider bn being bag of o such that
+        A37: fn = bn & tn = bn.j by A17;
+            consider bn1 being bag of o such that
+        A38: fn1 = bn1 & tn1 = bn1.j by A17;
+              now
+            per cases by ORDINAL1:24;
+             suppose i = j;
+              hence tn1 <= tn by A34,A37,A38;
+             suppose j in i;
+              hence tn1 <= tn by A18,A33,A36;
+             suppose i in j;
+              hence tn1 <= tn by A10,A15,A35,A37,A38;
+            end;
+         hence [t.(n+1), t.n] in the InternalRel of OrderedNAT
+           by DICKSON:def 14,def 15;
+        end;
+
+         set n = j;
+        set iln = InvLexOrder n; set S = RelStr(#Bags n, iln#);
+          iln is_strongly_connected_in Bags n by Def7;
+        then iln is_reflexive_in Bags n by ORDERS_1:92;
+   then A39: field(iln) = Bags n by PARTIT_2:9;
+        consider p being Nat such that
+     A40: for r being Nat st p <= r holds t.p = t.r by A31,Th11;
+     defpred _P[Nat,set] means
+       ex b being bag of o st b = f.(p+$1) & $2 = b|j;
+     A41: now let x be Element of NAT;
+            reconsider b = f.(p+x) as bag of o by POLYNOM1:def 14;
+            reconsider y = b|j as bag of n by A10,A15,Th21;
+            reconsider y as Element of Bags n by POLYNOM1:def 14;
+         take y;
+         thus _P[x,y];
+        end;
+        consider g being Function of NAT, Bags n such that
+     A42: for x being Element of NAT holds _P[x,g.x] from FuncExD(A41);
+        reconsider g as sequence of S by NORMSP_1:def 3;
+          now let k be Nat;
+           consider b being bag of o such that
+        A43: b = f.(p+k) & g.k = b|j by A42;
+           consider b1 being bag of o such that
+        A44: b1 = f.(p+(k+1)) & g.(k+1) = b1|j by A42;
+        A45: p+(k+1) = (p+k)+1 by XCMPLX_1:1;
+        then A46: b <> b1 by A7,A43,A44,WELLFND1:def 7;
+            consider bb being bag of o such that
+         A47: f.(p+k) = bb & t.(p+k) = bb.j by A17;
+            consider bb1 being bag of o such that
+         A48: f.(p+(k+1)) = bb1 & t.(p+(k+1)) = bb1.j by A17;
+               p <= p+k & p <= p+(k+1) by NAT_1:29;
+        then A49:  t.(p+k) = t.p & t.(p+(k+1)) = t.p by A40;
+         thus g.(k+1) <> g.k proof assume
+         A50: not thesis;
+         A51: o = dom b & o = dom b1 by PBOOLE:def 3;
+              now let m be set such that
+            A52: m in o;
+            A53: m is Ordinal by A52,ORDINAL1:23;
+            per cases by A53,ORDINAL1:24;
+            suppose m in j;
+              then (b|j).m = b.m & (b1|j).m = b1.m by FUNCT_1:72;
+             hence b.m = b1.m by A43,A44,A50;
+            suppose m = j;
+             hence b.m = b1.m by A43,A44,A47,A48,A49;
+            suppose j in m;
+              then b.m = 0 & b1.m = 0 by A18,A43,A44,A52,A53;
+             hence b.m = b1.m;
+            end;
+          hence contradiction by A46,A51,FUNCT_1:9;
+         end;
+              [f.((p+k)+1), f.(p+k)] in ilo by A7,WELLFND1:def 7;
+            then consider i being Ordinal such that
+        A54: i in o and
+        A55: b1.i < b.i and
+        A56: for k being Ordinal st i in k & k in o holds b.k = b1.k
+               by A43,A44,A45,A46,Def8;
+        A57: now assume A58: not i in j;
+            per cases by A58,ORDINAL1:24;
+            suppose i = j;
+             hence contradiction by A43,A44,A47,A48,A49,A55;
+            suppose A59: j in i; then b.i = 0 by A18,A43,A54
+                .= b1.i by A18,A44,A54,A59;
+             hence contradiction by A55;
+            end;
+            reconsider bj = b|j, b1j = b1|j as bag of n by A10,A15,Th21;
+        A60: b1j.i = b1.i & bj.i = b.i by A57,FUNCT_1:72;
+              now let k be Ordinal such that
+            A61: i in k & k in n;
+                  k in o by A10,A15,A61,ORDINAL1:19;
+            then A62: b.k = b1.k by A56,A61;
+             thus bj.k = b.k by A61,FUNCT_1:72
+                      .= b1j.k by A61,A62,FUNCT_1:72;
+            end;
+         hence [g.(k+1), g.k] in iln by A43,A44,A55,A57,A60,Def8;
+        end;
+             then g is descending by WELLFND1:def 7;
+        then S is non well_founded by WELLFND1:15;
+        then not iln is_well_founded_in the carrier of S by WELLFND1:def 2;
+        then not iln well_orders field iln by A39,WELLORD1:def 5;
+        then iln is non well-ordering by WELLORD1:8;
+      hence contradiction by A2,A10,A15;
+     end;
+A63:   field ilo = Bags o by ORDERS_1:97;
+A64:     ilo is_reflexive_in Bags o by A63,RELAT_2:def 9;
+A65:     ilo is_transitive_in Bags o by A63,RELAT_2:def 16;
+A66:     ilo is_antisymmetric_in Bags o by A63,RELAT_2:def 12;
+A67:     ilo is_connected_in field ilo by A3,A4,ORDERS_1:92;
+         ilo is_well_founded_in field ilo by A5,WELLORD1:5;
+     then ilo well_orders field ilo by A4,A64,A65,A66,A67,WELLORD1:def 5;
+    hence _P[o] by WELLORD1:8;
+   end;
+thus for o being Ordinal holds _P[o] from Transfinite_Ind(A1);
+end;
+
+definition
+   let n be Ordinal, o be TermOrder of n such that
+A1: for a,b,c being bag of n st [a,b] in o holds [a+c, b+c] in o;
+   func Graded o -> TermOrder of n means : Def9:
+       for a, b being bag of n holds [a,b] in it iff
+        ((TotDegree a < TotDegree b) or
+         (TotDegree a = TotDegree b & [a,b] in o));
+existence proof
+    defpred _P[set,set] means
+    (ex x', y' being bag of n st x'=$1 & y'=$2 &
+     ((TotDegree x' < TotDegree y') or
+      (TotDegree x' = TotDegree y' & [x',y'] in o)));
+    consider R being Relation of Bags n such that
+A2: for x,y being set holds [x,y] in R iff x in Bags n & y in Bags n & _P[x,y]
+                 from Rel_On_Set_Ex;
+A3:  now
+         now let x be set such that
+       A4: x in Bags n;
+           reconsider x'=x as bag of n by A4,POLYNOM1:def 14;
+             now take x';
+               thus x'=x;
+               thus TotDegree x' = TotDegree x';
+                 [EmptyBag n, EmptyBag n] in o by ORDERS_1:12;
+               then [(EmptyBag n) + x', (EmptyBag n) + x'] in o by A1;
+               then [x', (EmptyBag n) + x'] in o by POLYNOM1:57;
+               hence [x',x'] in o by POLYNOM1:57;
+           end;
+           hence [x,x] in R by A2,A4;
+       end;
+       hence R is_reflexive_in Bags n by RELAT_2:def 1;
+         now let x, y be set such that
+       A5: x in Bags n & y in Bags n & [x,y] in R & [y,x] in R;
+           consider x', y' being bag of n such that
+       A6: x'=x & y'=y and
+       A7: ((TotDegree x' < TotDegree y') or
+            (TotDegree x' = TotDegree y' & [x',y'] in o)) by A2,A5;
+           consider y'', x'' being bag of n such that
+       A8: y''=y & x''= x and
+       A9: ((TotDegree y'' < TotDegree x'') or
+            (TotDegree y'' = TotDegree x'' & [y'',x''] in o)) by A2,A5;
+             now per cases by A7;
+               suppose A10: TotDegree x' < TotDegree y';
+                     now per cases by A6,A8,A9;
+                       suppose TotDegree y' < TotDegree x';
+                           hence contradiction by A10;
+                       suppose TotDegree y' = TotDegree x' & [y',x'] in o;
+                           hence contradiction by A10;
+                   end;
+                   hence (TotDegree x' = TotDegree y' & [x',y'] in o) &
+                         (TotDegree y' = TotDegree x' & [y',x'] in o);
+               suppose A11: TotDegree x' = TotDegree y' & [x',y'] in o;
+                     now per cases by A6,A8,A9;
+                       suppose TotDegree y' < TotDegree x';
+                           hence (TotDegree x' = TotDegree y' & [x',y'] in o)
+&
+                                 (TotDegree y' = TotDegree x' & [y',x'] in o)
+                                  by A11;
+                       suppose TotDegree y' = TotDegree x' & [y',x'] in o;
+                           hence (TotDegree x' = TotDegree y' & [x',y'] in o)
+&
+                                 (TotDegree y' = TotDegree x' & [y',x'] in o)
+                                  by A11;
+                   end;
+                   hence (TotDegree x' = TotDegree y' & [x',y'] in o) &
+                         (TotDegree y' = TotDegree x' & [y',x'] in o);
+           end;
+           hence x = y by A5,A6,ORDERS_1:13;
+       end;
+       hence R is_antisymmetric_in Bags n by RELAT_2:def 4;
+         now let x,y,z be set such that
+       A12: x in Bags n & y in Bags n & z in Bags n & [x,y] in R & [y,z] in R;
+           consider x',y' being bag of n such that
+       A13: x'=x & y'=y & ((TotDegree x' < TotDegree y') or
+            (TotDegree x' = TotDegree y' & [x',y'] in o)) by A2,A12;
+           consider y'',z' being bag of n such that
+       A14: y''=y & z'=z & ((TotDegree y'' < TotDegree z') or
+            (TotDegree y'' = TotDegree z' & [y'',z'] in o)) by A2,A12;
+           per cases by A13;
+           suppose A15: TotDegree x' < TotDegree y';
+                 now per cases by A13,A14;
+                   suppose TotDegree y' < TotDegree z';
+                       then TotDegree x' < TotDegree z' by A15,AXIOMS:22;
+                       hence [x,z] in R by A2,A12,A13,A14;
+                   suppose TotDegree y' = TotDegree z' & [y', z'] in o;
+                       hence [x,z] in R by A2,A12,A13,A14,A15;
+               end;
+               hence [x,z] in R;
+           suppose A16: TotDegree x' = TotDegree y' & [x',y'] in o;
+                 now per cases by A13,A14;
+                   suppose TotDegree y' < TotDegree z';
+                       hence [x,z] in R by A2,A12,A13,A14,A16;
+                   suppose TotDegree y'=TotDegree z' & [y', z'] in o;
+                       then [x',z'] in o by A12,A13,A14,A16,ORDERS_1:14;
+                       hence [x,z] in R by A2,A12,A13,A14,A16;
+               end;
+               hence [x,z] in R;
+       end;
+       hence R is_transitive_in Bags n by RELAT_2:def 8;
+   end;
+A17:   dom R = Bags n & field R = Bags n by A3,ORDERS_1:98;
+    then R is total by PARTFUN1:def 4;
+   then reconsider R as TermOrder of n by A3,A17,RELAT_2:def 9,def 12,def 16;
+   take R;
+   let a,b be bag of n;
+   hereby assume [a,b] in R;
+       then consider x', y' being bag of n such that
+   A18: x'=a & y'=b and
+   A19: ((TotDegree x' < TotDegree y') or
+        (TotDegree x' = TotDegree y' & [x',y'] in o)) by A2;
+      thus ((TotDegree a < TotDegree b) or
+             (TotDegree a = TotDegree b & [a,b] in o)) by A18,A19;
+   end;
+   assume A20: ((TotDegree a < TotDegree b) or
+               (TotDegree a = TotDegree b & [a,b] in o));
+     a in Bags n & b in Bags n by POLYNOM1:def 14;
+   hence [a,b] in R by A2,A20;
+end;
+uniqueness proof
+    let IT1, IT2 be TermOrder of n such that
+A21: for a,b being bag of n holds [a,b] in IT1 iff
+    ((TotDegree a < TotDegree b) or
+     (TotDegree a = TotDegree b & [a,b] in o)) and
+A22: for a,b being bag of n holds [a,b] in IT2 iff
+    ((TotDegree a < TotDegree b) or
+     (TotDegree a = TotDegree b & [a,b] in o));
+      now let a, b be set;
+        hereby assume A23: [a,b] in IT1;
+            then a in dom IT1 & b in rng IT1 by RELAT_1:def 4,def 5;
+            then reconsider a'=a, b'=b as bag of n by POLYNOM1:def 14;
+              ((TotDegree a' < TotDegree b') or
+             (TotDegree a' = TotDegree b' & [a',b'] in o)) by A21,A23;
+            hence [a,b] in IT2 by A22;
+        end;
+        assume A24: [a,b] in IT2;
+        then a in dom IT2 & b in rng IT2 by RELAT_1:def 4,def 5;
+        then reconsider a'=a, b'=b as bag of n by POLYNOM1:def 14;
+          ((TotDegree a' < TotDegree b') or
+         (TotDegree a' = TotDegree b' & [a',b'] in o)) by A22,A24;
+        hence [a,b] in IT1 by A21;
+    end;
+    hence IT1 = IT2 by RELAT_1:def 2;
+end;
+end;
+
+theorem Th27: :: Exercise 4.61: iiia
+for n being Ordinal, o being TermOrder of n
+ st (for a,b,c being bag of n st [a,b] in o
+          holds [a+c, b+c] in o) & o is_strongly_connected_in Bags n
+  holds Graded o is admissible
+proof let n be Ordinal, o be TermOrder of n such that
+A1: for a,b,c being bag of n st [a,b] in o holds [a+c,b+c] in o and
+A2: o is_strongly_connected_in Bags n;
+      now let x,y be set such that
+    A3: x in Bags n & y in Bags n;
+        reconsider x'=x, y'=y as bag of n by A3,POLYNOM1:def 14;
+        assume A4: not [x,y] in Graded o;
+    then A5: TotDegree x' >= TotDegree y' by A1,Def9;
+        per cases by A5,REAL_1:def 5;
+        suppose TotDegree y' < TotDegree x';
+            hence [y,x] in Graded o by A1,Def9;
+        suppose A6: TotDegree y' = TotDegree x';
+            then not [x,y] in o by A1,A4,Def9;
+            then [y,x] in o by A2,A3,RELAT_2:def 7;
+            hence [y,x] in Graded o by A1,A6,Def9;
+    end;
+    hence Graded o is_strongly_connected_in Bags n by RELAT_2:def 7;
+      now let a be bag of n;
+    A7: TotDegree EmptyBag n = 0 by Th16;
+        per cases;
+        suppose a = EmptyBag n;
+            hence [EmptyBag n, a] in Graded o by ORDERS_1:12;
+        suppose a <> EmptyBag n;
+            then TotDegree a <> 0 by Th16;
+            then TotDegree EmptyBag n < TotDegree a by A7,NAT_1:19;
+            hence [EmptyBag n, a] in Graded o by A1,Def9;
+    end;
+    hence for a being bag of n holds [EmptyBag n, a] in Graded o;
+      now let a, b, c be bag of n such that
+    A8: [a,b] in Graded o;
+        per cases by A1,A8,Def9;
+        suppose A9: TotDegree a < TotDegree b;
+        A10: TotDegree (a+c) = TotDegree a + TotDegree c by Th14;
+              TotDegree (b+c) = TotDegree b + TotDegree c by Th14;
+            then TotDegree (a+c) < TotDegree (b+c) by A9,A10,REAL_1:67;
+            hence [a+c, b+c] in Graded o by A1,Def9;
+        suppose A11: TotDegree a = TotDegree b & [a,b] in o;
+            then TotDegree (a+c) = TotDegree b + TotDegree c by Th14;
+        then A12: TotDegree (a+c) = TotDegree(b+c) by Th14;
+              [a+c, b+c] in o by A1,A11;
+            hence [a+c, b+c] in Graded o by A1,A12,Def9;
+    end; hence
+      for a,b,c being bag of n st [a,b] in Graded o holds [a+c, b+c] in Graded
+o;
+end;
+
+definition
+  let n be Ordinal;
+  func GrLexOrder n -> TermOrder of n equals :Def10:
+    Graded LexOrder n;
+coherence;
+  func GrInvLexOrder n -> TermOrder of n equals :Def11:        :: Ex 4.61: iiic
+    Graded InvLexOrder n;
+coherence;
+end;
+
+theorem Th28:                                           :: Ex 4.61: iiib
+for n being Ordinal holds GrLexOrder n is admissible
+proof let n be Ordinal;
+A1: GrLexOrder n = Graded LexOrder n by Def10;
+A2: for a,b,c being bag of n st [a,b] in LexOrder n
+     holds [a+c,b+c] in LexOrder n by Def7;
+      LexOrder n is_strongly_connected_in Bags n by Def7;
+ hence thesis by A1,A2,Th27;
+end;
+
+definition
+  let n be Ordinal;
+  cluster GrLexOrder n -> admissible;
+  coherence by Th28;
+end;
+
+theorem
+  for o being infinite Ordinal holds GrLexOrder o is non well-ordering
+proof
+  let o be infinite Ordinal;
+  set R = GrLexOrder o; set r = RelStr(# Bags o, R#);
+  set ir = the InternalRel of r, cr = the carrier of r;
+A2: R = Graded LexOrder o by Def10;
+  assume R is well-ordering;
+then A3: R is well_founded by WELLORD1:def 4;
+     cr = field ir by ORDERS_2:2;
+   then ir is_well_founded_in cr by A3,WELLORD1:5;
+then A4: r is well_founded by WELLFND1:def 2;
+    defpred _P[Nat, set] means $2 = (o-->0)+*($1,1);
+A5: now let n be Element of NAT; set y = (o-->0)+*(n,1);
+    A6: dom (o-->0) = o by FUNCOP_1:19;
+        reconsider y as ManySortedSet of o;
+    A7: n in omega & omega c= o by CARD_4:8;
+        then y = (o-->0) +* (n .--> 1) by A6,FUNCT_7:def 3;
+        then rng y c= rng (o-->0) \/ rng (n .--> 1) by FUNCT_4:18;
+        then rng y c= {0} \/ rng (n .--> 1) by FUNCOP_1:14;
+    then rng y c= {0} \/ {1} by CQC_LANG:5;
+        then rng y c= NAT by XBOOLE_1:1;
+    then A8: y is natural-yielding by SEQM_3:def 8;
+          now let x be set;
+          hereby assume x in {n}; then x = n by TARSKI:def 1;
+            hence y.x <> 0 by A6,A7,FUNCT_7:33;
+          end;
+          assume that
+        A9: y.x <> 0 and
+        A10: not x in {n};
+              x <> n by A10,TARSKI:def 1;
+        then A11: y.x = (o-->0).x by FUNCT_7:34;
+            per cases;
+            suppose x in dom (o-->0);
+            hence contradiction by A6,A9,A11,FUNCOP_1:13;
+            suppose not x in dom (o-->0);
+            hence contradiction by A9,A11,FUNCT_1:def 4;
+        end;
+        then support y = {n} by POLYNOM1:def 7;
+        then y is finite-support by POLYNOM1:def 8;
+      then reconsider y as Element of cr by A8,POLYNOM1:def 14;
+    take y;
+    thus _P[n,y];
+    end;
+  consider f being Function of NAT, cr such that
+A12: for n being Element of NAT holds _P[n,f.n] from FuncExD(A5);
+  reconsider f as sequence of r by NORMSP_1:def 3;
+    f is descending proof let n be Nat;
+  set fn1 = f.(n+1), fn = f.n;
+  A13: fn1 = (o-->0)+*((n+1),1) by A12;
+  A14: fn = (o-->0)+*(n,1) by A12;
+      reconsider fn1 as bag of o by POLYNOM1:def 14;
+      reconsider fn as bag of o by POLYNOM1:def 14;
+      A15: n in omega & omega c= o by CARD_4:8;
+        n <> n+1 by NAT_1:38;
+  then A16: fn1.n = (o-->0).n by A13,FUNCT_7:34 .= 0 by A15,FUNCOP_1:13;
+  A17: dom (o-->0) = o by FUNCOP_1:19;
+  then A18: fn.n = 1 by A14,A15,FUNCT_7:33;
+      now let l be Ordinal; assume
+    A19: l in n;
+    then A20: l <> n;
+          n < n+1 by NAT_1:38;
+        then n in {i where i is Nat : i < n+1};
+        then n in n+1 by AXIOMS:30;
+        then n c= n+1 by ORDINAL1:def 2; then l in n+1 by A19;
+    then l <> n+1;
+     hence fn1.l = (o-->0).l by A13,FUNCT_7:34 .= fn.l by A14,A20,FUNCT_7:34;
+    end;
+  then A21: fn1 < fn by A16,A18,POLYNOM1:def 11;
+    thus f.(n+1) <> f.n by A14,A15,A16,A17,FUNCT_7:33; fn1 <=' fn by A21,
+POLYNOM1:def 12;
+then A22:  [f.(n+1), f.n] in LexOrder o by POLYNOM1:def 16;
+    consider tn being FinSequence of NAT such that
+A23:  TotDegree fn = Sum tn and
+A24:  tn = fn*SgmX(RelIncl o, support fn) by Def4;
+    consider tn1 being FinSequence of NAT such that
+A25: TotDegree fn1 = Sum tn1 and
+A26: tn1 = fn1*SgmX(RelIncl o, support fn1) by Def4;
+        n+1 in omega & omega c= o by CARD_4:8;
+     then reconsider nn=n, n1n = n+1 as Element of o by A15;
+     A27: field(RelIncl o) = o by WELLORD2:def 1;
+           RelIncl o is well-ordering by WELLORD2:7;
+         then RelIncl o is_linear-order by ORDERS_2:9;
+     then A28: RelIncl o linearly_orders o by A27,ORDERS_2:35;
+     then A29: RelIncl o linearly_orders support fn by ORDERS_2:36;
+     A30: RelIncl o linearly_orders support fn1 by A28,ORDERS_2:36;
+       now let x be set;
+     hereby assume A31: x in support fn1;
+           now assume x <> n1n; then fn1.x = (o-->0).x by A13,FUNCT_7:34;
+       then fn1.x = 0 by A31,FUNCOP_1:13; hence contradiction by A31,POLYNOM1:
+def 7;
+         end;
+      hence x in {n1n} by TARSKI:def 1;
+     end;
+     assume x in {n1n}; then x = n1n by TARSKI:def 1;
+       then fn1.x = 1 by A13,A17,FUNCT_7:33;
+     hence x in support fn1 by POLYNOM1:def 7;
+    end; then support fn1 = {n1n} by TARSKI:2;
+then A32:  SgmX(RelIncl o, support fn1) = <*n1n*> by A30,Th12;
+A33:  dom fn = o & dom fn1 = o by A13,A14,A17,FUNCT_7:32;
+       now let x be set;
+     hereby assume A34: x in support fn;
+           now assume x <> nn; then fn.x = (o-->0).x by A14,FUNCT_7:34;
+       then fn.x = 0 by A34,FUNCOP_1:13; hence contradiction by A34,POLYNOM1:
+def 7;
+         end;
+      hence x in {nn} by TARSKI:def 1;
+     end;
+     assume x in {nn}; then x = nn by TARSKI:def 1;
+       then fn.x = 1 by A14,A17,FUNCT_7:33;
+     hence x in support fn by POLYNOM1:def 7;
+    end; then support fn = {nn} by TARSKI:2;
+    then SgmX(RelIncl o, support fn) = <*nn*> by A29,Th12;
+    then A35: tn = <*fn.n*> by A24,A33,Th3
+      .= <*1*> by A14,A15,A17,FUNCT_7:33
+      .= <*fn1.n1n*> by A13,A17,FUNCT_7:33
+      .= tn1 by A26,A32,A33,Th3;
+      for a,b,c being bag of o st [a,b] in LexOrder o
+      holds [a+c, b+c] in LexOrder o by Def7;
+    hence [f.(n+1), f.n] in ir by A2,A22,A23,A25,A35,Def9;
+  end;
+  hence contradiction by A4,WELLFND1:15;
+end;
+
+theorem Th30:
+for n being Ordinal holds GrInvLexOrder n is admissible
+proof let n be Ordinal;
+A1: GrInvLexOrder n = Graded InvLexOrder n by Def11;
+A2: for a,b,c being bag of n st [a,b] in InvLexOrder n
+     holds [a+c,b+c] in InvLexOrder n by Def7;
+      InvLexOrder n is_strongly_connected_in Bags n by Def7;
+    hence thesis by A1,A2,Th27;
+end;
+
+definition
+  let n be Ordinal;
+  cluster GrInvLexOrder n -> admissible;
+  coherence by Th30;
+end;
+
+theorem
+  for o being Ordinal holds GrInvLexOrder o is well-ordering proof
+  let o be Ordinal;
+    set gilo = GrInvLexOrder o, ilo = InvLexOrder o;
+A1: gilo = Graded ilo by Def11;
+A2:  gilo is_strongly_connected_in Bags o by Def7;
+A3:  field gilo = Bags o by ORDERS_1:97;
+A4:  gilo is_reflexive_in Bags o by A3,RELAT_2:def 9;
+A5: field(gilo) = Bags o by A3;
+A6:  gilo is_transitive_in Bags o by A3,RELAT_2:def 16;
+A7:  gilo is_antisymmetric_in Bags o by A3,RELAT_2:def 12;
+A8:  gilo is_connected_in field gilo by A2,A5,ORDERS_1:92;
+A9: for a,b,c being bag of o st [a,b] in ilo holds [a+c, b+c] in ilo by Def7;
+      now let Y be set such that
+    A10: Y c= field gilo and
+    A11: Y <> {};
+        set TD = {TotDegree y where y is Element of Bags o : y in Y};
+        consider x being set such that
+    A12: x in Y by A11,XBOOLE_0:def 1;
+         reconsider x as Element of Bags o by A3,A10,A12;
+    A13: TotDegree x in TD by A12;
+           TD c= NAT proof let x be set; assume x in TD;
+            then consider y being Element of Bags o such that
+         A14: x = TotDegree y and y in Y;
+            thus x in NAT by A14;
+         end;
+        then reconsider TD as non empty Subset of NAT by A13;
+        set mTD ={y where y is Element of Bags o:y in Y & TotDegree y= min TD};
+
+    A15: mTD c= field(gilo) proof let x be set; assume x in mTD;
+            then consider y being Element of Bags o such that
+        A16: x = y and y in Y and TotDegree y = min TD;
+           thus x in field gilo by A5,A16;
+        end;
+          min TD in TD by CQC_SIM1:def 8;
+        then consider y being Element of Bags o such that
+    A17: TotDegree y = min TD and
+    A18: y in Y;
+         A19: y in mTD by A17,A18;
+     field ilo = Bags o by ORDERS_1:97;
+    then A20: field ilo = Bags o;
+          ilo is well-ordering by Th26;
+        then ilo well_orders field ilo by WELLORD1:8;
+        then ilo is_well_founded_in field ilo by WELLORD1:def 5;
+        then consider a being set such that
+    A21: a in mTD and
+    A22: ilo-Seg(a) misses mTD by A5,A15,A19,A20,WELLORD1:def 3;
+    A23:  ilo-Seg(a) /\ mTD = {} by A22,XBOOLE_0:def 7;
+        consider a' being Element of Bags o such that
+    A24: a' = a and
+    A25: a' in Y & TotDegree a' = min TD by A21;
+        take a;
+        thus a in Y by A24,A25;
+          now assume gilo-Seg(a) /\ Y <> {}; then consider z being set such
+that
+        A26: z in gilo-Seg(a) /\ Y by XBOOLE_0:def 1;
+        A27: z in gilo-Seg(a) by A26,XBOOLE_0:def 3;
+        A28: z in Y by A26,XBOOLE_0:def 3;
+        A29: z <> a & [z,a] in gilo by A27,WELLORD1:def 1;
+            reconsider a, z as Element of Bags o by A4,A10,A24,A28,PARTIT_2:9;
+        per cases by REAL_1:def 5;
+        suppose A30: TotDegree z < TotDegree a; TotDegree z in TD by A28;
+         hence contradiction by A24,A25,A30,CQC_SIM1:def 8;
+        suppose A31: TotDegree z = TotDegree a;
+             then [z,a] in ilo by A1,A9,A29,Def9;
+         then A32: z in ilo-Seg(a) by A29,WELLORD1:def 1;
+               z in mTD by A24,A25,A28,A31;
+         hence contradiction by A23,A32,XBOOLE_0:def 3;
+        suppose TotDegree z > TotDegree a;
+         hence contradiction by A1,A9,A29,Def9;
+        end;
+        hence gilo-Seg(a) misses Y by XBOOLE_0:def 7;
+    end;
+    then gilo is_well_founded_in field gilo by WELLORD1:def 3;
+    then gilo well_orders field gilo by A4,A5,A6,A7,A8,WELLORD1:def 5;
+  hence GrInvLexOrder o is well-ordering by WELLORD1:8;
+end;
+
+definition
+  let i,n be Nat, o1 be TermOrder of (i+1), o2 be TermOrder of (n-'(i+1));
+  func BlockOrder(i,n,o1,o2) -> TermOrder of n means :Def12:
+   for p,q being bag of n holds [p,q] in it iff
+     ((0,i+1)-cut p <> (0,i+1)-cut q & [(0,i+1)-cut p,(0,i+1)-cut q] in o1) or
+     ((0,i+1)-cut p = (0,i+1)-cut q & [(i+1,n)-cut p,(i+1,n)-cut q] in o2);
+existence proof
+A1: i+1 = (i+1)-'0 by JORDAN3:2;
+    defpred _P[set,set] means
+    (ex p,q being bag of n st $1 = p & $2 = q &
+    (((0,i+1)-cut p <> (0,i+1)-cut q & [(0,i+1)-cut p, (0,i+1)-cut q] in o1) or
+   ((0,i+1)-cut p = (0, i+1)-cut q & [(i+1, n)-cut p, (i+1, n)-cut q] in o2)));
+    consider BO being Relation of Bags n, Bags n such that
+A2: for x, y being set holds [x,y] in BO iff
+              x in Bags n & y in Bags n & _P[x,y] from Rel_On_Set_Ex;
+      now let x be set such that
+    A3: x in Bags n;
+        reconsider x' = x as bag of n by A3,POLYNOM1:def 14;
+    A4: (0,i+1)-cut x' = (0,i+1)-cut x';
+          (i+1, n)-cut x' in Bags (n-'(i+1)) by POLYNOM1:def 14;
+        then [(i+1, n)-cut x', (i+1, n)-cut x'] in o2 by ORDERS_1:12;
+        hence [x,x] in BO by A2,A3,A4;
+    end;
+then A5: BO is_reflexive_in Bags n by RELAT_2:def 1;
+      now let x,y be set such that
+          x in Bags n & y in Bags n and
+    A6: [x,y] in BO & [y,x] in BO;
+        consider p,q being bag of n such that
+    A7: x = p & y = q and
+    A8: ((0,i+1)-cut p <> (0,i+1)-cut q &
+         [(0,i+1)-cut p, (0,i+1)-cut q] in o1) or
+        ((0,i+1)-cut p = (0,i+1)-cut q & [(i+1,n)-cut p, (i+1,n)-cut q] in o2)
+         by A2,A6;
+        consider q',p' being bag of n such that
+    A9: y = q' & x = p' and
+    A10: ((0,i+1)-cut q' <> (0,i+1)-cut p' &
+         [(0,i+1)-cut q', (0,i+1)-cut p'] in o1) or
+         (0,i+1)-cut q'=(0,i+1)-cut p' & [(i+1,n)-cut q', (i+1,n)-cut p'] in o2
+         by A2,A6;
+        set CUTP1 = (0,i+1)-cut p, CUTP2 = (i+1, n)-cut p;
+        set CUTQ1 = (0,i+1)-cut q, CUTQ2 = (i+1, n)-cut q;
+    A11: CUTP1 in Bags ((i+1)-'0) & CUTQ1 in Bags ((i+1)-'0) by POLYNOM1:def 14
+;
+    A12: CUTP2 in Bags (n-'(i+1)) & CUTQ2 in Bags (n-'(i+1)) by POLYNOM1:def 14
+;
+        per cases by A8;
+        suppose A13: CUTP1 <> CUTQ1 & [CUTP1, CUTQ1] in o1;
+              now per cases by A7,A9,A10;
+                suppose CUTQ1 <> CUTP1 & [CUTQ1,CUTP1] in o1;
+                    hence x = y by A1,A11,A13,ORDERS_1:13;
+                suppose CUTQ1 = CUTP1 & [CUTQ2, CUTP2] in o2;
+                     hence x = y by A13;
+            end;
+            hence x = y;
+        suppose A14: CUTP1 = CUTQ1 &
+                [CUTP2, CUTQ2] in o2;
+              now per cases by A7,A9,A10;
+                suppose CUTQ1 <> CUTP1 & [CUTQ1, CUTP1] in o1;
+                    hence x = y by A14;
+                suppose CUTQ1 = CUTP1 & [CUTQ2, CUTP2] in o2;
+                    then CUTQ2 = CUTP2 by A12,A14,ORDERS_1:13;
+                    hence x = y by A7,A14,Th6;
+            end;
+            hence x = y;
+    end;
+then A15: BO is_antisymmetric_in Bags n by RELAT_2:def 4;
+      now let x, y, z be set such that
+    A16: x in Bags n & y in Bags n & z in Bags n and
+    A17: [x,y] in BO & [y,z] in BO;
+        consider x',y' being bag of n such that
+    A18: x'=x & y'=y and
+    A19: ((0,i+1)-cut x' <> (0,i+1)-cut y' &
+         [(0,i+1)-cut x',(0,i+1)-cut y'] in o1) or
+        ((0,i+1)-cut x' = (0,i+1)-cut y' &
+         [(i+1,n)-cut x',(i+1,n)-cut y'] in o2)
+        by A2,A17;
+        consider y'', z' being bag of n such that
+    A20: y''=y & z'=z and
+    A21: ((0,i+1)-cut y'' <> (0,i+1)-cut z' &
+         [(0,i+1)-cut y'',(0,i+1)-cut z'] in o1) or
+        ((0,i+1)-cut y'' = (0,i+1)-cut z' &
+         [(i+1,n)-cut y'',(i+1,n)-cut z'] in o2)
+        by A2,A17;
+        set CUTX1 = (0,i+1)-cut x', CUTX2 = (i+1, n)-cut x';
+        set CUTY1 = (0,i+1)-cut y', CUTY2 = (i+1, n)-cut y';
+        set CUTZ1 = (0,i+1)-cut z', CUTZ2 = (i+1, n)-cut z';
+    A22: CUTX1 in Bags ((i+1)-'0) & CUTY1 in Bags ((i+1)-'0) &
+         CUTZ1 in Bags((i+1)-'0) by POLYNOM1:def 14;
+    A23: CUTX2 in Bags (n-'(i+1)) & CUTY2 in Bags (n-'(i+1)) &
+        CUTZ2 in Bags (n-'(i+1)) by POLYNOM1:def 14;
+        per cases by A19;
+        suppose A24: (CUTX1 <> CUTY1 & [CUTX1, CUTY1] in o1);
+              now per cases by A18,A20,A21;
+            suppose A25: (CUTY1 <> CUTZ1 & [CUTY1, CUTZ1] in o1);
+            then A26: [CUTX1, CUTZ1] in o1 by A1,A22,A24,ORDERS_1:14;
+                  now per cases;
+                    suppose CUTX1 <> CUTZ1;
+                       hence [x,z] in BO by A2,A16,A18,A20,A26;
+                    suppose CUTX1 = CUTZ1;
+                        hence [x,z] in BO by A1,A22,A24,A25,ORDERS_1:13;
+                end;
+                hence [x,z] in BO;
+            suppose (CUTY1 = CUTZ1 & [CUTY2, CUTZ2] in o2);
+                hence [x,z] in BO by A2,A16,A18,A20,A24;
+            end;
+            hence [x,z] in BO;
+        suppose A27: (CUTX1 = CUTY1 & [CUTX2, CUTY2] in o2);
+              now per cases by A18,A20,A21;
+            suppose (CUTY1 <> CUTZ1 & [CUTY1, CUTZ1] in o1);
+                hence [x,z] in BO by A2,A16,A18,A20,A27;
+            suppose A28:(CUTY1 = CUTZ1 & [CUTY2, CUTZ2] in o2);
+                then [CUTX2, CUTZ2] in o2 by A23,A27,ORDERS_1:14;
+                hence [x,z] in BO by A2,A16,A18,A20,A27,A28;
+            end;
+            hence [x,z] in BO;
+    end; then
+A29:  BO is_transitive_in Bags n by RELAT_2:def 8;
+A30: dom BO = Bags n & field BO = Bags n by A5,ORDERS_1:98;
+    then BO is total by PARTFUN1:def 4;
+    then reconsider BO as TermOrder of n
+        by A5,A15,A29,A30,RELAT_2:def 9,def 12,def 16;
+
+    take BO;
+    let p,q be bag of n;
+    hereby assume [p,q] in BO;
+        then consider p',q' being bag of n such that
+    A31: p'=p & q'=q &
+        (((0,i+1)-cut p' <> (0,i+1)-cut q' &
+         [(0,i+1)-cut p',(0,i+1)-cut q'] in o1) or
+        ((0,i+1)-cut p'=(0,i+1)-cut q' &
+         [(i+1, n)-cut p', (i+1,n)-cut q'] in o2)) by A2;
+         thus ((0,i+1)-cut p <> (0,i+1)-cut q &
+               [(0,i+1)-cut p, (0,i+1)-cut q] in o1) or
+               ((0,i+1)-cut p = (0,i+1)-cut q &
+                [(i+1, n)-cut p, (i+1,n)-cut q] in o2) by A31;
+    end;
+    assume A32: (((0,i+1)-cut p <> (0,i+1)-cut q &
+                [(0,i+1)-cut p, (0,i+1)-cut q] in o1) or
+                (0,i+1)-cut p = (0,i+1)-cut q &
+                [(i+1, n)-cut p, (i+1,n)-cut q] in o2);
+           p in Bags n & q in Bags n by POLYNOM1:def 14;
+    hence [p,q] in BO by A2,A32;
+end;
+uniqueness proof
+    let IT1, IT2 be TermOrder of n such that
+A33: for p,q being bag of n holds [p,q] in IT1 iff
+    ((0,i+1)-cut p <> (0, i+1)-cut q &[(0,i+1)-cut p, (0, i+1)-cut q] in o1) or
+    ((0,i+1)-cut p=(0, i+1)-cut q & [(i+1, n)-cut p, (i+1, n)-cut q] in o2) and
+A34: for p,q being bag of n holds [p,q] in IT2 iff
+    ((0,i+1)-cut p <> (0, i+1)-cut q &[(0,i+1)-cut p, (0, i+1)-cut q] in o1) or
+    ((0,i+1)-cut p=(0, i+1)-cut q & [(i+1, n)-cut p, (i+1, n)-cut q] in o2);
+      now let a,b be set;
+        hereby assume A35: [a,b] in IT1;
+            then a in dom IT1 & b in rng IT1 by RELAT_1:20;
+            then reconsider p=a, q= b as bag of n by POLYNOM1:def 14;
+              ((0,i+1)-cut p <> (0,i+1)-cut q &
+            [(0,i+1)-cut p, (0, i+1)-cut q] in o1) or
+            ((0,i+1)-cut p=(0,i+1)-cut q & [(i+1,n)-cut p,(i+1,n)-cut q] in o2)
+             by A33,A35;
+            hence [a,b] in IT2 by A34;
+        end;
+        assume A36: [a,b] in IT2;
+        then a in dom IT2 & b in rng IT2 by RELAT_1:20;
+        then reconsider p=a, q= b as bag of n by POLYNOM1:def 14;
+          ((0,i+1)-cut p <> (0,i+1)-cut q &
+         [(0,i+1)-cut p, (0, i+1)-cut q] in o1) or
+        (0,i+1)-cut p=(0,i+1)-cut q & [(i+1,n)-cut p,(i+1,n)-cut q] in o2
+         by A34,A36;
+         hence [a,b] in IT1 by A33;
+    end;
+    hence IT1 = IT2 by RELAT_1:def 2;
+end;
+end;
+
+theorem ::E_4_61_iv:  :: Exercise 4.61: iv
+  for i,n being Nat, o1 being TermOrder of (i+1),o2 being TermOrder of (n-'(i+1
+)
+)
+ st o1 is admissible & o2 is admissible
+  holds BlockOrder(i,n,o1,o2) is admissible
+proof
+    let i, n be Nat, o1 be TermOrder of (i+1),
+                     o2 be TermOrder of (n-'(i+1)) such that
+A1: o1 is admissible & o2 is admissible;
+A2: i+1 = (i+1)-'0 by JORDAN3:2;
+then A3: o1 is_strongly_connected_in Bags ((i+1)-'0) &
+    o2 is_strongly_connected_in Bags (n-'(i+1)) by A1,Def7;
+    set BO = BlockOrder(i,n,o1,o2);
+      now
+          now let x,y be set such that
+        A4: x in Bags n & y in Bags n;
+            reconsider p=x, q=y as bag of n by A4,POLYNOM1:def 14;
+            set CUTP1 = (0,i+1)-cut p, CUTP2 = (i+1, n)-cut p;
+            set CUTQ1 = (0,i+1)-cut q, CUTQ2 = (i+1, n)-cut q;
+        A5: CUTP1 in Bags((i+1)-'0) & CUTQ1 in Bags((i+1)-'0)
+             by POLYNOM1:def 14;
+        A6: CUTP2 in Bags(n-'(i+1)) & CUTQ2 in Bags(n-'(i+1))
+             by POLYNOM1:def 14;
+            assume A7: not [x,y] in BO;
+            per cases by A7,Def12;
+            suppose A8: CUTP1 = CUTQ1;
+                  now per cases by A7,Def12;
+                    suppose CUTP1 <> CUTQ1;
+                        hence [y,x] in BO by A8;
+                    suppose not [CUTP2, CUTQ2] in o2;
+                        then [CUTQ2, CUTP2] in o2 by A3,A6,RELAT_2:def 7;
+                        hence [y,x] in BO by A8,Def12;
+                end;
+                hence [y,x] in BO;
+            suppose not [CUTP1, CUTQ1] in o1;
+            then A9: [CUTQ1, CUTP1] in o1 by A3,A5,RELAT_2:def 7;
+                  now per cases by A7,Def12;
+                    suppose CUTP1 <> CUTQ1;
+                        hence [y,x] in BO by A9,Def12;
+                    suppose not [CUTP2, CUTQ2] in o2;
+                    then A10: [CUTQ2, CUTP2] in o2 by A3,A6,RELAT_2:def 7;
+                          now per cases;
+                            suppose CUTP1 = CUTQ1;
+                                hence [y,x] in BO by A10,Def12;
+                            suppose CUTP1 <> CUTQ1;
+                                hence [y,x] in BO by A9,Def12;
+                        end;
+                        hence [y,x] in BO;
+                end;
+                hence [y,x] in BO;
+        end;
+        hence BO is_strongly_connected_in Bags n by RELAT_2:def 7;
+        let a be bag of n;
+        set CUTE1 = (0, i+1)-cut EmptyBag n, CUTA1 = (0, i+1)-cut a;
+        set CUTE2 = (i+1, n)-cut EmptyBag n, CUTA2 = (i+1, n)-cut a;
+          now per cases;
+            suppose A11: CUTE1 <> CUTA1;
+                  CUTE1 = EmptyBag ((i+1)-'0) by Th17;
+                then [CUTE1, CUTA1] in o1 by A1,A2,Def7;
+                hence [EmptyBag n, a] in BO by A11,Def12;
+            suppose A12: CUTE1 = CUTA1;
+                  CUTE2 = EmptyBag (n-'(i+1)) by Th17;
+                then [CUTE2, CUTA2] in o2 by A1,Def7;
+                hence [EmptyBag n, a] in BO by A12,Def12;
+        end;
+        hence [EmptyBag n, a] in BO;
+        let a,b,c be bag of n such that
+    A13: [a,b] in BO;
+        set CUTA1 = (0, i+1)-cut a, CUTA2 = (i+1, n)-cut a;
+        set CUTB1 = (0, i+1)-cut b, CUTB2 = (i+1, n)-cut b;
+        set CUTC1 = (0, i+1)-cut c, CUTC2 = (i+1, n)-cut c;
+        set CUTAC1 = (0,i+1)-cut(a+c), CUTBC1 = (0,i+1)-cut(b+c);
+        set CUTAC2 = (i+1,n)-cut(a+c), CUTBC2 = (i+1,n)-cut(b+c);
+        per cases by A13,Def12;
+        suppose A14: CUTA1 <> CUTB1 & [CUTA1, CUTB1] in o1;
+            then [CUTA1 + CUTC1, CUTB1+CUTC1] in o1 by A1,A2,Def7;
+            then [CUTAC1, CUTB1+CUTC1] in o1 by Th18;
+        then A15: [CUTAC1, CUTBC1] in o1 by Th18;
+              now assume A16: CUTA1 + CUTC1 = CUTB1 + CUTC1;
+                  CUTA1 + CUTC1 -' CUTC1 = CUTA1 by POLYNOM1:52;
+                hence contradiction by A14,A16,POLYNOM1:52;
+            end;
+            then CUTAC1 <> CUTB1 + CUTC1 by Th18;
+            then CUTAC1 <> CUTBC1 by Th18;
+            hence [a+c, b+c] in BO by A15,Def12;
+        suppose A17: CUTA1 = CUTB1 & [CUTA2, CUTB2] in o2;
+            then [CUTA2 + CUTC2, CUTB2 + CUTC2] in o2 by A1,Def7;
+            then [CUTAC2, CUTB2 + CUTC2] in o2 by Th18;
+        then A18: [CUTAC2, CUTBC2] in o2 by Th18;
+              CUTAC1 = CUTB1 + CUTC1 by A17,Th18;
+            then CUTAC1 = CUTBC1 by Th18;
+            hence [a+c, b+c] in BO by A18,Def12;
+    end;
+    hence BO is admissible by Def7;
+end;
+
+definition
+  let n be Nat;
+  func NaivelyOrderedBags n -> strict RelStr means :Def13:
+     the carrier of it = Bags n &
+   for x,y being bag of n holds [x,y] in the InternalRel of it iff x divides y;
+existence proof
+    defpred _P[set,set] means (ex x',y' being bag of n
+       st x' = $1 & y'= $2 & x' divides y');
+    consider IR being Relation of Bags n, Bags n such that
+A1: for x,y being set holds [x,y] in IR iff
+      x in Bags n & y in Bags n & _P[x,y] from Rel_On_Set_Ex;
+    set IT = RelStr(# Bags n, IR #);
+    reconsider IT as strict RelStr;
+    take IT;
+    thus the carrier of IT = Bags n;
+    let x,y be bag of n;
+    hereby assume [x,y] in the InternalRel of IT;
+        then consider x',y' being bag of n such that
+    A2: x' = x & y' = y & x' divides y' by A1;
+        thus x divides y by A2;
+    end;
+    assume x divides y;
+    then x in Bags n & y in Bags n &
+    (ex x',y' being bag of n
+     st x' = x & y'= y & x' divides y') by POLYNOM1:def 14;
+    hence [x,y] in the InternalRel of IT by A1;
+end;
+uniqueness proof
+    let IT1, IT2 be strict RelStr such that
+A3: the carrier of IT1 = Bags n &
+    for x,y being bag of n
+     holds [x,y] in the InternalRel of IT1 iff x divides y and
+A4: the carrier of IT2 = Bags n &
+    for x,y being bag of n
+     holds [x,y] in the InternalRel of IT2 iff x divides y;
+      now
+        thus the carrier of IT1 = the carrier of IT2 by A3,A4;
+          now let a,b be set;
+            set z = [a,b];
+            hereby assume A5: z in the InternalRel of IT1;
+            then consider a',b' being set such that
+        A6: z = [a',b'] and
+        A7: a' in Bags n & b' in Bags n by A3,RELSET_1:6;
+            reconsider a', b' as bag of n by A7,POLYNOM1:def 14;
+              a' divides b' by A3,A5,A6;
+            hence [a,b] in the InternalRel of IT2 by A4,A6;
+            end;
+            assume A8: [a,b] in the InternalRel of IT2;
+            set z = [a,b];
+            consider a',b' being set such that
+        A9: z = [a',b'] and
+        A10: a' in Bags n & b' in Bags n by A4,A8,RELSET_1:6;
+            reconsider a', b' as bag of n by A10,POLYNOM1:def 14;
+              a' divides b' by A4,A8,A9;
+            hence [a,b] in the InternalRel of IT1 by A3,A9;
+        end;
+        hence the InternalRel of IT1 = the InternalRel of IT2 by RELAT_1:def 2
+;
+    end;
+    hence IT1 = IT2;
+end;
+end;
+
+theorem Th33:
+for n being Nat holds the carrier of product(n --> OrderedNAT) = Bags n
+proof
+    let n be Nat;
+    set X = the carrier of product(n-->OrderedNAT);
+A1: X = product Carrier(n-->OrderedNAT) by YELLOW_1:def 4;
+      now let x be set;
+        hereby assume x in X;
+            then consider g being Function such that
+        A2: x = g and
+        A3: dom g = dom Carrier(n-->OrderedNAT) and
+        A4: for i being set st i in dom Carrier(n-->OrderedNAT)
+             holds g.i in Carrier(n-->OrderedNAT).i by A1,CARD_3:def 5;
+        A5: dom g = n by A3,PBOOLE:def 3;
+              now rng g c= NAT proof
+                    let z be set such that
+                A6: z in rng g;
+                    consider y being set such that
+                A7: y in dom g & z = g.y by A6,FUNCT_1:def 5;
+                A8: z in Carrier(n-->OrderedNAT).y by A3,A4,A7;
+                    consider R being 1-sorted such that
+                A9: R = (n-->OrderedNAT).y and
+                A10: Carrier(n-->OrderedNAT).y = the carrier of R
+                     by A5,A7,PRALG_1:def 13;
+                    thus z in NAT by A5,A7,A8,A9,A10,DICKSON:def 15,FUNCOP_1:13
+;
+                end;
+                hence g is natural-yielding by SEQM_3:def 8;
+                  support g c= n by A5,POLYNOM1:41;
+                then support g is finite by FINSET_1:13;
+                hence g is finite-support by POLYNOM1:def 8;
+                  dom g = n by A3,PBOOLE:def 3;
+                hence g is ManySortedSet of n by PBOOLE:def 3;
+            end;
+            hence x in Bags n by A2,POLYNOM1:def 14;
+        end;
+        assume x in Bags n;
+        then reconsider g = x as natural-yielding finite-support ManySortedSet
+of n
+         by POLYNOM1:def 14;
+    A11: dom g = n by PBOOLE:def 3;
+          now take g;
+            thus x = g;
+            thus dom g = dom Carrier(n-->OrderedNAT) by A11,PBOOLE:def 3;
+            let i be set such that
+        A12: i in dom (Carrier(n-->OrderedNAT));
+        A13: i in n by A12,PBOOLE:def 3;
+            then consider R being 1-sorted such that
+        A14: R = (n-->OrderedNAT).i and
+        A15: Carrier(n-->OrderedNAT).i = the carrier of R by PRALG_1:def 13;
+          R = OrderedNAT by A13,A14,FUNCOP_1:13;
+            hence g.i in Carrier(n-->OrderedNAT).i by A15,DICKSON:def 15;
+        end;
+        then x in product Carrier(n-->OrderedNAT) by CARD_3:def 5;
+        hence x in X by YELLOW_1:def 4;
+    end;
+    hence the carrier of product(n-->OrderedNAT) = Bags n by TARSKI:2;
+end;
+
+theorem Th34:
+for n being Nat holds NaivelyOrderedBags n = product (n --> OrderedNAT)
+proof
+    let n be Nat;
+    set CNOB = the carrier of NaivelyOrderedBags n;
+    set IROB = the InternalRel of NaivelyOrderedBags n;
+    set CP = the carrier of product(n-->OrderedNAT);
+    set IP = the InternalRel of product (n-->OrderedNAT);
+      CNOB = Bags n by Def13;
+then A1: CNOB = CP by Th33;
+      now let a,b be set;
+        hereby assume A2: [a,b] in IROB;
+            then a in dom IROB & b in rng IROB by RELAT_1:20;
+            then a in CNOB & b in CNOB;
+        then A3: a in Bags n & b in Bags n by Def13;
+            then reconsider a'=a, b'=b as Element of CP by Th33;
+              a' in the carrier of product(n-->OrderedNAT);
+        then A4: a' in product Carrier (n -->OrderedNAT) by YELLOW_1:def 4;
+              now set f = a', g = b';
+            A5: a' is bag of n & b is bag of n by A3,POLYNOM1:def 14;
+            reconsider f, g as Function by A3,POLYNOM1:def 14;
+                take f, g;
+                thus f = a' & g = b';
+                let i be set;
+                assume A6: i in n;
+                set R = (n-->OrderedNAT).i;
+            A7: R = OrderedNAT by A6,FUNCOP_1:13;
+                reconsider R as RelStr by A6,FUNCOP_1:13;
+                take R;
+                set xi = f.i;
+                set yi = g.i;
+                  dom f = n by A5,PBOOLE:def 3;
+            then A8: f.i in rng f by A6,FUNCT_1:12;
+                  rng f c= NAT by A5,SEQM_3:def 8;
+            then A9: xi is Element of R
+                 by A6,A8,DICKSON:def 15,FUNCOP_1:13;
+                  dom g = n by A5,PBOOLE:def 3;
+            then A10: g.i in rng g by A6,FUNCT_1:12;
+                  rng g c= NAT by A5,SEQM_3:def 8;
+                then yi is Element of R
+                 by A6,A10,DICKSON:def 15,FUNCOP_1:13;
+                then reconsider xi, yi as Element of R by A9;
+                take xi, yi;
+                thus R = (n-->OrderedNAT).i & xi = f.i & yi = g.i;
+                reconsider a''=a', b''=b' as bag of n by A3,POLYNOM1:def 14;
+                  a'' divides b'' by A2,Def13;
+                then a''.i <= b''.i by POLYNOM1:def 13;
+                then [xi, yi] in NATOrd by DICKSON:def 14;
+                hence xi <= yi by A7,DICKSON:def 15,ORDERS_1:def 9;
+            end;
+            then a' <= b' by A4,YELLOW_1:def 4;
+            hence [a,b] in IP by ORDERS_1:def 9;
+        end;
+        assume A11: [a,b] in IP;
+    then A12: a in dom IP & b in rng IP by RELAT_1:20;
+        then a in CP & b in CP;
+    then a in Bags n & b in Bags n by Th33;
+        then reconsider a'=a, b'=b as bag of n by POLYNOM1:def 14;
+        reconsider a2=a',b2=b' as Element of CP by A12;
+          a2 in the carrier of product(n-->OrderedNAT);
+    then A13: a2 in product Carrier(n-->OrderedNAT) by YELLOW_1:def 4;
+      a2 <= b2 by A11,ORDERS_1:def 9;
+        then consider f,g being Function such that
+    A14: f = a2 & g = b2 and
+    A15: for i being set st i in n
+         ex R being RelStr, xi,yi being Element of R
+         st R = (n-->OrderedNAT).i & xi = f.i & yi = g.i & xi <= yi
+         by A13,YELLOW_1:def 4;
+          now let k be set such that
+        A16: k in n;
+            consider R being RelStr, xi, yi being Element of R such that
+        A17: R = (n-->OrderedNAT).k and
+        A18: xi = f.k & yi = g.k and
+        A19: xi <= yi by A15,A16;
+              R = OrderedNAT by A16,A17,FUNCOP_1:13;
+            then [xi,yi] in NATOrd by A19,DICKSON:def 15,ORDERS_1:def 9;
+            then consider xii, yii being Element of NAT such that
+        A20: [xii,yii] = [xi,yi] and
+        A21: xii <= yii by DICKSON:def 14;
+              xii = xi & yii = yi by A20,ZFMISC_1:33;
+            hence a'.k <= b'.k by A14,A18,A21;
+        end;
+        then a' divides b' by POLYNOM1:50;
+        hence [a,b] in IROB by Def13;
+   end;
+   hence thesis by A1,RELAT_1:def 2;
+end;
+
+theorem ::T_4_62: :: Theorem 4.62
+  for n being Nat, o be TermOrder of n
+ st o is admissible
+  holds the InternalRel of NaivelyOrderedBags n c= o & o is well-ordering
+proof
+    let n be Nat, o be TermOrder of n such that
+A1: o is admissible;
+    set IRN = the InternalRel of NaivelyOrderedBags n;
+      now let a,b be set such that
+    A2: [a,b] in IRN;
+          a in dom IRN & b in rng IRN by A2,RELAT_1:20;
+        then reconsider a1 = a, b1 = b as Element of Bags n
+         by Def13;
+        A3: a1 divides b1 by A2,Def13;
+        set l = b1 -' a1;
+          now let i be set such that
+              i in n;
+        A4: (l+a1).i = l.i+a1.i by POLYNOM1:def 5
+                    .= b1.i -' a1.i + a1.i by POLYNOM1:def 6;
+              a1.i <= b1.i by A3,POLYNOM1:def 13;
+            then a1.i-a1.i <= b1.i-a1.i by REAL_1:49;
+            then b1.i - a1.i >= 0 by XCMPLX_1:14;
+            hence (l+a1).i = (b1.i - a1.i) + a1.i by A4,BINARITH:def 3
+                          .= (b1.i + (-a1.i)) + a1.i by XCMPLX_0:def 8
+                          .= b1.i + ((-a1.i) + a1.i) by XCMPLX_1:1
+                          .= b1.i + 0 by XCMPLX_0:def 6
+                          .= b1.i;
+        end;
+    then A5: l + a1 = b1 by PBOOLE:3;
+          [EmptyBag n, l] in o by A1,Def7;
+        then [(EmptyBag n)+a1, l+a1] in o by A1,Def7;
+        hence [a,b] in o by A5,POLYNOM1:57;
+    end;
+    hence A6:the InternalRel of NaivelyOrderedBags n c= o by RELAT_1:def 3;
+    set R = product(n --> OrderedNAT), S = RelStr(# Bags n, o #);
+A7: S is quasi_ordered by DICKSON:def 3;
+A8: the InternalRel of R c= the InternalRel of S by A6,Th34;
+      the carrier of R = the carrier of S by Th33;
+then A9: S\~ is well_founded by A7,A8,DICKSON:50;
+      now
+          o is_strongly_connected_in Bags n by A1,Def7;
+    then A10: o is_reflexive_in Bags n & o is_connected_in Bags n by ORDERS_1:
+92;
+A11:  field o = Bags n by ORDERS_1:97;
+A12: field o = Bags n by A11;
+        thus o is reflexive;
+        thus o is transitive;
+        thus o is antisymmetric;
+        thus o is connected by A10,A12,RELAT_2:def 14;
+          S is well_founded by A9,DICKSON:17;
+        then o is_well_founded_in field o by A12,WELLFND1:def 2;
+        hence o is well_founded by WELLORD1:5;
+    end;
+    hence o is well-ordering by WELLORD1:def 4;
+end;
+
+begin :: Ordering of finite subsets
+
+definition
+  let R be connected (non empty Poset),
+      X be Element of Fin the carrier of R such that
+A1: X is non empty;
+  func PosetMin X -> Element of R means :: FPOSMIN :
+      it in X & it is_minimal_wrt X, the InternalRel of R;
+existence proof
+    set IR = the InternalRel of R;
+  X c= the carrier of R & X is finite by FINSUB_1:def 5;
+    then consider x being Element of R such that
+A2: x in X & x is_minimal_wrt X, IR by A1,Th8;
+    take x;
+    thus x in X & x is_minimal_wrt X, IR by A2;
+end;
+uniqueness proof
+    let IT1, IT2 be Element of R such that
+A3: IT1 in X & IT1 is_minimal_wrt X, the InternalRel of R and
+A4: IT2 in X & IT2 is_minimal_wrt X, the InternalRel of R;
+    set IR = the InternalRel of R;
+    A5: IT1 <= IT2 or IT2 <= IT1 by WAYBEL_0:def 29;
+    per cases by A5,ORDERS_1:def 9;
+    suppose [IT1, IT2] in IR;
+        hence IT1 = IT2 by A3,A4,WAYBEL_4:def 26;
+    suppose [IT2, IT1] in IR;
+        hence IT1 = IT2 by A3,A4,WAYBEL_4:def 26;
+end;
+  func PosetMax X -> Element of R means : Def15:
+    it in X & it is_maximal_wrt X, the InternalRel of R;
+existence proof
+    set IR = the InternalRel of R;
+  X c= the carrier of R & X is finite by FINSUB_1:def 5;
+    then consider x being Element of R such that
+A6: x in X & x is_maximal_wrt X, IR by A1,Th7;
+    take x;
+    thus x in X & x is_maximal_wrt X, IR by A6;
+end;
+uniqueness proof
+    let IT1, IT2 be Element of R such that
+A7: IT1 in X & IT1 is_maximal_wrt X, the InternalRel of R and
+A8: IT2 in X & IT2 is_maximal_wrt X, the InternalRel of R;
+    set IR = the InternalRel of R;
+    A9: IT1 <= IT2 or IT2 <= IT1 by WAYBEL_0:def 29;
+    per cases by A9,ORDERS_1:def 9;
+    suppose [IT1, IT2] in IR;
+        hence IT1 = IT2 by A7,A8,WAYBEL_4:def 24;
+    suppose [IT2, IT1] in IR;
+        hence IT1 = IT2 by A7,A8,WAYBEL_4:def 24;
+end;
+end;
+
+definition
+  let R be connected (non empty Poset);
+  func FinOrd-Approx R ->
+           Function of NAT, bool[: Fin the carrier of R, Fin the carrier of R:]
+    means :Def16:
+  dom it = NAT &
+  it.0 = {[x,y] where x, y is Element of Fin the carrier of R :
+         x = {} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
+                    [PosetMax x,PosetMax y] in the InternalRel of R)} &
+  for n being Element of NAT holds
+     it.(n+1) = {[x,y] where x,y is Element of Fin the carrier of R :
+         x <> {} & y <> {} &
+         PosetMax x = PosetMax y & [x \{PosetMax x}, y \{PosetMax y}] in it.n};
+existence proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set FBCP = [: Fin CR, Fin CR :];
+    defpred _P[Nat,set,set] means $3 =
+     {[x,y] where x,y is Element of Fin CR : x <> {} & y <> {} &
+      PosetMax x = PosetMax y & [x \{PosetMax x}, y \{PosetMax y}] in $2};
+A1: for n being Nat for x being set ex y being set st _P[n,x,y];
+A2: for n being Nat for x,y1,y2 being set
+     st _P[n,x,y1] & _P[n,x,y2] holds y1 = y2;
+    consider f being Function such that
+A3: dom f = NAT and
+A4: f.0 = {[x,y] where x, y is Element of Fin CR :
+           x={} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
+           [PosetMax x,PosetMax y] in IR)} and
+A5: for n being Element of NAT holds _P[n,f.n,f.(n+1)] from RecEx(A1, A2);
+      now thus dom f = NAT by A3;
+        let x be set such that
+    A6: x in NAT;
+        reconsider x' = x as Nat by A6;
+        per cases by NAT_1:19;
+        suppose A7: x' = 0;
+            set F0 = {[a,b] where a, b is Element of Fin the carrier of R :
+                      a={} or (a<>{} & b<>{} & PosetMax a <> PosetMax b &
+                      [PosetMax a,PosetMax b] in IR)};
+              now let z be set such that
+            A8: z in F0;
+                consider a,b being Element of Fin CR such that
+            A9: z = [a,b] and
+                  a = {} or (a<>{} & b<>{} & PosetMax a <> PosetMax b &
+                    [PosetMax a, PosetMax b] in IR) by A8;
+                thus z in FBCP by A9;
+            end;
+            then F0 c= FBCP by TARSKI:def 3;
+            hence f.x in bool [:Fin CR, Fin CR:] by A4,A7;
+        suppose A10: x' > 0;
+              x' = x'+1-1 by XCMPLX_1:26;
+        then A11: x' = x'-1+1 by XCMPLX_1:29;
+            reconsider x1 = x'-1 as Nat by A10,RLVECT_2:103;
+            set FX = {[a,b] where a,b is Element of Fin CR :
+                      a <> {} & b <>{} & PosetMax a = PosetMax b &
+                      [a\{PosetMax a}, b\{PosetMax b}] in f.(x1)};
+        A12: FX = f.x by A5,A11;
+              now let z be set such that
+            A13: z in FX;
+                consider a,b being Element of Fin CR such that
+            A14: z = [a,b] & a<> {} & b <> {} & PosetMax a = PosetMax b &
+                [a\{PosetMax a}, b\{PosetMax b}] in f.(x1) by A13;
+                thus z in FBCP by A14;
+            end;
+            then FX c= FBCP by TARSKI:def 3;
+            hence f.x in bool [:Fin CR, Fin CR:] by A12;
+    end;
+    then reconsider f as Function of NAT, bool FBCP by FUNCT_2:5;
+    take f;
+    thus thesis by A3,A4,A5;
+end;
+uniqueness proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set FBCP = [: Fin CR, Fin CR :];
+    let IT1, IT2 be Function of NAT, bool FBCP such that
+A15: dom IT1 = NAT & IT1.0 = {[x,y] where x,y is Element of Fin CR :
+       x = {} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
+       [PosetMax x,PosetMax y] in IR)} &
+     for n being Element of NAT holds IT1.(n+1) =
+       {[x,y] where x,y is Element of Fin CR : x <> {} & y <> {} &
+       PosetMax x = PosetMax y & [x\{PosetMax x}, y\{PosetMax y}] in IT1.n} and
+A16: dom IT2 = NAT & IT2.0 = {[x,y] where x, y is Element of Fin CR :
+       x = {} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
+       [PosetMax x,PosetMax y] in IR)} &
+     for n being Element of NAT holds IT2.(n+1) =
+       {[x,y] where x,y is Element of Fin CR : x <> {} & y <> {} &
+       PosetMax x = PosetMax y & [x \{PosetMax x}, y \{PosetMax y}] in IT2.n};
+     defpred _P[Nat,set,set] means
+      $3 = {[x,y] where x,y is Element of Fin CR : x <> {} & y <> {} &
+       PosetMax x = PosetMax y & [x \{PosetMax x}, y \{PosetMax y}] in $2};
+A17: dom IT1 = NAT &
+    IT1.0 = {[x,y] where x, y is Element of Fin CR :
+        x = {} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
+        [PosetMax x,PosetMax y] in IR)} &
+    for n being Element of NAT holds _P[n,IT1.n,IT1.(n+1)] by A15;
+A18: dom IT2 = NAT &
+    IT2.0 = {[x,y] where x, y is Element of Fin CR :
+        x = {} or (x<>{} & y <> {} & PosetMax x <> PosetMax y &
+        [PosetMax x,PosetMax y] in IR)} &
+    for n being Element of NAT holds _P[n,IT2.n,IT2.(n+1)] by A16;
+A19: for n being Nat, x,y1,y2 being set st
+        _P[n,x,y1] & _P[n,x,y2] holds y1 = y2;
+    thus IT1 = IT2 from RecUn(A17, A18, A19);
+end;
+end;
+
+theorem Th36:
+for R being connected (non empty Poset),
+    x,y being Element of Fin the carrier of R
+  holds [x,y] in union rng FinOrd-Approx R iff
+         x = {} or
+         x<>{} & y<>{} & PosetMax x <> PosetMax y &
+          [PosetMax x,PosetMax y] in the InternalRel of R or
+         x<>{} & y<>{} & PosetMax x = PosetMax y &
+          [x\{PosetMax x},y\{PosetMax y}] in union rng FinOrd-Approx R
+proof
+    let R be connected (non empty Poset),
+        x,y be Element of Fin the carrier of R;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set FOAR = FinOrd-Approx R;
+A1: FOAR.0 = {[a,b] where a,b is Element of Fin CR : a = {} or
+              (a<>{} & b<>{} & PosetMax a <> PosetMax b &
+               [PosetMax a, PosetMax b] in IR)} by Def16;
+A2: dom FOAR = NAT by Def16;
+    hereby assume [x,y] in union rng FOAR;
+        then consider Y being set such that
+    A3: [x,y] in Y & Y in rng FOAR by TARSKI:def 4;
+        consider n being set such that
+    A4: n in dom FOAR & Y = FOAR.n by A3,FUNCT_1:def 5;
+        reconsider n as Nat by A4;
+        per cases by NAT_1:19;
+        suppose n = 0;
+            then consider a,b being Element of Fin CR such that
+        A5: [x,y] = [a,b] and
+        A6: a = {} or (a <> {} & b <> {} & PosetMax a <> PosetMax b &
+            [PosetMax a, PosetMax b] in IR) by A1,A3,A4;
+              x = a & b = y by A5,ZFMISC_1:33;
+            hence ((x = {}) or
+                   (x <> {} & y <> {} & PosetMax x <> PosetMax y &
+                    [PosetMax x,PosetMax y] in IR) or
+                   (x <> {} & y <> {} & PosetMax x = PosetMax y &
+                    [x\{PosetMax x}, y\{PosetMax y}] in union rng FOAR)) by A6;
+        suppose n > 0;
+        then A7: n-1 is Nat by RLVECT_2:103;
+        A8: n-1+1 = n+1-1 by XCMPLX_1:29
+                 .= n by XCMPLX_1:26;
+          FOAR.(n-1+1) = {[a,b] where a,b is Element of Fin CR : a<>{} &
+            b <> {} & PosetMax a = PosetMax b &
+            [a\{PosetMax a},b\{PosetMax b}] in FOAR.(n-1)}
+             by A7,Def16;
+            then consider a,b being Element of Fin CR such that
+        A9: [x,y] = [a,b] and
+        A10: a<>{} & b<>{} & PosetMax a = PosetMax b &
+             [a\{PosetMax a},b\{PosetMax b}] in FOAR.(n-1) by A3,A4,A8;
+        A11: x = a & y = b by A9,ZFMISC_1:33;
+              FOAR.(n-1) in rng FOAR by A2,A7,FUNCT_1:def 5;
+            hence ((x = {}) or (x <> {} & y <> {} & PosetMax x <> PosetMax y &
+                                [PosetMax x, PosetMax y] in IR) or
+                   (x <> {} & y <> {} & PosetMax x = PosetMax y &
+                    [x \ {PosetMax x}, y \ {PosetMax y}] in union rng FOAR))
+                     by A10,A11,TARSKI:def 4;
+    end;
+    assume A12: ((x = {}) or
+                (x <> {} & y <> {} & PosetMax x <> PosetMax y &
+                 [PosetMax x, PosetMax y] in IR) or
+                (x <> {} & y <> {} & PosetMax x = PosetMax y &
+                 [x\{PosetMax x}, y\{PosetMax y}] in union rng FOAR));
+    per cases by A12;
+    suppose x = {};
+    then A13: [x,y] in FOAR.0 by A1;
+          FOAR.0 in rng FOAR by A2,FUNCT_1:def 5;
+        hence [x,y] in union rng FOAR by A13,TARSKI:def 4;
+    suppose x <> {} & y <> {} & PosetMax x <> PosetMax y &
+            [PosetMax x, PosetMax y] in IR;
+    then A14: [x,y] in FOAR.0 by A1;
+          FOAR.0 in rng FOAR by A2,FUNCT_1:def 5;
+        hence [x,y] in union rng FOAR by A14,TARSKI:def 4;
+    suppose A15: x<>{} & y<>{} & PosetMax x = PosetMax y &
+                 [x\{PosetMax x}, y\{PosetMax y}] in union rng FOAR;
+        set NEXTXY = [x\{PosetMax x}, y\{PosetMax y}];
+        consider Y being set such that
+    A16: NEXTXY in Y & Y in rng FinOrd-Approx R by A15,TARSKI:def 4;
+        consider n being set such that
+    A17: n in dom FOAR & Y = FOAR.n by A16,FUNCT_1:def 5;
+        reconsider n as Nat by A17;
+      FOAR.(n+1) = {[a,b] where a,b is Element of Fin CR: a<>{} & b<>{}&
+         PosetMax a = PosetMax b & [a\{PosetMax a}, b\{PosetMax b}] in FOAR.n}
+          by Def16;
+    then A18: [x,y] in FOAR.(n+1) by A15,A16,A17;
+          FOAR.(n+1) in rng FOAR by A2,FUNCT_1:def 5;
+        hence [x,y] in union rng FOAR by A18,TARSKI:def 4;
+end;
+
+theorem Th37:
+for R being connected (non empty Poset),
+    x being Element of Fin the carrier of R
+ st x <> {} holds not [x,{}] in union rng FinOrd-Approx R
+proof
+    let R be connected (non empty Poset),
+        x be Element of Fin the carrier of R such that
+A1: x <> {};
+    set CR = the carrier of R,
+        FOAR = FinOrd-Approx R;
+        reconsider y={} as Element of Fin CR by FINSUB_1:18;
+      now assume A2: [x,y] in union rng FinOrd-Approx R;
+        per cases by A2,Th36;
+        suppose x = {};
+           hence contradiction by A1;
+        suppose (x<>{} & y<>{} & [PosetMax x,PosetMax y] in CR);
+           hence contradiction;
+        suppose (x<>{} & y<>{} & PosetMax x = PosetMax y &
+                 [x\PosetMax x, {}\PosetMax y] in union rng FOAR);
+          hence contradiction;
+   end;
+   hence thesis;
+end;
+
+theorem Th38:
+for R being connected (non empty Poset),
+    a being Element of Fin the carrier of R
+ holds a\{PosetMax a} is Element of Fin the carrier of R
+proof
+    let R be connected (non empty Poset),
+        a be Element of Fin the carrier of R;
+    set CR = the carrier of R;
+A1: a c= CR & a is finite by FINSUB_1:def 5;
+    reconsider a'=a as finite set;
+    set z = a'\{PosetMax a};
+      z c= a by XBOOLE_1:36;
+    then z c= CR by A1,XBOOLE_1:1;
+    hence a\{PosetMax a} is Element of Fin CR by FINSUB_1:def 5;
+end;
+
+Lm1:
+for R being connected (non empty Poset), n being Nat,
+    a being Element of Fin the carrier of R
+ st Card a = n+1 holds Card (a\{PosetMax a}) = n
+proof
+    let R be connected(non empty Poset), n be Nat,
+        a be Element of Fin the carrier of R;
+    assume
+A1: Card a = n+1;
+then A2: a <> {} by CARD_1:47,INT_2:9,XCMPLX_0:def 6;
+    reconsider a'=a as finite set;
+      now let w be set such that
+    A3: w in {PosetMax a};
+          w = PosetMax a by A3,TARSKI:def 1;
+        hence w in a by A2,Def15;
+    end;
+    then {PosetMax a} c= a by TARSKI:def 3;
+then A4: Card (a'\{PosetMax a}) = Card a' - Card {PosetMax a} by CARD_2:63;
+      Card {PosetMax a} = 1 by CARD_1:50,CARD_2:20;
+    hence Card (a\{PosetMax a}) = n by A1,A4,XCMPLX_1:26;
+end;
+
+theorem Th39:
+for R being connected (non empty Poset)
+  holds union (rng FinOrd-Approx R) is Order of Fin the carrier of R
+proof
+   let R be connected (non empty Poset);
+   set IR = the InternalRel of R, CR = the carrier of R;
+   set X = union (rng FinOrd-Approx R);
+   set FOAR = FinOrd-Approx R;
+   set FOAR0 = {[a,b] where a,b is Element of Fin CR: a={} or (a<>{} &
+            b<>{} & PosetMax a <> PosetMax b & [PosetMax a,PosetMax b] in IR)};
+A1: (FOAR).0 = FOAR0 by Def16;
+     now let x be set such that
+   A2: x in X;
+       consider Y being set such that
+   A3: x in Y & Y in rng FOAR by A2,TARSKI:def 4;
+         rng FOAR c= bool [:Fin CR,Fin CR:] by RELSET_1:12;
+       hence x in [:Fin CR, Fin CR:] by A3;
+   end;
+   then X c= [:Fin CR,Fin CR:] by TARSKI:def 3;
+   then reconsider X as Relation of Fin CR by RELSET_1:def 1;
+A4:  now
+      now let x be set such that
+       A5: x in Fin CR;
+       A6: x c= CR & x is finite by A5,FINSUB_1:def 5;
+             0 in NAT;
+       then 0 in dom FOAR by Def16;
+       then A7: (FOAR).0 in rng FOAR
+               by FUNCT_1:def 5;
+           reconsider x'=x as Element of Fin CR by A5;
+           defpred _P[Nat] means
+            (for x being Element of Fin CR st Card x = $1
+              holds [x,x] in union rng FOAR);
+       A8: _P[0]  proof let x be Element of Fin CR such that
+           A9: Card x = 0;
+                 x = {} by A9,CARD_2:59;
+               then [x,x] in (FOAR).0 by A1;
+               hence [x,x] in union rng FOAR by A7,TARSKI:def 4;
+           end;
+       A10: for n being Nat st _P[n] holds _P[n+1] proof
+               let n be Nat such that
+           A11: for x being Element of Fin CR st Card x = n
+                holds [x,x] in union rng FOAR;
+               let y be Element of Fin CR such that
+           A12: Card y = n+1;
+               per cases;
+               suppose y = {};
+                   then [y,y] in (FOAR).0 by A1;
+                   hence [y,y] in union rng FOAR by A7,TARSKI:def 4;
+               suppose A13: y <> {};
+                   set z = y\{PosetMax y};
+                   reconsider z as Element of Fin CR by Th38;
+                     Card z = n by A12,Lm1;
+                   then [z,z] in union rng FOAR by A11;
+                   hence [y,y] in union rng FOAR by A13,Th36;
+           end;
+       A14: for n being Nat holds _P[n] from Ind(A8, A10);
+           consider n being Nat such that
+       A15: x,n are_equipotent by A6,CARD_1:74;
+             Card x' = n by A15,CARD_1:def 5;
+           hence [x,x] in X by A14;
+       end;
+       hence X is_reflexive_in Fin CR by RELAT_2:def 1;
+
+         now let x,y be set such that
+       A16: x in Fin CR & y in Fin CR & [x,y] in X & [y,x] in X;
+           reconsider x'=x as Element of Fin CR by A16;
+       A17: x c= CR & x is finite by A16,FINSUB_1:def 5;
+       defpred _R[Nat] means  (for x, y being Element of Fin CR
+             st Card x = $1 & [x,y] in X & [y,x] in X holds x = y);
+             now let a,b be Element of Fin CR such that
+           A18: Card a = 0 & [a,b] in X & [b,a] in X;
+               reconsider a'=a as finite set;
+                 a' = {} by A18,CARD_2:59;
+               hence a = b by A18,Th37;
+           end;
+       then A19: _R[0];
+             now let n be Nat such that
+           A20: for a,b being Element of Fin CR
+                st Card a = n & [a,b] in X & [b,a] in X
+                holds a = b;
+               let a,b be Element of Fin CR such that
+           A21: Card a = n+1 & [a,b] in X & [b,a] in X;
+               per cases by A21,Th36;
+               suppose a = {};
+                   hence a = b by A21,Th37;
+               suppose A22: a <> {} & b <>{} & PosetMax a <> PosetMax b &
+                       [PosetMax a, PosetMax b] in IR;
+                     now per cases by A21,Th36;
+                       suppose b = {};
+                           hence a = b by A22;
+                       suppose b<>{} & a<>{} & PosetMax b <> PosetMax a &
+                                [PosetMax b, PosetMax a] in IR;
+                           hence a = b by A22,ORDERS_1:13;
+                       suppose b <>{} & a <>{} & PosetMax b = PosetMax a &
+                               [b\{PosetMax b}, a\{PosetMax a}] in X;
+                           hence a = b by A22;
+                   end;
+                   hence a = b;
+               suppose A23: a <> {} & b <>{} & PosetMax a = PosetMax b &
+                       [a\{PosetMax a}, b\{PosetMax b}] in X;
+                     now per cases by A21,Th36;
+                       suppose b = {};
+                           hence a = b by A23;
+                        suppose b<>{} & a<>{} & PosetMax b <> PosetMax a &
+                                [PosetMax b, PosetMax a] in IR;
+                           hence a = b by A23;
+                       suppose A24: b <>{} & a <>{} & PosetMax b = PosetMax a &
+                               [b\{PosetMax b}, a\{PosetMax a}] in X;
+                               reconsider a'= a as finite set;
+                               reconsider b' = b as finite set;
+                               set za = a'\{PosetMax a}, zb = b'\{PosetMax b};
+                               reconsider za,zb as Element of Fin CR
+                                by Th38;
+                             Card (za)=n by A21,Lm1;
+                           then A25: za = zb by A20,A23,A24;
+                                 now let z be set such that
+                               A26: z in {PosetMax a};
+                                     z = PosetMax a by A26,TARSKI:def 1;
+                                   hence z in a by A24,Def15;
+                               end;
+                               then {PosetMax a} c= a by TARSKI:def 3;
+                           then A27: a = {PosetMax a} \/ za by XBOOLE_1:45;
+
+                                 now let z be set such that
+                               A28: z in {PosetMax b};
+                                     z = PosetMax b by A28,TARSKI:def 1;
+                                   hence z in b by A24,Def15;
+                               end;
+                             then {PosetMax b} c= b by TARSKI:def 3;
+                             hence a = b by A24,A25,A27,XBOOLE_1:45;
+                   end;
+                   hence a = b;
+           end;
+       then A29: for n being Nat st _R[n] holds _R[n+1];
+       A30: for n being Nat holds _R[n] from Ind(A19,A29);
+           consider n being Nat such that
+       A31: x,n are_equipotent by A17,CARD_1:74;
+             Card x' = n by A31,CARD_1:def 5;
+           hence x = y by A16,A30;
+       end;
+       hence X is_antisymmetric_in Fin CR by RELAT_2:def 4;
+
+         now let x,y,z be set such that
+       A32: x in Fin CR & y in Fin CR & z in Fin CR &
+           [x,y] in X & [y,z] in X;
+        defpred _S[Nat] means
+         (for a,b,c being Element of Fin CR
+              st Card a = $1 & [a,b] in X & [b,c] in X
+              holds [a,c] in X);
+             now let a,b,c be Element of Fin CR such that
+           A33: Card a = 0 & [a,b] in X & [b,c] in X;
+               reconsider a'=a as finite set;
+                 a' = {} by A33,CARD_2:59;
+               hence [a,c] in X by Th36;
+           end;
+       then A34: _S[0];
+             now let n be Nat such that
+           A35: for a,b,c being Element of Fin CR
+                st Card a = n & [a,b] in X & [b,c] in X
+                holds [a,c] in X;
+               let a,b,c be Element of Fin CR such that
+           A36: Card a = n+1 & [a,b] in X & [b,c] in X;
+               per cases by A36,Th36;
+               suppose a = {};
+                   hence [a,c] in X by Th36;
+               suppose A37: a <> {} & b <> {} & PosetMax a <> PosetMax b &
+                       [PosetMax a, PosetMax b] in IR;
+                     now per cases by A36,Th36;
+                       suppose b = {};
+                           hence [a,c] in X by A37;
+                       suppose A38: b<>{} & c <> {} & PosetMax b <> PosetMax c
+&
+                                   [PosetMax b, PosetMax c] in IR;
+                       then A39: [PosetMax a, PosetMax c] in IR by A37,ORDERS_1
+:14;
+                             now per cases;
+                               suppose PosetMax a <> PosetMax c;
+                                   hence [a,c] in X by A37,A38,A39,Th36;
+                               suppose PosetMax a = PosetMax c;
+                                   hence [a,c] in X by A37,A38,ORDERS_1:13;
+                           end;
+                           hence [a,c] in X;
+                       suppose b<>{} & c <> {} & PosetMax b = PosetMax c &
+                       [b\{PosetMax b}, c\{PosetMax c}] in union rng FOAR;
+                           hence [a,c] in X by A37,Th36;
+                   end;
+                   hence [a,c] in X;
+               suppose A40: a <> {} & b <> {} & PosetMax a = PosetMax b &
+                       [a\{PosetMax a}, b\{PosetMax b}] in union rng FOAR;
+                     now per cases by A36,Th36;
+                       suppose b = {};
+                           hence [a,c] in X by A40;
+                       suppose b<>{} & c <>{} & PosetMax b <> PosetMax c &
+                                   [PosetMax b, PosetMax c] in IR;
+                            hence [a,c] in X by A40,Th36;
+                       suppose A41: b<>{} & c <>{} & PosetMax b = PosetMax c &
+                       [b\{PosetMax b}, c\{PosetMax c}] in union rng FOAR;
+                           set z = a\{PosetMax a};
+                           reconsider z as Element of Fin CR by Th38;
+                       A42: Card z = n by A36,Lm1;
+                       A43: c c= CR & c is finite by FINSUB_1:def 5;
+                           reconsider c'=c as finite set;
+                           set zc = c'\{PosetMax c};
+                             zc c= c by XBOOLE_1:36;
+                           then zc c= CR by A43,XBOOLE_1:1;
+                           then reconsider zc as Element of Fin CR
+                             by FINSUB_1:def 5;
+                       A44: b c= CR & b is finite by FINSUB_1:def 5;
+                           reconsider b'=b as finite set;
+                           set zb = b'\{PosetMax b};
+                             zb c= b by XBOOLE_1:36;
+                           then zb c= CR by A44,XBOOLE_1:1;
+                           then reconsider zb as Element of Fin CR
+                             by FINSUB_1:def 5;
+                        [z,zb] in union rng FOAR by A40;
+                           then [z,zc] in union rng FOAR
+                            by A35,A41,A42;
+                           hence [a,c] in X by A40,A41,Th36;
+                   end;
+                   hence [a,c] in X;
+           end;
+       then A45: for n being Nat st _S[n] holds _S[n+1];
+       A46: for n being Nat holds _S[n] from Ind(A34, A45);
+           reconsider x'=x as Element of Fin CR by A32;
+         x c= CR & x is finite by A32,FINSUB_1:def 5;
+           then consider n being Nat such that
+       A47: x,n are_equipotent by CARD_1:74;
+             Card x' = n by A47,CARD_1:def 5;
+           hence [x,z] in X by A32,A46;
+       end;
+       hence X is_transitive_in Fin CR by RELAT_2:def 8;
+   end;
+   reconsider R = union rng FOAR as Relation of Fin CR
+                        by A4;
+    dom R = Fin CR & field R = Fin CR by A4,ORDERS_1:98;
+   hence union (rng FOAR) is Order of Fin CR
+                        by A4,RELAT_2:def 9,def 12,def 16,PARTFUN1:def 4;
+end;
+
+definition
+  let R be connected (non empty Poset);
+  func FinOrd R -> Order of Fin (the carrier of R) equals:Def17:
+       union rng FinOrd-Approx R;
+coherence by Th39;
+end;
+
+definition
+  let R be connected (non empty Poset);
+  func FinPoset R -> Poset equals : Def18:
+     RelStr (# Fin the carrier of R, FinOrd R #);
+correctness;
+end;
+
+definition
+  let R be connected (non empty Poset);
+  cluster FinPoset R -> non empty;
+correctness proof
+      FinPoset R = RelStr(# Fin the carrier of R, FinOrd R #) by Def18;
+    hence FinPoset R is non empty;
+end;
+end;
+
+theorem Th40:
+for R being connected (non empty Poset),a,b being Element of FinPoset R
+  holds [a,b] in the InternalRel of FinPoset R iff
+        ex x,y being Element of Fin the carrier of R st
+           a = x & b = y &
+           (x = {} or
+            x<>{} & y<>{} & PosetMax x <> PosetMax y &
+             [PosetMax x,PosetMax y] in the InternalRel of R or
+            x<>{} & y<>{} & PosetMax x = PosetMax y &
+             [x\{PosetMax x},y\{PosetMax y}] in FinOrd R)
+proof
+    let R be connected (non empty Poset), a,b be Element of FinPoset R;
+    set CR = the carrier of R;
+    set FIR = FinOrd R, FCR = Fin CR;
+A1: FinPoset R = RelStr(#FCR, FIR#) by Def18;
+A2: FinOrd R = union rng FinOrd-Approx R by Def17;
+    reconsider x=a, y=b as Element of Fin CR by A1;
+    hereby assume A3: [a,b] in the InternalRel of FinPoset R;
+        take x,y;
+        thus a = x & b = y;
+        thus ((x = {}) or
+         (x<>{} & y<>{} & PosetMax x <> PosetMax y &
+                  [PosetMax x,PosetMax y] in the InternalRel of R)or
+         (x<>{} & y<>{} & PosetMax x = PosetMax y &
+                  [x\{PosetMax x},y\{PosetMax y}] in FinOrd R))
+           by A1,A2,A3,Th36;
+    end;
+    assume (ex x,y being Element of Fin the carrier of R st
+           (a = x & b = y) &
+            ((x = {}) or
+              (x<>{} & y<>{} & PosetMax x <> PosetMax y &
+               [PosetMax x,PosetMax y] in the InternalRel of R)or
+              (x<>{} & y<>{} & PosetMax x = PosetMax y &
+               [x\{PosetMax x},y\{PosetMax y}] in FinOrd R)));
+    then consider x,y being Element of Fin CR such that
+A4: (a = x & b = y) &
+    ((x = {}) or
+     (x<>{} & y<>{} & PosetMax x <> PosetMax y &
+              [PosetMax x,PosetMax y] in the InternalRel of R)or
+     (x<>{} & y<>{} & PosetMax x = PosetMax y &
+              [x\{PosetMax x},y\{PosetMax y}] in FinOrd R));
+     thus [a,b] in the InternalRel of FinPoset R by A1,A2,A4,Th36;
+end;
+
+definition
+  let R be connected (non empty Poset);
+  cluster FinPoset R -> connected;
+correctness proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set FIR = FinOrd R, FCR = Fin CR;
+A1: FinPoset R = RelStr(#FCR, FIR#) by Def18;
+      now let x,y be Element of FinPoset R;
+        reconsider x'=x,y'=y as Element of Fin CR by A1;
+        defpred _P[Nat] means (for x,y being Element of Fin CR
+               st Card x = $1 holds ([x,y] in FIR or [y,x] in FIR));
+              now let a,b be Element of Fin CR such that
+            A2: Card a = 0;
+             a = {} by A2,CARD_2:59;
+                hence [a,b] in FIR or [a,b] in FIR by A1,Th40;
+            end;
+        then A4: _P[0];
+              now let n be Nat such that
+            A5: for x,y being Element of Fin CR
+                 st Card x = n
+                 holds ([x,y] in FIR or [y,x] in FIR);
+                let a,b be Element of Fin CR such that
+            A6: Card a = n+1;
+                per cases;
+                suppose a = {};
+                    hence [a,b] in FIR or [b,a] in FIR by A1,Th40;
+                suppose A7: a <> {};
+                     now per cases;
+                       suppose b = {};
+                           hence [a,b] in FIR or [b,a] in FIR by A1,Th40;
+                       suppose A8: b <>{};
+                             now per cases;
+                               suppose A9: PosetMax a <> PosetMax b;
+                                 now per cases by WAYBEL_0:def 29;
+                                   suppose PosetMax a <= PosetMax b;
+                                       then [PosetMax a, PosetMax b] in IR
+                                        by ORDERS_1:def 9;
+              hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A9,Th40;
+                                   suppose PosetMax b <= PosetMax a;
+                                       then [PosetMax b, PosetMax a] in IR
+                                        by ORDERS_1:def 9;
+                    hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A9,Th40;
+                               end;
+                               hence [a,b] in FIR or [b,a] in FIR;
+                               suppose A10: PosetMax a = PosetMax b;
+                               set ax = a\{PosetMax a}, bx = b\{PosetMax b};
+                               A11: Card ax = n by A6,Lm1;
+                                   reconsider ax,bx as Element of Fin CR
+                                    by Th38;
+                                     now per cases by A5,A11;
+                                   suppose [ax,bx] in FIR;
+                      hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A10,Th40;
+
+                                   suppose [bx,ax] in FIR;
+               hence [a,b] in FIR or [b,a] in FIR by A1,A7,A8,A10,Th40;
+                                  end;
+                                  hence [a,b] in FIR or [b,a] in FIR;
+                           end;
+                           hence [a,b] in FIR or [b,a] in FIR;
+                  end;
+                  hence [a,b] in FIR or [b,a] in FIR;
+            end;
+        then A12: for n being Nat st _P[n] holds _P[n+1];
+        A13: for n being Nat holds _P[n] from Ind(A4,A12);
+              x' in Fin CR;
+            then consider n being Nat such that
+        A14: x,n are_equipotent by CARD_1:74;
+              Card x' = n by A14,CARD_1:def 5;
+            then [x',y'] in FIR or [y',x'] in FIR by A13;
+            hence x <= y or y <= x by A1,ORDERS_1:def 9;
+    end;
+    hence FinPoset R is connected by WAYBEL_0:def 29;
+end;
+end;
+
+definition
+   let R be connected (non empty RelStr), C be non empty set such that
+A1: R is well_founded and
+A2: C c= the carrier of R;
+  func MinElement (C,R)-> Element of R means :Def19:
+   it in C & it is_minimal_wrt C, the InternalRel of R;
+existence proof
+    set IR = the InternalRel of R, CR = the carrier of R;
+      IR is_well_founded_in CR by A1,WELLFND1:def 2;
+    then consider a0 being set such that
+A3: a0 in C & IR-Seg(a0) misses C by A2,WELLORD1:def 3;
+    reconsider a0 as Element of R by A2,A3;
+    take a0;
+    thus a0 in C by A3;
+    thus a0 is_minimal_wrt C, IR by A3,DICKSON:7;
+end;
+uniqueness proof
+    let IT1, IT2 be Element of R such that
+A4: IT1 in C & IT1 is_minimal_wrt C, the InternalRel of R and
+A5: IT2 in C & IT2 is_minimal_wrt C, the InternalRel of R;
+    set IR = the InternalRel of R;
+      now assume A6: IT1 <> IT2;
+        per cases by WAYBEL_0:def 29;
+        suppose IT1 <= IT2;
+            then [IT1, IT2] in IR by ORDERS_1:def 9;
+            then IT1 in IR-Seg(IT2) by A6,WELLORD1:def 1;
+            then IT1 in IR-Seg(IT2) /\ C by A4,XBOOLE_0:def 3;
+            then IR-Seg(IT2) meets C by XBOOLE_0:def 7;
+            hence contradiction by A5,DICKSON:7;
+        suppose IT2 <= IT1;
+            then [IT2, IT1] in IR by ORDERS_1:def 9;
+            then IT2 in IR-Seg(IT1) by A6,WELLORD1:def 1;
+            then IT2 in IR-Seg(IT1) /\ C by A5,XBOOLE_0:def 3;
+            then IR-Seg(IT1) meets C by XBOOLE_0:def 7;
+            hence contradiction by A4,DICKSON:7;
+    end;
+    hence IT1 = IT2;
+end;
+end;
+
+definition
+  let R  be non empty RelStr, s be sequence of R, j  be Nat;
+  func SeqShift (s, j) -> sequence of R means :Def20:
+    for i being Nat holds it.i = s.(i+j);
+existence proof
+    set CR = the carrier of R;
+    defpred _P[set,set] means (ex i being Nat st i = $1 & $2 = (s.(i+j)));
+A1: for x being set st x in NAT ex y being set st y in CR & _P[x,y] proof
+        let x be set such that
+    A2: x in NAT;
+        reconsider i=x as Nat by A2;
+        set y = s.(i+j);
+        take y;
+        thus y in CR;
+        take i;
+        thus i = x & y = s.(i+j);
+    end;
+    consider f being Function of NAT,CR such that
+A3: for x being set st x in NAT holds _P[x,f.x] from FuncEx1(A1);
+     reconsider f as sequence of R by NORMSP_1:def 3;
+    take f;
+    let i be Nat;
+    consider i' being Nat such that
+A4: i'=i & f.i = s.(i'+j) by A3;
+    thus f.i = s.(i+j) by A4;
+end;
+uniqueness proof
+    let IT1, IT2 be sequence of R such that
+A5: for i being Nat holds IT1.i = s.(i+j) and
+A6: for i being Nat holds IT2.i = s.(i+j);
+      now let x be set such that
+    A7: x in NAT;
+        reconsider i=x as Nat by A7;
+        thus IT1.x = s.(i+j) by A5
+                  .= IT2.x by A6;
+    end;
+    hence IT1 = IT2 by FUNCT_2:18;
+end;
+end;
+
+theorem Th41:
+for R being non empty RelStr, s being sequence of R, j being Nat
+ st s is descending holds SeqShift(s, j) is descending
+proof
+    let R be non empty RelStr, s1 be sequence of R, j be Nat such that
+A1:  s1 is descending;
+    set s2 = SeqShift(s1, j);
+    set IR = the InternalRel of R;
+      now let n be Nat;
+         set nj = n+j;
+    A2: s2.n = s1.nj by Def20;
+    A3: s2.(n+1) = s1.((n+1)+j) by Def20 .= s1.(n+j+1) by XCMPLX_1:1;
+        hence s2.(n+1) <> s2.n by A1,A2,WELLFND1:def 7;
+        thus [s2.(n+1), s2.n] in IR by A1,A2,A3,WELLFND1:def 7;
+    end;
+    hence SeqShift(s1, j) is descending by WELLFND1:def 7;
+end;
+
+theorem :: Theorem 4:69
+  for R being connected (non empty Poset)
+  st R is well_founded holds FinPoset R is well_founded
+proof
+    let R be connected (non empty Poset) such that
+A1: R is well_founded;
+    set IR = the InternalRel of R, CR = the carrier of R;
+    set FIR = FinOrd R, FCR = Fin CR;
+A2: FinPoset R = RelStr (#FCR, FIR #) by Def18;
+    assume not FinPoset R is well_founded;
+    then consider A being sequence of FinPoset R such that
+A3: A is descending by WELLFND1:15;
+    set zz = {z where z is sequence of FinPoset R : z is descending};
+      A in zz by A3;
+    then reconsider zz as non empty set;
+    set Z = [: CR, zz :];
+    defpred _S[Nat,set,set] means  ex Sn2 being sequence of FinPoset R,
+        Smax being Function of NAT, CR,
+        an being Element of R,
+        ix being Nat,
+        bnt being sequence of FinPoset R,
+        bn being sequence of FinPoset R st
+        Sn2 = ($2)`2 &
+        (for i being Nat holds
+          ex Sn2i being Element of Fin CR st Sn2i = Sn2.i & Sn2i <> {} &
+             Smax.i = PosetMax Sn2i) &
+        an = MinElement(rng Smax, R) &
+        ix = Smax mindex an &
+        bnt = SeqShift(Sn2,ix) &
+        (for i being Nat holds bn.i = bnt.i \ {an}) &
+        (for i being Nat st ix <= i holds Smax.i = an) &
+        $3 = [an,bn];
+
+A4: for n being Nat for Sn being Element of Z
+     ex Sn1 being Element of Z st _S[n,Sn,Sn1]
+    proof
+        let n being Nat, Sn be Element of Z;
+        set Sn2 = Sn`2;
+          Sn2 in zz;
+        then consider z being sequence of FinPoset R such that
+    A5: z = Sn2 & z is descending;
+        reconsider Sn2 as sequence of FinPoset R by A5;
+        A6: now let i be Nat;
+            reconsider Sn2i1 = Sn2.(i+1) as Element of Fin CR by A2;
+            assume A7: Sn2.i = {};
+            A8: Sn2.(i+1)<>Sn2.i & [Sn2.(i+1), Sn2.i] in FIR
+             by A2,A5,WELLFND1:def 7;
+            then [Sn2i1, {}] in union rng FinOrd-Approx R by A7,Def17;
+            hence contradiction by A7,A8,Th37;
+        end;
+        defpred _P[Nat,set] means
+        (ex Sn2i being Element of Fin CR st Sn2i = Sn2.$1 &
+                  Sn2i <> {} & $2 = PosetMax Sn2i);
+    A9: for i being Nat ex y being Element of CR st _P[i,y] proof
+            let i be Nat;
+            set Sn2i = Sn2.i;
+            reconsider Sn2i as Element of Fin CR by A2;
+            set y = PosetMax Sn2i;
+            take y;
+            take Sn2i;
+            thus Sn2i = Sn2.i;
+            thus Sn2i <> {} by A6;
+            thus y = PosetMax Sn2i;
+        end;
+        consider Smax being Function of NAT, CR such that
+    A10: for i being Nat holds _P[i,Smax.i] from FuncExD(A9);
+        set an = MinElement(rng Smax, R);
+        set ix = Smax mindex an;
+        set bnt = SeqShift(Sn2,ix);
+    defpred _R[set,set] means
+       (ex bni being Element of FCR st bni = bnt.$1 \{an} & $2 = bni);
+          now let i be Nat;
+            set bni = bnt.i \ {an};
+            reconsider k = bnt.i as finite Subset of CR by A2,FINSUB_1:def 5;
+              k \ {an} in FCR by FINSUB_1:def 5;
+            then reconsider bni as Element of FCR;
+            set y = bni;
+            take y;
+            take bni;
+            thus bni = bnt.i \ {an};
+            thus y = bni;
+        end;
+    then A11: for i being Nat ex y being Element of FCR st _R[i,y];
+    defpred _P[Nat] means Smax.(ix+$1) = an;
+    A12:  dom Smax = NAT by FUNCT_2:def 1;
+           rng Smax c= CR by RELSET_1:12;
+    then A13: an in rng Smax & an is_minimal_wrt rng Smax, IR
+           by A1,Def19;
+    then A14: _P[0] by A12,DICKSON:def 11;
+    A15: now let k be Nat such that
+        A16: _P[k];
+            set ixk = ix+k, ixk1 = ix+(k+1), ixk1' = (ix+k)+1;
+            consider Sn2ixk being Element of Fin CR such that
+        A17: Sn2ixk = Sn2.ixk & Sn2ixk <> {} & Smax.ixk = PosetMax Sn2ixk by
+A10;
+            consider Sn2ixk1 being Element of Fin CR such that
+        A18: Sn2ixk1 = Sn2.ixk1 & Sn2ixk1 <> {} & Smax.ixk1 = PosetMax Sn2ixk1
+             by A10;
+            reconsider Sn2ixk' = Sn2ixk, Sn2ixk1' = Sn2ixk1 as
+              Element of FinPoset R by A2;
+              ixk1 = ixk1' by XCMPLX_1:1;
+            then [Sn2ixk1', Sn2ixk'] in FIR by A2,A5,A17,A18,WELLFND1:def 7;
+            then consider x,y being Element of Fin CR such that
+        A19: Sn2ixk1 = x & Sn2ixk = y and
+        A20: ((x = {}) or
+             (x<>{} & y<>{} & PosetMax x <> PosetMax y &
+              [PosetMax x,PosetMax y] in IR) or
+             (x<>{} & y<>{} & PosetMax x = PosetMax y &
+              [x\{PosetMax x},y\{PosetMax y}] in FinOrd R)) by A2,Th40;
+            per cases by A20;
+            suppose x = {};
+                hence _P[k+1] by A18,A19;
+            suppose A21: (x<>{} & y<>{} & PosetMax x <> PosetMax y &
+                      [PosetMax x,PosetMax y] in IR);
+                    Smax.ixk1 in rng Smax by A12,FUNCT_1:def 5;
+                hence _P[k+1] by A13,A16,A17,A18,A19,A21,WAYBEL_4:def 26;
+            suppose (x<>{} & y<>{} & PosetMax x = PosetMax y &
+                  [x\{PosetMax x},y\{PosetMax y}] in FinOrd R);
+                hence _P[k+1] by A16,A17,A18,A19;
+        end;
+    A22: for k being Nat holds _P[k] from Ind(A14, A15);
+        A23: now let i be Nat such that
+        A24: ix <= i;
+            consider k being Nat such that
+        A25: i = ix+k by A24,NAT_1:28;
+            thus Smax.i = an by A22,A25;
+        end;
+        A26: now let i be Nat such that
+        A27: ix <= i;
+            consider Sn2i being Element of Fin CR such that
+        A28: Sn2i = Sn2.i & Sn2i <> {} & Smax.i = PosetMax Sn2i by A10;
+            take Sn2i;
+            thus Sn2i = Sn2.i by A28;
+            thus PosetMax Sn2i = an by A23,A27,A28;
+        end;
+        A29: now let i be Nat;
+            set bnti = bnt.i;
+            reconsider bnti as Element of Fin CR by A2;
+            take bnti;
+            thus bnti = bnt.i;
+            set iix = i+ix;
+              ix <= iix by NAT_1:29;
+            then consider Sn2iix being Element of Fin CR such that
+        A30: Sn2iix = Sn2.iix & PosetMax Sn2iix = an by A26;
+            thus PosetMax bnti = an by A30,Def20;
+        end;
+        consider bn being Function of NAT, FCR such that
+    A31: for i being Nat holds _R[i,bn.i] from FuncExD(A11);
+        reconsider bn as sequence of FinPoset R by A2,NORMSP_1:def 3;
+        set Sn1 = [an, bn];
+    A32: bnt is descending by A5,Th41;
+          now let i be Nat;
+            consider bni being Element of FCR such that
+        A33: bni = bnt.i \ {an} & bn.i = bni by A31;
+            consider bni1 being Element of FCR such that
+        A34: bni1 = bnt.(i+1) \ {an} & bn.(i+1) = bni1 by A31;
+            reconsider bnti = bnt.i, bnti1 = bnt.(i+1)
+             as Element of FinPoset R;
+            reconsider bnti'=bnti, bnti1'=bnti1 as Element of Fin CR by A2;
+        A35: bnti1 <> bnti & [bnti1, bnti] in FIR by A2,A32,WELLFND1:def 7;
+            then consider x,y being Element of Fin CR such that
+        A36: bnti1 = x & bnti = y and
+        A37: ((x = {}) or
+             (x<>{} & y<>{} & PosetMax x <> PosetMax y &
+              [PosetMax x,PosetMax y] in the InternalRel of R)or
+             (x<>{} & y<>{} & PosetMax x = PosetMax y &
+              [x\{PosetMax x},y\{PosetMax y}] in FinOrd R)) by A2,Th40;
+            A38: now let i be Nat;
+                 bnt.i = Sn2.(i+ix) by Def20;
+               hence bnt.i <> {} by A6;
+            end;
+            A39: now consider bnti'' being Element of Fin CR such that
+            A40: bnti''=bnt.i & PosetMax bnti'' = an by A29;
+                consider bnti1'' being Element of Fin CR such that
+            A41: bnti1'' =bnt.(i+1) & PosetMax bnti1'' = an by A29;
+                thus PosetMax bnti' = an & PosetMax bnti1' = an by A40,A41;
+            end;
+              bnti' <> {} & bnti1' <> {} by A38;
+            then an in bnti & an in bnti1 by A39,Def15;
+            hence bn.(i+1) <> bn.i by A33,A34,A35,Th1;
+            per cases by A37;
+            suppose x = {};
+                hence [bn.(i+1), bn.i] in FIR by A36,A38;
+            suppose (x<>{} & y<>{} & PosetMax x <> PosetMax y &
+                      [PosetMax x,PosetMax y] in IR);
+                hence [bn.(i+1), bn.i] in FIR by A36,A39;
+            suppose (x<>{} & y<>{} & PosetMax x = PosetMax y &
+                  [x\{PosetMax x},y\{PosetMax y}] in FinOrd R);
+                hence [bn.(i+1), bn.i] in FIR by A33,A34,A36,A39;
+        end;
+        then bn is descending by A2,WELLFND1:def 7;
+        then an in CR & bn in zz;
+        then reconsider Sn1 as Element of Z by ZFMISC_1:def 2;
+        take Sn1, Sn2,Smax,an,ix,bnt,bn;
+        thus Sn2 = Sn`2;
+        thus (for i being Nat holds
+              ex Sn2i being Element of Fin CR st Sn2i = Sn2.i & Sn2i<>{} &
+                 Smax.i = PosetMax Sn2i) by A10;
+        thus an = MinElement(rng Smax, R);
+        thus ix = Smax mindex an;
+        thus bnt = SeqShift(Sn2, ix);
+          now let i be Nat;
+            consider bni being Element of FCR such that
+        A42: bni = bnt.i \ {an} & bn.i = bni by A31;
+            thus bn.i = bnt.i \ {an} by A42;
+        end;
+        hence (for i being Nat holds bn.i = bnt.i \ {an});
+        thus (for i being Nat st ix <= i holds Smax.i = an) by A23;
+        thus Sn1 = [an,bn];
+    end;
+    consider aStart being Element of R;
+    set SS = [aStart, A];
+      A in zz by A3;
+    then reconsider SS as Element of Z by ZFMISC_1:def 2;
+    consider S01   being Element of Z,
+             S02   being sequence of FinPoset R,
+             S0max being Function of NAT, CR,
+             a0    being Element of R,
+             i0    being Nat,
+             b0t,b0 being sequence of FinPoset R such that
+      S02 = SS`2 and
+A43:(for i being Nat holds
+     ex S02i being Element of Fin CR st S02i = S02.i & S02i <> {} &
+         S0max.i = PosetMax S02i) and
+   a0 = MinElement(rng S0max, R) and
+      i0 = S0max mindex a0 and
+A44: b0t = SeqShift(S02,i0) and
+A45: for i being Nat holds b0.i = b0t.i \ {a0} and
+A46: for i being Nat st i0 <= i holds S0max.i = a0 and
+A47: S01 = [a0,b0] by A4;
+    consider S being Function of NAT,Z such that
+A48: S.0 = S01 and
+A49: for n being Element of NAT holds _S[n,S.n,S.(n+1)] from RecExD(A4);
+    deffunc _F(set) = (S.$1)`1;
+A50: now let x be set such that
+    A51: x in NAT;
+        reconsider x'=x as Nat by A51;
+        reconsider Sx = S.x' as Element of [:CR, zz:];
+          Sx`1 in CR;
+        hence _F(x) in CR;
+    end;
+    consider a being Function of NAT, CR such that
+A52: for x being set st x in NAT holds a.x = _F(x) from Lambda1(A50);
+    reconsider a as sequence of R by NORMSP_1:def 3;
+    defpred _PP[Nat] means (for i being Nat holds
+         (ex b being sequence of FinPoset R
+           st (b = (S.$1)`2) &
+              (for x being set
+                st x in b.i
+                holds x <> (S.$1)`1 & [x, (S.$1)`1] in IR)));
+A53: _PP[0] proof let i be Nat;
+        set b = (S.0)`2;
+          b in zz;
+        then consider z being sequence of FinPoset R such that
+    A54: z = b & z is descending;
+        reconsider b as sequence of FinPoset R by A54;
+        take b;
+        thus b = (S.0)`2;
+        let x be set such that
+    A55: x in b.i;
+    A56: a0 = (S.0)`1 by A47,A48,MCART_1:def 1;
+          b0 = b by A47,A48,MCART_1:def 2;
+        then x in b0t.i \ {a0} by A45,A55;
+    then A57: x in b0t.i & not x in {a0} by XBOOLE_0:def 4;
+        hence A58: x <> (S.0)`1 by A56,TARSKI:def 1;
+          now
+              b.i c= CR & b.i is finite by A2,FINSUB_1:def 5;
+            hence x in CR by A55;
+        end;
+        then reconsider x'=x as Element of R;
+    A59: x in S02.(i+i0) by A44,A57,Def20;
+        consider S02ib being Element of Fin CR such that
+    A60: S02ib = S02.(i+i0) & S02ib <> {} & S0max.(i+i0) = PosetMax S02ib by
+A43;
+          i0 <= i+i0 by NAT_1:29;
+        then PosetMax S02ib = a0 by A46,A60;
+    then a0 is_maximal_wrt S02ib, IR by A60,Def15;
+        then not [a0, x] in IR by A56,A58,A59,A60,WAYBEL_4:def 24;
+        then not a0 <= x' by ORDERS_1:def 9;
+        then x' <= a0 by WAYBEL_0:def 29;
+        hence [x, (S.0)`1] in IR by A56,ORDERS_1:def 9;
+    end;
+A61: for n being Nat st _PP[n] holds _PP[n+1] proof let n be Nat;
+        assume _PP[n];
+        let i be Nat;
+        set n1 = n+1;
+        reconsider n1 as Nat;
+        set b = (S.n1)`2;
+        consider Sn2 being sequence of FinPoset R,
+                 Smax being Function of NAT, CR,
+                 an being Element of R,
+                 ix being Nat,
+                 bnt,bn being sequence of FinPoset R such that
+    A62: Sn2 = (S.n)`2 &
+        (for i being Nat holds
+          ex Sn2i being Element of Fin CR st Sn2i = Sn2.i & Sn2i <> {} &
+             Smax.i = PosetMax Sn2i) &
+        an = MinElement(rng Smax, R) &
+        ix = Smax mindex an &
+        bnt = SeqShift(Sn2,ix) &
+        (for i being Nat holds bn.i = bnt.i \ {an}) &
+        (for i being Nat st ix <= i holds Smax.i = an) and
+    A63: S.(n+1) = [an,bn] by A49;
+          b in zz;
+        then consider z being sequence of FinPoset R such that
+    A64: z = b & z is descending;
+        reconsider b as sequence of FinPoset R by A64;
+        take b;
+        thus b = (S.(n+1))`2;
+        let x be set such that
+    A65: x in b.i;
+    A66: an = (S.n1)`1 by A63,MCART_1:def 1;
+          bn = b by A63,MCART_1:def 2;
+        then x in bnt.i \ {an} by A62,A65;
+    then A67: x in bnt.i & not x in {an} by XBOOLE_0:def 4;
+        hence A68: x <> (S.(n+1))`1 by A66,TARSKI:def 1;
+          now
+              b.i c= CR & b.i is finite by A2,FINSUB_1:def 5;
+            hence x in CR by A65;
+        end;
+        then reconsider x'=x as Element of R;
+    A69: x in Sn2.(i+ix) by A62,A67,Def20;
+        consider Sn2ib being Element of Fin CR such that
+    A70: Sn2ib = Sn2.(i+ix) & Sn2ib <> {} & Smax.(i+ix) = PosetMax Sn2ib
+          by A62;
+          ix <= i+ix by NAT_1:29;
+        then PosetMax Sn2ib = an by A62,A70;
+    then an is_maximal_wrt Sn2ib, IR by A70,Def15;
+        then not [an, x] in IR by A66,A68,A69,A70,WAYBEL_4:def 24;
+        then not an <= x' by ORDERS_1:def 9;
+        then x' <= an by WAYBEL_0:def 29;
+        hence [x, (S.(n+1))`1] in IR by A66,ORDERS_1:def 9;
+    end;
+A71: for n being Nat holds _PP[n]  from Ind(A53, A61);
+    defpred _P3[Nat] means (ex b being sequence of FinPoset R, i being Nat
+       st b = (S.$1)`2 & a.($1+1) in b.i);
+A72: _P3[0] proof set b = (S.0)`2;
+          b in zz;
+        then consider z being sequence of FinPoset R such that
+    A73: z = b & z is descending;
+        reconsider b as sequence of FinPoset R by A73;
+        take b;
+    A74: a.(0+1) = (S.(0+1))`1 by A52;
+        consider S12 being sequence of FinPoset R,
+                 S1max being Function of NAT, CR,
+                 a1 being Element of R,
+                 i1 being Nat,
+                 b1t,b1 being sequence of FinPoset R such that
+    A75: S12 = (S.0)`2 and
+    A76: (for i being Nat holds
+          ex S12i being Element of Fin CR st S12i = S12.i & S12i <> {} &
+             S1max.i = PosetMax S12i) and
+    A77: a1 = MinElement(rng S1max, R) and
+          i1 = S1max mindex a1 and
+          b1t = SeqShift(S12,i1) and
+          (for i being Nat holds b1.i = b1t.i \ {a1}) &
+        (for i being Nat st i1 <= i holds S1max.i = a1) and
+    A78: S.(0+1) = [a1,b1] by A49;
+          rng S1max c= CR by RELSET_1:12;
+        then a1 in rng S1max by A1,A77,Def19;
+        then consider i being set such that
+    A79: i in dom S1max & S1max.i = a1 by FUNCT_1:def 5;
+        consider S12i being Element of Fin CR such that
+    A80: S12i = S12.i & S12i <> {} & S1max.i = PosetMax S12i by A76,A79;
+        reconsider i as Nat by A79;
+        take i;
+        thus b = (S.0)`2;
+      a1 in b.i by A75,A79,A80,Def15;
+        hence a.(0+1) in b.i by A74,A78,MCART_1:def 1;
+    end;
+A81: for n being Nat st _P3[n] holds _P3[n+1] proof let n being Nat;
+        assume _P3[n];
+        set b = (S.(n+1))`2;
+          b in zz;
+        then consider z being sequence of FinPoset R such that
+    A82: z = b & z is descending;
+        reconsider b as sequence of FinPoset R by A82;
+        take b;
+        set n1 = n+1;
+        reconsider n1 as Nat;
+        consider Sn12 being sequence of FinPoset R,
+                 Sn1max being Function of NAT, CR,
+                 an1 being Element of R,
+                 in1 being Nat,
+                 bn1t,bn1 being sequence of FinPoset R such that
+    A83: Sn12 = (S.n1)`2 and
+    A84: (for i being Nat holds
+          ex Sn12i being Element of Fin CR st Sn12i = Sn12.i & Sn12i<>{} &
+             Sn1max.i = PosetMax Sn12i) and
+    A85: an1 = MinElement(rng Sn1max, R) and
+          in1 = Sn1max mindex an1 and
+          bn1t = SeqShift(Sn12,in1) and
+          (for i being Nat holds bn1.i = bn1t.i \ {an1}) &
+        (for i being Nat st in1 <= i holds Sn1max.i = an1) and
+    A86: S.(n1+1) = [an1,bn1] by A49;
+          rng Sn1max c= CR by RELSET_1:12;
+        then an1 in rng Sn1max by A1,A85,Def19;
+        then consider i being set such that
+    A87: i in dom Sn1max & Sn1max.i = an1 by FUNCT_1:def 5;
+        consider Sn12i being Element of Fin CR such that
+    A88: Sn12i = Sn12.i & Sn12i <> {} & Sn1max.i = PosetMax Sn12i by A84,A87;
+        reconsider i as Nat by A87;
+        take i;
+        thus b = (S.(n+1))`2;
+    A89: an1 in b.i by A83,A87,A88,Def15;
+          (S.(n1+1))`1 = an1 by A86,MCART_1:def 1;
+        hence a.((n+1)+1) in b.i by A52,A89;
+    end;
+A90: for n being Nat holds _P3[n] from Ind(A72, A81);
+    defpred _P4[Nat] means (a.($1+1) <> a.$1 & [a.($1+1), a.$1] in IR);
+A91: _P4[0] proof
+    A92: a.0 = (S.0)`1 by A52;
+        consider b being sequence of FinPoset R, i being Nat such that
+    A93: b = (S.0)`2 & a.(0+1) in b.i by A90;
+        consider bb being sequence of FinPoset R such that
+    A94: bb = (S.0)`2 and
+    A95: for x being set st x in bb.i holds
+         x <> (S.0)`1 & [x, (S.0)`1] in IR by A71;
+        thus a.(0+1) <> a.0 & [a.(0+1), a.0] in IR by A92,A93,A94,A95;
+    end;
+A96: for n being Nat st _P4[n] holds _P4[n+1] proof let n be Nat;
+        assume (a.(n+1) <> a.(n) & [a.(n+1), a.n] in IR);
+    A97: a.(n+1) = (S.(n+1))`1 by A52;
+        consider b being sequence of FinPoset R, i being Nat such that
+    A98: b = (S.(n+1))`2 & a.((n+1)+1) in b.i by A90;
+        consider bb being sequence of FinPoset R such that
+    A99: bb=(S.(n+1))`2 & for x being set st x in bb.i holds
+           x <>(S.(n+1))`1 & [x, (S.(n+1))`1] in IR by A71;
+        thus a.((n+1)+1) <> a.(n+1) & [a.((n+1)+1), a.(n+1)] in IR by A97,A98,
+A99;
+    end;
+    for n being Nat holds _P4[n] from Ind(A91, A96);
+      then a is descending by WELLFND1:def 7;
+    hence contradiction by A1,WELLFND1:15;
+end;
+

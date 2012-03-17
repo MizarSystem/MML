@@ -1,0 +1,1873 @@
+:: Shear Theorems and Their Role in Affine Geometry
+::  by Jolanta \'Swierzy\'nska and Bogdan \'Swierzy\'nski
+::
+:: Received April 19, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary DIRAF, ANALOAF, AFF_1, AFF_2, ANALMETR, CONMETR, CONAFFM, CONMETR1;
+ notation SUBSET_1, STRUCT_0, ANALOAF, DIRAF, AFF_1, ANALMETR, AFF_2, CONAFFM,
+      CONMETR;
+ constructors AFF_1, AFF_2, CONAFFM, CONMETR, XBOOLE_0;
+ clusters ANALMETR, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET;
+ theorems AFF_1, AFF_2, ANALMETR, CONAFFM, CONMETR, TRANSLAC, DIRAF;
+
+begin
+reserve X for AffinPlane;
+reserve o,a,a1,a2,a3,a4,b,b1,b2,b3,b4,c,c1,c2,d,d1,d2,
+        d3,d4,d5,e1,e2,x,y,z for Element of X;
+reserve Y,Z,M,N,A,K,C for Subset of X;
+
+definition let X; attr X is satisfying_minor_Scherungssatz means
+:Def1: for a1,a2,a3,a4,b1,b2,b3,b4,M,N st M // N &
+         a1 in M & a3 in M & b1 in M & b3 in M & a2 in N &
+         a4 in N & b2 in N & b4 in N & not a4 in M & not a2 in M &
+         not b2 in M & not b4 in M & not a1 in N & not a3 in N &
+         not b1 in N & not b3 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1
+         & a1,a4 // b1,b4 holds a3,a4 // b3,b4;
+  synonym X satisfies_minor_SCH;
+end;
+
+definition let X; attr X is satisfying_major_Scherungssatz means
+:Def2: for o,a1,a2,a3,a4,b1,b2,b3,b4,M,N st M is_line &
+         N is_line & o in M & o in N & a1 in M & a3 in M & b1 in M &
+         b3 in M & a2 in N &
+         a4 in N & b2 in N & b4 in N & not a4 in M & not a2 in M &
+         not b2 in M & not b4 in M & not a1 in N & not a3 in N &
+         not b1 in N & not b3 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1
+         & a1,a4 // b1,b4 holds a3,a4 // b3,b4;
+  synonym X satisfies_major_SCH;
+end;
+
+definition let X; attr X is satisfying_Scherungssatz means
+:Def3: for a1,a2,a3,a4,b1,b2,b3,b4,M,N st M is_line &
+         N is_line & a1 in M & a3 in M & b1 in M & b3 in M & a2 in N &
+         a4 in N & b2 in N & b4 in N & not a4 in M & not a2 in M &
+         not b2 in M & not b4 in M & not a1 in N & not a3 in N &
+         not b1 in N & not b3 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1
+         & a1,a4 // b1,b4 holds a3,a4 // b3,b4;
+  synonym X satisfies_SCH;
+end;
+
+definition let X; attr X is satisfying_indirect_Scherungssatz means
+:Def4: for a1,a2,a3,a4,b1,b2,b3,b4,M,N st M is_line &
+         N is_line & a1 in M & a3 in M & b2 in M & b4 in M & a2 in N &
+         a4 in N & b1 in N & b3 in N & not a4 in M & not a2 in M &
+         not b1 in M & not b3 in M & not a1 in N & not a3 in N &
+         not b2 in N & not b4 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1
+         & a1,a4 // b1,b4 holds a3,a4 // b3,b4;
+  synonym X satisfies_SCH*;
+end;
+
+definition let X; attr X is satisfying_minor_indirect_Scherungssatz means
+:Def5: for a1,a2,a3,a4,b1,b2,b3,b4,M,N st M // N
+          & a1 in M & a3 in M & b2 in M & b4 in M & a2 in N &
+         a4 in N & b1 in N & b3 in N & not a4 in M & not a2 in M &
+         not b1 in M & not b3 in M & not a1 in N & not a3 in N &
+         not b2 in N & not b4 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1
+         & a1,a4 // b1,b4 holds a3,a4 // b3,b4;
+  synonym X satisfies_minor_SCH*;
+end;
+
+definition let X; attr X is satisfying_major_indirect_Scherungssatz means
+:Def6: for o,a1,a2,a3,a4,b1,b2,b3,b4,M,N st M is_line & N is_line &
+         o in M & o in N & a1 in M & a3 in M & b2 in M & b4 in M & a2 in N &
+         a4 in N & b1 in N & b3 in N & not a4 in M & not a2 in M & not b1 in M
+         & not b3 in M & not a1 in N & not a3 in N & not b2 in N & not b4 in N
+         & a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4 holds
+         a3,a4 // b3,b4;
+  synonym X satisfies_major_SCH*;
+end;
+
+theorem Th1:
+    X satisfies_SCH* iff (X satisfies_minor_SCH* & X satisfies_major_SCH*)
+proof
+A1:X satisfies_SCH* implies X satisfies_minor_SCH* & X satisfies_major_SCH*
+ proof
+  A2:X satisfies_SCH* implies X satisfies_minor_SCH*
+   proof
+    assume A3:X satisfies_SCH*;
+      now let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+    assume A4:M // N & a1 in M & a3 in M & b2 in M & b4 in M & a2 in N &
+           a4 in N & b1 in N & b3 in N & not a4 in M & not a2 in M &
+           not b1 in M & not b3 in M & not a1 in N & not a3 in N & not b2 in N
+           & not b4 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
+    then M is_line & N is_line by AFF_1:50;
+    hence a3,a4 // b3,b4 by A3,A4,Def4;end;
+   hence thesis by Def5;end;
+    X satisfies_SCH* implies X satisfies_major_SCH*
+   proof
+    assume X satisfies_SCH*;
+    then for o,a1,a2,a3,a4,b1,b2,b3,b4,M,N holds
+ M is_line & N is_line & o in M & o in N & a1 in M & a3 in M &
+           b2 in M & b4 in M & a2 in N & a4 in N & b1 in N & b3 in N &
+           not a4 in M & not a2 in M & not b1 in M & not b3 in M & not a1 in N
+           & not a3 in N & not b2 in N & not b4 in N & a3,a2 // b3,b2 &
+           a2,a1 // b2,b1 & a1,a4 // b1,b4 implies a3,a4 // b3,b4 by Def4
+;
+   hence thesis by Def6;end;
+ hence thesis by A2;end;
+  X satisfies_minor_SCH* & X satisfies_major_SCH* implies X satisfies_SCH*
+ proof
+  assume that A5:X satisfies_minor_SCH* and A6:X satisfies_major_SCH*;
+    now let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+  assume A7:M is_line & N is_line & a1 in M & a3 in M & b2 in M & b4 in M &
+         a2 in N & a4 in N & b1 in N & b3 in N & not a4 in M & not a2 in M &
+         not b1 in M & not b3 in M & not a1 in N & not a3 in N & not b2 in N &
+         not b4 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
+
+    now assume not M // N;
+   then ex o st o in M & o in N by A7,AFF_1:72;
+  hence a3,a4 // b3,b4 by A6,A7,Def6;end;
+  hence a3,a4 // b3,b4 by A5,A7,Def5;end;
+ hence thesis by Def4;end;
+hence thesis by A1;end;
+
+theorem
+   Th2:X satisfies_SCH iff (X satisfies_minor_SCH & X satisfies_major_SCH)
+proof
+A1:X satisfies_SCH implies (X satisfies_minor_SCH & X satisfies_major_SCH)
+proof
+A2:X satisfies_SCH implies X satisfies_minor_SCH
+proof
+assume A3:X satisfies_SCH;
+  now let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+assume A4: M // N & a1 in M & a3 in M & b1 in M & b3 in M & a2 in N &
+         a4 in N & b2 in N & b4 in N & not a4 in M & not a2 in M &
+         not b2 in M & not b4 in M & not a1 in N & not a3 in N &
+         not b1 in N & not b3 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1
+         & a1,a4 // b1,b4;
+then M is_line & N is_line by AFF_1:50;
+hence a3,a4 // b3,b4 by A3,A4,Def3;end;
+hence thesis by Def1;end;
+  X satisfies_SCH implies X satisfies_major_SCH
+proof
+assume X satisfies_SCH;
+then for o,a1,a2,a3,a4,b1,b2,b3,b4,M,N holds
+ M is_line & N is_line & o in M & o in N & a1 in M & a3 in M &
+         b1 in M & b3 in M & a2 in N & a4 in N & b2 in N & b4 in N &
+         not a4 in M & not a2 in M & not b2 in M & not b4 in M & not a1 in N
+         & not a3 in N & not b1 in N & not b3 in N & a3,a2 // b3,b2
+         & a2,a1 // b2,b1 & a1,a4 // b1,b4 implies a3,a4 // b3,b4 by Def3;
+hence thesis by Def2;end;
+hence thesis by A2;end;
+  (X satisfies_minor_SCH & X satisfies_major_SCH) implies X satisfies_SCH
+proof
+assume A5:X satisfies_minor_SCH & X satisfies_major_SCH;
+  now let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+assume A6:M is_line & N is_line & a1 in M & a3 in M & b1 in M & b3 in M
+         & a2 in N & a4 in N & b2 in N & b4 in N & not a4 in M & not a2 in M
+         & not b2 in M & not b4 in M & not a1 in N & not a3 in N & not b1 in N
+         & not b3 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
+
+  now assume not M // N;
+then ex o st o in M & o in N by A6,AFF_1:72;
+hence a3,a4 // b3,b4 by A5,A6,Def2;end;
+hence a3,a4 // b3,b4 by A5,A6,Def1;end;
+hence thesis by Def3;end;
+hence thesis by A1;end;
+
+theorem Th3:
+      X satisfies_minor_SCH* implies X satisfies_minor_SCH
+proof
+ assume A1:X satisfies_minor_SCH*;
+   now let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+ assume A2: M // N & a1 in M & a3 in M & b1 in M & b3 in M &
+        a2 in N & a4 in N & b2 in N & b4 in N & not a4 in M & not a2 in M &
+        not b2 in M & not b4 in M & not a1 in N & not a3 in N & not b1 in N &
+        not b3 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
+ then A3:M is_line & N is_line by AFF_1:50;
+  then consider d1 such that A4:a2<>d1 & d1 in N by AFF_1:32;
+    ex d2 st d2 in M & a2,a1 // d2,d1
+   proof
+    consider e1 such that A5:a1<>e1 & e1 in M by A3,AFF_1:32;
+    consider e2 such that A6:a2,a1 // d1,e2 & d1<>e2 by DIRAF:47;
+      not a1,e1 // d1,e2 proof assume a1,e1 // d1,e2; then a1,e1 // a2,a1 by A6
+,AFF_1:14; then a1,e1 // a1,a2 by AFF_1:13; then LIN a1,e1,a2 by AFF_1:def 1;
+    hence contradiction by A2,A3,A5,AFF_1:39;end;
+    then consider d2 such that A7:LIN a1,e1,d2 & LIN
+ d1,e2,d2 by AFF_1:74;take d2;
+      d1,e2 // d1,d2 by A7,AFF_1:def 1; then a2,a1 // d1,d2 by A6,AFF_1:14;
+   hence thesis by A2,A3,A5,A7,AFF_1:13,39;end;
+  then consider d2 such that A8:d2 in M & a2,a1 // d2,d1;
+    ex d3 st d3 in N & a3,a2 // d3,d2 proof
+    consider e1 such that A9:a2<>e1 & e1 in N by A3,AFF_1:32;
+    consider e2 such that A10:a3,a2 // d2,e2 & d2<>e2 by DIRAF:47;
+      not a2,e1 // d2,e2 proof assume a2,e1 // d2,e2; then a2,e1 // a3,a2 by
+A10,AFF_1:14; then a2,e1 // a2,a3 by AFF_1:13; then LIN a2,e1,a3 by AFF_1:def 1
+;
+     hence contradiction by A2,A3,A9,AFF_1:39;end;
+    then consider d3 such that A11:LIN a2,e1,d3 & LIN
+ d2,e2,d3 by AFF_1:74;take d3;
+      d2,e2 // d2,d3 by A11,AFF_1:def 1; then a3,a2 // d2,d3 by A10,AFF_1:14;
+hence thesis by A2,A3,A9,A11,AFF_1:13,39;end;
+  then consider d3 such that A12:d3 in N & a3,a2 // d3,d2;
+    ex d4 st d4 in M & a1,a4 // d1,d4
+   proof
+    consider e1 such that A13:a1<>e1 & e1 in M by A3,AFF_1:32;
+    consider e2 such that A14:a1,a4 // d1,e2 & d1<>e2 by DIRAF:47;
+      not a1,e1 // d1,e2 proof assume a1,e1 // d1,e2; then a1,e1 // a1,a4 by
+A14,AFF_1:14; then LIN a1,e1,a4 by AFF_1:def 1;
+    hence contradiction by A2,A3,A13,AFF_1:39;end;
+    then consider d4 such that A15:LIN a1,e1,d4 & LIN
+ d1,e2,d4 by AFF_1:74;take d4;
+      d1,e2 // d1,d4 by A15,AFF_1:def 1;
+   hence thesis by A2,A3,A13,A14,A15,AFF_1:14,39;end;
+  then consider d4 such that A16:d4 in M & a1,a4 // d1,d4;
+  A17:not d1 in M & not d3 in M & not d2 in N & not d4 in N
+   by A2,A4,A8,A12,A16,AFF_1:59;
+  then A18:a3,a4 // d3,d4 by A1,A2,A4,A8,A12,A16,Def5;
+  A19:b2,b1 // d2,d1 by A2,A8,AFF_1:14;
+  A20:b3,b2 // d3,d2 by A2,A12,AFF_1:14;
+    b1,b4 // d1,d4 by A2,A16,AFF_1:14;
+  then b3,b4 // d3,d4 by A1,A2,A4,A8,A12,A16,A17,A19,A20,Def5;
+ hence a3,a4 // b3,b4 by A16,A17,A18,AFF_1:14;end;
+hence thesis by Def1;end;
+
+ theorem Th4:
+       X satisfies_major_SCH* implies X satisfies_major_SCH
+proof
+ assume A1:X satisfies_major_SCH*;
+   now let o,a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+ assume A2: M is_line & N is_line & o in M & o in N & a1 in M & a3 in M &
+        b1 in M & b3 in M & a2 in N & a4 in N & b2 in N & b4 in N & not a4 in M
+        & not a2 in M & not b2 in M & not b4 in M & not a1 in N & not a3 in N
+        & not b1 in N & not b3 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1 &
+        a1,a4 // b1,b4;
+ then A3:not M // N by AFF_1:59;
+  A4:M // M & N // N by A2,AFF_1:55;
+  A5:now assume A6:a1=a3 or a2=a4;
+   A7:now assume A8:a1=a3;
+    A9:not LIN o,b2,b1 by A2,AFF_1:39;
+      o,b1 // o,b3 by A2,A4,AFF_1:53; then A10:LIN o,b1,b3 by AFF_1:def 1;
+      b2,b1 // b2,b3 proof a2,a1 // b2,b3 by A2,A8,AFF_1:13;
+    hence thesis by A2,AFF_1:14;end;
+    hence a3,a4 // b3,b4 by A2,A8,A9,A10,AFF_1:23;end;
+     now assume A11:a2=a4;
+    A12:not LIN o,b1,b2 by A2,AFF_1:39;
+      o,b2 // o,b4 by A2,A4,AFF_1:53; then A13:LIN o,b2,b4 by AFF_1:def 1;
+      b1,b2 // b1,b4 proof a1,a4 // b1,b2 by A2,A11,AFF_1:13;
+    hence thesis by A2,AFF_1:14;end;
+   hence a3,a4 // b3,b4 by A2,A11,A12,A13,AFF_1:23;end;
+  hence a3,a4 // b3,b4 by A6,A7;end;
+    now assume A14:a1<>a3 & a2<>a4;
+  consider d1 such that A15:o<>d1 & d1 in N by A2;
+    ex d2 st d2 in M & a2,a1 // d2,d1 proof
+    consider e1 such that A16:o<>e1 & e1 in M by A2;
+    consider e2 such that A17:a2,a1 // d1,e2 & d1<>e2 by DIRAF:47;
+      not o,e1 // d1,e2 proof assume o,e1 // d1,e2; then A18:o,e1 // a2,a1 by
+A17,AFF_1:14; o,e1 // a1,a3 by A2,A4,A16,AFF_1:53; then a1,a3 // a2,a1 by A16,
+A18,AFF_1:14; then a1,a3 // a1,a2 by AFF_1:13; then LIN a1,a3,a2
+    by AFF_1:def 1;
+    hence contradiction by A2,A14,AFF_1:39;end;
+    then consider d2 such that A19:LIN o,e1,d2 & LIN
+ d1,e2,d2 by AFF_1:74;take d2;
+      d1,e2 // d1,d2 by A19,AFF_1:def 1; then a2,a1 // d1,d2 by A17,AFF_1:14;
+hence thesis by A2,A16,A19,AFF_1:13,39;end;
+  then consider d2 such that A20:d2 in M & a2,a1 // d2,d1;
+    ex d3 st d3 in N & a3,a2 // d3,d2 proof
+    consider e1 such that A21:o<>e1 & e1 in N by A2;
+    consider e2 such that A22:a3,a2 // d2,e2 & d2<>e2 by DIRAF:47;
+      not o,e1 // d2,e2 proof assume o,e1 // d2,e2; then A23:o,e1 // a3,a2 by
+A22,AFF_1:14; o,e1 // a2,a4 by A2,A4,A21,AFF_1:53; then a2,a4 // a3,a2
+     by A21,A23,AFF_1:14; then a2,a4 // a2,a3 by AFF_1:13; then LIN a2,a4,a3
+by AFF_1:def 1;hence contradiction by A2,A14,AFF_1:39;end;
+    then consider d3 such that A24:LIN o,e1,d3 & LIN
+ d2,e2,d3 by AFF_1:74;take d3;
+      d2,e2 // d2,d3 by A24,AFF_1:def 1; then a3,a2 // d2,d3 by A22,AFF_1:14;
+hence thesis by A2,A21,A24,AFF_1:13,39;end;
+  then consider d3 such that A25:d3 in N & a3,a2 // d3,d2;
+    ex d4 st d4 in M & a1,a4 // d1,d4 proof
+    consider e1 such that A26:o<>e1 & e1 in M by A2;
+    consider e2 such that A27:a1,a4 // d1,e2 & d1<>e2 by DIRAF:47;
+      not o,e1 // d1,e2 proof assume o,e1 // d1,e2; then A28:o,e1 // a1,a4 by
+A27,AFF_1:14; o,e1 // a1,a3 by A2,A4,A26,AFF_1:53; then a1,a3 // a1,a4 by A26,
+A28,AFF_1:14; then LIN a1,a3,a4 by AFF_1:def 1;
+    hence contradiction by A2,A14,AFF_1:39;end;
+    then consider d4 such that A29:LIN o,e1,d4 & LIN
+ d1,e2,d4 by AFF_1:74;take d4;
+   d1,e2 // d1,d4 by A29,AFF_1:def 1;
+hence thesis by A2,A26,A27,A29,AFF_1:14,39;end;
+  then consider d4 such that A30:d4 in M & a1,a4 // d1,d4;
+  A31:d2<>o & d3<>o & d4<>o proof assume A32:not thesis;
+   A33:now assume A34: d2=o; o,d1 // a2,a4 by A2,A4,A15,AFF_1:53; then a2,a4
+// a2,a1 by A15,A20,A34,AFF_1:14; then LIN a2,a4,a1 by AFF_1:def 1;hence
+ contradiction by A2,A14,AFF_1:39;end;
+
+   A35:now assume A36: d3=o; o,d2 // a3,a1 by A2,A4,A20,AFF_1:53; then a3,a1
+// a3,a2 by A25,A33,A36,AFF_1:14; then LIN a3,a1,a2 by AFF_1:def 1;hence
+ contradiction by A2,A14,AFF_1:39;end;
+     now assume A37: d4=o; d1,o // a2,a4 by A2,A4,A15,AFF_1:53; then a1,a4
+//
+a2,a4 by A15,A30,A37,AFF_1:14; then a4,a2 // a4,a1 by AFF_1:13; then LIN a4,
+a2,a1 by AFF_1:def 1;
+   hence contradiction by A2,A14,AFF_1:39;end;
+  hence contradiction by A32,A33,A35;end;
+  A38:not d1 in M & not d3 in M & not d2 in N & not d4 in N
+   proof assume not thesis; then A39:o,d1 // M or o,d3 // M or o,d2 // N or
+    o,d4 // N by A2,AFF_1:66; o,d1 // N & o,d3 // N & o,d2 // M & o,d4 // M
+    by A2,A15,A20,A25,A30,AFF_1:66;
+   hence contradiction by A3,A15,A31,A39,AFF_1:67;end;
+  then A40:a3,a4 // d3,d4 by A1,A2,A15,A20,A25,A30,Def6;
+  A41:d1<>d2 & d2<>d3 & d3<>d4 & d4<>d1 proof assume not thesis;
+   then A42:o,d1 // M or o,d3 // M by A2,A20,A30,AFF_1:66; o,d1 // N & o,d3
+//
+N by A2,A15,A25,AFF_1:66;
+  hence contradiction by A3,A15,A31,A42,AFF_1:67;end;
+  A43:b2,b1 // d2,d1 by A2,A20,AFF_1:14;
+  A44:b3,b2 // d3,d2 by A2,A25,AFF_1:14;
+    b1,b4 // d1,d4 by A2,A30,AFF_1:14;
+  then b3,b4 // d3,d4 by A1,A2,A15,A20,A25,A30,A38,A43,A44,Def6;
+ hence a3,a4 // b3,b4 by A40,A41,AFF_1:14;end;
+ hence a3,a4 // b3,b4 by A5;end;
+hence thesis by Def2;end;
+
+theorem
+         X satisfies_SCH* implies X satisfies_SCH
+proof
+ assume X satisfies_SCH*;
+ then X satisfies_minor_SCH* & X satisfies_major_SCH* by Th1;
+ then X satisfies_minor_SCH & X satisfies_major_SCH by Th3,Th4;
+hence thesis by Th2;end;
+
+theorem Th6:
+        X satisfies_des implies X satisfies_minor_SCH
+proof
+assume A1:X satisfies_des;
+  now let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+assume A2:M // N & a1 in M & a3 in M & b1 in M & b3 in M & a2 in N & a4 in N
+       & b2 in N & b4 in N & not a4 in M & not a2 in M & not b2 in M &
+       not b4 in M & not a1 in N & not a3 in N & not b1 in N & not b3 in N &
+       a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
+then A3:M is_line & N is_line by AFF_1:50;
+then A4:M // M & N // N by AFF_1:55;
+A5:now assume A6:a1=a3 or a2=a4;
+ A7:now assume A8:a1=a3;
+    b1=b3 proof assume A9:b1<>b3;A10:LIN b2,b1,b3 proof
+      LIN a2,a1,a3 by A8,AFF_1:16; then a2,a1 // a2,a3
+    by AFF_1:def 1; then b2,b1 // a2,a3 by A2,AFF_1:14; then b2,b1 // a3,a2
+by AFF_1:13; then b2,b1 // b3,b2 by A2,AFF_1:14; then b2,b1 // b2,b3 by AFF_1:
+13;hence thesis by AFF_1:def 1;end;
+     b1,b3 // N by A2,AFF_1:54;
+  hence contradiction by A2,A9,A10,AFF_1:60;end;
+ hence a3,a4 // b3,b4 by A2,A8;end;
+   now assume A11:a2=a4; N // M by A2; then A12:b2,b4 // M by A2,AFF_1:54;
+    LIN a1,a4,a2 by A11,AFF_1:16; then a1,a4 // a1,a2
+  by AFF_1:def 1; then b1,b4 // a1,a2 by A2,AFF_1:14; then b1,b4 // a2,a1 by
+AFF_1:13; then b1,b4 // b2,b1 by A2,AFF_1:14; then b1,b2 // b1,b4 by AFF_1:13
+;
+  then LIN b1,b2,b4 by AFF_1:def 1;
+ hence a3,a4 // b3,b4 by A2,A11,A12,AFF_1:60;end;
+hence a3,a4 // b3,b4 by A6,A7;end;
+  now assume A13:a1<>a3 & a2<>a4;
+ A14:now assume A15:not ex x,y,z st LIN x,y,z & x<>y & x<>z & y<>z;
+    a1,a3 // a1,b1 by A2,A4,AFF_1:53; then A16: LIN a1,a3,b1 by AFF_1:def 1;
+  A17:now assume A18:a1=b1;
+   then A19:LIN a1,a4,b4 by A2,AFF_1:def 1;A20:N // M by A2;
+   then a4,b4 // M by A2,AFF_1:54; then A21:a4=b4 by A2,A19,AFF_1:60;
+  a1,a2 // a1,b2 by A2,A18,AFF_1:13; then A22:LIN a1,a2,b2 by AFF_1:def 1;
+     a2,b2 // M by A2,A20,AFF_1:54; then a2=b2 by A2,A22,AFF_1:60;
+   then a2,a3 // a2,b3 by A2,AFF_1:13; then A23:LIN a2,a3,b3 by AFF_1:def 1;
+     a3,b3 // N by A2,AFF_1:54; then a3=b3 by A2,A23,AFF_1:60;
+  hence a3,a4 // b3,b4 by A21,AFF_1:11;end;
+    now assume A24:a3=b1;
+     a2,a4 // a2,b2 by A2,A4,AFF_1:53; then A25: LIN a2,a4,b2 by AFF_1:def 1;
+   A26:now assume A27:a4=b2; a1,a3 // a1,b3 by A2,A4,AFF_1:53; then A28: LIN
+a1,a3,b3
+    by AFF_1:def 1;
+      a3<>b3 proof assume a3=b3;
+     then A29:LIN a3,a2,b2 by A2,AFF_1:def 1; N // M by A2; then a2,b2 // M
+by A2,AFF_1:54;
+    hence contradiction by A2,A13,A27,A29,AFF_1:60;end;
+    then A30:a1=b3 by A13,A15,A28; a2,a4 // a2,b4 by A2,A4,AFF_1:53; then A31
+:
+ LIN a2,a4,b4 by AFF_1:def 1;
+      a4<>b4 proof assume a4=b4; then a4,a1 // a4,b1 by A2,AFF_1:13;
+     then A32:LIN a4,a1,b1 by AFF_1:def 1; a1,b1 // N by A2,AFF_1:54;
+hence contradiction by A2,A13,A24,A32,AFF_1:60;end;
+    then A33:a2=b4 by A13,A15,A31;
+      a3,a4 // b2,b1 by A24,A27,AFF_1:11;
+    then a3,a4 // a2,a1 by A2,AFF_1:14;
+   hence a3,a4 // b3,b4 by A30,A33,AFF_1:13;end;
+     now assume a2=b2; then A34:LIN a2,a1,b1 by A2,AFF_1:def 1; a1,b1 // N
+by A2,AFF_1:54;
+   hence a3,a4 // b3,b4 by A2,A17,A34,AFF_1:60;end;
+  hence a3,a4 // b3,b4 by A13,A15,A25,A26;end;
+ hence a3,a4 // b3,b4 by A13,A15,A16,A17;end;
+   now assume ex x,y,z st LIN x,y,z & x<>y & x<>z & y<>z;
+ then consider d such that A35:LIN a1,a2,d & a1<>d & a2<>d by A2,TRANSLAC:2;
+   ex Y st Y is_line & d in Y & Y // M
+  proof consider Y such that A36:d in Y & M // Y by A3,AFF_1:63;take Y;
+  thus thesis by A36,AFF_1:50;end;
+ then consider Y such that A37:Y is_line & d in Y & Y // M;
+ A38:Y // Y & M // M & N // N by A3,A37,AFF_1:55;
+   ex d1 st d1 in Y & b1,b2 // b1,d1 proof
+   consider e1 such that A39:d<>e1 & e1 in Y by A37,AFF_1:32;
+   consider e2 such that A40:b1,b2 // b1,e2 & b1<>e2 by DIRAF:47;
+     not d,e1 // b1,e2 proof assume d,e1 // b1,e2; then A41:d,e1 // b1,b2 by
+A40,AFF_1:14; d,e1 // Y by A37,A38,A39,AFF_1:54; then A42:b1,b2 // Y by A39,A41
+,AFF_1:46; M // Y by A37; then a1,a3 // Y by A2,AFF_1:54;
+    then a1,a3 // b1,b2 by A37,A42,AFF_1:45; then a1,a3 // b2,b1 by AFF_1:13;
+    then a1,a3 // a2,a1 by A2,AFF_1:14; then a1,a3 // a1,a2 by AFF_1:13;
+    then LIN a1,a3,a2 by AFF_1:def 1;
+   hence contradiction by A2,A3,A13,AFF_1:39;end;
+   then consider d1 such that A43:LIN d,e1,d1 & LIN
+ b1,e2,d1 by AFF_1:74;take d1;
+     b1,e2 // b1,d1 by A43,AFF_1:def 1;
+  hence thesis by A37,A39,A40,A43,AFF_1:14,39;end;
+ then consider d1 such that A44:d1 in Y & b1,b2 // b1,d1;
+ A45:N // Y & N // M by A2,A37,AFF_1:58;
+ A46:N<>M & N<>Y & Y<>M proof assume A47:not thesis;
+  A48:now assume N=Y; then A49:a2,d // a2,a4 by A2,A37,A38,AFF_1:53;
+     LIN a2,d,a1 by A35,AFF_1:15; then a2,d // a2,a1 by AFF_1:def 1;
+   then a2,a4 // a2,a1 by A35,A49,AFF_1:14; then LIN a2,a4,a1 by AFF_1:def 1;
+   hence contradiction by A2,A3,A13,AFF_1:39;end;
+    now assume Y=M; then A50:a1,d // a1,a3 by A2,A37,AFF_1:53;
+     a1,a2 // a1,d by A35,AFF_1:def 1; then a1,a3 // a1,a2
+   by A35,A50,AFF_1:14;
+   then LIN a1,a3,a2 by AFF_1:def 1;
+  hence contradiction by A2,A3,A13,AFF_1:39;end;
+ hence contradiction by A2,A47,A48;end;
+   LIN a2,a1,d by A35,AFF_1:15; then a2,a1 // a2,d by AFF_1:def 1;
+ then A51:b2,b1 // a2,d by A2,AFF_1:14; LIN b1,b2,d1 by A44,AFF_1:def 1;
+then LIN
+ b2,b1,d1
+ by AFF_1:15; then b2,b1 // b2,d1 by AFF_1:def 1;
+ then a2,d // b2,d1 & a2,a3 // b2,b3 by A2,A51,AFF_1:13,14;
+ then A52:d,a3 // d1,b3 by A1,A2,A3,A37,A44,A45,A46,AFF_2:def 11;
+   a1,d // b1,d1 proof a1,a2 // a1,d by A35,AFF_1:def 1; then a2,a1 // a1,d
+by AFF_1:13; then b2,b1 // a1,d by A2,AFF_1:14; then b1,b2 // a1,d by AFF_1:13;
+ hence thesis by A2,A44,AFF_1:14;end;
+ then A53:d,a4 // d1,b4 by A1,A2,A3,A37,A44,A46,AFF_2:def 11;
+   Y // N by A2,A37,AFF_1:58;
+ hence a3,a4 // b3,b4 by A1,A2,A3,A37,A44,A46,A52,A53,AFF_2:def 11;end;
+hence a3,a4 // b3,b4 by A14;end;
+hence a3,a4 // b3,b4 by A5;end;
+hence thesis by Def1;end;
+
+theorem Th7:
+         X satisfies_DES implies X satisfies_major_SCH
+proof
+assume A1:X satisfies_DES;
+  now let o,a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+assume A2:M is_line & N is_line & o in M & o in N & a1 in M & a3 in M &
+       b1 in M & b3 in M & a2 in N & a4 in N & b2 in N & b4 in N & not a4 in M
+       & not a2 in M & not b2 in M & not b4 in M & not a1 in N & not a3 in N &
+       not b1 in N & not b3 in N & a3,a2 // b3,b2 & a2,a1 // b2,b1 &
+       a1,a4 // b1,b4;
+
+then A3:M // M & N // N by AFF_1:55;
+A4:now assume A5:a1=a3 or a2=a4;
+ A6:now assume A7:a1=a3;
+  A8:not LIN o,b2,b1 by A2,AFF_1:39;
+    o,b1 // o,b3 by A2,A3,AFF_1:53; then A9:LIN o,b1,b3 by AFF_1:def 1;
+    a2,a1 // b2,b3 by A2,A7,AFF_1:13; then b2,b1 // b2,b3
+  by A2,AFF_1:14;hence a3,a4 // b3,b4 by A2,A7,A8,A9,AFF_1:23;end;
+   now assume A10:a2=a4;
+  A11:not LIN o,b1,b2 by A2,AFF_1:39;
+    o,b2 // o,b4 by A2,A3,AFF_1:53; then A12:LIN o,b2,b4 by AFF_1:def 1;
+    a1,a2 // b1,b2 by A2,AFF_1:13; then b1,b2 // b1,b4 by A2,A10,AFF_1:14;
+  hence a3,a4 // b3,b4 by A2,A10,A11,A12,AFF_1:23;end;
+hence a3,a4 // b3,b4 by A5,A6;end;
+  now assume A13:a1<>a3 & a2<>a4;
+ A14:now assume ex x,y,z st LIN x,y,z & x<>y & x<>z & y<>z;
+  then consider d such that A15:LIN a1,a2,d & a1<>d & a2<>d by A2,TRANSLAC:2;
+    LIN o,d,d by AFF_1:16;
+  then consider Y such that A16:Y is_line & o in Y & d in Y & d in Y by AFF_1:
+33;
+    ex d1 st LIN b1,b2,d1 & d1 in Y proof
+      not b1,b2 // o,d proof assume b1,b2 // o,d; then b2,b1 // o,d by AFF_1:13
+;
+     then A17:a2,a1 // o,d by A2,AFF_1:14; LIN a2,a1,d by A15,AFF_1:15;
+     then a2,a1 // a2,d by AFF_1:def 1; then a2,d // o,d by A2,A17,AFF_1:14;
+     then d,a2 // d,o by AFF_1:13; then LIN d,a2,o by AFF_1:def 1; then LIN
+o,d,a2 by AFF_1:15; then A18:o,d // o,a2 by AFF_1:def 1;A19:o<>d proof assume
+ o=d;
+     then LIN o,a1,a2 by A15,AFF_1:15;
+     hence contradiction by A2,AFF_1:39;end; then A20:Y // N by A2,A16,A18,
+AFF_1:52;
+       a1,a2 // a1,d by A15,AFF_1:def 1; then a2,a1 // a1,d by AFF_1:13;
+     then a1,d // o,d by A2,A17,AFF_1:14; then d,o // d,a1 by AFF_1:13;
+     then LIN d,o,a1 by AFF_1:def 1; then LIN o,d,a1 by AFF_1:15; then o,d
+// o,a1 by AFF_1:def 1; then Y // M by A2,A16,A19,AFF_1:52; then M // N by A20,
+AFF_1:58;
+    hence contradiction by A2,AFF_1:59;end;
+    then consider d1 such that A21:LIN b1,b2,d1 & LIN
+ o,d,d1 by AFF_1:74;take d1;
+      o<>d proof assume o=d; then LIN o,a1,a2 by A15,AFF_1:15;
+hence contradiction by A2,AFF_1:39;end;
+    hence thesis by A16,A21,AFF_1:39;end;
+  then consider d1 such that A22:LIN b1,b2,d1 & d1 in Y;
+  A23:o<>d proof assume o=d; then LIN o,a1,a2 by A15,AFF_1:15;
+hence contradiction by A2,AFF_1:39;end;
+  A24:N<>M & N<>Y & M<>Y proof assume A25:not thesis;
+     now assume A26: N=Y or M=Y;
+      LIN a2,d,a1 & LIN
+ a1,d,a2 by A15,AFF_1:15;hence contradiction by A2,A15,A16,A26,AFF_1:39;end;
+  hence contradiction by A2,A25;end;
+  A27:a2,d // b2,d1 proof LIN a2,a1,d & LIN b2,b1,d1 by A15,A22,AFF_1:15;
+   then A28:a2,a1 // a2,d & b2,b1 // b2,d1 by AFF_1:def 1; then b2,b1 // a2,d
+by A2,AFF_1:14;hence thesis by A2,A28,AFF_1:14;end;
+    a2,a3 // b2,b3 by A2,AFF_1:13;
+  then A29:d,a3 // d1,b3 by A1,A2,A16,A22,A23,A24,A27,AFF_2:def 4;
+    a1,d // b1,d1 proof a1,a2 // a1,d & b1,b2 // b1,d1 by A15,A22,AFF_1:def 1;
+   then A30:a2,a1 // a1,d & b2,b1 // b1,d1 by AFF_1:13; then b2,b1 // a1,d by
+A2,AFF_1:14;hence thesis by A2,A30,AFF_1:14;end;
+  then d,a4 // d1,b4 by A1,A2,A16,A22,A23,A24,AFF_2:def 4;
+ hence a3,a4 // b3,b4 by A1,A2,A16,A22,A23,A24,A29,AFF_2:def 4;end;
+   now assume A31:not ex x,y,z st LIN x,y,z & x<>y & x<>z & y<>z;
+A32:  LIN a1,a3,b1 by A2,AFF_1:33;
+  A33:now assume A34:a1=b1;
+A35:   LIN a1,a3,b3 by A2,AFF_1:33;
+     a1<>b3 proof assume A36: a1=b3;
+    A37:not LIN o,a2,a1 by A2,AFF_1:39;
+    A38:LIN o,a1,a3 by A2,AFF_1:33;
+      b2,b1 // a2,a3 by A2,A34,A36,AFF_1:13; then a2,a1 // a2,a3 by A2,AFF_1:14
+;
+    hence contradiction by A13,A37,A38,AFF_1:23;end;
+   then A39:a3=b3 by A13,A31,A35;
+     LIN a2,a4,b4 by A2,AFF_1:33; then A40:a2=b4 or a4=b4 by A13,A31;
+     a2<>b4 proof assume a2=b4; then LIN a1,a4,a2
+    by A2,A34,AFF_1:def 1; then LIN a2,a4,a1 by AFF_1:15;
+   hence contradiction by A2,A13,AFF_1:39;end;
+   hence a3,a4 // b3,b4 by A39,A40,AFF_1:11;end;
+    now assume A41:a3=b1;
+A42:   LIN a1,a3,b3 by A2,AFF_1:33;
+     a3<>b3 proof assume a3=b3; then a3,a2 //
+    b2,b1 by A2,A41,AFF_1:13
+; then a3,a2 // a2,a1 by A2,AFF_1:14; then a2,a3 // a2,a1
+    by AFF_1:13; then LIN a2,a3,a1 by AFF_1:def 1; then LIN a1,a3,a2 by AFF_1:
+15;
+hence contradiction by A2,A13,AFF_1:39;end;
+   then A43:a1=b3 by A13,A31,A42;
+A44:   LIN a2,a4,b2 by A2,AFF_1:33;
+     a2<>b2 proof assume a2=b2; then LIN a2,a1,a3 by A2,A41,AFF_1:def 1;
+    then LIN a1,a3,a2 by AFF_1:15;
+   hence contradiction by A2,A13,AFF_1:39;end;
+   then A45:a4=b2 by A13,A31,A44;
+A46:   LIN a2,a4,b4 by A2,AFF_1:33;
+     a4<>b4 proof assume a4=b4; then a4,a1 // a4,a3 by A2,A41,AFF_1:13;
+    then LIN a4,a1,a3 by AFF_1:def 1; then LIN a1,a3,a4 by AFF_1:15;
+hence contradiction by A2,A13,AFF_1:39;end;
+   then A47:a2=b4 by A13,A31,A46;
+     a3,a4 // b2,b1 by A41,A45,AFF_1:11;
+   then a3,a4 // b4,b3 by A2,A43,A47,AFF_1:14;hence a3,a4 // b3,b4 by AFF_1:13;
+end;
+ hence a3,a4 // b3,b4 by A13,A31,A32,A33;end;
+hence a3,a4 // b3,b4 by A14;end;
+hence a3,a4 // b3,b4 by A4;end;
+hence thesis by Def2;end;
+
+theorem X satisfies_DES iff X satisfies_SCH
+proof
+  A1:X satisfies_SCH implies X satisfies_DES
+proof
+assume A2:X satisfies_SCH;
+  now let Y,Z,M,o,a,b,c,a1,b1,c1;
+assume A3: o in Y & o in Z & o in M &
+o<>a & o<>b & o<>c & a in Y & a1 in Y & b in Z & b1 in Z &
+c in M & c1 in M & Y is_line & Z is_line & M is_line &
+Y<>Z & Y<>M & a,b // a1,b1 & a,c // a1,c1;
+assume A4:not b,c // b1,c1;
+A5:now let Y,Z,M,o,a,b,c,a1,b1,c1,d;
+  assume A6:X satisfies_SCH;
+  assume A7:o in Y & o in Z & o in M & o<>a & o<>b & o<>c & a in Y
+    & a1 in Y & b in Z & b1 in Z & c in M & c1 in M & Y is_line &
+    Z is_line & M is_line & Y<>Z & Y<>M & a,b // a1,b1 &
+    a,c // a1,c1 & LIN b,c,d & LIN b1,c1,d;
+    LIN a,a1,d or b,c // b1,c1 proof
+    assume A8:not LIN a,a1,d & not b,c // b1,c1;
+    A9:c <>c1 & a<>a1 & b<>b1
+     proof assume A10:not thesis;
+      A11:now assume A12:c =c1;
+       A13:not LIN o,c,a proof assume LIN o,c,a; then a in M by A7,AFF_1:39;
+then A14:o,a // M by A7,AFF_1:66; o,a // Y by A7,AFF_1:66;
+        then Y // M by A7,A14,AFF_1:67;
+       hence contradiction by A7,AFF_1:59;end;
+         Y // Y by A7,AFF_1:55; then o,a // o,a1 by A7,AFF_1:53;
+       then A15:LIN o,a,a1 by AFF_1:def 1;
+         c,a // c,a1 by A7,A12,AFF_1:13;
+       then A16:a=a1 by A13,A15,AFF_1:23;
+       A17:not LIN o,a,b proof assume LIN o,a,b; then b in Y by A7,AFF_1:39;
+then A18:o,b // Y by A7,AFF_1:66; o,b // Z by A7,AFF_1:66;
+        then Y // Z by A7,A18,AFF_1:67;
+       hence contradiction by A7,AFF_1:59;end;
+         Z // Z by A7,AFF_1:55; then o,b // o,b1 by A7,AFF_1:53;
+       then LIN o,b,b1 by AFF_1:def 1;
+       then b=b1 by A7,A16,A17,AFF_1:23;
+      hence contradiction by A8,A12,AFF_1:11;end;
+      A19:now assume A20:a=a1;
+       A21:not LIN o,a,b proof assume LIN o,a,b; then b in Y by A7,AFF_1:39;
+then A22:o,b // Y by A7,AFF_1:66; o,b // Z by A7,AFF_1:66;
+        then Y // Z by A7,A22,AFF_1:67;
+       hence contradiction by A7,AFF_1:59;end;
+         Z // Z by A7,AFF_1:55; then o,b // o,b1 by A7,AFF_1:53;
+       then LIN o,b,b1 by AFF_1:def 1;
+       then A23:b=b1 by A7,A20,A21,AFF_1:23;
+       A24:not LIN o,a,c proof assume LIN o,a,c; then c in Y by A7,AFF_1:39;
+then A25:o,c // Y by A7,AFF_1:66; o,c // M by A7,AFF_1:66;
+        then Y // M by A7,A25,AFF_1:67;
+       hence contradiction by A7,AFF_1:59;end;
+         M // M by A7,AFF_1:55; then o,c // o,c1 by A7,AFF_1:53;
+       then LIN o,c,c1 by AFF_1:def 1;
+       then c =c1 by A7,A20,A24,AFF_1:23;
+      hence contradiction by A8,A23,AFF_1:11;end;
+        now assume A26:b=b1;
+       A27:not LIN o,b,a proof assume LIN o,b,a; then a in Z by A7,AFF_1:39;
+then A28:o,a // Z by A7,AFF_1:66; o,a // Y by A7,AFF_1:66;
+        then Y // Z by A7,A28,AFF_1:67;
+       hence contradiction by A7,AFF_1:59;end;
+         Y // Y by A7,AFF_1:55; then o,a // o,a1 by A7,AFF_1:53;
+       then A29:LIN o,a,a1 by AFF_1:def 1;
+         b,a // b,a1 by A7,A26,AFF_1:13;
+       then A30:a=a1 by A27,A29,AFF_1:23;
+       A31:not LIN o,a,c proof assume LIN o,a,c; then c in Y by A7,AFF_1:39;
+then A32:o,c // Y by A7,AFF_1:66; o,c // M by A7,AFF_1:66;
+        then Y // M by A7,A32,AFF_1:67;
+       hence contradiction by A7,AFF_1:59;end;
+         M // M by A7,AFF_1:55; then o,c // o,c1 by A7,AFF_1:53;
+       then LIN o,c,c1 by AFF_1:def 1;
+       then c =c1 by A7,A30,A31,AFF_1:23;
+      hence contradiction by A8,A26,AFF_1:11;end;
+     hence contradiction by A10,A11,A19;end;
+      now assume A33:b<>c;
+    A34:now assume A35:b1=o;
+     A36:o=a1 proof assume A37:o<>a1;
+      A38:not LIN b,a,o proof assume LIN b,a,o;
+       then LIN o,a,b by AFF_1:15; then b in Y by A7,AFF_1:39;
+       then A39:o,b // Y by A7,AFF_1:66; o,b // Z by A7,AFF_1:66;
+       then Y // Z by A7,A39,AFF_1:67;
+      hence contradiction by A7,AFF_1:59;end;
+      A40:a,o // a,a1 by A7,AFF_1:65;
+        LIN b,o,a1 proof a1,o // a,a1 by A7,AFF_1:65;
+       then a,b // a,a1 by A7,A35,A37,AFF_1:14;
+       then LIN a,b,a1 by AFF_1:def 1; then LIN a1,b,a by AFF_1:15;
+       then A41:a1,b // a1,a by AFF_1:def 1;
+       A42:a1<>a proof assume a1=a; then LIN a,b,o by A7,A35,AFF_1:def 1
+; then LIN o,a,b by AFF_1:15; then b in Y by A7,AFF_1:39; then A43:o,b // Y
+by A7,AFF_1:66; o,b // Z by A7,AFF_1:66; then Y // Z by A7,A43,AFF_1:67;
+hence contradiction by A7,AFF_1:59;end;
+         a1,a // a1,o by A7,AFF_1:65;
+       then a1,b // a1,o by A41,A42,AFF_1:14;
+       then LIN a1,b,o by AFF_1:def 1;
+      hence thesis by AFF_1:15;end;
+     hence contradiction by A37,A38,A40,AFF_1:23;end;
+       o=c1 proof assume A44:o<>c1;
+      A45:not LIN a,c,o proof assume LIN a,c,o; then LIN o,a,c by AFF_1:15;
+        then c in Y by A7,AFF_1:39; then A46:o,c // Y by A7,AFF_1:66;
+          o,c // M by A7,AFF_1:66; then Y // M by A7,A46,AFF_1:67;
+       hence contradiction by A7,AFF_1:59;end;
+      A47:LIN a,o,c1 proof A48:o,c1 // o,c by A7,AFF_1:65;
+       then o,c // a,c by A7,A36,A44,AFF_1:14; then c,o // c,a by AFF_1:13;
+       then LIN c,o,a by AFF_1:def 1; then LIN o,a,c by AFF_1:15;
+       then o,a // o,c by AFF_1:def 1; then o,a // o,c1 by A7,A48,AFF_1:14;
+       then LIN o,a,c1 by AFF_1:def 1; hence thesis by AFF_1:15;end;
+        c,o // c,c1 by A7,AFF_1:65;
+      hence contradiction by A44,A45,A47,AFF_1:23;end;
+    hence contradiction by A8,A35,AFF_1:12;end;
+      now assume A49:b1<>o;
+    A50:a<>b & a<>c proof assume A51:not thesis;
+     A52:now assume a=b; then A53:o,a // Z by A7,AFF_1:66; o,a // Y by A7,AFF_1
+:66; then Y // Z by A7,A53,AFF_1:67;
+     hence contradiction by A7,AFF_1:59;end;
+       now assume a=c; then A54:o,a // M by A7,AFF_1:66; o,a // Y by A7,AFF_1:
+66; then Y // M by A7,A54,AFF_1:67;
+     hence contradiction by A7,AFF_1:59;end;
+    hence contradiction by A51,A52;end;
+    A55:a1<>b1 & a1<>c1 proof assume A56:not thesis;
+     A57:now assume a1=b1; then A58:o,b1 // Y by A7,AFF_1:66; o,b1 // Z by A7,
+AFF_1:66; then Y // Z by A49,A58,AFF_1:67;
+hence contradiction by A7,AFF_1:59;end;
+       now assume a1=c1; then A59:o,a1 // M by A7,AFF_1:66;A60:o<>a1 proof
+assume A61:o=a1;
+       A62:not LIN a,b,o proof assume LIN a,b,o; then LIN o,a,b by AFF_1:15;
+        then b in Y by A7,AFF_1:39; then A63:o,b // Y by A7,AFF_1:66;
+          o,b // Z by A7,AFF_1:66; then Y // Z by A7,A63,AFF_1:67;
+hence contradiction by A7,AFF_1:59;end; Z // Z by A7,AFF_1:55;
+        then A64:o,b // o,b1 by A7,AFF_1:53; then a,b // o,b by A7,A49,A61,
+AFF_1:14; then b,a // b,o by AFF_1:13; then LIN b,a,o by AFF_1:def 1;
+        then LIN o,a,b by AFF_1:15; then o,a // o,b by AFF_1:def 1;
+        then o,a // o,b1 by A7,A64,AFF_1:14; then LIN o,a,b1 by AFF_1:def 1;
+       then A65:LIN a,o,b1 by AFF_1:15;
+         Z // Z by A7,AFF_1:55; then b,o // b,b1 by A7,AFF_1:53;
+       hence contradiction by A49,A62,A65,AFF_1:23;end;
+        o,a1 // Y by A7,AFF_1:66; then Y // M by A59,A60,AFF_1:67;
+hence contradiction by A7,AFF_1:59;end;
+    hence contradiction by A56,A57;end;
+    A66:b<>c & b1<>c1 by A8,AFF_1:12;
+      LIN b,b,c by AFF_1:16;
+    then consider A such that A67:A is_line & b in A & b in A & c in A by AFF_1
+:33;
+      LIN b1,b1,c1 by AFF_1:16;
+    then consider K such that A68:K is_line & b1 in K & b1 in K & c1 in K by
+AFF_1:33; LIN o,o,a by AFF_1:16;
+    then consider C such that A69:C is_line & o in C & o in C & a in C by AFF_1
+:33;
+      ex d1 st d1 in C & c,c1 // d,d1 proof
+      consider e1 such that A70:o,a // o,e1 & o<>e1 by DIRAF:47;
+      consider e2 such that A71:c,c1 // d,e2 & d<>e2 by DIRAF:47;
+        not o,e1 // d,e2 proof assume o,e1 // d,e2; then o,a // d,e2
+      by A70,AFF_1:14; then A72:o,a // c,c1 by A71,AFF_1:14; M // M
+       by A7,AFF_1:55; then c,c1 // o,c by A7,AFF_1:53;
+       then o,a // o,c by A9,A72,AFF_1:14;
+       then LIN o,a,c by AFF_1:def 1; then c in Y by A7,AFF_1:39;
+       then A73:o,c // Y by A7,AFF_1:66; o,c // M by A7,AFF_1:66; then Y //
+M
+by A7,A73,AFF_1:67;
+      hence contradiction by A7,AFF_1:59;end;
+      then consider d1 such that A74:LIN o,e1,d1 & LIN d,e2,d1 by AFF_1:74;
+      take d1; LIN o,a,e1 by A70,AFF_1:def 1; then A75:
+ e1 in C by A7,A69,AFF_1:39;
+        d,e2 // d,d1 by A74,AFF_1:def 1;
+     hence thesis by A69,A70,A71,A74,A75,AFF_1:14,39;end;
+    then consider d1 such that A76:d1 in C & c,c1 // d,d1;
+      ex d2 st d2 in C & a,c // d,d2 proof
+      consider e1 such that A77:o,a // o,e1 & o<>e1 by DIRAF:47;
+      consider e2 such that A78:a,c // d,e2 & d<>e2 by DIRAF:47;
+        not o,e1 // d,e2
+       proof assume o,e1 // d,e2; then o,a // d,e2 by A77,AFF_1:14;
+       then o,a // a,c by A78,AFF_1:14; then a,o // a,c by AFF_1:13;
+       then LIN a,o,c by AFF_1:def 1; then c in Y by A7,AFF_1:39; then A79:o,
+c // Y
+       by A7,AFF_1:66; o,c // M by A7,AFF_1:66; then Y // M by A7,A79,AFF_1:67
+;
+       hence contradiction by A7,AFF_1:59;end;
+      then consider d2 such that A80:LIN o,e1,d2 & LIN d,e2,d2 by AFF_1:74;
+      take d2; LIN
+ o,a,e1 by A77,AFF_1:def 1; then A81: e1 in C by A7,A69,AFF_1:39;
+        d,e2 // d,d2 by A80,AFF_1:def 1;
+     hence thesis by A69,A77,A78,A80,A81,AFF_1:14,39;end;
+    then consider d2 such that A82:d2 in C & a,c // d,d2;
+      ex d3 st d3 in A & o,b // d1,d3 proof
+      consider e1 such that A83:b,c // b,e1 & b<>e1 by DIRAF:47;
+      consider e2 such that A84:o,b // d1,e2 & d1<>e2 by DIRAF:47;
+        not b,e1 // d1,e2
+      proof assume b,e1 // d1,e2; then b,c // d1,e2 by A83,AFF_1:14;
+       then A85:b,c // o,b by A84,AFF_1:14; then b,c // b,o by AFF_1:13;
+       then LIN b,c,o by AFF_1:def 1; then LIN o,b,c by AFF_1:15; then A86:o,
+b // o,c
+       by AFF_1:def 1;A87:Z // Z & M // M by A7,AFF_1:55; then A88:
+       o,b // o,b1 by A7,AFF_1:53; o,c // o,c1 by A7,A87,AFF_1:53; then o,b
+// o,c1 by A7,A86,AFF_1:14; then o,b1 // o,c1 by A7,A88,AFF_1:14; then LIN o,
+b1,c1 by AFF_1:def 1; then LIN b1,c1,o by AFF_1:15; then b1,c1 // b1,o
+       by AFF_1:def 1;
+       then b1,c1 // o,b1 by AFF_1:13; then b1,c1 // o,b by A49,A88,AFF_1:14;
+      hence contradiction by A7,A8,A85,AFF_1:14;end;
+      then consider d3 such that A89:LIN b,e1,d3 & LIN d1,e2,d3 by AFF_1:74;
+      take d3; LIN
+ b,c,e1 by A83,AFF_1:def 1; then A90: e1 in A by A66,A67,AFF_1:39;
+        d1,e2 // d1,d3 by A89,AFF_1:def 1;
+     hence thesis by A67,A83,A84,A89,A90,AFF_1:14,39;end;
+    then consider d3 such that A91:d3 in A & o,b // d1,d3;
+      ex d4 st d4 in K & d1,d3 // d1,d4 proof
+      consider e1 such that A92:b1,c1 // b1,e1 & b1<>e1 by DIRAF:47;
+      consider e2 such that A93:d1,d3 // d1,e2 & d1<>e2 by DIRAF:47;
+        not b1,e1 // d1,e2
+       proof assume b1,e1 // d1,e2; then b1,c1 // d1,e2 by A92,AFF_1:14;
+        then A94:b1,c1 // d1,d3 by A93,AFF_1:14;
+        A95:d1<>d3 proof assume A96: d1=d3;
+         A97:d<>d1 proof assume A98: d=d1; Y // Y by A7,AFF_1:55; then o,a
+//
+o,a1 by A7,AFF_1:53; then LIN o,a,a1 by AFF_1:def 1; then A99:a1 in C by A7,A69
+,AFF_1:39; C // C
+          by A69,AFF_1:55;
+          then a,a1 // a,d by A69,A76,A98,A99,AFF_1:53;
+         hence contradiction by A8,AFF_1:def 1;end;
+         A100:d in A by A7,A66,A67,AFF_1:39;
+           M // M by A7,AFF_1:55; then c,c1 // o,c by A7,AFF_1:53;
+         then o,c // d,d1 by A9,A76,AFF_1:14; then d,d1 // c,o by AFF_1:13;
+         then A101:o in A by A67,A91,A96,A97,A100,AFF_1:62; A // A by A67,AFF_1
+:55;
+         then A102:o,b // o,c by A67,A101,AFF_1:53; then LIN
+ o,b,c by AFF_1:def 1;
+         then LIN b,c,o by AFF_1:15; then b,c // b,o by AFF_1:def 1;
+         then A103:b,c // o,b by AFF_1:13;A104:Z // Z & M // M by A7,AFF_1:55;
+         then A105:o,b // o,b1 by A7,AFF_1:53; o,c // o,c1 by A7,A104,AFF_1:53
+;
+         then o,b // o,c1 by A7,A102,AFF_1:14; then o,b1 // o,c1 by A7,A105,
+AFF_1:14; then LIN o,b1,c1 by AFF_1:def 1; then LIN b1,c1,o by AFF_1:15;
+         then b1,c1 // b1,o by AFF_1:def 1; then b1,c1 // o,b1 by AFF_1:13;
+         then o,b // b1,c1 by A49,A105,AFF_1:14;hence contradiction by A7,A8,
+A103,AFF_1:14;end;
+          Z // Z by A7,AFF_1:55; then A106:o,b // o,b1 by A7,AFF_1:53;
+        then o,b1 // d1,d3 by A7,A91,AFF_1:14; then A107:o,b1 // b1,c1 by A94,
+A95,AFF_1:14; then b1,o // b1,c1 by AFF_1:13; then LIN b1,o,c1 by AFF_1:def 1
+; then LIN o,b1,c1 by AFF_1:15; then o,b1 // o,c1
+        by AFF_1:def 1;
+        then A108:o,b // o,c1 by A49,A106,AFF_1:14;
+        A109:o<>c1 proof assume A110:o=c1;
+         A111:not LIN a,c,o proof assume LIN a,c,o; then LIN o,a,c by AFF_1:15;
+          then c in Y by A7,AFF_1:39; then A112:o,c // Y by A7,AFF_1:66;
+            o,c // M by A7,AFF_1:66; then Y // M by A7,A112,AFF_1:67;
+hence contradiction by A7,AFF_1:59;end;
+           Y // Y by A7,AFF_1:55; then a,o // a,a1 by A7,AFF_1:53;
+         then A113:LIN a,o,a1 by AFF_1:def 1;
+           c,o // c,a1 proof
+           Y // Y by A7,AFF_1:55; then a1,o // a,a1 by A7,AFF_1:53;
+         then a,c // a,a1
+         by A7,A55,A110,AFF_1:14; then LIN a,c,a1 by AFF_1:def 1; then LIN a1
+,c,a by AFF_1:15; then A114:a1,c // a1,a by AFF_1:def 1; Y // Y by A7,AFF_1:55
+;
+          then a1,a // a1,o by A7,AFF_1:53; then a1,c // a1,o by A9,A114,AFF_1:
+14; then LIN a1,c,o by AFF_1:def 1; then LIN c,o,a1 by AFF_1:15;
+         hence thesis by AFF_1:def 1;end;
+        hence contradiction by A55,A110,A111,A113,AFF_1:23;end;
+          M // M by A7,AFF_1:55; then o,c // o,c1 by A7,AFF_1:53;
+        then o,b // o,c by A108,A109,AFF_1:14; then LIN o,b,c by AFF_1:def 1;
+        then LIN b,o,c by AFF_1:15; then b,o // b,c by AFF_1:def 1; then o,b
+// b,c
+        by AFF_1:13; then o,b1 // b,c by A7,A106,AFF_1:14;hence contradiction
+by A8,A49,A107,AFF_1:14;end;
+      then consider d4 such that A115:LIN b1,e1,d4 & LIN d1,e2,d4 by AFF_1:74;
+      take d4; LIN b1,c1,e1 by A92,AFF_1:def 1; then A116: e1 in K by A66,A68,
+AFF_1:39;
+
+        d1,e2 // d1,d4 by A115,AFF_1:def 1;
+     hence thesis by A68,A92,A93,A115,A116,AFF_1:14,39;end;
+    then consider d4 such that A117:d4 in K & d1,d3 // d1,d4;
+    A118:c in A & b in A & d in A & d3 in A by A7,A33,A67,A91,AFF_1:39;
+    A119:not o in A & not a in A & not d1 in A & not d2 in A
+     proof assume A120:not thesis;
+      A121:now assume A122:o in
+ A; A // A by A67,AFF_1:55; then A123:o,b // o,c by A67,A122,AFF_1:53;
+then LIN o,b,c by AFF_1:def 1; then LIN
+ b,c,o by AFF_1:15;
+       then A124:b,c // b,o by AFF_1:def 1; Z // Z by A7,AFF_1:55;
+       then A125:o,b // o,b1 by A7,AFF_1:53; M // M by A7,AFF_1:55;
+       then o,c // o,c1 by A7,AFF_1:53; then o,b // o,c1 by A7,A123,AFF_1:14;
+       then o,b1 // o,c1 by A7,A125,AFF_1:14; then LIN o,b1,c1 by AFF_1:def 1
+;
+       then LIN b1,c1,o by AFF_1:15; then b1,c1 // b1,o by AFF_1:def 1;
+       then b1,c1 // o,b1 by AFF_1:13; then o,b // b1,c1 by A49,A125,AFF_1:14
+;
+       then b,o // b1,c1 by AFF_1:13;
+      hence contradiction by A7,A8,A124,AFF_1:14;end;
+
+      A126:now assume A127:a in A; A // A by A67,AFF_1:55; then A128:
+      a,b // a,c by A67,A127,AFF_1:53;
+       A129:a<>b proof assume a=b; then A130:o,b // Y by A7,AFF_1:66; o,b //
+Z by A7,AFF_1:66; then Y // Z by A7,A130,AFF_1:67;
+        hence contradiction by A7,AFF_1:59;end;
+         a<>c proof assume a=c; then A131:o,c // Y by A7,AFF_1:66; o,c // M
+by A7,AFF_1:66; then Y // M by A7,A131,AFF_1:67;
+        hence contradiction by A7,AFF_1:59;end;
+       then a,b // a1,c1 by A7,A128,AFF_1:14; then a1,b1 // a1,c1 by A7,A129,
+AFF_1:14; then LIN a1,b1,c1 by AFF_1:def 1; then LIN b1,c1,a1 by AFF_1:15;
+       then b1,c1 // b1,a1 by AFF_1:def 1; then A132:a1,b1 // b1,c1 by AFF_1:13
+;
+       A133:a1<>b1 proof assume a1=b1;
+        then A134:o,b1 // Y by A7,AFF_1:66; o,b1 // Z by A7,AFF_1:66;
+        then Y // Z by A49,A134,AFF_1:67;
+       hence contradiction by A7,AFF_1:59;end;
+         LIN a,b,c by A128,AFF_1:def 1; then LIN b,c,a by AFF_1:15; then b,c
+// b,a
+       by AFF_1:def 1; then b,c // a,b by AFF_1:13; then b,c // a1,b1 by A7,
+A129,AFF_1:14;
+      hence contradiction by A8,A132,A133,AFF_1:14;end;
+
+      A135:now assume A136:d1 in A;A137:d<>d1 proof assume A138: d=d1;
+  Y // Y by A7,AFF_1:55; then o,a // o,a1 by A7,AFF_1:53;
+        then LIN o,a,a1 by AFF_1:def 1; then A139:a1 in
+ C by A7,A69,AFF_1:39; C // C by A69,AFF_1:55; then a,a1 // a,d by A69,A76,A138
+,A139,AFF_1:53;
+hence contradiction by A8,AFF_1:def 1;end;
+       A140:d in A by A7,A66,A67,AFF_1:39; d,d1 // c,c1 by A76,AFF_1:13;
+       then A141:c1 in A by A67,A136,A137,A140,AFF_1:62; M // M by A7,AFF_1:55
+;
+       then c,c1 // c,o by A7,AFF_1:53; then LIN c,c1,o by AFF_1:def 1;
+hence contradiction by A9,A67,A121,A141,AFF_1:39;end;
+        now assume A142:d2 in A;A143:d<>d2 proof assume A144: d=d2;
+  Y // Y by A7,AFF_1:55; then o,a // o,a1 by A7,AFF_1:53;
+        then LIN o,a,a1 by AFF_1:def 1; then A145:a1 in
+ C by A7,A69,AFF_1:39; C // C by A69,AFF_1:55; then a,a1 // a,d by A69,A82,A144
+,A145,AFF_1:53;
+hence contradiction by A8,AFF_1:def 1;end;
+       A146:d in A by A7,A66,A67,AFF_1:39; d,d2 // c,a by A82,AFF_1:13;
+hence contradiction by A67,A126,A142,A143,A146,AFF_1:62;end;
+     hence contradiction by A120,A121,A126,A135;end;
+    A147:not c in C & not b in C & not d in C & not d3 in C
+     proof assume A148:not thesis;
+     A149: now assume A150:c in C; C // C by A69,AFF_1:55; then o,a // o,c
+by A69,A150,AFF_1:53; then LIN
+ o,a,c by AFF_1:def 1; then c in Y by A7,AFF_1:39;
+      then A151:o,c // Y by A7,AFF_1:66; o,c // M by A7,AFF_1:66;
+      then Y // M by A7,A151,AFF_1:67;
+     hence contradiction by A7,AFF_1:59;end;
+     A152:now assume A153:b in C; C // C by A69,AFF_1:55; then o,a // o,b by
+A69,A153,AFF_1:53; then LIN
+ o,a,b by AFF_1:def 1; then b in Y by A7,AFF_1:39;
+      then A154:o,b // Y by A7,AFF_1:66; o,b // Z by A7,AFF_1:66;
+      then Y // Z by A7,A154,AFF_1:67;
+     hence contradiction by A7,AFF_1:59;end;
+
+     A155: now assume A156:d in
+ C; C // C by A69,AFF_1:55; then A157:o,a // a,d by A69,A156,AFF_1:53; Y //
+Y
+by A7,AFF_1:55; then o,a // a,a1 by A7,AFF_1:53;
+      then a,a1 // a,d by A7,A157,AFF_1:14;
+     hence contradiction by A8,AFF_1:def 1;end;
+        now assume A158:d3 in C;A159:d1<>d3 proof assume A160: d1=d3;
+       A161:d<>d1 proof assume A162: d=d1; Y // Y by A7,AFF_1:55; then o,a
+//
+o,a1 by A7,AFF_1:53; then LIN o,a,a1 by AFF_1:def 1; then A163:a1 in C by A7,
+A69,AFF_1:39; C // C by A69,AFF_1:55;
+        then a,a1 // a,d by A69,A76,A162,A163,AFF_1:53;
+       hence contradiction by A8,AFF_1:def 1;end;
+       A164:d in A by A7,A66,A67,AFF_1:39; d,d1 // c,c1 by A76,AFF_1:13;
+       then A165:c1 in A by A67,A91,A160,A161,A164,AFF_1:62; A // A by A67,
+AFF_1:55;
+       then A166:c,c1 // c,b by A67,A165,AFF_1:53; M // M by A7,AFF_1:55;
+       then c,o // c,c1 by A7,AFF_1:53; then c,o // c,b by A9,A166,AFF_1:14;
+then A167:       LIN c,o,b by AFF_1:def 1; then LIN o,b,c by AFF_1:15;
+then A168:o,b // o,c
+       by AFF_1:def 1; M // M & Z // Z by A7,AFF_1:55; then A169:o,b // o,b1
+&
+       o,c // o,c1 by A7,AFF_1:53; then o,b1 // o,c by A7,A168,AFF_1:14;
+       then o,b1 // o,c1 by A7,A169,AFF_1:14; then LIN o,b1,c1 by AFF_1:def 1
+;
+       then LIN b1,c1,o by AFF_1:15; then b1,c1 // b1,o by AFF_1:def 1;
+       then b1,c1 // o,b1 by AFF_1:13; then A170:o,b // b1,c1 by A49,A169,AFF_1
+:14; LIN b,c,o by A167,AFF_1:15;
+       then b,c // b,o by AFF_1:def 1; then b,c // o,b by AFF_1:13;
+hence contradiction by A7,A8,A170,AFF_1:14;end;
+        d1,d3 // o,b by A91,AFF_1:13;
+     hence contradiction by A69,A76,A152,A158,A159,AFF_1:62;end;
+     hence contradiction by A148,A149,A152,A155;end;
+    A171:a,c // d2,d by A82,AFF_1:13;
+      c,o // d,d1 proof M // M by A7,AFF_1:55; then c,c1 // c,o by A7,AFF_1:53
+;hence thesis by A9,A76,AFF_1:14;end;
+    then A172:a,b // d2,d3 by A6,A67,A69,A76,A82,A91,A118,A119,A147,A171,Def3;
+    A173:o in C & a1 in C & d1 in C & d2 in C
+     proof
+        a1 in C proof Y // Y by A7,AFF_1:55; then o,a // o,a1 by A7,AFF_1:53;
+      then LIN o,a,a1 by AFF_1:def 1; hence thesis by A7,A69,AFF_1:39;end;
+     hence thesis by A69,A76,A82;end;
+    A174:c1 in K & b1 in K & d in K & d4 in K
+     proof
+        d in K proof b1<>c1 by A8,AFF_1:12;
+      hence thesis by A7,A68,AFF_1:39;end;
+     hence thesis by A68,A117;end;
+    A175:not o in K & not a1 in K & not d1 in K & not d2 in K
+     proof assume A176:not thesis;
+      A177:now assume A178:o in K; K // K by A68,AFF_1:55; then A179:
+      o,b1 // o,c1 by A68,A178,AFF_1:53; then LIN o,b1,c1 by AFF_1:def 1;
+then LIN b1,c1,o
+       by AFF_1:15; then A180:b1,c1 // b1,o by AFF_1:def 1; Z // Z
+       by A7,AFF_1:55;
+       then A181:o,b1 // o,b by A7,AFF_1:53; then A182:o,b // o,c1 by A49,A179,
+AFF_1:14;
+       A183:o<>c1 proof assume A184:o=c1;
+        A185:a1<>o proof assume A186:a1=o;
+       A187:not LIN a,b,o proof assume LIN a,b,o; then LIN o,a,b by AFF_1:15;
+        then b in Y by A7,AFF_1:39; then A188:o,b // Y by A7,AFF_1:66;
+          o,b // Z by A7,AFF_1:66; then Y // Z by A7,A188,AFF_1:67;
+hence contradiction by A7,AFF_1:59;end; Z // Z by A7,AFF_1:55;
+        then A189:o,b // o,b1 by A7,AFF_1:53; then a,b // o,b by A7,A49,A186,
+AFF_1:14; then b,a // b,o by AFF_1:13; then LIN b,a,o by AFF_1:def 1;
+        then LIN o,a,b by AFF_1:15; then o,a // o,b by AFF_1:def 1;
+        then o,a // o,b1 by A7,A189,AFF_1:14; then LIN o,a,b1 by AFF_1:def 1;
+       then A190:LIN a,o,b1 by AFF_1:15;
+         Z // Z by A7,AFF_1:55; then b,o // b,b1 by A7,AFF_1:53;
+       hence contradiction by A49,A187,A190,AFF_1:23;end;
+        A191:not LIN c,a,o proof assume LIN c,a,o; then LIN o,a,c by AFF_1:15
+;
+         then c in Y by A7,AFF_1:39; then A192:o,c // Y by A7,AFF_1:66;
+           o,c // M by A7,AFF_1:66; then Y // M by A7,A192,AFF_1:67;
+hence contradiction by A7,AFF_1:59;end;
+        A193:LIN c,o,a1 proof Y // Y by A7,AFF_1:55;
+         then A194:a1,o // o,a by A7,AFF_1:53; then a,c // o,a by A7,A184,A185,
+AFF_1:14; then a,c // a,o by AFF_1:13; then LIN a,c,o by AFF_1:def 1;
+         then LIN o,c,a by AFF_1:15; then o,c // o,a by AFF_1:def 1;
+         then o,c // a1,o by A7,A194,AFF_1:14; then o,c // o,a1 by AFF_1:13;
+         then LIN o,c,a1 by AFF_1:def 1;hence thesis by AFF_1:15;end;
+          Y // Y by A7,AFF_1:55; then a,o // a,a1 by A7,AFF_1:53;
+        hence contradiction by A185,A191,A193,AFF_1:23;end;
+         M // M by A7,AFF_1:55; then o,c // o,c1 by A7,AFF_1:53;
+       then o,b // o,c by A182,A183,AFF_1:14; then LIN o,b,c by AFF_1:def 1;
+       then LIN b,c,o by AFF_1:15; then b,c // b,o by AFF_1:def 1; then b,c
+// o,b
+       by AFF_1:13; then b,c // o,b1 by A7,A181,AFF_1:14; then b,c // b1,o
+by AFF_1:13;
+      hence contradiction by A8,A49,A180,AFF_1:14;end;
+      A195:now assume A196:a1 in K; K // K by A68,AFF_1:55; then A197:
+      a1,b1 // a1,c1
+       by A68,A196,AFF_1:53; then LIN a1,b1,c1 by AFF_1:def 1; then LIN
+ b1,c1,a1 by AFF_1:15; then b1,c1 // b1,a1 by AFF_1:def 1; then A198:b1,c1 //
+a1,b1
+       by AFF_1:13; a,b // a1,c1 by A7,A55,A197,AFF_1:14; then a,b // a,c
+       by A7,A55,AFF_1:14; then LIN a,b,c by AFF_1:def 1; then LIN b,c,a by
+AFF_1:15; then b,c // b,a by AFF_1:def 1; then b,c // a,b by AFF_1:13;
+       then b,c // a1,b1 by A7,A50,AFF_1:14;hence contradiction by A8,A55,A198,
+AFF_1:14;end;
+
+      A199:now assume A200:d1 in K;A201:d in K by A7,A66,A68,AFF_1:39;
+       A202:d<>d1 proof assume A203: d=d1; C // C by A69,AFF_1:55; then A204:
+o
+,a // a,d by A69,A76,A203,AFF_1:53; Y // Y by A7,AFF_1:55; then o,a // a,a1
+by A7,AFF_1:53; then a,a1 // a,d by A7,A204,AFF_1:14;
+       hence contradiction by A8,AFF_1:def 1;end;
+         d,d1 // c1,c by A76,AFF_1:13; then A205:c in K by A68,A200,A201,A202,
+AFF_1:62;
+         M // M by A7,AFF_1:55; then c,c1 // c,o by A7,AFF_1:53;
+       then LIN c,c1,o by AFF_1:def 1;
+      hence contradiction by A9,A68,A177,A205,AFF_1:39;end;
+        now assume A206:d2 in K;A207:d in K by A7,A66,A68,AFF_1:39;
+       A208:d<>d2 proof assume A209: d=d2;
+         Y // Y by A7,AFF_1:55; then A210:o,a // a,a1 by A7,AFF_1:53;
+         C // C by A69,AFF_1:55; then o,a // a,d by A69,A82,A209,AFF_1:53;
+       then a,a1 // a,d by A7,A210,AFF_1:14;
+       hence contradiction by A8,AFF_1:def 1;end;
+         d,d2 // a1,c1 by A7,A50,A82,AFF_1:14; then d,d2 // c1,a1 by AFF_1:13;
+      hence contradiction by A68,A195,A206,A207,A208,AFF_1:62;end;
+     hence contradiction by A176,A177,A195,A199;end;
+    A211:not c1 in C & not b1 in C & not d in C & not d4 in C
+     proof assume A212:not thesis;
+      A213:now assume A214:c1 in C; M // M by A7,AFF_1:55; then o,c1 // c1,c
+       by A7,AFF_1:53;
+       hence contradiction by A68,A69,A147,A175,A214,AFF_1:62;end;
+      A215:now assume A216:b1 in C; Z // Z by A7,AFF_1:55; then o,b1 // o,b
+       by A7,AFF_1:53;
+      hence contradiction by A49,A69,A147,A216,AFF_1:62;end;
+        now assume A217:d4 in C;
+         d1,d4 // d1,d3 by A117,AFF_1:13;
+      hence contradiction by A69,A76,A117,A147,A175,A217,AFF_1:62;end;
+     hence contradiction by A147,A212,A213,A215;end;
+    A218:a1,c1 // d2,d proof a<>c
+      proof assume A219:a=c;A220:o,a // Y by A7,AFF_1:66; o,a // M by A7,A219,
+AFF_1:66; then Y // M by A7,A220,AFF_1:67;
+      hence contradiction by A7,AFF_1:59;end;
+      then a1,c1 // d,d2 by A7,A82,AFF_1:14;
+     hence thesis by AFF_1:13;end;
+    A221:c1,o // d,d1 proof M // M by A7,AFF_1:55; then c1,o // c,c1 by A7,
+AFF_1:53;hence thesis by A9,A76,AFF_1:14;end;
+      o,b1 // d1,d4 proof
+      A222:o,b // o,b1 by A7,AFF_1:65; o,b // d1,d4 by A76,A91,A117,A147,AFF_1:
+14;
+      hence thesis by A7,A222,AFF_1:14;end;
+    then A223:a1,b1 // d2,d4 by A6,A68,A69,A173,A174,A175,A211,A218,A221,Def3;
+    A224:d1<>d2 proof assume d1=d2;
+     then a,c // c,c1 by A76,A82,A147,AFF_1:14; then c,c1 // c,a
+     by AFF_1:13;
+     then LIN c,c1,a by AFF_1:def 1; then a in M by A7,A9,AFF_1:39;
+     then A225:o,a // M by A7,AFF_1:66; o,a // Y by A7,AFF_1:66; then Y // M
+by A7,A225,AFF_1:67;
+    hence contradiction by A7,AFF_1:59;end;
+    A226:d4<>d3 proof assume A227: d4=d3;
+       d=d3 proof assume A228:d<>d3;
+      A229:d in A & d in K by A7,A66,A67,A68,AFF_1:39;
+      A230:A // A & K // K by A67,A68,AFF_1:55;
+      then A231:b1,c1 // d,d3 by A68,A117,A227,A229,AFF_1:53;
+        b,c // d,d3 by A67,A91,A229,A230,AFF_1:53;
+     hence contradiction by A8,A228,A231,AFF_1:14;end;
+     then A232:o,b // d,d1 by A91,AFF_1:13;
+     A233:M // M & Z // Z by A7,AFF_1:55; then o,c // c,c1 by A7,AFF_1:53;
+     then o,c // d,d1 by A9,A76,AFF_1:14;
+     then A234:o,b // o,c by A76,A147,A232,AFF_1:14
+; then LIN o,b,c by AFF_1:def 1;
+     then LIN b,c,o by AFF_1:15; then b,c // b,o by AFF_1:def 1;
+     then A235:b,c // o,b by AFF_1:13;
+     A236:o,b // o,b1 & o,c // o,c1 by A7,A233,AFF_1:53;
+     then o,b1 // o,c by A7,A234,AFF_1:14; then o,b1 // o,c1 by A7,A236,AFF_1:
+14;
+     then LIN o,b1,c1 by AFF_1:def 1; then LIN b1,c1,o by AFF_1:15;
+     then b1,c1 // b1,o by AFF_1:def 1; then b1,c1 // o,b1 by AFF_1:13;
+     then o,b // b1,c1 by A49,A236,AFF_1:14;hence contradiction by A7,A8,A235,
+AFF_1:14
+;end;
+      d2,d3 // a1,b1 by A7,A50,A172,AFF_1:14;
+    then d2,d3 // d2,d4 by A55,A223,AFF_1:14; then LIN d2,d3,d4 by AFF_1:def 1;
+    then LIN d4,d3,d2 by AFF_1:15; then A237:d4,d3 // d4,d2 by AFF_1:def 1;
+      LIN d1,d3,d4 by A117,AFF_1:def 1; then LIN d4,d3,d1 by AFF_1:15;
+    then d4,d3 // d4,d1 by AFF_1:def 1; then A238: d4,d2 // d4,d1 by A226,A237,
+AFF_1:14;
+
+      not LIN d4,d2,d1
+     proof assume LIN d4,d2,d1; then LIN d1,d2,d4 by AFF_1:15;
+hence contradiction by A69,A76,A82,A211,A224,AFF_1:39;end;
+    hence contradiction by A238,AFF_1:def 1;end;
+    hence contradiction by A34;end;
+    hence contradiction by A8,AFF_1:12;end;
+  hence LIN a,a1,d or b,c // b1,c1;end;
+A239:now assume Z // M; then A240:b in M & b1 in M by A3,AFF_1:59; M // M by A3
+,AFF_1:55;
+hence contradiction by A3,A4,A240,AFF_1:53;end;
+  now assume A241:not Z // M;
+ A242:Y // Y & Z // Z & M // M by A3,AFF_1:55;
+ A243:not a in Z & not a in M proof assume A244:not thesis;
+  A245:now assume a in Z; then A246:o,a // Z by A3,AFF_1:66; o,a // Y by A3,
+AFF_1:66; then Y // Z by A3,A246,AFF_1:67;
+  hence contradiction by A3,AFF_1:59;end;
+    now assume a in M; then A247:o,a // M by A3,AFF_1:66; o,a // Y by A3,AFF_1:
+66; then Y // M by A3,A247,AFF_1:67;
+  hence contradiction by A3,AFF_1:59;end;
+ hence contradiction by A244,A245;end;
+ A248:a<>a1 & b<>b1 & c <>c1
+  proof assume A249:not thesis;
+   A250:now assume A251:a=a1;
+    A252:not LIN a,o,b proof assume LIN a,o,b; then LIN o,b,a by AFF_1:15;
+hence contradiction by A3,A243,AFF_1:39;end;
+    A253:LIN a,b,b1 by A3,A251,AFF_1:def 1;
+      o,b // o,b1 by A3,A242,AFF_1:53;
+    then A254:b=b1 by A252,A253,AFF_1:23;
+    A255:not LIN a,o,c proof assume LIN a,o,c; then LIN o,c,a by AFF_1:15;
+hence contradiction by A3,A243,AFF_1:39;end;
+    A256:LIN a,c,c1 by A3,A251,AFF_1:def 1;
+      o,c // o,c1 by A3,A242,AFF_1:53;
+    then c =c1 by A255,A256,AFF_1:23;
+   hence contradiction by A4,A254,AFF_1:11;end;
+
+   A257:now assume A258:b=b1;
+    A259:not LIN b,o,a by A3,A243,AFF_1:39;
+      b,a // b,a1 by A3,A258,AFF_1:13;
+    then A260:LIN b,a,a1 by AFF_1:def 1;
+      o,a // o,a1 by A3,A242,AFF_1:53;
+    hence contradiction by A250,A259,A260,AFF_1:23;end;
+     now assume A261:c =c1;
+    A262:not LIN c,o,a by A3,A243,AFF_1:39;
+      c,a // c,a1 by A3,A261,AFF_1:13;
+    then A263:LIN c,a,a1 by AFF_1:def 1; o,a // o,a1 by A3,A242,AFF_1:53;
+    hence contradiction by A250,A262,A263,AFF_1:23;end;
+  hence contradiction by A249,A250,A257;end;
+A264:a1<>o & b1<>o & c1<>o proof assume A265:not thesis;
+ A266:now assume A267:a1=o;
+       A268:o=b1 proof assume A269:o<>b1;
+        A270:not LIN b,a,o proof assume LIN b,a,o; then LIN o,b,a by AFF_1:15
+;
+         hence contradiction by A3,A243,AFF_1:39;end;
+          b,o // b,b1 by A3,A242,AFF_1:53; then A271:LIN b,o,b1 by AFF_1:def 1;
+          a,o // a,b1 proof A272:o,b1 // o,b
+         by A3,A242,AFF_1:53; then a,b // o,b by A3,A267,A269,AFF_1:14;
+         then b,a // b,o by AFF_1:13; then LIN b,a,o by AFF_1:def 1;
+then LIN o,a,b
+         by AFF_1:15; then o,a // o,b by AFF_1:def 1; then o,a // o,b1 by A3,
+A272,AFF_1:14; then LIN o,a,b1 by AFF_1:def 1; then LIN
+ a,o,b1 by AFF_1:15;
+         hence thesis by AFF_1:def 1;end;
+        hence contradiction by A269,A270,A271,AFF_1:23;end;
+         o=c1 proof assume A273:o<>c1;
+        A274:not LIN c,a,o proof assume LIN c,a,o; then LIN o,c,a by AFF_1:15
+;
+         hence contradiction by A3,A243,AFF_1:39;end;
+          c,o // c,c1 by A3,A242,AFF_1:53; then A275:LIN c,o,c1 by AFF_1:def 1;
+          a,o // a,c1 proof A276:o,c1 // o,c
+         by A3,A242,AFF_1:53; then a,c // o,c by A3,A267,A273,AFF_1:14;
+         then c,o // c,a by AFF_1:13; then LIN c,o,a by AFF_1:def 1;
+then LIN o,c,a
+         by AFF_1:15; then o,c // o,a by AFF_1:def 1; then o,c1 // o,a by A3,
+A276,AFF_1:14; then LIN o,c1,a by AFF_1:def 1; then LIN
+ a,o,c1 by AFF_1:15;
+        hence thesis by AFF_1:def 1;end;
+        hence contradiction by A273,A274,A275,AFF_1:23;end;
+       hence contradiction by A4,A268,AFF_1:12;end;
+
+ A277:now assume A278:b1=o;
+  A279:not LIN a,b,o proof assume LIN a,b,o; then LIN o,b,a by AFF_1:15;
+hence contradiction by A3,A243,AFF_1:39;end;
+    a,o // a,a1 by A3,A242,AFF_1:53; then A280:LIN a,o,a1 by AFF_1:def 1;
+    b,o // b,a1 proof A281:a1,o // a,a1 by A3,A242,AFF_1:53; then a,b // a,a1
+by A3,A266,A278,AFF_1:14; then LIN
+ a,b,a1 by AFF_1:def 1; then LIN
+ a1,b,a by AFF_1:15; then a1,b // a1,a by AFF_1:def 1;
+   then a1,b // a,a1 by AFF_1:13; then a1,b // a1,o by A248,A281,AFF_1:14;
+   then LIN a1,b,o by AFF_1:def 1; then LIN b,o,a1 by AFF_1:15;
+  hence thesis by AFF_1:def 1;end;
+ hence contradiction by A266,A279,A280,AFF_1:23;end;
+   now assume A282:c1=o;
+  A283:not LIN a,c,o proof assume LIN a,c,o; then LIN o,c,a by AFF_1:15;
+hence contradiction by A3,A243,AFF_1:39;end;
+    a,o // a,a1 by A3,A242,AFF_1:53; then A284:LIN a,o,a1 by AFF_1:def 1;
+    c,o // c,a1 proof A285:a1,o // a,a1 by A3,A242,AFF_1:53; then a,c // a,a1
+by A3,A266,A282,AFF_1:14; then LIN
+ a,c,a1 by AFF_1:def 1; then LIN
+ a1,a,c by AFF_1:15; then a1,a // a1,c by AFF_1:def 1;
+   then a,a1 // a1,c by AFF_1:13; then a1,o // a1,c by A248,A285,AFF_1:14;
+   then LIN a1,o,c by AFF_1:def 1; then LIN c,o,a1 by AFF_1:15;
+  hence thesis by AFF_1:def 1;end;
+ hence contradiction by A266,A283,A284,AFF_1:23;end;
+hence contradiction by A265,A266,A277;end;
+ consider d such that A286:LIN b,c,d & LIN b1,c1,d by A4,AFF_1:74;
+ A287:LIN a,a1,d by A2,A3,A4,A5,A286;
+   ex d1 st a,b // d,d1 & d1 in Z proof
+   consider e1 such that A288:o,b // o,e1 & o<>e1 by DIRAF:47;
+   consider e2 such that A289:a,b // d,e2 & d<>e2 by DIRAF:47;
+     not o,e1 // d,e2
+    proof assume o,e1 // d,e2; then o,b // d,e2 by A288,AFF_1:14;
+     then o,b // a,b by A289,AFF_1:14; then b,o // b,a by AFF_1:13;
+     then LIN b,o,a by AFF_1:def 1;
+    hence contradiction by A3,A243,AFF_1:39;end;
+   then consider d1 such that A290:LIN o,e1,d1 & LIN d,e2,d1 by AFF_1:74;
+   take d1; o,e1 // o,d1 by A290,AFF_1:def 1; then o,b // o,d1 by A288,AFF_1:14
+;
+   then A291: LIN o,b,d1 by AFF_1:def 1;
+     d,e2 // d,d1 by A290,AFF_1:def 1;
+  hence thesis by A3,A289,A291,AFF_1:14,39;end;
+ then consider d1 such that A292:a,b // d,d1 & d1 in Z;
+   ex d2 st a,c // d,d2 & d2 in M proof
+   consider e1 such that A293:o,c // o,e1 & o<>e1 by DIRAF:47;
+   consider e2 such that A294:a,c // d,e2 & d<>e2 by DIRAF:47;
+     not o,e1 // d,e2
+    proof assume o,e1 // d,e2; then o,c // d,e2 by A293,AFF_1:14;
+     then o,c // a,c by A294,AFF_1:14; then c,o // c,a by AFF_1:13;
+     then LIN c,o,a by AFF_1:def 1;
+    hence contradiction by A3,A243,AFF_1:39;end;
+   then consider d2 such that A295:LIN o,e1,d2 & LIN d,e2,d2 by AFF_1:74;
+   take d2; o,e1 // o,d2 by A295,AFF_1:def 1; then o,c // o,d2 by A293,AFF_1:14
+;
+   then A296: LIN o,c,d2 by AFF_1:def 1;
+     d,e2 // d,d2 by A295,AFF_1:def 1;
+  hence thesis by A3,A294,A296,AFF_1:14,39;end;
+ then consider d2 such that A297:a,c // d,d2 & d2 in M;
+ A298:d1<>d2 proof assume d1=d2; then A299:o,d1 // M
+  by A3,A297,AFF_1:66;A300:o<>d1 proof assume A301: o=d1;
+   A302:a,a1 // a,d by A287,AFF_1:def 1;A303:o<>d proof assume o=d;
+then LIN o,b,c by A286,AFF_1:15; then c in Z by A3,AFF_1:39;
+    then A304:o,c // Z by A3,AFF_1:66; o,c // M by A3,AFF_1:66;
+hence contradiction by A3,A241,A304,AFF_1:67;end;
+     a,o // a,a1 by A3,A242,AFF_1:53;
+   then a,o // a,d by A248,A302,AFF_1:14; then LIN a,o,d by AFF_1:def 1;
+then LIN
+ o,a,d
+   by AFF_1:15; then o,a // o,d by AFF_1:def 1; then a,o // d,o by AFF_1:13;
+   then a,b // a,o by A292,A301,A303,AFF_1:14; then LIN
+ a,b,o by AFF_1:def 1;
+   then LIN o,b,a by AFF_1:15;
+  hence contradiction by A3,A243,AFF_1:39;end;
+    o,d1 // Z by A3,A292,AFF_1:66;
+ hence contradiction by A241,A299,A300,AFF_1:67;end;
+ A305:now assume A306:b1,c1 // d1,d2;
+    ex d5 st LIN b,c,d5 & LIN d1,d2,d5 proof
+   consider e1 such that A307:b,c // b,e1 & b<>e1 by DIRAF:47;
+   consider e2 such that A308:d1,d2 // d1,e2 & d1<>e2 by DIRAF:47;
+     not b,e1 // d1,e2
+    proof assume b,e1 // d1,e2; then b,e1 // d1,d2 by A308,AFF_1:14;
+     then b,c // d1,d2 by A307,AFF_1:14;
+    hence contradiction by A4,A298,A306,AFF_1:14;end;
+   then consider d5 such that A309:LIN b,e1,d5 & LIN d1,e2,d5 by AFF_1:74;
+   take d5;
+     d1,e2 // d1,d5 & b,e1 // b,d5 by A309,AFF_1:def 1; then d1,d2 // d1,d5 &
+   b,c // b,d5 by A307,A308,AFF_1:14;
+   hence thesis by AFF_1:def 1;end;
+  then consider d5 such that A310:LIN b,c,d5 & LIN d1,d2,d5;
+  A311:d in Y by A3,A248,A287,AFF_1:39;
+
+  A312:now assume A313:LIN a,d,d5;
+   A314:not LIN a,b,d proof assume LIN a,b,d; then A315:LIN a,d,b by AFF_1:15;
+      a<>d proof assume A316: a=d; then LIN a,b,c by A286,AFF_1:15;
+     then a,b // a,c by AFF_1:def 1;
+     then a1,b1 // a,c by A3,A243,AFF_1:14; then a1,b1 // a1,c1 by A3,A243,
+AFF_1:14; then LIN a1,b1,c1 by AFF_1:def 1; then LIN b1,c1,a1 by AFF_1:15;
+     then b1,c1 // b1,a1 by AFF_1:def 1; then A317:b1,c1 // a1,b1 by AFF_1:13;
+     A318:a1<>b1 proof assume A319: a1=b1;
+        o,a1 // o,a by A3,A242,AFF_1:53; then LIN o,a1,a by AFF_1:def 1;
+hence contradiction by A3,A243,A264,A319,AFF_1:39;end;
+       b,c // b,a by A286,A316,AFF_1:def 1; then b,c // a,b
+     by AFF_1:13; then b,c // a1,b1 by A3,A243,AFF_1:14;hence contradiction
+by A4,A317,A318,AFF_1:14;end;
+    then b in Y by A3,A311,A315,AFF_1:39; then A320:o,b // Y by A3,AFF_1:66;
+      o,b // Z by A3,AFF_1:66; then Y // Z by A3,A320,AFF_1:67;
+hence contradiction by A3,AFF_1:59;end;
+     b,d // b,d5 proof A321:b<>c by A4,AFF_1:12;
+     A322:b,c // b,d by A286,AFF_1:def 1;
+      b,c // b,d5 by A310,AFF_1:def 1;hence thesis by A321,A322,AFF_1:14;end;
+   then LIN d1,d2,d by A310,A313,A314,AFF_1:23; then LIN d,d1,d2
+   by AFF_1:15; then A323:d,d1 // d,d2 by AFF_1:def 1;
+   A324:o<>d proof assume A325: o=d; then LIN o,b,c by A286,AFF_1:15;
+then A326:o,b // o,c by AFF_1:def 1;A327:o,b // o,b1 &
+    o,c // o,c1 by A3,A242,AFF_1:53; then o,b1 // o,c by A3,A326,AFF_1:14;
+    then o,b1 // o,c1 by A3,A327,AFF_1:14; then LIN o,b1,c1 by AFF_1:def 1;
+    then LIN b1,c1,o by AFF_1:15; then b1,c1 // b1,o by AFF_1:def 1;
+    then A328:b1,c1 // o,b1 by AFF_1:13; b,c // b,o by A286,A325,AFF_1:def 1;
+    then b,c // o,b by AFF_1:13; then b,c // o,b1 by A3,A327,AFF_1:14;
+hence contradiction by A4,A264,A328,AFF_1:14;end;
+   A329:d<>d1 proof assume d=d1; then A330:o,d // Z by A3,A292,AFF_1:66; o,d
+// Y by A3,A311,AFF_1:66; then Y // Z by A324,A330,AFF_1:67;
+    hence contradiction by A3,AFF_1:59;end;
+   A331:d<>d2 proof assume d=d2; then A332:o,d // M by A3,A297,AFF_1:66; o,d
+// Y by A3,A311,AFF_1:66; then Y // M by A324,A332,AFF_1:67;
+    hence contradiction by A3,AFF_1:59;end;
+     a,b // d,d2 by A292,A323,A329,AFF_1:14;
+   then A333:a,b // a,c by A297,A331,AFF_1:14;
+   then a1,b1 // a,c by A3,A243,AFF_1:14; then a1,b1 // a1,c1 by A3,A243,AFF_1:
+14; then LIN a1,b1,c1 by AFF_1:def 1; then LIN b1,c1,a1 by AFF_1:15;
+   then b1,c1 // b1,a1 by AFF_1:def 1; then A334:b1,c1 // a1,b1 by AFF_1:13;
+   A335:a1<>b1 proof assume A336: a1=b1;
+      o,a1 // o,a by A3,A242,AFF_1:53; then LIN o,a1,a by AFF_1:def 1;
+hence contradiction by A3,A243,A264,A336,AFF_1:39;end;
+     LIN a,b,c by A333,AFF_1:def 1; then LIN b,c,a by AFF_1:15; then b,c // b
+,
+a
+   by AFF_1:def 1; then b,c // a,b by AFF_1:13; then b,c // a1,b1 by A3,A243,
+AFF_1:14;
+  hence contradiction by A4,A334,A335,AFF_1:14;end;
+     not b,c // d1,d2 by A4,A298,A306,AFF_1:14;
+ hence contradiction by A2,A3,A5,A292,A297,A310,A311,A312;end;
+   now assume A337:not b1,c1 // d1,d2;
+  then consider d5 such that A338:LIN b1,c1,d5 & LIN d1,d2,d5 by AFF_1:74;
+  A339:d in Y by A3,A248,A287,AFF_1:39;
+  A340:a1,b1 // d,d1 by A3,A243,A292,AFF_1:14;
+    a1,c1 // d,d2 by A3,A243,A297,AFF_1:14;
+  then A341:LIN a1,d,d5 by A2,A3,A5,A264,A292,A297,A337,A338,A339,A340;
+  A342:not LIN a1,b1,d proof assume LIN a1,b1,d; then A343:LIN a1,d,b1 by AFF_1
+:15; a1<>d proof assume A344: a1=d; then LIN a1,b1,c1 by A286,AFF_1:15;
+then A345:a1,b1 // a1,c1 by AFF_1:def 1;
+    A346:a1<>b1 & a1<>c1 proof assume A347: not thesis;
+  o,a1 // o,a by A3,A242,AFF_1:53; then LIN o,a1,a by AFF_1:def 1;
+hence contradiction by A3,A243,A264,A347,AFF_1:39;end;
+    then a,b // a1,c1 by A3,A345,AFF_1:14; then a,b // a,c by A3,A346,AFF_1:14;
+    then LIN a,b,c by AFF_1:def 1; then LIN b,c,a by AFF_1:15; then b,c // b
+,a
+    by AFF_1:def 1; then A348:b,c // a,b by AFF_1:13;
+      b1,c1 // b1,a1 by A286,A344,AFF_1:def 1;
+    then b1,c1 // a1,b1 by AFF_1:13; then b1,c1 // a,b by A3,A346,AFF_1:14;
+   hence contradiction by A3,A4,A243,A348,AFF_1:14;end;
+   then b1 in Y by A3,A339,A343,AFF_1:39; then o,b1 // o,a by A3,A242,AFF_1:53;
+   then LIN o,b1,a by AFF_1:def 1;
+  hence contradiction by A3,A243,A264,AFF_1:39;end;
+    b1,d // b1,d5 proof A349:b1<>c1 by A4,AFF_1:12;
+   A350:b1,c1 // b1,d5 by A338,AFF_1:def 1; b1,c1 // b1,d by A286,AFF_1:def 1
+;
+   hence thesis by A349,A350,AFF_1:14;end;
+  then d=d5 by A341,A342,AFF_1:23; then LIN d,d1,d2 by A338,AFF_1:15;
+  then A351:d,d1 // d,d2 by AFF_1:def 1;
+  A352:d<>o proof assume A353: d=o; then LIN o,b,c by A286,AFF_1:15;
+   then A354:o,b // o,c by AFF_1:def 1;A355:o,b // o,b1 & o,c // o,c1 by A3,
+A242,AFF_1:53; then o,b1 // o,c by A3,A354,AFF_1:14; then o,b1 // o,c1 by A3,
+A355,AFF_1:14; then LIN o,b1,c1 by AFF_1:def 1; then LIN
+ b1,c1,o by AFF_1:15;
+   then b1,c1 // b1,o by AFF_1:def 1; then A356:b1,c1 // o,b1 by AFF_1:13;
+     b,c // b,o by A286,A353,AFF_1:def 1; then b,c // o,b
+   by AFF_1:13; then b,c // o,b1 by A3,A355,AFF_1:14;hence contradiction by A4,
+A264,A356,AFF_1:14;end;
+  A357:d<>d1 proof assume A358: d=d1; o,d // o,a by A3,A242,A339,AFF_1:53;
+then LIN o,d,a by AFF_1:def 1;
+  hence contradiction by A3,A243,A292,A352,A358,AFF_1:39;end;
+  A359:d<>d2 proof assume A360: d=d2; o,d // o,a by A3,A242,A339,AFF_1:53;
+then LIN o,d,a by AFF_1:def 1;
+  hence contradiction by A3,A243,A297,A352,A360,AFF_1:39;end;
+    a,b // d,d2 by A292,A351,A357,AFF_1:14;
+  then A361:a,b // a,c by A297,A359,AFF_1:14;
+  A362:a1<>b1 proof assume A363: a1=b1; o,a1 // o,a by A3,A242,AFF_1:53;
+then LIN o,a1,a by AFF_1:def 1;hence contradiction by A3,A243,A264,A363,AFF_1:
+39;
+end;
+    a1,b1 // a,c by A3,A243,A361,AFF_1:14; then a1,b1 // a1,c1 by A3,A243,AFF_1
+:14; then LIN a1,b1,c1 by AFF_1:def 1; then LIN b1,c1,a1 by AFF_1:15;
+  then b1,c1 // b1,a1 by AFF_1:def 1; then A364:b1,c1 // a1,b1 by AFF_1:13;
+    LIN a,b,c by A361,AFF_1:def 1; then LIN b,c,a by AFF_1:15; then b,c // b,
+a
+by AFF_1:def 1; then b,c // a,b by AFF_1:13; then b,c // a1,b1 by A3,A243,AFF_1
+:14;
+ hence contradiction by A4,A362,A364,AFF_1:14;end;
+hence contradiction by A305;end;
+hence contradiction by A239; end;
+hence thesis by AFF_2:def 4;end;
+
+  X satisfies_DES implies X satisfies_SCH
+ proof
+  assume A365:X satisfies_DES; then X satisfies_TDES by AFF_2:26;
+  then X satisfies_TDES_1 by AFF_2:17; then X satisfies_des_1 by AFF_2:27;
+  then X satisfies_des by AFF_2:21; then A366:X satisfies_minor_SCH by Th6;
+    X satisfies_major_SCH by A365,Th7; hence thesis by A366,Th2;end;
+hence thesis by A1;end;
+
+theorem Th9:
+        X satisfies_pap iff X satisfies_minor_SCH*
+proof
+ A1:X satisfies_pap implies X satisfies_minor_SCH* proof
+  assume A2:X satisfies_pap;
+    now let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+  assume A3:M // N & a1 in M & a3 in M & b2 in M & b4 in M & a2 in N &
+         a4 in N & b1 in N & b3 in N & not a4 in M & not a2 in M & not b1 in M
+         & not b3 in M & not a1 in N & not a3 in N & not b2 in N & not b4 in N
+         & a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
+   then A4:M is_line & N is_line by AFF_1:50;
+     a1,a2 // b2,b1 & b2,b3 // a3,a2 by A3,AFF_1:13;
+   then a1,b3 // a3,b1 by A2,A3,A4,AFF_2:def 13;
+   then A5:b1,a3 // b3,a1 by AFF_1:13;
+     a4,a1 // b1,b4 by A3,AFF_1:13;
+   then a4,a3 // b3,b4 by A2,A3,A4,A5,AFF_2:def 13;
+  hence a3,a4 // b3,b4 by AFF_1:13;end;
+ hence thesis by Def5;end;
+   X satisfies_minor_SCH* implies X satisfies_pap proof
+  assume A6:X satisfies_minor_SCH*;
+    now let M,N,a,b,c,a1,b1,c1;
+  assume A7:M is_line & N is_line & a in M & b in M & c in M & M // N &
+         M<>N & a1 in N & b1 in N & c1 in N & a,b1 // b,a1 & b,c1 // c,b1;
+   then A8:not a in N & not b in N & not c in N by AFF_1:59;
+   A9:not a1 in M & not b1 in M & not c1 in M by A7,AFF_1:59;
+   A10:a,b1 // a1,b & b,c1 // b1,c by A7,AFF_1:13;
+     b1,b // b,b1 by AFF_1:11;
+   then a,c1 // a1,c by A6,A7,A8,A9,A10,Def5;
+  hence a,c1 // c,a1 by AFF_1:13;end;
+ hence thesis by AFF_2:def 13;end;
+hence thesis by A1;end;
+
+theorem Th10:
+          X satisfies_PAP iff X satisfies_major_SCH*
+ proof
+ A1:X satisfies_PAP implies X satisfies_major_SCH* proof
+  assume A2:X satisfies_PAP; then A3:X satisfies_DES by AFF_2:25;
+    now let o,a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+  assume A4:M is_line & N is_line & o in M & o in N & a1 in M & a3 in M &
+         b2 in M & b4 in M & a2 in N & a4 in N & b1 in N & b3 in N &
+         not a4 in M & not a2 in M & not b1 in M & not b3 in M & not a1 in N &
+         not a3 in N & not b2 in N & not b4 in N & a3,a2 // b3,b2 &
+         a2,a1 // b2,b1 & a1,a4 // b1,b4;
+  then A5:M // M & N // N by AFF_1:55;
+  A6:now assume A7:a1<>a3 & a2<>a4;
+   A8:b1<>b3 proof assume A9:b1=b3; A10:not LIN o,a2,a1 by A4,AFF_1:39;
+      o,a1 // o,a3 by A4,A5,AFF_1:53; then A11:LIN o,a1,a3 by AFF_1:def 1;
+      b2,b1 // a2,a3 by A4,A9,AFF_1:13; then a2,a1 // a2,a3 by A4,AFF_1:14;
+   hence contradiction by A7,A10,A11,AFF_1:23;end;
+     ex x,y,z st LIN x,y,z & x<>y & x<>z & y<>z proof assume A12:not thesis;
+      o,a1 // o,a3 by A4,A5,AFF_1:53; then LIN o,a1,a3 by AFF_1:def 1;
+    hence contradiction by A4,A7,A12;end;
+    then consider d such that A13:LIN a2,a1,d & a2<>d & a1<>d by A4,TRANSLAC:2;
+    A14:o<>d proof assume o=d; then LIN o,a1,a2 by A13,AFF_1:15;
+    hence contradiction by A4,AFF_1:39;end;
+      LIN o,d,d by AFF_1:16;
+    then consider Y such that A15:Y is_line & o in Y & d in Y & d in Y by AFF_1
+:33;
+      ex d1 st LIN b1,b2,d1 & d1 in Y proof
+     consider e1 such that A16:b1,b2 // b1,e1 & b1<>e1 by DIRAF:47;
+     consider e2 such that A17:o,d // o,e2 & o<>e2 by DIRAF:47;
+       not b1,e1 // o,e2 proof assume b1,e1 // o,e2; then b1,b2 // o,e2 by A16,
+AFF_1:14; then b1,b2 // o,d by A17,AFF_1:14; then b2,b1 // o,d by AFF_1:13;
+      then A18:a2,a1 // o,d by A4,AFF_1:14; a2,a1 // a2,d
+      by A13,AFF_1:def 1;
+      then a2,d // o,d by A4,A18,AFF_1:14; then d,o // d,a2 by AFF_1:13;
+then LIN
+ d,o,a2
+      by AFF_1:def 1; then A19:LIN o,a2,d by AFF_1:15;
+      A20:not LIN o,a1,a2 by A4,AFF_1:39;
+        LIN a1,a2,d by A13,AFF_1:15; then a1,a2 // a1,d by AFF_1:def 1;
+     hence contradiction by A13,A19,A20,AFF_1:23;end;
+     then consider d1 such that A21:LIN b1,e1,d1 & LIN
+ o,e2,d1 by AFF_1:74;take d1;
+       o,e2 // o,d1 by A21,AFF_1:def 1; then o,d // o,d1 by A17,AFF_1:14;
+then A22:     LIN o,d,d1 by AFF_1:def 1; b1,e1 // b1,d1
+     by A21,AFF_1:def 1; then b1,b2 // b1,d1 by A16,AFF_1:14;
+    hence thesis by A14,A15,A22,AFF_1:39,def 1;end;
+    then consider d1 such that A23:LIN b1,b2,d1 & d1 in Y;
+      ex c1 st c1 in N & a1,a4 // b2,c1 proof
+     consider e1 such that A24:a1,a4 // b2,e1 & b2<>e1 by DIRAF:47;
+     consider e2 such that A25:a2,a4 // a2,e2 & a2<>e2 by DIRAF:47;
+       not b2,e1 // a2,e2 proof assume b2,e1 // a2,e2; then a1,a4 // a2,e2 by
+A24,AFF_1:14; then a1,a4 // a2,a4 by A25,AFF_1:14; then a4,a2 // a4,a1 by AFF_1
+:13; then LIN a4,a2,a1 by AFF_1:def 1;
+     hence contradiction by A4,A7,AFF_1:39;end;
+     then consider c1 such that A26:LIN b2,e1,c1 & LIN a2,e2,c1 by AFF_1:74;
+take c1;
+       a2,e2 // a2,c1 by A26,AFF_1:def 1; then a2,a4 // a2,c1 by A25,AFF_1:14;
+then A27:     LIN a2,a4,c1 by AFF_1:def 1;
+       b2,e1 // b2,c1 by A26,AFF_1:def 1;
+    hence thesis by A4,A7,A24,A27,AFF_1:14,39;end;
+    then consider c1 such that A28:c1 in N & a1,a4 // b2,c1;
+      ex c2 st c2 in M & a2,a3 // b1,c2 proof
+     consider e1 such that A29:a2,a3 // b1,e1 & b1<>e1 by DIRAF:47;
+     consider e2 such that A30:a1,a3 // a1,e2 & a1<>e2 by DIRAF:47;
+       not b1,e1 // a1,e2 proof assume b1,e1 // a1,e2; then a2,a3 // a1,e2 by
+A29,AFF_1:14; then a2,a3 // a1,a3 by A30,AFF_1:14; then a3,a1 // a3,a2 by AFF_1
+:13; then LIN a3,a1,a2 by AFF_1:def 1;
+     hence contradiction by A4,A7,AFF_1:39;end;
+     then consider c2 such that A31:LIN b1,e1,c2 & LIN a1,e2,c2 by AFF_1:74;
+take c2;
+       a1,e2 // a1,c2 by A31,AFF_1:def 1; then a1,a3 // a1,c2 by A30,AFF_1:14;
+then A32:     LIN a1,a3,c2 by AFF_1:def 1;
+       b1,e1 // b1,c2 by A31,AFF_1:def 1;hence thesis by A4,A7,A29,A32,AFF_1:14
+,39;end;
+    then consider c2 such that A33:c2 in M & a2,a3 // b1,c2;
+    A34:M<>N & M<>Y & N<>Y proof assume A35:not thesis;
+     A36:now assume A37: M=Y; LIN a1,d,a2 by A13,AFF_1:15;
+     hence contradiction by A4,A13,A15,A37,AFF_1:39;end;
+       now assume A38: N=Y; LIN a2,d,a1 by A13,AFF_1:15;
+     hence contradiction by A4,A13,A15,A38,AFF_1:39;end;
+    hence contradiction by A4,A35,A36;end;
+      a2,d // b1,d1 proof A39:a2,a1 // a2,d & b1,b2 // b1,d1 by A13,A23,AFF_1:
+def 1; then b2,b1 // b1,d1 by AFF_1:13; then a2,a1 // b1,d1
+    by A4,AFF_1:14; hence thesis by A4,A39,AFF_1:14;end;
+    then A40:d,a3 // d1,c2 by A3,A4,A14,A15,A23,A33,A34,AFF_2:def 4;
+      a1,d // b2,d1 proof LIN a1,a2,d & LIN b2,b1,d1 by A13,A23,AFF_1:15;
+     then A41:a1,a2 // a1,d & b2,b1 // b2,d1 by AFF_1:def 1; then a2,a1 // a1,
+d by AFF_1:13; then b2,b1 // a1,d by A4,AFF_1:14;
+    hence thesis by A4,A41,AFF_1:14;end;
+    then d,a4 // d1,c1 by A3,A4,A14,A15,A23,A28,A34,AFF_2:def 4;
+    then A42:a3,a4 // c2,c1 by A3,A4,A14,A15,A23,A28,A33,A34,A40,AFF_2:def 4;
+    A43:c1<>c2 proof assume c1=c2; then a3,a2 // b1,c1 by A33,AFF_1:13;
+     then A44:b3,b2 // b1,c1 by A4,AFF_1:14;
+     A45:b1<>c1 proof assume b1=c1; then a1,a4 // a2,a1 by A4,A28,AFF_1:14;
+      then a1,a4 // a1,a2 by AFF_1:13; then LIN a1,a4,a2 by AFF_1:def 1;
+      then LIN a2,a4,a1 by AFF_1:15;hence contradiction by A4,A7,AFF_1:39;end
+;
+       b1,c1 // b3,b1 by A4,A5,A28,AFF_1:53; then b3,b1 // b3,b2 by A44,A45,
+AFF_1:14;
+     then LIN
+ b3,b1,b2 by AFF_1:def 1;hence contradiction by A4,A8,AFF_1:39;end;
+    A46:o<>c1 & o<>c2 proof assume A47:not thesis;
+     A48:now assume o=c1; then A49:o,b2 // a1,a4 by A28,AFF_1:13;
+       o,b2 // a1,a3 by A4,A5,AFF_1:53; then a1,a3 // a1,a4 by A4,A49,AFF_1:14
+;
+then LIN a1,a3,a4
+      by AFF_1:def 1;hence contradiction by A4,A7,AFF_1:39;end;
+       now assume o=c2; then A50:o,b1 // a2,a3 by A33,AFF_1:13; o,b1 // a2,
+a4
+by A4,A5,AFF_1:53; then a2,a4 // a2,a3 by A4,A50,AFF_1:14; then LIN
+ a2,a4,a3 by AFF_1:def 1;hence contradiction by A4,A7,AFF_1:39;end;
+    hence contradiction by A47,A48;end;
+      b1,b4 // b2,c1 by A4,A28,AFF_1:14; then A51:b4,b1 // b2,c1 by AFF_1:13;
+      a3,a2 // c2,b1 by A33,AFF_1:13; then b3,b2 // c2,b1 by A4,AFF_1:14;
+    then b2,b3 // c2,b1 by AFF_1:13;
+    then b4,b3 // c2,c1 by A2,A4,A28,A33,A46,A51,AFF_2:def 2;
+    then b4,b3 // a3,a4 by A42,A43,AFF_1:14;
+   hence a3,a4 // b3,b4 by AFF_1:13;end;
+    now assume A52:a1=a3 or a2=a4;
+   A53:now assume A54:a1=a3; A55:not LIN o,b2,b1 by A4,AFF_1:39;
+      o,b1 // o,b3 by A4,A5,AFF_1:53; then A56:LIN o,b1,b3 by AFF_1:def 1;
+      a2,a1 // b2,b3 by A4,A54,AFF_1:13; then b2,b1 // b2,b3 by A4,AFF_1:14;
+    hence a3,a4 // b3,b4 by A4,A54,A55,A56,AFF_1:23;end;
+     now assume A57:a2=a4; A58:not LIN o,b1,b2 by A4,AFF_1:39;
+      o,b2 // o,b4 by A4,A5,AFF_1:53; then A59:LIN o,b2,b4 by AFF_1:def 1;
+      a1,a4 // b1,b2 by A4,A57,AFF_1:13; then b1,b2 // b1,b4 by A4,AFF_1:14;
+hence a3,a4 // b3,b4 by A4,A57,A58,A59,AFF_1:23;end;
+  hence a3,a4 // b3,b4 by A52,A53;end;
+  hence a3,a4 // b3,b4 by A6;end;
+ hence thesis by Def6;end;
+   X satisfies_major_SCH* implies X satisfies_PAP proof
+  assume A60:X satisfies_major_SCH*;
+    now let M,N,o,a,b,c,a1,b1,c1;
+  assume A61:M is_line & N is_line & M<>N & o in M & o in N & o<>a & o<>a1
+         & o<>b & o<>b1 & o<>c & o<>c1 & a in M & b in M & c in M & a1 in N &
+         b1 in N & c1 in N & a,b1 // b,a1 & b,c1 // c,b1;
+  A62:not a in N & not b in N & not c in N & not a1 in M & not b1 in M &
+  not c1 in M proof assume A63:not thesis;
+     o,a // o,a & o,b // o,b & o,c // o,c & o,a1 // o,a1 & o,b1 //
+   o,b1 & o,c1 // o,c1
+   by AFF_1:11; then M // N by A61,A63,AFF_1:52;
+  hence contradiction by A61,AFF_1:59;end;
+  A64:a,b1 // a1,b & b,c1 // b1,c by A61,AFF_1:13;
+    b1,b // b,b1 by AFF_1:11; then a,c1 // a1,c by A60,A61,A62,A64,Def6;
+  hence a,c1 // c,a1 by AFF_1:13;end;
+ hence thesis by AFF_2:def 2;end;
+hence thesis by A1;end;
+
+theorem
+          X satisfies_PPAP iff X satisfies_SCH*
+ proof
+ A1:X satisfies_PPAP implies X satisfies_SCH* proof
+  assume X satisfies_PPAP;
+  then X satisfies_PAP & X satisfies_pap by AFF_2:24;
+  then X satisfies_major_SCH* & X satisfies_minor_SCH* by Th9,Th10;
+ hence thesis by Th1;end;
+   X satisfies_SCH* implies X satisfies_PPAP proof
+  assume X satisfies_SCH*;
+  then X satisfies_minor_SCH* & X satisfies_major_SCH* by Th1;
+  then X satisfies_PAP & X satisfies_pap by Th9,Th10;
+ hence thesis by AFF_2:24;end;
+ hence thesis by A1;end;
+
+theorem
+         X satisfies_major_SCH* implies X satisfies_minor_SCH*
+ proof assume X satisfies_major_SCH*;
+ then X satisfies_PAP by Th10;
+ then X satisfies_pap by AFF_2:23;
+ hence thesis by Th9;end;
+
+reserve X for OrtAfPl;
+reserve o',a',a1',a2',a3',a4',b',b1',b2',b3',b4',c',c1'
+ for Element of X;
+reserve o,a,a1,a2,a3,a4,b,b1,b2,b3,b4,c,c1
+        for Element of Af(X);
+reserve M',N' for Subset of X;
+reserve A,M,N for Subset of Af(X);
+
+theorem
+             Af(X) satisfies_SCH iff SCH_holds_in X
+proof
+A1:Af(X) satisfies_SCH implies SCH_holds_in X
+ proof
+  assume A2:Af(X) satisfies_SCH;
+    now let a1',a2',a3',a4',b1',b2',b3',b4',M',N';
+  assume A3:M' is_line & N' is_line & a1' in M' & a3' in M' & b1' in M' & b3'
+in M'
+           & a2' in N' & a4' in N' & b2' in N' & b4' in N' & not a4' in M' &
+           not a2' in M' & not b2' in M' & not b4' in M' & not a1' in N' &
+           not a3' in N' & not b1' in N' & not b3' in N' & a3',a2' // b3',b2' &
+           a2',a1' // b2',b1' & a1',a4' // b1',b4';
+  reconsider M=M',N=N' as Subset of Af(X) by ANALMETR:57;
+  A4:M is_line & N is_line by A3,ANALMETR:58;
+  reconsider a1=a1',a2=a2',a3=a3',a4=a4',b1=b1',b2=b2',b3=b3',b4=b4'
+  as Element of Af(X) by ANALMETR:47;
+    a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4 by A3,ANALMETR:48;
+  then a3,a4 // b3,b4 by A2,A3,A4,Def3;
+  hence a3',a4' // b3',b4' by ANALMETR:48;end;
+ hence thesis by CONMETR:def 6;end;
+  SCH_holds_in X implies Af(X) satisfies_SCH
+ proof
+  assume A5:SCH_holds_in X;
+    now let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
+  assume A6:M is_line & N is_line & a1 in M & a3 in M & b1 in M & b3 in M & a2
+in N
+           & a4 in N & b2 in N & b4 in N & not a4 in M & not a2 in M & not b2
+in M
+           & not b4 in M & not a1 in N & not a3 in N & not b1 in N & not b3 in
+ N &
+           a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
+  reconsider M'=M,N'=N as Subset of X by ANALMETR:57;
+  A7:M' is_line & N' is_line by A6,ANALMETR:58;
+  reconsider a1'=a1,a2'=a2,a3'=a3,a4'=a4,b1'=b1,b2'=b2,b3'=b3,b4'=b4
+  as Element of X by ANALMETR:47;
+    a3',a2' // b3',b2' & a2',a1' // b2',b1' & a1',a4' // b1',b4'
+  by A6,ANALMETR:48;
+  then a3',a4' // b3',b4' by A5,A6,A7,CONMETR:def 6;
+  hence a3,a4 // b3,b4 by ANALMETR:48;end;
+ hence thesis by Def3;end;
+hence thesis by A1;end;
+
+theorem
+             TDES_holds_in X iff Af(X) satisfies_TDES
+ proof
+   Af(X) satisfies_TDES implies TDES_holds_in X proof
+  assume A1:Af(X) satisfies_TDES;
+    now let o',a',a1',b',b1',c',c1';
+  assume A2:o'<>a' & o'<>a1' & o'<>b' & o'<>b1' & o'<>c' & o'<>c1' &
+           not LIN b',b1',a' & not LIN b',b1',c' & LIN o',a',a1' & LIN
+ o',b',b1' &
+           LIN
+ o',c',c1' & a',b' // a1',b1' & a',b' // o',c' & b',c' // b1',c1';
+  reconsider o=o',a=a',a1=a1',b=b',b1=b1',c =c',c1=c1' as Element of the
+             carrier of Af(X) by ANALMETR:47;
+  A3:not LIN b,b1,a & not LIN b,b1,c & LIN o,a,a1 & LIN o,b,b1 & LIN o,c,c1
+     by A2,ANALMETR:55;
+  A4:a,b // a1,b1 & a,b // o,c & b,c // b1,c1 by A2,ANALMETR:48;
+  consider M such that A5:M is_line & o in M & c in M & c1 in M by A3,AFF_1:33;
+  A6:M // M by A5,AFF_1:55;
+  A7:not b in M proof assume b in M; then A8:o,b // b,c by A5,A6,AFF_1:53;
+     LIN b,b1,o by A3,AFF_1:15; then b,b1 // b,o by AFF_1:def 1; then b,b1 //
+o,b
+   by AFF_1:13; then b,b1 // b,c by A2,A8,AFF_1:14;
+  hence contradiction by A3,AFF_1:def 1;end;
+  A9:o<>c & b<>a by A2,A3,AFF_1:16;
+  A10:b,a // b1,a1 & b,c // b1,c1 by A4,AFF_1:13;
+    b,a // o,c by A4,AFF_1:13; then b,a // M by A2,A5,AFF_1:41;
+  then a,c // a1,c1 by A1,A3,A5,A7,A9,A10,AFF_2:def 7;
+  hence a',c' // a1',c1' by ANALMETR:48;end;
+ hence thesis by CONMETR:def 5;end;
+ hence thesis by CONMETR:7;end;
+
+theorem
+             Af(X) satisfies_des iff des_holds_in X
+ proof
+   des_holds_in X implies Af(X) satisfies_des proof
+  assume A1:des_holds_in X;
+    now let A,M,N,a,b,c,a1,b1,c1;
+  assume A2:A // M & A // N & a in A & a1 in A &
+    b in M & b1 in M & c in N & c1 in N & A is_line & M is_line &
+    N is_line & A<>M & A<>N & a,b // a1,b1 & a,c // a1,c1;
+  reconsider a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1
+             as Element of X by ANALMETR:47;
+    b,c // b1,c1
+  proof assume A3:not b,c // b1,c1;
+   A4:a<>a1 proof assume A5:a=a1;
+    A6:b=b1 proof assume A7:b<>b1; LIN a,b,b1 by A2,A5,AFF_1:def 1; then LIN
+ b,b1,a
+    by AFF_1:15; then a in M by A2,A7,AFF_1:39;
+    hence contradiction by A2,AFF_1:59;end;
+      c =c1 proof assume A8:c <>c1; LIN a,c,c1 by A2,A5,AFF_1:def 1;
+    then LIN c,c1,a by AFF_1:15; then a in N by A2,A8,AFF_1:39;
+    hence contradiction by A2,AFF_1:59;end;
+    hence contradiction by A3,A6,AFF_1:11;end;
+   A9:not LIN a',a1',b' & not LIN a',a1',c' proof
+    assume LIN a',a1',b' or LIN a',a1',c'; then LIN a,a1,b or LIN
+ a,a1,c by ANALMETR:55;
+    then b in A or c in A by A2,A4,AFF_1:39;
+   hence contradiction by A2,AFF_1:59;end;
+     a,a1 // b,b1 & a,a1 // c,c1 by A2,AFF_1:53;
+   then A10:a',a1' // b',b1' & a',a1' // c',c1' by ANALMETR:48;
+     a',b' // a1',b1' & a',c' // a1',c1' by A2,ANALMETR:48;
+   then b',c' // b1',c1' by A1,A9,A10,CONMETR:def 8;hence contradiction by A3,
+ANALMETR:48;end;
+  hence b,c // b1,c1;end;
+  hence thesis by AFF_2:def 11;end;
+ hence thesis by CONMETR:8;end;
+
+theorem
+            PAP_holds_in X iff Af(X) satisfies_PAP
+proof
+A1:PAP_holds_in X implies Af(X) satisfies_PAP
+proof
+assume A2:PAP_holds_in X;
+  now let M,N,o,a,b,c,a1,b1,c1;
+assume A3: M is_line & N is_line & M<>N &
+   o in M & o in N & o<>a & o<>a1 & o<>b & o<>b1 & o<>c & o<>c1 & a in M &
+   b in M & c in M & a1 in N & b1 in N & c1 in N &
+   a,b1 // b,a1 & b,c1 // c,b1;
+   reconsider M'=M,N'=N as Subset of X by ANALMETR:57;
+   reconsider a'=a,b'=b,c'=c,a1'=a1,b1'=b1,c1'=c1
+               as Element of X by ANALMETR:47;
+   A4:M' is_line & N' is_line by A3,ANALMETR:58;
+     b,a1 // a,b1 by A3,AFF_1:13;
+   then A5:b',a1' // a',b1' & b',c1' // c',b1' by A3,ANALMETR:48;
+    not c1' in M' & not b' in N' proof assume c1' in M' or b' in N';
+    then A6:o,c1 // M or o,b // N by A3,AFF_1:66; o,c1 // N & o,b // M
+    by A3,AFF_1:66;
+    then M // N by A3,A6,AFF_1:67;
+   hence contradiction by A3,AFF_1:59;end;
+   then a',c1' // c',a1' by A2,A3,A4,A5,CONMETR:def 2;
+   hence a,c1 // c,a1 by ANALMETR:48;end;
+hence thesis by AFF_2:def 2;end;
+  Af(X) satisfies_PAP implies PAP_holds_in X
+proof
+assume A7:Af(X) satisfies_PAP;
+  now let o',a1',a2',a3',b1',b2',b3',M',N';
+assume A8:M' is_line & N' is_line & o' in M' & a1' in M' & a2' in M' & a3' in
+ M'
+    & o' in N' & b1' in N' & b2' in N' & b3' in N' & not b2' in M' & not a3' in
+ N'
+    & o'<>a1' & o'<>a2' & o'<>a3' & o'<>b1' & o'<>b2' & o'<>b3' &
+    a3',b2' // a2',b1' & a3',b3' // a1',b1';
+    reconsider M=M',N=N' as Subset of Af(X) by ANALMETR:57;
+    reconsider a1=a1',a2=a2',a3=a3',b1=b1',b2=b2',b3=b3'
+               as Element of Af(X) by ANALMETR:47;
+   A9:M is_line & N is_line by A8,ANALMETR:58;
+     now assume M<>N;
+     a3,b2 // a2,b1 & a3,b3 // a1,b1 by A8,ANALMETR:48;
+   then a3,b2 // a2,b1 & a1,b1 // a3,b3 by AFF_1:13;
+   then a1,b2 // a2,b3 by A7,A8,A9,AFF_2:def 2;
+   hence a1',b2' // a2',b3' by ANALMETR:48;end;
+   hence a1',b2' // a2',b3' by A8;end;
+hence thesis by CONMETR:def 2;end;
+hence thesis by A1;end;
+
+theorem
+             DES_holds_in X iff Af(X) satisfies_DES
+proof
+A1:DES_holds_in X implies Af(X) satisfies_DES
+ proof assume A2:DES_holds_in X;
+    now let A,M,N,o,a,b,c,a1,b1,c1;
+  assume A3:o in A & o in M & o in N & o<>a & o<>b & o<>c & a in A & a1 in A &
+         b in M & b1 in M & c in N & c1 in
+ N & A is_line & M is_line & N is_line
+         & A<>M & A<>N & a,b // a1,b1 & a,c // a1,c1;
+  assume A4:not b,c // b1,c1;
+  reconsider o'=o,a'=a,a1'=a1,b'=b,b1'=b1,c'=c,c1'=c1
+             as Element of X by ANALMETR:47;
+  A5:A // A & M // M & N // N by A3,AFF_1:55;
+  A6: LIN o',a',a1' & LIN o',b',b1' & LIN o',c',c1' proof
+     o,a // o,a1 & o,b // o,b1 & o,c // o,c1 by A3,A5,AFF_1:53; then LIN o,a,
+a1
+&
+   LIN o,b,b1 & LIN o,c,c1 by AFF_1:def 1;hence thesis by ANALMETR:55;end;
+  A7:o'<>a1' & o'<>b1' & o'<>c1' proof assume A8:not thesis;
+   A9:now assume A10:o'=a1';
+    A11:o=b1 proof assume A12:o<>b1;
+     A13:not LIN b,a,o proof assume LIN b,a,o; then LIN
+ o,a,b by AFF_1:15; then b in A
+      by A3,AFF_1:39; then o,b // A & o,b // M by A3,AFF_1:66; then A // M
+by A3,AFF_1:67;hence contradiction by A3,AFF_1:59;end;
+       LIN o,b,b1 by A6,ANALMETR:55; then A14:LIN b,o,b1 by AFF_1:15;
+       a,o // a,b1 proof A15:o,b1 // o,b by A3,A5,AFF_1:53; then a,b // o,b by
+A3,A10,A12,AFF_1:14; then b,a // b,o by AFF_1:13;
+      then LIN b,a,o by AFF_1:def 1; then LIN
+ o,a,b by AFF_1:15; then o,a // o,b by AFF_1:def 1; then o,a // o,b1 by A3,A15,
+AFF_1:14; then LIN o,a,b1 by AFF_1:def 1; then LIN a,o,b1
+      by AFF_1:15;hence thesis by AFF_1:def 1;end;
+     hence contradiction by A12,A13,A14,AFF_1:23;end;
+      o=c1 proof assume A16:o<>c1;
+     A17:not LIN c,a,o proof assume LIN c,a,o; then LIN o,a,c by AFF_1:15;
+then c in A by A3,AFF_1:39; then o,c // A & o,c // N by A3,AFF_1:66; then A
+// N by A3,AFF_1:67;hence contradiction by A3,AFF_1:59;end;
+       LIN o,c,c1 by A6,ANALMETR:55; then A18:LIN c,o,c1 by AFF_1:15;
+       a,o // a,c1 proof A19:o,c // o,c1 by A3,A5,AFF_1:53; then a,c // o,c by
+A3,A10,A16,AFF_1:14; then c,a // c,o by AFF_1:13;
+      then LIN c,a,o by AFF_1:def 1; then LIN o,a,c by AFF_1:15; then o,a //
+o,c by AFF_1:def 1; then o,a // o,c1 by A3,A19,AFF_1:14; then LIN o,a,c1 by
+AFF_1:def 1; then LIN a,o,c1 by AFF_1:15;hence thesis by AFF_1:def 1;end;
+     hence contradiction by A16,A17,A18,AFF_1:23;end;
+    hence contradiction by A4,A11,AFF_1:12;end;
+
+   A20:now assume A21:o'=b1';
+    A22:not LIN a,b,o proof assume LIN a,b,o; then LIN
+ o,a,b by AFF_1:15; then b in A by A3,AFF_1:39; then o,b // A & o,b // M by A3,
+AFF_1:66; then A // M by A3,AFF_1:67;hence contradiction by A3,AFF_1:59;
+end;
+      LIN o,a,a1 by A6,ANALMETR:55; then A23:LIN a,o,a1 by AFF_1:15;
+      b,o // b,a1 proof A24:a1,o // a,o by A3,A5,AFF_1:53;
+     then a,b // a,o by A3,A9,A21,AFF_1:14; then LIN a,b,o by AFF_1:def 1;
+     then LIN o,b,a by AFF_1:15; then o,b // o,a by AFF_1:def 1; then o,b //
+a,o by AFF_1:13; then o,b // a1,o by A3,A24,AFF_1:14; then o,b // o,a1 by AFF_1
+:13;
+     then LIN o,b,a1 by AFF_1:def 1; then LIN b,o,a1 by AFF_1:15;hence
+ thesis by AFF_1:def 1;end; hence contradiction by A9,A22,A23,AFF_1:23;end;
+     now assume A25:o'=c1';
+    A26:not LIN a,c,o proof assume LIN a,c,o; then LIN
+ o,a,c by AFF_1:15; then c in A by A3,AFF_1:39; then o,c // A & o,c // N by A3,
+AFF_1:66; then A // N by A3,AFF_1:67;hence contradiction by A3,AFF_1:59;
+end;
+     LIN o,a,a1 by A6,ANALMETR:55; then A27:LIN a,o,a1 by AFF_1:15;
+     c,o // c,a1 proof A28:a1,o // a,o by A3,A5,AFF_1:53;
+     then a,c // a,o by A3,A9,A25,AFF_1:14; then LIN a,c,o by AFF_1:def 1;
+     then LIN o,c,a by AFF_1:15; then o,c // o,a by AFF_1:def 1; then o,c //
+a,o by AFF_1:13; then o,c // a1,o by A3,A28,AFF_1:14; then o,c // o,a1 by AFF_1
+:13;
+     then LIN o,c,a1 by AFF_1:def 1; then LIN c,o,a1 by AFF_1:15;hence
+ thesis by AFF_1:def 1;end;
+    hence contradiction by A9,A26,A27,AFF_1:23;end;
+  hence contradiction by A8,A9,A20;end;
+  A29:not LIN b',b1',a' & not LIN a',a1',c' proof assume LIN b',b1',a' or LIN
+ a',a1',c';
+   then A30:LIN b,b1,a or LIN a,a1,c by ANALMETR:55;
+   A31:a<>a1 proof assume A32:a=a1;
+    A33:b=b1 proof assume A34:b<>b1;A35:not LIN o,a,b proof assume LIN
+ o,a,b;
+      then b in A by A3,AFF_1:39; then A36:o,b // A by A3,AFF_1:66; o,b // M
+by A3,AFF_1:66; then A // M by A3,A36,AFF_1:67;
+     hence contradiction by A3,AFF_1:59;end; LIN o,b,b1 by A6,ANALMETR:55;
+hence contradiction by A3,A32,A34,A35,AFF_1:23;end;
+      c =c1 proof assume A37:c <>c1;A38:not LIN o,a,c proof assume LIN o,a,c;
+      then c in A by A3,AFF_1:39; then A39:o,c // A by A3,AFF_1:66; o,c // N
+by A3,AFF_1:66; then A // N by A3,A39,AFF_1:67;
+     hence contradiction by A3,AFF_1:59;end; LIN o,c,c1 by A6,ANALMETR:55;
+hence contradiction by A3,A32,A37,A38,AFF_1:23;end;
+    hence contradiction by A4,A33,AFF_1:11;end;
+     b<>b1 proof assume A40:b=b1;
+    A41:not LIN o,b,a proof assume LIN o,b,a; then a in M by A3,AFF_1:39;
+     then A42:o,a // M by A3,AFF_1:66; o,a // A by A3,AFF_1:66; then A // M
+by A3,A42,AFF_1:67;hence contradiction by A3,AFF_1:59;end;
+    A43:LIN o,a,a1 by A6,ANALMETR:55;
+      b,a // b,a1 by A3,A40,AFF_1:13;
+    hence contradiction by A31,A41,A43,AFF_1:23;end;
+   then a in M or c in A by A3,A30,A31,AFF_1:39; then A44:o,a // M
+   or o,c // A by A3,AFF_1:66; o,a // A & o,c // N by A3,AFF_1:66; then A //
+M or A // N by A3,A44,AFF_1:67;hence contradiction by A3,AFF_1:59;end;
+    a',b' // a1',b1' & a',c' // a1',c1' by A3,ANALMETR:48;
+  then b',c' // b1',c1' by A2,A3,A6,A7,A29,CONAFFM:def 1;
+  hence contradiction by A4,ANALMETR:48;end;
+  hence thesis by AFF_2:def 4;end;
+  Af(X) satisfies_DES implies DES_holds_in X
+ proof
+ assume A45:Af(X) satisfies_DES;
+   now let o',a',a1',b',b1',c',c1';
+ assume A46:o'<>a' & o'<>a1' & o'<>b' & o'<>b1' & o'<>c' & o'<>c1' &
+        not LIN b',b1',a' & not LIN a',a1',c' & LIN o',a',a1' & LIN o',b',b1' &
+        LIN o',c',c1' & a',b' // a1',b1' & a',c' // a1',c1';
+ reconsider o=o',a=a',a1=a1',b=b',b1=b1',c =c',c1=c1'
+            as Element of Af(X) by ANALMETR:47;
+ A47:not LIN b,b1,a & not LIN a,a1,c & LIN o,a,a1 & LIN o,b,b1 & LIN o,c,c1
+    by A46,ANALMETR:55;
+ then consider A such that A48:A is_line & o in A & a in A & a1 in
+ A by AFF_1:33;
+ consider M such that A49:M is_line & o in M & b in M & b1 in
+ M by A47,AFF_1:33;
+ consider N such that A50:N is_line & o in N & c in N & c1 in
+ N by A47,AFF_1:33;
+ A51:A // A & M // M & N // N by A48,A49,A50,AFF_1:55;
+ A52:A<>M & A<>N proof assume not thesis;
+  then b,b1 // b,a or a,a1 // a,c by A48,A49,A50,A51,AFF_1:53;hence
+ contradiction by A47,AFF_1:def 1;end;
+   a,b // a1,b1 & a,c // a1,c1 by A46,ANALMETR:48;
+ then b,c // b1,c1 by A45,A46,A48,A49,A50,A52,AFF_2:def 4;
+ hence b',c' // b1',c1' by ANALMETR:48;end;
+ hence thesis by CONAFFM:def 1;end;
+hence thesis by A1;end;

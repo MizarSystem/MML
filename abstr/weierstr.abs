@@ -1,0 +1,403 @@
+:: The Theorem of Weierstrass
+::  by J\'ozef Bia\las and Yatsuka Nakamura
+::
+:: Received July 10, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, PRE_TOPC, BOOLE, ABSVALUE, ARYTM_1, SETFAM_1, FINSEQ_1,
+      FINSET_1, TOPMETR, RELAT_1, TARSKI, FUNCT_1, SUBSET_1, ORDINAL2,
+      COMPTS_1, EUCLID, LATTICES, PCOMPS_1, SEQ_2, SEQ_1, SEQM_3, SEQ_4,
+      WEIERSTR, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1,
+      NUMBERS, XREAL_0, REAL_1, NAT_1, TOPMETR, METRIC_1, COMPTS_1, SEQ_1,
+      SEQ_2, SEQM_3, SEQ_4, ABSVALUE, FINSEQ_1, FINSET_1, STRUCT_0, PRE_TOPC,
+      TOPS_2, RCOMP_1, EUCLID, PCOMPS_1;
+ constructors REAL_1, NAT_1, TOPMETR, COMPTS_1, SEQ_2, SEQM_3, SEQ_4, ABSVALUE,
+      TOPS_2, RCOMP_1, EUCLID;
+ clusters STRUCT_0, TOPMETR, PRE_TOPC, PCOMPS_1, EUCLID, XREAL_0, METRIC_1,
+      RELSET_1, ARYTM_3, FINSET_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+
+
+begin
+
+theorem :: WEIERSTR:1
+   for M being MetrSpace,
+       x1,x2 being Point of M,
+       r1,r2 being Real
+   ex x being Point of M, r being Real st
+   Ball(x1,r1) \/ Ball(x2,r2) c= Ball(x,r);
+
+theorem :: WEIERSTR:2
+   for M being MetrSpace,
+       n being Nat,
+       F being Subset-Family of M,
+       p being FinSequence st
+   (F is finite & F is_ball-family & rng p = F & dom p = Seg(n+1)) holds
+   ex G being Subset-Family of M st
+   (G is finite & G is_ball-family &
+   ex q being FinSequence st (rng q = G & dom q = Seg(n)) &
+   ex x being Point of M st
+   ex r being Real st
+   (union F c= union G \/ Ball(x,r)));
+
+theorem :: WEIERSTR:3
+   for M being MetrSpace,
+       F being Subset-Family of M st
+   (F is finite & F is_ball-family) holds
+   ex x being Point of M, r being Real st
+   union F c= Ball(x,r);
+
+definition
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let G be Subset-Family of S;
+func f"G -> Subset-Family of T means
+:: WEIERSTR:def 1
+for A being Subset of T holds
+     A in it iff ex B being Subset of S st (B in G & A = f"B);
+end;
+
+theorem :: WEIERSTR:4
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       A,B being Subset-Family of S st
+   A c= B holds f"A c= f"B;
+
+theorem :: WEIERSTR:5
+   for T,S being non empty TopSpace,
+       f being map of T,S,
+       B being Subset-Family of S st
+   f is continuous & B is open holds
+   f"B is open;
+
+definition
+   let T,S be non empty TopSpace;
+   let f be map of T,S;
+   let G be Subset-Family of T;
+func f.:G -> Subset-Family of S means
+:: WEIERSTR:def 2
+for A being Subset of S holds
+     A in it iff ex B being Subset of T st (B in G & A = f.:B);
+end;
+
+theorem :: WEIERSTR:6
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       A,B being Subset-Family of T holds
+   A c= B implies f.:A c= f.:B;
+
+theorem :: WEIERSTR:7
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       B being Subset-Family of S,
+       P being Subset of S st
+   f.:(f"B) is_a_cover_of P holds
+   B is_a_cover_of P;
+
+theorem :: WEIERSTR:8
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       B being Subset-Family of T,
+       P being Subset of T st
+   B is_a_cover_of P holds
+   f"(f.:B) is_a_cover_of P;
+
+theorem :: WEIERSTR:9
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       Q being Subset-Family of S holds
+   union(f.:(f"(Q))) c= union Q;
+
+theorem :: WEIERSTR:10
+     for T,S being non empty TopSpace,
+       f being map of T,S,
+       P being Subset-Family of T holds
+   union P c= union(f"(f.:P));
+
+theorem :: WEIERSTR:11
+     for T,S being non empty TopSpace holds
+   for f being map of T,S holds
+   for Q being Subset-Family of S holds
+   Q is finite implies f"Q is finite;
+
+theorem :: WEIERSTR:12
+     for T,S being non empty TopSpace holds
+   for f being map of T,S holds
+   for P being Subset-Family of T holds
+   P is finite implies f.:P is finite;
+
+theorem :: WEIERSTR:13
+   for T,S being non empty TopSpace holds
+   for f being map of T,S holds
+   for P being Subset of T holds
+   for F being Subset-Family of S holds
+   (ex B being Subset-Family of T st
+   (B c= f"F & B is_a_cover_of P & B is finite))
+   implies
+   (ex G being Subset-Family of S st
+   (G c= F & G is_a_cover_of f.:P & G is finite));
+
+begin
+::
+::                       The Weierstrass` theorem
+::
+
+theorem :: WEIERSTR:14
+   for T,S being non empty TopSpace holds
+   for f being map of T,S holds
+   for P being Subset of T holds
+   (P is compact & f is continuous) implies f.:P is compact;
+
+theorem :: WEIERSTR:15
+    for T being non empty TopSpace holds
+   for f being map of T,R^1 holds
+   for P being Subset of T holds
+   P is compact & f is continuous implies f.:P is compact;
+
+theorem :: WEIERSTR:16
+     for f being map of TOP-REAL 2,R^1 holds
+   for P being Subset of TOP-REAL 2 holds
+   P is compact & f is continuous implies f.:P is compact;
+
+definition
+   let P be Subset of R^1;
+   func [#](P) -> Subset of REAL equals
+:: WEIERSTR:def 3
+ P;
+end;
+
+theorem :: WEIERSTR:17
+   for P being Subset of R^1 holds
+   P is compact implies [#](P) is bounded;
+
+theorem :: WEIERSTR:18
+   for P being Subset of R^1 holds
+   P is compact implies [#](P) is closed;
+
+theorem :: WEIERSTR:19
+   for P being Subset of R^1 holds
+   P is compact implies [#](P) is compact;
+
+definition
+   let P be Subset of R^1;
+   func upper_bound(P) -> Real equals
+:: WEIERSTR:def 4
+    upper_bound([#](P));
+   func lower_bound(P) -> Real equals
+:: WEIERSTR:def 5
+    lower_bound([#](P));
+end;
+
+theorem :: WEIERSTR:20
+   for T being non empty TopSpace holds
+   for f being map of T,R^1 holds
+   for P being Subset of T holds
+   (P <> {} & P is compact & f is continuous) implies
+   ex x1 being Point of T st
+   (x1 in P & f.x1 = upper_bound(f.:P));
+
+theorem :: WEIERSTR:21
+   for T being non empty TopSpace holds
+   for f being map of T,R^1 holds
+   for P being Subset of T holds
+   (P <> {} & P is compact & f is continuous) implies
+   ex x2 being Point of T st
+   (x2 in P & f.x2 = lower_bound(f.:P));
+
+begin
+::
+::           The measure of the distance between compact sets
+::
+
+
+definition
+   let M be non empty MetrSpace;
+   let x be Point of M;
+   func dist(x) -> map of TopSpaceMetr(M),R^1 means
+:: WEIERSTR:def 6
+for y being Point of M holds
+           it.y = dist(y,x);
+end;
+
+theorem :: WEIERSTR:22
+   for M being non empty MetrSpace holds
+   for x being Point of M holds
+   dist(x) is continuous;
+
+theorem :: WEIERSTR:23
+   for M being non empty MetrSpace holds
+   for x being Point of M holds
+   for P being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact) implies
+   ex x1 being Point of TopSpaceMetr(M) st
+   (x1 in P & (dist(x)).x1 = upper_bound((dist(x)).:P));
+
+theorem :: WEIERSTR:24
+   for M being non empty MetrSpace holds
+   for x being Point of M holds
+   for P being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact) implies
+   ex x2 being Point of TopSpaceMetr(M) st
+   (x2 in P & (dist(x)).x2 = lower_bound((dist(x)).:P));
+
+definition
+   let M be non empty MetrSpace;
+   let P be Subset of TopSpaceMetr(M);
+   func dist_max(P) -> map of TopSpaceMetr(M),R^1 means
+:: WEIERSTR:def 7
+for x being Point of M holds
+         it.x = upper_bound((dist(x)).:P);
+
+   func dist_min(P) -> map of TopSpaceMetr(M),R^1 means
+:: WEIERSTR:def 8
+for x being Point of M holds
+         it.x = lower_bound((dist(x)).:P);
+end;
+
+theorem :: WEIERSTR:25
+   for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st P is compact
+   for p1,p2 being Point of M holds
+   p1 in P implies dist(p1,p2) <= upper_bound((dist(p2)).:P) &
+   lower_bound((dist(p2)).:P) <= dist(p1,p2);
+
+theorem :: WEIERSTR:26
+   for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st
+   (P <> {} & P is compact) holds
+   for p1,p2 being Point of M holds
+   abs(upper_bound((dist(p1)).:P) - upper_bound((dist(p2)).:P)) <= dist(p1,p2);
+
+theorem :: WEIERSTR:27
+     for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st
+   (P <> {} & P is compact) holds
+   for p1,p2 being Point of M holds
+   for x1,x2 being Real holds
+   x1 = (dist_max(P)).p1 & x2 = (dist_max(P)).p2 implies
+   abs(x1 - x2) <= dist(p1,p2);
+
+theorem :: WEIERSTR:28
+   for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st
+   (P <> {} & P is compact) holds
+   for p1,p2 being Point of M holds
+   abs(lower_bound((dist(p1)).:P) - lower_bound((dist(p2)).:P)) <= dist(p1,p2);
+
+theorem :: WEIERSTR:29
+     for M being non empty MetrSpace holds
+   for P being Subset of TopSpaceMetr(M) st
+   (P <> {} & P is compact) holds
+   for p1,p2 being Point of M holds
+   for x1,x2 being Real holds
+   x1 = (dist_min(P)).p1 & x2 = (dist_min(P)).p2 implies
+   abs(x1 - x2) <= dist(p1,p2);
+
+theorem :: WEIERSTR:30
+   for M being non empty MetrSpace holds
+   for X being Subset of TopSpaceMetr(M) st
+   (X <> {} & X is compact) holds
+   dist_max(X) is continuous;
+
+theorem :: WEIERSTR:31
+   for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact & Q <> {} & Q is compact) implies
+   ex x1 being Point of TopSpaceMetr(M) st
+   (x1 in Q & (dist_max(P)).x1 = upper_bound((dist_max(P)).:Q));
+
+theorem :: WEIERSTR:32
+   for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact & Q <> {} & Q is compact) implies
+   ex x2 being Point of TopSpaceMetr(M) st
+   (x2 in Q & (dist_max(P)).x2 = lower_bound((dist_max(P)).:Q));
+
+theorem :: WEIERSTR:33
+   for M being non empty MetrSpace holds
+   for X being Subset of TopSpaceMetr(M) st
+   X <> {} & X is compact holds
+   dist_min(X) is continuous;
+
+theorem :: WEIERSTR:34
+   for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact & Q <> {} & Q is compact) implies
+   ex x1 being Point of TopSpaceMetr(M) st
+   (x1 in Q & (dist_min(P)).x1 = upper_bound((dist_min(P)).:Q));
+
+theorem :: WEIERSTR:35
+   for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) holds
+   (P <> {} & P is compact & Q <> {} & Q is compact) implies
+   ex x2 being Point of TopSpaceMetr(M) st
+   (x2 in Q & (dist_min(P)).x2 = lower_bound((dist_min(P)).:Q));
+
+definition
+   let M be non empty MetrSpace;
+   let P,Q be Subset of TopSpaceMetr(M);
+   func min_dist_min(P,Q) -> Real equals
+:: WEIERSTR:def 9
+ lower_bound((dist_min(P)).:Q);
+
+   func max_dist_min(P,Q) -> Real equals
+:: WEIERSTR:def 10
+ upper_bound((dist_min(P)).:Q);
+
+   func min_dist_max(P,Q) -> Real equals
+:: WEIERSTR:def 11
+ lower_bound((dist_max(P)).:Q);
+
+   func max_dist_max(P,Q) -> Real equals
+:: WEIERSTR:def 12
+ upper_bound((dist_max(P)).:Q);
+end;
+
+theorem :: WEIERSTR:36
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P <> {} & P is compact & Q <> {} & Q is compact holds
+   ex x1,x2 being Point of M st
+   x1 in P & x2 in Q &
+   dist(x1,x2) = min_dist_min(P,Q);
+
+theorem :: WEIERSTR:37
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P <> {} & P is compact & Q <> {} & Q is compact holds
+   ex x1,x2 being Point of M st
+   x1 in P & x2 in Q &
+   dist(x1,x2) = min_dist_max(P,Q);
+
+theorem :: WEIERSTR:38
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P <> {} & P is compact & Q <> {} & Q is compact holds
+   ex x1,x2 being Point of M st
+   x1 in P & x2 in Q &
+   dist(x1,x2) = max_dist_min(P,Q);
+
+theorem :: WEIERSTR:39
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P <> {} & P is compact & Q <> {} & Q is compact holds
+   ex x1,x2 being Point of M st
+   x1 in P & x2 in Q &
+   dist(x1,x2) = max_dist_max(P,Q);
+
+theorem :: WEIERSTR:40
+     for M being non empty MetrSpace holds
+   for P,Q being Subset of TopSpaceMetr(M) st
+   P is compact & Q is compact holds
+   for x1,x2 being Point of M st
+   x1 in P & x2 in Q holds
+   min_dist_min(P,Q) <= dist(x1,x2) & dist(x1,x2) <= max_dist_max(P,Q);
+
+::  B i b l i o g r a p h y
+
+::  J.Dieudonne, "Foundations of Modern Analysis",Academic Press, 1960.
+::  J.L.Kelley, "General Topology", von Nostnend, 1955.
+::  K.Yosida, "Functional Analysis", Springer Verlag, 1968.

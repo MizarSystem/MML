@@ -1,0 +1,269 @@
+:: Convergent Real Sequences. Upper and Lower Bound of Sets of Real Numbers
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received November 23, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, SEQ_1, ORDINAL2, SEQM_3, ARYTM_3, RELAT_1, ARYTM_1, SEQ_2,
+      LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, RELAT_1, SEQ_1, SEQ_2, NAT_1, FUNCT_2, SEQM_3, ABSVALUE,
+      MEMBERED;
+ constructors REAL_1, SEQ_2, NAT_1, SEQM_3, ABSVALUE, PARTFUN1, XCMPLX_0,
+      XREAL_0, MEMBERED, XBOOLE_0;
+ clusters XREAL_0, RELSET_1, SEQ_1, SEQM_3, ARYTM_3, REAL_1, XBOOLE_0, NUMBERS,
+      SUBSET_1, MEMBERED, ZFMISC_1, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+  reserve n,k,k1,m,m1,n1,n2,l for Nat;
+  reserve r,r1,r2,p,p1,g,g1,g2,s,s1,s2 for real number;
+  reserve seq,seq1,seq2 for Real_Sequence;
+  reserve Nseq for increasing Seq_of_Nat;
+  reserve x for set;
+  reserve X,Y for Subset of REAL;
+
+theorem :: SEQ_4:1
+ 0<r1 & r1<=r & 0<=g implies g/r<=g/r1;
+
+canceled 2;
+
+theorem :: SEQ_4:4
+ 0<s implies 0<s/3;
+
+canceled;
+
+theorem :: SEQ_4:6
+ 0<g & 0<=r & g<=g1 & r<r1 implies g*r<g1*r1;
+
+theorem :: SEQ_4:7
+ 0<=g & 0<=r & g<=g1 & r<=r1 implies g*r<=g1*r1;
+
+theorem :: SEQ_4:8
+ for X,Y st for r,p st r in X & p in Y holds r<p
+   ex g st for r,p st r in X & p in Y holds r<=g & g<=p;
+
+theorem :: SEQ_4:9 :: ARCHIMEDES LAW
+ 0<p & (ex r st r in X) & (for r st r in X holds r+p in X) implies
+       for g ex r st r in X & g<r;
+
+theorem :: SEQ_4:10
+ for r ex n st r<n;
+
+definition let X be real-membered set;
+attr X is bounded_above means
+:: SEQ_4:def 1
+ ex p st for r st r in X holds r<=p;
+attr X is bounded_below means
+:: SEQ_4:def 2
+ ex p st for r st r in X holds p<=r;
+end;
+
+definition let X;
+attr X is bounded means
+:: SEQ_4:def 3
+ X is bounded_below bounded_above;
+end;
+
+canceled 3;
+
+theorem :: SEQ_4:14
+  X is bounded iff ex s st 0<s & for r st r in X holds abs(r)<s;
+
+definition let r;
+  redefine func {r} -> Subset of REAL;
+end;
+
+theorem :: SEQ_4:15
+  {r} is bounded;
+
+theorem :: SEQ_4:16
+ for X being real-membered set holds
+ X is non empty bounded_above implies
+  ex g st (for r st r in X holds r<=g) & for s st 0<s ex r st r in X & g-s<r;
+
+theorem :: SEQ_4:17
+ for X being real-membered set holds
+      (for r st r in X holds r<=g1) &
+      (for s st 0<s ex r st (r in X & g1-s<r)) &
+      (for r st r in X holds r<=g2) &
+      (for s st 0<s ex r st (r in X & g2-s<r))
+        implies g1=g2;
+
+theorem :: SEQ_4:18
+  for X being real-membered set holds
+  X is non empty bounded_below implies ex g st
+        (for r st r in X holds g<=r) & (for s st 0<s ex r st r in X & r<g+s);
+
+theorem :: SEQ_4:19
+ for X being real-membered set holds
+      (for r st r in X holds g1<=r) &
+      (for s st 0<s ex r st (r in X & r<g1+s)) &
+      (for r st r in X holds g2<=r) &
+      (for s st 0<s ex r st (r in X & r<g2+s))
+        implies g1=g2;
+
+definition let X be real-membered set;
+assume  X is non empty bounded_above;
+func upper_bound X -> real number means
+:: SEQ_4:def 4
+  (for r st r in X holds r<=it) & (for s st 0<s ex r st r in X & it-s<r);
+end;
+
+definition let X be real-membered set;
+assume  X is non empty bounded_below;
+func lower_bound X -> real number means
+:: SEQ_4:def 5
+  (for r st r in X holds it<=r) & (for s st 0<s ex r st r in X & r<it+s);
+end;
+
+definition let X;
+ redefine func upper_bound X -> Real;
+ redefine func lower_bound X -> Real;
+end;
+
+canceled 2;
+
+theorem :: SEQ_4:22
+  lower_bound {r} = r & upper_bound {r} = r;
+
+theorem :: SEQ_4:23
+  lower_bound {r} = upper_bound {r};
+
+theorem :: SEQ_4:24
+    X is bounded non empty implies lower_bound X <= upper_bound X;
+
+theorem :: SEQ_4:25
+    X is bounded non empty implies
+      ((ex r,p st r in X & p in X & p<>r) iff lower_bound X < upper_bound X);
+
+::
+:: Theorems about the Convergence and the Limit
+::
+
+theorem :: SEQ_4:26
+ seq is convergent implies abs seq is convergent;
+
+theorem :: SEQ_4:27
+    seq is convergent implies lim abs seq = abs lim seq;
+
+theorem :: SEQ_4:28
+   abs seq is convergent & lim abs seq=0 implies
+             seq is convergent & lim seq=0;
+
+theorem :: SEQ_4:29
+ seq1 is_subsequence_of seq & seq is convergent implies
+        seq1 is convergent;
+
+theorem :: SEQ_4:30
+ seq1 is_subsequence_of seq & seq is convergent implies
+        lim seq1=lim seq;
+
+theorem :: SEQ_4:31
+ seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n)
+      implies seq1 is convergent;
+
+theorem :: SEQ_4:32
+   seq is convergent & (ex k st for n st k<=n holds seq1.n=seq.n)
+      implies lim seq=lim seq1;
+
+theorem :: SEQ_4:33
+  seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq);
+
+canceled;
+
+theorem :: SEQ_4:35
+  seq is convergent & (ex k st seq=seq1 ^\k) implies seq1 is convergent;
+
+theorem :: SEQ_4:36
+   seq is convergent & (ex k st seq=seq1 ^\k)
+       implies lim seq1 =lim seq;
+
+theorem :: SEQ_4:37
+ seq is convergent & lim seq<>0 implies ex k st (seq ^\k) is_not_0;
+
+theorem :: SEQ_4:38
+   seq is convergent & lim seq<>0 implies
+       ex seq1 st seq1 is_subsequence_of seq & seq1 is_not_0;
+
+theorem :: SEQ_4:39
+  seq is constant implies seq is convergent;
+
+theorem :: SEQ_4:40
+ (seq is constant & r in rng seq or
+      seq is constant & (ex n st seq.n=r)) implies lim seq=r;
+
+theorem :: SEQ_4:41
+   seq is constant implies for n holds lim seq=seq.n;
+
+theorem :: SEQ_4:42
+   seq is convergent & lim seq<>0 implies
+       for seq1 st seq1 is_subsequence_of seq & seq1 is_not_0 holds
+        lim (seq1")=(lim seq)";
+
+theorem :: SEQ_4:43
+  0<r & (for n holds seq.n=1/(n+r)) implies seq is convergent;
+
+theorem :: SEQ_4:44
+  0<r & (for n holds seq.n=1/(n+r)) implies lim seq=0;
+
+theorem :: SEQ_4:45
+   (for n holds seq.n=1/(n+1)) implies seq is convergent & lim seq=0;
+
+theorem :: SEQ_4:46
+   0<r & (for n holds seq.n=g/(n+r)) implies seq is convergent & lim seq=0;
+
+theorem :: SEQ_4:47
+  0<r & (for n holds seq.n=1/(n*n+r)) implies seq is convergent;
+
+theorem :: SEQ_4:48
+  0<r & (for n holds seq.n=1/(n*n+r)) implies lim seq=0;
+
+theorem :: SEQ_4:49
+   (for n holds seq.n=1/(n*n+1)) implies
+           seq is convergent & lim seq=0;
+
+theorem :: SEQ_4:50
+   0<r & (for n holds seq.n=g/(n*n+r)) implies seq is convergent &
+        lim seq=0;
+
+theorem :: SEQ_4:51
+ seq is non-decreasing & seq is bounded_above implies
+      seq is convergent;
+
+theorem :: SEQ_4:52
+ seq is non-increasing & seq is bounded_below implies
+      seq is convergent;
+
+theorem :: SEQ_4:53
+ seq is monotone & seq is bounded implies seq is convergent;
+
+theorem :: SEQ_4:54
+   seq is bounded_above & seq is non-decreasing implies
+        for n holds seq.n<=lim seq;
+
+theorem :: SEQ_4:55
+   seq is bounded_below & seq is non-increasing implies
+        for n holds lim seq <= seq.n;
+
+ theorem :: SEQ_4:56
+  for seq ex Nseq st seq*Nseq is monotone;
+
+theorem :: SEQ_4:57 :: BOLZANO-WEIERSTRASS THEOREM
+ seq is bounded implies
+      ex seq1 st seq1 is_subsequence_of seq & seq1 is convergent;
+
+theorem :: SEQ_4:58 :: CAUCHY THEOREM
+     seq is convergent iff
+         for s st 0<s ex n st for m st n<=m holds abs(seq.m -seq.n)<s;
+
+theorem :: SEQ_4:59
+   seq is constant & seq1 is convergent implies
+        lim (seq+seq1) =(seq.0) + lim seq1 &
+        lim (seq-seq1) =(seq.0) - lim seq1 &
+        lim (seq1-seq) =(lim seq1) -seq.0 &
+        lim (seq(#)seq1) =(seq.0) * (lim seq1);

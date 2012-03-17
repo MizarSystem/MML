@@ -1,0 +1,269 @@
+:: The One-Dimensional Lebesgue Measure As an Example of a
+:: Formalization in the Mizar Language of the Classical Definition
+:: of a Mathematical Object
+::  by J\'ozef Bia{\l}as
+::
+:: Received February 4, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, SUPINF_1, RLVECT_1, SUPINF_2, ORDINAL2, RELAT_1, ARYTM_3,
+      TARSKI, MEASURE5, FUNCT_2, BOOLE, COMPLEX1, FUNCT_3, MCART_1, MEASURE4,
+      MEASURE1, MEASURE3, MEASURE7;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, NUMBERS, XREAL_0,
+      REAL_1, RELAT_1, FUNCT_1, NAT_1, SUPINF_1, SUPINF_2, MEASURE1, MEASURE3,
+      MEASURE4, MEASURE5, FUNCT_2, DTCONSTR;
+ constructors NAT_1, SUPINF_2, MEASURE3, MEASURE4, MEASURE6, DTCONSTR, MCART_1,
+      FRAENKEL, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, SUPINF_1, MEASURE4, RELSET_1, ARYTM_3, FRAENKEL, FUNCT_2,
+      MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Some theorems about series of R_eal numbers
+
+theorem :: MEASURE7:1
+   for F being Function of NAT,ExtREAL st
+   for n being Nat holds F.n = 0. holds SUM(F) = 0.;
+
+theorem :: MEASURE7:2
+   for F being Function of NAT,ExtREAL st F is nonnegative holds
+   for n being Nat holds F.n <=' Ser(F).n;
+
+theorem :: MEASURE7:3
+   for F,G,H being Function of NAT,ExtREAL st
+   G is nonnegative & H is nonnegative holds
+   (for n being Nat holds F.n = G.n + H.n ) implies
+   (for n being Nat holds (Ser F).n = (Ser G).n + (Ser H).n );
+
+theorem :: MEASURE7:4
+   for F,G,H being Function of NAT,ExtREAL st
+   for n being Nat holds F.n = G.n + H.n holds
+   G is nonnegative & H is nonnegative implies
+   SUM(F) <=' SUM(G) + SUM(H);
+
+canceled;
+
+theorem :: MEASURE7:6
+   for F,G being Function of NAT,ExtREAL holds
+   (F is nonnegative & for n being Nat holds F.n <=' G.n) implies
+   for n being Nat holds (Ser(F)).n <=' SUM(G);
+
+theorem :: MEASURE7:7
+   for F being Function of NAT,ExtREAL holds
+   F is nonnegative implies
+   for n being Nat holds (Ser(F)).n <=' SUM(F);
+
+definition
+   let S be non empty Subset of NAT;
+   let H be Function of S,NAT;
+   let n be Element of S;
+redefine func H.n -> Nat;
+end;
+
+definition
+   let S be non empty set;
+   let H be Function of S,ExtREAL;
+func On H -> Function of NAT,ExtREAL means
+:: MEASURE7:def 1
+for n being Element of NAT holds
+              (n in S implies it.n = H.n) &
+              (not n in S implies it.n = 0.);
+end;
+
+theorem :: MEASURE7:8
+   for X being non empty set
+   for G being Function of X,ExtREAL st G is nonnegative holds
+   On G is nonnegative;
+
+theorem :: MEASURE7:9
+   for F being Function of NAT,ExtREAL st F is nonnegative holds
+   for n,k being Nat st n <= k holds Ser(F).n <=' Ser(F).k;
+
+theorem :: MEASURE7:10
+   for k being Nat holds
+   for F being Function of NAT,ExtREAL holds
+   ((for n being Nat st n <> k holds F.n = 0.) implies
+   ((for n being Nat st n < k holds Ser(F).n = 0.) &
+   (for n being Nat st k <= n holds Ser(F).n = F.k)));
+
+theorem :: MEASURE7:11
+   for G being Function of NAT,ExtREAL st G is nonnegative holds
+   for S being non empty Subset of NAT holds
+   for H being Function of S,NAT st H is one-to-one holds
+   SUM(On(G*H)) <=' SUM(G);
+
+theorem :: MEASURE7:12
+   for F,G being Function of NAT,ExtREAL st
+   F is nonnegative & G is nonnegative holds
+   for S being non empty Subset of NAT holds
+   for H being Function of S,NAT st H is one-to-one holds
+   (for k being Nat holds ((k in S implies F.k = (G*H).k) &
+   ((not k in S) implies F.k = 0.))) implies SUM(F) <=' SUM(G);
+
+definition
+   let A be Subset of REAL;
+   mode Interval_Covering of A -> Function of NAT, bool REAL means
+:: MEASURE7:def 2
+A c= union(rng it) & for n being Nat holds it.n is Interval;
+end;
+
+definition
+   let A be Subset of REAL;
+   let F be Interval_Covering of A;
+   let n be Nat;
+redefine func F.n ->Interval;
+end;
+
+definition
+   let F be Function of NAT,bool REAL;
+   mode Interval_Covering of F -> Function of NAT,Funcs(NAT,bool REAL) means
+:: MEASURE7:def 3
+for n being Nat holds it.n is Interval_Covering of F.n;
+end;
+
+definition
+   let A be Subset of REAL;
+   let F be Interval_Covering of A;
+   func F vol -> Function of NAT,ExtREAL means
+:: MEASURE7:def 4
+for n being Nat holds it.n = vol(F.n);
+end;
+
+theorem :: MEASURE7:13
+   for A being Subset of REAL holds
+   for F being Interval_Covering of A holds
+   (F vol) is nonnegative;
+
+definition
+   let F be Function of NAT, bool REAL;
+   let H be Interval_Covering of F;
+   let n be Nat;
+redefine func H.n -> Interval_Covering of F.n;
+end;
+
+definition
+   let F be Function of NAT, bool REAL;
+   let G be Interval_Covering of F;
+   func G vol -> Function of NAT,Funcs(NAT,ExtREAL) means
+:: MEASURE7:def 5
+  for n being Nat holds it.n = (G.n) vol;
+end;
+
+definition
+   let A be Subset of REAL;
+   let F be Interval_Covering of A;
+   func vol(F) -> R_eal equals
+:: MEASURE7:def 6
+ SUM(F vol);
+end;
+
+definition
+   let F be Function of NAT,(bool REAL);
+   let G be Interval_Covering of F;
+   func vol(G) -> Function of NAT,ExtREAL means
+:: MEASURE7:def 7
+for n being Nat holds it.n = vol(G.n);
+end;
+
+theorem :: MEASURE7:14
+   for F being Function of NAT,(bool REAL) holds
+   for G being Interval_Covering of F holds
+   for n being Nat holds 0. <=' (vol(G)).n;
+
+definition
+   let A be Subset of REAL;
+   func Svc(A) -> Subset of ExtREAL means
+:: MEASURE7:def 8
+for x being R_eal holds x in it iff
+       ex F being Interval_Covering of A st x = vol(F);
+end;
+
+definition
+   let A be Subset of REAL;
+   cluster Svc(A) -> non empty;
+end;
+
+definition
+   let A be Element of bool REAL;
+   func COMPLEX(A) -> Element of ExtREAL equals
+:: MEASURE7:def 9
+ inf(Svc(A));
+end;
+
+definition
+   func OS_Meas -> Function of bool REAL,ExtREAL means
+:: MEASURE7:def 10
+for A being Subset of REAL holds it.A = inf(Svc(A));
+end;
+
+definition
+   let H be Function of NAT,[:NAT,NAT:];
+ redefine func pr1(H) -> Function of NAT,NAT means
+:: MEASURE7:def 11
+   for n being Element of NAT holds
+       ex s being Element of NAT st H.n = [it.n,s];
+end;
+
+definition
+   let H be Function of NAT,[:NAT,NAT:];
+ redefine func pr2(H) -> Function of NAT,NAT means
+:: MEASURE7:def 12
+for n being Element of NAT holds
+       H.n = [pr1(H).n,it.n];
+end;
+
+definition
+   let F be Function of NAT,bool REAL;
+   let G be Interval_Covering of F;
+   let H be Function of NAT,[:NAT,NAT:] such that
+ rng H = [:NAT,NAT:];
+func On(G,H) -> Interval_Covering of union rng F means
+:: MEASURE7:def 13
+for n being Element of NAT holds
+              it.n = (G.(pr1(H).n)).(pr2(H).n);
+end;
+
+theorem :: MEASURE7:15
+   for H being Function of NAT,[:NAT,NAT:] st
+   H is one-to-one & rng H = [:NAT,NAT:] holds
+   for k being Nat holds
+   ex m being Nat st
+   for F being Function of NAT,bool REAL holds
+   for G being Interval_Covering of F holds
+   Ser((On(G,H)) vol).k <=' Ser(vol(G)).m;
+
+theorem :: MEASURE7:16
+   for F being Function of NAT,bool REAL holds
+   for G being Interval_Covering of F holds
+   inf Svc(union rng F) <=' SUM(vol(G));
+
+theorem :: MEASURE7:17
+   OS_Meas is C_Measure of REAL;
+
+definition
+   redefine func OS_Meas -> C_Measure of REAL;
+end;
+
+definition
+   func Lmi_sigmaFIELD -> sigma_Field_Subset of REAL equals
+:: MEASURE7:def 14
+  sigma_Field(OS_Meas);
+end;
+
+definition
+   func L_mi -> sigma_Measure of Lmi_sigmaFIELD equals
+:: MEASURE7:def 15
+ sigma_Meas(OS_Meas);
+end;
+
+theorem :: MEASURE7:18
+     L_mi is_complete Lmi_sigmaFIELD;
+
+canceled 2;
+
+theorem :: MEASURE7:21
+     for A being set st
+   A in Lmi_sigmaFIELD holds REAL \ A in Lmi_sigmaFIELD;
+

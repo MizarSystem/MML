@@ -1,0 +1,1415 @@
+:: Connected Spaces
+::  by Beata Padlewska
+::
+:: Received May 6, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, BOOLE, SUBSET_1, RELAT_2, ORDINAL2, RELAT_1, TOPS_1,
+      SETFAM_1, TARSKI, CONNSP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, STRUCT_0, PRE_TOPC, TOPS_1;
+ constructors TOPS_1, MEMBERED;
+ clusters PRE_TOPC, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions XBOOLE_0;
+ theorems TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, SETFAM_1, PRE_TOPC, TOPS_1,
+      SUBSET_1, RELAT_1, XBOOLE_0, XBOOLE_1;
+ schemes PRE_TOPC;
+
+begin
+ reserve GX for TopSpace;
+ reserve A, B, C for Subset of GX;
+ reserve TS for TopStruct;
+ reserve K, K1, L, L1 for Subset of TS;
+
+::
+::                         Separated sets
+::
+
+definition let GX be TopStruct, A,B be Subset of GX;
+ pred A,B are_separated means
+   :Def1: Cl A misses B & A misses Cl B;
+ symmetry;
+end;
+
+canceled;
+
+theorem Th2:
+  K,L are_separated implies K misses L
+proof assume
+A1:  (Cl K) /\ L = {} & K /\ Cl L = {};
+       K c= Cl K & L c= L by PRE_TOPC:48;
+     then K /\ L c= (Cl K) /\ L by XBOOLE_1:27;
+  hence K /\ L = {} by A1,XBOOLE_1:3;
+end;
+
+theorem Th3:
+ [#]TS = K \/ L & K is closed & L is closed & K misses L
+  implies K,L are_separated
+proof assume that
+A1:  [#]TS = K \/ L & K is closed & L is closed and
+A2:  K misses L;
+A3:   K /\ L = {} by A2,XBOOLE_0:def 7;
+      (Cl K) /\ L = K /\ L & K /\ Cl L = K /\ L by A1,PRE_TOPC:52;
+    then (Cl K) misses L & K misses Cl L by A3,XBOOLE_0:def 7;
+  hence thesis by Def1;
+end;
+
+theorem Th4:
+ [#]GX = A \/ B & A is open & B is open & A misses B
+  implies A,B are_separated
+proof assume that
+A1:  [#]GX = A \/ B and
+A2:  A is open & B is open and
+A3:  A misses B;
+A4:  Cl([#]GX \ A) = [#]GX \ A &
+     Cl([#]GX \ B) = [#]GX \ B by A2,PRE_TOPC:53;
+       B = [#]GX \ A & A = [#]GX \ B by A1,A3,PRE_TOPC:25;
+     then B is closed & A is closed by A4,PRE_TOPC:52;
+   hence A,B are_separated by A1,A3,Th3;
+end;
+
+theorem Th5:
+  [#]GX = A \/ B & A,B are_separated implies
+        A is open closed & B is open closed
+proof assume that
+A1:  [#]GX = A \/ B and
+A2:  A,B are_separated;
+     A3: A misses B by A2,Th2;
+then A4:  B = [#]GX \ A by A1,PRE_TOPC:25;
+A5:  A c= Cl A & B c= Cl B by PRE_TOPC:48;
+A6:  Cl([#]GX) =[#]GX by PRE_TOPC:52;
+A7:  Cl ( A \/ B ) = Cl A \/ Cl B by PRE_TOPC:50;
+A8:  now assume
+A9:   (Cl A) misses B;
+         Cl A c= A \/ B by A1,A6,A7,XBOOLE_1:7;
+       then Cl A c= A by A9,XBOOLE_1:73;
+      hence Cl A = A by A5,XBOOLE_0:def 10;
+     end;
+A10: now assume
+A11:   A misses Cl B;
+     Cl B c= A \/ B by A1,A6,A7,XBOOLE_1:7;
+       then Cl B c= B by A11,XBOOLE_1:73;
+      hence Cl B = B by A5,XBOOLE_0:def 10;
+     end;
+       [#]GX \ B = A by A1,A3,PRE_TOPC:25;
+     hence A is open closed & B is open closed
+ by A2,A4,A8,A10,Def1,PRE_TOPC:52,53;
+end;
+
+theorem Th6:
+  for X' being SubSpace of GX, P1,Q1 being Subset of GX,
+  P,Q being Subset of X' st P=P1 & Q=Q1 holds
+  P,Q are_separated implies P1,Q1 are_separated
+proof
+  let X' be SubSpace of GX, P1,Q1 be Subset of GX,
+      P,Q be Subset of X' such that
+A1:   P = P1 and
+A2:   Q = Q1;
+     assume A3: (Cl P) /\ Q = {} & P /\ Cl Q = {};
+     reconsider P2 = P, Q2 = Q as Subset of GX by PRE_TOPC:39;
+A4:  (Cl P) /\ Q = ((Cl P2) /\ ([#](X'))) /\ Q by PRE_TOPC:47
+               .= (Cl P2) /\ (Q /\ [#] X') by XBOOLE_1:16
+               .= (Cl P2) /\ Q2 by PRE_TOPC:15;
+       P /\ Cl Q = P /\ (([#] X') /\ Cl Q2) by PRE_TOPC:47
+             .= P /\ [#] X' /\ Cl Q2 by XBOOLE_1:16
+             .= P2 /\ Cl Q2 by PRE_TOPC:15;
+     then (Cl P2) misses Q2 & P2 misses Cl Q2 by A3,A4,XBOOLE_0:def 7;
+   hence P1,Q1 are_separated by A1,A2,Def1;
+end;
+
+theorem Th7:
+  for X' being SubSpace of GX, P,Q being Subset of GX,
+  P1,Q1 being Subset of X' st P=P1 & Q=Q1 & P \/ Q c= [#](X')
+  holds P,Q are_separated implies P1,Q1 are_separated
+proof
+  let X' be SubSpace of GX, P,Q be Subset of GX,
+      P1,Q1 be Subset of X' such that
+A1:  P = P1 and
+A2:  Q = Q1 and
+A3:  P \/ Q c= [#](X');
+     assume A4: (Cl P) /\ Q = {} & P /\ Cl Q = {};
+       P c= P \/ Q & Q c= P \/ Q by XBOOLE_1:7;
+  then P c= [#](X') & Q c= [#](X') by A3,XBOOLE_1:1;
+     then reconsider P2 = P, Q2 = Q as Subset of X'
+       by PRE_TOPC:16;
+    Cl P2 = (Cl P) /\ [#] X' & Cl Q2 = (Cl Q) /\ [#] X' by PRE_TOPC:47;
+then A5:  (Cl P2) /\ Q2 = (Cl P) /\ (Q2 /\ [#] X') by XBOOLE_1:16
+                 .= (Cl P) /\ Q by PRE_TOPC:15;
+       P2 /\ Cl Q2 = P2 /\ (([#] X') /\ Cl Q) by PRE_TOPC:47
+               .= (P2 /\ [#] X') /\ Cl Q by XBOOLE_1:16
+               .= P /\ Cl Q by PRE_TOPC:15;
+     then (Cl P2) misses Q2 & P2 misses Cl Q2 by A4,A5,XBOOLE_0:def 7;
+  hence P1,Q1 are_separated by A1,A2,Def1;
+end;
+
+theorem Th8:
+  K,L are_separated & K1 c= K & L1 c= L implies
+  K1,L1 are_separated
+proof assume that
+A1:  (Cl K) /\ L = {} & K /\ Cl L = {} and
+A2:  K1 c= K and
+A3:  L1 c= L;
+       Cl K1 c= Cl K & Cl L1 c= Cl L by A2,A3,PRE_TOPC:49;
+     then (Cl K1) /\ L1 c= (Cl K) /\ L & K1 /\ Cl L1 c= K /\ Cl L
+ by A2,A3,XBOOLE_1:27;
+     then (Cl K1) /\ L1 = {}TS & K1 /\ Cl L1 = {}TS by A1,XBOOLE_1:3;
+     then (Cl K1) misses L1 & K1 misses Cl L1 by XBOOLE_0:def 7;
+  hence K1,L1 are_separated by Def1;
+end;
+
+theorem Th9:
+  A,B are_separated & A,C are_separated implies A,B \/ C are_separated
+proof assume that
+A1:  (Cl A) misses B & A misses Cl B and
+A2:  (Cl A) misses C & A misses Cl C;
+A3:   (Cl A) /\ B = {} & A /\ Cl B = {} &
+     (Cl A) /\ C = {} & A /\ Cl C = {} by A1,A2,XBOOLE_0:def 7;
+    (Cl A) /\ (B \/ C) = ((Cl A) /\ B) \/ ((Cl A) /\ C) by XBOOLE_1:23
+                     .= {}GX by A3;
+then A4:   (Cl A) misses (B \/ C) by XBOOLE_0:def 7;
+       A /\ Cl (B \/ C) = A /\ ((Cl B) \/ Cl C) by PRE_TOPC:50
+                   .= (A /\ Cl B) \/ (A /\ Cl C) by XBOOLE_1:23
+                   .= {}GX by A3;
+   then A misses Cl (B \/ C) by XBOOLE_0:def 7;
+   hence A,B \/ C are_separated by A4,Def1;
+end;
+
+theorem Th10:
+  (K is closed & L is closed) or (K is open & L is open)
+   implies K \ L,L \ K are_separated
+proof assume
+A1: (K is closed & L is closed) or (K is open & L is open);
+A2:  now
+     let K,L be Subset of TS such that
+A3:   K is open & L is open;
+A4:   K \ L = K /\ (L`) & L \ K = L /\ (K`) by SUBSET_1:32;
+        Cl(K /\ (L`)) c= (Cl K) /\ Cl (L`) & L /\ (K`) c= L /\ (K`)
+ by PRE_TOPC:51;
+then A5:   (Cl(K \ L)) /\ (L \ K) c= ((Cl K) /\ Cl(L`)) /\ (L /\ (K`))
+ by A4,XBOOLE_1:27;
+        Cl(L /\ (K`)) c= (Cl L) /\ Cl(K`) & K /\ (L`) c= K /\ (L`)
+         by PRE_TOPC:51;
+then A6:   (K \ L) /\ Cl(L \ K) c= (K /\ (L`)) /\ ((Cl L) /\ Cl(K`))
+ by A4,XBOOLE_1:27;
+A7:  Cl([#]TS \ K) = [#]TS \ K & Cl([#]TS \ L) = [#]TS \ L by A3,PRE_TOPC:53;
+A8:   [#]TS \ K = K` & [#]TS \ L = L` by PRE_TOPC:17;
+then A9:  ((Cl K) /\ Cl(L`)) /\ (L /\ (K`)) =
+      ((Cl K) /\ (L`)) /\ (L /\ (K`)) by A3,PRE_TOPC:53;
+        L misses L` & K misses K` by PRE_TOPC:26;
+then A10:    L /\ L` = {} & K /\ K` = {} by XBOOLE_0:def 7;
+        (Cl K) /\ (L`) c= L` & L /\ K` c= L by XBOOLE_1:17;
+      then ((Cl K) /\ L`) /\ (L /\ K`) c= L /\ (L`) by XBOOLE_1:27;
+      then A11: (Cl(K \ L)) /\ (L \ K) c= {} by A5,A9,A10,XBOOLE_1:1;
+        K /\ L` c= K & (Cl L) /\ K` c= K` by XBOOLE_1:17;
+      then (K /\ (L`)) /\ ((Cl L) /\ Cl(K`)) c= K /\ (K`) by A7,A8,XBOOLE_1:27
+;
+      then (K \ L) /\ Cl(L \ K) c= {} by A6,A10,XBOOLE_1:1;
+      then (Cl(K \ L)) /\ (L \ K) = {}TS &
+            (K \ L) /\ Cl(L \ K) = {}TS by A11,XBOOLE_1:3;
+      then (Cl(K \ L)) misses (L \ K) &
+            (K \ L) misses Cl(L \ K) by XBOOLE_0:def 7;
+     hence K \ L,L \ K are_separated by Def1;
+    end;
+      now
+     let K,L be Subset of TS;
+     assume K is closed & L is closed;
+then A12:         [#]TS \ K is open & [#]TS \ L is open by PRE_TOPC:def 6;
+    A13:  [#]TS \ L = L` & [#]TS \ K = K` by PRE_TOPC:17;
+    then A14:  ([#]TS \ L) \ ([#]TS \ K) = (L`) /\ (([#]TS \ K)`) by SUBSET_1:
+32
+                         .= (L`) /\ ([#]TS \([#]TS \ K)) by PRE_TOPC:17
+                         .= (L`) /\ K by PRE_TOPC:22
+                         .= K \ L by SUBSET_1:32;
+     ([#]TS \ K) \ ([#]TS \ L) = (K`) /\ (([#]TS \ L)`) by A13,SUBSET_1:32
+                        .= (K`) /\ ([#]TS \ ([#]TS \ L)) by PRE_TOPC:17
+                        .= (K`) /\ L by PRE_TOPC:22
+                        .= L \ K by SUBSET_1:32;
+  hence K \ L,L \ K are_separated by A2,A12,A14;
+ end;
+ hence thesis by A1,A2;
+end;
+
+::
+::                        Connected Spaces
+::
+
+definition let GX be TopStruct;
+  attr GX is connected means
+    :Def2:for A, B being Subset of GX st
+          [#]GX = A \/ B & A,B are_separated
+          holds A = {}GX or B = {}GX;
+end;
+
+theorem Th11:
+ GX is connected iff for A, B being Subset of GX
+  st [#]GX = A \/ B & A <> {}GX & B <> {}GX & A is closed &
+  B is closed holds A meets B
+proof
+A1:  now
+     given A, B being Subset of GX such that
+A2:   [#]GX = A \/ B and
+A3:   A <> {}GX & B <> {}GX and
+A4:   A is closed & B is closed & A misses B;
+        A,B are_separated by A2,A4,Th3;
+     hence not GX is connected by A2,A3,Def2;
+    end;
+      now assume not GX is connected;
+      then consider P, Q being Subset of GX
+         such that
+    A5:  [#]GX = P \/ Q and
+    A6:  P,Q are_separated and
+    A7:  P <> {}GX & Q <> {}GX by Def2;
+         reconsider P, Q as Subset of GX;
+           [#]GX = P \/ Q by A5;
+    then A8:  P is closed & Q is closed by A6,Th5;
+           P misses Q by A6,Th2;
+      hence ex A,B being Subset of GX st [#]GX = A \/ B &
+             A <> {}GX & B <> {}GX & A is closed & B is closed &
+             A misses B by A5,A7,A8;
+    end;
+   hence thesis by A1;
+end;
+
+theorem
+    GX is connected iff for A,B being Subset of GX
+  st [#]GX = A \/ B & A <> {}GX & B <> {}GX & A is open &
+  B is open holds A meets B
+proof
+A1:  now given A,B being Subset of GX such that
+    A2:  [#]GX = A \/ B and
+    A3:  A <> {}GX & B <> {}GX and
+    A4:  A is open & B is open and
+    A5:  A misses B;
+           A,B are_separated by A2,A4,A5,Th4;
+      hence not GX is connected by A2,A3,Def2;
+    end;
+      now assume not GX is connected;
+       then consider P,Q being Subset of GX
+         such that
+    A6:  [#]GX = P \/ Q and
+    A7:  P,Q are_separated and
+    A8:  P <> {}GX & Q <> {}GX by Def2;
+         reconsider P, Q as Subset of GX;
+           [#]GX = P \/ Q by A6;
+    then A9:  P is open & Q is open by A7,Th5;
+           P misses Q by A7,Th2;
+      hence ex A,B being Subset of GX st [#]GX = A \/ B &
+            A <> {}GX & B <> {}GX & A is open & B is open &
+            A misses B by A6,A8,A9;
+    end;
+  hence thesis by A1;
+end;
+
+theorem Th13:
+  GX is connected iff for A being Subset of GX st A <> {}GX
+  & A <> [#]GX holds Cl A meets Cl([#]GX \ A)
+proof
+A1:  now given A being Subset of GX such that
+    A2:  A <> {}GX and
+    A3:  A <> [#]GX and
+    A4:  (Cl A) misses Cl([#]GX \ A);
+    A5:   (Cl A) /\ Cl([#]GX \ A) = {} by A4,XBOOLE_0:def 7;
+    A6:  [#]GX \ A <> {}GX by A3,PRE_TOPC:23;
+           [#]GX \ A c= Cl([#]GX \ A) &
+         Cl A c= Cl A by PRE_TOPC:48;
+         then (Cl A) /\ ([#]GX \ A) c= (Cl A) /\ Cl([#]GX \ A) by XBOOLE_1:27;
+         then (Cl A) /\ ([#]GX \ A) = {} by A5,XBOOLE_1:3;
+         then A7: (Cl A) misses ([#]GX \ A) by XBOOLE_0:def 7;
+           A c= Cl A & Cl ([#]GX \ A) c= Cl([#]GX \ A) by PRE_TOPC:48;
+         then A /\ Cl([#]GX \ A) c= (Cl A) /\ Cl([#]GX \ A) by XBOOLE_1:27;
+         then A /\ Cl([#]GX \ A) = {}GX by A5,XBOOLE_1:3;
+         then A misses Cl([#]GX \ A) by XBOOLE_0:def 7;
+    then A8:  A,[#]GX \ A are_separated by A7,Def1;
+           [#]GX = A \/ (A`) by PRE_TOPC:18;
+         then [#]GX = A \/ ([#]GX \ A) by PRE_TOPC:17;
+      hence not GX is connected by A2,A6,A8,Def2;
+    end;
+      now assume not GX is connected;
+        then consider A, B being Subset of GX such that
+    A9:  [#]GX = A \/ B and
+    A10:   A <> {}GX and
+    A11:  B <> {}GX and
+    A12:  A is closed & B is closed and
+    A13:  A misses B by Th11;
+    A14:  B = [#]GX \ A by A9,A13,PRE_TOPC:25;
+A15:      Cl A = A & Cl B = B by A12,PRE_TOPC:52;
+            A <> [#]GX by A11,A14,PRE_TOPC:23;
+      hence ex A being Subset of GX st A <> {}GX &
+            A <> [#]GX & (Cl A) misses Cl([#]GX \ A) by A10,A13,A14,A15;
+    end;
+  hence thesis by A1;
+end;
+
+theorem
+    GX is connected iff for A being Subset of GX st A is open closed holds
+   A = {}GX or A = [#]GX
+proof
+A1:   now given A1 being Subset of GX such that
+     A2:  A1 is open closed & A1 <> {}GX & A1 <> [#]GX;
+     A3:  Cl A1 = A1 & Cl ([#]GX \ A1) = [#]GX \ A1 by A2,PRE_TOPC:52,53;
+     A4:   A1 misses A1` by PRE_TOPC:26;
+            A1 /\ ([#]GX \ A1) = A1 /\ A1` by PRE_TOPC:17;
+          then (Cl A1) /\ Cl([#]GX \ A1) = {} by A3,A4,XBOOLE_0:def 7;
+          then (Cl A1) misses Cl([#]GX \ A1) by XBOOLE_0:def 7;
+       hence not GX is connected by A2,Th13;
+     end;
+       now assume not GX is connected;
+          then consider P,Q being Subset of GX such that
+     A5:  [#]GX = P \/ Q and
+     A6:  P,Q are_separated and
+     A7:  P <> {}GX & Q <> {}GX by Def2;
+         reconsider P, Q as Subset of GX;
+            [#]GX = P \/ Q by A5;
+     then A8:  P is open closed & Q is open closed by A6,Th5;
+            P misses Q by A6,Th2;
+          then Q = [#]GX \ P by A5,PRE_TOPC:25;
+          then P <> [#]GX by A7,PRE_TOPC:23;
+        hence ex P being Subset of GX st P is open closed &
+              P <> {}GX & P <> [#]GX by A7,A8;
+     end;
+   hence thesis by A1;
+end;
+
+theorem
+    for GY being TopSpace
+  for F being map of GX,GY st F is continuous
+  & F.:[#]GX = [#]GY & GX is connected holds GY is connected
+proof let GY be TopSpace;
+     let F be map of GX,GY such that
+A1:  F is continuous and
+A2:  F.:[#]GX = [#]GY and
+A3:  GX is connected;
+A4:  the carrier of GY = F.:[#]GX by A2,PRE_TOPC:12
+                      .= F.:(the carrier of GX) by PRE_TOPC:12;
+     assume not GY is connected;
+     then consider A, B being Subset of GY such that
+A5:  [#]GY = A \/ B and
+A6:  A <> {}GY & B <> {}GY and
+A7:  A is closed & B is closed and
+A8:  A misses B by Th11;
+A9:  A /\ B = {} by A8,XBOOLE_0:def 7;
+A10:  the carrier of GY is non empty by A6,XBOOLE_1:3;
+A11: [#]GX = the carrier of GX by PRE_TOPC:12
+         .= F"the carrier of GY by A10,FUNCT_2:48
+         .= F" [#] GY by PRE_TOPC:12
+         .= F" A \/ F" B by A5,RELAT_1:175;
+   F" A /\ F" B = F"(A /\ B) by FUNCT_1:137
+                .= {} by A9,RELAT_1:171;
+then A12:F" A misses F" B by XBOOLE_0:def 7;
+A13: F" A is closed & F" B is closed by A1,A7,PRE_TOPC:def 12;
+    rng F = F.:(the carrier of GX) by A10,FUNCT_2:45;
+  then F"A <> {}GX & F"B <> {}GX by A4,A6,RELAT_1:174;
+  hence contradiction by A3,A11,A12,A13,Th11;
+end;
+
+::
+::                          Connected Sets
+::
+
+definition let GX be TopStruct, A be Subset of GX;
+  attr A is connected means
+   :Def3: GX|A is connected;
+end;
+
+theorem Th16:
+  A is connected
+  iff for P,Q being Subset of GX st A = P \/ Q &
+  P,Q are_separated holds P = {}GX or Q = {}GX
+proof A1:  [#](GX|A) = A & {}(GX|A) = {} by PRE_TOPC:def 10;
+A2:   now given P,Q being Subset of GX such that
+     A3:  A = P \/ Q and
+     A4:  P,Q are_separated and
+     A5:  P <> {}GX & Q <> {}GX;
+     A6:  P c= [#](GX|A) & Q c= [#](GX|A) by A1,A3,XBOOLE_1:7;
+          then reconsider P1 = P as Subset of GX|A by PRE_TOPC:
+16;
+          reconsider Q1 = Q as Subset of GX|A by A6,PRE_TOPC:16;
+         P1,Q1 are_separated by A1,A3,A4,Th7;
+          then not GX|A is connected by A1,A3,A5,Def2;
+       hence not A is connected by Def3;
+     end;
+       now assume not A is connected;
+          then not GX|A is connected by Def3;
+          then consider P,Q being Subset of GX|A such that
+     A7:  [#](GX|A) = P \/ Q and
+     A8:  P,Q are_separated and
+     A9:  P <> {}(GX|A) & Q <> {}(GX|A) by Def2;
+          reconsider P1 = P as Subset of GX by PRE_TOPC:39;
+          reconsider Q1 = Q as Subset of GX by PRE_TOPC:39;
+         P1,Q1 are_separated by A8,Th6;
+        hence ex P1,Q1 being Subset of GX st A = P1 \/ Q1 &
+              P1,Q1 are_separated & P1 <> {}GX & Q1 <> {}GX by A1,A7,A9;
+     end;
+   hence thesis by A2;
+end;
+
+theorem Th17:
+  A is connected & A c= B \/ C & B,C are_separated implies
+  A c= B or A c= C
+proof assume that
+A1:  A is connected and
+A2:  A c= B \/ C and
+A3:  B,C are_separated;
+     assume not A c= B & not A c= C;
+     then A meets B & A meets C by A2,XBOOLE_1:73;
+then A4:  A /\ B <> {} & A /\ C <> {} by XBOOLE_0:def 7;
+then A5:  A <> {}GX;
+       A /\ B c= B & A /\ C c= C by XBOOLE_1:17;
+then A6:  A /\ B,A /\ C are_separated by A3,Th8;
+       (A /\ B) \/ (A /\ C) = A /\ (B \/ C) by XBOOLE_1:23
+                      .= A by A2,XBOOLE_1:28;
+  hence contradiction by A1,A4,A5,A6,Th16;
+end;
+
+theorem Th18:
+  A is connected & B is connected & not A,B are_separated
+  implies A \/ B is connected
+proof assume that
+A1:  A is connected and
+A2:  B is connected and
+A3:  not A,B are_separated;
+     assume not A \/ B is connected;
+     then consider P,Q being Subset of GX such that
+A4:  A \/ B = P \/ Q and
+A5:  P,Q are_separated and
+A6:  P <> {}GX and
+A7:  Q <> {}GX by Th16;
+     P misses Q by A5,Th2;
+then A8:  P /\ Q = {} by XBOOLE_0:def 7;
+A9:     A c= P \/ Q & B c= P \/ Q by A4,XBOOLE_1:7;
+A10:  now assume A c= P & B c= P;
+       then A \/ B c= P & P c= P \/ Q by XBOOLE_1:7,8;
+       then P \/ Q = P by A4,XBOOLE_0:def 10;
+       then Q c= P by XBOOLE_1:7;
+      hence contradiction by A7,A8,XBOOLE_1:28;
+     end;
+A11: not(A c= P & B c= Q) by A3,A5,Th8;
+A12: not(A c= Q & B c= P) by A3,A5,Th8;
+       now assume A c= Q & B c= Q;
+       then A \/ B c= Q & Q c= Q \/ P by XBOOLE_1:7,8;
+       then Q \/ P = Q by A4,XBOOLE_0:def 10;
+       then P c= Q by XBOOLE_1:7;
+      hence contradiction by A6,A8,XBOOLE_1:28;
+     end;
+   hence contradiction by A1,A2,A5,A9,A10,A11,A12,Th17;
+end;
+
+theorem Th19:
+  C is connected & C c= A & A c= Cl C implies A is connected
+proof assume that
+A1:  C is connected and
+A2:  C c= A and
+A3:  A c= Cl C;
+     assume not A is connected;
+     then consider P,Q being Subset of GX such that
+A4:  A = P \/ Q and
+A5:  P,Q are_separated and
+A6:  P <> {}GX & Q <> {}GX by Th16;
+       (Cl P) misses Q & P misses Cl Q by A5,Def1;
+then A7: (Cl P) /\ Q = {} & P /\ Cl Q = {} by XBOOLE_0:def 7;
+A8:   now assume C c= P;
+         then Cl C c= Cl P by PRE_TOPC:49;
+         then (Cl C) /\ Q c= (Cl P) /\ Q by XBOOLE_1:27;
+     then A9: (Cl C) /\ Q = {} by A7,XBOOLE_1:3;
+            A /\ Q c= (Cl C) /\ Q by A3,XBOOLE_1:27;
+      then A /\ Q = {} by A9,XBOOLE_1:3;
+       hence contradiction by A4,A6,XBOOLE_1:21;
+     end;
+       now assume C c= Q;
+          then Cl C c= Cl Q by PRE_TOPC:49;
+          then P /\ Cl C c= P /\ Cl Q by XBOOLE_1:27;
+     then A10: P /\ Cl C = {} by A7,XBOOLE_1:3;
+            P /\ A c= P /\ Cl C by A3,XBOOLE_1:27;
+          then P /\ A = {} by A10,XBOOLE_1:3;
+       hence contradiction by A4,A6,XBOOLE_1:21;
+     end;
+   hence contradiction by A1,A2,A4,A5,A8,Th17;
+end;
+
+theorem Th20:
+  A is connected implies Cl A is connected
+proof assume
+A1:  A is connected;
+       A c= Cl A & Cl A c= Cl A by PRE_TOPC:48;
+  hence Cl A is connected by A1,Th19;
+end;
+
+theorem Th21:
+  GX is connected & A is connected & [#]GX \ A = B \/ C &
+  B,C are_separated implies A \/ B is connected & A \/ C is connected
+proof
+A1:  now let A,B,C be Subset of GX such that
+     A2:  GX is connected and
+     A3:  A is connected and
+     A4:  [#]GX \ A = B \/ C and
+     A5:  B,C are_separated;
+            now let P,Q be Subset of GX such that
+          A6:  A \/ B = P \/ Q and
+          A7:  P,Q are_separated;
+          A8:  [#]GX = A \/ (B \/ C) by A4,PRE_TOPC:24
+                   .= P \/ Q \/ C by A6,XBOOLE_1:4;
+A9:               A c= P \/ Q by A6,XBOOLE_1:7;
+          A10:  now assume
+                  A c= P;
+                    then Q,A are_separated by A7,Th8;
+               then A11: Q misses A by Th2;
+                      Q c= B \/ A by A6,XBOOLE_1:7;
+                    then Q c= B by A11,XBOOLE_1:73;
+                    then Q,C are_separated by A5,Th8;
+               then A12: Q,P \/ C are_separated by A7,Th9;
+                      [#]GX = Q \/ (P \/ C) by A8,XBOOLE_1:4;
+                then Q = {}GX or P \/ C = {}GX by A2,A12,Def2;
+                 hence P = {}GX or Q = {}GX by XBOOLE_1:15;
+               end;
+                 now assume A c= Q;
+                    then P,A are_separated by A7,Th8;
+               then A13: P misses A by Th2;
+                      P c= B \/ A by A6,XBOOLE_1:7;
+                    then P c= B by A13,XBOOLE_1:73;
+                    then P,C are_separated by A5,Th8;
+               then A14: P,Q \/ C are_separated by A7,Th9;
+                      [#]GX = P \/ (Q \/ C) by A8,XBOOLE_1:4;
+                 then P = {}GX or Q \/ C = {}GX by A2,A14,Def2;
+                 hence P = {}GX or Q = {}GX by XBOOLE_1:15;
+               end;
+            hence P = {}GX or Q = {}GX by A3,A7,A9,A10,Th17;
+          end;
+       hence A \/ B is connected by Th16;
+     end;
+     assume that
+A15:  GX is connected and
+A16:  A is connected and
+A17:  [#]GX \ A = B \/ C and
+A18:  B,C are_separated;
+     thus A \/ B is connected & A \/ C is connected by A1,A15,A16,A17,A18;
+end;
+
+theorem
+    [#]GX \ A = B \/ C & B,C are_separated & A is closed implies
+  A \/ B is closed & A \/ C is closed
+proof
+A1:  now let A,B,C be Subset of GX; assume that
+     A2:  [#]GX \ A = B \/ C and
+     A3:  B,C are_separated and
+     A4:  A is closed;
+     A5:  Cl A = A by A4,PRE_TOPC:52;
+     A6:  [#]GX = A \/ (B \/ C) by A2,PRE_TOPC:24;
+     A7:  B c= Cl B & C c= Cl C by PRE_TOPC:48;
+            (Cl B) misses C & B misses Cl C by A3,Def1;
+     then A8:  (Cl B) /\ C = {} & B /\ Cl C = {} by XBOOLE_0:def 7;
+            Cl(A \/ B) = (Cl A) \/ Cl B by PRE_TOPC:50
+                  .= A \/ ((Cl B) /\ (A \/ (B \/ C))) by A5,A6,PRE_TOPC:15
+                  .= (A \/ Cl B) /\ (A \/ (A \/ (B \/ C))) by XBOOLE_1:24
+                  .= (A \/ Cl B) /\ ((A \/ A) \/ (B \/ C)) by XBOOLE_1:4
+                  .= A \/ ((Cl B) /\ (B \/ C)) by XBOOLE_1:24
+                  .= A \/ (((Cl B) /\ B) \/ ((Cl B) /\ C)) by XBOOLE_1:23
+                  .= A \/ B by A7,A8,XBOOLE_1:28;
+        hence A \/ B is closed by PRE_TOPC:52;
+     end;
+     assume that
+A9:  [#]GX \ A = B \/ C and
+A10:  B,C are_separated and
+A11:  A is closed;
+     thus A \/ B is closed & A \/ C is closed by A1,A9,A10,A11;
+end;
+
+theorem
+    C is connected & C meets A & C \ A <> {}GX implies C meets Fr A
+proof
+     assume that
+A1:  C is connected and
+A2:  C meets A & C \ A <> {}GX;
+A3:   C /\ A <> {} by A2,XBOOLE_0:def 7;
+A4:  C \ A = C /\ A` by SUBSET_1:32;
+A5:  C = C /\ [#]GX by PRE_TOPC:15
+      .= C /\ ( A \/ A`) by PRE_TOPC:18
+      .= (C /\ A) \/ (C \ A) by A4,XBOOLE_1:23;
+       C /\ A c= A by XBOOLE_1:17;
+then A6:  Cl (C /\ A) c= Cl A by PRE_TOPC:49;
+A7:  A` c= Cl(A`) by PRE_TOPC:48;
+A8:  A c= Cl A by PRE_TOPC:48;
+       C \ A c= A` by A4,XBOOLE_1:17;
+then A9:  Cl (C \ A) c= Cl(A`) by PRE_TOPC:49;
+       not C /\ A,C \ A are_separated by A1,A2,A3,A5,Th16;
+     then (Cl(C /\ A)) meets (C \ A) or (C /\ A) meets Cl(C \ A)
+       by Def1;
+     then (Cl(C /\ A)) /\ (C \ A) <> {} or (C /\ A) /\ Cl(C \ A) <> {}
+ by XBOOLE_0:def 7;
+then A10: ((Cl(C /\ A)) /\ (C \ A)) \/ ((C /\ A) /\ Cl(C \ A)) <> {} by
+XBOOLE_1:15;
+A11: ((Cl(C /\ A)) /\ (C \ A)) \/ ((C /\ A) /\ Cl(C \ A)) =
+     (((Cl(C /\ A)) /\ C) /\ (A`)) \/ ((C /\ A) /\ Cl(C /\ (A`)))
+ by A4,XBOOLE_1:16
+     .= ((C /\ Cl(C /\ A)) /\ (A`)) \/ (C /\ (A /\ Cl(C /\ (A`)))) by XBOOLE_1:
+16
+     .= (C /\ ((Cl(C /\ A)) /\ (A`))) \/ (C /\ (A /\ Cl(C /\ (A`))))
+ by XBOOLE_1:16
+     .= C /\ ((Cl(C /\ A) /\ (A`)) \/ (A /\ Cl(C /\ A`))) by XBOOLE_1:23;
+A12: (Cl(C /\ A)) /\ (A`) c= (Cl A) /\ Cl(A`) by A6,A7,XBOOLE_1:27;
+       A /\ Cl(C /\ (A`)) c= (Cl A) /\ Cl(A`) by A4,A8,A9,XBOOLE_1:27;
+     then ((Cl(C /\ A)) /\ (A`)) \/ (A /\ Cl(C /\ (A`))) c=
+          (Cl A) /\ Cl(A`) & C c= C by A12,XBOOLE_1:8;
+     then C /\ (((Cl(C /\ A)) /\ (A`)) \/ (A /\ Cl(C /\ (A`)))) c=
+          C /\ ((Cl A) /\ Cl(A`)) by XBOOLE_1:27;
+     then ((Cl(C /\ A)) /\ (C \ A)) \/ ((C /\ A) /\ Cl(C \ A)) c= C /\ Fr A
+ by A11,TOPS_1:def 2;
+   hence C /\ Fr A <> {} by A10,XBOOLE_1:3;
+end;
+
+theorem Th24:
+  for X' being SubSpace of GX,
+      A being Subset of GX,
+      B being Subset of X' st A = B
+   holds A is connected iff B is connected
+proof
+ let X' be SubSpace of GX, A be Subset of GX,
+     B be Subset of X'; assume
+A1: A = B;
+A2:  [#](GX|A) = A & [#](X'|B) = B by PRE_TOPC:def 10;
+     reconsider GX' = GX, X = X' as TopSpace;
+     reconsider A' = A as Subset of GX';
+     reconsider B' = B as Subset of X;
+A3:  the carrier of (GX|A) = [#](GX|A) by PRE_TOPC:12
+                          .= the carrier of X'|B by A1,A2,PRE_TOPC:12;
+A4:  {}(GX|A) = {}(X'|B);
+A5:   now assume not A is connected;
+       then not GX'|A' is connected by Def3;
+       then consider P,Q being Subset of GX|A such that
+     A6:  [#](GX|A) = P \/ Q and
+     A7:  P <> {}(GX|A) and
+     A8:  Q <> {}(GX|A) and
+     A9:  P is closed and
+     A10:  Q is closed and
+     A11:  P misses Q by Th11;
+          consider P1 being Subset of GX such that
+     A12: P1 is closed and
+     A13: P1 /\ ([#](GX|A)) = P by A9,PRE_TOPC:43;
+          consider Q1 being Subset of GX such that
+     A14: Q1 is closed and
+     A15: Q1 /\ ([#](GX|A)) = Q by A10,PRE_TOPC:43;
+          reconsider PP = P, QQ=Q as Subset of X'|B by A3;
+            P1 /\ [#]X' c= [#]X' by XBOOLE_1:17;
+          then reconsider P11 = P1 /\ ([#](X')) as Subset of X' by PRE_TOPC:16;
+     A16: P11 is closed by A12,PRE_TOPC:43;
+            P1 /\ ([#](X')) c= P1 & A c= A by XBOOLE_1:17;
+     then A17: P1 /\ [#](X') /\ A c= P by A2,A13,XBOOLE_1:27;
+     A18: P1 /\ A c= P1 by XBOOLE_1:17;
+     A19: P1 /\ A c= A by XBOOLE_1:17;
+     A20: B c= [#](X') by PRE_TOPC:14;
+            P c= P \/ Q by XBOOLE_1:7;
+          then P c= [#](X') by A1,A2,A6,A20,XBOOLE_1:1;
+          then P c= P1 /\ ([#](X')) by A2,A13,A18,XBOOLE_1:19;
+          then P c= P1 /\ [#](X') /\ A by A2,A13,A19,XBOOLE_1:19;
+          then P11 /\ [#](X'|B) = PP by A1,A2,A17,XBOOLE_0:def 10;
+     then A21:  PP is closed by A16,PRE_TOPC:43;
+            Q1 /\ ([#](X')) c= [#](X') by XBOOLE_1:17;
+          then reconsider Q11 = Q1 /\ ([#](X')) as Subset of X' by PRE_TOPC:16;
+     A22: Q11 is closed by A14,PRE_TOPC:43;
+            Q1 /\ ([#](X')) c= Q1 & A c= A by XBOOLE_1:17;
+     then A23: (Q1 /\ ([#](X'))) /\ A c= Q by A2,A15,XBOOLE_1:27;
+     A24: Q1 /\ A c= Q1 by XBOOLE_1:17;
+     A25: Q1 /\ A c= A by XBOOLE_1:17;
+     A26: B c= [#](X') by PRE_TOPC:14;
+            Q c= P \/ Q by XBOOLE_1:7;
+          then Q c= [#](X') by A1,A2,A6,A26,XBOOLE_1:1;
+          then Q c= Q1 /\ ([#](X')) by A2,A15,A24,XBOOLE_1:19;
+          then Q c= (Q1 /\ ([#](X'))) /\ A by A2,A15,A25,XBOOLE_1:19;
+          then (Q1 /\ ([#](X'))) /\ A = Q by A23,XBOOLE_0:def 10;
+          then QQ is closed by A1,A2,A22,PRE_TOPC:43;
+          then not X|B' is connected by A1,A2,A4,A6,A7,A8,A11,A21,Th11;
+       hence not B is connected by Def3;
+     end;
+       now assume not B is connected;
+       then not X'|B is connected by Def3;
+       then consider P,Q being Subset of X'|B such that
+     A27:  [#](X'|B) = P \/ Q and
+     A28:  P <> {}(X'|B) and
+     A29:  Q <> {}(X'|B) and
+     A30:  P is closed and
+     A31:  Q is closed and
+     A32:  P misses Q by Th11;
+          consider P1 being Subset of X' such that
+     A33: P1 is closed and
+     A34: P1 /\ ([#](X'|B)) = P by A30,PRE_TOPC:43;
+          consider Q1 being Subset of X' such that
+     A35: Q1 is closed and
+     A36: Q1 /\ ([#](X'|B)) = Q by A31,PRE_TOPC:43;
+          consider P2 being Subset of GX such that
+     A37: P2 is closed and
+     A38: P2 /\ ([#](X')) = P1 by A33,PRE_TOPC:43;
+          consider Q2 being Subset of GX such that
+     A39: Q2 is closed and
+     A40: Q2 /\ ([#](X')) = Q1 by A35,PRE_TOPC:43;
+          reconsider PP = P as Subset of GX|A by A3;
+          reconsider QQ = Q as Subset of GX|A by A3;
+            P2 /\ ([#](GX|A)) = P2 /\ (([#](X')) /\ B) by A1,A2,PRE_TOPC:15
+                        .= PP by A2,A34,A38,XBOOLE_1:16;
+     then A41:  PP is closed by A37,PRE_TOPC:43;
+            Q2 /\ ([#](GX|A)) = Q2 /\ (([#](X')) /\ B) by A1,A2,PRE_TOPC:15
+                        .= QQ by A2,A36,A40,XBOOLE_1:16;
+          then QQ is closed by A39,PRE_TOPC:43;
+          then not GX'|A' is connected by A1,A2,A4,A27,A28,A29,A32,A41,Th11;
+       hence not A is connected by Def3;
+     end;
+   hence thesis by A5;
+end;
+
+theorem
+   A is closed & B is closed & A \/ B is connected & A /\ B is connected
+implies
+  A is connected & B is connected
+proof assume that
+A1:  A is closed and
+A2:  B is closed;
+     assume that
+A3:  A \/ B is connected and
+A4:  A /\ B is connected;
+A5:  GX|(A \/ B) is connected by A3,Def3;
+A6:  A \/ B = [#](GX|(A \/ B)) by PRE_TOPC:def 10;
+     set AB = A \/ B;
+A7:  A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+     then reconsider A1 = A as Subset of GX|AB by A6,PRE_TOPC:16;
+     reconsider B1 = B as Subset of GX|AB by A6,A7,PRE_TOPC:16;
+A8: [#](GX|(A \/ B)) \ (A1 /\ B1) = (A1 \ B1) \/ (B1 \ A1) by A6,XBOOLE_1:55;
+A9: (A1 /\ B1) \/ (A1 \ B1) = A1 by XBOOLE_1:51;
+     A10: (A1 /\ B1) \/ (B1 \ A1) = B1 by XBOOLE_1:51;
+A11: A /\ ([#](GX|(A \/ B))) = A by A6,A7,XBOOLE_1:28;
+       B /\ ([#](GX|(A \/ B))) = B by A6,A7,XBOOLE_1:28;
+     then A1 is closed & B1 is closed by A1,A2,A11,PRE_TOPC:43;
+then A12: A1 \ B1,B1 \ A1 are_separated by Th10;
+   A1 /\ B1 is connected by A4,Th24;
+     then A1 is connected & B1 is connected by A5,A8,A9,A10,A12,Th21;
+ hence A is connected & B is connected by Th24;
+end;
+
+theorem Th26:
+  for F being Subset-Family of GX st
+  (for A being Subset of GX st A in F holds A is connected)
+  & (ex A being Subset of GX st A <> {}GX & A in F &
+  (for B being Subset of GX st B in F & B <> A holds
+  not A,B are_separated)) holds union F is connected
+proof
+ let F be Subset-Family of GX;assume that
+A1:  for A being Subset of GX st A in F holds A is connected and
+A2:  ex A being Subset of GX st A <> {}GX & A in F &
+     (for B being Subset of GX st B in F & B <> A holds
+     not A,B are_separated);
+     consider A1 being Subset of GX such that
+A3:  A1 <> {}GX & A1 in F and
+A4:  for B being Subset of GX st B in F & B <> A1 holds
+     not A1,B are_separated by A2;
+     reconsider A1 as Subset of GX;
+    now
+      let P,Q be Subset of GX; assume that
+     A5:  union F = P \/ Q and
+     A6:  P,Q are_separated;
+          P misses Q by A6,Th2;
+     then A7:  P /\ Q = {} by XBOOLE_0:def 7;
+     A8:  A1 is connected by A1,A3;
+A9:          A1 c= P \/ Q by A3,A5,ZFMISC_1:92;
+     A10:  now assume
+          A11:  A1 c= P;
+A12:                now let B be Subset of GX; assume that
+                A13: B in F and
+                A14: B <> A1;assume
+                A15: not B c= P;
+                A16: not A1,B are_separated by A4,A13,A14;
+                A17: B is connected by A1,A13;
+                       B c= P \/ Q by A5,A13,ZFMISC_1:92;
+                     then B c= P or B c= Q by A6,A17,Th17;
+                 hence contradiction by A6,A11,A15,A16,Th8;
+                end;
+                  for A being set st A in F holds A c= P by A11,A12;
+          then A18:   union F c= P by ZFMISC_1:94;
+                  P c= P \/ Q by XBOOLE_1:7;
+                then P = P \/ Q by A5,A18,XBOOLE_0:def 10;
+                then Q c= P by XBOOLE_1:7;
+            hence Q = {}GX by A7,XBOOLE_1:28;
+          end;
+           now assume
+          A19: A1 c= Q;
+A20:               now let B be Subset of GX; assume that
+               A21: B in F and
+               A22: B <> A1 and
+               A23: not B c= Q;
+               A24: not A1,B are_separated by A4,A21,A22;
+               A25: B is connected by A1,A21;
+                      B c= P \/ Q by A5,A21,ZFMISC_1:92;
+                    then B c= P or B c= Q by A6,A25,Th17;
+                 hence contradiction by A6,A19,A23,A24,Th8;
+               end;
+                  for A being set st A in F holds A c= Q by A19,A20;
+          then A26:  union F c= Q by ZFMISC_1:94;
+                 Q c= P \/ Q by XBOOLE_1:7;
+               then Q = P \/ Q by A5,A26,XBOOLE_0:def 10;
+               then P c= Q by XBOOLE_1:7;
+             hence P = {}GX by A7,XBOOLE_1:28;
+          end;
+       hence P = {}GX or Q = {}GX by A6,A8,A9,A10,Th17;
+     end;
+  hence union F is connected by Th16;
+end;
+
+theorem Th27:
+  for F being Subset-Family of GX st
+  (for A being Subset of GX st A in F holds A is connected)
+  & meet F <> {}GX holds union F is connected
+proof
+     let F be Subset-Family of GX;assume that
+A1:  for A being Subset of GX st A in F
+     holds A is connected and
+A2:  meet F <> {}GX;
+     consider x being Point of GX such that
+A3:  x in meet F by A2,PRE_TOPC:41;
+       meet F c= union F by SETFAM_1:3;
+     then consider A2 being set such that
+A4:  x in A2 and
+A5:  A2 in F by A3,TARSKI:def 4;
+     reconsider A2 as Subset of GX by A5;
+A6:  A2 <> {}GX by A4;
+       now let B be Subset of GX such that
+A7:    B in F and
+         B <> A2;
+     A2 c= Cl A2 & B c= Cl B by PRE_TOPC:48;
+       then (x in Cl A2 & x in B) or (x in A2 & x in Cl B)
+ by A3,A4,A7,SETFAM_1:def 1;
+       then Cl A2 /\ B <> {} or A2 /\ Cl B <> {} by XBOOLE_0:def 3;
+       then Cl A2 meets B or A2 meets Cl B by XBOOLE_0:def 7;
+      hence not A2,B are_separated by Def1;
+     end;
+  hence union F is connected by A1,A5,A6,Th26;
+end;
+
+theorem Th28:
+   :: do poprawienia, przy poprawnej definicji "connected" !!!
+ [#]GX is connected iff GX is connected
+proof
+A1:  {}(GX|[#]GX) = {}GX;
+A2:  [#]GX = [#](GX|[#]GX) by PRE_TOPC:def 10;
+A3:   now assume [#]GX is connected;
+          then A4: GX|[#]GX is connected by Def3;
+           now let P1,Q1 be Subset of GX such that
+         A5:  [#]GX = P1 \/ Q1 and
+         A6:  P1,Q1 are_separated;
+         A7:  P1 c= [#]GX & Q1 c= [#]GX by PRE_TOPC:14;
+              then reconsider P = P1 as Subset of (GX|([#]GX))
+ by A2,PRE_TOPC:16;
+              reconsider Q = Q1 as Subset of GX|([#]GX)
+ by A2,A7,PRE_TOPC:16;
+                P,Q are_separated by A2,A5,A6,Th7;
+             hence P1 = {}GX or Q1 = {}GX by A1,A2,A4,A5,Def2;
+         end;
+       hence GX is connected by Def2;
+     end;
+       now assume A8: GX is connected;
+            now let P1,Q1 be Subset of GX|([#]GX) such that
+          A9: [#](GX|[#]GX) = P1 \/ Q1 and
+          A10: P1,Q1 are_separated;
+              reconsider P = P1 as Subset of GX by PRE_TOPC:39;
+              reconsider Q = Q1 as Subset of GX by PRE_TOPC:39;
+                P,Q are_separated by A10,Th6;
+            hence P1 = {}(GX|([#]GX)) or Q1 = {}(GX|([#]GX))
+ by A1,A2,A8,A9,Def2;
+          end;
+          then GX|([#]GX) is connected by Def2;
+       hence [#]GX is connected by Def3;
+     end;
+   hence thesis by A3;
+end;
+
+theorem Th29:
+  for GX being non empty TopSpace
+  for x being Point of GX holds {x} is connected
+proof
+ let GX be non empty TopSpace;
+ let x be Point of GX; assume
+   not {x} is connected;
+     then consider P,Q being Subset of GX such that
+A1:  {x} = P \/ Q and
+A2:  P,Q are_separated and
+A3:  P <> {}GX and
+A4:  Q <> {}GX by Th16;
+       P <> Q
+     proof assume not thesis;
+then A5:   P /\ Q = P;
+      P misses Q by A2,Th2;
+      hence contradiction by A3,A5,XBOOLE_0:def 7;
+     end;
+   hence contradiction by A1,A3,A4,ZFMISC_1:44;
+end;
+
+definition let GX be TopStruct, x,y be Point of GX;
+  pred x, y are_joined means
+:Def4:ex C being Subset of GX st C is connected & x in C & y in C;
+end;
+
+theorem Th30:
+ for GX being non empty TopSpace st
+  ex x being Point of GX st for y being Point of GX holds x,y are_joined
+   holds GX is connected
+proof
+ let GX be non empty TopSpace;
+    given a being Point of GX such that
+A1: for x being Point of GX holds a,x are_joined;
+A2: now let x be Point of GX;
+        a,x are_joined by A1;
+     hence ex C being Subset of GX st C is connected & a in C & x in C by Def4
+;
+    end;
+      now let x be Point of GX;
+      defpred P[set] means
+        ex C1 being Subset of GX st C1 = $1 & C1 is connected & x in $1;
+      consider F being Subset-Family of GX such that
+A3:     for C being Subset of GX holds C in F iff P[C]
+          from SubFamExS;
+     take F;
+     let C be Subset of GX;
+     thus C in F implies C is connected & x in C
+     proof
+      assume C in F;
+      then ex C1 being Subset of GX st C1 = C & C1 is connected & x in C by A3
+;
+      hence thesis;
+     end;
+     thus C is connected & x in C implies C in F by A3;
+    end;
+    then consider F being Subset-Family of GX such that
+A4:  for C being Subset of GX
+       holds C in F iff C is connected & a in C;
+A5: for A being Subset of GX st A in F holds A is connected by A4;
+A6: union F c= [#]GX by PRE_TOPC:14;
+      now let x be set; assume
+      x in [#]GX; then consider C being Subset of GX such that
+A7:   C is connected and A8:a in C and A9:x in C by A2;
+        C in F by A4,A7,A8;
+     hence x in union F by A9,TARSKI:def 4;
+    end;
+    then [#]GX c= union F by TARSKI:def 3;
+then A10: union F = [#]GX by A6,XBOOLE_0:def 10;
+A11:  for A being set st A in F holds a in A by A4;
+      {a} is connected & a in {a} by Th29,TARSKI:def 1;
+    then F <> {} by A4;
+    then meet F <> {}GX by A11,SETFAM_1:def 1;
+    then [#]GX is connected by A5,A10,Th27;
+  hence GX is connected by Th28;
+end;
+
+theorem Th31:
+  (ex x being Point of GX st for y being Point of GX holds
+   x,y are_joined)
+   iff (for x,y being Point of GX holds x,y are_joined)
+proof
+A1:  now given a being Point of GX such that
+A2:   for x being Point of GX holds a,x are_joined;
+      let x,y be Point of GX;
+        a,x are_joined by A2;
+      then consider C1 being Subset of GX such that
+A3:   C1 is connected and
+A4:   a in C1 and
+A5:   x in C1 by Def4;
+        a,y are_joined by A2;
+      then consider C2 being Subset of GX such that
+A6:   C2 is connected and
+A7:   a in C2 and
+A8:   y in C2 by Def4;
+        C1 /\ C2 <> {}GX by A4,A7,XBOOLE_0:def 3;
+      then C1 meets C2 by XBOOLE_0:def 7;
+      then not C1,C2 are_separated by Th2;
+then A9:   C1 \/ C2 is connected by A3,A6,Th18;
+        x in C1 \/ C2 & y in C1 \/ C2 by A5,A8,XBOOLE_0:def 2;
+     hence x,y are_joined by A9,Def4;
+    end;
+      now assume
+A10:   for x,y being Point of GX holds x,y are_joined;
+      consider a being Point of GX;
+        for y being Point of GX holds a,y are_joined by A10;
+     hence ex x being Point of GX st for y being Point of GX
+           holds x,y are_joined;
+    end;
+  hence thesis by A1;
+end;
+
+theorem
+   for GX being non empty TopSpace st
+  for x, y being Point of GX holds x,y are_joined holds
+   GX is connected
+proof
+ let GX be non empty TopSpace;
+ assume for x,y being Point of GX holds x,y are_joined;
+     then ex x being Point of GX st
+     for y being Point of GX holds x,y are_joined by Th31;
+  hence GX is connected by Th30;
+end;
+
+theorem Th33:
+  for GX being non empty TopSpace
+  for x being Point of GX, F being Subset-Family of GX
+  st for A being Subset of GX holds A in F iff A is connected & x in A
+  holds F <> {}
+proof
+  let GX be non empty TopSpace;
+  let x be Point of GX, F be Subset-Family of GX such that
+A1: for A being Subset of GX holds A in F iff A is connected
+    & x in A;
+      {x} is connected & x in {x} by Th29,TARSKI:def 1;
+  hence F <> {} by A1;
+end;
+
+::
+::              Components of Topological Spaces
+::
+
+definition let GX be TopStruct, A be Subset of GX;
+   pred A is_a_component_of GX means
+    :Def5:A is connected & for B being Subset of GX st
+           B is connected holds A c= B implies A = B;
+end;
+
+theorem Th34:
+ for GX being non empty TopSpace, A being Subset of GX
+  st A is_a_component_of GX holds A <> {}GX
+proof let GX be non empty TopSpace, A be Subset of GX;
+ assume
+A1: A is_a_component_of GX;
+    assume A2: not thesis;
+    consider x being Point of GX;
+A3: {x} is connected by Th29;
+      {} c= {x} by XBOOLE_1:2;
+  hence contradiction by A1,A2,A3,Def5;
+end;
+
+theorem
+    A is_a_component_of GX implies A is closed
+proof
+ assume
+A1: A is_a_component_of GX;
+A2: A c= Cl A by PRE_TOPC:48;
+      A is connected by A1,Def5;
+    then Cl A is connected by Th20;
+    then A = Cl A by A1,A2,Def5;
+  hence A is closed by PRE_TOPC:52;
+end;
+
+theorem Th36:
+  A is_a_component_of GX & B is_a_component_of GX implies
+  A = B or A,B are_separated
+proof assume
+A1: A is_a_component_of GX & B is_a_component_of GX;
+      A <> B implies A,B are_separated
+    proof assume that
+A2: A <> B and
+A3:   not A,B are_separated;
+        A is connected & B is connected by A1,Def5;
+then A4:   A \/ B is connected by A3,Th18;
+        A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+      then A = A \/ B & B = A \/ B by A1,A4,Def5;
+     hence contradiction by A2;
+    end;
+ hence thesis;
+end;
+
+theorem Th37:
+  A is_a_component_of GX & B is_a_component_of GX implies
+  A = B or A misses B
+proof assume that
+A1: A is_a_component_of GX and
+A2: B is_a_component_of GX;
+     A <> B implies A,B are_separated by A1,A2,Th36;
+  hence thesis by Th2;
+end;
+
+theorem
+    C is connected implies
+  for S being Subset of GX st S is_a_component_of GX holds
+               C misses S or C c= S
+proof
+assume
+A1: C is connected;
+    let S be Subset of GX; assume
+A2: S is_a_component_of GX;
+    assume C meets S;
+then A3: not C,S are_separated by Th2;
+      S is connected by A2,Def5;
+then A4: C \/ S is connected by A1,A3,Th18;
+      S c= C \/ S by XBOOLE_1:7;
+    then S = C \/ S by A2,A4,Def5;
+  hence C c= S by XBOOLE_1:7;
+end;
+
+definition let GX be TopStruct, A, B be Subset of GX;
+   pred B is_a_component_of A means
+    :Def6:ex B1 being Subset of GX|A st B1 = B & B1 is_a_component_of GX|A;
+end;
+
+theorem
+    GX is connected & A is connected & C is_a_component_of [#]GX \ A implies
+   [#]GX \ C is connected
+proof assume that
+A1:  GX is connected and
+A2:  A is connected and
+A3:  C is_a_component_of [#]GX \ A;
+     consider C1 being Subset of GX|([#]GX \ A) such that
+A4:  C1 = C and
+A5:  C1 is_a_component_of GX|([#]GX \ A) by A3,Def6;
+A6:  C1 is connected by A5,Def5;
+     reconsider C2 = C1 as Subset of GX by A4;
+       C1 c= [#](GX|([#]GX \ A)) by PRE_TOPC:14;
+     then C1 c= [#]GX \ A by PRE_TOPC:def 10;
+     then ([#]GX \ A)` c= C2` by PRE_TOPC:19;
+     then [#]GX \ ([#]GX \ A) c= C2` by PRE_TOPC:17;
+then A7:  A c= C2` by PRE_TOPC:22;
+then A8: A c= [#]GX \ C2 by PRE_TOPC:17;
+       now let P,Q be Subset of GX such that
+     A9:  [#]GX \ C = P \/ Q and
+     A10:  P,Q are_separated;
+     A11:  P misses Q by A10,Th2;
+     A12: Q c= [#]GX \ C by A9,XBOOLE_1:7;
+        A misses C1 by A7,PRE_TOPC:21;
+then A13:   A /\ C1 = {} by XBOOLE_0:def 7;
+     A14: C is connected by A4,A6,Th24;
+A15:   P misses P` by PRE_TOPC:26;
+     A16:  now assume
+          A17: A c= P;
+                 Q c= P` by A11,PRE_TOPC:21;
+               then A /\ Q c= P /\ P` by A17,XBOOLE_1:27;
+               then A18: A /\ Q c= {} by A15,XBOOLE_0:def 7;
+                 (C \/ Q) /\ A = (A /\ C) \/ (A /\ Q) by XBOOLE_1:23
+                          .= {} by A4,A13,A18,XBOOLE_1:3;
+               then (C \/ Q) misses A by XBOOLE_0:def 7;
+               then C \/ Q c= A` by PRE_TOPC:21;
+               then C \/ Q c= [#]GX \ A by PRE_TOPC:17;
+               then C \/ Q c= [#](GX|([#]GX \ A)) by PRE_TOPC:def 10;
+               then reconsider C1Q1 = C \/ Q as
+               Subset of GX|([#]GX \ A) by PRE_TOPC:16;
+                 C \/ Q is connected by A1,A9,A10,A14,Th21;
+          then A19: C1Q1 is connected by Th24;
+A20:             C misses C` by PRE_TOPC:26;
+                 C1 c= C1 \/ Q by XBOOLE_1:7;
+               then C1Q1 = C1 by A4,A5,A19,Def5;
+               then Q c= C by A4,XBOOLE_1:7;
+               then Q c= C /\ ([#]GX \ C) by A12,XBOOLE_1:19;
+               then Q c= C /\ C` by PRE_TOPC:17;
+               then Q c= {} by A20,XBOOLE_0:def 7;
+            hence Q = {}GX by XBOOLE_1:3;
+          end;
+            now assume
+          A21: A c= Q;
+A22:             Q misses Q` by PRE_TOPC:26;
+                 P c= Q` by A11,PRE_TOPC:21;
+               then A /\ P c= Q /\ Q` by A21,XBOOLE_1:27;
+               then A23: A /\ P c= {} by A22,XBOOLE_0:def 7;
+                 (C \/ P ) /\ A = (A /\ C) \/ (A /\ P) by XBOOLE_1:23
+                           .= {} by A4,A13,A23,XBOOLE_1:3;
+               then C \/ P misses A by XBOOLE_0:def 7;
+               then C \/ P c= A` by PRE_TOPC:21;
+               then C \/ P c= [#]GX \ A by PRE_TOPC:17;
+               then C \/ P c= [#](GX|([#]GX \ A)) by PRE_TOPC:def 10;
+               then reconsider C1P1 = C \/ P as
+               Subset of GX|([#]GX \ A) by PRE_TOPC:16;
+             C \/ P is connected by A1,A9,A10,A14,Th21;
+          then A24: C1P1 is connected by Th24;
+                 C c= C1 \/ P by A4,XBOOLE_1:7;
+               then C1P1 = C1 by A4,A5,A24,Def5;
+          then A25: P c= C by A4,XBOOLE_1:7;
+A26:             C misses C` by PRE_TOPC:26;
+                 P c= [#]GX \ C by A9,XBOOLE_1:7;
+               then P c= C /\ ([#]GX \ C) by A25,XBOOLE_1:19;
+               then P c= C /\ C` by PRE_TOPC:17;
+               then P c= {} by A26,XBOOLE_0:def 7;
+            hence P = {}GX by XBOOLE_1:3;
+          end;
+      hence P = {}GX or Q = {}GX by A2,A4,A8,A9,A10,A16,Th17;
+     end;
+  hence [#]GX \ C is connected by Th16;
+end;
+
+::
+::                    A Component of a Point
+::
+
+definition let GX be TopStruct, x be Point of GX;
+  func skl x -> Subset of GX means
+   :Def7:ex F being Subset-Family of GX st
+      (for A being Subset of GX holds A in F iff A is connected & x in A) &
+      union F = it;
+   existence
+   proof
+      defpred P[set] means
+        ex A1 being Subset of GX st A1 = $1 & A1 is connected & x in $1;
+        consider F being Subset-Family of GX such that
+   A1:  for A being Subset of GX holds A in F iff P[A]
+         from SubFamExS;
+        take S = union F, F;
+     thus for A being Subset of GX holds A in F iff A is connected & x in A
+     proof
+      let A be Subset of GX;
+      thus A in F implies A is connected & x in A
+      proof
+       assume A in F;
+        then ex A1 being Subset of GX st A1 = A & A1 is connected & x in A by
+A1;
+        hence thesis;
+      end;
+      thus thesis by A1;
+     end;
+     thus union F = S;
+   end;
+   uniqueness
+   proof let S,S' be Subset of GX; assume
+   A2:  (ex F being Subset-Family of GX st
+        (for A being Subset of GX holds A in F iff A is connected &
+        x in A) & union F = S) & ex F' being Subset-Family of GX st
+        (for A being Subset of GX holds A in F' iff A is connected &
+        x in A) & union F' = S';
+        then consider F being Subset-Family of GX such that
+   A3:  (for A being Subset of GX holds A in F iff A is connected
+        & x in A) & union F = S;
+        consider F' being Subset-Family of GX such that
+   A4: (for A being Subset of GX holds A in F' iff A is connected
+       & x in A) & union F' = S' by A2;
+         now let y be set;
+       A5:  now assume
+                 y in S;
+               then consider B being set such that
+           A6: y in B & B in F by A3,TARSKI:def 4;
+               reconsider B as Subset of GX by A6;
+                 B is connected & x in B & y in B by A3,A6;
+               then B in F'& y in B by A4;
+              hence y in S' by A4,TARSKI:def 4;
+           end;
+             now assume
+                 y in S';
+               then consider B being set such that
+           A7: y in B & B in F' by A4,TARSKI:def 4;
+               reconsider B as Subset of GX by A7;
+                 B is connected & x in B & y in B by A4,A7;
+               then B in F & y in B by A3;
+             hence y in S by A3,TARSKI:def 4;
+           end;
+         hence y in S iff y in S' by A5;
+       end;
+     hence S = S' by TARSKI:2;
+   end;
+end;
+
+reserve GX for non empty TopSpace;
+reserve A, C for Subset of GX;
+reserve x for Point of GX;
+
+theorem Th40:
+  x in skl x
+proof
+    consider F being Subset-Family of GX such that
+A1: for A being Subset of GX holds A in F iff A is connected & x in A and
+A2: skl x = union F by Def7;
+A3: F <> {} by A1,Th33;
+      for A being set holds A in F implies x in A by A1;
+then A4: x in meet F by A3,SETFAM_1:def 1;
+      meet F c= union F by SETFAM_1:3;
+  hence x in skl x by A2,A4;
+end;
+
+theorem Th41:
+  skl x is connected
+proof
+    consider F being Subset-Family of GX such that
+A1: for A being Subset of GX holds A in F iff A is connected & x in A and
+A2: skl x = union F by Def7;
+A3: for A being set holds A in F implies x in A by A1;
+A4: for A being Subset of GX st A in F holds A is connected by A1;
+      F <> {} by A1,Th33;
+    then meet F <> {}GX by A3,SETFAM_1:def 1;
+  hence skl x is connected by A2,A4,Th27;
+end;
+
+theorem Th42:
+ C is connected & skl x c= C implies C = skl x
+proof assume
+A1: C is connected; assume
+A2: skl x c= C;
+    consider F being Subset-Family of GX such that
+A3: for A being Subset of GX holds (A in F iff A is connected & x in A) and
+A4: skl x = union F by Def7;
+      x in skl x by Th40;
+    then C in F by A1,A2,A3;
+    then C c= skl x by A4,ZFMISC_1:92;
+  hence C = skl x by A2,XBOOLE_0:def 10;
+end;
+
+theorem Th43:
+ A is_a_component_of GX iff ex x being Point of GX st A = skl x
+proof
+A1:  now assume
+A2:   A is_a_component_of GX;
+then A3:   A <> {}GX & A is connected by Def5,Th34;
+      then consider y being Point of GX such that
+A4:   y in A by PRE_TOPC:41;
+      take x = y;
+      consider F being Subset-Family of GX such that
+A5:   for B being Subset of GX holds B in F iff B is connected & x in B and
+A6:   union F = skl x by Def7;
+        A in F by A3,A4,A5;
+then A7:   A c= union F by ZFMISC_1:92;
+        skl x is connected by Th41;
+     hence A = skl x by A2,A6,A7,Def5;
+    end;
+      now given x being Point of GX such that
+A8:   A = skl x;
+        A is connected &
+       for B being Subset of GX st B is connected
+      holds A c= B implies A = B by A8,Th41,Th42;
+     hence A is_a_component_of GX by Def5;
+    end;
+  hence thesis by A1;
+end;
+
+theorem
+    A is_a_component_of GX & x in A implies A = skl x
+proof assume that
+A1: A is_a_component_of GX and
+A2: x in A; assume
+A3: A <> skl x;
+      x in skl x by Th40;
+    then A /\ (skl x) <> {} by A2,XBOOLE_0:def 3;
+then A4: A meets (skl x) by XBOOLE_0:def 7;
+      skl x is_a_component_of GX by Th43;
+    then A,skl x are_separated by A1,A3,Th36;
+  hence contradiction by A4,Th2;
+end;
+
+theorem
+    A = skl x implies
+   for p being Point of GX st p in A holds skl p = A
+proof assume
+A1: A = skl x; given p being Point of GX such that
+A2: p in A and
+A3: skl p <> A;
+      skl p is_a_component_of GX & A is_a_component_of GX by A1,Th43;
+    then (skl p) misses A by A3,Th37;
+then A4: (skl p) /\ A = {}GX by XBOOLE_0:def 7;
+      p in skl p by Th40;
+   hence contradiction by A2,A4,XBOOLE_0:def 3;
+end;
+
+theorem
+   for F being Subset-Family of GX st for A being Subset of GX
+ holds A in F iff A is_a_component_of GX
+ holds F is_a_cover_of GX
+proof let F  be Subset-Family of GX such that
+A1: for A being Subset of GX holds A in F iff A is_a_component_of GX;
+A2: union F c= [#]GX by PRE_TOPC:14;
+      now let x be set; assume
+       x in [#]GX;
+      then reconsider y = x as Point of GX;
+        skl y is_a_component_of GX by Th43;
+      then skl y in F by A1;
+then A3:   skl y c= union F by ZFMISC_1:92;
+        y in skl y by Th40;
+     hence x in union F by A3;
+    end;
+    then [#]GX c= union F by TARSKI:def 3;
+    then union F = [#]GX by A2,XBOOLE_0:def 10;
+  hence F is_a_cover_of GX by PRE_TOPC:def 8;
+end;

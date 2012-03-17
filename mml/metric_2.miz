@@ -1,0 +1,1137 @@
+:: On Pseudometric Spaces
+::  by Adam Lecko and Mariusz Startek
+::
+:: Received September 28, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary METRIC_1, PARTFUN1, RELAT_2, SUB_METR, BOOLE, FUNCT_1, METRIC_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      DOMAIN_1, FUNCT_2, STRUCT_0, METRIC_1, MCART_1, SUB_METR;
+ constructors DOMAIN_1, SUB_METR, REAL_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, METRIC_1, STRUCT_0, METRIC_3, XREAL_0, RELSET_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ theorems TARSKI, AXIOMS, BINOP_1, METRIC_1, SUBSET_1, MCART_1, XBOOLE_0;
+ schemes FRAENKEL, FUNCT_2;
+
+begin :: Equivalence classes
+
+definition let M be non empty MetrStruct, x,y be Element of M;
+  pred x tolerates y means :Def1:
+    dist(x,y)=0;
+end;
+
+definition let M be Reflexive (non empty MetrStruct),
+               x, y be Element of M;
+  redefine pred x tolerates y;
+  reflexivity
+  proof
+    let x be Element of M;
+      dist(x,x) = 0 by METRIC_1:1;
+    hence thesis by Def1;
+  end;
+end;
+
+definition let M be symmetric (non empty MetrStruct),
+               x, y be Element of M;
+  redefine pred x tolerates y;
+  symmetry
+  proof
+    let x, y be Element of M;
+    assume x tolerates y;
+    then dist(x,y) = 0 by Def1;
+    hence thesis by Def1;
+  end;
+end;
+
+definition let M be non empty MetrStruct, x be Element of M;
+   func x-neighbour -> Subset of M equals
+   :Def2:  {y where y is Element of M: x tolerates y};
+   coherence
+   proof
+     defpred P[Element of M] means x tolerates $1;
+       {y where y is Element of M: P[y]} c=
+     the carrier of M from Fr_Set0;
+     hence thesis;
+   end;
+end;
+
+definition let M be non empty MetrStruct;
+  mode equivalence_class of M -> Subset of M means
+   :Def3: ex x being Element of M st it=x-neighbour;
+   existence
+      proof
+        consider z being Element of M;
+          z-neighbour is Subset of M;
+        hence thesis;
+      end;
+   end;
+
+  Lm1: for M being Reflexive (non empty MetrStruct),
+           x being Element of M
+         holds x tolerates x;
+
+canceled 5;
+
+theorem
+  Th6: for M being PseudoMetricSpace,
+    x,y,z being Element of M holds
+               (x tolerates y & y tolerates z) implies x tolerates z
+proof
+  let M be PseudoMetricSpace, x,y,z be Element of M;
+  assume A1: (x tolerates y) & (y tolerates z);
+  then A2: dist(x,y)=0 by Def1;
+    dist(y,z)=0 by A1,Def1;
+  then dist(x,z) <= 0 + 0 by A2,METRIC_1:4;
+  then dist(x,z) = 0 by METRIC_1:5;
+  hence thesis by Def1;
+end;
+
+theorem
+  Th7: for M being PseudoMetricSpace,x,y being Element of M
+        holds y in x-neighbour iff y tolerates x
+proof
+  let M be PseudoMetricSpace,x,y be Element of M;
+  hereby assume y in x-neighbour;
+    then y in {q where q is Element of M: x tolerates q}
+    by Def2;
+    then ex q be Element of M st y = q & x tolerates q;
+    hence y tolerates x;
+  end;
+    assume y tolerates x;
+    then y in {q where q is Element of M: x tolerates q};
+    hence thesis by Def2;
+end;
+
+theorem
+    for M being PseudoMetricSpace,x,p,q being Element of M
+           holds p in x-neighbour & q in x-neighbour implies p tolerates q
+   proof
+     let M be PseudoMetricSpace, x,p,q be Element of M;
+     assume p in x-neighbour & q in x-neighbour;
+     then p tolerates x & q tolerates x by Th7;
+     hence thesis by Th6;
+   end;
+
+theorem
+  Th9: for M being PseudoMetricSpace, x being Element of M
+            holds x in x-neighbour
+proof
+  let M be PseudoMetricSpace, x be Element of M;
+    x tolerates x by Lm1;
+  hence thesis by Th7;
+end;
+
+theorem
+     for M being PseudoMetricSpace, x,y being Element of M
+         holds x in y-neighbour iff y in x-neighbour
+proof
+  let M be PseudoMetricSpace, x,y be Element of M;
+    hereby assume x in y-neighbour;
+      then x tolerates y by Th7;
+      hence y in x-neighbour by Th7;
+    end;
+      assume y in x-neighbour;
+      then y tolerates x by Th7;
+      hence thesis by Th7;
+  end;
+
+theorem
+     for M being PseudoMetricSpace, p,x,y being Element of M
+         holds p in x-neighbour & x tolerates y implies p in y-neighbour
+proof
+  let M be PseudoMetricSpace,p,x,y be Element of M;
+  assume p in x-neighbour & x tolerates y;
+  then (p tolerates x) & (x tolerates y) by Th7;
+  then p tolerates y by Th6;
+  hence thesis by Th7;
+end;
+
+theorem
+  Th12: for M being PseudoMetricSpace, x,y being Element of M
+            holds y in x-neighbour implies x-neighbour = y-neighbour
+proof
+  let M be PseudoMetricSpace, x,y be Element of M;
+  assume A1: y in x-neighbour;
+A2:  for p being Element of M holds p in x-neighbour
+ implies p in y-neighbour
+  proof
+    let p be Element of M;
+    assume p in x-neighbour;
+    then (p tolerates x) & (x tolerates y) by A1,Th7;
+    then p tolerates y by Th6;
+    hence thesis by Th7;
+  end;
+    for p being Element of M holds p in y-neighbour implies p in
+x
+-neighbour
+  proof
+    let p be Element of M;
+    assume p in y-neighbour;
+    then (p tolerates y) & (y tolerates x) by A1,Th7;
+    then p tolerates x by Th6;
+    hence thesis by Th7;
+  end;
+  then x-neighbour c= y-neighbour & y-neighbour c= x-neighbour
+ by A2,SUBSET_1:7;
+  hence thesis by XBOOLE_0:def 10;
+end;
+
+theorem
+  Th13: for M being PseudoMetricSpace,
+            x,y being Element of M
+              holds x-neighbour = y-neighbour iff x tolerates y
+proof
+  let M be PseudoMetricSpace,
+      x,y be Element of M;
+  hereby assume x-neighbour = y-neighbour;
+    then x in y-neighbour by Th9;
+    hence x tolerates y by Th7;
+  end;
+    assume x tolerates y;
+    then x in y-neighbour by Th7;
+    hence thesis by Th12;
+  end;
+
+theorem
+     for M being PseudoMetricSpace, x,y being Element of M
+           holds x-neighbour meets y-neighbour iff x tolerates y
+proof
+  let M be PseudoMetricSpace, x,y be Element of M;
+  hereby assume x-neighbour meets y-neighbour;
+    then consider p being set such that
+    A1: p in x-neighbour & p in y-neighbour by XBOOLE_0:3;
+      p in {q where q is Element of M: x tolerates q}
+    by A1,Def2;
+    then A2: ex q being Element of M st q=p & x tolerates q;
+    reconsider p as Element of M by A1;
+      p in {s where s is Element of M: y tolerates s}
+    by A1,Def2;
+    then ex s being Element of M st s=p & y tolerates s;
+    hence x tolerates y by A2,Th6;
+  end;
+  assume x tolerates y;
+  then A3: x in y-neighbour by Th7;
+    x in x-neighbour by Th9;
+  hence thesis by A3,XBOOLE_0:3;
+end;
+
+canceled;
+
+theorem Th16:
+   for M being PseudoMetricSpace, V being equivalence_class of M holds
+     V is non empty set
+  proof
+     let M be PseudoMetricSpace, V be equivalence_class of M;
+       ex x being Element of M st V=x-neighbour by Def3;
+     hence thesis by Th9;
+  end;
+
+definition let M be PseudoMetricSpace;
+  cluster -> non empty equivalence_class of M;
+  coherence by Th16;
+end;
+
+theorem
+  Th17:for M being PseudoMetricSpace, x,p,q being Element of M
+              holds
+            (p in x-neighbour & q in x-neighbour) implies dist(p,q)=0
+   proof
+     let M be PseudoMetricSpace, x,p,q be Element of M;
+     assume p in x-neighbour & q in x-neighbour;
+     then p tolerates x & q tolerates x by Th7;
+     then p tolerates q by Th6;
+     hence thesis by Def1;
+   end;
+
+::----------------------------------------------------------------------------
+
+theorem
+  Th18: for M being Reflexive discerning (non empty MetrStruct),
+     x,y being Element of M holds
+              x tolerates y iff x = y
+proof
+  let M be Reflexive discerning (non empty MetrStruct),
+      x,y be Element of M;
+    x tolerates y implies x = y
+  proof
+    assume x tolerates y;
+    then dist(x,y) = 0 by Def1;
+    hence thesis by METRIC_1:2;
+  end;
+  hence thesis;
+end;
+
+theorem Th19:
+ for M being non empty MetrSpace,x,y being Element of M holds
+   y in x-neighbour iff y = x
+proof
+  let M be non empty MetrSpace, x,y be Element of M;
+  hereby assume y in x-neighbour;
+    then y in {q where q is Element of M: x tolerates q}
+                                       by Def2;
+    then ex q be Element of M st y = q & x tolerates q;
+    hence y = x by Th18;
+  end;
+    assume y = x;
+    then x tolerates y by Th18;
+    then y in {q where q is Element of M: x tolerates q};
+    hence thesis by Def2;
+end;
+
+theorem
+  Th20: for M being non empty MetrSpace,x being Element of M
+                    holds
+            x-neighbour = {x}
+proof
+  let M be non empty MetrSpace,x be Element of M;
+  A1: x-neighbour c= {x}
+  proof
+       for p being Element of M holds p in x-neighbour
+ implies p in {x}
+      proof
+        let p be Element of M;
+        assume p in x-neighbour;
+        then p = x by Th19;
+        hence thesis by TARSKI:def 1;
+      end;
+    hence thesis by SUBSET_1:7;
+  end;
+    {x} c= x-neighbour
+  proof
+       for p being Element of M holds p in {x} implies p in x
+-neighbour
+      proof
+        let p be Element of M;
+        assume p in {x};
+        then p = x by TARSKI:def 1;
+        hence thesis by Th19;
+      end;
+    hence thesis by SUBSET_1:7;
+  end;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem
+     for M being non empty MetrSpace, V being Subset of M
+               holds
+             (V is equivalence_class of M iff
+             ex x being Element of M st V={x})
+proof
+  let M be non empty MetrSpace, V be Subset of M;
+  A1: V is equivalence_class of M implies
+  ex x being Element of M st V={x}
+  proof
+    assume V is equivalence_class of M;
+    then consider x being Element of M such that A2: V=x
+-neighbour by Def3;
+      x-neighbour={x} by Th20;
+    hence thesis by A2;
+  end;
+    (ex x being Element of M st V={x}) implies
+  V is equivalence_class of M
+    proof
+      given x being Element of M such that A3: V={x};
+        {x}=x-neighbour by Th20;
+      hence thesis by A3,Def3;
+    end;
+  hence thesis by A1;
+end;
+
+:: Set of the equivalence classes
+
+definition let M be non empty MetrStruct;
+  func M-neighbour -> set equals
+  :Def4:  {s where s is Element of bool the carrier of M:
+                 ex x being Element of M st x-neighbour = s};
+coherence;
+end;
+
+definition let M be non empty MetrStruct;
+  cluster M-neighbour -> non empty;
+coherence
+  proof
+    consider y being Element of M;
+      y-neighbour in {s where s is Element of bool the carrier of M:
+         ex x being Element of M st x-neighbour = s};
+    hence thesis by Def4;
+  end;
+end;
+
+ reserve V for set;
+
+canceled;
+
+theorem
+  Th23: for M being non empty MetrStruct holds
+            V in M-neighbour iff ex x being Element of M st V=x
+-neighbour
+     proof
+       let M be non empty MetrStruct;
+       A1:V in
+ M-neighbour implies ex x being Element of M st V=x
+-neighbour
+         proof
+           assume V in M-neighbour;
+           then V in {s where s is Element of bool the carrier of M:
+                ex x being Element of M st s=x-neighbour
+} by Def4;
+           then ex q being Element of bool the carrier of M st
+                (q=V & ex x being Element of M st q=x-neighbour
+);
+           hence thesis;
+         end;
+         (ex x being Element of M st V=x-neighbour) implies V in
+M
+-neighbour
+         proof
+           assume A2:ex x being Element of M st V=x-neighbour;
+           then reconsider V as Subset of M;
+             V in {s where s is Element of bool the carrier of M:
+                ex x being Element of M st s=x-neighbour} by A2;
+           hence thesis by Def4;
+         end;
+       hence thesis by A1;
+     end;
+
+theorem
+    for M being non empty MetrStruct,
+  x being Element of M holds
+            x-neighbour in M-neighbour by Th23;
+
+canceled;
+
+theorem
+  Th26: for M being non empty MetrStruct holds
+            V in M-neighbour iff V is equivalence_class of M
+proof
+  let M be non empty MetrStruct;
+  A1: V in M-neighbour implies V is equivalence_class of M
+  proof
+    assume V in M-neighbour;
+    then ex x being Element of M st V=x-neighbour by Th23;
+    hence thesis by Def3;
+  end;
+    V is equivalence_class of M implies V in M-neighbour
+  proof
+    assume V is equivalence_class of M;
+    then ex x being Element of M st V=x-neighbour by Def3;
+    hence thesis by Th23;
+  end;
+hence thesis by A1;
+end;
+
+theorem
+    for M being non empty MetrSpace, x being Element of M holds
+   {x} in M-neighbour
+proof
+  let M be non empty MetrSpace,x be Element of M;
+    x-neighbour = {x} by Th20;
+  hence thesis by Th23;
+end;
+
+theorem
+     for M being non empty MetrSpace holds
+     V in M-neighbour iff ex x being Element of M st V={x}
+proof
+  let M be non empty MetrSpace;
+  A1: V in M-neighbour implies ex x being Element of M st V={x}
+  proof
+    assume V in M-neighbour;
+    then consider x being Element of M such that A2: V=x
+-neighbour by Th23;
+      x-neighbour = {x} by Th20;
+    hence thesis by A2;
+  end;
+    (ex x being Element of M st V={x}) implies V in M-neighbour
+  proof
+    given x being Element of M such that A3: V={x};
+      x-neighbour = {x} by Th20;
+    hence thesis by A3,Th23;
+  end;
+  hence thesis by A1;
+end;
+
+theorem
+   Th29: for M being PseudoMetricSpace, V,Q being Element of M-neighbour
+             for p1,p2,q1,q2 being Element of M
+                 holds
+    ((p1 in V & q1 in Q & p2 in V & q2 in Q) implies dist(p1,q1)=dist(p2,q2))
+   proof
+     let M be PseudoMetricSpace, V,Q be Element of M-neighbour;
+     let p1,p2,q1,q2 be Element of M;
+     assume A1: p1 in V & q1 in Q & p2 in V & q2 in Q;
+       V is equivalence_class of M by Th26;
+     then ex x being Element of M st V=x-neighbour by Def3;
+     then A2: dist(p1,p2)=0 & dist(p2,p1)=0 by A1,Th17;
+       Q is equivalence_class of M by Th26;
+     then ex y being Element of M st Q=y-neighbour by Def3;
+     then A3: dist(q1,q2)=0 & dist(q2,q1)=0 by A1,Th17;
+     A4: dist(p1,q1) <= dist(p1,p2) + dist(p2,q1) by METRIC_1:4;
+        dist(p2,q1) <= dist(p2,q2) + dist(q2,q1) by METRIC_1:4;
+     then A5: dist(p1,q1) <= dist(p2,q2) by A2,A3,A4,AXIOMS:22;
+     A6: dist(p2,q2) <= dist(p2,p1) + dist(p1,q2) by METRIC_1:4;
+        dist(p1,q2) <= dist(p1,q1) + dist(q1,q2) by METRIC_1:4;
+     then dist(p2,q2) <= dist(p1,q1) by A2,A3,A6,AXIOMS:22;
+     hence thesis by A5,AXIOMS:21;
+   end;
+
+definition let M be non empty MetrStruct,
+               V, Q be Element of M-neighbour,
+               v be Element of REAL;
+  pred V,Q is_dst v means :Def5:
+    for p,q being Element of M st (p in V & q in Q)
+                  holds dist(p,q)=v;
+end;
+
+canceled;
+
+theorem
+  Th31: for M being PseudoMetricSpace, V,Q being Element of M-neighbour,
+            v being Element of REAL holds
+           V,Q is_dst v iff (ex p,q being Element of M
+                       st (p in V & q in Q & dist(p,q)=v))
+proof
+   let M be PseudoMetricSpace, V,Q be Element of M-neighbour,
+     v be Element of REAL;
+   A1: V,Q is_dst v implies (ex p,q being Element of M
+                       st (p in V & q in Q & dist(p,q)=v))
+     proof
+       assume A2: V,Q is_dst v;
+
+       consider p being Element of M such that
+                       A3: V=p-neighbour by Th23;
+       A4: p in V by A3,Th9;
+       consider q being Element of M such that
+                       A5: Q=q-neighbour by Th23;
+       A6: q in Q by A5,Th9;
+       then dist(p,q)=v by A2,A4,Def5;
+       hence thesis by A4,A6;
+     end;
+     (ex p,q being Element of M st
+    (p in V & q in Q & dist(p,q)=v))
+          implies V,Q is_dst v
+     proof
+       assume ex p,q being Element of M st
+               (p in V & q in Q & dist(p,q)=v);
+       then for p1,q1 being Element of M st p1 in V & q1 in Q
+                      holds dist(p1,q1)=v by Th29;
+       hence thesis by Def5;
+     end;
+  hence thesis by A1;
+end;
+
+theorem
+  Th32: for M being PseudoMetricSpace, V,Q being Element of M-neighbour,
+       v being Element of REAL holds V,Q is_dst v iff Q,V is_dst v
+proof
+  let M be PseudoMetricSpace, V,Q be Element of M-neighbour
+, v be Element of REAL;
+  A1: V,Q is_dst v implies Q,V is_dst v
+  proof
+    assume V,Q is_dst v;
+    then for q,p being Element of M st q in Q & p in V
+            holds dist(q,p)=v by Def5;
+    hence thesis by Def5;
+  end;
+    Q,V is_dst v implies V,Q is_dst v
+  proof
+    assume Q,V is_dst v;
+    then for p,q being Element of M st p in V & q in Q
+           holds dist(p,q)=v by Def5;
+    hence thesis by Def5;
+  end;
+  hence thesis by A1;
+end;
+
+definition let M be non empty MetrStruct,
+               V,Q be Element of M-neighbour;
+  func ev_eq_1(V,Q) -> Subset of REAL equals
+    :Def6:  {v where v is Element of REAL: V,Q is_dst v};
+    coherence
+      proof
+        defpred P[Element of REAL] means V,Q is_dst $1;
+          {v where v is Element of REAL: P[v]} c= REAL from Fr_Set0;
+        hence thesis;
+      end;
+    end;
+
+canceled;
+
+theorem
+     for M being PseudoMetricSpace, V,Q being Element of M-neighbour,
+       v being Element of REAL holds
+     v in ev_eq_1(V,Q) iff V,Q is_dst v
+proof
+  let M be PseudoMetricSpace, V,Q be Element of M-neighbour
+, v be Element of REAL;
+  A1: v in ev_eq_1(V,Q) implies V,Q is_dst v
+  proof
+    assume v in ev_eq_1(V,Q);
+    then v in {r where r is Element of REAL: V,Q is_dst r} by Def6;
+    then ex r being Element of REAL st r=v & V,Q is_dst r;
+    hence thesis;
+  end;
+    V,Q is_dst v implies v in ev_eq_1(V,Q)
+  proof
+    assume V,Q is_dst v;
+    then v in {r where r is Element of REAL: V,Q is_dst r};
+    hence thesis by Def6;
+  end;
+  hence thesis by A1;
+end;
+
+definition let M be non empty MetrStruct, v be Element of REAL;
+  func ev_eq_2(v,M) -> Subset of [:M-neighbour,M-neighbour:] equals
+    :Def7:  {W where W is Element of [:M-neighbour,M-neighbour:]:
+                   ex V,Q being Element of M-neighbour
+ st W=[V,Q] & V,Q is_dst v};
+     coherence
+       proof
+         defpred P[Element of [:M-neighbour,M-neighbour:]]
+            means ex V,Q being Element of M-neighbour
+                   st $1=[V,Q] & V,Q is_dst v;
+           {W where W is Element of [:M-neighbour,M-neighbour
+:]: P[W] } c= [:M-neighbour,M-neighbour
+:] from Fr_Set0;
+         hence thesis;
+       end;
+     end;
+
+canceled;
+
+theorem
+     for M being PseudoMetricSpace, v being Element of REAL,
+               W being Element of [:M-neighbour,M-neighbour:] holds
+           W in ev_eq_2(v,M) iff
+           (ex V,Q being Element of M-neighbour st W=[V,Q] & V,Q is_dst v)
+proof
+  let M be PseudoMetricSpace, v be Element of REAL, W be Element of [:M
+-neighbour,M-neighbour:];
+  A1: W in ev_eq_2(v,M) implies
+        (ex V,Q being Element of M-neighbour st W=[V,Q] & V,Q is_dst v)
+  proof
+    assume W in ev_eq_2(v,M);
+    then W in {S where S is Element of [:M-neighbour,M-neighbour:]:
+           ex V,Q being Element of M-neighbour
+ st S=[V,Q] & V,Q is_dst v} by Def7;
+    then ex S being Element of [:M-neighbour,M-neighbour:] st W = S &
+         (ex V,Q being Element of M-neighbour st S=[V,Q] & V,Q is_dst v);
+    hence thesis;
+  end;
+     (ex V,Q being Element of M-neighbour st W=[V,Q] & V,Q is_dst v) implies
+         W in ev_eq_2(v,M)
+  proof
+    assume ex V,Q being Element of M-neighbour st W=[V,Q] & V,Q is_dst v;
+    then W in {S where S is Element of [:M-neighbour,M-neighbour:]:
+              ex V,Q being Element of M-neighbour st S=[V,Q] & V,Q is_dst v};
+    hence thesis by Def7;
+  end;
+  hence thesis by A1;
+end;
+
+definition let M be non empty MetrStruct;
+  func real_in_rel M -> Subset of REAL equals
+  :Def8:  {v where v is Element of REAL: ex V,Q being Element of M-neighbour st
+                 (V,Q is_dst v)};
+  coherence
+    proof
+      defpred P[Element of REAL] means ex V,Q being Element of M-neighbour
+                st V,Q is_dst $1;
+        {v where v is Element of REAL:P[v]} c= REAL from Fr_Set0;
+       hence thesis;
+    end;
+  end;
+
+canceled;
+
+theorem
+  Th38: for M being PseudoMetricSpace, v being Element of REAL holds
+    v in
+ real_in_rel M iff (ex V,Q being Element of M-neighbour st V,Q is_dst v)
+proof
+  let M be PseudoMetricSpace, v be Element of REAL;
+  A1: v in real_in_rel M implies ex V,Q being Element of M-neighbour
+ st V,Q is_dst v
+  proof
+    assume v in real_in_rel M;
+    then v in {r where r is Element of REAL:
+              ex V,Q being Element of M-neighbour st V,Q is_dst r} by Def8;
+    then ex r be Element of REAL st
+         v=r & ex V,Q being Element of M-neighbour st V,Q is_dst r;
+    hence thesis;
+  end;
+    (ex V,Q being Element of M-neighbour
+ st V,Q is_dst v) implies v in real_in_rel M
+  proof
+    assume ex V,Q being Element of M-neighbour st V,Q is_dst v;
+    then v in {r where r is Element of REAL:
+              ex V,Q being Element of M-neighbour st V,Q is_dst r};
+    hence thesis by Def8;
+  end;
+  hence thesis by A1;
+end;
+
+definition let M be non empty MetrStruct;
+  func elem_in_rel_1 M -> Subset of M-neighbour equals
+  :Def9:  {V where V is Element of M-neighbour:
+           ex Q being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v};
+  coherence
+  proof
+    defpred P[Element of M-neighbour] means
+      ex Q being Element of M-neighbour, v being Element of REAL
+        st $1,Q is_dst v;
+      {V where V is Element of M-neighbour: P[V] } c= M-neighbour from Fr_Set0;
+    hence thesis;
+  end;
+  end;
+
+canceled;
+
+theorem
+  Th40: for M being PseudoMetricSpace, V being Element of M-neighbour
+              holds
+          V in elem_in_rel_1 M iff
+          (ex Q being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v)
+proof
+  let M be PseudoMetricSpace, V be Element of M-neighbour;
+  A1: V in elem_in_rel_1 M implies
+          (ex Q being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v)
+  proof
+    assume V in elem_in_rel_1 M;
+    then V in {S where S is Element of M-neighbour:
+           ex Q being Element of M-neighbour
+, v being Element of REAL st S,Q is_dst v}
+              by Def9;
+    then ex S being Element of M-neighbour st S=V &
+         (ex Q being Element of M-neighbour
+, v being Element of REAL st S,Q is_dst v);
+    hence thesis;
+  end;
+    (ex Q being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v) implies
+  V in elem_in_rel_1 M
+  proof
+    assume ex Q being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v;
+    then V in {S where S is Element of M-neighbour:
+           ex Q being Element of M-neighbour
+, v being Element of REAL st S,Q is_dst v};
+    hence thesis by Def9;
+  end;
+  hence thesis by A1;
+end;
+
+definition let M be non empty MetrStruct;
+  func elem_in_rel_2 M -> Subset of M-neighbour equals
+  :Def10:  {Q where Q is Element of M-neighbour:
+           ex V being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v};
+  coherence
+  proof
+    defpred P[Element of M-neighbour] means
+     ex V being Element of M-neighbour, v being Element of REAL
+      st V,$1 is_dst v;
+    {Q where Q is Element of M-neighbour: P[Q]} c= M-neighbour
+           from Fr_Set0;
+    hence thesis;
+  end;
+  end;
+
+canceled;
+
+theorem
+  Th42: for M being PseudoMetricSpace, Q being Element of M-neighbour
+              holds
+          Q in elem_in_rel_2 M iff
+          (ex V being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v)
+proof
+  let M be PseudoMetricSpace, Q be Element of M-neighbour;
+  A1: Q in elem_in_rel_2 M implies
+          (ex V being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v)
+  proof
+    assume Q in elem_in_rel_2 M;
+    then Q in {S where S is Element of M-neighbour:
+           ex V being Element of M-neighbour
+, v being Element of REAL st V,S is_dst v}
+              by Def10;
+    then ex S being Element of M-neighbour st S=Q &
+         (ex V being Element of M-neighbour
+, v being Element of REAL st V,S is_dst v);
+    hence thesis;
+  end;
+    (ex V being Element of M-neighbour
+, v being Element of REAL st V,Q is_dst v) implies
+  Q in elem_in_rel_2 M
+  proof
+    assume ex V being Element of M-neighbour,
+    v being Element of REAL st V,Q is_dst v;
+    then Q in {S where S is Element of M-neighbour:
+           ex V being Element of M-neighbour,
+           v being Element of REAL st V,S is_dst v};
+    hence thesis by Def10;
+  end;
+  hence thesis by A1;
+end;
+
+definition let M be non empty MetrStruct;
+  func elem_in_rel M -> Subset of [:M-neighbour,M-neighbour:] equals
+  :Def11:  {V_Q where V_Q is Element of [:M-neighbour,M-neighbour:]:
+                   ex V,Q being Element of M-neighbour, v being Element of REAL
+                   st V_Q = [V,Q] & V,Q is_dst v};
+  coherence
+    proof
+      defpred P[Element of [:M-neighbour,M-neighbour:]] means
+       ex V,Q being Element of M-neighbour, v being Element of REAL st
+       $1 = [V,Q] & V,Q is_dst v;
+        {V_Q where V_Q is Element of [:M-neighbour,M-neighbour:]: P[V_Q]
+      } c= [:M-neighbour,M-neighbour:] from Fr_Set0;
+      hence thesis;
+    end;
+  end;
+
+canceled;
+
+theorem
+     for M being PseudoMetricSpace, V_Q being Element of [:M-neighbour,M
+-neighbour:]
+             holds
+           V_Q in elem_in_rel M iff
+           (ex V,Q being Element of M-neighbour, v being Element of REAL
+                   st V_Q = [V,Q] & V,Q is_dst v)
+proof
+  let M be PseudoMetricSpace, V_Q be Element of [:M-neighbour,M-neighbour:];
+  A1: V_Q in elem_in_rel M implies
+        (ex V,Q being Element of M-neighbour, v being Element of REAL
+         st V_Q = [V,Q] & V,Q is_dst v)
+  proof
+    assume V_Q in elem_in_rel M;
+    then V_Q in {S where S is Element of [:M-neighbour,M-neighbour:]:
+                   ex V,Q being Element of M-neighbour, v being Element of REAL
+                   st S = [V,Q] & V,Q is_dst v} by Def11;
+     then ex S being Element of [:M-neighbour,M-neighbour:] st V_Q=S &
+          (ex V,Q being Element of M-neighbour, v being Element of REAL
+                   st S = [V,Q] & V,Q is_dst v);
+     hence thesis;
+   end;
+     (ex V,Q being Element of M-neighbour, v being Element of REAL
+   st V_Q = [V,Q] & V,Q is_dst v) implies V_Q in elem_in_rel M
+   proof
+     assume ex V,Q being Element of M-neighbour, v being Element of REAL
+            st V_Q = [V,Q] & V,Q is_dst v;
+     then V_Q in {S where S is Element of [:M-neighbour,M-neighbour:]:
+               ex V,Q being Element of M-neighbour, v being Element of REAL
+               st S = [V,Q] & V,Q is_dst v};
+     hence thesis by Def11;
+   end;
+   hence thesis by A1;
+ end;
+
+definition let M be non empty MetrStruct;
+  func set_in_rel M -> Subset of [:M-neighbour,M-neighbour,REAL:] equals
+  :Def12:  {V_Q_v where V_Q_v is Element of [:M-neighbour,M-neighbour,REAL:]:
+                  ex V,Q being Element of M-neighbour
+,v being Element of REAL st
+                  V_Q_v = [V,Q,v] & V,Q is_dst v};
+  coherence
+    proof
+      defpred P[Element of [:M-neighbour,M-neighbour,REAL:]] means
+              ex V,Q being Element of M-neighbour,v being Element of REAL st
+              $1 = [V,Q,v] & V,Q is_dst v;
+      {V_Q_v where V_Q_v is Element of [:M-neighbour,M-neighbour,REAL:]:
+       P[V_Q_v] } c= [:M-neighbour,M-neighbour,REAL:] from Fr_Set0;
+      hence thesis;
+    end;
+  end;
+
+canceled;
+
+theorem
+  Th46: for M being PseudoMetricSpace,V_Q_v being Element of [:M-neighbour,M
+-neighbour,REAL:]
+              holds
+            V_Q_v in set_in_rel M iff
+            (ex V,Q being Element of M-neighbour,v being Element of REAL st
+                  V_Q_v = [V,Q,v] & V,Q is_dst v)
+proof
+  let M be PseudoMetricSpace,V_Q_v be Element of [:M-neighbour,M-neighbour
+,REAL:];
+  A1: V_Q_v in set_in_rel M implies
+            (ex V,Q being Element of M-neighbour,v being Element of REAL st
+                  V_Q_v = [V,Q,v] & V,Q is_dst v)
+  proof
+    assume V_Q_v in set_in_rel M;
+    then V_Q_v in {S where S is Element of [:M-neighbour,M-neighbour,REAL:]:
+                  ex V,Q being Element of M-neighbour
+,v being Element of REAL st
+                  S = [V,Q,v] & V,Q is_dst v} by Def12;
+    then ex S being Element of [:M-neighbour,M-neighbour,REAL:] st V_Q_v = S &
+         (ex V,Q being Element of M-neighbour,v being Element of REAL st
+                  S = [V,Q,v] & V,Q is_dst v);
+    hence thesis;
+  end;
+    (ex V,Q being Element of M-neighbour,v being Element of REAL st
+  V_Q_v = [V,Q,v] & V,Q is_dst v) implies V_Q_v in set_in_rel M
+  proof
+    assume ex V,Q being Element of M-neighbour,v being Element of REAL st
+           V_Q_v = [V,Q,v] & V,Q is_dst v;
+    then V_Q_v in {S where S is Element of [:M-neighbour,M-neighbour,REAL:]:
+                  ex V,Q being Element of M-neighbour
+,v being Element of REAL st
+                  S = [V,Q,v] & V,Q is_dst v};
+    hence thesis by Def12;
+  end;
+  hence thesis by A1;
+end;
+
+theorem
+     for M being PseudoMetricSpace holds
+          elem_in_rel_1 M = elem_in_rel_2 M
+proof
+  let M be PseudoMetricSpace;
+A1:   for V being Element of M-neighbour holds
+            (V in elem_in_rel_1 M implies V in elem_in_rel_2 M)
+  proof
+    let V be Element of M-neighbour;
+    assume V in elem_in_rel_1 M;
+    then consider Q being Element of M-neighbour, v being Element of REAL
+         such that A2: V,Q is_dst v by Th40;
+      Q,V is_dst v by A2,Th32;
+    hence thesis by Th42;
+  end;
+
+    for V being Element of M-neighbour holds
+            (V in elem_in_rel_2 M implies V in elem_in_rel_1 M)
+  proof
+    let V be Element of M-neighbour;
+    assume V in elem_in_rel_2 M;
+    then consider Q being Element of M-neighbour, v being Element of REAL
+         such that A3: Q,V is_dst v by Th42;
+      V,Q is_dst v by A3,Th32;
+    hence thesis by Th40;
+  end;
+  then elem_in_rel_1 M c= elem_in_rel_2 M & elem_in_rel_2 M c= elem_in_rel_1 M
+        by A1,SUBSET_1:7;
+  hence thesis by XBOOLE_0:def 10;
+end;
+
+theorem
+     for M being PseudoMetricSpace holds
+        set_in_rel M c= [:elem_in_rel_1 M,elem_in_rel_2 M,real_in_rel M:]
+proof
+  let M be PseudoMetricSpace;
+    for V_Q_v being Element of [:M-neighbour,M-neighbour
+,REAL:] holds (V_Q_v in set_in_rel M
+      implies V_Q_v in [:elem_in_rel_1 M,elem_in_rel_2 M,real_in_rel M:])
+  proof
+    let V_Q_v be Element of [:M-neighbour,M-neighbour,REAL:];
+    assume V_Q_v in set_in_rel M;
+    then consider V,Q being Element of M-neighbour
+,v being Element of REAL such that
+                A1:  V_Q_v = [V,Q,v] & V,Q is_dst v by Th46;
+    A2: V in elem_in_rel_1 M by A1,Th40;
+    A3: Q in elem_in_rel_2 M by A1,Th42;
+        v in real_in_rel M by A1,Th38;
+      hence thesis by A1,A2,A3,MCART_1:73;
+  end;
+  hence thesis by SUBSET_1:7;
+end;
+
+canceled;
+
+theorem
+      for M being PseudoMetricSpace, V,Q being Element of M-neighbour,
+                 v1,v2 being Element of REAL
+                     holds
+              ((V,Q is_dst v1) & (V,Q is_dst v2)) implies v1=v2
+proof
+  let M be PseudoMetricSpace, V,Q be Element of M-neighbour
+, v1,v2 be Element of REAL;
+  assume A1: (V,Q is_dst v1) & (V,Q is_dst v2);
+  consider p1 being Element of M such that A2: V=p1-neighbour
+by Th23;
+  A3: p1 in V by A2,Th9;
+  consider q1 being Element of M such that A4: Q=q1-neighbour
+by Th23;
+  A5: q1 in Q by A4,Th9;
+  then dist(p1,q1)=v1 by A1,A3,Def5;
+  hence thesis by A1,A3,A5,Def5;
+end;
+
+canceled;
+
+theorem
+   Th52: for M being PseudoMetricSpace, V,Q being Element of M-neighbour holds
+                  ex v being Element of REAL st V,Q is_dst v
+proof
+   let M be PseudoMetricSpace, V,Q be Element of M-neighbour;
+   consider p being Element of M such that A1: V=p-neighbour by
+Th23;
+   A2: p in V by A1,Th9;
+   consider q being Element of M such that A3: Q=q-neighbour by
+Th23;
+      q in Q by A3,Th9;
+   then V,Q is_dst (dist(p,q)) by A2,Th31;
+   hence thesis;
+end;
+
+definition let M be PseudoMetricSpace;
+  func nbourdist M -> Function of [:M-neighbour,M-neighbour:],REAL means
+  :Def13: for V,Q being Element of M-neighbour
+              for p,q being Element of M st p in V & q in Q
+              holds it.(V,Q)=dist(p,q);
+  existence
+    proof
+      defpred
+      P[Element of M-neighbour,Element of M-neighbour,Element of REAL]
+        means  $1,$2 is_dst $3;
+      A1: for V,Q being Element of M-neighbour holds
+                ex v being Element of REAL st P[V,Q,v] by Th52;
+      consider F being Function of [:M-neighbour,M-neighbour:],REAL such that
+      A2: (for V,Q being Element of M-neighbour holds P[V,Q,F.[V,Q]])
+                        from FuncEx2D(A1);
+      take F;
+      let V,Q be Element of M-neighbour
+, p,q be Element of M such that
+ A3: p in V & q in Q;
+A4:      V,Q is_dst F.[V,Q] by A2;
+        F.[V,Q] = F.(V,Q) by BINOP_1:def 1;
+      hence thesis by A3,A4,Def5;
+    end;
+  uniqueness
+    proof
+      let F1,F2 be Function of [:M-neighbour,M-neighbour:],REAL;
+      assume that
+       A5:  for V,Q being Element of M-neighbour
+              for p,q being Element of M st p in V & q in Q
+              holds F1.(V,Q)=dist(p,q) and
+       A6:  for V,Q being Element of M-neighbour
+              for p,q being Element of M st p in V & q in Q
+              holds F2.(V,Q)=dist(p,q);
+         for V,Q being Element of M-neighbour holds F1.(V,Q) = F2.(V,Q)
+       proof
+         let V,Q be Element of M-neighbour;
+         consider p being Element of M such that
+             A7: V=p-neighbour by Th23;
+         A8: p in V by A7,Th9;
+         consider q being Element of M such that
+             A9: Q=q-neighbour by Th23;
+         A10: q in Q by A9,Th9;
+         then F1.(V,Q) = dist(p,q) by A5,A8
+                 .= F2.(V,Q) by A6,A8,A10;
+         hence thesis;
+      end;
+      hence thesis by BINOP_1:2;
+    end;
+  end;
+
+canceled;
+
+theorem
+  Th54: for M being PseudoMetricSpace, V,Q being Element of M-neighbour holds
+           (nbourdist M).(V,Q) = 0 iff V = Q
+proof
+  let M be PseudoMetricSpace, V,Q be Element of M-neighbour;
+  A1: (nbourdist M).(V,Q) = 0 implies V = Q
+  proof
+    assume A2: (nbourdist M).(V,Q) = 0;
+    consider p being Element of M such that
+       A3: V=p-neighbour by Th23;
+    A4: p in V by A3,Th9;
+    consider q being Element of M such that
+          A5: Q=q-neighbour by Th23;
+      q in Q by A5,Th9;
+    then dist(p,q) = 0 by A2,A4,Def13;
+    then p tolerates q by Def1;
+    hence thesis by A3,A5,Th13;
+  end;
+    V=Q implies (nbourdist M).(V,Q) = 0
+    proof
+      assume A6: V = Q;
+      consider p being Element of M such that
+      A7: V=p-neighbour by Th23;
+      A8: p in V by A7,Th9;
+      consider q being Element of M such that
+      A9: Q=q-neighbour by Th23;
+A10:      p tolerates q by A6,A8,A9,Th7;
+        q in Q by A9,Th9;
+      then (nbourdist M).(V,Q) = dist(p,q) by A8,Def13
+                          .= 0 by A10,Def1;
+      hence thesis;
+    end;
+  hence thesis by A1;
+end;
+
+theorem
+  Th55: for M being PseudoMetricSpace, V,Q being Element of M-neighbour holds
+           (nbourdist M).(V,Q) = (nbourdist M).(Q,V)
+proof
+  let M be PseudoMetricSpace, V,Q be Element of M-neighbour;
+  consider p being Element of M such that
+     A1: V=p-neighbour by Th23;
+  A2: p in V by A1,Th9;
+  consider q being Element of M such that
+        A3: Q=q-neighbour by Th23;
+  A4: q in Q by A3,Th9;
+  then (nbourdist M).(V,Q) = dist(q,p) by A2,Def13
+                      .= (nbourdist M).(Q,V) by A2,A4,Def13;
+  hence thesis;
+end;
+
+theorem
+  Th56: for M being PseudoMetricSpace, V,Q,W being Element of M-neighbour holds
+           (nbourdist M).(V,W) <= (nbourdist M).(V,Q) + (nbourdist M).(Q,W)
+proof
+  let M be PseudoMetricSpace,V,Q,W be Element of M-neighbour;
+  consider p being Element of M such that
+     A1: V=p-neighbour by Th23;
+  A2: p in V by A1,Th9;
+  consider q being Element of M such that
+        A3: Q=q-neighbour by Th23;
+  A4: q in Q by A3,Th9;
+  consider w being Element of M such that
+        A5: W=w-neighbour by Th23;
+  A6: w in W by A5,Th9;
+  A7: (nbourdist M).(V,Q) = dist(p,q) by A2,A4,Def13;
+  A8: (nbourdist M).(V,W) = dist(p,w) by A2,A6,Def13;
+     (nbourdist M).(Q,W) = dist(q,w) by A4,A6,Def13;
+  hence thesis by A7,A8,METRIC_1:4;
+end;
+
+definition let M be PseudoMetricSpace;
+  func Eq_classMetricSpace M -> MetrSpace equals
+  :Def14:  MetrStruct(#M-neighbour,nbourdist M#);
+    coherence
+      proof
+        set Z = MetrStruct(#M-neighbour,nbourdist M#);
+            now let V,Q,W be Element of Z;
+            reconsider V'=V, Q'=Q,W'=W as Element of M-neighbour;
+              A1: dist(V,Q) = (nbourdist M).(V',Q') by METRIC_1:def 1;
+              A2: dist(Q,V) = (nbourdist M).(Q',V') by METRIC_1:def 1;
+              A3: dist(V,W) = (nbourdist M).(V',W') by METRIC_1:def 1;
+              A4: dist(Q,W) = (nbourdist M).(Q',W') by METRIC_1:def 1;
+              thus dist(V,Q)=0 iff V=Q by A1,Th54;
+              thus dist(V,Q) = dist(Q,V) by A1,A2,Th55;
+              thus dist(V,W) <= dist(V,Q) + dist(Q,W) by A1,A3,A4,Th56;
+            end;
+          hence thesis by METRIC_1:6;
+        end;
+      end;
+
+definition let M be PseudoMetricSpace;
+  cluster Eq_classMetricSpace M -> strict non empty;
+  coherence
+  proof
+      Eq_classMetricSpace M = MetrStruct(#M-neighbour,nbourdist M#) by Def14;
+    hence thesis;
+  end;
+end;
+
+

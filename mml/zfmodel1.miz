@@ -1,0 +1,1706 @@
+:: Properties of ZF Models
+::  by Grzegorz Bancerek
+::
+:: Received July 5, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ZF_LANG, FUNCT_1, ORDINAL1, ZF_MODEL, TARSKI, BOOLE, FINSEQ_1,
+      MCART_1, RELAT_1, ZFMODEL1;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1,
+      RELAT_1, FUNCT_1, FINSEQ_1, ZF_LANG, RELSET_1, FUNCT_2, ORDINAL1,
+      ZF_MODEL, MCART_1;
+ constructors NAT_1, ENUMSET1, ZF_MODEL, MCART_1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters ZF_LANG, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, ORDINAL1, ZF_MODEL, ZF_LANG, RELAT_1, FUNCT_1, XBOOLE_0;
+ theorems TARSKI, ZF_LANG, ZF_MODEL, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2,
+      ENUMSET1, ORDINAL1, RELAT_1, RELSET_1, XBOOLE_0;
+ schemes NAT_1, ZF_LANG, XBOOLE_0;
+
+begin
+
+ reserve x,y,z for Variable,
+         H for ZF-formula,
+         E for non empty set,
+         a,b,c,X,Y,Z for set,
+         u,v,w for Element of E,
+         f,g,h,i,j for Function of VAR,E,
+         k,n for Nat;
+
+ set x0 = x.0, x1 = x.1, x2 = x.2, x3 = x.3, x4 = x.4;
+
+  Lm1: x0 = 5 + 0 & x1 = 5 + 1 & x2 = 5 + 2 & x3 = 5 + 3 & x4 = 5 + 4
+  by ZF_LANG:def 2;
+
+theorem
+    E is epsilon-transitive implies E |= the_axiom_of_extensionality
+   proof assume
+A1:   X in E implies X c= E;
+A2:   the_axiom_of_extensionality =
+All(x0,All(x1,All(x2,x2 'in' x0 <=> x2 'in' x1) => x0 '=' x1))
+       by ZF_LANG:23,ZF_MODEL:def 6;
+       E |= All(x2,x2 'in' x0 <=> x2 'in' x1) => x0 '=' x1
+      proof let f;
+         now assume
+A3:       E,f |= All(x2,x2 'in' x0 <=> x2 'in' x1);
+           f.x0 = f.x1
+          proof
+           thus a in f.x0 implies a in f.x1
+             proof assume
+A4:            a in f.x0;
+                 f.x0 c= E by A1;
+              then reconsider a' = a as Element of E by A4;
+              consider g such that
+A5:            g.x2 = a' & for x st x <> x2 holds g.x = f.x by ZF_MODEL:21;
+                 for x st g.x <> f.x holds x2 = x by A5;
+               then E,g |= x2 'in' x0 <=> x2 'in' x1 by A3,ZF_MODEL:16;
+then A6:            E,g |= x2 'in' x0 iff E,g |= x2 'in' x1 by ZF_MODEL:19;
+              g.x0 = f.x0 & g.x1 = f.x1 by A5,Lm1;
+              hence thesis by A4,A5,A6,ZF_MODEL:13;
+             end;
+           let a such that
+A7:         a in f.x1;
+              f.x1 c= E by A1;
+           then reconsider a' = a as Element of E by A7;
+           consider g such that
+A8:         g.x2 = a' & for x st x <> x2 holds g.x = f.x by ZF_MODEL:21;
+              for x st g.x <> f.x holds x2 = x by A8;
+            then E,g |= x2 'in' x0 <=> x2 'in' x1 by A3,ZF_MODEL:16;
+then A9:         E,g |= x2 'in' x0 iff E,g |= x2 'in' x1 by ZF_MODEL:19;
+           g.x0 = f.x0 & g.x1 = f.x1 by A8,Lm1;
+           hence thesis by A7,A8,A9,ZF_MODEL:13;
+          end;
+        hence E,f |= x0 '=' x1 by ZF_MODEL:12;
+       end;
+       hence E,f |= All(x2,x2 'in' x0 <=> x2 'in' x1) => x0 '=' x1
+          by ZF_MODEL:18;
+      end;
+     then E |= All(x1,All(x2,x2 'in' x0 <=> x2 'in'
+ x1) => x0 '=' x1) by ZF_MODEL:25;
+    hence thesis by A2,ZF_MODEL:25;
+   end;
+
+theorem
+ Th2: E is epsilon-transitive implies
+   (E |= the_axiom_of_pairs iff for u,v holds { u,v } in E)
+   proof assume
+A1:  X in E implies X c= E;
+A2: a in u implies a is Element of E
+      proof assume
+A3:     a in u;
+          u c= E by A1;
+       hence a is Element of E by A3;
+      end;
+A4:   (E |= All(x0,All(x1,Ex(x2,
+       All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) ))) iff
+      E |= All(x1,Ex(x2,All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) )) ) &
+     (E |= All(x1,Ex(x2,All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) )) iff
+      E |= Ex(x2,All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) ) )
+       by ZF_MODEL:25;
+    thus E |= the_axiom_of_pairs implies for u,v holds { u,v } in E
+      proof
+       assume A5: E |= the_axiom_of_pairs;
+       let u,v;
+       consider fv being Function of VAR,E;
+       consider g such that
+A6:     g.x0 = u & for x st x <> x0 holds g.x = fv.x by ZF_MODEL:21;
+       consider f such that
+A7:     f.x1 = v & for x st x <> x1 holds f.x = g.x by ZF_MODEL:21;
+A8:     f.x0 = u by A6,A7,Lm1;
+        E,f |= Ex(x2,All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) )
+         by A4,A5,ZF_LANG:23,ZF_MODEL:def 5,def 7;
+       then consider h such that
+A9:      (for x st h.x <> f.x holds x2 = x) &
+         E,h |= All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) by ZF_MODEL:20;
+          for a holds a in h.x2 iff a = u or a = v
+         proof let a;
+          thus a in h.x2 implies a = u or a = v
+            proof assume
+A10:           a in h.x2;
+             then reconsider a' = a as Element of E by A2;
+             consider f3 being Function of VAR,E such that
+A11:           f3.x3 = a' & for x st x <> x3 holds f3.x = h.x by ZF_MODEL:21;
+                for x st f3.x <> h.x holds x3 = x by A11;
+              then E,f3 |= x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1
+               by A9,ZF_MODEL:16;
+then A12:           E,f3 |= x3 'in' x2 iff E,f3 |= x3 '=' x0 'or' x3 '=' x1
+               by ZF_MODEL:19;
+                f3.x2 = h.x2 by A11,Lm1;
+              then E,f3 |= x3 '=' x0 or E,f3 |= x3 '=' x1 by A10,A11,A12,
+ZF_MODEL:13,17;
+then A13:           f3.x3 = f3.x0 or f3.x3 = f3.x1 by ZF_MODEL:12;
+                f3.x0 = h.x0 & h.x0 = f.x0 & f3.x1 = h.x1 & h.x1 = f.x1
+               by A9,A11,Lm1;
+             hence thesis by A6,A7,A11,A13;
+            end;
+          assume
+A14:        a = u or a = v;
+          then reconsider a' = a as Element of E;
+          consider f3 being Function of VAR,E such that
+A15:        f3.x3 = a' & for x st x <> x3 holds f3.x = h.x by ZF_MODEL:21;
+             for x st f3.x <> h.x holds x3 = x by A15;
+           then E,f3 |= x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1
+            by A9,ZF_MODEL:16;
+then A16:        E,f3 |= x3 'in' x2 iff E,f3 |= x3 '=' x0 'or' x3 '=' x1
+            by ZF_MODEL:19;
+             f3.x0 = h.x0 & h.x0 = f.x0 & f3.x1 = h.x1 & h.x1 = f.x1
+            by A9,A15,Lm1;
+           then E,f3 |= x3 '=' x0 or E,f3 |= x3 '=' x1 by A7,A8,A14,A15,
+ZF_MODEL:12;
+then f3.x3 in f3.x2 by A16,ZF_MODEL:13,17;
+          hence thesis by A15,Lm1;
+         end;
+        then h.x2 = { u,v } by TARSKI:def 2;
+       hence thesis;
+      end;
+    assume
+A17:   for u,v holds { u,v } in E;
+    let f;
+       now let g such that
+       for x st g.x <> f.x holds x0 = x or x1 = x;
+      reconsider w = { g.x0,g.x1 } as Element of E by A17;
+      consider h such that
+A18:     h.x2 = w & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+         now let m be Function of VAR,E; assume
+        for x st m.x <> h.x holds x3 = x;
+then A19:      h.x0 = g.x0 & m.x0 = h.x0 & h.x1 = g.x1 & m.x1 = h.x1 & m.x2 = h
+.x2
+          by A18,Lm1;
+           ( E,m |= x3 'in' x2 iff m.x3 in m.x2 ) &
+          ( E,m |= x3 '=' x0 iff m.x3 = m.x0 ) &
+           ( E,m |= x3 '=' x1 iff m.x3 = m.x1 ) &
+            ( E,m |= x3 '=' x0 'or' x3 '=' x1 iff
+             E,m |= x3 '=' x0 or E,m |= x3 '=' x1 )
+          by ZF_MODEL:12,13,17;
+        hence E,m |= x3 'in'
+ x2 <=> x3 '=' x0 'or' x3 '=' x1 by A18,A19,TARSKI:def 2,ZF_MODEL:19;
+       end;
+then A20:     E,h |= All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) by
+ZF_MODEL:16;
+         for x st h.x <> g.x holds x2 = x by A18;
+      hence E,g |= Ex(x2,All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) )
+        by A20,ZF_MODEL:20;
+     end;
+    hence E,f |= the_axiom_of_pairs by ZF_MODEL:22,def 7;
+   end;
+
+theorem
+    E is epsilon-transitive implies
+   (E |= the_axiom_of_pairs iff for X,Y st X in E & Y in E holds { X,Y } in E)
+  proof assume
+A1:  E is epsilon-transitive;
+   hence E |= the_axiom_of_pairs implies
+      for X,Y st X in E & Y in E holds { X,Y } in E by Th2;
+   assume
+    for X,Y st X in E & Y in E holds { X,Y } in E;
+    then for u,v holds { u,v } in E;
+   hence E |= the_axiom_of_pairs by A1,Th2;
+  end;
+
+theorem
+ Th4: E is epsilon-transitive implies
+   (E |= the_axiom_of_unions iff for u holds union u in E)
+   proof assume
+A1:   X in E implies X c= E;
+    thus E |= the_axiom_of_unions implies for u holds union u in E
+      proof assume
+          E |= the_axiom_of_unions;
+then A2:      E |= Ex(x1,All(x2,x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0)
+))
+         by ZF_MODEL:25,def 8;
+       let u;
+       consider f0 being Function of VAR,E;
+       consider f such that
+A3:      f.x0 = u & for x st x <> x0 holds f.x = f0.x by ZF_MODEL:21;
+          E,f |= Ex(x1,All(x2,x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0) )
+)
+         by A2,ZF_MODEL:def 5;
+       then consider g such that
+A4:      (for x st g.x <> f.x holds x1 = x) &
+         E,g |= All(x2,x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0) )
+          by ZF_MODEL:20;
+          a in g.x1 iff ex X st a in X & X in u
+         proof
+          thus a in g.x1 implies ex X st a in X & X in u
+            proof assume
+A5:            a in g.x1;
+                g.x1 c= E by A1;
+             then reconsider a' = a as Element of E by A5;
+             consider h such that
+A6:            h.x2 = a' & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+                h.x1 = g.x1 by A6,Lm1;
+then A7:            E,h |= x2 'in' x1 by A5,A6,ZF_MODEL:13;
+                for x st h.x <> g.x holds x2 = x by A6;
+              then E,h |= x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0)
+               by A4,ZF_MODEL:16;
+              then E,h |= Ex(x3,x2 'in' x3 '&' x3 'in' x0) by A7,ZF_MODEL:19;
+             then consider m being Function of VAR,E such that
+A8:            (for x st m.x <> h.x holds x3 = x) &
+               E,m |= x2 'in' x3 '&' x3 'in' x0 by ZF_MODEL:20;
+A9:              E,m |= x2 'in' x3 & E,m |= x3 'in' x0 by A8,ZF_MODEL:15;
+             reconsider X = m.x3 as set;
+             take X;
+                m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0 & m.x2 = h.x2
+               by A4,A6,A8,Lm1;
+             hence a in X & X in u by A3,A6,A9,ZF_MODEL:13;
+            end;
+          given X such that
+A10:          a in X & X in u;
+              u c= E by A1;
+           then reconsider X as Element of E by A10;
+              X c= E by A1;
+           then reconsider a' = a as Element of E by A10;
+           consider h such that
+A11:          h.x2 = a' & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+           consider m being Function of VAR,E such that
+A12:          m.x3 = X & for x st x <> x3 holds m.x = h.x by ZF_MODEL:21;
+A13:         for x st m.x <> h.x holds x3 = x by A12;
+              m.x2 = h.x2 & m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0
+             by A4,A11,A12,Lm1;
+            then E,m |= x2 'in' x3 & E,m |= x3 'in' x0 by A3,A10,A11,A12,
+ZF_MODEL:13
+;
+            then E,m |= x2 'in' x3 '&' x3 'in' x0 by ZF_MODEL:15;
+then A14:          E,h |= Ex(x3,x2 'in' x3 '&' x3 'in' x0) by A13,ZF_MODEL:20;
+              for x st h.x <> g.x holds x2 = x by A11;
+            then E,h |= x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0)
+             by A4,ZF_MODEL:16;
+            then E,h |= x2 'in' x1 by A14,ZF_MODEL:19;
+          then h.x2 in h.x1 by ZF_MODEL:13;
+           hence thesis by A11,Lm1;
+         end;
+        then g.x1 = union u by TARSKI:def 4;
+       hence union u in E;
+      end;
+    assume
+A15:   for u holds union u in E;
+       now let f;
+      reconsider v = union(f.x0) as Element of E by A15;
+      consider g such that
+A16:     g.x1 = v & for x st x <> x1 holds g.x = f.x by ZF_MODEL:21;
+A17:    for x st g.x <> f.x holds x1 = x by A16;
+         now let h; assume
+A18:       for x st h.x <> g.x holds x2 = x;
+then A19:       h.x1 = g.x1 by Lm1;
+           E,h |= x2 'in' x1 iff E,h |= Ex(x3,x2 'in' x3 '&' x3 'in' x0)
+          proof
+           thus E,h |= x2 'in' x1 implies E,h |= Ex(x3,x2 'in' x3 '&' x3 'in'
+ x0)
+            proof assume E,h |= x2 'in' x1;
+              then h.x2 in h.x1 by ZF_MODEL:13;
+             then consider X such that
+A20:            h.x2 in X & X in f.x0 by A16,A19,TARSKI:def 4;
+                f.x0 c= E by A1;
+             then reconsider X as Element of E by A20;
+             consider m being Function of VAR,E such that
+A21:            m.x3 = X & for x st x <> x3 holds m.x = h.x by ZF_MODEL:21;
+A22:           for x st m.x <> h.x holds x3 = x by A21;
+                m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0 & m.x2 = h.x2
+               by A16,A18,A21,Lm1;
+              then E,m |= x2 'in' x3 & E,m |= x3 'in'
+ x0 by A20,A21,ZF_MODEL:13;
+              then E,m |= x2 'in' x3 '&' x3 'in' x0 by ZF_MODEL:15;
+             hence thesis by A22,ZF_MODEL:20;
+            end;
+           assume E,h |= Ex(x3,x2 'in' x3 '&' x3 'in' x0);
+           then consider m being Function of VAR,E such that
+A23:          (for x st m.x <> h.x holds x3 = x) &
+             E,m |= x2 'in' x3 '&' x3 'in' x0 by ZF_MODEL:20;
+              E,m |= x2 'in' x3 & E,m |= x3 'in' x0 by A23,ZF_MODEL:15;
+            then m.x2 in m.x3 & m.x3 in m.x0 by ZF_MODEL:13;
+then A24:          m.x2 in union(m.x0) by TARSKI:def 4;
+              m.x2 = h.x2 & m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0 &
+             h.x1 = g.x1 by A16,A18,A23,Lm1;
+           hence E,h |= x2 'in' x1 by A16,A24,ZF_MODEL:13;
+          end;
+        hence E,h |= x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0)
+         by ZF_MODEL:19;
+       end;
+       then E,g |= All(x2,x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0) )
+        by ZF_MODEL:16;
+      hence
+         E,f |= Ex(x1,All(x2,x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0) ))
+        by A17,ZF_MODEL:20;
+     end;
+     then E |= Ex(x1,All(x2,x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0) ))
+      by ZF_MODEL:def 5;
+    hence E |= the_axiom_of_unions by ZF_MODEL:25,def 8;
+   end;
+
+theorem
+    E is epsilon-transitive implies
+   (E |= the_axiom_of_unions iff for X st X in E holds union X in E)
+  proof assume
+A1:  E is epsilon-transitive;
+   hence E |= the_axiom_of_unions implies
+      for X st X in E holds union X in E by Th4;
+   assume
+    for X st X in E holds union X in E;
+    then for u holds union u in E;
+   hence thesis by A1,Th4;
+  end;
+
+theorem
+ Th6: E is epsilon-transitive implies
+   (E |= the_axiom_of_infinity iff
+     ex u st u <> {} & for v st v in u ex w st v c< w & w in u)
+   proof assume
+A1:   X in E implies X c= E;
+    thus E |= the_axiom_of_infinity implies
+       ex u st u <> {} & for v st v in u ex w st v c< w & w in u
+      proof
+       consider f;
+       assume E,g |= the_axiom_of_infinity;
+        then E,f |= the_axiom_of_infinity;
+       then consider g such that
+A2:      (for x st g.x <> f.x holds x0 = x or x1 = x) &
+        E,g |= x1 'in' x0 '&' All(x2,x2 'in' x0 =>
+         Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&' All(x4,x4 'in' x2 => x4 'in'
+ x3) ))
+          by ZF_MODEL:23,def 9;
+       take u = g.x0;
+          E,g |= x1 'in' x0 by A2,ZF_MODEL:15;
+       hence u <> {} by ZF_MODEL:13;
+       let v such that
+A3:      v in u;
+       consider h such that
+A4:      h.x2 = v & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+A5:     for x st h.x <> g.x holds x2 = x by A4;
+          E,g |= All(x2,x2 'in' x0 =>
+         Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&' All(x4,x4 'in' x2 => x4 'in'
+ x3) ))
+          by A2,ZF_MODEL:15;
+then A6:      E,h |= x2 'in' x0 =>
+         Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&' All(x4,x4 'in' x2 => x4 'in'
+ x3) )
+          by A5,ZF_MODEL:16;
+          h.x0 = g.x0 by A4,Lm1;
+        then E,h |= x2 'in' x0 by A3,A4,ZF_MODEL:13;
+        then E,h |= Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&'
+         All(x4,x4 'in' x2 => x4 'in' x3) ) by A6,ZF_MODEL:18;
+       then consider f such that
+A7:      (for x st f.x <> h.x holds x3 = x) &
+         E,f |= x3 'in' x0 '&' 'not'
+ x3 '=' x2 '&' All(x4,x4 'in' x2 => x4 'in' x3)
+          by ZF_MODEL:20;
+       take w = f.x3;
+A8:      E,f |= x3 'in' x0 '&' 'not' x3 '=' x2 &
+         E,f |= All(x4,x4 'in' x2 => x4 'in' x3) by A7,ZF_MODEL:15;
+       thus v c= w
+         proof let a such that
+A9:        a in v;
+             v c= E by A1;
+          then reconsider a' = a as Element of E by A9;
+          consider m being Function of VAR,E such that
+A10:        m.x4 = a' & for x st x <> x4 holds m.x = f.x by ZF_MODEL:21;
+             for x st m.x <> f.x holds x4 = x by A10;
+then A11:        E,m |= x4 'in' x2 => x4 'in' x3 by A8,ZF_MODEL:16;
+             m.x2 = f.x2 & f.x2 = h.x2 by A7,A10,Lm1;
+           then E,m |= x4 'in' x2 by A4,A9,A10,ZF_MODEL:13;
+           then E,m |= x4 'in' x3 by A11,ZF_MODEL:18;
+        then m.x4 in m.x3 by ZF_MODEL:13;
+          hence thesis by A10,Lm1;
+         end;
+A12:      E,f |= x3 'in' x0 & E,f |= 'not' x3 '=' x2 by A8,ZF_MODEL:15;
+        then not E,f |= x3 '=' x2 by ZF_MODEL:14;
+        then f.x3 <> f.x2 & f.x2 = h.x2 by A7,Lm1,ZF_MODEL:12;
+       hence v <> w by A4;
+          f.x0 = h.x0 & h.x0 = g.x0 by A4,A7,Lm1;
+       hence thesis by A12,ZF_MODEL:13;
+      end;
+    given u such that
+A13:   u <> {} and
+A14:   for v st v in u ex w st v c< w & w in u;
+    consider a being Element of u;
+       u c= E by A1;
+    then reconsider a as Element of E by A13,TARSKI:def 3;
+    let f0 be Function of VAR,E;
+    consider f1 being Function of VAR,E such that
+A15:  f1.x0 = u & for x st x <> x0 holds f1.x = f0.x by ZF_MODEL:21;
+A16: for x st f1.x <> f0.x holds x0 = x by A15;
+    consider f2 being Function of VAR,E such that
+A17:  f2.x1 = a & for x st x <> x1 holds f2.x = f1.x by ZF_MODEL:21;
+A18: for x st f2.x <> f1.x holds x1 = x by A17;
+       now let f such that
+A19:     for x st f.x <> f2.x holds x2 = x;
+         now assume
+           E,f |= x2 'in' x0;
+         then f.x2 in f.x0 & f.x0 = f2.x0 & f2.x0 = f1.x0
+          by A17,A19,Lm1,ZF_MODEL:13;
+        then consider w such that
+A20:       f.x2 c< w & w in u by A14,A15;
+A21:    f.x2 c=w & f.x2 <> w by A20,XBOOLE_0:def 8;
+        consider g such that
+A22:       g.x3 = w & for x st x <> x3 holds g.x = f.x by ZF_MODEL:21;
+A23:      for x st g.x <> f.x holds x3 = x by A22;
+           g.x0 = f.x0 & f.x0 = f2.x0 & f2.x0 = f1.x0 & g.x2 = f.x2
+          by A17,A19,A22,Lm1;
+then A24:       E,g |= x3 'in' x0 & not E,g |= x3 '=' x2
+          by A15,A20,A22,ZF_MODEL:12,13;
+         then E,g |= 'not' x3 '=' x2 by ZF_MODEL:14;
+then A25:       E,g |= x3 'in' x0 '&' 'not' x3 '=' x2 by A24,ZF_MODEL:15;
+           now let h such that
+A26:         for x st h.x <> g.x holds x4 = x;
+             now assume E,h |= x4 'in' x2;
+             then h.x4 in h.x2 & h.x2 = g.x2 & g.x2 = f.x2
+              by A22,A26,Lm1,ZF_MODEL:13;
+             then h.x3 = g.x3 & h.x4 in w by A21,A26,Lm1;
+            hence E,h |= x4 'in' x3 by A22,ZF_MODEL:13;
+           end;
+          hence E,h |= x4 'in' x2 => x4 'in' x3 by ZF_MODEL:18;
+         end;
+         then E,g |= All(x4,x4 'in' x2 => x4 'in' x3) by ZF_MODEL:16;
+         then E,g |= x3 'in' x0 '&' 'not' x3 '=' x2 '&'
+          All(x4,x4 'in' x2 => x4 'in' x3) by A25,ZF_MODEL:15;
+        hence E,f |= Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&'
+          All(x4,x4 'in' x2 => x4 'in' x3) ) by A23,ZF_MODEL:20;
+       end;
+      hence E,f |= x2 'in' x0 => Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&'
+        All(x4,x4 'in' x2 => x4 'in' x3) ) by ZF_MODEL:18;
+     end;
+then A27:   E,f2 |= All(x2,x2 'in' x0 => Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2
+'&'
+      All(x4,x4 'in' x2 => x4 'in' x3) )) by ZF_MODEL:16;
+       f2.x0 = f1.x0 by A17,Lm1;
+     then E,f2 |= x1 'in' x0 by A13,A15,A17,ZF_MODEL:13;
+     then E,f2 |= x1 'in' x0 '&' All(x2,x2 'in' x0 =>
+      Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&'
+       All(x4,x4 'in' x2 => x4 'in' x3) )) by A27,ZF_MODEL:15;
+     then E,f1 |= Ex(x1,x1 'in' x0 '&' All(x2,x2 'in' x0 =>
+      Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&'
+       All(x4,x4 'in' x2 => x4 'in' x3) ))) by A18,ZF_MODEL:20;
+     then E,f0 |= Ex(x0,Ex(x1,x1 'in' x0 '&' All(x2,x2 'in' x0 =>
+      Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&'
+       All(x4,x4 'in' x2 => x4 'in' x3) )))) by A16,ZF_MODEL:20;
+    hence thesis by ZF_LANG:23,ZF_MODEL:def 9;
+   end;
+
+theorem
+    E is epsilon-transitive implies
+   (E |= the_axiom_of_infinity iff
+     ex X st X in E & X <> {} & for Y st Y in X ex Z st Y c< Z & Z in X)
+  proof assume
+A1:  E is epsilon-transitive;
+   thus E |= the_axiom_of_infinity implies
+      ex X st X in E & X <> {} & for Y st Y in X ex Z st Y c< Z & Z in
+ X
+     proof assume E |= the_axiom_of_infinity;
+      then consider u such that
+A2:     u <> {} & for v st v in u ex w st v c< w & w in u by A1,Th6;
+      reconsider X = u as set;
+      take X;
+      thus
+       X in E & X <> {} by A2;
+      let Y such that
+A3:     Y in X;
+         X c= E by A1,ORDINAL1:def 2;
+      then reconsider v = Y as Element of E by A3;
+      consider w such that
+A4:     v c< w & w in u by A2,A3;
+      reconsider w as set;
+      take w;
+      thus thesis by A4;
+     end;
+   given X such that
+A5:  X in E & X <> {} & for Y st Y in X ex Z st Y c< Z & Z in X;
+      ex u st u <> {} & for v st v in u ex w st v c< w & w in u
+     proof
+      reconsider u = X as Element of E by A5;
+      take u; thus u <> {} by A5;
+      let v; assume v in u;
+      then consider Z such that
+A6:     v c< Z & Z in X by A5;
+         X c= E by A1,A5,ORDINAL1:def 2;
+      then reconsider w = Z as Element of E by A6;
+      take w;
+      thus thesis by A6;
+     end;
+   hence thesis by A1,Th6;
+  end;
+
+theorem
+ Th8: E is epsilon-transitive implies
+   (E |= the_axiom_of_power_sets iff for u holds E /\ bool u in E)
+   proof assume
+A1:   X in E implies X c= E;
+    thus E |= the_axiom_of_power_sets implies for u holds E /\ bool u in E
+      proof assume
+          E |= the_axiom_of_power_sets;
+then A2:      E |= Ex(x1,All(x2,x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0)
+))
+         by ZF_MODEL:25,def 10;
+       let u;
+       consider f0 being Function of VAR,E;
+       consider f such that
+A3:      f.x0 = u & for x st x <> x0 holds f.x = f0.x by ZF_MODEL:21;
+          E,f |= Ex(x1,All(x2,x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0) )
+)
+         by A2,ZF_MODEL:def 5;
+       then consider g such that
+A4:      (for x st g.x <> f.x holds x1 = x) &
+         E,g |= All(x2,x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0) )
+          by ZF_MODEL:20;
+          g.x1 = E /\ bool u
+         proof
+          thus a in g.x1 implies a in E /\ bool u
+            proof assume
+A5:            a in g.x1;
+                g.x1 c= E by A1;
+             then reconsider a' = a as Element of E by A5;
+             consider h such that
+A6:            h.x2 = a' & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+                for x st h.x <> g.x holds x2 = x by A6;
+then A7:            E,h |= x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0)
+               by A4,ZF_MODEL:16;
+                h.x1 = g.x1 by A6,Lm1;
+              then E,h |= x2 'in' x1 by A5,A6,ZF_MODEL:13;
+then A8:            E,h |= All(x3,x3 'in' x2 => x3 'in' x0) by A7,ZF_MODEL:19;
+                a' c= u
+               proof let b such that
+A9:               b in a';
+                   a' c= E by A1;
+                then reconsider b' = b as Element of E by A9;
+                consider m being Function of VAR,E such that
+A10:               m.x3 = b' & for x st x <> x3 holds m.x = h.x by ZF_MODEL:21;
+                   for x st m.x <> h.x holds x3 = x by A10;
+then A11:               E,m |= x3 'in' x2 => x3 'in' x0 by A8,ZF_MODEL:16;
+                   m.x2 = h.x2 by A10,Lm1;
+                 then E,m |= x3 'in' x2 by A6,A9,A10,ZF_MODEL:13;
+then A12:                 E,m |= x3 'in' x0 by A11,ZF_MODEL:18;
+                   m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0 by A4,A6,A10,Lm1;
+                hence b in u by A3,A10,A12,ZF_MODEL:13;
+               end; hence thesis by XBOOLE_0:def 3;
+            end;
+          let a;
+          assume A13: a in E /\ bool u;
+then A14:         a in E & a in bool u by XBOOLE_0:def 3;
+          reconsider a as Element of E by A13,XBOOLE_0:def 3;
+          consider h such that
+A15:         h.x2 = a & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+             for x st h.x <> g.x holds x2 = x by A15;
+then A16:         E,h |= x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0)
+            by A4,ZF_MODEL:16;
+             now let m be Function of VAR,E such that
+A17:           for x st m.x <> h.x holds x3 = x;
+               now assume E,m |= x3 'in' x2;
+               then m.x3 in m.x2 & m.x2 = h.x2 & a c= u
+                by A14,A17,Lm1,ZF_MODEL:13;
+               then m.x3 in u & m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0
+                by A4,A15,A17,Lm1;
+              hence E,m |= x3 'in' x0 by A3,ZF_MODEL:13;
+             end;
+            hence E,m |= x3 'in' x2 => x3 'in' x0 by ZF_MODEL:18;
+           end;
+           then E,h |= All(x3,x3 'in' x2 => x3 'in' x0) by ZF_MODEL:16;
+           then E,h |= x2 'in' x1 by A16,ZF_MODEL:19;
+           then h.x2 in h.x1 & h.x1 = g.x1 by A15,Lm1,ZF_MODEL:13;
+          hence thesis by A15;
+         end;
+       hence thesis;
+      end;
+    assume
+A18:   for u holds E /\ bool u in E;
+       E |= Ex(x1,All(x2,x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0) ))
+      proof let f;
+       reconsider v = E /\ bool(f.x0) as Element of E by A18;
+       consider g such that
+A19:      g.x1 = v & for x st x <> x1 holds g.x = f.x by ZF_MODEL:21;
+          now let h such that
+A20:        for x st h.x <> g.x holds x2 = x;
+            now
+           thus E,h |= x2 'in' x1 implies E,h |= All(x3,x3 'in' x2 => x3 'in'
+ x0)
+             proof assume E,h |= x2 'in' x1;
+then A21:            h.x2 in h.x1 by ZF_MODEL:13;
+                 h.x1 = v by A19,A20,Lm1;
+then A22:           h.x2 in bool(f.x0) by A21,XBOOLE_0:def 3;
+                 now let m be Function of VAR,E such that
+A23:              for x st m.x <> h.x holds x3 = x;
+                   now assume E,m |= x3 'in' x2;
+                   then m.x3 in m.x2 & m.x2 = h.x2 by A23,Lm1,ZF_MODEL:13;
+                   then m.x3 in f.x0 & f.x0 = g.x0 & g.x0 = h.x0 & h.x0 = m.x0
+                    by A19,A20,A22,A23,Lm1;
+                  hence E,m |= x3 'in' x0 by ZF_MODEL:13;
+                 end;
+                hence E,m |= x3 'in' x2 => x3 'in' x0 by ZF_MODEL:18;
+               end;
+              hence thesis by ZF_MODEL:16;
+             end;
+           assume
+A24:         E,h |= All(x3,x3 'in' x2 => x3 'in' x0);
+              h.x2 c= f.x0
+             proof let a such that
+A25:            a in h.x2;
+                 h.x2 c= E by A1;
+              then reconsider a' = a as Element of E by A25;
+              consider m being Function of VAR,E such that
+A26:            m.x3 = a' & for x st x <> x3 holds m.x = h.x by ZF_MODEL:21;
+                 (for x st m.x <> h.x holds x3 = x) & m.x2 = h.x2
+                by A26,Lm1;
+               then E,m |= x3 'in' x2 => x3 'in' x0 & E,m |= x3 'in' x2
+                by A24,A25,A26,ZF_MODEL:13,16;
+               then E,m |= x3 'in' x0 by ZF_MODEL:18;
+               then m.x3 in m.x0 & m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0
+                by A19,A20,A26,Lm1,ZF_MODEL:13;
+              hence a in f.x0 by A26;
+             end;
+            then h.x2 in bool(f.x0) & h.x1 = g.x1 by A20,Lm1;
+            then h.x2 in h.x1 by A19,XBOOLE_0:def 3;
+           hence E,h |= x2 'in' x1 by ZF_MODEL:13;
+          end;
+         hence E,h |= x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0)
+           by ZF_MODEL:19;
+        end;
+then A27:      E,g |= All(x2,x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0) )
+         by ZF_MODEL:16;
+          for x st g.x <> f.x holds x1 = x by A19;
+       hence
+          E,f |= Ex(x1,All(x2,x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0) )
+)
+         by A27,ZF_MODEL:20;
+      end;
+    hence thesis by ZF_MODEL:25,def 10;
+   end;
+
+theorem
+    E is epsilon-transitive implies
+   (E |= the_axiom_of_power_sets iff for X st X in E holds E /\ bool X in E)
+  proof assume
+A1:  E is epsilon-transitive;
+   hence E |= the_axiom_of_power_sets implies
+      for X st X in E holds E /\ bool X in E by Th8;
+   assume
+    for X st X in E holds E /\ bool X in E;
+    then for u holds E /\ bool u in E;
+   hence thesis by A1,Th8;
+  end;
+
+defpred Lm2[Nat] means
+ for x,E,H,f st len H = $1 & not x in Free H & E,f |= H holds E,f |= All(x,H);
+
+Lm2: for n st for k st k < n holds Lm2[k] holds Lm2[n]
+  proof let n such that
+A1:  for k st k < n
+     for x,E,H,f st len H = k & not x in Free H & E,f |= H
+      holds E,f |= All(x,H);
+   let x,E,H,f such that
+A2:  len H = n and
+A3:  not x in Free H & E,f |= H;
+A4:  now assume H is_equality;
+then A5:   H = (Var1 H) '=' Var2 H & Free H = { Var1 H,Var2 H }
+       by ZF_LANG:53,ZF_MODEL:1;
+then A6:   f.(Var1 H) = f.(Var2 H) & x <> Var1 H & x <> Var2 H
+       by A3,TARSKI:def 2,ZF_MODEL:12;
+        now let g; assume for y st g.y <> f.y holds x = y;
+        then g.(Var1 H) = f.(Var1 H) & g.(Var2 H) = f.(Var2 H) by A6;
+       hence E,g |= H by A5,A6,ZF_MODEL:12;
+      end;
+     hence thesis by ZF_MODEL:16;
+    end;
+A7:  now assume H is_membership;
+then A8:   H = (Var1 H) 'in' Var2 H & Free H = { Var1 H,Var2 H }
+       by ZF_LANG:54,ZF_MODEL:1;
+then A9:   f.(Var1 H) in f.(Var2 H) & x <> Var1 H & x <> Var2 H
+       by A3,TARSKI:def 2,ZF_MODEL:13;
+        now let g; assume for y st g.y <> f.y holds x = y;
+        then g.(Var1 H) = f.(Var1 H) & g.(Var2 H) = f.(Var2 H) by A9;
+       hence E,g |= H by A8,A9,ZF_MODEL:13;
+      end;
+     hence thesis by ZF_MODEL:16;
+    end;
+A10:  now assume A11: H is negative;
+then A12:   H = 'not' the_argument_of H & Free H = Free the_argument_of H
+       by ZF_LANG:def 30,ZF_MODEL:1;
+     assume not thesis;
+     then consider g such that
+A13:   for y st g.y <> f.y holds x = y and
+A14:   not E,g |= H by ZF_MODEL:16;
+A15:   E,g |= the_argument_of H by A12,A14,ZF_MODEL:14;
+        the_argument_of H is_immediate_constituent_of H by A12,ZF_LANG:def 39
+;
+      then len the_argument_of H
+ < len H & not x in Free the_argument_of H by A3,A11,ZF_LANG:81,ZF_MODEL:1;
+      then E,g |= All(x,the_argument_of H) by A1,A2,A15;
+      then E,f |= the_argument_of H & not E,f |= the_argument_of H
+       by A3,A12,A13,ZF_MODEL:14,16;
+     hence contradiction;
+    end;
+A16:  now assume H is conjunctive;
+then A17:   H = (the_left_argument_of H) '&' the_right_argument_of H &
+       Free H = Free the_left_argument_of H \/ Free the_right_argument_of H
+        by ZF_LANG:58,ZF_MODEL:1;
+then A18:   E,f |= the_left_argument_of H & E,f |= the_right_argument_of H &
+       not x in Free the_left_argument_of H &
+        not x in Free the_right_argument_of H by A3,XBOOLE_0:def 2,ZF_MODEL:15;
+        the_left_argument_of H is_immediate_constituent_of H &
+       the_right_argument_of H is_immediate_constituent_of H
+        by A17,ZF_LANG:def 39;
+      then len the_left_argument_of H < len H &
+       len the_right_argument_of H < len H by ZF_LANG:81;
+then A19:   E,f |= All(x,the_left_argument_of H) &
+       E,f |= All(x,the_right_argument_of H) by A1,A2,A18;
+        now let g; assume for y st g.y <> f.y holds x = y;
+        then E,g |= the_left_argument_of H & E,g |= the_right_argument_of H
+         by A19,ZF_MODEL:16;
+       hence E,g |= H by A17,ZF_MODEL:15;
+      end;
+     hence thesis by ZF_MODEL:16;
+    end;
+    now assume H is universal;
+then A20:   H = All(bound_in H,the_scope_of H) &
+       Free H = Free the_scope_of H \ { bound_in H }
+        by ZF_LANG:62,ZF_MODEL:1;
+A21:   now assume
+A22:     x = bound_in H;
+          now let g; assume
+            for y st g.y <> f.y holds x = y or bound_in H = y;
+          then for y st g.y <> f.y holds bound_in H = y by A22;
+         hence E,g |= the_scope_of H by A3,A20,ZF_MODEL:16;
+        end;
+        then E,f |= All(x,bound_in H,the_scope_of H) by ZF_MODEL:22;
+       hence thesis by A20,ZF_LANG:23;
+      end;
+A23:   not x in Free the_scope_of H or x in
+ { bound_in H } by A3,A20,XBOOLE_0:def 4;
+        now assume A24: x <> bound_in H;
+       assume not thesis;
+       then consider g such that
+A25:     for y st g.y <> f.y holds x = y and
+A26:     not E,g |= H by ZF_MODEL:16;
+       consider h such that
+A27:     for y st h.y <> g.y holds bound_in H = y and
+A28:     not E,h |= the_scope_of H by A20,A26,ZF_MODEL:16;
+       consider m being Function of VAR,E such that
+A29:    m.(bound_in H) = h.(bound_in H) &
+         for y st y <> bound_in H holds m.y = f.y by ZF_MODEL:21;
+          (for y st m.y <> f.y holds bound_in H = y) &
+         the_scope_of H is_immediate_constituent_of H
+          by A20,A29,ZF_LANG:def 39;
+        then len the_scope_of H < len H & E,m |= the_scope_of H
+         by A3,A20,ZF_LANG:81,ZF_MODEL:16;
+then A30:    E,m |= All(x,the_scope_of H) by A1,A2,A23,A24,TARSKI:def 1;
+          now let y; assume
+A31:        h.y <> m.y;
+then A32:        y <> bound_in H by A29;
+         assume x <> y;
+          then f.y = g.y & m.y = f.y & h.y = g.y by A25,A27,A29,A32;
+         hence contradiction by A31;
+        end;
+       hence contradiction by A28,A30,ZF_MODEL:16;
+      end;
+     hence thesis by A21;
+    end;
+   hence thesis by A4,A7,A10,A16,ZF_LANG:25;
+  end;
+
+theorem
+ Th10: not x in Free H & E,f |= H implies E,f |= All(x,H)
+  proof
+A1:  for n holds Lm2[n] from Comp_Ind(Lm2);
+      len H = len H;
+   hence thesis by A1;
+  end;
+
+ Lm3: the_scope_of All(x,H) = H & bound_in All(x,H) = x
+  proof
+      All(x,H) is universal by ZF_LANG:16;
+    then All(x,H) = All(bound_in All(x,H),the_scope_of All(x,H)) by ZF_LANG:62
+;
+   hence thesis by ZF_LANG:12;
+  end;
+
+theorem
+ Th11: { x,y } misses Free H & E,f |= H implies E,f |= All(x,y,H)
+  proof assume
+A1:  { x,y } misses Free H & E,f |= H;
+      y in { x,y } & x in { x,y } by TARSKI:def 2;
+then A2:  not y in Free H & not x in Free H by A1,XBOOLE_0:3;
+then A3:  E,f |= All(y,H) by A1,Th10;
+      All(y,H) is universal & the_scope_of All(y,H) = H &
+     bound_in All(y,H) = y by Lm3,ZF_LANG:16;
+    then Free All(y,H) = Free H \ { y } by ZF_MODEL:1;
+    then not x in Free All(y,H) by A2,XBOOLE_0:def 4;
+    then E,f |= All(x,All(y,H)) & All(x,y,H) = All(x,All(y,H))
+     by A3,Th10,ZF_LANG:23;
+   hence thesis;
+  end;
+
+theorem
+    { x,y,z } misses Free H & E,f |= H implies E,f |= All(x,y,z,H)
+  proof assume
+A1:  { x,y,z } misses Free H & E,f |= H;
+       now let a; assume a in { y,z };
+       then a = y or a = z by TARSKI:def 2;
+       then a in { x,y,z } by ENUMSET1:14;
+      hence not a in Free H by A1,XBOOLE_0:3;
+     end;
+    then { y,z } misses Free H by XBOOLE_0:3;
+then A2:  E,f |= All(y,z,H) by A1,Th11;
+A3:  All(y,z,H) = All(y,All(z,H)) & All(y,All(z,H)) is universal &
+     the_scope_of All(y,All(z,H)) = All(z,H) & bound_in All(y,All(z,H)) = y &
+      All(z,H) is universal & the_scope_of All(z,H) = H & bound_in All(z,H)= z
+       by Lm3,ZF_LANG:16,23;
+then A4:  Free All(y,z,H) = Free All(z,H) \ { y } by ZF_MODEL:1
+      .= (Free H \ { z }) \ { y } by A3,ZF_MODEL:1;
+      x in { x,y,z } by ENUMSET1:14;
+    then not x in Free H by A1,XBOOLE_0:3;
+    then not x in Free H \ { z } by XBOOLE_0:def 4;
+    then not x in (Free H \ { z }) \ { y } by XBOOLE_0:def 4;
+    then E,f |= All(x,All(y,z,H)) & All(x,y,z,H) = All(x,All(y,z,H))
+     by A2,A4,Th10,ZF_LANG:24;
+   hence thesis;
+  end;
+
+definition let H,E; let val be Function of VAR,E;
+ assume
+A1:not x.0 in Free H &
+    E,val |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+ func def_func'(H,val) -> Function of E,E means
+:Def1:  for g st for y st g.y <> val.y holds x.0 = y or x.3 = y or x.4 = y
+       holds E,g |= H iff it.(g.x.3) = g.x.4;
+  existence
+   proof
+    defpred Like[Function of VAR,E] means
+     for y st $1.y <> val.y holds x0 = y or x3 = y or x4 = y;
+    defpred P[set] means
+      for g st Like[g] & g.x3 = $1`1 & g.x4 = $1`2 holds E,g |= H;
+    consider X such that
+A2:   a in X iff a in [:E,E:] & P[a] from Separation;
+       X is Relation-like Function-like
+      proof
+       thus a in X implies ex b,c st [b,c] = a
+         proof assume a in X;
+           then a in [:E,E:] by A2;
+          hence thesis by ZFMISC_1:102;
+         end;
+       let a,b,c; assume
+A3:        [a,b] in X & [a,c] in X;
+      then [a,b] in [:E,E:] & [a,c] in [:E,E:] &
+         (for f st Like[f] & f.x3 = [a,b]`1 & f.x4 = [a,b]`2 holds E,f |= H) &
+           for f st Like[f] & f.x3 = [a,c]`1 & f.x4 = [a,c]`2 holds E,f |= H
+            by A2;
+       then reconsider a' = a , b' = b , c' = c as Element of E by ZFMISC_1:106
+;
+A4:        [a,b]`1 = a' & [a,b]`2 = b' & [a,c]`1 = a' & [a,c]`2 = c'
+         by MCART_1:7;
+       consider f such that
+A5:      f.x3 = a' & for x st x <> x3 holds f.x = val.x by ZF_MODEL:21;
+          for x st f.x <> val.x holds x = x3 by A5;
+        then E,f |= Ex(x0,All(x4,H <=> x4 '=' x0)) by A1,ZF_MODEL:16;
+       then consider g such that
+A6:      (for x st g.x <> f.x holds x0 = x) & E,g |= All(x4,H <=> x4 '=' x0)
+         by ZF_MODEL:20;
+       consider g1 being Function of VAR,E such that
+A7:     g1.x4 = b' & for x st x <> x4 holds g1.x = g.x by ZF_MODEL:21;
+       consider g2 being Function of VAR,E such that
+A8:     g2.x4 = c' & for x st x <> x4 holds g2.x = g.x by ZF_MODEL:21;
+          (for x st g1.x <> g.x holds x4 = x) &
+         (for x st g2.x <> g.x holds x4 = x) by A7,A8;
+then A9:      E,g1 |= H <=> x4 '=' x0 & E,g2 |= H <=> x4 '=' x0 & g1.x3 = g.x3
+&
+         g2.x3 = g.x3 & g.x3 = f.x3 by A6,Lm1,ZF_MODEL:16;
+A10:     Like[g1]
+         proof let y; assume
+A11:        g1.y <> val.y;
+          assume x0 <> y & x3 <> y & x4 <> y;
+           then f.y = val.y & g.y = f.y & g1.y = g.y by A5,A6,A7;
+          hence contradiction by A11;
+         end;
+          Like[g2]
+         proof let y; assume
+A12:        g2.y <> val.y;
+          assume x0 <> y & x3 <> y & x4 <> y;
+           then f.y = val.y & g.y = f.y & g2.y = g.y by A5,A6,A8;
+          hence contradiction by A12;
+         end;
+        then E,g1 |= H & E,g2 |= H by A2,A3,A4,A5,A7,A8,A9,A10;
+        then E,g1 |= x4 '=' x0 & E,g2 |= x4 '=' x0 by A9,ZF_MODEL:19;
+        then g1.x4 = g1.x0 & g2.x4 = g2.x0 & g1.x0 = g.x0 & g2.x0 = g.x0
+         by A7,A8,Lm1,ZF_MODEL:12;
+       hence b = c by A7,A8;
+      end;
+    then reconsider F = X as Function;
+A13:   E = dom F
+      proof
+       thus E c= dom F
+         proof let a; assume
+           a in E;
+          then reconsider a' = a as Element of E;
+          consider g such that
+A14:         g.x3 = a' & for x st x <> x3 holds g.x = val.x by ZF_MODEL:21;
+             for x st g.x <> val.x holds x = x3 by A14;
+           then E,g |= Ex(x0,All(x4,H <=> x4 '=' x0)) by A1,ZF_MODEL:16;
+          then consider h such that
+A15:         (for x st h.x <> g.x holds x = x0) &
+            E,h |= All(x4,H <=> x4 '=' x0) by ZF_MODEL:20;
+          set u = h.x0;
+A16:         [a',u] in [:E,E:] by ZFMISC_1:106;
+             now let f such that
+A17:           Like[f] & f.x3 = [a',u]`1 & f.x4 = [a',u]`2;
+            consider m being Function of VAR,E such that
+A18:           m.x4 = u & for x st x <> x4 holds m.x = h.x by ZF_MODEL:21;
+               for x st m.x <> h.x holds x4 = x by A18;
+then A19:           E,m |= H <=> x4 '=' x0 by A15,ZF_MODEL:16;
+               m.x0 = h.x0 by A18;
+             then E,m |= x4 '=' x0 by A18,ZF_MODEL:12;
+             then E,m |= H by A19,ZF_MODEL:19;
+then A20:           E,m |= All(x0,H) by A1,Th10;
+               now let x such that
+A21:            f.x <> m.x;
+              assume
+A22:            x0 <> x;
+                 g.x3 = h.x3 & h.x3 = m.x3 by A15,A18,Lm1;
+            then x <> x4 & x <> x3 by A14,A17,A18,A21,MCART_1:7;
+               then f.x = val.x & g.x = val.x & h.x = g.x & m.x = h.x
+                by A14,A15,A17,A18,A22;
+              hence contradiction by A21;
+             end;
+            hence E,f |= H by A20,ZF_MODEL:16;
+           end;
+           then [a',u] in X by A2,A16;
+          hence a in dom F by FUNCT_1:8;
+         end;
+       thus dom F c= E
+         proof let a; assume
+             a in dom F;
+          then consider b such that
+A23:         [a,b] in F by RELAT_1:def 4;
+             [a,b] in [:E,E:] by A2,A23;
+          hence a in E by ZFMISC_1:106;
+         end;
+     end;
+    rng F c= E
+     proof
+       let b; assume
+          b in rng F;
+       then consider a such that
+A24:      a in dom F & b = F.a by FUNCT_1:def 5;
+          [a,b] in F by A24,FUNCT_1:8;
+        then [a,b] in [:E,E:] by A2;
+       hence b in E by ZFMISC_1:106;
+      end;
+    then reconsider F as Function of E,E by A13,FUNCT_2:def 1,RELSET_1:11;
+    take F;
+    let f such that
+A25:  for y st f.y <> val.y holds x.0 = y or x.3 = y or x.4 = y;
+
+A26:  [f.x3,f.x4]`1 = f.x3 & [f.x3,f.x4]`2 = f.x4 by MCART_1:7;
+    thus E,f |= H implies F.(f.x.3) = f.x.4
+      proof assume E,f |= H;
+then A27:      E,f |= All(x0,H) by A1,Th10;
+A28:      [f.x3,f.x4] in [:E,E:] by ZFMISC_1:106;
+          now let g such that
+A29:       Like[g] & g.x3 = [f.x3,f.x4]`1 & g.x4 = [f.x3,f.x4]`2;
+            now let x; assume that
+A30:         g.x <> f.x and
+A31:         x0 <> x;
+              x <> x3 & x <> x4 by A29,A30,MCART_1:7;
+            then f.x = val.x & g.x = val.x by A25,A29,A31;
+           hence contradiction by A30;
+          end;
+         hence E,g |= H by A27,ZF_MODEL:16;
+        end;
+        then [f.x3,f.x4] in X by A2,A28;
+       hence F.(f.x.3) = f.x.4 by FUNCT_1:8;
+      end;
+A32:   f.x3 in E & dom F = E by FUNCT_2:def 1;
+    assume F.(f.x.3) = f.x.4;
+     then [f.x3,f.x4] in F by A32,FUNCT_1:8;
+    hence E,f |= H by A2,A25,A26;
+   end;
+  uniqueness
+   proof let F1,F2 be Function of E,E; assume that
+A33:  for g st for y st g.y <> val.y holds x.0 = y or x.3 = y or x.4 = y
+       holds E,g |= H iff F1.(g.x.3) = g.x.4 and
+A34:  for g st for y st g.y <> val.y holds x.0 = y or x.3 = y or x.4 = y
+       holds E,g |= H iff F2.(g.x.3) = g.x.4;
+       now let a; assume a in E;
+      then reconsider a' = a as Element of E;
+      consider f such that
+A35:     f.x3 = a' & for x st x <> x3 holds f.x = val.x by ZF_MODEL:21;
+         for x st f.x <> val.x holds x3 = x by A35;
+       then E,f |= Ex(x0,All(x4,H <=> x4 '=' x0)) by A1,ZF_MODEL:16;
+      then consider g such that
+A36:     (for x st g.x <> f.x holds x0 = x) & E,g |= All(x4,H <=> x4 '=' x0)
+        by ZF_MODEL:20;
+      consider h such that
+A37:     h.x4 = g.x0 & for x st x <> x4 holds h.x = g.x by ZF_MODEL:21;
+         for x st h.x <> g.x holds x4 = x by A37;
+then A38:     E,h |= H <=> x4 '=' x0 by A36,ZF_MODEL:16;
+         h.x0 = g.x0 by A37;
+       then E,h |= x4 '=' x0 by A37,ZF_MODEL:12;
+then A39:     E,h |= H by A38,ZF_MODEL:19;
+         now let x; assume that
+A40:      h.x <> val.x and
+A41:      x.0 <> x & x.3 <> x & x.4 <> x;
+           f.x = val.x & g.x = f.x & h.x = g.x by A35,A36,A37,A41;
+        hence contradiction by A40;
+       end;
+then A42:     F1.(h.x.3) = h.x.4 & F2.(h.x.3) = h.x.4 by A33,A34,A39;
+         h.x3 = g.x3 & g.x3 = f.x3 by A36,A37,Lm1;
+      hence F1.a = F2.a by A35,A42;
+     end;
+    hence F1 = F2 by FUNCT_2:18;
+   end;
+end;
+
+canceled;
+
+theorem
+ Th14: for H,f,g st (for x st f.x <> g.x holds not x in Free H) & E,f |= H
+       holds E,g |= H
+  proof
+   defpred Th[ZF-formula] means
+    for f,g st (for x st f.x <> g.x holds not x in Free $1) & E,f |= $1
+      holds E,g |= $1;
+A1:  for H st H is atomic holds Th[H]
+     proof let H such that
+A2:    H is_equality or H is_membership;
+      let f,g such that
+A3:    for x st f.x <> g.x holds not x in Free H and
+A4:    E,f |= H;
+A5:    now assume H is_equality;
+then A6:      H = (Var1 H) '=' Var2 H & Free H = { Var1 H,Var2 H }
+          by ZF_LANG:53,ZF_MODEL:1;
+then A7:      f.(Var1 H) = f.(Var2 H) by A4,ZF_MODEL:12;
+           Var1 H in Free H & Var2 H in Free H by A6,TARSKI:def 2;
+         then f.(Var1 H) = g.(Var1 H) & f.(Var2 H) = g.(Var2 H) by A3;
+        hence E,g |= H by A6,A7,ZF_MODEL:12;
+       end;
+      now assume H is_membership;
+then A8:      H = (Var1 H) 'in' Var2 H & Free H = { Var1 H,Var2 H }
+          by ZF_LANG:54,ZF_MODEL:1;
+then A9:      f.(Var1 H) in f.(Var2 H) by A4,ZF_MODEL:13;
+           Var1 H in Free H & Var2 H in Free H by A8,TARSKI:def 2;
+         then f.(Var1 H) = g.(Var1 H) & f.(Var2 H) = g.(Var2 H) by A3;
+        hence E,g |= H by A8,A9,ZF_MODEL:13;
+       end;
+      hence thesis by A2,A5;
+     end;
+A10:  for H st H is negative & Th[the_argument_of H] holds Th[H]
+     proof let H; assume
+         H is negative;
+then A11:    H = 'not' the_argument_of H & Free H = Free the_argument_of H
+        by ZF_LANG:def 30,ZF_MODEL:1;
+      assume
+A12:    for f,g st (for x st f.x <> g.x holds not x in Free the_argument_of H)&
+        E,f |= the_argument_of H holds E,g |= the_argument_of H;
+      let f,g such that
+A13:    for x st f.x <> g.x holds not x in Free H and
+A14:    E,f |= H and
+A15:    not E,g |= H;
+         E,g |= the_argument_of H by A11,A15,ZF_MODEL:14;
+       then E,f |= the_argument_of H & not E,f |= the_argument_of H
+        by A11,A12,A13,A14,ZF_MODEL:14;
+      hence thesis;
+     end;
+A16:  for H st H is conjunctive & Th[the_left_argument_of H] &
+      Th[the_right_argument_of H] holds Th[H]
+     proof let H; assume H is conjunctive;
+then A17:    H = (the_left_argument_of H) '&' the_right_argument_of H &
+        Free H = Free the_left_argument_of H \/ Free the_right_argument_of H
+         by ZF_LANG:58,ZF_MODEL:1;
+      assume that
+A18:    for f,g st (for x st f.x <> g.x holds
+          not x in Free the_left_argument_of H)&
+        E,f |= the_left_argument_of H holds E,g |= the_left_argument_of H and
+A19:    for f,g st (for x st f.x <> g.x holds
+          not x in Free the_right_argument_of H)&
+        E,f |= the_right_argument_of H holds E,g |= the_right_argument_of H;
+      let f,g such that
+A20:    for x st f.x <> g.x holds not x in Free H and
+A21:    E,f |= H;
+A22:    E,f |= the_left_argument_of H & E,f |= the_right_argument_of H
+        by A17,A21,ZF_MODEL:15;
+         now let x; assume f.x <> g.x;
+         then not x in Free H by A20;
+        hence not x in Free the_left_argument_of H by A17,XBOOLE_0:def 2;
+       end;
+then A23:    E,g |= the_left_argument_of H by A18,A22;
+         now let x; assume f.x <> g.x;
+         then not x in Free H by A20;
+        hence not x in Free the_right_argument_of H by A17,XBOOLE_0:def 2;
+       end;
+       then E,g |= the_right_argument_of H by A19,A22;
+      hence thesis by A17,A23,ZF_MODEL:15;
+     end;
+A24:  for H st H is universal & Th[the_scope_of H] holds Th[H]
+     proof let H; assume H is universal;
+then A25:    H = All(bound_in H,the_scope_of H) &
+        Free H = Free the_scope_of H \ { bound_in H }
+         by ZF_LANG:62,ZF_MODEL:1;
+      assume
+A26:    for f,g st (for x st f.x <> g.x holds not x in Free the_scope_of H)&
+        E,f |= the_scope_of H holds E,g |= the_scope_of H;
+      let f,g such that
+A27:    for x st f.x <> g.x holds not x in Free H and
+A28:    E,f |= H;
+         now let j such that
+A29:      for x st j.x <> g.x holds bound_in H = x;
+        consider h such that
+A30:      h.(bound_in H) = j.(bound_in H) &
+          for x st x <> bound_in H holds h.x = f.x by ZF_MODEL:21;
+           for x st h.x <> f.x holds bound_in H = x by A30;
+then A31:      E,h |= the_scope_of H by A25,A28,ZF_MODEL:16;
+           now let x; assume
+A32:        h.x <> j.x;
+           then x <> bound_in H by A30;
+then A33:        h.x = f.x & j.x = g.x & not x in { bound_in H }
+            by A29,A30,TARSKI:def 1;
+           then not x in Free H by A27,A32;
+          hence not x in Free the_scope_of H by A25,A33,XBOOLE_0:def 4;
+         end;
+        hence E,j |= the_scope_of H by A26,A31;
+       end;
+      hence E,g |= H by A25,ZF_MODEL:16;
+     end;
+   thus for H holds Th[H] from ZF_Ind(A1,A10,A16,A24);
+  end;
+
+definition let H,E;
+ assume
+A1:Free H c= { x.3,x.4 } &
+    E |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+ func def_func(H,E) -> Function of E,E means
+:Def2: for g holds E,g |= H iff it.(g.x.3) = g.x.4;
+  existence
+   proof
+    consider f;
+    take F = def_func'(H,f);
+     A2:   not x0 in Free H by A1,Lm1,TARSKI:def 2;
+A3:
+     E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) by A1,ZF_MODEL:def 5;
+    let g;
+    thus E,g |= H implies F.(g.x.3) = g.x.4
+      proof assume
+A4:      E,g |= H;
+       consider g3 being Function of VAR,E such that
+A5:      g3.x3 = g.x3 & for x st x <> x3 holds g3.x = f.x by ZF_MODEL:21;
+       consider g4 being Function of VAR,E such that
+A6:      g4.x4 = g.x4 & for x st x <> x4 holds g4.x = g3.x by ZF_MODEL:21;
+          now let x; assume
+A7:       g.x <> g4.x;
+then A8:       x4 <> x by A6;
+          then x3 <> x by A5,A6,A7; hence not x in Free H by A1,A8,TARSKI:def 2
+;
+        end;
+then A9:      E,g4 |= H by A4,Th14;
+          now let x such that
+A10:       g4.x <> f.x and
+A11:       x.0 <> x & x.3 <> x & x.4 <> x;
+            g4.x = g3.x by A6,A11 .= f.x by A5,A11;
+         hence contradiction by A10;
+        end;
+      then F.(g4.x.3) = g4.x.4 by A2,A3,A9,Def1;
+       hence F.(g.x.3) = g.x.4 by A5,A6,Lm1;
+      end;
+    assume that
+A12:   F.(g.x.3) = g.x.4 and
+A13:   not E,g |= H;
+    consider j such that
+A14:   j.x3 = g.x3 & for x st x <> x3 holds j.x = f.x by ZF_MODEL:21;
+    consider h such that
+A15:   h.x4 = g.x4 & for x st x <> x4 holds h.x = j.x by ZF_MODEL:21;
+       now let x; assume
+A16:    h.x <> g.x;
+then A17:    x4 <> x by A15;
+       then x3 <> x by A14,A15,A16; hence not x in Free H by A1,A17,TARSKI:def
+2;
+     end;
+then A18:   not E,h |= H by A13,Th14;
+       now let x such that
+A19:    h.x <> f.x and
+A20:    x.0 <> x & x.3 <> x & x.4 <> x;
+         h.x = j.x by A15,A20 .= f.x by A14,A20;
+      hence contradiction by A19;
+     end;
+   then F.(h.x.3) <> h.x.4 by A2,A3,A18,Def1;
+    hence contradiction by A12,A14,A15,Lm1;
+   end;
+  uniqueness
+   proof let F1,F2 be Function of E,E such that
+A21:  for g holds E,g |= H iff F1.(g.x.3) = g.x.4 and
+A22:  for g holds E,g |= H iff F2.(g.x.3) = g.x.4;
+       now let a; assume a in E;
+      then reconsider e = a as Element of E;
+      consider f;
+      consider g such that
+A23:     g.x3 = e & for x st x <> x3 holds g.x = f.x by ZF_MODEL:21;
+         E |= Ex(x0,All(x4,H <=> x4 '=' x0)) by A1,ZF_MODEL:25;
+       then E,g |= Ex(x0,All(x4,H <=> x4 '=' x0)) by ZF_MODEL:def 5;
+      then consider h such that
+A24:     (for x st h.x <> g.x holds x0 = x) &
+        E,h |= All(x4,H <=> x4 '=' x0) by ZF_MODEL:20;
+      consider j such that
+A25:     j.x4 = h.x0 & for x st x <> x4 holds j.x = h.x by ZF_MODEL:21;
+         for x st j.x <> h.x holds x4 = x by A25;
+then A26:     E,j |= H <=> x4 '=' x0 by A24,ZF_MODEL:16;
+         j.x0 = h.x0 by A25;
+       then E,j |= x4 '=' x0 by A25,ZF_MODEL:12;
+       then E,j |= H by A26,ZF_MODEL:19;
+then A27:     F1.(j.x3) = j.x4 & F2.(j.x3) = j.x4 by A21,A22;
+         j.x3 = h.x3 & h.x3 = g.x3 by A24,A25,Lm1;
+      hence F1.a = F2.a by A23,A27;
+     end;
+    hence thesis by FUNCT_2:18;
+   end;
+end;
+
+definition let F be Function; let E;
+ pred F is_definable_in E means
+   ex H st Free H c= { x.3,x.4 } &
+        E |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) &
+         F = def_func(H,E);
+
+ pred F is_parametrically_definable_in E means
+:Def4: ex H,f st { x.0,x.1,x.2 } misses Free H &
+        E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) &
+         F = def_func'(H,f);
+end;
+
+canceled 3;
+
+theorem
+    for F being Function st F is_definable_in E holds
+   F is_parametrically_definable_in E
+  proof let F be Function; given H such that
+A1:  Free H c= { x.3,x.4 } and
+A2:  E |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) & F = def_func(H,E);
+   consider f;
+   reconsider F1 = F as Function of E,E by A2;
+   take H,f;
+     A3: now let a; assume a in { x.0,x.1,x.2 };
+       then a <> x3 & a <> x4 by Lm1,ENUMSET1:13;
+       hence not a in Free H by A1,TARSKI:def 2;
+     end;
+   hence
+   { x.0,x.1,x.2 } misses Free H by XBOOLE_0:3;
+A4:  now assume x.0 in Free H;
+      then not x.0 in { x.0,x.1,x.2 } & x.0 in { x.0,x.1,x.2 }
+       by A3,ENUMSET1:14;
+     hence contradiction;
+    end;
+   thus
+A5:  E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) by A2,ZF_MODEL:def 5;
+      for g st for y st g.y <> f.y holds x.0 = y or x.3 = y or x.4 = y
+      holds E,g |= H iff F1.(g.x.3) = g.x.4 by A1,A2,Def2;
+   hence F = def_func'(H,f) by A4,A5,Def1;
+  end;
+
+theorem
+ Th19: E is epsilon-transitive implies
+  ((for H st { x.0,x.1,x.2 } misses Free H holds
+   E |= the_axiom_of_substitution_for H) iff
+  for H,f st { x.0,x.1,x.2 } misses Free H &
+   E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
+    for u holds def_func'(H,f).:u in E )
+  proof assume
+A1: X in E implies X c= E;
+A2:now assume
+A3:   for H st { x.0,x.1,x.2 } misses Free H holds
+       E |= the_axiom_of_substitution_for H;
+     let H,f; assume that
+A4:   { x.0,x.1,x.2 } misses Free H and
+A5:   E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+        x0 in { x0,x1,x2 } by ENUMSET1:14;
+then A6:   not x0 in Free H by A4,XBOOLE_0:3;
+         now let a; assume
+           a in { x1,x2 };
+         then a = x1 or a = x2 by TARSKI:def 2;
+         then a in { x0,x1,x2 } by ENUMSET1:14;
+        hence not a in Free H by A4,XBOOLE_0:3;
+       end;
+then A7:  { x1,x2 } misses Free H by XBOOLE_0:3;
+     let u;
+        E |= the_axiom_of_substitution_for H by A3,A4;
+      then E,f |= the_axiom_of_substitution_for H &
+       the_axiom_of_substitution_for H =
+        All(x3,Ex(x0,All(x4,H <=> x4 '=' x0))) =>
+         All(x1,Ex(x2,All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H))))
+          by ZF_MODEL:def 5,def 11;
+then A8:    E,f |= All(x1,Ex(x2,
+              All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H)) ))
+        by A5,ZF_MODEL:18;
+     consider g such that
+A9:    g.x1 = u & for x st x <> x1 holds g.x = f.x by ZF_MODEL:21;
+        for x st g.x <> f.x holds x1 = x by A9;
+      then E,g |= Ex(x2,All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H)))
+       by A8,ZF_MODEL:16;
+     then consider h such that
+A10:    (for x st h.x <> g.x holds x2 = x) &
+       E,h |= All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H)) by ZF_MODEL:20;
+     set v = h.x2;
+A11:    def_func'(H,f).:u c= v
+       proof let a; assume
+A12:      a in def_func'(H,f).:u;
+        then consider b such that
+A13:      b in dom def_func'(H,f) & b in u & def_func'(H,f).b = a by FUNCT_1:
+def 12;
+        reconsider e = a as Element of E by A12;
+        reconsider b as Element of E by A13;
+        consider i such that
+A14:      i.x4 = e & for x st x <> x4 holds i.x = h.x by ZF_MODEL:21;
+           for x st i.x <> h.x holds x4 = x by A14;
+then A15:      E,i |= x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H) by A10,ZF_MODEL:16
+;
+        consider j such that
+A16:      j.x3 = b & for x st x <> x3 holds j.x = i.x by ZF_MODEL:21;
+           j.x1 = i.x1 & i.x1 = h.x1 & h.x1 = g.x1 by A10,A14,A16,Lm1;
+then A17:      E,j |= x3 'in' x1 by A9,A13,A16,ZF_MODEL:13;
+        consider m1 being Function of VAR,E such that
+A18:      m1.x3 = b & for x st x <> x3 holds m1.x = f.x by ZF_MODEL:21;
+        consider m being Function of VAR,E such that
+A19:      m.x4 = e & for x st x <> x4 holds m.x = m1.x by ZF_MODEL:21;
+           now let y; assume
+A20:        m.y <> f.y;
+          assume x.0 <> y & x.3 <> y & x.4 <> y;
+           then m.y = m1.y & m1.y = f.y by A18,A19;
+          hence contradiction by A20;
+         end;
+then A21:      E,m |= H iff def_func'(H,f).(m.x.3) = m.x.4 by A5,A6,Def1;
+A22:      m.x3 = m1.x3 by A19,Lm1;
+A23:     E,m |= All(x1,x2,H) by A7,A13,A18,A19,A21,Lm1,Th11;
+        consider k being Function of VAR,E such that
+A24:      k.x1 = j.x1 & for x st x <> x1 holds k.x = m.x by ZF_MODEL:21;
+           All(x1,x2,H) = All(x1,All(x2,H)) &
+          for x st k.x <> m.x holds x1 = x by A24,ZF_LANG:23;
+then A25:      E,k |= All(x2,H) by A23,ZF_MODEL:16;
+           now let x; assume that
+A26:        j.x <> k.x and
+A27:        x2 <> x;
+A28:        x <> x1 by A24,A26;
+A29:        x <> x3 by A16,A18,A22,A24,A26,Lm1;
+             k.x4 = m.x4 & j.x4 = i.x4 by A16,A24,Lm1;
+then A30:        x <> x4 by A14,A19,A26;
+             k.x = m.x by A24,A28 .= m1.x by A19,A30 .= f.x by A18,A29
+              .= g.x by A9,A28 .= h.x by A10,A27 .= i.x by A14,A30 .= j.x by
+A16,A29;
+          hence contradiction by A26;
+         end;
+         then E,j |= H by A25,ZF_MODEL:16;
+then A31:      E,j |= x3 'in' x1 '&' H by A17,ZF_MODEL:15;
+           for x st i.x <> j.x holds x3 = x by A16;
+         then E,i |= Ex(x3,x3 'in' x1 '&' H) by A31,ZF_MODEL:20;
+         then E,i |= x4 'in' x2 by A15,ZF_MODEL:19;
+         then i.x4 in i.x2 & i.x2 = h.x2 by A14,Lm1,ZF_MODEL:13;
+        hence a in v by A14;
+       end;
+      v c= def_func'(H,f).:u
+       proof let a such that
+A32:      a in v;
+           v c= E by A1;
+        then reconsider e = a as Element of E by A32;
+        consider i such that
+A33:      i.x4 = e & for x st x <> x4 holds i.x = h.x by ZF_MODEL:21;
+           for x st i.x <> h.x holds x4 = x by A33;
+then A34:      E,i |= x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H) by A10,ZF_MODEL:16
+;
+           i.x2 = h.x2 by A33,Lm1;
+         then E,i |= x4 'in' x2 by A32,A33,ZF_MODEL:13;
+         then E,i |= Ex(x3,x3 'in' x1 '&' H) by A34,ZF_MODEL:19;
+        then consider j such that
+A35:      (for x st j.x <> i.x holds x3 = x) & E,j |= x3 'in' x1 '&' H
+          by ZF_MODEL:20;
+A36:      E,j |= x3 'in' x1 & E,j |= H by A35,ZF_MODEL:15;
+then A37:      j.x3 in j.x1 & j.x1 = i.x1 & i.x1 = h.x1 & h.x1 = g.x1
+          by A10,A33,A35,Lm1,ZF_MODEL:13;
+        consider m1 being Function of VAR,E such that
+A38:      m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x by ZF_MODEL:21;
+        consider m being Function of VAR,E such that
+A39:      m.x4 = e & for x st x <> x4 holds m.x = m1.x by ZF_MODEL:21;
+           now let y; assume
+A40:        m.y <> f.y;
+          assume x.0 <> y & x.3 <> y & x.4 <> y;
+           then m.y = m1.y & m1.y = f.y by A38,A39;
+          hence contradiction by A40;
+         end;
+then A41:      E,m |= H iff def_func'(H,f).(m.x.3) = m.x.4 by A5,A6,Def1;
+A42:      E,j |= All(x1,x2,H) by A7,A36,Th11;
+        consider k being Function of VAR,E such that
+A43:      k.x1 = m.x1 & for x st x <> x1 holds k.x = j.x by ZF_MODEL:21;
+           All(x1,x2,H) = All(x1,All(x2,H)) &
+          for x st k.x <> j.x holds x1 = x by A43,ZF_LANG:23;
+then A44:      E,k |= All(x2,H) by A42,ZF_MODEL:16;
+           now let x; assume that
+A45:        m.x <> k.x and
+A46:        x2 <> x;
+A47:        x1 <> x by A43,A45;
+             k.x3 = j.x3 & m1.x3 = m.x3 by A39,A43,Lm1;
+then A48:        x3 <> x by A38,A45;
+             k.x4 = j.x4 & j.x4 = i.x4 by A35,A43,Lm1;
+then A49:        x4 <> x by A33,A39,A45;
+             k.x = j.x by A43,A47 .= i.x by A35,A48 .= h.x by A33,A49 .= g.x
+by A10,A46
+              .= f.x by A9,A47 .= m1.x by A38,A48 .= m.x by A39,A49;
+          hence contradiction by A45;
+         end;
+then A50:      def_func'(H,f).(j.x3) = a by A38,A39,A41,A44,Lm1,ZF_MODEL:16;
+           j.x3 in E & dom def_func'(H,f) = E by FUNCT_2:def 1;
+        hence a in def_func'(H,f).:u by A9,A37,A50,FUNCT_1:def 12;
+       end;
+      then def_func'(H,f).:u = v by A11,XBOOLE_0:def 10;
+     hence def_func'(H,f).:u in E;
+    end;
+  now assume
+A51:   for H,f st { x.0,x.1,x.2 } misses Free H &
+       E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
+        for u holds def_func'(H,f).:u in E;
+     let H; assume
+A52:   { x.0,x.1,x.2 } misses Free H;
+A53:   the_axiom_of_substitution_for H =
+       All(x3,Ex(x0,All(x4,H <=> x4 '=' x0))) =>
+        All(x1,Ex(x2,All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H))))
+         by ZF_MODEL:def 11;
+        x0 in { x0,x1,x2 } by ENUMSET1:14;
+then A54:   not x0 in Free H by A52,XBOOLE_0:3;
+         now let a; assume a in { x1,x2 };
+         then a = x1 or a = x2 by TARSKI:def 2;
+         then a in { x0,x1,x2 } by ENUMSET1:14;
+        hence not a in Free H by A52,XBOOLE_0:3;
+       end;
+then A55:   { x1,x2 } misses Free H by XBOOLE_0:3;
+     thus E |= the_axiom_of_substitution_for H
+       proof let f;
+           now assume
+A56:         E,f |= All(x3,Ex(x0,All(x4,H <=> x4 '=' x0)));
+             now let g such that
+A57:           for x st g.x <> f.x holds x1 = x;
+            reconsider v = def_func'(H,f).:
+(g.x1) as Element of E by A51,A52,A56;
+            consider h such that
+A58:           h.x2 = v & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+            now let i such that
+A59:             for x st i.x <> h.x holds x4 = x;
+A60:             now assume E,i |= x4 'in' x2;
+                 then i.x4 in i.x2 & i.x2 = h.x2 by A59,Lm1,ZF_MODEL:13;
+              then consider a such that
+A61:          a in dom def_func'(H,f) & a in g.x1 & i.x4 = def_func'(H,f).a
+                   by A58,FUNCT_1:def 12;
+                reconsider a as Element of E by A61;
+                consider j such that
+A62:               j.x3 = a & for x st x <> x3 holds j.x = i.x by ZF_MODEL:21;
+                   j.x1 = i.x1 & i.x1 = h.x1 & h.x1 = g.x1 by A58,A59,A62,Lm1
+;
+then A63:               E,j |= x3 'in' x1 by A61,A62,ZF_MODEL:13;
+                consider m1 being Function of VAR,E such that
+A64:              m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x
+                  by ZF_MODEL:21;
+                consider m being Function of VAR,E such that
+A65:               m.x4 = i.x4 & for x st x <> x4 holds m.x = m1.x
+                  by ZF_MODEL:21;
+                   now let x such that
+A66:                m.x <> f.x and
+A67:                x.0 <> x & x.3 <> x & x.4 <> x;
+                     m.x = m1.x & m1.x = f.x by A64,A65,A67;
+                  hence contradiction by A66;
+                 end;
+                 then (E,m |= H iff def_func'(H,f).(m.x.3) = m.x.4) & m.x3 = m1
+.x3
+                  by A54,A56,A65,Def1,Lm1;
+then A68:               E,m |= All(x1,x2,H) by A55,A61,A62,A64,A65,Th11;
+                consider k being Function of VAR,E such that
+A69:               k.x1 = j.x1 & for x st x <> x1 holds k.x = m.x by ZF_MODEL:
+21;
+                   All(x1,x2,H) = All(x1,All(x2,H)) &
+                  for x st k.x <> m.x holds x1 = x by A69,ZF_LANG:23;
+then A70:               E,k |= All(x2,H) by A68,ZF_MODEL:16;
+                   now let x such that
+A71:                j.x <> k.x and
+A72:                x2 <> x;
+A73:                x1 <> x by A69,A71;
+                     k.x3 = m.x3 & m.x3 = m1.x3 by A65,A69,Lm1;
+then A74:                x3 <> x by A64,A71;
+                     j.x4 = i.x4 & k.x4 = m.x4 by A62,A69,Lm1;
+then A75:                x4 <> x by A65,A71;
+                     j.x = i.x by A62,A74 .= h.x by A59,A75 .= g.x by A58,A72
+                      .= f.x by A57,A73 .= m1.x by A64,A74 .= m.x by A65,A75
+                      .= k.x by A69,A73;
+                  hence contradiction by A71;
+                 end;
+                 then E,j |= H by A70,ZF_MODEL:16;
+                 then E,j |= x3 'in' x1 '&' H &
+                  for x st j.x <> i.x holds x3 = x by A62,A63,ZF_MODEL:15;
+                hence E,i |= Ex(x3,x3 'in' x1 '&' H) by ZF_MODEL:20;
+               end;
+                 now assume
+                   E,i |= Ex(x3,x3 'in' x1 '&' H);
+                then consider j such that
+A76:               (for x st j.x <> i.x holds x3 = x) &
+                  E,j |= x3 'in' x1 '&' H by ZF_MODEL:20;
+A77:               E,j |= x3 'in' x1 & E,j |= H by A76,ZF_MODEL:15;
+then A78:               E,j |= All(x1,x2,H) by A55,Th11;
+                consider m1 being Function of VAR,E such that
+A79:              m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x
+                  by ZF_MODEL:21;
+                consider m being Function of VAR,E such that
+A80:               m.x4 = i.x4 & for x st x <> x4 holds m.x = m1.x
+                  by ZF_MODEL:21;
+                consider k being Function of VAR,E such that
+A81:               k.x1 = m.x1 & for x st x <> x1 holds k.x = j.x
+                  by ZF_MODEL:21;
+                   All(x1,x2,H) = All(x1,All(x2,H)) &
+                  for x st k.x <> j.x holds x1 = x by A81,ZF_LANG:23;
+then A82:               E,k |= All(x2,H) by A78,ZF_MODEL:16;
+                   now let x such that
+A83:                m.x <> k.x and
+A84:                x2 <> x;
+A85:                x1 <> x by A81,A83;
+                     m.x3 = m1.x3 & k.x3 = j.x3 by A80,A81,Lm1;
+then A86:                x3 <> x by A79,A83;
+                     k.x4 = j.x4 & j.x4 = i.x4 by A76,A81,Lm1;
+then A87:                x4 <> x by A80,A83;
+                   then m.x = m1.x by A80 .= f.x by A79,A86 .= g.x by A57,A85
+                      .= h.x by A58,A84 .= i.x by A59,A87 .= j.x by A76,A86
+                      .= k.x by A81,A85;
+                  hence contradiction by A83;
+                 end;
+then A88:               E,m |= H by A82,ZF_MODEL:16;
+                   now let x such that
+A89:                m.x <> f.x and
+A90:                x.0 <> x & x.3 <> x & x.4 <> x;
+                     f.x = m1.x by A79,A90 .= m.x by A80,A90;
+                  hence contradiction by A89;
+                 end;
+then A91:                 def_func'(H,f).(m.x.3) = m.x.4 & m.x3 = m1.x3
+                  by A54,A56,A80,A88,Def1,Lm1;
+A92:               j.x3 in j.x1 & j.x1 = i.x1 & i.x1 = h.x1 & h.x1 = g.x1
+                  by A58,A59,A76,A77,Lm1,ZF_MODEL:13;
+                   j.x3 in E & dom def_func'(H,f) = E by FUNCT_2:def 1;
+then A93:               i.x4 in def_func'(H,f).:(g.x1) by A79,A80,A91,A92,
+FUNCT_1:def 12;
+                   i.x2 = h.x2 by A59,Lm1;
+                hence E,i |= x4 'in' x2 by A58,A93,ZF_MODEL:13;
+               end;
+              hence E,i |= x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H)
+                by A60,ZF_MODEL:19;
+             end;
+             then E,h |= All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H)) &
+              for x st h.x <> g.x holds x2 = x by A58,ZF_MODEL:16;
+            hence E,g |= Ex(x2,All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H)))
+              by ZF_MODEL:20;
+           end;
+          hence
+              E,f |= All(x1,Ex(x2,All(x4,x4 'in' x2 <=> Ex(x3,x3 'in'
+ x1 '&' H))))
+              by ZF_MODEL:16;
+         end;
+        hence E,f |= the_axiom_of_substitution_for H by A53,ZF_MODEL:18;
+       end;
+    end;
+   hence thesis by A2;
+  end;
+
+theorem
+    E is epsilon-transitive implies
+  ((for H st { x.0,x.1,x.2 } misses Free H holds
+   E |= the_axiom_of_substitution_for H) iff
+  for F being Function st F is_parametrically_definable_in E
+    for X st X in E holds F.:X in E )
+  proof assume A1: E is epsilon-transitive;
+   thus (for H st { x.0,x.1,x.2 } misses Free H holds
+       E |= the_axiom_of_substitution_for H) implies
+      for F being Function st F is_parametrically_definable_in E
+       for X st X in E holds F.:X in E
+     proof assume
+A2:     for H st { x.0,x.1,x.2 } misses Free H holds
+        E |= the_axiom_of_substitution_for H;
+      let F be Function;
+      given H,f such that
+A3:     { x.0,x.1,x.2 } misses Free H and
+A4:     E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) and
+A5:     F = def_func'(H,f);
+      let X; assume X in E;
+      then reconsider u = X as Element of E;
+         def_func'(H,f).:u in E by A1,A2,A3,A4,Th19;
+      hence thesis by A5;
+     end;
+   assume
+A6:  for F being Function st F is_parametrically_definable_in E
+     for X st X in E holds F.:X in E;
+      for H,f st { x.0,x.1,x.2 } misses Free H &
+     E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
+      for u holds def_func'(H,f).:u in E
+     proof let H,f; assume that
+A7:     { x.0,x.1,x.2 } misses Free H and
+A8:     E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)));
+A9:     def_func'(H,f) is_parametrically_definable_in E by A7,A8,Def4;
+      let u;
+      thus thesis by A6,A9;
+     end;
+   hence thesis by A1,Th19;
+  end;
+
+Lm4:E is epsilon-transitive implies
+    for u,v st for w holds w in u iff w in v holds u = v
+  proof assume
+A1:  X in E implies X c= E;
+   let u,v such that
+A2:  for w holds w in u iff w in v;
+A3:  u c= E & v c= E by A1;
+   thus u c= v
+     proof let a; assume
+A4:     a in u;
+      then reconsider e = a as Element of E by A3;
+         e in v by A2,A4;
+      hence a in v;
+     end;
+   let a; assume
+A5:  a in v;
+   then reconsider e = a as Element of E by A3;
+      e in u by A2,A5;
+   hence a in u;
+  end;
+
+theorem
+    E is_a_model_of_ZF implies
+   E is epsilon-transitive &
+   (for u,v st for w holds w in u iff w in v holds u = v) &
+   (for u,v holds { u,v } in E) &
+   (for u holds union u in E) &
+   (ex u st u <> {} & for v st v in u ex w st v c< w & w in u) &
+   (for u holds E /\ bool u in E) &
+   (for H,f st { x.0,x.1,x.2 } misses Free H &
+     E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
+      for u holds def_func'(H,f).:u in E )
+  proof assume
+      E is epsilon-transitive &
+    E |= the_axiom_of_pairs &
+    E |= the_axiom_of_unions &
+    E |= the_axiom_of_infinity &
+    E |= the_axiom_of_power_sets &
+    for H st { x.0,x.1,x.2 } misses Free H holds
+     E |= the_axiom_of_substitution_for H;
+   hence thesis by Lm4,Th2,Th4,Th6,Th8,Th19;
+  end;
+
+theorem
+
+     E is epsilon-transitive &
+   (for u,v holds { u,v } in E) &
+   (for u holds union u in E) &
+   (ex u st u <> {} & for v st v in u ex w st v c< w & w in u) &
+   (for u holds E /\ bool u in E) &
+   (for H,f st { x.0,x.1,x.2 } misses Free H &
+     E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
+      for u holds def_func'(H,f).:u in E )
+    implies E is_a_model_of_ZF
+  proof assume
+      E is epsilon-transitive &
+    (for u,v holds { u,v } in E) &
+    (for u holds union u in E) &
+    (ex u st u <> {} & for v st v in u ex w st v c< w & w in u) &
+    (for u holds E /\ bool u in E) &
+    (for H,f st { x.0,x.1,x.2 } misses Free H &
+      E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
+       for u holds def_func'(H,f).:u in E );
+   hence
+      E is epsilon-transitive &
+    E |= the_axiom_of_pairs &
+    E |= the_axiom_of_unions &
+    E |= the_axiom_of_infinity &
+    E |= the_axiom_of_power_sets &
+    for H st { x.0,x.1,x.2 } misses Free H holds
+     E |= the_axiom_of_substitution_for H by Th2,Th4,Th6,Th8,Th19;
+  end;

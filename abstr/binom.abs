@@ -1,0 +1,323 @@
+:: The Binomial Theorem for Algebraic Structures
+::  by Christoph Schwarzweller
+::
+:: Received November 20, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ALGSTR_1, VECTSP_2, ARYTM_1, BINOP_1, LATTICES, GROUP_1,
+      VECTSP_1, ALGSTR_2, FUNCT_1, FUNCT_2, MCART_1, RELAT_1, FINSEQ_1,
+      FINSEQ_4, NEWTON, FINSEQ_2, BOOLE, BINOM;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      STRUCT_0, FINSEQ_1, FUNCT_1, FUNCT_2, NAT_1, FINSEQ_4, RELSET_1, BINOP_1,
+      ALGSTR_1, FINSEQ_2, VECTSP_1, VECTSP_2, GROUP_1, NEWTON, RLVECT_1,
+      MCART_1, POLYNOM1;
+ constructors BINOP_1, REAL_1, ALGSTR_2, NEWTON, DOMAIN_1, POLYNOM1, MONOID_0,
+      MEMBERED;
+ clusters STRUCT_0, ALGSTR_1, RELSET_1, FUNCT_2, MONOID_0, FINSEQ_2, VECTSP_2,
+      INT_1, VECTSP_1, MEMBERED, ZFMISC_1, ORDINAL2, NUMBERS;
+ requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
+
+
+begin  :: Preliminaries
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let L be non empty LoopStr;
+ canceled 2;
+
+attr L is add-cancelable means
+:: BINOM:def 3
+  for a,b,c being Element of L
+  holds (a + b = a + c implies b = c) & (b + a = c + a implies b = c);
+end;
+
+definition
+cluster add-left-cancelable (non empty LoopStr);
+cluster add-right-cancelable (non empty LoopStr);
+cluster add-cancelable (non empty LoopStr);
+end;
+
+definition
+cluster add-left-cancelable add-right-cancelable ->
+                     add-cancelable (non empty LoopStr);
+cluster add-cancelable ->
+           add-left-cancelable add-right-cancelable (non empty LoopStr);
+end;
+
+definition
+cluster Abelian add-right-cancelable ->
+  add-left-cancelable (non empty LoopStr);
+cluster Abelian add-left-cancelable ->
+            add-right-cancelable (non empty LoopStr);
+end;
+
+definition
+cluster right_zeroed right_complementable add-associative ->
+           add-right-cancelable (non empty LoopStr);
+end;
+
+definition
+cluster Abelian add-associative left_zeroed right_zeroed
+        commutative associative add-cancelable
+        distributive unital (non empty doubleLoopStr);
+end;
+
+theorem :: BINOM:1
+for R being right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr),
+    a being Element of R
+holds 0.R * a = 0.R;
+
+theorem :: BINOM:2
+for R being left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    a being Element of R
+holds a * 0.R = 0.R;
+
+scheme Ind2{M() -> Nat, P[Nat]} :
+for i being Nat st M() <= i holds P[i]
+provided
+  P[M()] and
+  for j being Nat st M() <= j holds P[j] implies P[j+1];
+
+scheme RecDef1 {C,D() -> non empty set,
+                b() -> Element of D(),
+                F() -> Function of [:C(),D():],D()} :
+ex g being Function of [:NAT,C():],D() st
+   for a being Element of C() holds g.(0,a) = b() &
+   for n being Nat holds g.(n+1,a) = F().(a,g.(n,a));
+
+scheme RecDef2 {C,D() -> non empty set,
+                b() -> Element of D(),
+                F() -> Function of [:D(),C():],D()} :
+ex g being Function of [:C(),NAT:],D() st
+   for a being Element of C() holds g.(a,0) = b() &
+   for n being Nat holds g.(a,n+1) = F().(g.(a,n),a);
+
+
+begin  ::  On Finite Sequences
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+theorem :: BINOM:3
+for L being left_zeroed (non empty LoopStr),
+    a being Element of L
+holds Sum <* a *> = a;
+
+theorem :: BINOM:4
+  for R being left_zeroed add-right-cancelable
+            right-distributive (non empty doubleLoopStr),
+    a being Element of R,
+    p being FinSequence of the carrier of R
+holds Sum(a * p) = a * Sum p;
+
+theorem :: BINOM:5
+for R being right_zeroed add-left-cancelable
+            left-distributive (non empty doubleLoopStr),
+    a being Element of R,
+    p being FinSequence of the carrier of R
+holds Sum(p * a) = Sum p * a;
+
+theorem :: BINOM:6
+  for R being commutative (non empty doubleLoopStr),
+    a being Element of R,
+    p being FinSequence of the carrier of R
+holds Sum(p * a) = Sum(a * p);
+
+definition
+let R be non empty LoopStr,
+    p,q be FinSequence of the carrier of R such that dom p = dom q;
+func p + q -> FinSequence of the carrier of R means
+:: BINOM:def 4
+  dom it = dom p &
+  for i being Nat st 1 <= i & i <= len it holds it/.i = p/.i + q/.i;
+end;
+
+theorem :: BINOM:7
+for R being Abelian right_zeroed add-associative (non empty LoopStr),
+    p,q being FinSequence of the carrier of R st dom p = dom q
+holds Sum(p + q) = Sum p + Sum q;
+
+
+begin  ::  On Powers in Rings
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+definition
+let R be unital (non empty HGrStr),
+    a be Element of R,
+    n be Nat;
+func a|^n -> Element of R equals
+:: BINOM:def 5
+  power(R).(a,n);
+end;
+
+theorem :: BINOM:8
+for R being unital (non empty HGrStr),
+    a being Element of R
+holds a|^0 = 1.R & a|^1 = a;
+
+theorem :: BINOM:9
+for R being unital (non empty HGrStr),
+    a being Element of R,
+    n being Nat
+holds a|^(n+1) = (a|^n) * a;
+
+theorem :: BINOM:10
+  for R being unital associative commutative (non empty HGrStr),
+    a,b being Element of R,
+    n being Nat
+holds (a * b)|^n = (a|^n) * (b|^n);
+
+theorem :: BINOM:11
+for R being unital associative (non empty HGrStr),
+    a being Element of R,
+    n,m being Nat
+holds a|^(n+m) = (a|^n) * (a|^m);
+
+theorem :: BINOM:12
+  for R being unital associative (non empty HGrStr),
+    a being Element of R,
+    n,m being Nat
+holds (a|^n)|^m = a|^(n * m);
+
+
+begin  ::  On Natural Products in Rings
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+definition
+let R be non empty LoopStr;
+func Nat-mult-left(R)
+        -> Function of [:NAT,the carrier of R:],the carrier of R means
+:: BINOM:def 6
+  for a being Element of R
+  holds it.(0,a) = 0.R &
+        for n being Nat holds it.(n+1,a) = a + it.(n,a);
+func Nat-mult-right(R)
+        -> Function of [:the carrier of R,NAT:],the carrier of R means
+:: BINOM:def 7
+  for a being Element of R
+  holds it.(a,0) = 0.R &
+        for n being Nat holds it.(a,n+1) = it.(a,n) + a;
+end;
+
+definition
+let R be non empty LoopStr,
+    a be Element of R,
+    n be Nat;
+func n * a -> Element of R equals
+:: BINOM:def 8
+  (Nat-mult-left(R)).(n,a);
+func a * n -> Element of R equals
+:: BINOM:def 9
+  (Nat-mult-right(R)).(a,n);
+end;
+
+theorem :: BINOM:13
+for R being non empty LoopStr,
+    a being Element of R
+holds 0 * a = 0.R & a * 0 = 0.R;
+
+theorem :: BINOM:14
+for R being right_zeroed (non empty LoopStr),
+    a being Element of R
+holds 1 * a = a;
+
+theorem :: BINOM:15
+for R being left_zeroed (non empty LoopStr),
+    a being Element of R
+holds a * 1 = a;
+
+theorem :: BINOM:16
+for R being left_zeroed add-associative (non empty LoopStr),
+    a being Element of R,
+    n,m being Nat
+holds (n + m) * a = n * a + m * a;
+
+theorem :: BINOM:17
+for R being right_zeroed add-associative (non empty LoopStr),
+    a being Element of R,
+    n,m being Nat
+holds a * (n + m) = a * n + a * m;
+
+theorem :: BINOM:18
+for R being left_zeroed right_zeroed add-associative (non empty LoopStr),
+    a being Element of R,
+    n being Nat
+holds n * a = a * n;
+
+theorem :: BINOM:19
+  for R being Abelian (non empty LoopStr),
+    a being Element of R,
+    n being Nat
+holds n * a = a * n;
+
+theorem :: BINOM:20
+for R being left_zeroed right_zeroed add-left-cancelable add-associative
+            left-distributive (non empty doubleLoopStr),
+    a,b being Element of R,
+    n being Nat
+holds (n * a) * b = n * (a * b);
+
+theorem :: BINOM:21
+for R being left_zeroed right_zeroed add-right-cancelable add-associative
+            distributive (non empty doubleLoopStr),
+    a,b being Element of R,
+    n being Nat
+holds b * (n * a) = (b * a) * n;
+
+theorem :: BINOM:22
+for R being left_zeroed right_zeroed add-associative
+            add-cancelable distributive (non empty doubleLoopStr),
+    a,b being Element of R,
+    n being Nat
+holds (a * n) * b = a * (n * b);
+
+
+begin  ::  The Binomial Theorem
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+definition
+let k,n be Nat;
+redefine func n choose k -> Nat;
+end;
+
+definition
+let R be unital (non empty doubleLoopStr),
+    a,b be Element of R,
+    n be Nat;
+func (a,b) In_Power n -> FinSequence of the carrier of R means
+:: BINOM:def 10
+   len it = n + 1 &
+   for i,l,m being Nat st i in dom it & m = i - 1 & l = n - m
+   holds it/.i = (n choose m) * a|^l * b|^m;
+end;
+
+theorem :: BINOM:23
+for R being right_zeroed unital (non empty doubleLoopStr),
+    a,b being Element of R
+holds (a,b) In_Power 0 = <*1.R*>;
+
+theorem :: BINOM:24
+for R being right_zeroed unital (non empty doubleLoopStr),
+    a,b being Element of R,
+    n being Nat
+holds ((a,b) In_Power n).1 = a|^n;
+
+theorem :: BINOM:25
+for R being right_zeroed unital (non empty doubleLoopStr),
+    a,b being Element of R,
+    n being Nat
+holds ((a,b) In_Power n).(n+1) = b|^n;
+
+theorem :: BINOM:26
+  for R being Abelian add-associative left_zeroed right_zeroed
+            commutative associative add-cancelable
+            distributive unital (non empty doubleLoopStr),
+    a,b being Element of R,
+    n being Nat
+holds (a+b)|^n = Sum((a,b) In_Power n);

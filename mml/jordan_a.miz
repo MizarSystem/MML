@@ -1,0 +1,1834 @@
+:: On the Segmentation of a Simple Closed Curve
+::  by Andrzej Trybulec
+::
+:: Received August 18, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary JORDAN_A, TOPREAL1, TBSP_1, PSCOMP_1, JORDAN3, JORDAN6, BOOLE,
+      RCOMP_1, FINSEQ_4, SQUARE_1, TOPREAL2, ARYTM_3, METRIC_1, GOBRD10,
+      PRE_TOPC, EUCLID, FINSEQ_1, GR_CY_1, RELAT_1, FUNCT_1, ARYTM, ARYTM_1,
+      WEIERSTR, PCOMPS_1, FINSET_1, REALSET1, TOPMETR, CONNSP_2, COMPLEX1,
+      SEQ_2, ORDINAL2, COMPTS_1, SUBSET_1, LATTICES;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL2, ORDINAL1, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, NAT_1, FINSET_1, REALSET1, FUNCT_1, FUNCT_2,
+      BINOP_1, FINSEQ_1, FINSEQ_4, BINARITH, SQUARE_1, PRE_CIRC, SEQ_4,
+      RCOMP_1, TOPMETR, CONNSP_2, STRUCT_0, PRE_TOPC, TBSP_1, PCOMPS_1,
+      COMPTS_1, SFMASTR3, BORSUK_1, METRIC_1, EUCLID, TOPREAL1, TOPREAL2,
+      JGRAPH_1, GOBRD10, WEIERSTR, JORDAN5C, JORDAN6, JORDAN7, PSCOMP_1,
+      JORDAN1K;
+ constructors FINSEQ_4, JORDAN7, GOBRD10, PRE_CIRC, SFMASTR3, REALSET1,
+      BINARITH, PSCOMP_1, JORDAN5C, REAL_1, SQUARE_1, JORDAN6, TBSP_1,
+      CONNSP_1, JORDAN9, TOPRNS_1, JORDAN1K, RCOMP_1, CARD_4, DOMAIN_1, TOPS_2;
+ clusters RELSET_1, FINSEQ_1, STRUCT_0, EUCLID, TOPREAL6, PRELAMB, SUBSET_1,
+      JORDAN1B, REVROT_1, REALSET1, ARYTM_3, BORSUK_1, XREAL_0, WAYBEL_2,
+      PSCOMP_1, RCOMP_1, FINSET_1, XBOOLE_0, MEMBERED, PRE_CIRC;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+ definitions XBOOLE_0, TARSKI, GOBRD10, PSCOMP_1;
+ theorems EUCLID, PCOMPS_1, FINSEQ_3, GOBOARD9, AXIOMS, FINSET_1, NAT_1,
+      SPRECT_3, FINSEQ_5, JGRAPH_1, SPPOL_1, ZFMISC_1, JORDAN7, SPRECT_1,
+      JORDAN6, XBOOLE_1, PRE_CIRC, REVROT_1, XCMPLX_1, JORDAN5A, JORDAN5C,
+      REAL_1, FRECHET2, FINSEQ_4, SEQ_4, SEQ_2, FINSEQ_1, PARTFUN2, WEIERSTR,
+      SUBSET_1, METRIC_1, TOPREAL3, REAL_2, TARSKI, XBOOLE_0, TOPRNS_1,
+      PSCOMP_1, BORSUK_1, JORDAN16, JORDAN1K, RCOMP_1, BORSUK_3, TOPREAL6,
+      TOPMETR, FUNCT_2, BINOP_1, JORDAN3, HAUSDORF, TOPS_1, JCT_MISC, CONNSP_2,
+      FUNCT_1, RELAT_1, SFMASTR3, SQUARE_1, TOPREAL5, JORDAN17, JORDAN1A,
+      TOPREAL1, JORDAN18, TOPREAL8, GOBRD10, AMI_5, ORDINAL2, XREAL_0;
+ schemes COMPLSP1, FRAENKEL, FUNCT_7, TOPREAL1;
+
+begin :: Preliminaries
+
+ reserve x,y,A for set;
+
+scheme AndScheme{A()-> non empty set, P,Q[set]}:
+  { a where a is Element of A(): P[a] & Q[a] }
+   = { a1 where a1 is Element of A(): P[a1] }
+   /\ { a2 where a2 is Element of A(): Q[a2] }
+proof
+ set A = { a where a is Element of A(): P[a] & Q[a] },
+     A1 = { a1 where a1 is Element of A(): P[a1] },
+     A2 = { a2 where a2 is Element of A(): Q[a2] };
+ thus A c= A1 /\ A2
+  proof let x;
+   assume x in A;
+    then consider a being Element of A() such that
+A1:  x = a and
+A2: P[a] & Q[a];
+    a in A1 & a in A2 by A2;
+   hence thesis by A1,XBOOLE_0:def 3;
+  end;
+ let x;
+ assume x in A1 /\ A2;
+  then x in A1 & x in A2 by XBOOLE_0:def 3;
+  then (ex a being Element of A() st x = a & P[a])
+   & ex a being Element of A() st x = a & Q[a];
+ hence thesis;
+end;
+
+reserve C,C1,C2 for Simple_closed_curve,
+        X,Y for non empty set,
+        p,q,p1,p2,q1,q2,z1,z2 for Point of TOP-REAL 2,
+        i,j,k,m,n for Nat,
+        r,s for real number,
+        e for Real;
+
+theorem Th1:
+ for A,B being finite non empty Subset of REAL
+  holds min(A \/ B) = min(min A, min B)
+ proof let A,B be finite non empty Subset of REAL;
+A1: min A in A & min B in B by SFMASTR3:def 1;
+   min(min A, min B) = min A or min(min A, min B) = min B by SQUARE_1:38;
+   then
+A2: min(min A, min B) in A \/ B by A1,XBOOLE_0:def 2;
+   for k being real number st k in A \/ B holds min(min A, min B) <= k
+    proof let k be real number such that
+A3:   k in A \/ B;
+     per cases by A3,XBOOLE_0:def 2;
+     suppose k in A;
+      then
+A4:     min A <= k by SFMASTR3:def 1;
+      min(min A, min B) <= min A by SQUARE_1:35;
+     hence min(min A, min B) <= k by A4,AXIOMS:22;
+     suppose k in B;
+      then
+A5:     min B <= k by SFMASTR3:def 1;
+      min(min A, min B) <= min B by SQUARE_1:35;
+     hence min(min A, min B) <= k by A5,AXIOMS:22;
+    end;
+  hence min(A \/ B) = min(min A, min B) by A2,SFMASTR3:def 1;
+ end;
+
+definition let T be non empty TopSpace;
+ cluster compact non empty Subset of T;
+ existence
+  proof consider p being Point of T;
+   take {p};
+   thus {p} is compact;
+   thus thesis;
+  end;
+end;
+
+theorem Th2:
+ for T being non empty TopSpace, f being continuous RealMap of T,
+     A being compact Subset of T
+  holds f.:A is compact
+ proof
+  let T be non empty TopSpace, f be continuous RealMap of T,
+      A be compact Subset of T;
+   reconsider g = f as continuous map of T,R^1 by TOPMETR:24,TOPREAL6:83;
+   g.:A is compact by WEIERSTR:15;
+   then [#](g.:A) is compact by WEIERSTR:19;
+  hence f.:A is compact by WEIERSTR:def 3;
+ end;
+
+theorem Th3:
+ for A being compact Subset of REAL, B being non empty Subset of REAL st B c= A
+  holds inf B in A
+proof let A be compact Subset of REAL, B be non empty Subset of REAL such that
+A1: B c= A;
+   A is bounded by RCOMP_1:28;
+   then
+A2:  A is bounded_below by SEQ_4:def 3;
+   then
+A3: B is bounded_below by A1,RCOMP_1:3;
+   A is closed by RCOMP_1:26;
+   then
+A4: Cl B c= A by A1,PSCOMP_1:32;
+  Cl B is bounded_below by A2,A4,RCOMP_1:3;
+  then inf Cl B in Cl B by RCOMP_1:31;
+  then inf Cl B in A by A4;
+ hence inf B in A by A3,TOPREAL6:77;
+end;
+
+theorem
+ for A,B being compact non empty Subset of TOP-REAL n,
+     f being continuous RealMap of [:TOP-REAL n, TOP-REAL n:],
+     g being RealMap of TOP-REAL n
+      st for p being Point of TOP-REAL n
+          ex G being Subset of REAL
+           st G = { f.(p,q) where q is Point of TOP-REAL n : q in B } &
+              g.p = inf G
+   holds inf(f.:[:A,B:]) = inf(g.:A)
+proof let A,B be compact non empty Subset of TOP-REAL n;
+ let f be continuous RealMap of [:TOP-REAL n, TOP-REAL n:];
+ let g being RealMap of TOP-REAL n such that
+A1: for p being Point of TOP-REAL n ex G being Subset of REAL st
+      G = { f.(p,q) where q is Point of TOP-REAL n : q in B } & g.p = inf G;
+   [:A,B:] is compact by BORSUK_3:27;
+   then
+A2:  f.:[:A,B:] is compact by Th2;
+   then f.:[:A,B:] is bounded by RCOMP_1:28;
+   then
+A3: f.:[:A,B:] is bounded_below by SEQ_4:def 3;
+A4: g.:A c= f.:[:A,B:]
+    proof let u be set;
+     assume u in g.:A;
+      then consider p being Point of TOP-REAL n such that
+A5:      p in A and
+A6:      u = g.p by FUNCT_2:116;
+      consider q being Point of TOP-REAL n such that
+A7:       q in B by SUBSET_1:10;
+      consider G being Subset of REAL such that
+A8:      G = { f.(p,q1) where q1 is Point of TOP-REAL n : q1 in B } and
+A9:      u = inf G by A1,A6;
+A10:      f.(p,q) in G by A7,A8;
+      G c= f.:[:A,B:]
+       proof let u be set;
+        assume u in G;
+         then consider q1 being Point of TOP-REAL n such that
+A11:         u = f.(p,q1) and
+A12:         q1 in B by A8;
+A13:         u = f. [p,q1] by A11,BINOP_1:def 1;
+         [p,q1] in [:A,B:] by A5,A12,ZFMISC_1:106;
+        hence u in f.:[:A,B:] by A13,FUNCT_2:43;
+       end;
+     hence u in f.:[:A,B:] by A2,A9,A10,Th3;
+    end;
+A14: g.:A is bounded_below by A3,A4,RCOMP_1:3;
+A15: for r st r in f.:[:A,B:] holds inf(g.:A)<=r
+   proof let r;
+    assume r in f.:[:A,B:];
+     then consider pq being Point of [:TOP-REAL n, TOP-REAL n:] such that
+A16:   pq in [:A,B:] and
+A17:   r = f.pq by FUNCT_2:116;
+     pq in the carrier of [:TOP-REAL n, TOP-REAL n:];
+     then pq in [:the carrier of TOP-REAL n, the carrier of TOP-REAL n:]
+                by BORSUK_1:def 5;
+     then consider p,q being set such that
+A18:   p in the carrier of TOP-REAL n & q in the carrier of TOP-REAL n and
+A19:   pq = [p,q] by ZFMISC_1:103;
+A20:   q in B by A16,A19,ZFMISC_1:106;
+     reconsider p,q as Point of TOP-REAL n by A18;
+     consider G being Subset of REAL such that
+A21:   G = { f.(p,q1) where q1 is Point of TOP-REAL n : q1 in B } and
+A22:   g.p = inf G by A1;
+A23:   p in A by A16,A19,ZFMISC_1:106;
+     G c= f.:[:A,B:]
+      proof let u be set;
+       assume u in G;
+        then consider q1 being Point of TOP-REAL n such that
+A24:      u = f.(p,q1) and
+A25:      q1 in B by A21;
+A26:      u = f. [p,q1] by A24,BINOP_1:def 1;
+        [p,q1] in [:A,B:] by A23,A25,ZFMISC_1:106;
+       hence u in f.:[:A,B:] by A26,FUNCT_2:43;
+      end;
+     then
+A27:   G is bounded_below by A3,RCOMP_1:3;
+     r = f.(p,q) by A17,A19,BINOP_1:def 1;
+     then r in G by A20,A21;
+     then
+A28:   g.p <= r by A22,A27,SEQ_4:def 5;
+     g.p in g.:A by A23,FUNCT_2:43;
+     then inf(g.:A)<=g.p by A14,SEQ_4:def 5;
+    hence inf(g.:A)<=r by A28,AXIOMS:22;
+   end;
+  for s st 0<s ex r st r in f.:[:A,B:] & r<inf(g.:A)+s
+   proof let s; assume 0<s;
+     then consider r such that
+A29:   r in g.:A and
+A30:   r<inf(g.:A)+s by A14,SEQ_4:def 5;
+    take r;
+    thus r in f.:[:A,B:] by A4,A29;
+    thus r<inf(g.:A)+s by A30;
+   end;
+ hence inf(f.:[:A,B:]) = inf(g.:A) by A3,A15,SEQ_4:def 5;
+end;
+
+theorem
+ for A,B being compact non empty Subset of TOP-REAL n,
+     f being continuous RealMap of [:TOP-REAL n, TOP-REAL n:],
+     g being RealMap of TOP-REAL n
+      st for q being Point of TOP-REAL n
+          ex G being Subset of REAL
+           st G = { f.(p,q) where p is Point of TOP-REAL n : p in A } &
+              g.q = inf G
+   holds inf(f.:[:A,B:]) = inf(g.:B )
+proof let A,B be compact non empty Subset of TOP-REAL n;
+ let f be continuous RealMap of [:TOP-REAL n, TOP-REAL n:];
+ let g being RealMap of TOP-REAL n such that
+A1: for q being Point of TOP-REAL n ex G being Subset of REAL st
+      G = { f.(p,q) where p is Point of TOP-REAL n : p in A } & g.q = inf G;
+   [:A,B:] is compact by BORSUK_3:27;
+   then
+A2:  f.:[:A,B:] is compact by Th2;
+   then f.:[:A,B:] is bounded by RCOMP_1:28;
+   then
+A3: f.:[:A,B:] is bounded_below by SEQ_4:def 3;
+A4: g.:B c= f.:[:A,B:]
+    proof let u be set;
+     assume u in g.:B;
+      then consider q being Point of TOP-REAL n such that
+A5:      q in B and
+A6:      u = g.q by FUNCT_2:116;
+      consider p being Point of TOP-REAL n such that
+A7:       p in A by SUBSET_1:10;
+      consider G being Subset of REAL such that
+A8:      G = { f.(p1,q) where p1 is Point of TOP-REAL n : p1 in A } and
+A9:      u = inf G by A1,A6;
+A10:      f.(p,q) in G by A7,A8;
+      G c= f.:[:A,B:]
+       proof let u be set;
+        assume u in G;
+         then consider p1 being Point of TOP-REAL n such that
+A11:         u = f.(p1,q) and
+A12:         p1 in A by A8;
+A13:         u = f. [p1,q] by A11,BINOP_1:def 1;
+         [p1,q] in [:A,B:] by A5,A12,ZFMISC_1:106;
+        hence u in f.:[:A,B:] by A13,FUNCT_2:43;
+       end;
+     hence u in f.:[:A,B:] by A2,A9,A10,Th3;
+    end;
+A14: g.:B is bounded_below by A3,A4,RCOMP_1:3;
+A15: for r st r in f.:[:A,B:] holds inf(g.:B)<=r
+   proof let r;
+    assume r in f.:[:A,B:];
+     then consider pq being Point of [:TOP-REAL n, TOP-REAL n:] such that
+A16:   pq in [:A,B:] and
+A17:   r = f.pq by FUNCT_2:116;
+     pq in the carrier of [:TOP-REAL n, TOP-REAL n:];
+     then pq in [:the carrier of TOP-REAL n, the carrier of TOP-REAL n:]
+                by BORSUK_1:def 5;
+     then consider p,q being set such that
+A18:   p in the carrier of TOP-REAL n & q in the carrier of TOP-REAL n and
+A19:   pq = [p,q] by ZFMISC_1:103;
+A20:   p in A by A16,A19,ZFMISC_1:106;
+     reconsider p,q as Point of TOP-REAL n by A18;
+     consider G being Subset of REAL such that
+A21:   G = { f.(p1,q) where p1 is Point of TOP-REAL n : p1 in A } and
+A22:   g.q = inf G by A1;
+A23:   q in B by A16,A19,ZFMISC_1:106;
+     G c= f.:[:A,B:]
+      proof let u be set;
+       assume u in G;
+        then consider p1 being Point of TOP-REAL n such that
+A24:      u = f.(p1,q) and
+A25:      p1 in A by A21;
+A26:      u = f. [p1,q] by A24,BINOP_1:def 1;
+        [p1,q] in [:A,B:] by A23,A25,ZFMISC_1:106;
+       hence u in f.:[:A,B:] by A26,FUNCT_2:43;
+      end;
+     then
+A27:   G is bounded_below by A3,RCOMP_1:3;
+     r = f.(p,q) by A17,A19,BINOP_1:def 1;
+     then r in G by A20,A21;
+     then
+A28:   g.q <= r by A22,A27,SEQ_4:def 5;
+     g.q in g.:B by A23,FUNCT_2:43;
+     then inf(g.:B)<=g.q by A14,SEQ_4:def 5;
+    hence inf(g.:B)<=r by A28,AXIOMS:22;
+   end;
+  for s st 0<s ex r st r in f.:[:A,B:] & r<inf(g.:B)+s
+   proof let s; assume 0<s;
+     then consider r such that
+A29:   r in g.:B and
+A30:   r<inf(g.:B)+s by A14,SEQ_4:def 5;
+    take r;
+    thus r in f.:[:A,B:] by A4,A29;
+    thus r<inf(g.:B)+s by A30;
+   end;
+ hence inf(f.:[:A,B:]) = inf(g.:B) by A3,A15,SEQ_4:def 5;
+end;
+
+theorem Th6:
+ q in Lower_Arc C & q <> W-min C implies LE E-max C, q, C
+proof
+  E-max C in Upper_Arc C by JORDAN7:1;
+ hence thesis by JORDAN6:def 10;
+end;
+
+theorem Th7:
+ q in Upper_Arc C implies LE q, E-max C, C
+proof
+  E-max C in Lower_Arc C & E-max C <> W-min C by JORDAN7:1,TOPREAL5:25;
+ hence thesis by JORDAN6:def 10;
+end;
+
+begin :: The Euclidean distance
+
+definition let n;
+A1: [:the carrier of TOP-REAL n, the carrier of TOP-REAL n:]
+     =  the carrier of [:TOP-REAL n, TOP-REAL n:] by BORSUK_1:def 5;
+ func Eucl_dist n -> RealMap of [:TOP-REAL n, TOP-REAL n:] means
+:Def1:  for p,q being Point of TOP-REAL n holds it.(p,q) =|.p - q.|;
+ existence
+  proof
+  deffunc F(Point of TOP-REAL n,Point of TOP-REAL n) = |.$1 - $2.|;
+A2: for p,q being Point of TOP-REAL n holds F(p,q) in REAL;
+  consider f
+   being Function of [:the carrier of TOP-REAL n, the carrier of TOP-REAL n:],
+                     REAL
+   such that
+A3:   for p,q being Point of TOP-REAL n holds f. [p,q] = F(p,q)
+       from Kappa2D(A2);
+  reconsider f as RealMap of [:TOP-REAL n, TOP-REAL n:] by A1;
+   take f;
+   let p,q being Point of TOP-REAL n;
+   thus f.(p,q) = f. [p,q] by BINOP_1:def 1 .=|.p - q.| by A3;
+  end;
+ uniqueness
+  proof let IT1,IT2 be RealMap of [:TOP-REAL n, TOP-REAL n:] such that
+A4: for p,q being Point of TOP-REAL n holds IT1.(p,q) =|.p - q.| and
+A5: for p,q being Point of TOP-REAL n holds IT2.(p,q) =|.p - q.|;
+    now let p,q be Point of TOP-REAL n;
+     thus IT1. [p,q] = IT1.(p,q) by BINOP_1:def 1
+             .= |.p - q.| by A4
+             .= IT2.(p,q) by A5
+             .= IT2. [p,q] by BINOP_1:def 1;
+    end;
+   hence thesis by A1,FUNCT_2:120;
+  end;
+end;
+
+definition let T be non empty TopSpace, f be RealMap of T;
+ redefine attr f is continuous means
+  for p being Point of T, N being Neighbourhood of f.p
+   ex V being a_neighborhood of p st f.:V c= N;
+ compatibility
+  proof
+   thus f is continuous implies
+    for p being Point of T, N being Neighbourhood of f.p
+     ex V being a_neighborhood of p st f.:V c= N
+    proof assume
+A1:   f is continuous;
+     let p be Point of T, N be Neighbourhood of f.p;
+A2:    f"(N`) = (f"N)` by JCT_MISC:5;
+      N` is closed by RCOMP_1:def 5;
+      then f"(N`) is closed by A1,PSCOMP_1:def 25;
+      then
+A3:     f"N is open by A2,TOPS_1:30;
+      f.p in N by RCOMP_1:37;
+      then p in f"N by FUNCT_2:46;
+      then reconsider V = f"N as a_neighborhood of p by A3,CONNSP_2:5;
+     take V;
+     thus f.:V c= N by FUNCT_1:145;
+    end;
+   assume
+A4:  for p being Point of T, N being Neighbourhood of f.p
+      ex V being a_neighborhood of p st f.:V c= N;
+   let Y be Subset of REAL;
+   assume Y is closed;
+    then Y`` is closed;
+    then
+A5:   Y` is open by RCOMP_1:def 5;
+    for p being Point of T
+     st p in (f"Y)` ex A being Subset of T st
+      A is a_neighborhood of p & A c= (f"Y)`
+     proof let p be Point of T;
+      assume p in (f"Y)`;
+       then p in (f"Y)`;
+       then p in f"Y` by JCT_MISC:5;
+       then f.p in Y` by FUNCT_2:46;
+       then consider N being Neighbourhood of f.p such that
+A6:     N c= Y` by A5,RCOMP_1:39;
+       consider V being a_neighborhood of p such that
+A7:     f.:V c= N by A4;
+      take V;
+      thus V is a_neighborhood of p;
+       f.:V c= Y` by A6,A7,XBOOLE_1:1;
+       then
+A8:      f"(f.:V) c= f"Y` by RELAT_1:178;
+       V c= f"(f.:V) by FUNCT_2:50;
+       then V c= f"Y` by A8,XBOOLE_1:1;
+       then V c= (f"Y)` by JCT_MISC:5;
+      hence V c= (f"Y)`;
+     end;
+    then (f"Y)` is open by CONNSP_2:9;
+    then (f"Y)`` is closed by TOPS_1:30;
+   hence f"Y is closed;
+  end;
+end;
+
+definition let n;
+ cluster Eucl_dist n -> continuous;
+ coherence
+  proof set f = Eucl_dist n;
+   let p being Point of [:TOP-REAL n, TOP-REAL n:],
+             N being Neighbourhood of f.p;
+     consider r such that
+A1:   0<r and
+A2:   N = ].f.p-r,f.p+r.[ by RCOMP_1:def 7;
+     p in the carrier of [:TOP-REAL n, TOP-REAL n:];
+     then p in [:the carrier of TOP-REAL n, the carrier of TOP-REAL n:]
+          by BORSUK_1:def 5;
+     then consider p1,p2 being set such that
+A3:   p1 in the carrier of TOP-REAL n & p2 in the carrier of TOP-REAL n and
+A4:   p = [p1,p2] by ZFMISC_1:103;
+     reconsider p1,p2 as Point of TOP-REAL n by A3;
+A5:  the carrier of TOP-REAL n = the carrier of Euclid n by TOPREAL3:13;
+     then reconsider p1'=p1, p2'=p2 as Element of Euclid n;
+A6:  r/2 > 0 by A1,SEQ_2:3;
+A7:  TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+     then
+A8:  Ball(p1',r/2) is a_neighborhood of p1 by A6,HAUSDORF:6;
+     Ball(p2',r/2) is a_neighborhood of p2 by A6,A7,HAUSDORF:6;
+     then reconsider V = [:Ball(p1',r/2),Ball(p2',r/2):]
+        as a_neighborhood of p by A4,A8,BORSUK_1:48;
+    take V;
+    let s be set;
+    assume
+A9:   s in f.:V;
+     then reconsider s as Real;
+     consider q being Point of [:TOP-REAL n, TOP-REAL n:] such that
+A10:   q in V and
+A11:   f.q = s by A9,FUNCT_2:116;
+     q in the carrier of [:TOP-REAL n, TOP-REAL n:];
+     then q in [:the carrier of TOP-REAL n, the carrier of TOP-REAL n:]
+          by BORSUK_1:def 5;
+     then consider q1,q2 being set such that
+A12:   q1 in the carrier of TOP-REAL n & q2 in the carrier of TOP-REAL n and
+A13:   q = [q1,q2] by ZFMISC_1:103;
+     reconsider q1,q2 as Point of TOP-REAL n by A12;
+     reconsider q1'=q1, q2'=q2 as Element of Euclid n by A5;
+     reconsider q1''=q1', q2''=q2', p1''=p1', p2''=p2' as Element of REAL n
+               by EUCLID:25;
+     q1' in Ball(p1',r/2) & q2' in Ball(p2',r/2) by A10,A13,ZFMISC_1:106;
+     then dist(q1',p1') < r/2 & dist(q2',p2') < r/2 by METRIC_1:12;
+     then
+A14:   |.q1''-p1''.| < r/2 & |.q2''-p2''.| < r/2 by SPPOL_1:20;
+     q1''-p1'' = q1 - p1 & q2''-p2'' = q2 - p2 by EUCLID:def 13;
+     then |.q1-p1.| < r/2 & |.q2-p2.| < r/2 by A14,JGRAPH_1:def 5;
+     then |.q1-p1.|+|.q2-p2.| < r/2+r/2 by REAL_1:67;
+     then
+A15:   |.q1-p1.|+|.q2-p2.| < r by XCMPLX_1:66;
+A16:   for p,q being Point of TOP-REAL n holds f. [p,q] =|.p - q.|
+      proof let p,q be Point of TOP-REAL n;
+       thus f. [p,q] = f.(p,q) by BINOP_1:def 1.=|.p - q.| by Def1;
+      end;
+A17:  f.p = |.p1-p2.| by A4,A16;
+A18:  s = |.q1-q2.| by A11,A13,A16;
+A19:  q1-q2-(p1-p2) = q1-q2-p1+p2 by EUCLID:51
+           .= q1-(q2+p1)+p2 by EUCLID:50
+           .= q1-p1-q2+p2 by EUCLID:50
+           .= (q1-p1)-(q2-p2) by EUCLID:51;
+A20:  |.(q1-p1)-(q2-p2).| <= |.q1-p1.| + |.q2-p2.| by TOPRNS_1:31;
+A21:  s - f.p <= |.(q1-q2)-(p1-p2).| by A17,A18,TOPRNS_1:33;
+     f.p - s <= |.(p1-p2)-(q1-q2).| by A17,A18,TOPRNS_1:33;
+     then f.p - s <= |.(q1-q2)-(p1-p2).| by TOPRNS_1:28;
+     then f.p - s <= |.q1-p1.| + |.q2-p2.| by A19,A20,AXIOMS:22;
+     then f.p - s < r by A15,AXIOMS:22;
+     then
+A22:  f.p-r < s by REAL_2:165;
+     s - f.p <= |.q1-p1.| + |.q2-p2.| by A19,A20,A21,AXIOMS:22;
+     then s - f.p < r by A15,AXIOMS:22;
+     then s < f.p+r by REAL_1:84;
+    hence thesis by A2,A22,JORDAN6:45;
+  end;
+end;
+
+begin :: On the distance between subsets of a Euclidean space
+
+theorem Th8:
+ :: JORDAN1K:39, JGRAPH_1:55
+ for A,B being non empty compact Subset of TOP-REAL n st A misses B
+  holds dist_min(A,B) > 0
+proof let A,B be non empty compact Subset of TOP-REAL n such that
+A1: A misses B;
+  consider A',B' being Subset of TopSpaceMetr Euclid n such that
+A2: A = A' & B = B' and
+A3: dist_min(A,B) = min_dist_min(A',B') by JORDAN1K:def 1;
+  TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8;
+ hence dist_min(A,B) > 0 by A1,A2,A3,JGRAPH_1:55;
+end;
+
+begin :: On the segments
+
+theorem Th9:
+ LE p,q,C & LE q, E-max C, C & p <> q implies
+  Segment(p,q,C) = Segment(Upper_Arc C,W-min C,E-max C,p,q)
+proof assume that
+A1: LE p,q,C and
+A2: LE q, E-max C, C and
+A3: p <> q;
+A4: Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:65;
+    LE p, E-max C, C by A1,A2,JORDAN6:73;
+    then
+A5: p in Upper_Arc C by JORDAN17:3;
+A6: q in Upper_Arc C by A2,JORDAN17:3;
+A7: Upper_Arc C c= C by JORDAN1A:16;
+A8: now assume q = W-min C;
+     then LE q,p,C by A5,A7,JORDAN7:3;
+    hence contradiction by A1,A3,JORDAN6:72;
+   end;
+   defpred P[Point of TOP-REAL 2] means LE p,$1,C & LE $1,q,C;
+   defpred Q[Point of TOP-REAL 2] means
+               LE p,$1,Upper_Arc C,W-min C,E-max C &
+               LE $1,q,Upper_Arc C,W-min C,E-max C;
+A9:  P[p1] iff Q[p1]
+     proof
+      hereby
+       assume
+A10:      LE p,p1,C & LE p1,q,C;
+       hereby per cases;
+        suppose p1 = E-max C;
+        hence LE p,p1,Upper_Arc C,W-min C,E-max C by A4,A5,JORDAN5C:10;
+        suppose p1 = W-min C;
+           then LE p1,p,C by A5,A7,JORDAN7:3;
+           then p = p1 by A10,JORDAN6:72;
+        hence LE p,p1,Upper_Arc C,W-min C,E-max C by A4,A5,JORDAN5C:9;
+        suppose that
+A11:        p1 <> E-max C and
+A12:        p1 <> W-min C;
+         now assume
+A13:          p1 in Lower_Arc C;
+           LE p1, E-max C, C by A2,A10,JORDAN6:73;
+           then p1 in Upper_Arc C by JORDAN17:3;
+           then p1 in Upper_Arc C /\ Lower_Arc C by A13,XBOOLE_0:def 3;
+           then p1 in {W-min C,E-max C} by JORDAN6:65;
+          hence contradiction by A11,A12,TARSKI:def 2;
+         end;
+        hence LE p,p1,Upper_Arc C,W-min C,E-max C by A10,JORDAN6:def 10;
+       end;
+       per cases;
+       suppose
+A14:       q = E-max C;
+         p1 in Upper_Arc C by A10,A14,JORDAN17:3;
+        hence LE p1,q,Upper_Arc C,W-min C,E-max C by A4,A14,JORDAN5C:10;
+       suppose
+A15:       q <> E-max C;
+        now assume q in Lower_Arc C;
+          then q in Upper_Arc C /\ Lower_Arc C by A6,XBOOLE_0:def 3;
+          then q in {W-min C,E-max C} by JORDAN6:65;
+         hence contradiction by A8,A15,TARSKI:def 2;
+        end;
+       hence LE p1,q,Upper_Arc C,W-min C,E-max C by A10,JORDAN6:def 10;
+      end;
+      assume that
+A16:    LE p,p1,Upper_Arc C,W-min C,E-max C and
+A17:    LE p1,q,Upper_Arc C,W-min C,E-max C;
+A18:     p1 in Upper_Arc C by A16,JORDAN5C:def 3;
+      hence LE p,p1,C by A5,A16,JORDAN6:def 10;
+      thus LE p1,q,C by A6,A17,A18,JORDAN6:def 10;
+     end;
+  deffunc F(set) = $1;
+  set X = {F(p1): P[p1]},
+      Y = {F(p1): Q[p1]};
+A19: X = Y from Fraenkel6'(A9);
+   Segment(p,q,C) = X by A8,JORDAN7:def 1;
+ hence Segment(p,q,C) = Segment(Upper_Arc C,W-min C,E-max C,p,q)
+          by A19,JORDAN6:29;
+end;
+
+theorem Th10:
+ LE E-max C, q, C implies
+  Segment(E-max C,q,C) = Segment(Lower_Arc C,E-max C,W-min C,E-max C,q)
+proof set p = E-max C;
+ assume
+A1: LE E-max C, q, C;
+A2: Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:65;
+A3: p in Lower_Arc C by JORDAN7:1;
+A4: q in Lower_Arc C by A1,JORDAN17:4;
+A5: Lower_Arc C c= C by JORDAN1A:16;
+A6: now assume
+A7:   q = W-min C;
+     p = q by A1,A7,JORDAN7:2;
+    hence contradiction by A7,TOPREAL5:25;
+   end;
+   defpred P[Point of TOP-REAL 2] means LE p,$1,C & LE $1,q,C;
+   defpred Q[Point of TOP-REAL 2] means
+               LE p,$1,Lower_Arc C,E-max C,W-min C &
+               LE $1,q,Lower_Arc C,E-max C, W-min C;
+A8:  P[p1] iff Q[p1]
+     proof
+      hereby
+       assume
+A9:      LE p,p1,C & LE p1,q,C;
+        then
+A10:       p1 in Lower_Arc C by JORDAN17:4;
+        hence LE p,p1,Lower_Arc C,E-max C,W-min C by A2,JORDAN5C:10;
+       per cases;
+       suppose
+A11:       p1 = E-max C;
+         q in Lower_Arc C by A9,A11,JORDAN17:4;
+        hence LE p1,q,Lower_Arc C,E-max C,W-min C by A2,A11,JORDAN5C:10;
+       suppose
+A12:       p1 <> E-max C;
+A13:     now assume
+A14:       p1 = W-min C;
+          then LE p1,p, C by A3,A5,JORDAN7:3;
+          then p1 = p by A9,JORDAN6:72;
+         hence contradiction  by A14,TOPREAL5:25;
+        end;
+        now assume p1 in Upper_Arc C;
+          then p1 in Upper_Arc C /\ Lower_Arc C by A10,XBOOLE_0:def 3;
+          then p1 in {W-min C,E-max C} by JORDAN6:65;
+         hence contradiction by A12,A13,TARSKI:def 2;
+        end;
+       hence LE p1,q,Lower_Arc C,E-max C,W-min C by A9,JORDAN6:def 10;
+      end;
+      assume that
+A15:    LE p,p1,Lower_Arc C,E-max C,W-min C and
+A16:    LE p1,q,Lower_Arc C,E-max C,W-min C;
+A17:     p1 in Lower_Arc C by A15,JORDAN5C:def 3;
+       p1 <> W-min C by A2,A6,A16,JORDAN6:70;
+      hence LE p,p1,C by A3,A15,A17,JORDAN6:def 10;
+      thus LE p1,q,C by A4,A6,A16,A17,JORDAN6:def 10;
+     end;
+  deffunc F(set) = $1;
+  set X = {F(p1): P[p1]},
+      Y = {F(p1): Q[p1]};
+A18: X = Y from Fraenkel6'(A8);
+   Segment(p,q,C) = X by A6,JORDAN7:def 1;
+ hence Segment(E-max C,q,C) = Segment(Lower_Arc C,E-max C,W-min C,E-max C,q)
+         by A18,JORDAN6:29;
+end;
+
+theorem Th11:
+ LE E-max C, q, C implies
+  Segment(q,W-min C,C) = Segment(Lower_Arc C,E-max C,W-min C,q,W-min C)
+proof set p = W-min C;
+ assume
+A1: LE E-max C, q, C;
+A2: Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:65;
+A3: p in Lower_Arc C by JORDAN7:1;
+A4: q in Lower_Arc C by A1,JORDAN17:4;
+A5: Lower_Arc C c= C by JORDAN1A:16;
+   defpred P[Point of TOP-REAL 2] means
+         LE q,$1,C or q in C & $1=W-min C;
+   defpred Q[Point of TOP-REAL 2] means
+               LE q,$1,Lower_Arc C,E-max C,W-min C &
+               LE $1,p,Lower_Arc C,E-max C, W-min C;
+A6:  P[p1] iff Q[p1]
+     proof
+      hereby
+       assume
+A7:      LE q,p1,C or q in C & p1=W-min C;
+       per cases by A7;
+       suppose that
+A8:     q = E-max C and
+A9:     LE q,p1,C;
+A10:      p1 in Lower_Arc C by A8,A9,JORDAN17:4;
+        hence LE q,p1,Lower_Arc C,E-max C,W-min C by A2,A8,JORDAN5C:10;
+        thus LE p1,p,Lower_Arc C,E-max C,W-min C by A2,A10,JORDAN5C:10;
+       suppose that
+A11:     q <> E-max C and
+A12:      LE q,p1,C;
+        LE E-max C, p1, C by A1,A12,JORDAN6:73;
+        then
+A13:      p1 in Lower_Arc C by JORDAN17:4;
+A14:     E-max C in C by SPRECT_1:16;
+A15:     now assume
+A16:        q = W-min C;
+          then LE q, E-max C, C by A14,JORDAN7:3;
+          then q = E-max C by A1,JORDAN6:72;
+         hence contradiction by A16,TOPREAL5:25;
+        end;
+         now assume q in Upper_Arc C;
+           then q in Upper_Arc C /\ Lower_Arc C by A4,XBOOLE_0:def 3;
+           then q in {E-max C, W-min C} by JORDAN6:def 9;
+          hence contradiction by A11,A15,TARSKI:def 2;
+         end;
+        hence LE q,p1,Lower_Arc C,E-max C,W-min C by A12,JORDAN6:def 10;
+        thus LE p1,p,Lower_Arc C,E-max C,W-min C by A2,A13,JORDAN5C:10;
+       suppose that q in C and
+A17:       p1 = W-min C;
+       thus LE q,p1,Lower_Arc C,E-max C,W-min C by A2,A4,A17,JORDAN5C:10;
+       thus LE p1,p,Lower_Arc C,E-max C,W-min C by A2,A3,A17,JORDAN5C:9;
+      end;
+      assume that
+A18:    LE q,p1,Lower_Arc C,E-max C,W-min C and
+       LE p1,p,Lower_Arc C,E-max C,W-min C;
+A19:     p1 in Lower_Arc C & q in Lower_Arc C by A18,JORDAN5C:def 3;
+      per cases;
+      suppose p1 <> W-min C;
+      hence thesis by A18,A19,JORDAN6:def 10;
+      suppose p1 = W-min C;
+      hence thesis by A4,A5;
+     end;
+  deffunc F(set) = $1;
+  set X = {F(p1): P[p1]},
+      Y = {F(p1): Q[p1]};
+A20: X = Y from Fraenkel6'(A6);
+   Segment(q,p,C) = X by JORDAN7:def 1;
+ hence Segment(q,W-min C,C) = Segment(Lower_Arc C,E-max C,W-min C,q,W-min C)
+         by A20,JORDAN6:29;
+end;
+
+theorem Th12:
+ LE p,q,C & LE E-max C, p, C implies
+  Segment(p,q,C) = Segment(Lower_Arc C,E-max C,W-min C,p,q)
+proof assume that
+A1: LE p,q,C and
+A2: LE E-max C, p, C;
+ per cases;
+ suppose p = E-max C;
+  hence thesis by A1,Th10;
+ suppose
+A3: p <> E-max C;
+A4: Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:65;
+    LE E-max C, q, C by A1,A2,JORDAN6:73;
+    then
+A5: q in Lower_Arc C by JORDAN17:4;
+A6: p in Lower_Arc C by A2,JORDAN17:4;
+A7: Lower_Arc C c= C by JORDAN1A:16;
+A8: now assume
+A9:   p = W-min C;
+     then LE p, E-max C, C by JORDAN17:2;
+     then p = E-max C by A2,JORDAN6:72;
+    hence contradiction by A9,TOPREAL5:25;
+   end;
+A10: now assume
+A11:   q = W-min C;
+     then LE q,p,C by A6,A7,JORDAN7:3;
+    hence contradiction by A1,A8,A11,JORDAN6:72;
+   end;
+   defpred P[Point of TOP-REAL 2] means
+         LE p,$1,C & LE $1,q,C;
+   defpred Q[Point of TOP-REAL 2] means
+         LE p,$1,Lower_Arc C,E-max C,W-min C &
+         LE $1,q,Lower_Arc C,E-max C,W-min C;
+A12:  P[p1] iff Q[p1]
+     proof
+      hereby
+       assume
+A13:      LE p,p1,C & LE p1,q,C;
+A14:       now assume
+A15:         p1 = W-min C;
+           then LE p1,p,C by A6,A7,JORDAN7:3;
+          hence contradiction by A8,A13,A15,JORDAN6:72;
+         end;
+A16:      now assume
+A17:          p in Upper_Arc C;
+           p in Lower_Arc C by A2,JORDAN17:4;
+           then p in Lower_Arc C /\ Upper_Arc C by A17,XBOOLE_0:def 3;
+           then p in {W-min C,E-max C} by JORDAN6:65;
+          hence contradiction by A3,A8,TARSKI:def 2;
+         end;
+        hence LE p,p1,Lower_Arc C,E-max C,W-min C by A13,JORDAN6:def 10;
+A18:     p1 in Lower_Arc C by A13,A16,JORDAN6:def 10;
+       per cases;
+       suppose q = E-max C;
+        hence LE p1,q,Lower_Arc C,E-max C,W-min C by A1,A2,A3,JORDAN6:72;
+       suppose p1 = E-max C;
+        hence LE p1,q,Lower_Arc C,E-max C,W-min C by A4,A5,JORDAN5C:10;
+       suppose that
+A19:      p1 <> E-max C;
+        now assume p1 in Upper_Arc C;
+          then p1 in Lower_Arc C /\ Upper_Arc C by A18,XBOOLE_0:def 3;
+          then p1 in {W-min C,E-max C} by JORDAN6:65;
+         hence contradiction by A14,A19,TARSKI:def 2;
+        end;
+       hence LE p1,q,Lower_Arc C,E-max C,W-min C by A13,JORDAN6:def 10;
+      end;
+      assume that
+A20:    LE p,p1,Lower_Arc C,E-max C,W-min C and
+A21:    LE p1,q,Lower_Arc C,E-max C,W-min C;
+A22:     p1 <> W-min C by A4,A10,A21,JORDAN6:70;
+A23:     p1 in Lower_Arc C by A20,JORDAN5C:def 3;
+      hence LE p,p1,C by A6,A20,A22,JORDAN6:def 10;
+      thus LE p1,q,C by A5,A10,A21,A23,JORDAN6:def 10;
+     end;
+  deffunc F(set) = $1;
+  set X = {F(p1): P[p1]},
+      Y = {F(p1): Q[p1]};
+A24: X = Y from Fraenkel6'(A12);
+   Segment(p,q,C) = X by A10,JORDAN7:def 1;
+ hence Segment(p,q,C) = Segment(Lower_Arc C,E-max C,W-min C,p,q)
+         by A24,JORDAN6:29;
+end;
+
+theorem Th13:
+ LE p,E-max C,C & LE E-max C, q, C implies
+  Segment(p,q,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,q)
+proof assume that
+A1: LE p,E-max C,C and
+A2: LE E-max C, q, C;
+A3: p in Upper_Arc C by A1,JORDAN17:3;
+A4: q in Lower_Arc C by A2,JORDAN17:4;
+A5: now assume q = W-min C;
+     then W-min C = E-max C by A2,JORDAN7:2;
+    hence contradiction by TOPREAL5:25;
+   end;
+A6: Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:65;
+A7: Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:65;
+   defpred P[Point of TOP-REAL 2] means
+         LE p,$1,C & LE $1,q,C;
+   defpred Q1[Point of TOP-REAL 2] means
+         LE p,$1,Upper_Arc C,W-min C,E-max C;
+   defpred Q2[Point of TOP-REAL 2] means
+         LE $1,q,Lower_Arc C,E-max C,W-min C;
+   defpred Q[Point of TOP-REAL 2] means Q1[$1] or Q2[$1];
+A8:  P[p1] iff Q[p1]
+     proof
+      thus LE p,p1,C & LE p1,q,C implies LE p,p1,Upper_Arc C,W-min C,E-max C or
+               LE p1,q,Lower_Arc C,E-max C,W-min C
+      proof
+       assume
+A9:      LE p,p1,C & LE p1,q,C;
+A10:    now assume p1 in Lower_Arc C & p1 in Upper_Arc C;
+         then p1 in Lower_Arc C /\ Upper_Arc C by XBOOLE_0:def 3;
+         then p1 in {W-min C,E-max C} by JORDAN6:def 9;
+        hence p1 = W-min C or p1 = E-max C by TARSKI:def 2;
+       end;
+       per cases by A10;
+       suppose
+A11:     p1 = W-min C;
+         then p = W-min C by A9,JORDAN7:2;
+        hence thesis by A3,A7,A11,JORDAN5C:9;
+       suppose p1 = E-max C;
+        hence thesis by A4,A6,JORDAN5C:10;
+       suppose not p1 in Lower_Arc C;
+       hence thesis by A9,JORDAN6:def 10;
+       suppose not p1 in Upper_Arc C;
+       hence thesis by A9,JORDAN6:def 10;
+      end;
+      assume that
+A12:    LE p,p1,Upper_Arc C,W-min C,E-max C or
+       LE p1,q,Lower_Arc C,E-max C,W-min C;
+      per cases by A12;
+      suppose
+A13:    LE p,p1,Upper_Arc C,W-min C,E-max C;
+       then
+A14:     p1 in Upper_Arc C by JORDAN5C:def 3;
+      hence LE p,p1,C by A3,A13,JORDAN6:def 10;
+      thus LE p1,q,C by A4,A5,A14,JORDAN6:def 10;
+      suppose that
+A15:   LE p1,q,Lower_Arc C,E-max C,W-min C and
+A16:   p1 <> W-min C;
+A17:      p1 in Lower_Arc C by A15,JORDAN5C:def 3;
+      hence LE p,p1,C by A3,A16,JORDAN6:def 10;
+      thus LE p1,q,C by A4,A5,A15,A17,JORDAN6:def 10;
+      suppose LE p1,q,Lower_Arc C,E-max C,W-min C & p1 = W-min C;
+      hence thesis by A5,A6,JORDAN6:70;
+     end;
+  set Y1 = {p1: Q1[p1]},
+      Y2 = {p1: Q2[p1]};
+  deffunc F(set) = $1;
+  set X = {F(p1): P[p1]},
+      Y = {F(p1): Q[p1]},
+      Y' = {p1: Q1[p1] or Q2[p1]};
+A18: X = Y from Fraenkel6'(A8);
+A19: Segment(p,q,C) = X by A5,JORDAN7:def 1;
+A20: L_Segment(Lower_Arc C,E-max C,W-min C,q) = Y2 by JORDAN6:def 3;
+  Y' = Y1 \/ Y2 from Fraenkel_Alt;
+ hence Segment(p,q,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,q) by A18,A19,A20,JORDAN6:def 4;
+end;
+
+theorem Th14:
+ LE p,E-max C,C implies
+  Segment(p,W-min C,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,W-min C)
+proof set q = W-min C;
+ assume that
+A1: LE p,E-max C,C;
+A2: p in Upper_Arc C by A1,JORDAN17:3;
+A3: q in Lower_Arc C by JORDAN7:1;
+A4: Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:65;
+   defpred P[Point of TOP-REAL 2] means
+         LE p,$1,C or p in C & $1 = W-min C;
+   defpred Q1[Point of TOP-REAL 2] means
+         LE p,$1,Upper_Arc C,W-min C,E-max C;
+   defpred Q2[Point of TOP-REAL 2] means
+         LE $1,q,Lower_Arc C,E-max C,W-min C;
+   defpred Q[Point of TOP-REAL 2] means Q1[$1] or Q2[$1];
+A5:  P[p1] iff Q[p1]
+     proof
+      thus LE p,p1,C or p in C & p1=W-min C implies
+             LE p,p1,Upper_Arc C,W-min C,E-max C or
+             LE p1,q,Lower_Arc C,E-max C,W-min C
+      proof
+       assume
+A6:      LE p,p1,C or p in C & p1=W-min C;
+A7:    now assume p1 in Lower_Arc C & p1 in Upper_Arc C;
+         then p1 in Lower_Arc C /\ Upper_Arc C by XBOOLE_0:def 3;
+         then p1 in {W-min C,E-max C} by JORDAN6:def 9;
+        hence p1 = W-min C or p1 = E-max C by TARSKI:def 2;
+       end;
+       per cases by A7;
+       suppose p1 = W-min C;
+        hence thesis by A3,A4,JORDAN5C:9;
+       suppose p1 = E-max C;
+        hence thesis by A3,A4,JORDAN5C:10;
+       suppose not p1 in Lower_Arc C & p1 <> W-min C;
+       hence thesis by A6,JORDAN6:def 10;
+       suppose that
+A8:       not p1 in Upper_Arc C and
+A9:      p1 <> W-min C;
+A10:      p1 in C by A6,A9,JORDAN7:5;
+        C = Lower_Arc C \/ Upper_Arc C by JORDAN6:def 9;
+        then p1 in Lower_Arc C by A8,A10,XBOOLE_0:def 2;
+       hence thesis by A4,JORDAN5C:10;
+      end;
+      assume that
+A11:    LE p,p1,Upper_Arc C,W-min C,E-max C or
+       LE p1,q,Lower_Arc C,E-max C,W-min C;
+A12:    Upper_Arc C c= C by JORDAN1A:16;
+      per cases by A11;
+      suppose
+A13:    LE p,p1,Upper_Arc C,W-min C,E-max C;
+       then p1 in Upper_Arc C by JORDAN5C:def 3;
+       hence thesis by A2,A13,JORDAN6:def 10;
+      suppose that
+A14:   LE p1,q,Lower_Arc C,E-max C,W-min C;
+A15:      p1 in Lower_Arc C by A14,JORDAN5C:def 3;
+       now per cases;
+        suppose p1 = W-min C;
+        hence thesis by A2,A12;
+        suppose p1 <> W-min C;
+        hence thesis by A2,A15,JORDAN6:def 10;
+       end;
+       hence thesis;
+     end;
+  set Y1 = {p1: Q1[p1]},
+      Y2 = {p1: Q2[p1]};
+  deffunc F(set) = $1;
+  set X = {F(p1): P[p1]},
+      Y = {F(p1): Q[p1]},
+      Y' = {p1: Q1[p1] or Q2[p1]};
+A16: X = Y from Fraenkel6'(A5);
+A17: Segment(p,q,C) = X by JORDAN7:def 1;
+A18: L_Segment(Lower_Arc C,E-max C,W-min C,q) = Y2 by JORDAN6:def 3;
+  Y' = Y1 \/ Y2 from Fraenkel_Alt;
+ hence Segment(p,q,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,q) by A16,A17,A18,JORDAN6:def 4;
+end;
+
+theorem Th15:
+ R_Segment(Upper_Arc C,W-min C,E-max C,p) =
+  Segment(Upper_Arc C,W-min C,E-max C,p,E-max C)
+ proof
+   Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:65;
+   then
+A1:  L_Segment(Upper_Arc C,W-min C,E-max C,E-max C) = Upper_Arc C
+                              by JORDAN6:25;
+A2:  R_Segment(Upper_Arc C,W-min C,E-max C,p) c= Upper_Arc C by JORDAN6:21;
+  thus Segment(Upper_Arc C,W-min C,E-max C,p,E-max C) =
+   R_Segment(Upper_Arc C,W-min C,E-max C,p) /\ Upper_Arc C by A1,JORDAN6:def 5
+   .= R_Segment(Upper_Arc C,W-min C,E-max C,p) by A2,XBOOLE_1:28;
+ end;
+
+theorem Th16:
+ L_Segment(Lower_Arc C,E-max C,W-min C,p) =
+  Segment(Lower_Arc C,E-max C,W-min C,E-max C,p)
+ proof
+   Lower_Arc C is_an_arc_of E-max C,W-min C by JORDAN6:65;
+   then
+A1:  R_Segment(Lower_Arc C,E-max C,W-min C,E-max C) = Lower_Arc C
+                              by JORDAN6:27;
+A2: L_Segment(Lower_Arc C,E-max C,W-min C,p) c= Lower_Arc C by JORDAN6:20;
+  thus Segment(Lower_Arc C,E-max C,W-min C,E-max C,p) =
+   Lower_Arc C /\ L_Segment(Lower_Arc C,E-max C,W-min C,p) by A1,JORDAN6:def 5
+   .= L_Segment(Lower_Arc C,E-max C,W-min C,p) by A2,XBOOLE_1:28;
+ end;
+
+theorem Th17:
+for p being Point of TOP-REAL 2 st p in C & p <> W-min C
+ holds Segment(p,W-min C,C) is_an_arc_of p,W-min C
+proof set q = W-min C;
+ let p be Point of TOP-REAL 2 such that
+A1: p in C and
+A2: p <> W-min C;
+A3:  E-max C in C by SPRECT_1:16;
+A4: Upper_Arc C is_an_arc_of W-min C, E-max C by JORDAN6:65;
+A5: Lower_Arc C is_an_arc_of E-max C, W-min C by JORDAN6:65;
+A6: q <> E-max C by TOPREAL5:25;
+ per cases by A1,A3,JORDAN16:11;
+ suppose that
+A7: p <> E-max C and
+A8: LE p, E-max C, C;
+A9: now assume
+     W-min C in R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     /\  L_Segment(Lower_Arc C,E-max C,W-min C,q);
+    then W-min C in R_Segment(Upper_Arc C,W-min C,E-max C,p) by XBOOLE_0:def 3;
+   hence contradiction by A2,A4,JORDAN18:17;
+  end;
+   p in Upper_Arc C by A8,JORDAN17:3;
+   then
+A10: LE p,E-max C,Upper_Arc C,W-min C,E-max C by A4,JORDAN5C:10;
+A11: R_Segment(Upper_Arc C,W-min C,E-max C,p) =
+      Segment(Upper_Arc C,W-min C,E-max C,p,E-max C) by Th15;
+   then
+A12: E-max C in R_Segment(Upper_Arc C,W-min C,E-max C,p)
+                        by A4,A10,JORDAN16:9;
+   q in Lower_Arc C by JORDAN7:1;
+   then
+A13: LE E-max C,q,Lower_Arc C,E-max C,W-min C by A5,JORDAN5C:10;
+A14: L_Segment(Lower_Arc C,E-max C,W-min C,q) =
+    Segment(Lower_Arc C,E-max C,W-min C,E-max C,q) by Th16;
+    then E-max C in L_Segment(Lower_Arc C,E-max C,W-min C,q)
+                        by A5,A13,JORDAN16:9;
+     then
+A15: E-max C in R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     /\  L_Segment(Lower_Arc C,E-max C,W-min C,q) by A12,XBOOLE_0:def 3;
+A16: R_Segment(Upper_Arc C,W-min C,E-max C,p) c= Upper_Arc C by JORDAN6:21;
+A17: L_Segment(Lower_Arc C,E-max C,W-min C,q) c= Lower_Arc C by JORDAN6:20;
+  Upper_Arc C /\ Lower_Arc C = {W-min C, E-max C} by JORDAN6:def 9;
+  then
+  R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     /\  L_Segment(Lower_Arc C,E-max C,W-min C,q) c= {W-min C, E-max C}
+                      by A16,A17,XBOOLE_1:27;
+  then
+A18: R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     /\  L_Segment(Lower_Arc C,E-max C,W-min C,q) = {E-max C}
+                            by A9,A15,TOPREAL8:1;
+A19: R_Segment(Upper_Arc C,W-min C,E-max C,p) is_an_arc_of p, E-max C
+              by A4,A7,A10,A11,JORDAN16:36;
+A20: L_Segment(Lower_Arc C,E-max C,W-min C,q) is_an_arc_of E-max C,q
+              by A5,A6,A13,A14,JORDAN16:36;
+  Segment(p,W-min C,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,W-min C) by A8,Th14;
+ hence Segment(p,q,C) is_an_arc_of p,q by A18,A19,A20,TOPREAL1:5;
+ suppose
+A21: p = E-max C;
+  then Segment(p,q,C) = Lower_Arc C by JORDAN7:4;
+  hence thesis by A21,JORDAN6:65;
+ suppose that
+    p <> E-max C and
+A22: LE E-max C,p, C;
+A23: Segment(p,q,C) = Segment(Lower_Arc C,E-max C,W-min C,p,q) by A22,Th11;
+  p in Lower_Arc C by A22,JORDAN17:4;
+  then LE p, q, Lower_Arc C, E-max C, W-min C by A5,JORDAN5C:10;
+ hence Segment(p,q,C) is_an_arc_of p,q by A2,A5,A23,JORDAN16:36;
+end;
+
+theorem Th18:
+for p,q being Point of TOP-REAL 2 st p<> q & LE p,q,C
+ holds Segment(p,q,C) is_an_arc_of p,q
+proof let p,q be Point of TOP-REAL 2 such that
+A1: p <> q and
+A2: LE p,q,C;
+A3:  E-max C in C by SPRECT_1:16;
+A4:  p in C by A2,JORDAN7:5;
+A5:  q in C by A2,JORDAN7:5;
+A6: Upper_Arc C is_an_arc_of W-min C, E-max C by JORDAN6:65;
+A7: Lower_Arc C is_an_arc_of E-max C, W-min C by JORDAN6:65;
+ per cases by A3,A4,A5,JORDAN16:11;
+ suppose q = W-min C;
+ hence thesis by A1,A4,Th17;
+ suppose that
+A8: LE q, E-max C, C and
+A9: not  LE E-max C, q, C and
+A10: q <> W-min C;
+A11: Segment(p,q,C) = Segment(Upper_Arc C,W-min C,E-max C,p,q) by A1,A2,A8,Th9;
+  not q in Lower_Arc C by A9,A10,Th6;
+  then LE p, q, Upper_Arc C, W-min C, E-max C by A2,JORDAN6:def 10;
+ hence Segment(p,q,C) is_an_arc_of p,q by A1,A6,A11,JORDAN16:36;
+ suppose that
+A12: p <> E-max C and
+A13: LE p, E-max C, C and
+A14: LE E-max C,q, C and
+A15: q <> E-max C;
+A16: now assume
+A17:  W-min C in R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     /\  L_Segment(Lower_Arc C,E-max C,W-min C,q);
+    then W-min C in R_Segment(Upper_Arc C,W-min C,E-max C,p) by XBOOLE_0:def 3;
+    then
+A18:  p = W-min C by A6,JORDAN18:17;
+    W-min C in L_Segment(Lower_Arc C,E-max C,W-min C,q) by A17,XBOOLE_0:def 3;
+   hence contradiction by A1,A7,A18,JORDAN18:16;
+  end;
+   p in Upper_Arc C by A13,JORDAN17:3;
+   then
+A19: LE p,E-max C,Upper_Arc C,W-min C,E-max C by A6,JORDAN5C:10;
+A20: R_Segment(Upper_Arc C,W-min C,E-max C,p) =
+      Segment(Upper_Arc C,W-min C,E-max C,p,E-max C) by Th15;
+   then
+A21: E-max C in R_Segment(Upper_Arc C,W-min C,E-max C,p)
+                        by A6,A19,JORDAN16:9;
+   q in Lower_Arc C by A14,JORDAN17:4;
+   then
+A22: LE E-max C,q,Lower_Arc C,E-max C,W-min C by A7,JORDAN5C:10;
+A23: L_Segment(Lower_Arc C,E-max C,W-min C,q) =
+    Segment(Lower_Arc C,E-max C,W-min C,E-max C,q) by Th16;
+    then E-max C in L_Segment(Lower_Arc C,E-max C,W-min C,q)
+                        by A7,A22,JORDAN16:9;
+     then
+A24: E-max C in R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     /\  L_Segment(Lower_Arc C,E-max C,W-min C,q) by A21,XBOOLE_0:def 3;
+A25: R_Segment(Upper_Arc C,W-min C,E-max C,p) c= Upper_Arc C by JORDAN6:21;
+A26: L_Segment(Lower_Arc C,E-max C,W-min C,q) c= Lower_Arc C by JORDAN6:20;
+  Upper_Arc C /\ Lower_Arc C = {W-min C, E-max C} by JORDAN6:def 9;
+  then
+  R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     /\  L_Segment(Lower_Arc C,E-max C,W-min C,q) c= {W-min C, E-max C}
+                      by A25,A26,XBOOLE_1:27;
+  then
+A27: R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     /\  L_Segment(Lower_Arc C,E-max C,W-min C,q) = {E-max C}
+                            by A16,A24,TOPREAL8:1;
+A28: R_Segment(Upper_Arc C,W-min C,E-max C,p) is_an_arc_of p, E-max C
+              by A6,A12,A19,A20,JORDAN16:36;
+A29: L_Segment(Lower_Arc C,E-max C,W-min C,q) is_an_arc_of E-max C,q
+              by A7,A15,A22,A23,JORDAN16:36;
+  Segment(p,q,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,q) by A13,A14,Th13;
+ hence Segment(p,q,C) is_an_arc_of p,q by A27,A28,A29,TOPREAL1:5;
+ suppose that
+A30: q = E-max C and
+A31: LE p, E-max C, C and
+A32: LE E-max C,q, C;
+   p in Upper_Arc C by A31,JORDAN17:3;
+   then
+A33: LE p,E-max C,Upper_Arc C,W-min C,E-max C by A6,JORDAN5C:10;
+A34: R_Segment(Upper_Arc C,W-min C,E-max C,p) =
+      Segment(Upper_Arc C,W-min C,E-max C,p,E-max C) by Th15;
+   then
+A35: E-max C in R_Segment(Upper_Arc C,W-min C,E-max C,p)
+                        by A6,A33,JORDAN16:9;
+A36: L_Segment(Lower_Arc C,E-max C,W-min C,q) = {E-max C} by A7,A30,JORDAN6:22;
+  Segment(p,q,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,q) by A31,A32,Th13
+     .= R_Segment(Upper_Arc C,W-min C,E-max C,p) by A35,A36,ZFMISC_1:46;
+ hence Segment(p,q,C) is_an_arc_of p,q by A1,A6,A30,A33,A34,JORDAN16:36;
+ suppose that
+A37: p = E-max C and
+A38: LE p, E-max C, C and
+A39: LE E-max C,q, C;
+   q in Lower_Arc C by A39,JORDAN17:4;
+   then
+A40: LE E-max C,q,Lower_Arc C,E-max C,W-min C by A7,JORDAN5C:10;
+A41: L_Segment(Lower_Arc C,E-max C,W-min C,q) =
+    Segment(Lower_Arc C,E-max C,W-min C,E-max C,q) by Th16;
+    then
+A42:  E-max C in L_Segment(Lower_Arc C,E-max C,W-min C,q)
+                        by A7,A40,JORDAN16:9;
+A43: R_Segment(Upper_Arc C,W-min C,E-max C,p) = {E-max C} by A6,A37,JORDAN6:26;
+  Segment(p,q,C) = R_Segment(Upper_Arc C,W-min C,E-max C,p)
+     \/  L_Segment(Lower_Arc C,E-max C,W-min C,q) by A38,A39,Th13
+     .= L_Segment(Lower_Arc C,E-max C,W-min C,q) by A42,A43,ZFMISC_1:46;
+ hence Segment(p,q,C) is_an_arc_of p,q by A1,A7,A37,A40,A41,JORDAN16:36;
+ suppose that
+A44: LE E-max C,p, C and
+A45: not LE p, E-max C, C;
+A46: Segment(p,q,C) = Segment(Lower_Arc C,E-max C,W-min C,p,q) by A2,A44,Th12;
+  not p in Upper_Arc C by A45,Th7;
+  then LE p, q, Lower_Arc C, E-max C, W-min C by A2,JORDAN6:def 10;
+ hence Segment(p,q,C) is_an_arc_of p,q by A1,A7,A46,JORDAN16:36;
+end;
+
+theorem Th19:  :: poprawic JORDAN7:7
+ C = Segment(W-min C,W-min C,C)
+proof set X = {p: LE W-min C,p,C or W-min C in C & p=W-min C};
+A1: Segment(W-min C,W-min C,C) = X by JORDAN7:def 1;
+ thus C c= Segment(W-min C,W-min C,C)
+  proof let e be set;
+   assume
+A2:    e in C;
+    then reconsider p = e as Point of TOP-REAL 2;
+    LE W-min C,p,C by A2,JORDAN7:3;
+   hence thesis by A1;
+  end;
+ thus thesis by JORDAN16:10;
+end;
+
+theorem Th20:
+for q being Point of TOP-REAL 2 st q in C
+ holds Segment(q,W-min C,C) is compact
+proof let q be Point of TOP-REAL 2 such that
+A1: q in C;
+ per cases;
+ suppose q = W-min C;
+ hence Segment(q,W-min C,C) is compact by Th19;
+ suppose q <> W-min C;
+  then Segment(q,W-min C,C) is_an_arc_of q,W-min C by A1,Th17;
+ hence Segment(q,W-min C,C) is compact by JORDAN5A:1;
+end;
+
+theorem Th21:
+for q1,q2 being Point of TOP-REAL 2 st LE q1,q2,C
+ holds Segment(q1,q2,C) is compact
+proof let q1,q2 be Point of TOP-REAL 2 such that
+A1: LE q1,q2,C;
+A2: q1 in C by A1,JORDAN7:5;
+ per cases;
+ suppose q2 = W-min C;
+  hence thesis by A2,Th20;
+ suppose q1 = q2 & q2 <> W-min C;
+  then Segment(q1,q2,C) = {q1} by A2,JORDAN7:8;
+ hence Segment(q1,q2,C) is compact;
+ suppose q1 <> q2 & q2 <> W-min C;
+  then Segment(q1,q2,C) is_an_arc_of q1,q2 by A1,Th18;
+ hence Segment(q1,q2,C) is compact by JORDAN5A:1;
+end;
+
+begin :: The concept of a segmentation
+
+definition let C;
+ mode Segmentation of C -> FinSequence of TOP-REAL 2 means
+:Def3: it/.1=W-min C & it is one-to-one & 8<=len it & rng it c= C &
+   (for i being Nat st 1<=i & i<len it holds LE it/.i,it/.(i+1),C) &
+   (for i being Nat st 1<=i & i+1<len it holds
+   Segment(it/.i,it/.(i+1),C) /\  Segment(it/.(i+1),it/.(i+2),C)={it/.(i+1)}) &
+   Segment(it/.len it,it/.1,C) /\  Segment(it/.1,it/.2,C)={it/.1} &
+   Segment(it/.(len it-' 1),it/.len it,C)/\ Segment(it/.len it,it/.1,C)
+          ={it/.len it} &
+   Segment(it/.(len it-'1),it/.len it,C) misses Segment(it/.1,it/.2,C) &
+   (for i,j being Nat st 1<=i & i < j & j < len it & not i,j are_adjacent1
+    holds Segment(it/.i,it/.(i+1),C) misses Segment(it/.j,it/.(j+1),C)) &
+   for i being Nat st 1 < i & i+1 < len it holds
+      Segment(it/.len it,it/.1,C) misses Segment(it/.i,it/.(i+1),C);
+ existence
+  proof
+   consider h being FinSequence of the carrier of TOP-REAL 2 such that
+A1: h.1=W-min C and
+A2: h is one-to-one and
+A3: 8<=len h and
+A4: rng h c= C and
+A5: for i being Nat st 1<=i & i<len h holds LE h/.i,h/.(i+1),C and
+    (for i being Nat,W being Subset of Euclid 2
+   st 1<=i & i<len h & W=Segment(h/.i,h/.(i+1),C) holds diameter(W)<1)
+   & (for W being Subset of Euclid 2 st
+   W=Segment(h/.len h,h/.1,C)  holds diameter(W)<1) and
+A6: for i being Nat st 1<=i & i+1<len h holds
+    Segment(h/.i,h/.(i+1),C)/\ Segment(h/.(i+1),h/.(i+2),C)={h/.(i+1)} and
+A7: Segment(h/.len h,h/.1,C)/\ Segment(h/.1,h/.2,C)={h/.1} and
+A8: Segment(h/.(len h-' 1),h/.len h,C)/\ Segment(h/.len h,h/.1,C)={h/.len h}
+      and
+A9: Segment(h/.(len h-'1),h/.len h,C) misses Segment(h/.1,h/.2,C) and
+A10: for i,j being Nat st 1<=i & i < j & j < len h & not(i,j are_adjacent1)
+    holds Segment(h/.i,h/.(i+1),C) misses Segment(h/.j,h/.(j+1),C) and
+A11: for i being Nat st 1 < i & i+1 < len h holds
+      Segment(h/.len h,h/.1,C) misses Segment(h/.i,h/.(i+1),C) by JORDAN7:21;
+    len h <> 0 by A3;
+    then reconsider h as non empty FinSequence of the carrier of TOP-REAL 2
+                      by FINSEQ_1:25;
+   take h;
+    1 in dom h by FINSEQ_5:6;
+   hence h/.1=W-min C by A1,FINSEQ_4:def 4;
+   thus h is one-to-one by A2;
+   thus 8<=len h by A3;
+   thus rng h c= C by A4;
+   thus for i being Nat st 1<=i & i<len h holds LE h/.i,h/.(i+1),C by A5;
+   thus for i being Nat st 1<=i & i+1<len h holds
+    Segment(h/.i,h/.(i+1),C) /\  Segment(h/.(i+1),h/.(i+2),C)={h/.(i+1)} by A6;
+   thus Segment(h/.len h,h/.1,C) /\  Segment(h/.1,h/.2,C)={h/.1} by A7;
+   thus Segment(h/.(len h-' 1),h/.len h,C)/\ Segment(h/.len h,h/.1,C)
+       ={h/.len h} by A8;
+   thus Segment(h/.(len h-'1),h/.len h,C) misses Segment(h/.1,h/.2,C) by A9;
+   thus for i,j being Nat st 1<=i & i < j & j < len h & not(i,j are_adjacent1)
+    holds Segment(h/.i,h/.(i+1),C) misses Segment(h/.j,h/.(j+1),C) by A10;
+   thus for i being Nat st 1 < i & i+1 < len h holds
+      Segment(h/.len h,h/.1,C) misses Segment(h/.i,h/.(i+1),C) by A11;
+  end;
+end;
+
+definition let C;
+ cluster -> non trivial Segmentation of C;
+ coherence
+  proof let S be Segmentation of C;
+    len S >= 8 by Def3;
+    then len S >= 2 by AXIOMS:22;
+   hence thesis by SPPOL_1:2;
+  end;
+end;
+
+theorem Th22:
+ for S being Segmentation of C, i st 1<=i & i <= len S
+  holds S/.i in C
+proof let S be Segmentation of C, i;
+ assume 1<=i & i <= len S;
+  then i in dom S by FINSEQ_3:27;
+  then
+A1: S/.i in rng S by PARTFUN2:4;
+  rng S c= C by Def3;
+ hence S/.i in C by A1;
+end;
+
+begin :: The segments of a segmentation
+
+definition let C; let i be natural number;
+ let S be Segmentation of C;
+ func Segm(S,i) -> Subset of TOP-REAL 2 equals
+:Def4: Segment(S/.i,S/.(i+1),C) if 1<=i & i<len S
+   otherwise Segment(S/.len S,S/.1,C);
+ correctness;
+end;
+
+theorem
+ for S being Segmentation of C st i in dom S holds Segm(S,i) c= C
+proof let S be Segmentation of C;
+ assume i in dom S;
+  then
+A1: 1 <= i by FINSEQ_3:27;
+  i < len S or i >= len S;
+  then Segm(S,i) = Segment(S/.i,S/.(i+1),C) or
+       Segm(S,i) = Segment(S/.len S,S/.1,C) by A1,Def4;
+ hence thesis by JORDAN16:10;
+end;
+
+definition let C; let S be Segmentation of C, i;
+ cluster Segm(S,i) -> non empty compact;
+ coherence
+  proof
+   per cases;
+   suppose
+A1:   1<=i & i<len S;
+    then
+A2:   Segm(S,i) = Segment(S/.i,S/.(i+1),C) by Def4;
+    LE S/.i,S/.(i+1),C by A1,Def3;
+   hence thesis by A2,Th21,JORDAN7:6;
+   suppose not(1<=i & i<len S);
+    then
+A3:   Segm(S,i) = Segment(S/.len S,S/.1,C) by Def4;
+    8 <= len S by Def3;
+    then 1 <= len S by AXIOMS:22;
+    then
+A4:  S/.len S in C by Th22;
+    S/.1 = W-min C by Def3;
+   hence thesis by A3,A4,Th20,JORDAN16:23;
+  end;
+end;
+
+theorem
+ for S being Segmentation of C, p st p in C
+  ex i being natural number st i in dom S & p in Segm(S,i)
+ proof let S be Segmentation of C, p such that
+A1: p in C;
+   set X = { i : i in dom S & LE S/.i, p, C };
+A2: X c= dom S
+   proof let e be set;
+    assume e in X;
+     then ex i st e = i & i in dom S & LE S/.i, p, C;
+    hence thesis;
+   end;
+A3: 1 in dom S by FINSEQ_5:6;
+A4:  W-min C = S/.1 by Def3;
+   then LE S/.1, p, C by A1,JORDAN7:3;
+   then 1 in X by A3;
+   then reconsider X as finite non empty Subset of NAT
+             by A2,FINSET_1:13,XBOOLE_1:1;
+  take max X;
+A5: max X in X by PRE_CIRC:def 1;
+  hence max X in dom S by A2;
+A6: 1 <= max X & max X <= len S by A2,A5,FINSEQ_3:27;
+A7: ex i st max X = i & i in dom S & LE S/.i, p, C by A5;
+   reconsider mX = max X as Element of NAT by ORDINAL2:def 21;
+  per cases by A6,AXIOMS:21;
+  suppose
+A8: max X < len S;
+   then 1 <= max X + 1 & max X +1 <= len S by NAT_1:29,38;
+   then
+A9:  mX + 1 in dom S by FINSEQ_3:27;
+A10: S is one-to-one by Def3;
+   max X +1 >= 1+1 by A6,AXIOMS:24;
+   then max X + 1 <> 1;
+   then
+A11: S/.(max X+1) <> S/.1 by A3,A9,A10,PARTFUN2:17;
+A12: S/.(max X+1) in rng S by A9,PARTFUN2:4;
+A13: rng S c= C by Def3;
+   now assume LE S/.(max X+1),p,C;
+     then max X +1 in X by A9;
+     then max X +1 <= max X by FRECHET2:51;
+    hence contradiction by REAL_1:69;
+   end;
+   then LE p,S/.(max X+1),C by A1,A12,A13,JORDAN16:11;
+   then p in {p1: LE S/.(max X),p1,C & LE p1,S/.(max X+1),C} by A7;
+   then p in Segment(S/.max X,S/.(max X+1),C) by A4,A11,JORDAN7:def 1;
+  hence p in Segm(S,max X) by A6,A8,Def4;
+  suppose
+A14: max X = len S;
+   now per cases;
+    case p<>W-min C;
+     thus LE S/.len S,p,C by A7,A14;
+    case p=W-min C;
+A15:   S/.len S in rng S by REVROT_1:3;
+     rng S c= C by Def3;
+    hence S/.len S in C by A15;
+   end;
+   then p in {p1: LE S/.len S,p1,C or S/.len S in C & p1=W-min C};
+   then p in Segment(S/.len S,S/.1,C) by A4,JORDAN7:def 1;
+  hence p in Segm(S,max X) by A14,Def4;
+ end;
+
+theorem Th25:
+ for S being Segmentation of C
+ for i,j st 1<=i & i< j & j<len S & not i,j are_adjacent1
+  holds Segm(S,i) misses Segm(S,j)
+proof let S be Segmentation of C;
+ let i,j such that
+A1: 1<=i  and
+A2: i < j and
+A3: j<len S and
+A4: not i,j are_adjacent1;
+    i < len S by A2,A3,AXIOMS:22;
+    then
+A5:  Segm(S,i) = Segment(S/.i,S/.(i+1),C) by A1,Def4;
+    1 < j by A1,A2,AXIOMS:22;
+    then  Segm(S,j) = Segment(S/.j,S/.(j+1),C) by A3,Def4;
+ hence Segm(S,i) misses Segm(S,j) by A1,A2,A3,A4,A5,Def3;
+end;
+
+theorem Th26:
+ for S being Segmentation of C
+ for j st 1<j & j<len S -' 1
+  holds Segm(S,len S) misses Segm(S,j)
+proof let S be Segmentation of C;
+ let j such that
+A1:  1<j and
+A2: j<len S -' 1;
+A3:  Segm(S,len S) = Segment(S/.len S,S/.1,C) by Def4;
+A4: j+1 < len S by A2,SPRECT_3:6;
+  j < len S by A2,JORDAN3:7;
+  then Segm(S,j) = Segment(S/.j,S/.(j+1),C) by A1,Def4;
+ hence Segm(S,len S) misses Segm(S,j) by A1,A3,A4,Def3;
+end;
+
+theorem Th27:
+ for S being Segmentation of C
+ for i,j st 1<=i & i< j & j<len S & i,j are_adjacent1
+  holds Segm(S,i) /\  Segm(S,j)={S/.(i+1)}
+proof let S be Segmentation of C;
+ let i,j such that
+A1: 1<=i and
+A2: i< j and
+A3: j<len S and
+A4: i,j are_adjacent1;
+   i < len S by A2,A3,AXIOMS:22;
+   then
+A5: Segm(S,i) = Segment(S/.i,S/.(i+1),C) by A1,Def4;
+  1 < j by A1,A2,AXIOMS:22;then
+A6: Segm(S,j) = Segment(S/.j,S/.(j+1),C) by A3,Def4;
+   j+1 > i by A2,NAT_1:38; then
+A7: j = i+1 by A4,GOBRD10:def 1;
+  then j+1 = i+(1+1) by XCMPLX_1:1;
+ hence Segm(S,i) /\  Segm(S,j)={S/.(i+1)} by A1,A3,A5,A6,A7,Def3;
+end;
+
+theorem Th28:
+ for S being Segmentation of C
+ for i,j st 1<=i & i< j & j<len S & i,j are_adjacent1
+  holds Segm(S,i) meets Segm(S,j)
+proof let S be Segmentation of C;
+ let i,j;
+ assume 1<=i & i< j & j<len S & i,j are_adjacent1;
+  then Segm(S,i) /\  Segm(S,j)={S/.(i+1)} by Th27;
+ hence Segm(S,i) meets Segm(S,j) by XBOOLE_0:def 7;
+end;
+
+theorem Th29:
+ for S being Segmentation of C
+  holds Segm(S,len S) /\ Segm(S,1) = {S/.1}
+proof let S be Segmentation of C;
+A1:  Segm(S,len S) = Segment(S/.len S,S/.1,C) by Def4;
+  len S >= 8 by Def3;
+  then 1 < len S by AXIOMS:22;
+  then Segm(S,1) = Segment(S/.1,S/.(1+1),C) by Def4;
+ hence Segm(S,len S) /\ Segm(S,1) = {S/.1} by A1,Def3;
+end;
+
+theorem Th30:
+ for S being Segmentation of C
+  holds Segm(S,len S) meets Segm(S,1)
+proof let S be Segmentation of C;
+  Segm(S,len S) /\ Segm(S,1) = {S/.1} by Th29;
+ hence Segm(S,len S) meets Segm(S,1) by XBOOLE_0:def 7;
+end;
+
+theorem Th31:
+ for S being Segmentation of C
+  holds Segm(S,len S) /\ Segm(S,len S -' 1) = {S/.len S}
+proof let S be Segmentation of C;
+A1:  Segm(S,len S) = Segment(S/.len S,S/.1,C) by Def4;
+A2:  len S >= 8 by Def3;
+  then
+A3: len S >= 1 by AXIOMS:22;
+   len S >= 1+1 by A2,AXIOMS:22;
+   then
+A4: 1 <= len S -' 1 by SPRECT_3:8;
+A5: len S -' 1 + 1 = len S by A3,AMI_5:4;
+  then len S -' 1 < len S by NAT_1:38;
+  then Segm(S,len S -' 1) = Segment(S/.(len S -' 1),S/.len S,C) by A4,A5,Def4;
+ hence Segm(S,len S) /\ Segm(S,len S -' 1) = {S/.len S} by A1,Def3;
+end;
+
+theorem Th32:
+ for S being Segmentation of C
+  holds Segm(S,len S) meets Segm(S,len S -' 1)
+proof let S be Segmentation of C;
+  Segm(S,len S) /\ Segm(S,len S -' 1) = {S/.len S} by Th31;
+ hence Segm(S,len S) meets Segm(S,len S -' 1) by XBOOLE_0:def 7;
+end;
+
+begin :: The diameter of a segmentation
+
+definition let n;
+ let C be Subset of TOP-REAL n;
+ func diameter C -> Real means
+:Def5: ex W being Subset of Euclid n
+   st W = C & it = diameter W;
+ existence
+  proof
+    TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 8
+     .= TopStruct (#the carrier of  Euclid n,Family_open_set Euclid n #)
+                      by PCOMPS_1:def 6;
+    then reconsider W = C as Subset of Euclid n;
+   take diameter W, W;
+   thus thesis;
+  end;
+ correctness;
+end;
+
+definition let C;
+ let S be Segmentation of C;
+ func diameter S -> Real means
+:Def6: ex S1 being non empty finite Subset of REAL st
+    S1 = { diameter Segm(S,i): i in dom S} & it = max S1;
+ existence
+  proof
+    deffunc F(Nat) = diameter Segm(S,$1);
+    defpred P[set] means $1 in dom S;
+    set S1 = { F(i): P[i]};
+    set S2 = { F(i): i in dom S};
+A1:  dom S is finite;
+A2:  S2 is finite from FraenkelFin(A1);
+A3:  S1 is Subset of REAL from SubsetFD;
+    1 in dom S by FINSEQ_5:6;
+    then diameter Segm(S,1) in S1;
+    then reconsider S1 as non empty finite Subset of REAL by A2,A3;
+    reconsider mS1 = max S1 as Element of REAL by XREAL_0:def 1;
+   take mS1, S1;
+   thus thesis;
+  end;
+ correctness;
+end;
+
+theorem
+ for S being Segmentation of C, i
+   holds diameter Segm(S,i) <= diameter S
+proof let S be Segmentation of C, i;
+  consider S1 be non empty finite Subset of REAL such that
+A1: S1 = { diameter Segm(S,j): j in dom S} and
+A2: diameter S = max S1 by Def6;
+ per cases;
+ suppose 1 <= i & i < len S;
+  then i in dom S by FINSEQ_3:27;
+  then diameter Segm(S,i) in S1 by A1;
+ hence diameter Segm(S,i) <= diameter S by A2,PRE_CIRC:def 1;
+ suppose
+A3: not(1 <= i & i < len S);
+A4: Segm(S,len S) = Segment(S/.len S,S/.1,C) by Def4
+         .= Segm(S,i) by A3,Def4;
+  len S in dom S by FINSEQ_5:6;
+  then diameter Segm(S,i) in S1 by A1,A4;
+ hence diameter Segm(S,i) <= diameter S by A2,PRE_CIRC:def 1;
+end;
+
+theorem Th34:
+ for S being Segmentation of C, e being Real
+  st for i holds diameter Segm(S,i) < e
+ holds diameter S < e
+proof let S be Segmentation of C, e be Real such that
+A1: for i holds diameter Segm(S,i) < e;
+  consider S1 being non empty finite Subset of REAL such that
+A2: S1 = { diameter Segm(S,i): i in dom S} and
+A3: diameter S = max S1 by Def6;
+  for r being Real st r in S1 holds r < e
+   proof let r be Real;
+    assume r in S1;
+     then ex i st r = diameter Segm(S,i) & i in dom S by A2;
+    hence r < e by A1;
+   end;
+ hence thesis by A3,JORDAN16:1;
+end;
+
+theorem
+ for e being Real st e > 0
+  ex S being Segmentation of C st diameter S < e
+proof let e be Real;
+ assume e > 0;
+   then consider h being FinSequence of the carrier of TOP-REAL 2 such that
+A1: h.1=W-min C and
+A2: h is one-to-one and
+A3: 8<=len h and
+A4: rng h c= C and
+A5: for i being Nat st 1<=i & i<len h holds LE h/.i,h/.(i+1),C and
+A6: for i being Nat,W being Subset of Euclid 2
+     st 1<=i & i<len h & W=Segment(h/.i,h/.(i+1),C) holds diameter(W)<e and
+A7: for W being Subset of Euclid 2 st
+      W=Segment(h/.len h,h/.1,C)  holds diameter(W)<e and
+A8: for i being Nat st 1<=i & i+1<len h holds
+    Segment(h/.i,h/.(i+1),C)/\ Segment(h/.(i+1),h/.(i+2),C)={h/.(i+1)} and
+A9: Segment(h/.len h,h/.1,C)/\ Segment(h/.1,h/.2,C)={h/.1} and
+A10: Segment(h/.(len h-' 1),h/.len h,C)/\ Segment(h/.len h,h/.1,C)={h/.len h}
+      and
+A11: Segment(h/.(len h-'1),h/.len h,C) misses Segment(h/.1,h/.2,C) and
+A12: for i,j being Nat st 1<=i & i < j & j < len h & not(i,j are_adjacent1)
+    holds Segment(h/.i,h/.(i+1),C) misses Segment(h/.j,h/.(j+1),C) and
+A13: for i being Nat st 1 < i & i+1 < len h holds
+      Segment(h/.len h,h/.1,C) misses Segment(h/.i,h/.(i+1),C) by JORDAN7:21;
+  len h <> 0 by A3;
+  then h <> {} by FINSEQ_1:25;
+  then 1 in dom h by FINSEQ_5:6;
+  then h/.1 = W-min C by A1,FINSEQ_4:def 4;
+  then reconsider h as Segmentation of C
+  by A2,A3,A4,A5,A8,A9,A10,A11,A12,A13,Def3;
+ take h;
+  diameter Segm(h,i) < e
+   proof
+     consider W being Subset of Euclid 2 such that
+A14:   W = Segm(h,i) and
+A15:   diameter Segm(h,i) = diameter W by Def5;
+    per cases;
+    suppose
+A16:   1<=i & i<len h;
+     then Segm(h,i) = Segment(h/.i,h/.(i+1),C) by Def4;
+     hence diameter Segm(h,i) < e by A6,A14,A15,A16;
+    suppose not(1<=i & i<len h);
+     then Segm(h,i) = Segment(h/.len h,h/.1,C) by Def4;
+     hence diameter Segm(h,i) < e by A7,A14,A15;
+   end;
+ hence diameter h < e by Th34;
+end;
+
+begin :: The concept of the gap of a segmentation
+
+definition let C;
+ let S be Segmentation of C;
+ func S-Gap S -> Real means
+:Def7: ex S1,S2 being non empty finite Subset of REAL st
+    S1 = { dist_min(Segm(S,i),Segm(S,j)):
+          1<=i & i< j & j<len S & not i,j are_adjacent1} &
+    S2 = { dist_min(Segm(S,len S),Segm(S,k)): 1<k & k<len S -' 1 } &
+    it = min(min S1,min S2);
+ existence
+  proof
+   deffunc F(Nat) = dist_min(Segm(S,len S),Segm(S,$1));
+   deffunc F(Nat,Nat) = dist_min(Segm(S,$1),Segm(S,$2));
+   defpred P[Nat] means 1<$1 & $1<len S -' 1;
+   defpred Q[Nat] means $1 in dom S;
+   defpred R[Nat,Nat] means
+     1<=$1 & $1< $2 & $2<len S & not $1,$2 are_adjacent1;
+   defpred W[Nat,Nat] means Q[$1] & Q[$2];
+   set S1 = { F(i,j) : R[i,j] };
+   set S2 = { F(j) : P[j] };
+   set B = { F(i,j) : W[i,j] };
+   set B' = { F(i,j) : i in dom S & j in dom S };
+   set A = { F(j) : Q[j] };
+   set A' = { F(j) : j in dom S };
+A1: P[j] implies Q[j]
+    proof assume
+A2:    1<j;
+A3:    len S -' 1 <= len S by GOBOARD9:2;
+     assume j<len S -' 1;
+      then j < len S by A3,AXIOMS:22;
+     hence j in dom S by A2,FINSEQ_3:27;
+    end;
+A4: S2 c= A from Fraenkel5'(A1);
+A5: for i, j holds R[i,j] implies W[i,j]
+   proof let i,j such that
+A6: 1<=i and
+A7: i< j and
+A8: j<len S and not i,j are_adjacent1;
+     i < len S by A7,A8,AXIOMS:22;
+    hence i in dom S by A6,FINSEQ_3:27;
+     1 < j by A6,A7,AXIOMS:22;
+    hence j in dom S by A8,FINSEQ_3:27;
+   end;
+A9: S1 c= B from Fraenkel5''(A5);
+A10: S1 c= REAL
+     proof let x be set;
+      assume x in S1;
+       then ex i,j st x = dist_min(Segm(S,i),Segm(S,j)) &
+          1<=i & i<j & j<len S & not i,j are_adjacent1;
+      hence thesis;
+     end;
+A11: S2 c= REAL
+     proof let x be set;
+      assume x in S2;
+       then ex j st x = dist_min(Segm(S,len S),Segm(S,j)) &
+              1<j & j<len S -' 1;
+      hence thesis;
+     end;
+A12: dom S is finite;
+A13: A' is finite from FraenkelFin(A12);
+A14: B' is finite from CartFin(A12,A12);
+A15:  not 1,3 are_adjacent1
+     proof thus 3 <> 1+1 & 1 <> 3+1; end;
+A16:   len S >= 7+1 by Def3;
+    then 1<len S & 3<len S by AXIOMS:22;
+    then
+A17: dist_min(Segm(S,1),Segm(S,3)) in S1 by A15;
+   2+1 < len S by A16,AXIOMS:22;
+   then 2<len S -' 1 by SPRECT_3:5;
+   then dist_min(Segm(S,len S),Segm(S,2)) in S2;
+   then reconsider S1, S2 as non empty finite Subset of REAL
+       by A4,A9,A10,A11,A13,A14,A17,FINSET_1:13;
+    reconsider mm = min(min S1,min S2) as Element of REAL by XREAL_0:def 1;
+   take mm,S1,S2;
+   thus thesis;
+  end;
+ correctness;
+end;
+
+theorem Th36:
+ for S being Segmentation of C
+  ex F being finite non empty Subset of REAL st
+   F = { dist_min(Segm(S,i),Segm(S,j)):
+          1<=i & i<j & j<=len S & Segm(S,i) misses Segm(S,j)} &
+   S-Gap S = min F
+proof let S be Segmentation of C;
+  consider S1,S2 being non empty finite Subset of REAL such that
+A1: S1 = { dist_min(Segm(S,i),Segm(S,j)):
+          1<=i & i< j & j<len S & not i,j are_adjacent1} and
+A2: S2 = { dist_min(Segm(S,len S),Segm(S,k)): 1<k & k<len S -' 1 } and
+A3: S-Gap S = min(min S1,min S2) by Def7;
+ take F = S1 \/ S2;
+  set X = { dist_min(Segm(S,i),Segm(S,j)):
+            1<=i & i<j & j<=len S & Segm(S,i) misses Segm(S,j)};
+ thus F c= X
+  proof let e be set;
+   assume
+A4:  e in F;
+   per cases by A4,XBOOLE_0:def 2;
+   suppose e in S1;
+    then consider i,j such that
+A5:  e = dist_min(Segm(S,i),Segm(S,j)) and
+A6:  1<=i & i< j & j<len S and
+A7:  not i,j are_adjacent1 by A1;
+    Segm(S,i) misses Segm(S,j) by A6,A7,Th25;
+   hence e in X by A5,A6;
+   suppose e in S2;
+    then consider j such that
+A8:  e = dist_min(Segm(S,len S),Segm(S,j)) and
+A9:  1<j and
+A10:  j<len S -' 1 by A2;
+A11:  j < len S by A10,JORDAN3:7;
+    Segm(S,len S) misses Segm(S,j) by A9,A10,Th26;
+   hence e in X by A8,A9,A11;
+  end;
+ thus X c= F
+  proof let e be set;
+   assume e in X;
+    then consider i,j such that
+A12:  e = dist_min(Segm(S,i),Segm(S,j)) and
+A13:  1<=i and
+A14: i<j and
+A15:  j<=len S and
+A16:  Segm(S,i) misses Segm(S,j);
+A17:  i < len S by A14,A15,AXIOMS:22;
+   per cases by A15,AXIOMS:21;
+   suppose that
+A18:  j < len S;
+    not i,j are_adjacent1 by A13,A14,A16,A18,Th28;
+    then e in S1 by A1,A12,A13,A14,A18;
+   hence e in F by XBOOLE_0:def 2;
+   suppose
+A19:   j = len S;
+    then 1 <> i by A16,Th30;
+    then
+A20:  1 < i by A13,AXIOMS:21;
+A21:  i <= len S -' 1 by A17,JORDAN3:12;
+    i <> len S -' 1 by A16,A19,Th32;
+    then i < len S -' 1 by A21,AXIOMS:21;
+    then e in S2 by A2,A12,A19,A20;
+   hence e in F by XBOOLE_0:def 2;
+  end;
+ thus S-Gap S = min F by A3,Th1;
+end;
+
+theorem
+ for S being Segmentation of C holds S-Gap S > 0
+proof let S be Segmentation of C;
+  consider F being finite non empty Subset of REAL such that
+A1: F = { dist_min(Segm(S,i),Segm(S,j)):
+          1<=i & i<j & j<=len S & Segm(S,i) misses Segm(S,j)} and
+A2: S-Gap S = min F by Th36;
+  S-Gap S in F by A2,SFMASTR3:def 1;
+  then ex i,j st S-Gap S = dist_min(Segm(S,i),Segm(S,j)) &
+        1<=i & i<j & j<=len S & Segm(S,i) misses Segm(S,j) by A1;
+ hence S-Gap S > 0 by Th8;
+end;
+

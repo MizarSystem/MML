@@ -1,0 +1,2073 @@
+:: On the Baire Category Theorem
+::  by Artur Korni{\l}owicz
+::
+:: Received February 5, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, FUNCT_1, FINSET_1, BOOLE, FINSEQ_1, CARD_1, PRE_TOPC,
+      SUBSET_1, SETFAM_1, TOPS_1, CARD_4, TARSKI, RELAT_1, RELAT_2, WAYBEL_0,
+      YELLOW_0, ORDINAL2, LATTICE3, LATTICES, QUANTAL1, WAYBEL_6, WAYBEL_3,
+      FINSUB_1, FILTER_0, FREEALG, ORDERS_2, REALSET1, YELLOW_1, TOPS_3,
+      YELLOW_8, CANTOR_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1, FINSUB_1, STRUCT_0,
+      REALSET1, CARD_1, CARD_4, PRE_TOPC, ORDERS_1, TOPS_1, TOPS_2, TOPS_3,
+      CANTOR_1, LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_2, YELLOW_4,
+      WAYBEL_3, WAYBEL_4, WAYBEL_6, YELLOW_8;
+ constructors CARD_4, WAYBEL_3, WAYBEL_6, SETWISEO, YELLOW_4, REALSET1, TOPS_1,
+      YELLOW_3, WAYBEL_4, TOPS_2, TOPS_3, NAT_1, CANTOR_1, YELLOW_8, WAYBEL_1,
+      MEMBERED;
+ clusters SUBSET_1, LATTICE3, WAYBEL_3, WAYBEL_6, WAYBEL_0, YELLOW_0, STRUCT_0,
+      YELLOW_4, FINSET_1, CARD_1, YELLOW_6, YELLOW_1, WAYBEL_7, YELLOW_8,
+      CANTOR_1, FINSUB_1, FINSEQ_1, RELSET_1, RLVECT_2, MEMBERED, ZFMISC_1,
+      NUMBERS, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, WAYBEL_0, PRE_TOPC, TOPS_2, YELLOW_4, WAYBEL_6, YELLOW_8,
+      CARD_4, LATTICE3, XBOOLE_0;
+ theorems CARD_1, CARD_4, FUNCT_2, LATTICE3, MSUALG_9, ORDERS_1, STRUCT_0,
+      TARSKI, WAYBEL_0, WAYBEL_1, WAYBEL_3, WAYBEL_4, WAYBEL_6, WELLORD2,
+      YELLOW_0, YELLOW_1, YELLOW_3, YELLOW_4, ZFMISC_1, PRE_TOPC, WAYBEL_7,
+      FUNCT_1, TOPS_1, TOPS_2, TOPS_3, CARD_2, YELLOW_8, CANTOR_1, MSSUBFAM,
+      NAT_1, FINSEQ_1, FINSUB_1, RELAT_1, YELLOW_2, FINSET_1, RELSET_1,
+      YELLOW_6, SETFAM_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, TREES_2, SETWISEO, NAT_1, RECDEF_1;
+
+begin  :: Preliminaries
+
+Lm1:
+for L being non empty RelStr, f being Function of NAT, the carrier of L
+ for n being Nat holds
+  {f.k where k is Nat: k <= n} is non empty finite Subset of L
+  proof
+    let L be non empty RelStr,
+        f be Function of NAT, the carrier of L,
+        n be Nat;
+    set A = {f.m where m is Nat: m <= n};
+      0 <= n by NAT_1:18;
+then A1: f.0 in A;
+A2: A c= {f.m where m is Nat: m in {0} \/ Seg n}
+    proof
+      let q be set;
+      assume q in A;
+      then consider m being Nat such that
+A3:     q = f.m and
+A4:     m <= n;
+A5:   Seg m c= Seg n by A4,FINSEQ_1:7;
+        m = 0 or m in Seg m by FINSEQ_1:5;
+      then m in {0} or m in Seg n by A5,TARSKI:def 1;
+      then m in {0} \/ Seg n by XBOOLE_0:def 2;
+      hence q in {f.k where k is Nat: k in {0} \/ Seg n} by A3;
+    end;
+    deffunc F(set) = f.$1;
+      Card {F(m) where m is Nat: m in {0} \/ Seg n} <=` Card ({0} \/ Seg n)
+      from FraenkelCard;
+then A6: {f.m where m is Nat: m in {0} \/ Seg n} is finite by CARD_2:68;
+      A c= the carrier of L
+    proof
+      let q be set;
+      assume q in A;
+      then consider m being Nat such that
+A7:     q = f.m and m <= n;
+      thus q in the carrier of L by A7;
+    end;
+    hence thesis by A1,A2,A6,FINSET_1:13;
+  end;
+
+definition let T be TopStruct,
+               P be Subset of T;
+ redefine attr P is closed means
+    P` is open;
+compatibility
+  proof
+    hereby assume
+        P is closed;
+      then [#]T \ P is open by PRE_TOPC:def 6;
+      hence P` is open by PRE_TOPC:17;
+    end;
+    assume P` is open;
+    hence [#]T \ P is open by PRE_TOPC:17;
+  end;
+end;
+
+definition let T be TopStruct,
+               F be Subset-Family of T;
+ attr F is dense means :Def2:
+  for X being Subset of T st X in F holds X is dense;
+end;
+
+definition
+ cluster empty 1-sorted;
+existence
+  proof
+    take 1-sorted (#{}#);
+    thus thesis by STRUCT_0:def 1;
+  end;
+end;
+
+definition let S be empty 1-sorted;
+ cluster the carrier of S -> empty;
+coherence by STRUCT_0:def 1;
+end;
+
+definition let S be empty 1-sorted;
+ cluster -> empty Subset of S;
+coherence by XBOOLE_1:3;
+end;
+
+definition
+ cluster finite -> countable set;
+coherence by CARD_4:43;
+end;
+
+definition
+ cluster empty set;
+existence
+  proof
+    take {};
+    thus thesis;
+  end;
+end;
+
+definition let S be 1-sorted;
+ cluster empty Subset of S;
+existence
+  proof
+      {} c= the carrier of S by XBOOLE_1:2;
+    then reconsider A = {} as Subset of S;
+    take A;
+    thus thesis;
+  end;
+end;
+
+definition
+ cluster non empty finite set;
+existence
+  proof
+    take {0};
+    thus thesis;
+  end;
+end;
+
+definition let L be non empty RelStr;
+ cluster non empty finite Subset of L;
+existence
+  proof
+    consider a being Element of L;
+    take {a};
+    thus thesis;
+  end;
+end;
+
+definition
+ cluster NAT -> infinite;
+coherence by CARD_4:15;
+end;
+
+definition
+ cluster infinite countable set;
+existence by CARD_4:44;
+end;
+
+definition let S be 1-sorted;
+ cluster empty Subset-Family of S;
+existence
+  proof
+      {} c= bool the carrier of S by XBOOLE_1:2;
+    then {} is Subset-Family of S by SETFAM_1:def 7;
+    then reconsider A = {} as Subset-Family of S;
+    take A;
+    thus thesis;
+  end;
+end;
+
+canceled;
+
+theorem Th2:
+for X, Y being set st Card X <=` Card Y & Y is countable holds X is countable
+  proof
+    let X, Y be set such that
+A1:   Card X <=` Card Y;
+    assume Card Y <=` alef 0;
+    hence Card X <=` alef 0 by A1,XBOOLE_1:1;
+  end;
+
+theorem Th3:
+for A being infinite countable set holds NAT,A are_equipotent
+  proof
+    let A be infinite countable set;
+      not Card A <` alef 0 by CARD_4:2;
+then A1: alef 0 <=` Card A by CARD_1:14;
+      Card A <=` alef 0 by CARD_4:def 1;
+    then Card NAT = Card A by A1,CARD_1:38,XBOOLE_0:def 10;
+    hence NAT,A are_equipotent by CARD_1:21;
+  end;
+
+theorem Th4:
+for A being non empty countable set
+ ex f being Function of NAT, A st rng f = A
+  proof
+    let A be non empty countable set;
+    per cases;
+    suppose A is finite;
+      then consider f being Function of NAT, A such that
+A1:     A = rng f by MSUALG_9:3;
+      take f;
+      thus rng f = A by A1;
+    suppose not A is finite;
+      then NAT,A are_equipotent by Th3;
+      then consider f being Function such that
+          f is one-to-one and
+A2:     dom f = NAT & rng f = A by WELLORD2:def 4;
+      reconsider f as Function of NAT, A by A2,FUNCT_2:def 1,RELSET_1:11;
+      take f;
+      thus thesis by A2;
+  end;
+
+theorem Th5:
+for S being 1-sorted, X, Y being Subset of S holds (X \/ Y)` = (X`) /\ Y`
+  proof
+    let S be 1-sorted,
+        X, Y be Subset of S;
+  per cases;
+  suppose
+A1:   S is non empty;
+    thus (X \/ Y)` c= (X`) /\ Y`
+    proof
+      let q be set; assume
+A2:     q in (X \/ Y)`;
+      then reconsider q1 = q as Element of S;
+        not q1 in X \/ Y by A1,A2,YELLOW_6:10;
+      then not q1 in X & not q1 in Y by XBOOLE_0:def 2;
+      then q1 in X` & q1 in Y` by A1,YELLOW_6:10;
+      hence q in (X`) /\ Y` by XBOOLE_0:def 3;
+    end;
+    let q be set; assume
+A3:   q in (X`) /\ Y`;
+    then reconsider q1 = q as Element of S;
+      q1 in X` & q1 in Y` by A3,XBOOLE_0:def 3;
+    then not q1 in X & not q1 in Y by A1,YELLOW_6:10;
+    then not q1 in X \/ Y by XBOOLE_0:def 2;
+    hence q in (X \/ Y)` by A1,YELLOW_6:10;
+  suppose S is empty;
+    then reconsider S1 = S as empty 1-sorted;
+    reconsider X1 = X, Y1 = Y as Subset of S1;
+      (X1 \/ Y1)` = (X1`) /\ Y1`;
+    hence thesis;
+  end;
+
+theorem Th6:
+for S being 1-sorted, X, Y being Subset of S holds (X /\ Y)` = (X`) \/ Y`
+  proof
+    let S be 1-sorted,
+        X, Y be Subset of S;
+  per cases;
+  suppose
+A1:   S is non empty;
+    thus (X /\ Y)` c= (X`) \/ Y`
+    proof
+      let q be set; assume
+A2:     q in (X /\ Y)`;
+      then reconsider q1 = q as Element of S;
+        not q1 in X /\ Y by A1,A2,YELLOW_6:10;
+      then not q1 in X or not q1 in Y by XBOOLE_0:def 3;
+      then q1 in X` or q1 in Y` by A1,YELLOW_6:10;
+      hence q in (X`) \/ Y` by XBOOLE_0:def 2;
+    end;
+    let q be set; assume
+A3:   q in (X`) \/ Y`;
+    then reconsider q1 = q as Element of S;
+      q1 in X` or q1 in Y` by A3,XBOOLE_0:def 2;
+    then not q1 in X or not q1 in Y by A1,YELLOW_6:10;
+    then not q1 in X /\ Y by XBOOLE_0:def 3;
+    hence q in (X /\ Y)` by A1,YELLOW_6:10;
+  suppose S is empty;
+    then reconsider S1 = S as empty 1-sorted;
+    reconsider X1 = X, Y1 = Y as Subset of S1;
+      (X1 /\ Y1)` = (X1`) \/ Y1`;
+    hence thesis;
+  end;
+
+theorem
+  for L being non empty transitive RelStr, A, B being Subset of L
+ st A is_finer_than B holds downarrow A c= downarrow B
+  proof
+    let L be non empty transitive RelStr,
+        A, B be Subset of L such that
+A1:   for a being Element of L st a in A
+       ex b being Element of L st b in B & b >= a;
+    let q be set; assume
+A2:   q in downarrow A;
+    then reconsider q1 = q as Element of L;
+    consider a being Element of L such that
+A3:   a >= q1 and
+A4:   a in A by A2,WAYBEL_0:def 15;
+    consider b being Element of L such that
+A5:   b in B and
+A6:   b >= a by A1,A4;
+      b >= q1 by A3,A6,ORDERS_1:26;
+    hence q in downarrow B by A5,WAYBEL_0:def 15;
+  end;
+
+theorem Th8:
+for L being non empty transitive RelStr, A, B being Subset of L
+ st A is_coarser_than B holds uparrow A c= uparrow B
+  proof
+    let L be non empty transitive RelStr,
+        A, B be Subset of L such that
+A1:   for a being Element of L st a in A
+       ex b being Element of L st b in B & b <= a;
+    let q be set; assume
+A2:   q in uparrow A;
+    then reconsider q1 = q as Element of L;
+    consider a being Element of L such that
+A3:   a <= q1 and
+A4:   a in A by A2,WAYBEL_0:def 16;
+    consider b being Element of L such that
+A5:   b in B and
+A6:   b <= a by A1,A4;
+      b <= q1 by A3,A6,ORDERS_1:26;
+    hence q in uparrow B by A5,WAYBEL_0:def 16;
+  end;
+
+theorem
+  for L being non empty Poset, D being non empty finite filtered Subset of L
+ st ex_inf_of D,L holds inf D in D
+  proof
+    let L be non empty Poset,
+        D be non empty finite filtered Subset of L such that
+A1:  ex_inf_of D,L;
+      D c= D;
+    then consider d being Element of L such that
+A2:   d in D & d is_<=_than D by WAYBEL_0:2;
+      inf D is_<=_than D by A1,YELLOW_0:31;
+    then inf D <= d & inf D >= d by A1,A2,LATTICE3:def 8,YELLOW_0:31;
+    hence thesis by A2,ORDERS_1:25;
+  end;
+
+theorem
+  for L being lower-bounded antisymmetric non empty RelStr
+ for X being non empty lower Subset of L holds Bottom L in X
+  proof
+    let L be lower-bounded antisymmetric non empty RelStr,
+        X be non empty lower Subset of L;
+    consider y being set such that
+A1:   y in X by XBOOLE_0:def 1;
+    reconsider y as Element of X by A1;
+      Bottom L <= y by YELLOW_0:44;
+    hence Bottom L in X by WAYBEL_0:def 19;
+  end;
+
+theorem
+  for L being lower-bounded antisymmetric non empty RelStr
+ for X being non empty Subset of L holds Bottom L in downarrow X
+  proof
+    let L be lower-bounded antisymmetric non empty RelStr,
+        X be non empty Subset of L;
+A1: downarrow X = {x where x is Element of L:
+     ex y being Element of L st x <= y & y in X} by WAYBEL_0:14;
+    consider y being set such that
+A2:   y in X by XBOOLE_0:def 1;
+    reconsider y as Element of X by A2;
+      Bottom L <= y by YELLOW_0:44;
+    hence Bottom L in downarrow X by A1;
+  end;
+
+theorem Th12:
+for L being upper-bounded antisymmetric non empty RelStr
+ for X being non empty upper Subset of L holds Top L in X
+  proof
+    let L be upper-bounded antisymmetric non empty RelStr,
+        X be non empty upper Subset of L;
+    consider y being set such that
+A1:   y in X by XBOOLE_0:def 1;
+    reconsider y as Element of X by A1;
+      Top L >= y by YELLOW_0:45;
+    hence Top L in X by WAYBEL_0:def 20;
+  end;
+
+theorem Th13:
+for L being upper-bounded antisymmetric non empty RelStr
+ for X being non empty Subset of L holds Top L in uparrow X
+  proof
+    let L be upper-bounded antisymmetric non empty RelStr,
+        X be non empty Subset of L;
+A1: uparrow X = {x where x is Element of L:
+     ex y being Element of L st x >= y & y in X} by WAYBEL_0:15;
+    consider y being set such that
+A2:   y in X by XBOOLE_0:def 1;
+    reconsider y as Element of X by A2;
+      Top L >= y by YELLOW_0:45;
+    hence Top L in uparrow X by A1;
+  end;
+
+theorem Th14:
+for L being lower-bounded with_infima antisymmetric RelStr
+ for X being Subset of L holds X "/\" {Bottom L} c= {Bottom L}
+  proof
+    let L be lower-bounded with_infima antisymmetric RelStr,
+        X be Subset of L;
+A1: {Bottom L} "/\" X = {Bottom
+L "/\" y where y is Element of L: y in X} by YELLOW_4:42;
+    let q be set;
+    assume q in X "/\" {Bottom L};
+    then consider y being Element of L such that
+A2:   q = Bottom L "/\" y and
+        y in X by A1;
+      y "/\" Bottom L = Bottom L by WAYBEL_1:4;
+    hence q in {Bottom L} by A2,TARSKI:def 1;
+  end;
+
+theorem
+  for L being lower-bounded with_infima antisymmetric RelStr
+ for X being non empty Subset of L holds X "/\" {Bottom L} = {Bottom L}
+  proof
+    let L be lower-bounded with_infima antisymmetric RelStr,
+        X be non empty Subset of L;
+A1: X "/\" {Bottom L} = {Bottom
+L "/\" y where y is Element of L: y in X} by YELLOW_4:42;
+    thus X "/\" {Bottom L} c= {Bottom L} by Th14;
+    let q be set;
+    assume q in {Bottom L};
+then A2: q = Bottom L by TARSKI:def 1;
+    consider y being set such that
+A3:   y in X by XBOOLE_0:def 1;
+    reconsider y as Element of X by A3;
+      Bottom L "/\" y = Bottom L by WAYBEL_1:4;
+    hence q in X "/\" {Bottom L} by A1,A2;
+  end;
+
+theorem Th16:
+for L being upper-bounded with_suprema antisymmetric RelStr
+ for X being Subset of L holds X "\/" {Top L} c= {Top L}
+  proof
+    let L be upper-bounded with_suprema antisymmetric RelStr,
+        X be Subset of L;
+A1: {Top L} "\/" X = {Top
+L "\/" y where y is Element of L: y in X} by YELLOW_4:15;
+    let q be set;
+    assume q in X "\/" {Top L};
+    then consider y being Element of L such that
+A2:   q = Top L "\/" y and
+        y in X by A1;
+      y "\/" Top L = Top L by WAYBEL_1:5;
+    hence q in {Top L} by A2,TARSKI:def 1;
+  end;
+
+theorem
+  for L being upper-bounded with_suprema antisymmetric RelStr
+ for X being non empty Subset of L holds X "\/" {Top L} = {Top L}
+  proof
+    let L be upper-bounded with_suprema antisymmetric RelStr,
+        X be non empty Subset of L;
+A1: X "\/" {Top L} = {Top
+L "\/" y where y is Element of L: y in X} by YELLOW_4:15;
+    thus X "\/" {Top L} c= {Top L} by Th16;
+    let q be set;
+    assume q in {Top L};
+then A2: q = Top L by TARSKI:def 1;
+    consider y being set such that
+A3:   y in X by XBOOLE_0:def 1;
+    reconsider y as Element of X by A3;
+      Top L "\/" y = Top L by WAYBEL_1:5;
+    hence q in X "\/" {Top L} by A1,A2;
+  end;
+
+theorem Th18:
+for L being upper-bounded Semilattice, X being Subset of L
+ holds {Top L} "/\" X = X
+  proof
+    let L be upper-bounded Semilattice,
+        X be Subset of L;
+A1: {Top L} "/\" X = {Top
+L "/\" y where y is Element of L: y in X} by YELLOW_4:42;
+    thus {Top L} "/\" X c= X
+    proof
+      let q be set;
+      assume q in {Top L} "/\" X;
+      then consider y being Element of L such that
+A2:     q = Top L "/\" y & y in X by A1;
+      thus q in X by A2,WAYBEL_1:5;
+    end;
+    let q be set; assume
+A3:   q in X;
+    then reconsider X1 = X as non empty Subset of L;
+    reconsider y = q as Element of X1 by A3;
+      q = Top L "/\" y by WAYBEL_1:5;
+    hence q in {Top L} "/\" X by A1;
+  end;
+
+theorem
+  for L being lower-bounded with_suprema Poset, X being Subset of L
+ holds {Bottom L} "\/" X = X
+  proof
+    let L be lower-bounded with_suprema Poset,
+        X be Subset of L;
+A1: {Bottom L} "\/" X = {Bottom
+L "\/" y where y is Element of L: y in X} by YELLOW_4:15;
+    thus {Bottom L} "\/" X c= X
+    proof
+      let q be set;
+      assume q in {Bottom L} "\/" X;
+      then consider y being Element of L such that
+A2:     q = Bottom L "\/" y & y in X by A1;
+      thus q in X by A2,WAYBEL_1:4;
+    end;
+    let q be set; assume
+A3:   q in X;
+    then reconsider X1 = X as non empty Subset of L;
+    reconsider y = q as Element of X1 by A3;
+      q = Bottom L "\/" y by WAYBEL_1:4;
+    hence q in {Bottom L} "\/" X by A1;
+  end;
+
+theorem Th20:
+for L being non empty reflexive RelStr, A, B being Subset of L st A c= B
+ holds A is_finer_than B & A is_coarser_than B
+  proof
+   let L be non empty reflexive RelStr,
+       A, B be Subset of L such that
+A1:  A c= B;
+   thus A is_finer_than B
+   proof
+     let a be Element of L such that
+A2:    a in A;
+     take b = a;
+     thus b in B & a <= b by A1,A2;
+   end;
+   let a be Element of L such that
+A3:  a in A;
+   take b = a;
+   thus b in B & b <= a by A1,A3;
+ end;
+
+theorem Th21:
+for L being antisymmetric transitive with_infima RelStr
+ for V being Subset of L, x, y being Element of L st x <= y
+  holds {y} "/\" V is_coarser_than {x} "/\" V
+  proof
+    let L be antisymmetric transitive with_infima RelStr,
+        V be Subset of L,
+        x, y be Element of L such that
+A1:  x <= y;
+    let b be Element of L such that
+A2:  b in {y} "/\" V;
+      {y} "/\" V = {y "/\"
+ s where s is Element of L: s in V} by YELLOW_4:42;
+    then consider s being Element of L such that
+A3:   b = y "/\" s and
+A4:   s in V by A2;
+    take a = x "/\" s;
+      {x} "/\" V = {x "/\" t where t is Element of L: t in V} by YELLOW_4:42;
+    hence a in {x} "/\" V by A4;
+    thus a <= b by A1,A3,WAYBEL_1:2;
+  end;
+
+theorem
+  for L being antisymmetric transitive with_suprema RelStr
+ for V being Subset of L, x, y being Element of L st x <= y
+  holds {x} "\/" V is_finer_than {y} "\/" V
+  proof
+    let L be antisymmetric transitive with_suprema RelStr,
+        V be Subset of L,
+        x, y be Element of L such that
+A1:  x <= y;
+    let b be Element of L such that
+A2:  b in {x} "\/" V;
+      {x} "\/" V = {x "\/"
+ s where s is Element of L: s in V} by YELLOW_4:15;
+    then consider s being Element of L such that
+A3:   b = x "\/" s and
+A4:   s in V by A2;
+    take a = y "\/" s;
+      {y} "\/" V = {y "\/" t where t is Element of L: t in V} by YELLOW_4:15;
+    hence a in {y} "\/" V by A4;
+    thus b <= a by A1,A3,WAYBEL_1:3;
+  end;
+
+theorem Th23:
+for L being non empty RelStr, V, S, T being Subset of L
+ st S is_coarser_than T & V is upper & T c= V holds S c= V
+  proof
+    let L be non empty RelStr,
+        V, S, T be Subset of L such that
+A1:   S is_coarser_than T and
+A2:   V is upper and
+A3:   T c= V;
+    let q be set; assume
+A4:   q in S;
+    then reconsider S1 = S as non empty Subset of L;
+    reconsider b = q as Element of S1 by A4;
+    consider a being Element of L such that
+A5:   a in T & a <= b by A1,YELLOW_4:def 2;
+    thus q in V by A2,A3,A5,WAYBEL_0:def 20;
+  end;
+
+theorem
+  for L being non empty RelStr, V, S, T being Subset of L
+ st S is_finer_than T & V is lower & T c= V holds S c= V
+  proof
+    let L be non empty RelStr,
+        V, S, T be Subset of L such that
+A1:   S is_finer_than T and
+A2:   V is lower and
+A3:   T c= V;
+    let q be set; assume
+A4:   q in S;
+    then reconsider S1 = S as non empty Subset of L;
+    reconsider a = q as Element of S1 by A4;
+    consider b being Element of L such that
+A5:   b in T & a <= b by A1,YELLOW_4:def 1;
+    thus q in V by A2,A3,A5,WAYBEL_0:def 19;
+  end;
+
+theorem Th25:
+for L being Semilattice, F being upper filtered Subset of L
+ holds F "/\" F = F
+  proof
+    let L be Semilattice,
+        F be upper filtered Subset of L;
+    thus F "/\" F c= F
+    proof
+A1:   F "/\" F = { y "/\" z where y, z is Element of L : y in F & z in F }
+        by YELLOW_4:def 4;
+      let x be set;
+      assume x in F "/\" F;
+      then consider y, z being Element of L such that
+A2:     x = y "/\" z and
+A3:     y in F & z in F by A1;
+      consider t being Element of L such that
+A4:     t in F and
+A5:     t <= y & t <= z by A3,WAYBEL_0:def 2;
+        y "/\" z >= t by A5,YELLOW_0:23;
+      hence x in F by A2,A4,WAYBEL_0:def 20;
+    end;
+    thus thesis by YELLOW_4:40;
+  end;
+
+theorem
+  for L being sup-Semilattice, I being lower directed Subset of L
+ holds I "\/" I = I
+  proof
+    let L be sup-Semilattice,
+        I be lower directed Subset of L;
+    thus I "\/" I c= I
+    proof
+A1:   I "\/" I = { y "\/" z where y, z is Element of L : y in I & z in I }
+        by YELLOW_4:def 3;
+      let x be set;
+      assume x in I "\/" I;
+      then consider y, z being Element of L such that
+A2:     x = y "\/" z and
+A3:     y in I & z in I by A1;
+      consider t being Element of L such that
+A4:     t in I and
+A5:     t >= y & t >= z by A3,WAYBEL_0:def 1;
+        y "\/" z <= t by A5,YELLOW_0:22;
+      hence x in I by A2,A4,WAYBEL_0:def 19;
+    end;
+    thus thesis by YELLOW_4:13;
+  end;
+
+Lm2:
+for L being non empty RelStr, V being Subset of L
+ holds {x where x is Element of L : V "/\" {x} c= V} is Subset of L
+  proof
+    let L be non empty RelStr,
+        V be Subset of L;
+    set G = {x where x is Element of L : V "/\" {x} c= V};
+      G c= the carrier of L
+    proof
+      let q be set;
+      assume q in G;
+      then consider x being Element of L such that
+A1:     q = x and
+          V "/\" {x} c= V;
+      thus q in the carrier of L by A1;
+    end;
+    hence G is Subset of L;
+  end;
+
+theorem Th27:
+for L being upper-bounded Semilattice, V being Subset of L
+ holds {x where x is Element of L : V "/\" {x} c= V} is non empty
+  proof
+    let L be upper-bounded Semilattice,
+        V be Subset of L;
+    set G = {x where x is Element of L : V "/\" {x} c= V};
+      V "/\" {Top L} = V by Th18;
+    then Top L in G;
+    hence G is non empty;
+  end;
+
+theorem Th28:
+for L being antisymmetric transitive with_infima RelStr, V being Subset of L
+ holds {x where x is Element of L : V "/\" {x} c= V} is filtered Subset of L
+  proof
+    let L be antisymmetric transitive with_infima RelStr,
+        V be Subset of L;
+    reconsider G1 = {x where x is Element of L : V "/\" {x} c= V}
+      as Subset of L by Lm2;
+      G1 is filtered
+    proof
+      let x, y be Element of L;
+      assume x in G1;
+      then consider x1 being Element of L such that
+A1:     x = x1 and
+A2:     V "/\" {x1} c= V;
+      assume y in G1;
+      then consider y1 being Element of L such that
+A3:     y = y1 and
+A4:     V "/\" {y1} c= V;
+      take z = x1 "/\" y1;
+        V "/\" {z} c= V
+      proof
+        let q be set such that
+A5:       q in V "/\" {z};
+          {z} "/\" V = {z "/\"
+ v where v is Element of L: v in V} by YELLOW_4:42;
+        then consider v being Element of L such that
+A6:       q = z "/\" v and
+A7:       v in V by A5;
+A8:     {x1} "/\" V = {x1 "/\"
+ s where s is Element of L: s in V} by YELLOW_4:42;
+A9:     q = x1 "/\" (y1 "/\" v) by A6,LATTICE3:16;
+          {y1} "/\" V = {y1 "/\"
+ t where t is Element of L: t in V} by YELLOW_4:42;
+        then y1 "/\" v in V "/\" {y1} by A7;
+        then q in V "/\" {x1} by A4,A8,A9;
+        hence q in V by A2;
+      end;
+      hence z in G1;
+      thus z <= x & z <= y by A1,A3,YELLOW_0:23;
+    end;
+    hence thesis;
+  end;
+
+theorem Th29:
+for L being antisymmetric transitive with_infima RelStr
+ for V being upper Subset of L
+  holds {x where x is Element of L : V "/\" {x} c= V} is upper Subset of L
+  proof
+    let L be antisymmetric transitive with_infima RelStr,
+        V be upper Subset of L;
+    reconsider G1 = {x where x is Element of L : V "/\" {x} c= V}
+      as Subset of L by Lm2;
+      G1 is upper
+    proof
+      let x, y be Element of L;
+      assume x in G1;
+      then consider x1 being Element of L such that
+A1:     x1 = x & V "/\" {x1} c= V;
+      assume x <= y;
+      then {y} "/\" V is_coarser_than {x} "/\" V by Th21;
+      then V "/\" {y} c= V by A1,Th23;
+      hence y in G1;
+    end;
+    hence thesis;
+  end;
+
+theorem Th30:
+for L being with_infima Poset, X being Subset of L st X is Open lower
+ holds X is filtered
+  proof
+    let L be with_infima Poset,
+        X be Subset of L such that
+A1:   X is Open lower;
+    let x, y be Element of L such that
+A2:   x in X & y in X;
+A3: x "/\" y <= x & x "/\" y <= y by YELLOW_0:23;
+    then x "/\" y in X by A1,A2,WAYBEL_0:def 19;
+    then consider z being Element of L such that
+A4:   z in X and
+A5:   z << x "/\" y by A1,WAYBEL_6:def 1;
+    take z;
+      z <= x "/\" y by A5,WAYBEL_3:1;
+    hence z in X & z <= x & z <= y by A3,A4,ORDERS_1:26;
+  end;
+
+definition let L be with_infima Poset;
+ cluster Open lower -> filtered Subset of L;
+coherence by Th30;
+end;
+
+definition let L be continuous antisymmetric (non empty reflexive RelStr);
+ cluster lower -> Open Subset of L;
+coherence
+  proof
+    let A be Subset of L such that
+A1:   A is lower;
+    let x be Element of L such that
+A2:   x in A;
+    consider y being set such that
+A3:   y in waybelow x by XBOOLE_0:def 1;
+    reconsider y as Element of L by A3;
+    take y;
+      y << x by A3,WAYBEL_3:7;
+    then y <= x by WAYBEL_3:1;
+    hence y in A & y << x by A1,A2,A3,WAYBEL_0:def 19,WAYBEL_3:7;
+  end;
+end;
+
+definition let L be continuous Semilattice,
+               x be Element of L;
+ cluster (downarrow x)` -> Open;
+coherence
+  proof
+    set A = (downarrow x)`;
+    let a be Element of L;
+    assume a in A;
+    then not a in downarrow x by YELLOW_6:10;
+then A1: not a <= x by WAYBEL_0:17;
+      for x being Element of L holds waybelow x is non empty directed;
+    then consider y being Element of L such that
+A2:   y << a and
+A3:   not y <= x by A1,WAYBEL_3:24;
+    take y;
+      not y in downarrow x by A3,WAYBEL_0:17;
+    hence y in A by YELLOW_6:10;
+    thus y << a by A2;
+  end;
+end;
+
+theorem Th31:
+for L being Semilattice, C being non empty Subset of L
+ st for x, y being Element of L st x in C & y in C holds x <= y or y <= x
+  for Y being non empty finite Subset of C holds "/\"(Y,L) in Y
+  proof
+    let L be Semilattice,
+        C be non empty Subset of L such that
+A1:   for x, y being Element of L st x in C & y in C holds x <= y or y <= x;
+    let Y be non empty finite Subset of C;
+defpred P[set] means "/\"($1,L) in $1 & ex_inf_of $1,L;
+A2: for x being Element of C holds P[{x}]
+    proof
+      let x be Element of C;
+        "/\"({x},L) = x by YELLOW_0:39;
+      hence P[{x}] by TARSKI:def 1,YELLOW_0:38;
+    end;
+A3: for B1, B2 being Element of Fin C st B1 <> {} & B2 <> {}
+      holds P[B1] & P[B2] implies P[B1 \/ B2]
+    proof
+      let B1, B2 be Element of Fin C such that
+          B1 <> {} & B2 <> {} and
+A4:     P[B1] & P[B2];
+        B1 c= C & B2 c= C by FINSUB_1:def 5;
+      then "/\"(B1,L) <= "/\"(B2,L) or "/\"(B2,L) <= "/\"(B1,L) by A1,A4;
+then A5:   "/\"(B1,L) "/\" "/\"(B2,L) = "/\"(B1,L) or "/\"(B1,L) "/\" "/\"(B2,L
+) =
+"/\"(B2,L)
+        by YELLOW_0:25;
+        "/\"(B1 \/ B2,L) = "/\"(B1, L) "/\" "/\"(B2, L) by A4,YELLOW_2:4;
+      hence P[B1 \/ B2] by A4,A5,XBOOLE_0:def 2,YELLOW_2:4;
+    end;
+A6: for B being Element of Fin C st B <> {} holds P[B]
+      from FinSubInd2(A2,A3);
+      Y in Fin C by FINSUB_1:def 5;
+    hence "/\"(Y,L) in Y by A6;
+  end;
+
+theorem
+  for L being sup-Semilattice, C being non empty Subset of L
+ st for x, y being Element of L st x in C & y in C holds x <= y or y <= x
+  for Y being non empty finite Subset of C holds "\/"(Y,L) in Y
+  proof
+    let L be sup-Semilattice,
+        C be non empty Subset of L such that
+A1:   for x, y being Element of L st x in C & y in C holds x <= y or y <= x;
+    let Y be non empty finite Subset of C;
+defpred P[set] means "\/"($1,L) in $1 & ex_sup_of $1,L;
+A2: for x being Element of C holds P[{x}]
+    proof
+      let x be Element of C;
+        "\/"({x},L) = x by YELLOW_0:39;
+      hence P[{x}] by TARSKI:def 1,YELLOW_0:38;
+    end;
+A3: for B1, B2 being Element of Fin C st B1 <> {} & B2 <> {}
+      holds P[B1] & P[B2] implies P[B1 \/ B2]
+    proof
+      let B1, B2 be Element of Fin C such that
+          B1 <> {} & B2 <> {} and
+A4:     P[B1] & P[B2];
+        B1 c= C & B2 c= C by FINSUB_1:def 5;
+      then "\/"(B1,L) <= "\/"(B2,L) or "\/"(B2,L) <= "\/"(B1,L) by A1,A4;
+then A5:   "\/"(B1,L) "\/" "\/"(B2,L) = "\/"(B1,L) or "\/"(B1,L) "\/" "\/"(B2,L
+) =
+"\/"(B2,L)
+        by YELLOW_0:24;
+        "\/"(B1 \/ B2,L) = "\/"(B1, L) "\/" "\/"(B2, L) by A4,YELLOW_2:3;
+      hence P[B1 \/ B2] by A4,A5,XBOOLE_0:def 2,YELLOW_2:3;
+    end;
+A6: for B being Element of Fin C st B <> {} holds P[B]
+      from FinSubInd2(A2,A3);
+      Y in Fin C by FINSUB_1:def 5;
+    hence "\/"(Y,L) in Y by A6;
+  end;
+
+Lm3:
+for L being Semilattice, F being Filter of L
+ holds F = uparrow fininfs F
+  proof
+    let L be Semilattice,
+        F be Filter of L;
+    thus F c= uparrow fininfs F by WAYBEL_0:62;
+    thus thesis by WAYBEL_0:62;
+  end;
+
+definition let L be Semilattice,
+               F be Filter of L;
+ mode GeneratorSet of F -> Subset of L means :Def3:
+  F = uparrow fininfs it;
+existence
+  proof
+    take F;
+    thus thesis by Lm3;
+  end;
+end;
+
+definition let L be Semilattice,
+               F be Filter of L;
+ cluster non empty GeneratorSet of F;
+existence
+  proof
+      F is GeneratorSet of F
+    proof
+      thus F = uparrow fininfs F by Lm3;
+    end;
+    then reconsider F1 = F as GeneratorSet of F;
+    take F1;
+    thus thesis;
+  end;
+end;
+
+Lm4:
+for L being Semilattice, F being Filter of L
+ for G being GeneratorSet of F holds G c= F
+  proof
+    let L be Semilattice,
+        F be Filter of L,
+        G be GeneratorSet of F;
+      F = uparrow fininfs G by Def3;
+    hence thesis by WAYBEL_0:62;
+  end;
+
+theorem Th33:
+for L being Semilattice, A being Subset of L
+ for B being non empty Subset of L st A is_coarser_than B
+  holds fininfs A is_coarser_than fininfs B
+  proof
+    let L be Semilattice,
+        A be Subset of L,
+        B be non empty Subset of L such that
+A1:   for a being Element of L st a in A
+       ex b being Element of L st b in B & b <= a;
+    let a be Element of L such that
+A2:   a in fininfs A;
+A3: fininfs B = {"/\"(S,L) where S is finite Subset of B: ex_inf_of S,L}
+      by WAYBEL_0:def 28;
+      fininfs A = {"/\"(Y,L) where Y is finite Subset of A: ex_inf_of Y,L}
+      by WAYBEL_0:def 28;
+    then consider Y being finite Subset of A such that
+A4:   a = "/\"(Y,L) and
+A5:   ex_inf_of Y,L by A2;
+
+defpred P[set,set] means
+ ex x, y being Element of L st x = $1 & y = $2 & y <= x;
+
+A6: for e being set st e in Y ex u being set st u in B & P[e,u]
+    proof
+      let e be set such that
+A7:     e in Y;
+        Y c= the carrier of L by XBOOLE_1:1;
+      then reconsider e as Element of L by A7;
+        ex b being Element of L st b in B & b <= e by A1,A7;
+      hence thesis;
+    end;
+    consider f being Function of Y, B such that
+A8:   for e being set st e in Y holds P[e,f.e] from FuncEx1(A6);
+      f.:Y c= the carrier of L
+    proof
+      let y be set;
+      assume y in f.:Y;
+      then consider x being set such that
+A9:      x in dom f & x in Y & y = f.x by FUNCT_1:def 12;
+        f.x in B by A9,FUNCT_2:7;
+      hence thesis by A9;
+    end;
+then A10: f.:Y is Subset of L;
+A11: now per cases;
+      case Y = {};
+      hence ex_inf_of f.:Y,L by A5,RELAT_1:149;
+      case Y <> {};
+      then consider e being set such that
+A12:     e in Y by XBOOLE_0:def 1;
+        dom f = Y by FUNCT_2:def 1;
+      then f.e in f.:Y by A12,FUNCT_1:def 12;
+      hence ex_inf_of f.:Y,L by A10,YELLOW_0:55;
+    end;
+then A13: "/\"(f.:Y,L) in fininfs B by A3;
+      "/\"(f.:Y,L) is_<=_than Y
+    proof
+      let e be Element of L; assume
+A14:     e in Y;
+      then consider x, y being Element of L such that
+A15:     x = e & y = f.e & y <= x by A8;
+        dom f = Y by FUNCT_2:def 1;
+      then f.e in f.:Y by A14,FUNCT_1:def 12;
+      then "/\"(f.:Y,L) <= y by A11,A15,YELLOW_4:2;
+      hence "/\"(f.:Y,L) <= e by A15,ORDERS_1:26;
+    end;
+    then "/\"(f.:Y,L) <= "/\"(Y,L) by A5,YELLOW_0:31;
+    hence ex b being Element of L st b in fininfs B & b <= a by A4,A13;
+  end;
+
+theorem Th34:
+for L being Semilattice, F being Filter of L, G being GeneratorSet of F
+ for A being non empty Subset of L
+  st G is_coarser_than A & A is_coarser_than F
+ holds A is GeneratorSet of F
+  proof
+    let L be Semilattice,
+        F be Filter of L,
+        G be GeneratorSet of F,
+        A be non empty Subset of L such that
+A1:   G is_coarser_than A;
+    assume A is_coarser_than F;
+then A2: A c= F by YELLOW_4:8;
+A3: F = uparrow fininfs G by Def3;
+      fininfs G is_coarser_than fininfs A by A1,Th33;
+    hence F c= uparrow fininfs A by A3,Th8;
+    thus thesis by A2,WAYBEL_0:62;
+  end;
+
+theorem Th35:
+for L being Semilattice, A being Subset of L
+ for f, g being Function of NAT, the carrier of L st rng f = A &
+  for n being Element of NAT holds
+   g.n = "/\"({f.m where m is Nat: m <= n},L)
+ holds A is_coarser_than rng g
+  proof
+    let L be Semilattice,
+        A be Subset of L,
+        f, g be Function of NAT, the carrier of L such that
+A1:   rng f = A and
+A2:   for n being Element of NAT holds
+       g.n = "/\"({f.m where m is Nat: m <= n},L);
+    let a be Element of L;
+    assume a in A;
+    then consider n being set such that
+A3:   n in dom f and
+A4:   f.n = a by A1,FUNCT_1:def 5;
+    reconsider n as Nat by A3,FUNCT_2:def 1;
+    reconsider T = {f.m where m is Nat: m <= n}
+      as non empty finite Subset of L by Lm1;
+A5: ex_inf_of {f.n},L & ex_inf_of T,L by YELLOW_0:55;
+    take b = "/\"(T,L);
+A6: dom g = NAT by FUNCT_2:def 1;
+      g.n = b by A2;
+    hence b in rng g by A6,FUNCT_1:def 5;
+      f.n in T;
+    then {f.n} c= T by ZFMISC_1:37;
+    then b <= "/\"({f.n},L) by A5,YELLOW_0:35;
+    hence b <= a by A4,YELLOW_0:39;
+  end;
+
+theorem Th36:
+for L being Semilattice, F being Filter of L, G being GeneratorSet of F
+ for f, g being Function of NAT, the carrier of L st rng f = G &
+  for n being Element of NAT holds
+   g.n = "/\"({f.m where m is Nat: m <= n},L)
+ holds rng g is GeneratorSet of F
+  proof
+    let L be Semilattice,
+        F be Filter of L,
+        G be GeneratorSet of F,
+        f, g be Function of NAT, the carrier of L such that
+A1:   rng f = G and
+A2:   for n being Element of NAT holds
+        g.n = "/\"({f.m where m is Nat: m <= n},L);
+A3: g.0 in rng g by FUNCT_2:6;
+A4: G is_coarser_than rng g by A1,A2,Th35;
+      rng g is_coarser_than F
+    proof
+      let a be Element of L;
+      assume a in rng g;
+      then consider n being set such that
+A5:     n in dom g and
+A6:     g.n = a by FUNCT_1:def 5;
+      reconsider n as Nat by A5,FUNCT_2:def 1;
+      reconsider Y = {f.m where m is Nat: m <= n} as
+        non empty finite Subset of L by Lm1;
+A7:   Y c= G
+      proof
+        let q be set;
+        assume q in Y;
+        then consider m being Nat such that
+A8:       q = f.m and
+            m <= n;
+          dom f = NAT by FUNCT_2:def 1;
+        hence q in G by A1,A8,FUNCT_1:def 5;
+      end;
+        G c= F by Lm4;
+      then Y c= F by A7,XBOOLE_1:1;
+then A9:   "/\"(Y,L) in F by WAYBEL_0:43;
+        g.n = "/\"(Y,L) by A2;
+      hence ex b being Element of L st b in F & b <= a by A6,A9;
+    end;
+    hence rng g is GeneratorSet of F by A3,A4,Th34;
+  end;
+
+
+begin  :: On the Baire Category Theorem
+
+:: Proposition 3.43.1
+theorem Th37:
+for L being lower-bounded continuous LATTICE, V being Open upper Subset of L
+ for F being Filter of L, v being Element of L st V "/\" F c= V & v in V &
+  ex A being non empty GeneratorSet of F st A is countable
+ ex O being Open Filter of L st O c= V & v in O & F c= O
+  proof
+    let L be lower-bounded continuous LATTICE,
+        V be Open upper Subset of L,
+        F be Filter of L,
+        v be Element of L such that
+A1:   V "/\" F c= V and
+A2:   v in V;
+    reconsider V1 = V as non empty Open upper Subset of L by A2;
+    reconsider v1 = v as Element of V1 by A2;
+    given A being non empty GeneratorSet of F such that
+A3:   A is countable;
+    reconsider G = {x where x is Element of L : V "/\" {x} c= V}
+      as Filter of L by Th27,Th28,Th29;
+A4: F c= G
+    proof
+      let q be set;
+      assume q in F;
+      then reconsider s = q as Element of F;
+A5:   V "/\" {s} = {s "/\" t where t is Element of L : t in V} by YELLOW_4:42;
+        V "/\" {s} c= V
+      proof
+        let w be set;
+        assume w in V "/\" {s};
+        then consider t being Element of L such that
+A6:       w = s "/\" t and
+A7:       t in V by A5;
+          t "/\" s in V "/\" F by A7,YELLOW_4:37;
+        hence w in V by A1,A6;
+      end;
+      hence q in G;
+    end;
+
+    consider f being Function of NAT, A such that
+A8:   rng f = A by A3,Th4;
+
+    deffunc F(Nat) = "/\"({f.m where m is Nat: m <= $1},L);
+    consider g being Function of NAT, the carrier of L such that
+A9:   for n being Element of NAT holds g.n = F(n) from LambdaD;
+
+A10: dom g = NAT by FUNCT_2:def 1;
+    then reconsider AA = rng g as non empty Subset of L by RELAT_1:65;
+A11: f is Function of NAT, the carrier of L by FUNCT_2:9;
+A12: for n being Nat, a, b being Element of L st a = g.n & b = g.(n+1)
+     holds b <= a
+    proof
+      let n be Nat,
+          a, b be Element of L such that
+A13:     a = g.n & b = g.(n+1);
+      reconsider gn = {f.m where m is Nat: m <= n},
+                 gn1 = {f.k where k is Nat: k <= n+1}
+        as non empty finite Subset of L by A11,Lm1;
+A14:   a = "/\"(gn,L) & b = "/\"(gn1,L) by A9,A13;
+A15:   ex_inf_of gn,L & ex_inf_of gn1,L by YELLOW_0:55;
+        gn c= gn1
+       proof
+        let i be set;
+        assume i in gn;
+        then consider k being Nat such that
+A16:       i = f.k and
+A17:       k <= n;
+          k <= n+1 by A17,NAT_1:37;
+        hence i in gn1 by A16;
+      end;
+      hence b <= a by A14,A15,YELLOW_0:35;
+    end;
+
+A18: AA is GeneratorSet of F by A8,A9,A11,Th36;
+then A19: uparrow fininfs AA = F by Def3;
+
+defpred P[Nat,set,set] means
+ ex x1, y1 being Element of V1, z1 being Element of L st
+  x1 = $2 & y1 = $3 & z1 = g.($1+1) & y1 << x1 "/\" z1;
+
+A20:  for n being Nat, x being Element of V1
+      ex y being Element of V1 st P[n,x,y]
+     proof
+       let n be Nat,
+           x be Element of V1;
+A21:    g.(n+1) in AA by A10,FUNCT_1:def 5;
+         AA c= F by A18,Lm4;
+       then AA c= G by A4,XBOOLE_1:1;
+       then g.(n+1) in G by A21;
+       then consider g1 being Element of L such that
+A22:      g.(n+1) = g1 and
+A23:      V "/\" {g1} c= V;
+         g1 in {g1} by TARSKI:def 1;
+       then x "/\" g1 in V "/\" {g1} by YELLOW_4:37;
+       then ex y1 being Element of L st y1 in V & y1 << x "/\" g1
+         by A23,WAYBEL_6:def 1;
+       hence ex y being Element of V1 st P[n,x,y] by A22;
+     end;
+
+    consider h being Function of NAT, V1 such that
+A24:   h.0 = v1 and
+A25:   for n being Element of NAT holds P[n,h.n,h.(n+1)] from RecExD(A20);
+
+A26: dom h = NAT by FUNCT_2:def 1;
+then A27: h.0 in rng h by FUNCT_1:def 5;
+      rng h c= V1 by RELSET_1:12;
+    then rng h c= the carrier of L by XBOOLE_1:1;
+    then reconsider R = rng h as non empty Subset of L by A27;
+    set O = uparrow fininfs R;
+A28: for x, y being Element of L, n being Nat st h.n = x & h.(n+1) = y
+     holds y <= x
+    proof
+      let x, y be Element of L,
+          n be Nat such that
+A29:     h.n = x & h.(n+1) = y;
+      consider x1, y1 being Element of V1,
+               z1 being Element of L such that
+A30:     x1 = h.n & y1 = h.(n+1) & z1 = g.(n+1) & y1 << x1 "/\" z1 by A25;
+A31:   y1 <= x1 "/\" z1 by A30,WAYBEL_3:1;
+        x1 "/\" z1 <= x1 by YELLOW_0:23;
+      hence y <= x by A29,A30,A31,ORDERS_1:26;
+    end;
+
+A32: for x, y being Element of L, n, m being Nat st h.n = x & h.m = y & n <= m
+      holds y <= x
+    proof
+      let x, y be Element of L,
+          n, m be Nat such that
+A33:     h.n = x & h.m = y & n <= m;
+defpred P[Nat] means
+ for a being Nat, s, t being Element of L st t = h.a & s = h.$1 & a <= $1
+  holds s <= t;
+A34:   P[0] by NAT_1:19;
+A35:   for k being Nat st P[k] holds P[k + 1]
+      proof
+        let k be Nat such that
+A36:       for j being Nat, s, t being Element of L st t = h.j & s = h.k
+           & j <= k holds s <= t;
+        let a be Nat,
+            c, d be Element of L such that
+A37:       d = h.a & c = h.(k+1) & a <= k+1;
+          h.k in R by A26,FUNCT_1:def 5;
+        then reconsider s = h.k as Element of L;
+A38:     c <= s by A28,A37;
+        per cases by A37,NAT_1:26;
+        suppose a <= k;
+        then s <= d by A36,A37;
+        hence c <= d by A38,ORDERS_1:26;
+        suppose a = k + 1;
+        hence c <= d by A37;
+      end;
+        for k being Nat holds P[k] from Ind(A34,A35);
+      hence y <= x by A33;
+    end;
+
+A39: for x, y being Element of L st x in R & y in R holds x <= y or y <= x
+    proof
+      let x, y be Element of L; assume
+A40:     x in R & y in R;
+      then consider n being set such that
+A41:     n in dom h and
+A42:     x = h.n by FUNCT_1:def 5;
+      reconsider n as Nat by A41,FUNCT_2:def 1;
+      consider m being set such that
+A43:     m in dom h and
+A44:     y = h.m by A40,FUNCT_1:def 5;
+      reconsider m as Nat by A43,FUNCT_2:def 1;
+      per cases;
+      suppose m <= n;
+      hence x <= y or y <= x by A32,A42,A44;
+      suppose n <= m;
+      hence x <= y or y <= x by A32,A42,A44;
+    end;
+
+A45: R c= O by WAYBEL_0:62;
+      O is Open
+    proof
+      let x be Element of L;
+      assume x in O;
+      then consider y being Element of L such that
+A46:     y <= x and
+A47:     y in fininfs R by WAYBEL_0:def 16;
+        fininfs R = {"/\"(Y,L) where Y is finite Subset of R: ex_inf_of Y,L}
+        by WAYBEL_0:def 28;
+      then consider Y being finite Subset of R such that
+A48:     y = "/\"(Y,L) and
+          ex_inf_of Y,L by A47;
+
+      per cases;
+      suppose Y <> {};
+      then y in Y by A39,A48,Th31;
+      then consider n being set such that
+A49:     n in dom h and
+A50:     h.n = y by FUNCT_1:def 5;
+      reconsider n as Nat by A49,FUNCT_2:def 1;
+      consider x1, y1 being Element of V1,
+               z1 being Element of L such that
+A51:     x1 = h.n and
+A52:     y1 = h.(n+1) and
+          z1 = g.(n+1) and
+A53:     y1 << x1 "/\" z1 by A25;
+      take y1;
+        y1 in R by A26,A52,FUNCT_1:def 5;
+      hence y1 in O by A45;
+        x1 "/\" z1 <= x1 by YELLOW_0:23;
+      then y1 << x1 by A53,WAYBEL_3:2;
+      hence y1 << x by A46,A50,A51,WAYBEL_3:2;
+      suppose Y = {};
+then A54:   y = Top L by A48,YELLOW_0:def 12;
+        x <= Top L by YELLOW_0:45;
+then A55:   x = Top L by A46,A54,ORDERS_1:25;
+      consider b being set such that
+A56:     b in R by XBOOLE_0:def 1;
+      reconsider b as Element of L by A56;
+      consider n being set such that
+A57:     n in dom h and
+          h.n = b by A56,FUNCT_1:def 5;
+      reconsider n as Nat by A57,FUNCT_2:def 1;
+      consider x1, y1 being Element of V1,
+               z1 being Element of L such that
+          x1 = h.n and
+A58:     y1 = h.(n+1) and
+          z1 = g.(n+1) and
+A59:     y1 << x1 "/\" z1 by A25;
+      take y1;
+        y1 in R by A26,A58,FUNCT_1:def 5;
+      hence y1 in O by A45;
+        x1 "/\" z1 <= x1 by YELLOW_0:23;
+then A60:   y1 << x1 by A59,WAYBEL_3:2;
+        x1 <= x by A55,YELLOW_0:45;
+      hence y1 << x by A60,WAYBEL_3:2;
+    end;
+    then reconsider O as Open Filter of L;
+    take O;
+    thus O c= V
+    proof
+      let q be set;
+      assume q in O;
+      then reconsider q as Element of O;
+      consider y being Element of L such that
+A61:     y <= q and
+A62:     y in fininfs R by WAYBEL_0:def 16;
+        fininfs R = {"/\"(Y,L) where Y is finite Subset of R: ex_inf_of Y,L}
+        by WAYBEL_0:def 28;
+      then consider Y being finite Subset of R such that
+A63:     y = "/\"(Y,L) and
+          ex_inf_of Y,L by A62;
+      per cases;
+      suppose Y <> {};
+      then y in Y by A39,A63,Th31;
+      then consider n being set such that
+A64:     n in dom h and
+A65:     h.n = y by FUNCT_1:def 5;
+      reconsider n as Nat by A64,FUNCT_2:def 1;
+      consider x1, y1 being Element of V1,
+               z1 being Element of L such that
+A66:     x1 = h.n and
+          y1 = h.(n+1) & z1 = g.(n+1) & y1 << x1 "/\" z1 by A25;
+      thus thesis by A61,A65,A66,WAYBEL_0:def 20;
+      suppose Y = {};
+then A67:   y = Top L by A63,YELLOW_0:def 12;
+        q <= Top L by YELLOW_0:45;
+      then q = Top L by A61,A67,ORDERS_1:25;
+      hence thesis by Th12;
+    end;
+    thus v in O by A24,A27,A45;
+A68: AA is_coarser_than R
+    proof
+      let a be Element of L;
+      assume a in AA;
+      then consider x being set such that
+A69:     x in dom g and
+A70:     g.x = a by FUNCT_1:def 5;
+      reconsider x as Nat by A69,FUNCT_2:def 1;
+      consider x1, y1 being Element of V1,
+               z1 being Element of L such that
+          x1 = h.x and
+A71:     y1 = h.(x+1) and
+A72:     z1 = g.(x+1) and
+A73:     y1 << x1 "/\" z1 by A25;
+A74:   h.(x+1) in R by A26,FUNCT_1:def 5;
+A75:   x1 "/\" z1 <= z1 by YELLOW_0:23;
+        y1 <= x1 "/\" z1 by A73,WAYBEL_3:1;
+then A76:   y1 <= z1 by A75,ORDERS_1:26;
+        z1 <= a by A12,A70,A72;
+      then y1 <= a by A76,ORDERS_1:26;
+      hence ex b be Element of L st b in R & b <= a by A71,A74;
+    end;
+      R is_coarser_than O by A45,Th20;
+    then AA is_coarser_than O by A68,YELLOW_4:7;
+    then AA c= O by YELLOW_4:8;
+    hence F c= O by A19,WAYBEL_0:62;
+  end;
+
+:: Corolarry 3.43.2
+theorem Th38:
+for L being lower-bounded continuous LATTICE, V being Open upper Subset of L
+ for N being non empty countable Subset of L
+  for v being Element of L st V "/\" N c= V & v in V
+ ex O being Open Filter of L st {v} "/\" N c= O & O c= V & v in O
+  proof
+    let L be lower-bounded continuous LATTICE,
+        V be Open upper Subset of L,
+        N be non empty countable Subset of L,
+        v be Element of L such that
+A1:   V "/\" N c= V and
+A2:   v in V;
+    reconsider G = {x where x is Element of L : V "/\" {x} c= V}
+      as Filter of L by Th27,Th28,Th29;
+      N is GeneratorSet of uparrow fininfs N
+    proof
+      thus uparrow fininfs N = uparrow fininfs N;
+    end;
+    then consider F being Filter of L such that
+A3:   N is GeneratorSet of F;
+A4: N c= G
+    proof
+      let q be set; assume
+A5:     q in N;
+      then reconsider q1 = q as Element of L;
+A6:   {q1} "/\" V = {q1 "/\" y where y is Element of L: y in V} by YELLOW_4:42;
+        V "/\" {q1} c= V
+      proof
+        let t be set;
+        assume t in V "/\" {q1};
+        then consider y being Element of L such that
+A7:       t = q1 "/\" y and
+A8:       y in V by A6;
+          q1 "/\" y in N "/\" V by A5,A8,YELLOW_4:37;
+        hence t in V by A1,A7;
+      end;
+      hence q in G;
+    end;
+      F = uparrow fininfs N by A3,Def3;
+then A9: F c= G by A4,WAYBEL_0:62;
+      V "/\" F c= V
+    proof
+A10:   V "/\" F = { d "/\" f where d, f is Element of L : d in V & f in F }
+        by YELLOW_4:def 4;
+      let q be set;
+      assume q in V "/\" F;
+      then consider d, f being Element of L such that
+A11:     q = d "/\" f and
+A12:     d in V and
+A13:     f in F by A10;
+        f in G by A9,A13;
+      then consider x being Element of L such that
+A14:     f = x and
+A15:     V "/\" {x} c= V;
+        x in {x} by TARSKI:def 1;
+      then d "/\" f in V "/\" {x} by A12,A14,YELLOW_4:37;
+      hence q in V by A11,A15;
+    end;
+    then consider O being Open Filter of L such that
+A16:   O c= V and
+A17:   v in O and
+A18:   F c= O by A2,A3,Th37;
+    take O;
+A19: {v} "/\" N = {v "/\" n where n is Element of L: n in N} by YELLOW_4:42;
+    thus {v} "/\" N c= O
+    proof
+      let q be set;
+      assume q in {v} "/\" N;
+      then consider n being Element of L such that
+A20:     q = v "/\" n and
+A21:     n in N by A19;
+        N c= F by A3,Lm4;
+      then N c= O by A18,XBOOLE_1:1;
+      then v "/\" n in O "/\" O by A17,A21,YELLOW_4:37;
+      hence q in O by A20,Th25;
+    end;
+    thus O c= V & v in O by A16,A17;
+  end;
+
+:: Proposition 3.43.3
+theorem Th39:
+for L being lower-bounded continuous LATTICE, V being Open upper Subset of L
+ for N being non empty countable Subset of L, x, y being Element of L
+  st V "/\" N c= V & y in V & not x in V
+ ex p being irreducible Element of L st x <= p & not p in uparrow ({y} "/\" N)
+  proof
+    let L be lower-bounded continuous LATTICE,
+        V be Open upper Subset of L,
+        N be non empty countable Subset of L,
+        x, y be Element of L such that
+A1:  V "/\" N c= V & y in V and
+A2:  not x in V;
+    consider O being Open Filter of L such that
+A3:   {y} "/\" N c= O and
+A4:   O c= V and
+        y in O by A1,Th38;
+      not x in O by A2,A4;
+    then x in O` by YELLOW_6:10;
+    then consider p being Element of L such that
+A5:   x <= p and
+A6:   p is_maximal_in O` by WAYBEL_6:9;
+    reconsider p as irreducible Element of L by A6,WAYBEL_6:13;
+    take p;
+    thus x <= p by A5;
+      uparrow O = O
+    proof
+      thus uparrow O c= O by WAYBEL_0:24;
+      thus thesis by WAYBEL_0:16;
+    end;
+then A7: uparrow({y} "/\" N) c= O by A3,YELLOW_3:7;
+      p in O` by A6,WAYBEL_4:56;
+    hence not p in uparrow ({y} "/\" N) by A7,YELLOW_6:10;
+  end;
+
+:: Corollary 3.43.4
+theorem Th40:
+for L being lower-bounded continuous LATTICE, x being Element of L
+ for N being non empty countable Subset of L
+  st for n, y being Element of L st not y <= x & n in N holds not y "/\" n <= x
+ for y being Element of L st not y <= x
+  ex p being irreducible Element of L st x <= p & not p in uparrow ({y} "/\" N)
+  proof
+    let L be lower-bounded continuous LATTICE,
+        x be Element of L,
+        N be non empty countable Subset of L such that
+A1:   for n, y being Element of L st not y <= x & n in N holds not y "/\"
+ n <= x;
+    let y be Element of L such that
+A2:   not y <= x;
+    set V = (downarrow x)`;
+A3: V = [#]L \ downarrow x by PRE_TOPC:17
+     .= (the carrier of L) \ downarrow x by PRE_TOPC:12;
+A4: V "/\" N = { v "/\" n where v, n is Element of L : v in V & n in N }
+      by YELLOW_4:def 4;
+A5: V "/\" N c= V
+    proof
+      let q be set;
+      assume q in V "/\" N;
+      then consider v, n being Element of L such that
+A6:     q = v "/\" n and
+A7:     v in V and
+A8:     n in N by A4;
+        not v in downarrow x by A3,A7,XBOOLE_0:def 4;
+      then not v <= x by WAYBEL_0:17;
+      then not v "/\" n <= x by A1,A8;
+      then not v "/\" n in downarrow x by WAYBEL_0:17;
+      hence q in V by A3,A6,XBOOLE_0:def 4;
+    end;
+      not y in downarrow x by A2,WAYBEL_0:17;
+then A9: y in V by A3,XBOOLE_0:def 4;
+      x <= x;
+    then x in downarrow x by WAYBEL_0:17;
+    then not x in V by A3,XBOOLE_0:def 4;
+    hence thesis by A5,A9,Th39;
+  end;
+
+:: Definition 3.43.5
+definition let L be non empty RelStr,
+               u be Element of L;
+ attr u is dense means :Def4:
+  for v being Element of L st v <> Bottom L holds u "/\" v <> Bottom L;
+end;
+
+definition let L be upper-bounded Semilattice;
+ cluster Top L -> dense;
+coherence
+  proof
+    let v be Element of L;
+    assume v <> Bottom L;
+    hence Top L "/\" v <> Bottom L by WAYBEL_1:5;
+  end;
+end;
+
+definition let L be upper-bounded Semilattice;
+ cluster dense Element of L;
+existence
+  proof
+    take Top L;
+    thus thesis;
+  end;
+end;
+
+theorem
+  for L being non trivial bounded Semilattice
+ for x being Element of L st x is dense holds x <> Bottom L
+  proof
+    let L be non trivial bounded Semilattice,
+        x be Element of L such that
+A1:  x is dense;
+      Top L <> Bottom L by WAYBEL_7:5;
+    then x "/\" Top L <> Bottom L by A1,Def4;
+    hence x <> Bottom L by WAYBEL_1:5;
+  end;
+
+definition let L be non empty RelStr,
+               D be Subset of L;
+ attr D is dense means :Def5:
+  for d being Element of L st d in D holds d is dense;
+end;
+
+theorem Th42:
+for L being upper-bounded Semilattice holds {Top L} is dense
+  proof
+    let L be upper-bounded Semilattice;
+    let d be Element of L;
+    assume d in {Top L};
+    hence thesis by TARSKI:def 1;
+  end;
+
+definition let L be upper-bounded Semilattice;
+ cluster non empty finite countable dense Subset of L;
+existence
+  proof
+    take {Top L};
+    thus {Top L} is non empty finite countable;
+    thus {Top L} is dense by Th42;
+  end;
+end;
+
+:: Theorem 3.43.7
+theorem Th43:
+for L being lower-bounded continuous LATTICE
+ for D being non empty countable dense Subset of L, u being Element of L
+  st u <> Bottom L
+ ex p being irreducible Element of L st p <> Top
+L & not p in uparrow ({u} "/\" D)
+  proof
+    let L be lower-bounded continuous LATTICE,
+        D be non empty countable dense Subset of L,
+        u be Element of L such that
+A1:   u <> Bottom L;
+A2:  for d, y being Element of L st not y <= Bottom L & d in D holds not y "/\"
+ d <= Bottom L
+     proof
+       let d, y be Element of L such that
+A3:      not y <= Bottom L;
+       assume d in D;
+       then d is dense by Def5;
+then A4:    y "/\" d <> Bottom L by A3,Def4;
+         Bottom L <= y "/\" d by YELLOW_0:44;
+       hence not y "/\" d <= Bottom L by A4,ORDERS_1:25;
+     end;
+       Bottom L <= u by YELLOW_0:44;
+     then not u <= Bottom L by A1,ORDERS_1:25;
+     then consider p being irreducible Element of L such that
+         Bottom L <= p and
+A5:    not p in uparrow ({u} "/\" D) by A2,Th40;
+     take p;
+     thus p <> Top L by A5,Th13;
+     thus thesis by A5;
+  end;
+
+theorem Th44:
+for T being non empty TopSpace
+ for A being Element of InclPoset the topology of T
+  for B being Subset of T st A = B & B` is irreducible
+ holds A is irreducible
+  proof
+    let T be non empty TopSpace,
+        A be Element of InclPoset the topology of T,
+        B be Subset of T such that
+A1:   A = B;
+A2: the carrier of InclPoset the topology of T = the topology of T
+      by YELLOW_1:1;
+    assume that
+         B` is non empty closed and
+A3:    for S1, S2 being Subset of T st S1 is closed & S2 is closed &
+        B` = S1 \/ S2 holds S1 = B` or S2 = B`;
+    let x, y be Element of InclPoset the topology of T such that
+A4:   A = x "/\" y;
+      x in the topology of T & y in the topology of T by A2;
+    then reconsider x1 = x, y1 = y as Subset of T;
+A5: x1 is open & y1 is open by A2,PRE_TOPC:def 5;
+then A6: x1` is closed & y1` is closed by TOPS_1:30;
+      x1 /\ y1 is open by A5,TOPS_1:38;
+    then x /\ y in the topology of T by PRE_TOPC:def 5;
+    then A = x /\ y by A4,YELLOW_1:9;
+    then B` = (x1`) \/ y1` by A1,Th6;
+    then x1` = B` or y1` = B` by A3,A6;
+    hence x = A or y = A by A1,TOPS_1:21;
+  end;
+
+theorem Th45:
+for T being non empty TopSpace
+ for A being Element of InclPoset the topology of T
+  for B being Subset of T st A = B & A <> Top InclPoset the topology of T
+ holds A is irreducible iff B` is irreducible
+  proof
+    let T be non empty TopSpace,
+        A be Element of InclPoset the topology of T,
+        B be Subset of T such that
+A1:   A = B and
+A2:   A <> Top InclPoset the topology of T;
+A3: the carrier of InclPoset the topology of T = the topology of T
+      by YELLOW_1:1;
+    hereby assume
+A4:     A is irreducible;
+      thus B` is irreducible
+      proof
+A5:     B <> the carrier of T by A1,A2,YELLOW_1:24;
+          now
+          assume (the carrier of T) \ B = {};
+          then the carrier of T c= B by XBOOLE_1:37;
+          hence contradiction by A5,XBOOLE_0:def 10;
+        end;
+        then ([#]T) \ B <> {} by PRE_TOPC:12;
+        hence B` is non empty by PRE_TOPC:17;
+        thus B` is closed
+        proof
+            B in the topology of T by A1,A3;
+          hence B`` in the topology of T;
+        end;
+        let S1, S2 be Subset of T such that
+A6:       S1 is closed & S2 is closed and
+A7:       B` = S1 \/ S2;
+A8:     S1` is open & S2` is open by A6,TOPS_1:29;
+        then S1` in the topology of T & S2` in the topology of T by PRE_TOPC:
+def 5;
+          then reconsider s1 = S1`, s2 = S2`
+          as Element of InclPoset the topology of T by A3;
+          (S1`) /\ S2` is open by A8,TOPS_1:38;
+then A9:     s1 /\ s2 in the topology of T by PRE_TOPC:def 5;
+          B = (S1 \/ S2)` by A7
+         .= (S1`) /\ S2` by Th5;
+        then A = s1 "/\" s2 by A1,A9,YELLOW_1:9;
+        then A = s1 or A = s2 by A4,WAYBEL_6:def 2;
+        hence S1 = B` or S2 = B` by A1;
+      end;
+    end;
+    thus thesis by A1,Th44;
+  end;
+
+theorem Th46:
+for T being non empty TopSpace
+ for A being Element of InclPoset the topology of T
+  for B being Subset of T st A = B
+ holds A is dense iff B is everywhere_dense
+  proof
+    let T be non empty TopSpace,
+        A be Element of InclPoset the topology of T,
+        B be Subset of T such that
+A1:   A = B;
+      {} in the topology of T by PRE_TOPC:5;
+then A2: Bottom InclPoset the topology of T = {} by YELLOW_1:13;
+A3: the carrier of InclPoset the topology of T = the topology of T
+      by YELLOW_1:1;
+A4: B is open
+    proof
+      thus B in the topology of T by A1,A3;
+    end;
+    hereby assume
+A5:     A is dense;
+        for Q being Subset of T st Q <> {} & Q is open holds B meets Q
+      proof
+        let Q be Subset of T such that
+A6:       Q <> {} and
+A7:       Q is open;
+          Q in the topology of T by A7,PRE_TOPC:def 5;
+        then reconsider q = Q as Element of InclPoset the topology of T
+          by A3;
+A8:     A "/\" q <> Bottom InclPoset the topology of T by A2,A5,A6,Def4;
+          B /\ Q is open by A4,A7,TOPS_1:38;
+        then A /\ q in the topology of T by A1,PRE_TOPC:def 5;
+        then B /\ Q <> {} by A1,A2,A8,YELLOW_1:9;
+        hence B meets Q by XBOOLE_0:def 7;
+      end;
+      then B is dense by TOPS_1:80;
+      hence B is everywhere_dense by A4,TOPS_3:36;
+    end;
+    assume B is everywhere_dense;
+then A9: B is dense by TOPS_3:33;
+    let v be Element of InclPoset the topology of T such that
+A10:   v <> Bottom InclPoset the topology of T;
+      v in the topology of T by A3;
+    then reconsider V = v as Subset of T;
+A11: V is open
+    proof
+      thus V in the topology of T by A3;
+    end;
+    then B meets V by A2,A9,A10,TOPS_1:80;
+then A12: B /\ V <> {} by XBOOLE_0:def 7;
+      B is open
+    proof
+      thus B in the topology of T by A1,A3;
+    end;
+    then B /\ V is open by A11,TOPS_1:38;
+    then B /\ V in the topology of T by PRE_TOPC:def 5;
+    hence A "/\" v <> Bottom
+InclPoset the topology of T by A1,A2,A12,YELLOW_1:9;
+  end;
+
+:: Theorem 3.43.8
+theorem Th47:
+for T being non empty TopSpace st T is locally-compact
+ for D being countable Subset-Family of T st D is non empty dense open
+  for O being non empty Subset of T st O is open
+ ex A being irreducible Subset of T st for V being Subset of T st V in D
+  holds A /\ O meets V
+  proof
+    let T be non empty TopSpace;
+    assume T is locally-compact;
+    then reconsider L = InclPoset the topology of T
+      as bounded continuous LATTICE by WAYBEL_3:43;
+    let D be countable Subset-Family of T such that
+A1:   D is non empty dense open;
+    let O be non empty Subset of T such that
+A2:   O is open;
+A3: the carrier of L = the topology of T by YELLOW_1:1;
+      O in the topology of T by A2,PRE_TOPC:def 5;
+    then reconsider u = O as Element of L by A3;
+      {} in the topology of T by PRE_TOPC:5;
+then A4: u <> Bottom L by YELLOW_1:13;
+    set D1 = {d where d is Element of L : ex d1 being Subset of T
+                st d1 in D & d1 = d & d is dense};
+      D1 c= the carrier of L
+    proof
+      let q be set;
+      assume q in D1;
+      then consider d being Element of L such that
+A5:     q = d and
+          ex d1 being Subset of T st d1 in D & d1 = d & d is dense;
+      thus q in the carrier of L by A5;
+    end;
+    then reconsider D1 as Subset of L;
+      D1 c= D
+    proof
+      let q be set;
+      assume q in D1;
+      then consider d being Element of L such that
+A6:     q = d & ex d1 being Subset of T st d1 in D & d1 = d & d is dense;
+      thus q in D by A6;
+    end;
+then A7: D1 is countable by CARD_4:46;
+A8: D1 is dense
+    proof
+      let q be Element of L;
+      assume q in D1;
+      then consider d being Element of L such that
+A9:     q = d & ex d1 being Subset of T st d1 in D & d1 = d & d is dense;
+      thus q is dense by A9;
+    end;
+    consider I being set such that
+A10:   I in D by A1,XBOOLE_0:def 1;
+    reconsider I as Subset of T by A10;
+      I is open by A1,A10,TOPS_2:def 1;
+    then I in the topology of T by PRE_TOPC:def 5;
+    then reconsider i = I as Element of L by A3;
+      I is open dense by A1,A10,Def2,TOPS_2:def 1;
+    then I is everywhere_dense by TOPS_3:36;
+    then i is dense by Th46;
+    then i in D1 by A10;
+    then consider p being irreducible Element of L such that
+A11:   p <> Top L and
+A12:   not p in uparrow ({u} "/\" D1) by A4,A7,A8,Th43;
+      p in the topology of T by A3;
+    then reconsider P = p as Subset of T;
+    reconsider A = P` as irreducible Subset of T by A11,Th45;
+    take A;
+    let V be Subset of T; assume
+A13:   V in D;
+then A14: V is dense by A1,Def2;
+A15: for d1 being Element of L st d1 in D1 holds not u "/\" d1 <= p
+    proof
+      let d1 be Element of L such that
+A16:     d1 in D1;
+        u in {u} by TARSKI:def 1;
+      then u "/\" d1 in {u} "/\" D1 by A16,YELLOW_4:37;
+      hence not u "/\" d1 <= p by A12,WAYBEL_0:def 16;
+    end;
+A17: V is open by A1,A13,TOPS_2:def 1;
+    then V in the topology of T by PRE_TOPC:def 5;
+    then reconsider v = V as Element of L by A3;
+      O /\ V is open by A2,A17,TOPS_1:38;
+then A18: u /\ v in the topology of T by PRE_TOPC:def 5;
+      V is everywhere_dense by A14,A17,TOPS_3:36;
+    then v is dense by Th46;
+    then v in D1 by A13;
+    then not u "/\" v <= p by A15;
+    then not u "/\" v c= p by YELLOW_1:3;
+    then not O /\ V c= p by A18,YELLOW_1:9;
+    then not O /\ V c= A`;
+    then consider x being set such that
+A19:   x in O /\ V and
+A20:   not x in A` by TARSKI:def 3;
+    reconsider x as Element of T by A19;
+      x in A by A20,YELLOW_6:10;
+    then O /\ V /\ A <> {} by A19,XBOOLE_0:def 3;
+    hence A /\ O /\ V <> {} by XBOOLE_1:16;
+  end;
+
+definition let T be non empty TopSpace;
+ redefine attr T is Baire means
+    for F being Subset-Family of T st F is countable &
+   for S being Subset of T st S in F holds S is open dense
+  ex I being Subset of T st I = Intersect F & I is dense;
+compatibility
+  proof
+    hereby assume
+A1:   T is Baire;
+      thus for F being Subset-Family of T st F is countable &
+        for S being Subset of T st S in F holds S is open dense
+         ex I being Subset of T st I = Intersect F & I is dense
+       proof
+         let F be Subset-Family of T such that
+A2:        F is countable and
+A3:        for S being Subset of T st S in F holds S is open dense;
+       for S being Subset of T st S in F holds S is everywhere_dense
+        proof
+          let S be Subset of T;
+          assume S in F;
+          then S is open dense by A3;
+          hence S is everywhere_dense by TOPS_3:36;
+        end; hence thesis by A1,A2,YELLOW_8:def 3;
+      end;
+    end;
+    assume
+A4:   for F being Subset-Family of T st F is countable &
+       for S being Subset of T st S in F holds S is open dense
+        ex I being Subset of T st I = Intersect F & I is dense;
+    let F be Subset-Family of T such that
+A5:   F is countable and
+A6:   for S being Subset of T st S in F holds S is everywhere_dense;
+    set F1 = {Int A where A is Subset of T : A in F};
+    set D = bool the carrier of T;
+    deffunc F(Element of D) = Int $1;
+    consider f being Function of D, D such that
+A7:   for x being Element of D holds f.x = F(x) from LambdaD;
+      F1 c= f.:F
+    proof
+      let q be set;
+      assume q in F1;
+      then consider A being Subset of T such that
+A8:     q = Int A & A in F;
+A9:   dom f = D by FUNCT_2:def 1;
+        f.A = Int A by A7;
+      hence q in f.:F by A8,A9,FUNCT_1:def 12;
+    end;
+    then Card F1 <=` Card F by CARD_2:2;
+then A10: F1 is countable by A5,Th2;
+      F1 c= bool the carrier of T
+    proof
+      let q be set;
+      assume q in F1;
+      then consider A being Subset of T such that
+A11:     q = Int A and A in F;
+      thus q in bool the carrier of T by A11;
+    end;
+    then F1 is Subset-Family of T by SETFAM_1:def 7;
+    then reconsider F1 as Subset-Family of T;
+   now
+      let S be Subset of T;
+      assume S in F1;
+      then consider A being Subset of T such that
+A12:     S = Int A and
+A13:     A in F;
+        A is everywhere_dense by A6,A13;
+      hence S is open dense by A12,TOPS_1:51,TOPS_3:35;
+    end;
+    then consider I being Subset of T such that
+A14:   I = Intersect F1 & I is dense by A4,A10;
+    reconsider J = Intersect F as Subset of T;
+    take J;
+    thus J = Intersect F;
+      for X being set st X in F holds Intersect F1 c= X
+    proof
+      let X be set such that
+A15:     X in F;
+      let q be set such that
+A16:     q in Intersect F1;
+      reconsider X1 = X as Subset of T by A15;
+A17:   Int X1 c= X1 by TOPS_1:44;
+        Int X1 in F1 by A15;
+      then q in Int X1 by A16,CANTOR_1:10;
+      hence q in X by A17;
+    end;
+    then Intersect F1 c= Intersect F by MSSUBFAM:4;
+    hence J is dense by A14,TOPS_1:79;
+  end;
+end;
+
+:: Corolarry 3.43.10
+theorem
+  for T being non empty TopSpace st T is sober locally-compact
+ holds T is Baire
+  proof
+    let T be non empty TopSpace such that
+A1:   T is sober locally-compact;
+    let F be Subset-Family of T such that
+A2:   F is countable and
+A3:   for S being Subset of T st S in F holds S is open dense;
+    reconsider I = Intersect F as Subset of T;
+    take I;
+    thus I = Intersect F;
+A4: F is open dense
+    proof
+      thus F is open
+      proof
+        let X be Subset of T;
+        assume X in F;
+        hence X is open by A3;
+      end;
+      thus for X being Subset of T st X in F holds X is dense by A3;
+    end;
+    per cases;
+    suppose
+A5:   F <> {};
+      for Q being Subset of T st Q <> {} & Q is open holds
+     (Intersect F) meets Q
+    proof
+      let Q be Subset of T; assume
+A6:     Q <> {} & Q is open;
+      then consider S being irreducible Subset of T such that
+A7:     for V being Subset of T st V in F holds S /\ Q meets V
+          by A1,A2,A4,A5,Th47;
+      consider p being Point of T such that
+A8:     p is_dense_point_of S and
+          for q being Point of T st q is_dense_point_of S holds p = q
+          by A1,YELLOW_8:def 6;
+        S is closed by YELLOW_8:def 4;
+then A9:   S = Cl{p} by A8,YELLOW_8:25;
+A10:   for Y being set holds Y in F implies p in Y & p in Q
+      proof
+        let Y be set; assume
+A11:       Y in F;
+        then reconsider Y1 = Y as Subset of T;
+          S /\ Q meets Y1 by A7,A11;
+then A12:    S /\ Q /\ Y1 <> {} by XBOOLE_0:def 7;
+          now
+            Y1 is open by A3,A11;
+          then Q /\ Y1 is open by A6,TOPS_1:38;
+then A13:       (Q /\ Y1)` is closed by TOPS_1:30;
+          assume not p in Q /\ Y1;
+          then p in (Q /\ Y1)` by YELLOW_6:10;
+          then {p} c= (Q /\ Y1)` by ZFMISC_1:37;
+          then Cl{p} c= Cl(Q /\ Y1)` by PRE_TOPC:49;
+          then S c= (Q /\ Y1)` by A9,A13,PRE_TOPC:52;
+          then S misses (Q /\ Y1) by PRE_TOPC:21;
+          then S /\ (Q /\ Y1) = {} by XBOOLE_0:def 7;
+          hence contradiction by A12,XBOOLE_1:16;
+        end;
+        hence p in Y & p in Q by XBOOLE_0:def 3;
+      end;
+      then for Y being set holds Y in F implies p in Y;
+then A14:   p in Intersect F by CANTOR_1:10;
+      consider Y being set such that
+A15:     Y in F by A5,XBOOLE_0:def 1;
+        p in Q by A10,A15;
+      then (Intersect F) /\ Q <> {} by A14,XBOOLE_0:def 3;
+      hence (Intersect F) meets Q by XBOOLE_0:def 7;
+    end;
+    hence I is dense by TOPS_1:80;
+    suppose F = {};
+    then Intersect F = the carrier of T by CANTOR_1:def 3
+               .= [#]T by PRE_TOPC:12;
+    hence I is dense by TOPS_3:16;
+  end;

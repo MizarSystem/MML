@@ -1,0 +1,2856 @@
+:: The Characterization of Continuity of Topologies
+::  by Grzegorz Bancerek and Adam Naumowicz
+::
+:: Received January 6, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary ORDERS_1, PRE_TOPC, FUNCT_1, SGRAPH1, RELAT_1, SUBSET_1, YELLOW_0,
+      GROUP_1, WAYBEL27, FUNCT_2, PRALG_1, FUNCT_5, CAT_1, SEQM_3, BOOLE,
+      WAYBEL_0, WAYBEL11, WAYBEL19, ORDINAL2, QUANTAL1, TARSKI, SETFAM_1,
+      WAYBEL24, LATTICES, FUNCOP_1, WAYBEL26, LATTICE3, WAYBEL_9, FUNCTOR0,
+      TSP_1, BHSP_3, YELLOW_9, YELLOW16, WAYBEL_3, PBOOLE, CARD_3, FINSET_1,
+      FUNCT_4, RELAT_2, WAYBEL25, PRELAMB, YELLOW_1, T_0TOPSP, CONNSP_2,
+      WELLORD1, LATTICE5, WAYBEL18, FUNCT_3, PROB_1, PRALG_2, RLVECT_2,
+      WELLORD2, TOPS_1, YELLOW_6, WAYBEL29, RLVECT_3;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1,
+      FUNCT_1, PARTFUN1, RELSET_1, FUNCT_3, FINSET_1, CARD_3, STRUCT_0,
+      PRE_TOPC, TOPS_1, GRCAT_1, T_0TOPSP, TSP_1, CONNSP_2, CANTOR_1, FUNCT_4,
+      FUNCT_5, FUNCT_7, MONOID_0, PBOOLE, PRALG_1, PRALG_2, WELLORD1, ORDERS_1,
+      LATTICE3, TOPS_2, YELLOW_0, WAYBEL_0, YELLOW_1, FUNCT_2, WAYBEL_1,
+      YELLOW_3, WAYBEL_3, WAYBEL_5, WAYBEL_9, YELLOW_6, WAYBEL11, YELLOW_9,
+      BORSUK_1, WAYBEL18, WAYBEL19, WAYBEL24, WAYBEL25, YELLOW16, WAYBEL26,
+      WAYBEL27;
+ constructors ENUMSET1, ORDERS_3, WAYBEL_5, WAYBEL_1, WAYBEL17, QUANTAL1,
+      GRCAT_1, CANTOR_1, TOPS_1, TOPS_2, YELLOW_9, TOLER_1, PRALG_3, FUNCT_7,
+      WAYBEL18, WAYBEL24, YELLOW16, WAYBEL26, WAYBEL27, T_0TOPSP, MONOID_0,
+      BORSUK_1;
+ clusters SUBSET_1, RELSET_1, FUNCT_1, FINSET_1, FRAENKEL, STRUCT_0, LATTICE3,
+      TOPS_1, BORSUK_1, BORSUK_2, PRALG_1, FUNCT_2, YELLOW_0, WAYBEL_0,
+      YELLOW_1, YELLOW_3, WAYBEL_3, WAYBEL11, YELLOW_9, WAYBEL14, YELLOW14,
+      WAYBEL24, WAYBEL25, YELLOW16, WAYBEL26, WAYBEL27, TOPGRP_1, WAYBEL10,
+      WAYBEL18, XBOOLE_0;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, LATTICE3, YELLOW_0, WAYBEL_0, WAYBEL_1, WAYBEL_3,
+      PRE_TOPC, WAYBEL11, WAYBEL27, XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, GRCAT_1, WELLORD2, SETFAM_1, ENUMSET1, RELAT_1,
+      FUNCT_1, RELSET_1, FUNCT_2, FUNCT_3, FUNCT_5, STRUCT_0, PRE_TOPC, TOPS_1,
+      TOPS_2, CONNSP_2, CANTOR_1, FUNCT_4, FUNCT_7, PBOOLE, FINSET_1, BORSUK_1,
+      FUNCOP_1, CARD_3, ORDERS_1, LATTICE3, PRALG_2, YELLOW_0, YELLOW_1,
+      YELLOW_2, YELLOW_3, YELLOW_9, YELLOW12, YELLOW14, YELLOW16, WAYBEL_0,
+      WAYBEL_3, WAYBEL_8, WAYBEL11, WAYBEL13, WAYBEL15, WAYBEL17, WAYBEL18,
+      WAYBEL20, WAYBEL21, WAYBEL24, WAYBEL25, WAYBEL26, WAYBEL27, XBOOLE_0,
+      XBOOLE_1;
+ schemes MSUALG_2, PRALG_2, COMPTS_1;
+
+begin :: Preliminaries
+
+:: isomorphic -> onto  is in YELLOW14
+
+theorem Th1:
+ for S, T being non empty RelStr
+ for f being map of S, T st f is one-to-one onto
+  holds f*f" = id T & f"*f = id S & f" is one-to-one onto
+  proof let S, T be non empty RelStr;
+   let f be map of S, T;
+A1:  dom f = the carrier of S by FUNCT_2:def 1;
+   assume f is one-to-one onto;
+    then f is one-to-one & rng f = the carrier of T & [#]T = the carrier of T
+     by FUNCT_2:def 3,PRE_TOPC:12;
+    then f*f" = id the carrier of T & f"*f = id the carrier of S &
+    rng (f") = [#]S & f" is one-to-one & [#]S = the carrier of S
+     by A1,PRE_TOPC:12,TOPS_2:62,63,65;
+   hence thesis by FUNCT_2:def 3,GRCAT_1:def 11;
+  end;
+
+theorem Th2:
+ for X,Y being non empty set, Z being non empty RelStr
+ for S being non empty SubRelStr of Z|^[:X,Y:]
+ for T being non empty SubRelStr of (Z|^Y)|^X
+ for f being map of S, T st f is currying one-to-one onto
+  holds f" is uncurrying
+  proof let X,Y be non empty set, Z be non empty RelStr;
+   let S be non empty SubRelStr of Z|^[:X,Y:];
+   let T be non empty SubRelStr of (Z|^Y)|^X;
+   let f be map of S, T; assume
+A1:  f is currying one-to-one onto;
+    then f" is one-to-one onto by Th1;
+then A2:  rng (f") = the carrier of S & rng f = the carrier of T by A1,FUNCT_2:
+def 3;
+A3:  Funcs(X, the carrier of Z|^Y) = the carrier of (Z|^Y)|^X &
+    Funcs(Y, the carrier of Z) = the carrier of Z|^Y &
+    Funcs([:X,Y:], the carrier of Z) = the carrier of Z|^[:X,Y:]
+     by YELLOW_1:28;
+   hereby let x be set; assume x in dom (f");
+     then x is Element of T;
+     then x is Element of (Z|^Y)|^X by YELLOW_0:59;
+     then x is Function of X, Funcs(Y,the carrier of Z) by A3,FUNCT_2:121;
+    hence x is Function-yielding Function;
+   end;
+      [#]T = the carrier of T by PRE_TOPC:12;
+then A4:  f" = f qua Function" by A1,A2,TOPS_2:def 4;
+   let g be Function; assume
+      g in dom (f");
+   then consider h being set such that
+A5:  h in dom f & g = f.h by A2,FUNCT_1:def 5;
+   reconsider h as Function by A1,A5,WAYBEL27:def 2;
+A6:  g = curry h by A1,A5,WAYBEL27:def 2;
+      h is Element of S by A5;
+    then h is Element of Z|^[:X,Y:] by YELLOW_0:59;
+    then h is Function of [:X,Y:], the carrier of Z by A3,FUNCT_2:121;
+    then dom h = [:X,Y:] by FUNCT_2:def 1;
+    then uncurry g = h by A6,FUNCT_5:56;
+   hence (f").g = uncurry g by A1,A4,A5,FUNCT_1:54;
+  end;
+
+theorem Th3:
+ for X,Y being non empty set, Z being non empty RelStr
+ for S being non empty SubRelStr of Z|^[:X,Y:]
+ for T being non empty SubRelStr of (Z|^Y)|^X
+ for f being map of T, S st f is uncurrying one-to-one onto
+  holds f" is currying
+  proof let X,Y be non empty set, Z be non empty RelStr;
+   let S be non empty SubRelStr of Z|^[:X,Y:];
+   let T be non empty SubRelStr of (Z|^Y)|^X;
+   let f be map of T, S; assume
+A1:  f is uncurrying one-to-one onto;
+    then f" is one-to-one onto by Th1;
+then A2:  rng (f") = the carrier of T & rng f = the carrier of S by A1,FUNCT_2:
+def 3;
+A3:  Funcs(X, the carrier of Z|^Y) = the carrier of (Z|^Y)|^X &
+    Funcs(Y, the carrier of Z) = the carrier of Z|^Y &
+    Funcs([:X,Y:], the carrier of Z) = the carrier of Z|^[:X,Y:]
+     by YELLOW_1:28;
+   hereby let x be set; assume x in dom (f");
+     then x is Element of S;
+     then x is Element of Z|^[:X,Y:] by YELLOW_0:59;
+    then reconsider g = x as Function of [:X,Y:], the carrier of Z by A3,
+FUNCT_2:121;
+       dom g = proj1 g by FUNCT_5:21;
+    hence x is Function & proj1 x is Relation;
+   end;
+      [#]S = the carrier of S by PRE_TOPC:12;
+then A4:  f" = f qua Function" by A1,A2,TOPS_2:def 4;
+   let g be Function; assume
+      g in dom (f");
+   then consider h being set such that
+A5:  h in dom f & g = f.h by A2,FUNCT_1:def 5;
+   reconsider h as Function by A1,A5,WAYBEL27:def 1;
+A6:  g = uncurry h by A1,A5,WAYBEL27:def 1;
+      h is Element of T by A5;
+    then h is Element of (Z|^Y)|^X by YELLOW_0:59;
+    then h is Function of X, Funcs(Y, the carrier of Z) by A3,FUNCT_2:121;
+    then rng h c= Funcs(Y, the carrier of Z) by RELSET_1:12;
+    then curry g = h by A6,FUNCT_5:55;
+   hence (f").g = curry g by A1,A4,A5,FUNCT_1:54;
+  end;
+
+theorem
+   for X,Y being non empty set, Z being non empty Poset
+ for S being non empty full SubRelStr of Z|^[:X,Y:]
+ for T being non empty full SubRelStr of (Z|^Y)|^X
+ for f being map of S, T st f is currying one-to-one onto
+  holds f is isomorphic
+  proof let X,Y be non empty set, Z be non empty Poset;
+   let S be non empty full SubRelStr of Z|^[:X,Y:];
+   let T be non empty full SubRelStr of (Z|^Y)|^X;
+   let f be map of S, T; assume
+A1:  f is currying one-to-one onto;
+    then f" is uncurrying by Th2;
+    then f is monotone & f" is monotone & f*f" = id T & f"*f = id S
+     by A1,Th1,WAYBEL27:20,21;
+   hence f is isomorphic by YELLOW16:17;
+  end;
+
+theorem
+   for X,Y being non empty set, Z being non empty Poset
+ for T being non empty full SubRelStr of Z|^[:X,Y:]
+ for S being non empty full SubRelStr of (Z|^Y)|^X
+ for f being map of S, T st f is uncurrying one-to-one onto
+  holds f is isomorphic
+  proof let X,Y be non empty set, Z be non empty Poset;
+   let T be non empty full SubRelStr of Z|^[:X,Y:];
+   let S be non empty full SubRelStr of (Z|^Y)|^X;
+   let f be map of S, T; assume
+A1:  f is uncurrying one-to-one onto;
+    then f" is currying by Th3;
+    then f is monotone & f" is monotone & f*f" = id T & f"*f = id S
+     by A1,Th1,WAYBEL27:20,21;
+   hence f is isomorphic by YELLOW16:17;
+  end;
+
+theorem Th6:
+ for S1, S2, T1, T2 being RelStr
+  st the RelStr of S1 = the RelStr of S2 & the RelStr of T1 = the RelStr of T2
+ for f being map of S1, T1 st f is isomorphic
+ for g being map of S2, T2 st g = f holds g is isomorphic
+  proof let S1, S2, T1, T2 be RelStr such that
+A1:  the RelStr of S1 = the RelStr of S2 & the RelStr of T1 = the RelStr of T2;
+   let f be map of S1, T1 such that
+A2:  f is isomorphic;
+   let g be map of S2, T2 such that
+A3:  g = f;
+   per cases;
+   suppose S1 is empty;
+    then S1 is empty & T1 is empty by A2,WAYBEL_0:def 38;
+    then the carrier of S2 = {} & the carrier of T2 = {} by A1,STRUCT_0:def 1;
+    then S2 is empty & T2 is empty by STRUCT_0:def 1;
+   hence thesis by WAYBEL_0:def 38;
+   suppose S1 is non empty;
+   then reconsider S1, T1 as non empty RelStr by A2,WAYBEL_0:def 38;
+      the carrier of S1 <> {} & the carrier of T1 <> {};
+   then reconsider S2, T2 as non empty RelStr by A1,STRUCT_0:def 1;
+   reconsider f as map of S1, T1;
+   reconsider g as map of S2, T2;
+A4:  f is one-to-one & rng f = the carrier of T1 &
+    for x,y being Element of S1 holds x <= y iff f.x <= f.y
+     by A2,WAYBEL_0:66;
+      now let x,y be Element of S2;
+     reconsider a = x, b = y as Element of S1 by A1;
+        (x <= y iff a <= b) & (g.x <= g.y iff f.a <= f.b) by A1,A3,YELLOW_0:1;
+     hence x <= y iff g.x <= g.y by A2,WAYBEL_0:66;
+    end;
+   hence thesis by A1,A3,A4,WAYBEL_0:66;
+  end;
+
+:::::::::::::::::::::::: Przywlaszczone
+
+theorem Th7: :: stolen from WAYBEL_1:8
+ for R, S, T being RelStr
+ for f being map of R, S st f is isomorphic
+ for g being map of S, T st g is isomorphic
+ for h being map of R, T st h = g*f
+  holds h is isomorphic
+  proof let L1,L2,L3 be RelStr;
+   let f1 be map of L1,L2 such that
+A1:  f1 is isomorphic;
+   let f2 be map of L2,L3 such that
+A2:  f2 is isomorphic;
+   let h be map of L1,L3 such that
+A3: h = f2*f1;
+  per cases;
+  suppose L1 is non empty & L2 is non empty & L3 is non empty;
+   then reconsider L1,L2,L3 as non empty RelStr;
+   reconsider f1 as map of L1,L2;
+   reconsider f2 as map of L2,L3;
+   consider g1 being map of L2,L1 such that
+A4:  g1 = (f1 qua Function)" and
+A5:  g1 is monotone by A1,WAYBEL_0:def 38;
+A6:  f1 is one-to-one by A1,WAYBEL_0:def 38;
+A7:  f1 is monotone by A1,WAYBEL_0:def 38;
+   consider g2 being map of L3,L2 such that
+A8:  g2 = (f2 qua Function)" and
+A9:  g2 is monotone by A2,WAYBEL_0:def 38;
+A10:  f2 is one-to-one by A2,WAYBEL_0:def 38;
+A11:  f2 is monotone by A2,WAYBEL_0:def 38;
+A12:  f2*f1 is one-to-one by A6,A10,FUNCT_1:46;
+A13:  f2*f1 is monotone by A7,A11,YELLOW_2:14;
+A14:  g1*g2 is monotone by A5,A9,YELLOW_2:14;
+     g1*g2 = ((f2*f1) qua Function)" by A4,A6,A8,A10,FUNCT_1:66;
+   hence thesis by A3,A12,A13,A14,WAYBEL_0:def 38;
+  suppose
+A15:  L1 is empty;
+   then L2 is empty by A1,WAYBEL_0:def 38;
+    then L3 is empty by A2,WAYBEL_0:def 38;
+   hence thesis by A15,WAYBEL_0:def 38;
+  suppose
+    L2 is empty;
+then L1 is empty & L3 is empty by A1,A2,WAYBEL_0:def 38;
+   hence thesis by WAYBEL_0:def 38;
+  suppose
+A16:  L3 is empty;
+   then L2 is empty by A2,WAYBEL_0:def 38;
+then L1 is empty by A1,WAYBEL_0:def 38;
+   hence thesis by A16,WAYBEL_0:def 38;
+ end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+canceled 2;
+
+theorem Th10:
+ for X,Y,X1,Y1 being TopSpace st
+ the TopStruct of X = the TopStruct of X1 &
+ the TopStruct of Y = the TopStruct of Y1 holds
+ [:X,Y:] = [:X1,Y1:]
+  proof
+   let X,Y,X1,Y1 be TopSpace;
+   assume
+A1: the TopStruct of X = the TopStruct of X1 &
+   the TopStruct of Y = the TopStruct of Y1;
+A2: the carrier of [:X,Y:] =
+   [:the carrier of X,the carrier of Y:] by BORSUK_1:def 5
+   .= the carrier of [:X1,Y1:] by A1,BORSUK_1:def 5;
+   set U1 = {union A where A is Subset-Family of [:X,Y:]:
+    A c= { [:X2,Y2:] where X2 is Subset of X,
+                           Y2 is Subset of Y :
+                     X2 in the topology of X & Y2 in the topology of Y}};
+   set U2 = {union A where A is Subset-Family of [:X1,Y1:]:
+    A c= { [:X2,Y2:] where X2 is Subset of X1,
+                           Y2 is Subset of Y1 :
+                     X2 in the topology of X1 & Y2 in the topology of Y1}};
+  U1 = U2 by A1,A2;
+   then the topology of [:X,Y:] = U2 by BORSUK_1:def 5
+   .= the topology of [:X1,Y1:] by BORSUK_1:def 5;
+   hence thesis by A2;
+  end;
+
+theorem Th11:
+ for X being non empty TopSpace
+ for L being Scott up-complete (non empty TopPoset)
+ for F being non empty directed Subset of ContMaps(X, L)
+  holds "\/"(F, L|^the carrier of X) is continuous map of X, L
+  proof let X be non empty TopSpace;
+   let L be Scott up-complete (non empty TopPoset);
+   let F be non empty directed Subset of ContMaps(X, L);
+   set sF = "\/"(F, L|^the carrier of X);
+      Funcs(the carrier of X, the carrier of L)
+      = the carrier of L|^the carrier of X by YELLOW_1:28;
+    then sF is Function of the carrier of X, the carrier of L by FUNCT_2:121;
+   then reconsider sF as map of X, L;
+      ContMaps(X, L) is full SubRelStr of L|^the carrier of X
+     by WAYBEL24:def 3;
+   then reconsider aF = F as non empty directed Subset of L|^the carrier of X
+     by YELLOW_2:7;
+      now let A be Subset of L; assume
+A1:    A is open;
+then A2:    A is upper inaccessible by WAYBEL11:def 4;
+        now let x be set;
+       hereby assume A3: x in sF"A;
+then A4:       x in dom sF & sF.x in A by FUNCT_1:def 13;
+A5:      dom sF = the carrier of X by FUNCT_2:def 1;
+        reconsider y = x as Element of X by A3;
+A6:       ((the carrier of X) --> L).y = L by FUNCOP_1:13;
+A7:       ex_sup_of aF, L|^the carrier of X &
+         (the carrier of X)-POS_prod ((the carrier of X) --> L)
+           = L|^the carrier of X by WAYBEL_0:75,YELLOW_1:def 5;
+         then (sup aF).y = sup pi(aF,y) & pi(aF,y) is directed non empty
+          by A6,YELLOW16:35,37;
+         then pi(aF,y) meets A by A2,A4,WAYBEL11:def 1;
+        then consider a being set such that
+A8:       a in pi(aF,y) & a in A by XBOOLE_0:3;
+        consider f being Function such that
+A9:       f in aF & a = f.y by A8,CARD_3:def 6;
+           f is Element of ContMaps(X, L) by A9;
+        then reconsider f as continuous map of X, L by WAYBEL24:21;
+A10:      dom f = the carrier of X by FUNCT_2:def 1;
+        take Q = f"A;
+        thus Q is open by A1,TOPS_2:55;
+        thus Q c= sF"A
+          proof let b be set; assume A11: b in Q;
+then A12:          f.b in A & b in dom f by FUNCT_1:def 13;
+           reconsider b as Element of X by A11;
+              ((the carrier of X) --> L).b = L by FUNCOP_1:13;
+then A13:          sF.b = sup pi(aF,b) & pi(aF,b) is directed non empty
+             by A7,YELLOW16:35,37;
+            then ex_sup_of pi(aF,b), L by WAYBEL_0:75;
+            then sF.b is_>=_than pi(aF,b) & f.b in pi(aF,b)
+             by A9,A13,CARD_3:def 6,YELLOW_0:30;
+            then f.b <= sF.b by LATTICE3:def 9;
+            then sF.b in A by A2,A12,WAYBEL_0:def 20;
+           hence thesis by A5,FUNCT_1:def 13;
+          end;
+        thus x in Q by A8,A9,A10,FUNCT_1:def 13;
+       end;
+       thus (ex Q being Subset of X st Q is open & Q c= sF"A & x in Q)
+         implies x in sF"A;
+      end;
+     hence sF"A is open by TOPS_1:57;
+    end;
+   hence thesis by TOPS_2:55;
+  end;
+
+theorem Th12:
+ for X being non empty TopSpace
+ for L being Scott up-complete (non empty TopPoset)
+  holds ContMaps(X, L) is directed-sups-inheriting
+         SubRelStr of L|^the carrier of X
+  proof let X be non empty TopSpace;
+   let L be Scott up-complete (non empty TopPoset);
+   reconsider XL = ContMaps(X, L) as non empty full
+         SubRelStr of L|^the carrier of X by WAYBEL24:def 3;
+      XL is directed-sups-inheriting
+     proof let A be directed Subset of XL; assume
+         A <> {} & ex_sup_of A, L|^the carrier of X;
+      then reconsider A as directed non empty Subset of XL;
+         "\/"(A, L|^the carrier of X) is continuous map of X, L by Th11;
+      hence thesis by WAYBEL24:def 3;
+     end;
+   hence thesis;
+  end;
+
+theorem Th13:
+ for S1,S2 being TopStruct st the TopStruct of S1 = the TopStruct of S2
+ for T1,T2 being non empty TopRelStr
+ st the TopRelStr of T1 = the TopRelStr of T2
+ holds ContMaps(S1,T1) = ContMaps(S2,T2)
+  proof
+   let S1,S2 be TopStruct;
+   assume
+A1: the TopStruct of S1 = the TopStruct of S2;
+   let T1,T2 be non empty TopRelStr;
+   assume
+A2: the TopRelStr of T1 = the TopRelStr of T2;
+A3: the carrier of ContMaps(S1,T1) = the carrier of ContMaps(S2,T2)
+    proof
+     thus the carrier of ContMaps(S1,T1) c= the carrier of ContMaps(S2,T2)
+      proof
+       let x be set; assume x in the carrier of ContMaps(S1,T1);
+       then consider f being map of S1,T1 such that
+A4:     x=f & f is continuous by WAYBEL24:def 3;
+       reconsider f2=f as map of S2,T2 by A1,A2;
+         f2 is continuous
+        proof
+         let P2 be Subset of T2;
+         reconsider P1=P2 as Subset of T1 by A2;
+A5:       [#]T1 = the carrier of T2 by A2,PRE_TOPC:12
+            .= [#]T2 by PRE_TOPC:12;
+A6:       [#]S1 = the carrier of S2 by A1,PRE_TOPC:12
+            .= [#]S2 by PRE_TOPC:12;
+         assume P2 is closed;
+         then [#]T2 \ P2 is open by PRE_TOPC:def 6;
+         then [#]T2 \ P2 in the topology of T2 by PRE_TOPC:def 5;
+         then ([#]T1) \ P1 is open by A2,A5,PRE_TOPC:def 5;
+         then P1 is closed by PRE_TOPC:def 6;
+         then f" P1 is closed by A4,PRE_TOPC:def 12;
+         then [#]S1 \ (f" P1) is open by PRE_TOPC:def 6;
+         then [#]S1 \ (f2" P2) in the topology of S2 by A1,PRE_TOPC:def 5;
+         then [#]S2 \ (f2" P2) is open by A6,PRE_TOPC:def 5;
+         hence f2" P2 is closed by PRE_TOPC:def 6;
+        end;
+       hence x in the carrier of ContMaps(S2,T2) by A4,WAYBEL24:def 3;
+      end;
+     let x be set; assume x in the carrier of ContMaps(S2,T2);
+     then consider f being map of S2,T2 such that
+A7:   x=f & f is continuous by WAYBEL24:def 3;
+     reconsider f1=f as map of S1,T1 by A1,A2;
+       f1 is continuous
+      proof
+       let P1 be Subset of T1;
+       reconsider P2=P1 as Subset of T2 by A2;
+A8:     [#]T1 = the carrier of T2 by A2,PRE_TOPC:12
+          .= [#]T2 by PRE_TOPC:12;
+A9:     [#]S1 = the carrier of S2 by A1,PRE_TOPC:12
+          .= [#]S2 by PRE_TOPC:12;
+       assume P1 is closed;
+       then [#]T1 \ P1 is open by PRE_TOPC:def 6;
+       then ([#]T1) \ P2 in the topology of T2 by A2,PRE_TOPC:def 5;
+       then ([#]T2) \ P2 is open by A8,PRE_TOPC:def 5;
+       then P2 is closed by PRE_TOPC:def 6;
+       then f" P2 is closed by A7,PRE_TOPC:def 12;
+       then [#]S2 \ (f" P2) is open by PRE_TOPC:def 6;
+       then [#]S2 \ (f1" P1) in the topology of S1 by A1,PRE_TOPC:def 5;
+       then [#]S1 \ (f1" P1) is open by A9,PRE_TOPC:def 5;
+       hence f1" P1 is closed by PRE_TOPC:def 6;
+      end;
+     hence x in the carrier of ContMaps(S1,T1) by A7,WAYBEL24:def 3;
+    end;
+   reconsider C1 = ContMaps(S1,T1) as full SubRelStr of
+   T1 |^ the carrier of S1 by WAYBEL24:def 3;
+     the RelStr of T1 = the RelStr of T2 &
+   the carrier of S1 = the carrier of S2 by A1,A2;
+   then T1 |^ the carrier of S1 = T2 |^ the carrier of S2 by WAYBEL27:15;
+   then reconsider C2 = ContMaps(S2,T2) as full SubRelStr of
+   T1 |^ the carrier of S1 by WAYBEL24:def 3;
+     the RelStr of C1 = the RelStr of C2 by A3,YELLOW_0:58;
+   hence thesis;
+  end;
+
+definition
+ cluster Scott -> injective T_0 (complete continuous TopLattice);
+ coherence
+  proof let T be complete continuous TopLattice; assume
+      T is Scott;
+    then T is Scott TopAugmentation of T by YELLOW_9:44;
+   hence thesis;
+  end;
+end;
+
+definition
+ cluster Scott continuous complete TopLattice;
+ existence
+  proof
+   consider L being continuous complete LATTICE;
+   consider T being Scott TopAugmentation of L;
+   take T;
+   thus T is Scott continuous complete;
+  end;
+end;
+
+definition
+ let X be non empty TopSpace;
+ let L be Scott up-complete (non empty TopPoset);
+ cluster ContMaps(X, L) -> up-complete;
+ coherence
+  proof
+      ContMaps(X, L) is full directed-sups-inheriting SubRelStr of
+      L|^the carrier of X by Th12,WAYBEL24:def 3;
+   hence thesis by YELLOW16:5;
+  end;
+end;
+
+theorem Th14:
+ for I being non empty set
+ for J being Poset-yielding non-Empty ManySortedSet of I
+  st for i being Element of I holds J.i is up-complete
+  holds I-POS_prod J is up-complete
+  proof
+   let I be non empty set;
+   let J be Poset-yielding non-Empty ManySortedSet of I such that
+A1:  for i being Element of I holds J.i is up-complete;
+   set L = I-POS_prod J;
+      now let A be non empty directed Subset of L;
+        now let x be Element of I;
+          J.x is up-complete (non empty Poset) &
+        pi(A,x) is directed non empty by A1,YELLOW16:37;
+       hence ex_sup_of pi(A,x), J.x by WAYBEL_0:75;
+      end;
+     hence ex_sup_of A,L by YELLOW16:33;
+    end;
+   hence thesis by WAYBEL_0:75;
+  end;
+
+theorem :: stolen (generalized) from WAYBEL_3:33
+   for I being non empty set
+ for J being Poset-yielding non-Empty reflexive-yielding ManySortedSet of I
+  st for i being Element of I holds J.i is up-complete lower-bounded
+ for x,y being Element of product J holds
+   x << y
+  iff
+   (for i being Element of I holds x.i << y.i) &
+   (ex K being finite Subset of I st
+      for i being Element of I st not i in K holds x.i = Bottom (J.i))
+  proof let I be non empty set;
+   let J be Poset-yielding non-Empty reflexive-yielding ManySortedSet of I;
+   set L = product J;
+   assume
+A1: for i being Element of I holds J.i is up-complete lower-bounded;
+   then reconsider L' = L as up-complete (non empty Poset) by Th14;
+   let x,y be Element of L;
+   hereby assume A2: x << y;
+    hereby let i be Element of I;
+    thus x.i << y.i
+     proof let Di be non empty directed Subset of J.i such that
+A3:    y.i <= sup Di;
+A4:    dom y = I by WAYBEL_3:27;
+      set D = {y+*(i,z) where z is Element of J.i: z in Di};
+         D c= the carrier of L
+        proof let a be set; assume a in D;
+         then consider z being Element of J.i such that
+A5:       a = y+*(i,z) & z in Di;
+A6:       dom (y+*(i,z)) = I by A4,FUNCT_7:32;
+            now let j be Element of I;
+              i = j or i <> j;
+            then (y+*(i,z)).j = z & i = j or (y+*(i,z)).j = y.j by A4,FUNCT_7:
+33,34;
+           hence (y+*(i,z)).j is Element of J.j;
+          end;
+          then a is Element of L by A5,A6,WAYBEL_3:27;
+         hence thesis;
+        end;
+      then reconsider D as Subset of L;
+      consider di being Element of Di;
+      reconsider di as Element of J.i;
+A7:    y+*(i,di) in D & dom y = I by WAYBEL_3:27;
+      then reconsider D as non empty Subset of L;
+         D is directed
+        proof let z1,z2 be Element of L; assume z1 in D;
+         then consider a1 being Element of J.i such that
+A8:       z1 = y+*(i,a1) & a1 in Di;
+         assume z2 in D;
+         then consider a2 being Element of J.i such that
+A9:       z2 = y+*(i,a2) & a2 in Di;
+         consider a being Element of J.i such that
+A10:      a in Di & a >= a1 & a >= a2 by A8,A9,WAYBEL_0:def 1;
+            y+*(i,a) in D by A10;
+         then reconsider z = y+*(i,a) as Element of L;
+         take z; thus z in D by A10;
+A11:      dom y = I by WAYBEL_3:27;
+            now let j be Element of I;
+              i = j or i <> j;
+            then z.j = a & z1.j = a1 & i = j or z.j = y.j & z1.j = y.j
+             by A8,A11,FUNCT_7:33,34;
+           hence z.j >= z1.j by A10,YELLOW_0:def 1;
+          end;
+         hence z >= z1 by WAYBEL_3:28;
+            now let j be Element of I;
+              i = j or i <> j;
+            then z.j = a & z2.j = a2 & i = j or z.j = y.j & z2.j = y.j
+             by A9,A11,FUNCT_7:33,34;
+           hence z.j >= z2.j by A10,YELLOW_0:def 1;
+          end;
+         hence z >= z2 by WAYBEL_3:28;
+        end;
+      then reconsider D as non empty directed Subset of L;
+         now let j be Element of I;
+A12:     J.i is up-complete (non empty Poset) &
+         J.j is up-complete (non empty Poset) by A1;
+           pi(D,j) is non empty directed &
+         pi(D,i) is non empty directed by YELLOW16:37;
+then A13:     ex_sup_of Di,J.i & ex_sup_of pi(D,i),J.i & ex_sup_of pi(D,j),J.j
+          by A12,WAYBEL_0:75;
+           Di c= pi(D,i)
+          proof let a be set; assume
+A14:        a in Di;
+           then reconsider a as Element of J.i;
+              y+*(i,a) in D by A14;
+            then (y+*(i,a)).i in pi(D,i) by CARD_3:def 6;
+           hence thesis by A7,FUNCT_7:33;
+          end;
+then A15:    sup Di <= sup pi(D,i) by A13,YELLOW_0:34;
+           ex_sup_of D, L' by WAYBEL_0:75;
+then A16:     (sup D).j = sup pi(D,j) by YELLOW16:35;
+then A17:     (sup D).j is_>=_than pi(D, j) by A13,YELLOW_0:30;
+           now assume j <> i;
+           then (y+*(i,di)).j = y.j & (y+*(i,di)).j in pi(D,j)
+            by A7,CARD_3:def 6,FUNCT_7:34;
+          hence y.j in pi(D,j);
+         end;
+        hence
+         (sup D).j >= y.j by A3,A15,A16,A17,LATTICE3:def 9,YELLOW_0:def 2;
+       end;
+       then sup D >= y by WAYBEL_3:28;
+      then consider d being Element of L such that
+A18:    d in D & d >= x by A2,WAYBEL_3:def 1;
+      consider z being Element of J.i such that
+A19:    d = y+*(i,z) & z in Di by A18;
+      take z;
+         d.i = z by A4,A19,FUNCT_7:33;
+      hence thesis by A18,A19,WAYBEL_3:28;
+     end;
+    end;
+    set K = {i where i is Element of I: x.i <> Bottom (J.i)};
+       K c= I
+      proof let a be set; assume a in K;
+        then ex i being Element of I st a = i & x.i <> Bottom (J.i);
+       hence thesis;
+      end;
+    then reconsider K as Subset of I;
+    deffunc F(Element of I) = Bottom (J.$1);
+    consider f being ManySortedSet of I such that
+A20:   for i being Element of I holds f.i = F(i) from LambdaDMS;
+A21:  dom f = I by PBOOLE:def 3;
+       now let i be Element of I; f.i = Bottom (J.i) by A20;
+      hence f.i is Element of J.i;
+     end;
+    then reconsider f as Element of product J by A21,WAYBEL_3:27;
+    set X = {f+*(y|a) where a is finite Subset of I: not contradiction};
+       X c= the carrier of L
+      proof let a be set; assume a in X;
+       then consider b being finite Subset of I such that
+A22:      a = f+*(y|b);
+        dom y = I & b c= I by WAYBEL_3:27;
+then A23:      dom (y|b) = b by RELAT_1:91;
+then A24:      I = I \/ dom (y|b) by XBOOLE_1:12
+         .= dom (f+*(y|b)) by A21,FUNCT_4:def 1;
+          now let i be Element of I;
+            i in b or not i in b;
+          then (f+*(y|b)).i = f.i or (f+*(y|b)).i = (y|b).i & (y|b).i = y.i
+           by A23,FUNCT_1:70,FUNCT_4:12,14;
+         hence (f+*(y|b)).i is Element of J.i;
+        end;
+        then a is Element of L by A22,A24,WAYBEL_3:27;
+       hence thesis;
+      end;
+    then reconsider X as Subset of L;
+    consider e being finite Subset of I;
+       f+*(y|e) in X;
+    then reconsider X as non empty Subset of L;
+       X is directed
+      proof let z1,z2 be Element of L; assume z1 in X;
+       then consider a1 being finite Subset of I such that
+A25:    z1 = f+*(y|a1);
+       assume z2 in X;
+       then consider a2 being finite Subset of I such that
+A26:    z2 = f+*(y|a2);
+       reconsider a = a1 \/ a2 as finite Subset of I;
+          f+*(y|a) in X;
+       then reconsider z = f+*(y|a) as Element of L;
+       take z; thus z in X;
+      dom y = I & dom z = I & dom z1 = I & dom z2 = I by WAYBEL_3:27;
+then A27:    dom (y|a) = a & dom (y|a1) = a1 & dom (y|a2) = a2 by RELAT_1:91;
+          now let i be Element of I;
+            J.i is up-complete lower-bounded (non empty Poset) by A1;
+then A28:      Bottom (J.i) <= y.i & f.i = Bottom (J.i) by A20,YELLOW_0:44;
+         per cases by XBOOLE_0:def 2;
+         suppose not i in a1 & i in a;
+          then z.i = (y|a).i & (y|a).i = y.i & z1.i = f.i
+           by A25,A27,FUNCT_1:70,FUNCT_4:12,14;
+         hence z.i >= z1.i by A28;
+         suppose not i in a & not i in a1;
+          then z.i = f.i & z1.i = f.i by A25,A27,FUNCT_4:12;
+         hence z.i >= z1.i by YELLOW_0:def 1;
+         suppose i in a1 & i in a;
+          then z.i = (y|a).i & (y|a).i = y.i & z1.i = (y|a1).i & (y|a1).i = y.
+i
+           by A25,A27,FUNCT_1:70,FUNCT_4:14;
+         hence z.i >= z1.i by YELLOW_0:def 1;
+        end;
+       hence z >= z1 by WAYBEL_3:28;
+          now let i be Element of I;
+            J.i is up-complete lower-bounded (non empty Poset) by A1;
+then A29:      Bottom (J.i) <= y.i & f.i = Bottom (J.i) by A20,YELLOW_0:44;
+         per cases by XBOOLE_0:def 2;
+         suppose not i in a2 & i in a;
+          then z.i = (y|a).i & (y|a).i = y.i & z2.i = f.i
+           by A26,A27,FUNCT_1:70,FUNCT_4:12,14;
+         hence z.i >= z2.i by A29;
+         suppose not i in a & not i in a2;
+          then z.i = f.i & z2.i = f.i by A26,A27,FUNCT_4:12;
+         hence z.i >= z2.i by YELLOW_0:def 1;
+         suppose i in a2 & i in a;
+          then z.i = (y|a).i & (y|a).i = y.i & z2.i = (y|a2).i & (y|a2).i = y.
+i
+           by A26,A27,FUNCT_1:70,FUNCT_4:14;
+         hence z.i >= z2.i by YELLOW_0:def 1;
+        end;
+       hence z >= z2 by WAYBEL_3:28;
+      end;
+    then reconsider X as non empty directed Subset of L;
+       now let i be Element of I;
+      reconsider a = {i} as finite Subset of I by ZFMISC_1:37;
+A30:   f+*(y|a) in X & L = L';
+      then reconsider z = f+*(y|a) as Element of L;
+A31:   dom y = I & i in a by TARSKI:def 1,WAYBEL_3:27;
+         ex_sup_of X, L' by WAYBEL_0:75;
+then A32:   sup X is_>=_than X by YELLOW_0:30;
+         (y|a).i = y.i & dom (y|a) = a by A31,FUNCT_1:72,RELAT_1:91;
+       then z <= sup X & z.i = y.i by A30,A31,A32,FUNCT_4:14,LATTICE3:def 9;
+      hence (sup X).i >= y.i by WAYBEL_3:28;
+     end;
+     then y <= sup X by WAYBEL_3:28;
+    then consider d being Element of L such that
+A33:   d in X & x <= d by A2,WAYBEL_3:def 1;
+    consider a being finite Subset of I such that
+A34:   d = f+*(y|a) by A33;
+       K c= a
+      proof let j be set; assume j in K;
+       then consider i being Element of I such that
+A35:    j = i & x.i <> Bottom (J.i);
+       assume
+A36:    not j in a;
+          dom y = I by WAYBEL_3:27;
+        then dom (y|a) = a & dom d = I by RELAT_1:91,WAYBEL_3:27;
+then A37:    d.i = f.i by A34,A35,A36,FUNCT_4:12 .= Bottom (J.i) by A20;
+          J.i is up-complete lower-bounded (non empty Poset) by A1;
+        then x.i <= d.i & x.i >= Bottom (J.i) by A33,WAYBEL_3:28,YELLOW_0:44;
+       hence contradiction by A35,A37,ORDERS_1:25;
+      end;
+    then reconsider K as finite Subset of I by FINSET_1:13;
+    take K;
+    thus for i being Element of I st not i in K holds x.i = Bottom (J.i);
+   end;
+   assume
+A38:for i being Element of I holds x.i << y.i;
+   given K being finite Subset of I such that
+A39:for i being Element of I st not i in K holds x.i = Bottom (J.i);
+   let D be non empty directed Subset of L such that
+A40:y <= sup D;
+   defpred P[set,set] means
+     ex i being Element of I, z being Element of L st $1 = i & $2 = z &
+       z.i >= x.i;
+A41:now let k be set; assume
+        k in K; then reconsider i = k as Element of I;
+A42:  pi(D,i) is directed
+       proof let a,b be Element of J.i; assume a in pi(D,i);
+        then consider f being Function such that
+A43:     f in D & a = f.i by CARD_3:def 6;
+        assume b in pi(D,i);
+        then consider g being Function such that
+A44:     g in D & b = g.i by CARD_3:def 6;
+        reconsider f,g as Element of L by A43,A44;
+        consider h being Element of L such that
+A45:     h in D & h >= f & h >= g by A43,A44,WAYBEL_0:def 1;
+        take h.i; thus thesis by A43,A44,A45,CARD_3:def 6,WAYBEL_3:28;
+       end;
+        ex_sup_of D, L' by WAYBEL_0:75;
+      then x.i << y.i & y.i <= (sup D).i & (sup D).i = sup pi(D,i)
+       by A38,A40,WAYBEL_3:28,YELLOW16:35;
+     then consider zi being Element of J.i such that
+A46:  zi in pi(D,i) & zi >= x.i by A42,WAYBEL_3:def 1;
+     consider a being Function such that
+A47:  a in D & zi = a.i by A46,CARD_3:def 6;
+     reconsider a as set;
+     take a; thus a in D by A47;
+     thus P[k,a] by A46,A47;
+    end;
+   consider F being Function such that
+A48:dom F = K & rng F c= D and
+A49:for k being set st k in K holds P[k,F.k] from NonUniqBoundFuncEx(A41);
+   reconsider Y = rng F as finite Subset of D by A48,FINSET_1:26;
+   consider d being Element of L such that
+A50:d in D & d is_>=_than Y by WAYBEL_0:1;
+   take d; thus d in D by A50;
+      now let i be Element of I;
+A51:  J.i is up-complete lower-bounded (non empty Poset) by A1;
+     per cases; suppose
+A52:  i in K;
+     then consider j being Element of I, z being Element of L such that
+A53:  i = j & F.i = z & z.j >= x.j by A49;
+        z in Y by A48,A52,A53,FUNCT_1:def 5;
+      then d >= z by A50,LATTICE3:def 9;
+      then d.i >= z.i by WAYBEL_3:28;
+     hence d.i >= x.i by A51,A53,YELLOW_0:def 2;
+     suppose not i in K;
+      then x.i = Bottom (J.i) by A39;
+     hence d.i >= x.i by A51,YELLOW_0:44;
+    end;
+   hence thesis by WAYBEL_3:28;
+  end;
+
+definition
+ let X be set;
+ let L be lower-bounded (non empty reflexive antisymmetric RelStr);
+ cluster L|^X -> lower-bounded;
+ coherence
+  proof
+A1:  the carrier of L|^X = Funcs(X, the carrier of L) by YELLOW_1:28;
+      dom (X --> Bottom L) = X & rng (X --> Bottom L) c= the carrier of L
+     by FUNCT_2:def 1;
+    then X --> Bottom L in the carrier of L|^X by A1,FUNCT_2:def 2;
+   then reconsider f = X --> Bottom L as Element of L|^X;
+   take f; let g be Element of L|^X;
+   per cases; suppose X is empty;
+    then L|^X = RelStr (#{{}}, id {{}}#) by YELLOW_1:27;
+    then f <= f & f = {} & g = {} by TARSKI:def 1;
+   hence thesis;
+   suppose X is non empty;
+   then reconsider X as non empty set;
+   reconsider f, g as Element of L|^X;
+      now let x be Element of X;
+        f.x = Bottom L & L is lower-bounded by FUNCOP_1:13;
+     hence f.x <= g.x by YELLOW_0:44;
+    end;
+   hence thesis by WAYBEL27:14;
+  end;
+end;
+
+definition
+ let X be non empty TopSpace;
+ let L be lower-bounded (non empty TopPoset);
+ cluster ContMaps(X, L) -> lower-bounded;
+ coherence
+  proof
+      X --> Bottom L is continuous map of X, L by BORSUK_1:36;
+   then reconsider f = X --> Bottom L as Element of ContMaps(X, L) by WAYBEL24:
+21;
+   take f; let g be Element of ContMaps(X, L);
+A1:  ContMaps(X, L) is full SubRelStr of L|^the carrier of X
+     by WAYBEL24:def 3;
+   then reconsider a = g as Element of L|^the carrier of X by YELLOW_0:59;
+A2:  the TopStruct of Omega X = the TopStruct of X by WAYBEL25:def 2;
+    then (Omega X) --> Bottom L = (the carrier of X) --> Bottom L by BORSUK_1:
+def 3
+                    .= X --> Bottom L by BORSUK_1:def 3;
+    then a >= Bottom (L|^the carrier of X) & Bottom (L|^the carrier of X) = f
+     by A2,WAYBEL24:33,YELLOW_0:44;
+   hence thesis by A1,YELLOW_0:61;
+  end;
+end;
+
+definition
+ let L be up-complete (non empty Poset);
+ cluster -> up-complete TopAugmentation of L;
+ coherence
+  proof let S be TopAugmentation of L;
+      the RelStr of L = the RelStr of S by YELLOW_9:def 4;
+   hence thesis by WAYBEL_8:15;
+  end;
+ cluster Scott -> correct TopAugmentation of L;
+ coherence
+  proof
+   let IT be TopAugmentation of L;
+   assume A1: IT is Scott;
+   then [#]IT is open by WAYBEL11:def 4;
+   then [#]IT in the topology of IT by PRE_TOPC:def 5;
+   hence the carrier of IT in the topology of IT by PRE_TOPC:12;
+   thus for a being Subset-Family of IT
+   st a c= the topology of IT
+   holds union a in the topology of IT
+    proof
+     let a be Subset-Family of IT;
+     assume A2: a c= the topology of IT;
+       now let X be Subset of IT;
+     assume X in a; then X is open by A2,PRE_TOPC:def 5;
+     hence X is upper by A1,WAYBEL11:def 4;
+     end;
+then A3:  union a is upper by WAYBEL_0:28;
+       union a is inaccessible
+      proof
+       let D be non empty directed Subset of IT;
+       assume sup D in union a; then consider A being set such that
+A4:     sup D in A & A in a by TARSKI:def 4;
+       reconsider A as Subset of IT by A4;
+         A is open by A2,A4,PRE_TOPC:def 5;
+       then A is inaccessible by A1,WAYBEL11:def 4;
+       then D meets A by A4,WAYBEL11:def 1; then consider x being set such
+that
+       A5: x in D & x in A by XBOOLE_0:3;
+         x in D & x in union a by A4,A5,TARSKI:def 4;
+       hence D meets union a by XBOOLE_0:3;
+      end;
+     then union a is open by A1,A3,WAYBEL11:def 4;
+     hence union a in the topology of IT by PRE_TOPC:def 5;
+    end;
+   thus for a,b being Subset of IT st
+   a in the topology of IT & b in the topology of IT
+   holds a /\ b in the topology of IT
+    proof
+     let a,b be Subset of IT;
+     assume A6: a in the topology of IT & b in the topology of IT;
+     reconsider a1=a,b1=b as Subset of IT;
+       a1 is open & b1 is open by A6,PRE_TOPC:def 5;
+then A7:  a1 is upper inaccessible & b1 is upper inaccessible
+     by A1,WAYBEL11:def 4;
+then A8:  a /\ b is upper by WAYBEL_0:29;
+       a /\ b is inaccessible
+      proof
+       let D be non empty directed Subset of IT;
+       assume sup D in a /\ b;
+       then sup D in a1 & sup D in b1 by XBOOLE_0:def 3;
+then A9:    D meets a1 & D meets b1 by A7,WAYBEL11:def 1;
+       then consider d1 being set such that
+A10:    d1 in D & d1 in a1 by XBOOLE_0:3;
+       consider d2 being set such that
+A11:    d2 in D & d2 in b1 by A9,XBOOLE_0:3;
+       reconsider d1,d2 as Element of IT by A10,A11;
+       consider z being Element of IT such that
+A12:     z in D & d1 <= z & d2 <= z by A10,A11,WAYBEL_0:def 1;
+         z in a1 & z in b1 by A7,A10,A11,A12,WAYBEL_0:def 20;
+       then z in a /\ b by XBOOLE_0:def 3;
+       hence D meets a /\ b by A12,XBOOLE_0:3;
+      end;
+     then a /\ b is open by A1,A8,WAYBEL11:def 4;
+     hence a /\ b in the topology of IT by PRE_TOPC:def 5;
+    end;
+  end;
+end;
+
+definition
+ let L be up-complete (non empty Poset);
+ cluster strict Scott TopAugmentation of L;
+ existence
+  proof
+   set T = {S where S is Subset of L : S is upper inaccessible};
+     T c= bool the carrier of L
+    proof
+     let x be set; assume x in T; then consider S being Subset of L such that
+A1:   x=S & S is upper inaccessible;
+     thus x in bool the carrier of L by A1;
+    end;
+   then reconsider T as Subset-Family of L by SETFAM_1:def 7;
+   set SL=TopRelStr(#the carrier of L, the InternalRel of L, T#);
+A2: the RelStr of L = the RelStr of SL;
+   then reconsider SL as TopAugmentation of L by YELLOW_9:def 4;
+   take SL;
+     for S being Subset of SL holds
+   S is open iff S is inaccessible upper
+    proof
+     let S be Subset of SL;
+     thus S is open implies S is inaccessible upper
+      proof
+       assume S is open; then S in T by PRE_TOPC:def 5;
+       then consider S1 being Subset of L such that
+A3:    S1=S & S1 is upper inaccessible;
+       thus S is inaccessible upper by A2,A3,WAYBEL_0:25,YELLOW_9:47;
+      end;
+     thus S is inaccessible upper implies S is open
+      proof
+       reconsider S1=S as Subset of L;
+       assume S is inaccessible upper;
+       then S1 is inaccessible upper by A2,WAYBEL_0:25,YELLOW_9:47;
+       then S in the topology of SL;
+       hence S is open by PRE_TOPC:def 5;
+      end;
+    end;
+   hence SL is strict Scott by WAYBEL11:def 4;
+  end;
+end;
+
+canceled;
+
+theorem Th17:
+ for L being up-complete (non empty Poset)
+ for S1, S2 being Scott TopAugmentation of L
+  holds the topology of S1 = the topology of S2
+  proof
+   let L be up-complete (non empty Poset);
+   let S1, S2 be Scott TopAugmentation of L;
+A1: the RelStr of S1 = the RelStr of L by YELLOW_9:def 4
+   .= the RelStr of S2 by YELLOW_9:def 4;
+   thus the topology of S1 c= the topology of S2
+   proof
+   let x be set;
+   assume x in the topology of S1;
+   then reconsider y=x as open Subset of S1 by PRE_TOPC:def 5;
+   reconsider z=y as Subset of S2 by A1;
+     z is inaccessible upper by A1,WAYBEL_0:25,YELLOW_9:47;
+   then z is open by WAYBEL11:def 4;
+   hence thesis by PRE_TOPC:def 5;
+   end;
+   let x be set;
+   assume x in the topology of S2;
+   then reconsider y=x as open Subset of S2 by PRE_TOPC:def 5;
+   reconsider z=y as Subset of S1 by A1;
+     z is inaccessible upper by A1,WAYBEL_0:25,YELLOW_9:47;
+   then z is open by WAYBEL11:def 4;
+   hence thesis by PRE_TOPC:def 5;
+  end;
+
+theorem Th18:
+ for S1, S2 being up-complete antisymmetric (non empty reflexive TopRelStr)
+  st the TopRelStr of S1 = the TopRelStr of S2 & S1 is Scott
+  holds S2 is Scott
+  proof
+   let S1, S2 be up-complete antisymmetric (non empty reflexive TopRelStr);
+   assume A1: the TopRelStr of S1 = the TopRelStr of S2;
+   then A2: the RelStr of S1 = the RelStr of S2;
+   assume A3: S1 is Scott;
+   let T be Subset of S2;
+   reconsider T1=T as Subset of S1 by A1;
+   thus T is open implies T is inaccessible upper
+    proof
+     assume T is open;
+     then T in the topology of S2 by PRE_TOPC:def 5;
+     then T1 is open by A1,PRE_TOPC:def 5;
+     then T1 is inaccessible upper by A3,WAYBEL11:def 4;
+     hence T is inaccessible upper by A2,WAYBEL_0:25,YELLOW_9:47;
+    end;
+   thus T is inaccessible upper implies T is open
+    proof
+     assume T is inaccessible upper;
+     then T1 is inaccessible upper by A2,WAYBEL_0:25,YELLOW_9:47;
+     then T1 is open by A3,WAYBEL11:def 4;
+     then T1 in the topology of S1 by PRE_TOPC:def 5;
+     hence T is open by A1,PRE_TOPC:def 5;
+    end;
+  end;
+
+definition
+ let L be up-complete (non empty Poset);
+ func Sigma L -> strict Scott TopAugmentation of L means:
+Def1:
+  not contradiction;
+ uniqueness
+  proof let S1,S2 be strict Scott TopAugmentation of L;
+     the RelStr of S1 = the RelStr of L &
+    the RelStr of S2 = the RelStr of L by YELLOW_9:def 4;
+   hence thesis by Th17;
+  end;
+ existence;
+end;
+
+theorem Th19:
+ for S being Scott up-complete (non empty TopPoset)
+  holds Sigma S = the TopRelStr of S
+  proof let S be Scott up-complete (non empty TopPoset);
+      the RelStr of the TopRelStr of S = the RelStr of S;
+   then reconsider T = the TopRelStr of S as TopAugmentation of S by YELLOW_9:
+def 4;
+      T is Scott by Th18;
+   hence thesis by Def1;
+  end;
+
+theorem Th20:
+ for L1, L2 being up-complete (non empty Poset)
+  st the RelStr of L1 = the RelStr of L2
+  holds Sigma L1 = Sigma L2
+  proof let L1, L2 be up-complete (non empty Poset);
+   assume the RelStr of L1 = the RelStr of L2;
+then A1:  the RelStr of Sigma L1 = the RelStr of L1 &
+    the RelStr of Sigma L2 = the RelStr of L1 by YELLOW_9:def 4;
+    then Sigma L2 is TopAugmentation of L1 by YELLOW_9:def 4;
+   hence thesis by A1,Th17;
+  end;
+
+definition
+ let S,T be up-complete (non empty Poset);
+ let f be map of S,T;
+ func Sigma f -> map of Sigma S, Sigma T equals:
+Def2:
+  f;
+ coherence
+  proof
+      the RelStr of Sigma S = the RelStr of S &
+    the RelStr of Sigma T = the RelStr of T by YELLOW_9:def 4;
+   hence thesis;
+  end;
+end;
+
+definition
+ let S,T be up-complete (non empty Poset);
+ let f be directed-sups-preserving map of S,T;
+ cluster Sigma f -> continuous;
+ coherence
+  proof
+A1:  the RelStr of Sigma S = the RelStr of S &
+    the RelStr of Sigma T = the RelStr of T by YELLOW_9:def 4;
+      f = Sigma f by Def2;
+    then Sigma f is directed-sups-preserving map of Sigma S, Sigma T
+     by A1,WAYBEL21:6;
+   hence thesis by WAYBEL17:29;
+  end;
+end;
+
+theorem
+   for S, T being up-complete (non empty Poset)
+ for f being map of S, T holds
+  f is isomorphic iff Sigma f is isomorphic
+  proof let S, T be up-complete (non empty Poset);
+   let f be map of S, T;
+      Sigma f = f & the RelStr of Sigma S = the RelStr of S &
+    the RelStr of Sigma T = the RelStr of T by Def2,YELLOW_9:def 4;
+   hence thesis by Th6;
+  end;
+
+theorem Th22:
+ for X being non empty TopSpace
+ for S being Scott complete TopLattice
+  holds oContMaps(X, S) = ContMaps(X, S)
+  proof let X be non empty TopSpace;
+   let S be Scott complete TopLattice;
+A1:  Omega S = the TopRelStr of S &
+    the TopStruct of X = the TopStruct of X by WAYBEL25:15;
+   thus oContMaps(X, S) = ContMaps(X, Omega S) by WAYBEL26:def 1
+     .= ContMaps(X, S) by A1,Th13;
+  end;
+
+definition
+ let X,Y be non empty TopSpace;
+ func Theta(X,Y) ->
+   map of InclPoset the topology of [:X, Y:],
+          ContMaps(X, Sigma InclPoset the topology of Y) means:
+Def3:
+  for W being open Subset of [:X, Y:]
+    holds it.W = (W, the carrier of X)*graph;
+ existence
+  proof consider F being map of InclPoset the topology of [:X, Y:],
+        oContMaps(X, Sigma InclPoset the topology of Y) such that
+      F is monotone and
+A1:  for W being open Subset of [:X,Y:]
+     holds F.W = (W, the carrier of X)*graph by WAYBEL26:46;
+      Omega Sigma InclPoset the topology of Y
+      = Sigma InclPoset the topology of Y by WAYBEL25:15;
+    then oContMaps(X, Sigma InclPoset the topology of Y)
+      = ContMaps(X, Sigma InclPoset the topology of Y) by WAYBEL26:def 1;
+   hence thesis by A1;
+  end;
+ correctness
+  proof let F,G be map of InclPoset the topology of [:X, Y:],
+          ContMaps(X, Sigma InclPoset the topology of Y) such that
+A2:  for W being open Subset of [:X, Y:]
+     holds F.W = (W, the carrier of X)*graph and
+A3:  for W being open Subset of [:X, Y:]
+     holds G.W = (W, the carrier of X)*graph;
+      now let x be Element of InclPoset the topology of [:X, Y:];
+        the carrier of InclPoset the topology of [:X, Y:]
+        = the topology of [:X, Y:] by YELLOW_1:1;
+      then x in the topology of [:X, Y:];
+     then reconsider W = x as open Subset of [:X,Y:]
+       by PRE_TOPC:def 5;
+     thus F.x = (W, the carrier of X)*graph by A2 .= G.x by A3;
+    end;
+   hence thesis by YELLOW_2:9;
+  end;
+end;
+
+defpred 4_10_1[T_0-TopSpace] means
+  for X being non empty TopSpace
+  for L being Scott continuous complete TopLattice
+  for T being Scott TopAugmentation of ContMaps($1, L)
+  ex f being map of ContMaps(X, T), ContMaps([:X, $1:], L),
+     g being map of ContMaps([:X, $1:], L), ContMaps(X, T)
+   st f is uncurrying one-to-one onto &
+      g is currying one-to-one onto;
+
+defpred 4_10_1'[T_0-TopSpace] means
+  for X being non empty TopSpace
+  for L being Scott continuous complete TopLattice
+  for T being Scott TopAugmentation of ContMaps($1, L)
+  ex f being map of ContMaps(X, T), ContMaps([:X, $1:], L),
+     g being map of ContMaps([:X, $1:], L), ContMaps(X, T)
+   st f is uncurrying isomorphic &
+      g is currying isomorphic;
+
+defpred 4_10_2[T_0-TopSpace] means
+  for X being non empty TopSpace
+   holds Theta(X, $1) is isomorphic;
+
+defpred 4_10_3[T_0-TopSpace] means
+ for X being non empty TopSpace
+ for T being Scott TopAugmentation of InclPoset the topology of $1
+ for f being continuous map of X, T
+  holds *graph f is open Subset of [:X, $1:];
+
+defpred 4_10_4[T_0-TopSpace] means
+ for T being Scott TopAugmentation of InclPoset the topology of $1
+  holds
+   {[W,y] where W is open Subset of $1, y is Element of $1: y in W}
+     is open Subset of [:T, $1:];
+
+defpred 4_10_5[T_0-TopSpace] means
+ for S being Scott TopAugmentation of InclPoset the topology of $1
+ for y being Element of $1, V being open a_neighborhood of y
+ ex H being open Subset of S st V in H & meet H is a_neighborhood of y;
+
+Lm1: for T being T_0-TopSpace holds 4_10_1[T] iff 4_10_1'[T]
+  proof
+   let T be T_0-TopSpace;
+   thus 4_10_1[T] implies 4_10_1'[T]
+    proof
+     assume A1: 4_10_1[T];
+     let X be non empty TopSpace;
+     let L be Scott continuous complete TopLattice;
+     let S be Scott TopAugmentation of ContMaps(T, L);
+     consider f being map of ContMaps(X, S), ContMaps([:X, T:], L),
+     g being map of ContMaps([:X, T:], L), ContMaps(X, S)
+     such that
+A2:   f is uncurrying one-to-one onto &
+     g is currying one-to-one onto by A1;
+     take f,g;
+A3:   the RelStr of S = the RelStr of ContMaps(T,L) by YELLOW_9:def 4;
+       ContMaps(T,L) is full non empty SubRelStr of (L|^the carrier of T)
+     by WAYBEL24:def 3;
+     then the carrier of ContMaps(T,L) c= the carrier of L|^the carrier of T &
+     the InternalRel of ContMaps(T,L) c= the InternalRel of
+     L|^the carrier of T & the InternalRel of ContMaps(T,L) =
+  (the InternalRel of (L|^the carrier of T))|_2 the carrier of ContMaps(T,L)
+     by YELLOW_0:def 13,def 14;
+     then S is full non empty SubRelStr of (L|^the carrier of T)
+     by A3,YELLOW_0:def 13,def 14;
+     then A4:  S |^ the carrier of X is full non empty SubRelStr of
+     (L|^the carrier of T) |^ the carrier of X by YELLOW16:41;
+       ContMaps(X, S) is full non empty SubRelStr of
+     S|^the carrier of X by WAYBEL24:def 3;
+then A5:  ContMaps(X, S) is full non empty SubRelStr of
+     (L|^the carrier of T)|^the carrier of X by A4,WAYBEL15:1;
+       L|^ the carrier of [:X,T:] = L|^[:the carrier of X,the carrier of T:]
+     by BORSUK_1:def 5;
+then A6:  ContMaps([:X, T:], L) is full non empty SubRelStr of
+     L|^[:the carrier of X,the carrier of T:] by WAYBEL24:def 3;
+then A7:  f is monotone by A2,A5,WAYBEL27:20;
+A8:  g is monotone by A2,A5,A6,WAYBEL27:21;
+A9:  rng f = the carrier of ContMaps([:X, T:], L) by A2,FUNCT_2:def 3
+          .= dom g by FUNCT_2:def 1;
+       ContMaps(T,L) is full non empty SubRelStr of L|^the carrier of T
+     by WAYBEL24:def 3;
+     then ContMaps(T,L)|^the carrier of X is full SubRelStr of
+     (L|^the carrier of T)|^the carrier of X by YELLOW16:41;
+     then A10:   the carrier of ContMaps(T,L)|^the carrier of X c=
+     the carrier of (L|^the carrier of T)|^the carrier of X by YELLOW_0:def 13;
+       ContMaps(X, S) is non empty full SubRelStr of S|^the carrier of X
+     by WAYBEL24:def 3;
+     then the carrier of ContMaps(X, S) c= the carrier of (S|^the carrier of X
+)
+     by YELLOW_0:def 13;
+     then dom f c= the carrier of (S|^the carrier of X) by FUNCT_2:def 1;
+     then dom f c= the carrier of ContMaps(T,L)|^the carrier of X by A3,
+WAYBEL27:15;
+     then dom f c=
+     the carrier of (L|^the carrier of T)|^the carrier of X by A10,XBOOLE_1:1;
+     then dom f c= Funcs(the carrier of X,the carrier of L|^the carrier of T)
+     by YELLOW_1:28;
+     then dom f c= Funcs(the carrier of X,Funcs(the carrier of T,the carrier
+of L))
+     by YELLOW_1:28;
+     then g*f = id dom f by A2,A9,WAYBEL27:4;
+     then g = f qua Function" by A2,A9,FUNCT_1:63;
+     hence f is uncurrying isomorphic by A2,A7,A8,WAYBEL_0:def 38;
+A11:  rng g = the carrier of ContMaps(X, S) by A2,FUNCT_2:def 3
+          .= dom f by FUNCT_2:def 1;
+       ContMaps([:X,T:],L) is non empty full SubRelStr of
+     L |^ the carrier of [:X,T:] by WAYBEL24:def 3;
+     then the carrier of ContMaps([:X,T:],L) c= the carrier of
+     (L |^ the carrier of [:X,T:]) by YELLOW_0:def 13;
+     then dom g c= the carrier of (L |^ the carrier of [:X,T:]) by FUNCT_2:def
+1;
+     then dom g c= Funcs(the carrier of [:X,T:],the carrier of L) by YELLOW_1:
+28;
+     then dom g c= Funcs([:the carrier of X,the carrier of T:],the carrier of
+L)
+     by BORSUK_1:def 5;
+     then f*g = id dom g by A2,A11,WAYBEL27:5;
+     then f = g qua Function" by A2,A11,FUNCT_1:63;
+     hence g is currying isomorphic by A2,A7,A8,WAYBEL_0:def 38;
+    end;
+   assume A12: 4_10_1'[T];
+   let X be non empty TopSpace;
+   let L be Scott continuous complete TopLattice;
+   let S be Scott TopAugmentation of ContMaps(T, L);
+   consider f being map of ContMaps(X, S), ContMaps([:X, T:], L),
+   g being map of ContMaps([:X, T:], L), ContMaps(X, S)
+   such that
+A13: f is uncurrying isomorphic &
+   g is currying isomorphic by A12;
+   take f,g;
+   thus f is uncurrying one-to-one onto by A13,WAYBEL_0:def 38,YELLOW14:10;
+   thus g is currying one-to-one onto by A13,WAYBEL_0:def 38,YELLOW14:10;
+  end;
+
+begin :: Some Natural Isomorphisms
+
+definition let X be non empty TopSpace;
+ func alpha X ->
+   map of oContMaps(X, Sierpinski_Space), InclPoset the topology of X means:
+Def4:
+  for g being continuous map of X, Sierpinski_Space holds it.g = g"{1};
+ existence
+  proof
+    deffunc F(Function) = $1"{1};
+    consider f being Function such that
+A1:  dom f = the carrier of oContMaps(X, Sierpinski_Space) and
+A2:  for x being Element of oContMaps(X, Sierpinski_Space)
+     holds f.x = F(x) from LambdaB;
+      rng f c= the topology of X
+     proof let y be set; assume y in rng f;
+      then consider x being set such that
+A3:     x in dom f & y = f.x by FUNCT_1:def 5;
+      reconsider x as Element of oContMaps(X, Sierpinski_Space)
+        by A1,A3;
+      reconsider g = x as continuous map of X, Sierpinski_Space by WAYBEL26:2;
+         the topology of Sierpinski_Space = {{}, {1}, {0,1}}
+        by WAYBEL18:def 9;
+       then {1} in the topology of Sierpinski_Space by ENUMSET1:14;
+      then reconsider A = {1} as open Subset of Sierpinski_Space
+        by PRE_TOPC:def 5;
+         y = g"A & g"A is open by A2,A3,TOPS_2:55;
+      hence thesis by PRE_TOPC:def 5;
+     end;
+    then rng f c= the carrier of InclPoset the topology of X by YELLOW_1:1;
+    then f is Function of the carrier of oContMaps(X, Sierpinski_Space),
+      the carrier of InclPoset the topology of X by A1,FUNCT_2:4;
+   then reconsider f as
+      map of oContMaps(X, Sierpinski_Space), InclPoset the topology of X;
+   take f; let g be continuous map of X, Sierpinski_Space;
+      g is Element of oContMaps(X, Sierpinski_Space) by WAYBEL26:2;
+   hence thesis by A2;
+  end;
+ uniqueness
+  proof let f1, f2 be map of oContMaps(X, Sierpinski_Space),
+     InclPoset the topology of X such that
+A4: for g being continuous map of X, Sierpinski_Space holds f1.g = g"{1} and
+A5: for g being continuous map of X, Sierpinski_Space holds f2.g = g"{1};
+      now let x be Element of oContMaps(X, Sierpinski_Space);
+     reconsider g = x as continuous map of X, Sierpinski_Space by WAYBEL26:2;
+     thus f1.x = g"{1} by A4 .= f2.x by A5;
+    end;
+   hence thesis by YELLOW_2:9;
+  end;
+end;
+
+theorem
+   for X being non empty TopSpace
+ for V being open Subset of X
+  holds (alpha X)".V = chi(V, the carrier of X)
+  proof let X be non empty TopSpace;
+   consider f be map of InclPoset the topology of X,
+     oContMaps(X, Sierpinski_Space) such that
+A1:  f is isomorphic and
+A2:  for V being open Subset of X holds f.V = chi(V, the carrier of X)
+     by WAYBEL26:5;
+      [#]oContMaps(X, Sierpinski_Space)
+     = the carrier of oContMaps(X, Sierpinski_Space) by PRE_TOPC:12;
+then A3:  f is one-to-one & rng f = [#]oContMaps(X, Sierpinski_Space)
+     by A1,WAYBEL_0:66;
+then A4:  f" = f qua Function" by TOPS_2:def 4;
+A5:  the topology of Sierpinski_Space = {{}, {1}, {0,1}} &
+    the carrier of Sierpinski_Space = {0, 1} by WAYBEL18:def 9;
+    then {1} in the topology of Sierpinski_Space by ENUMSET1:14;
+   then reconsider A = {1} as open Subset of Sierpinski_Space
+     by PRE_TOPC:def 5;
+A6:  the carrier of InclPoset the topology of X = the topology of X
+     by YELLOW_1:1;
+      now let x be Element of oContMaps(X, Sierpinski_Space);
+     reconsider g = x as continuous map of X, Sierpinski_Space by WAYBEL26:2;
+A7:    g"A is open by TOPS_2:55;
+then A8:    g"A in the topology of X by PRE_TOPC:def 5;
+A9:    f.(g"A) = chi(g"A, the carrier of X) by A2,A7 .= x by A5,FUNCT_3:49;
+     thus (alpha X).x = g"A by Def4 .= f".x by A3,A4,A6,A8,A9,FUNCT_2:32;
+    end;
+    then alpha X = f" by YELLOW_2:9;
+    then (alpha X)" = f by A3,TOPS_2:64;
+   hence thesis by A2;
+  end;
+
+definition
+ let X be non empty TopSpace;
+ cluster alpha X -> isomorphic;
+ coherence
+  proof
+   consider f be map of InclPoset the topology of X,
+     oContMaps(X, Sierpinski_Space) such that
+A1:  f is isomorphic and
+A2:  for V being open Subset of X holds f.V = chi(V, the carrier of X)
+     by WAYBEL26:5;
+      [#]oContMaps(X, Sierpinski_Space)
+     = the carrier of oContMaps(X, Sierpinski_Space) by PRE_TOPC:12;
+then A3:  f is one-to-one & rng f = [#]oContMaps(X, Sierpinski_Space)
+     by A1,WAYBEL_0:66;
+then A4:  f" = f qua Function" by TOPS_2:def 4;
+A5:  the topology of Sierpinski_Space = {{}, {1}, {0,1}} &
+    the carrier of Sierpinski_Space = {0, 1} by WAYBEL18:def 9;
+    then {1} in the topology of Sierpinski_Space by ENUMSET1:14;
+   then reconsider A = {1} as open Subset of Sierpinski_Space
+     by PRE_TOPC:def 5;
+A6:  the carrier of InclPoset the topology of X = the topology of X
+     by YELLOW_1:1;
+      now let x be Element of oContMaps(X, Sierpinski_Space);
+     reconsider g = x as continuous map of X, Sierpinski_Space by WAYBEL26:2;
+A7:    g"A is open by TOPS_2:55;
+then A8:    g"A in the topology of X by PRE_TOPC:def 5;
+A9:    f.(g"A) = chi(g"A, the carrier of X) by A2,A7 .= x by A5,FUNCT_3:49;
+     thus (alpha X).x = g"A by Def4 .= f".x by A3,A4,A6,A8,A9,FUNCT_2:32;
+    end;
+    then alpha X = f" by YELLOW_2:9;
+   hence thesis by A1,A4,WAYBEL_0:68;
+  end;
+end;
+
+definition
+ let X be non empty TopSpace;
+ cluster (alpha X)" -> isomorphic;
+ coherence by YELLOW14:11;
+end;
+
+definition
+ let S be injective T_0-TopSpace;
+ cluster Omega S -> Scott;
+ coherence
+  proof consider T being strict Scott TopAugmentation of Omega S;
+A1:  the RelStr of T = the RelStr of Omega S by YELLOW_9:def 4;
+      the TopStruct of T = the TopStruct of S by WAYBEL25:37
+                      .= the TopStruct of Omega S by WAYBEL25:def 2;
+   hence thesis by A1;
+  end;
+end;
+
+definition
+ let X be non empty TopSpace;
+ cluster oContMaps(X, Sierpinski_Space) -> complete;
+ coherence
+  proof
+      InclPoset the topology of X, oContMaps(X, Sierpinski_Space)
+are_isomorphic
+     by WAYBEL26:6;
+   hence thesis by WAYBEL20:18;
+  end;
+end;
+
+theorem
+   Omega Sierpinski_Space = Sigma BoolePoset 1
+  proof reconsider T = Omega Sierpinski_Space
+    as Scott strict TopAugmentation of BoolePoset 1 by WAYBEL26:4;
+   set S = Sigma BoolePoset 1;
+A1:  the RelStr of T = BoolePoset 1 by YELLOW_9:def 4
+                   .= the RelStr of S by YELLOW_9:def 4;
+      the topology of T = sigma BoolePoset 1 by YELLOW_9:51
+                     .= the topology of S by YELLOW_9:51;
+   hence thesis by A1;
+  end;
+
+definition
+ let M be non empty set;
+ let S be injective T_0-TopSpace;
+ cluster M-TOP_prod (M --> S) -> injective;
+ coherence
+  proof
+      for m being Element of M holds (M --> S).m is injective by FUNCOP_1:13;
+   hence thesis by WAYBEL18:8;
+  end;
+end;
+
+theorem
+   for M being non empty set, L being complete continuous LATTICE holds
+  Omega (M-TOP_prod (M --> Sigma L)) = Sigma (M-POS_prod (M --> L))
+  proof let M be non empty set, L be complete continuous LATTICE;
+A1:  the RelStr of Sigma L = the RelStr of L by YELLOW_9:def 4;
+   reconsider S = Sigma L as injective T_0-TopSpace;
+      Omega Sigma L = Sigma L by WAYBEL25:15;
+    then the RelStr of Omega (M-TOP_prod (M --> Sigma L))
+      = M-POS_prod (M --> Sigma L) by WAYBEL25:14
+     .= (Sigma L)|^M by YELLOW_1:def 5
+     .= L|^M by A1,WAYBEL27:15;
+    then Sigma (L|^M) = Sigma Omega (M-TOP_prod (M --> S)) by Th20
+     .= Omega (M-TOP_prod (M --> Sigma L)) by Th19;
+   hence thesis by YELLOW_1:def 5;
+  end;
+
+theorem
+   for M being non empty set, T being injective T_0-TopSpace holds
+  Omega (M-TOP_prod (M --> T)) = Sigma (M-POS_prod (M --> Omega T))
+  proof let M be non empty set, T be injective T_0-TopSpace;
+   set L = Omega T;
+      the RelStr of Omega (M-TOP_prod (M --> T)) = M-POS_prod (M --> L)
+     by WAYBEL25:14;
+    then Sigma Omega (M-TOP_prod (M --> T)) = Sigma (M-POS_prod (M --> L))
+     by Th20;
+   hence thesis by Th19;
+  end;
+
+definition
+ let M be non empty set;
+ let X,Y be non empty TopSpace;
+ func commute(X, M, Y) ->
+   map of oContMaps(X, M-TOP_prod (M --> Y)), oContMaps(X, Y)|^M means:
+Def5:
+  for f being continuous map of X, M-TOP_prod (M --> Y)
+   holds it.f = commute f;
+ uniqueness
+  proof let F1, F2 be
+     map of oContMaps(X, M-TOP_prod (M --> Y)), oContMaps(X, Y)|^M such that
+A1: for f being continuous map of X, M-TOP_prod (M --> Y)
+     holds F1.f = commute f and
+A2: for f being continuous map of X, M-TOP_prod (M --> Y)
+     holds F2.f = commute f;
+      now let f be Element of oContMaps(X, M-TOP_prod (M --> Y));
+     reconsider g = f as continuous map of X, M-TOP_prod (M --> Y)
+       by WAYBEL26:2;
+     thus F1.f = commute g by A1 .= F2.f by A2;
+    end;
+   hence thesis by YELLOW_2:9;
+  end;
+ existence
+  proof
+    deffunc F(Function) = commute $1;
+    consider F being Function such that
+A3:  dom F = the carrier of oContMaps(X, M-TOP_prod (M --> Y)) and
+A4:  for f being Element of oContMaps(X, M-TOP_prod (M --> Y))
+     holds F.f = F(f) from LambdaB;
+      rng F c= the carrier of oContMaps(X, Y)|^M
+     proof let y be set; assume y in rng F;
+      then consider x being set such that
+A5:     x in dom F & y = F.x by FUNCT_1:def 5;
+      reconsider x as Element of oContMaps(X, M-TOP_prod (M --> Y))
+        by A3,A5;
+      reconsider f = x as continuous map of X, M-TOP_prod (M --> Y)
+        by WAYBEL26:2;
+         commute f is Function of M, the carrier of oContMaps(X, Y) &
+       y = commute x by A4,A5,WAYBEL26:32;
+       then y in Funcs(M, the carrier of oContMaps(X, Y)) by FUNCT_2:11;
+      hence thesis by YELLOW_1:28;
+     end;
+    then F is Function of the carrier of oContMaps(X, M-TOP_prod (M --> Y)),
+                     the carrier of oContMaps(X, Y)|^M by A3,FUNCT_2:4;
+   then reconsider F as
+    map of oContMaps(X, M-TOP_prod (M --> Y)), oContMaps(X, Y)|^M;
+   take F; let f be continuous map of X, M-TOP_prod (M --> Y);
+      f is Element of oContMaps(X, M-TOP_prod (M --> Y)) by WAYBEL26:2;
+   hence thesis by A4;
+  end;
+end;
+
+definition
+ let M be non empty set;
+ let X,Y be non empty TopSpace;
+ cluster commute(X,M,Y) -> one-to-one onto;
+ correctness
+  proof set f = commute(X,M,Y);
+      Carrier (M --> Y) = M --> the carrier of Y by WAYBEL26:31;
+    then the carrier of M-TOP_prod (M --> Y)
+      = product (M --> the carrier of Y) by WAYBEL18:def 3
+     .= Funcs(M, the carrier of Y) by CARD_3:20;
+then A1:  the carrier of oContMaps(X, M-TOP_prod (M --> Y))
+     c= Funcs(the carrier of X, Funcs(M, the carrier of Y)) by WAYBEL26:33;
+      now
+    thus the carrier of oContMaps(X, Y)|^M <> {};
+     let x1,x2 be set; assume
+A2:    x1 in the carrier of oContMaps(X, M-TOP_prod (M --> Y)) &
+      x2 in the carrier of oContMaps(X, M-TOP_prod (M --> Y));
+     then reconsider a1 = x1, a2 = x2 as
+       Element of oContMaps(X, M-TOP_prod (M --> Y));
+     reconsider f1 = a1, f2 = a2 as continuous map of X, M-TOP_prod (M --> Y)
+       by WAYBEL26:2;
+     assume f.x1 = f.x2;
+      then commute f1 = f.x2 by Def5 .= commute f2 by Def5;
+      then f1 = commute commute f2 by A1,A2,PRALG_2:6;
+     hence x1 = x2 by A1,A2,PRALG_2:6;
+    end;
+   hence commute(X,M,Y) is one-to-one by FUNCT_2:25;
+      rng f = the carrier of oContMaps(X, Y)|^M
+     proof thus rng f c= the carrier of oContMaps(X, Y)|^M;
+      let x be set; assume
+A3:     x in the carrier of oContMaps(X, Y)|^M;
+      then reconsider x as Element of oContMaps(X, Y)|^M;
+A4:     the carrier of oContMaps(X, Y)
+         c= Funcs(the carrier of X, the carrier of Y) &
+       the carrier of oContMaps(X, Y)|^M
+         = Funcs(M, the carrier of oContMaps(X, Y))
+          by WAYBEL26:33,YELLOW_1:28;
+then A5:    the carrier of oContMaps(X, Y)|^M
+         c= Funcs(M, Funcs(the carrier of X, the carrier of Y))
+          by FUNCT_5:63;
+      reconsider x as Function of M, the carrier of oContMaps(X, Y)
+        by A4,FUNCT_2:121;
+      reconsider g = commute x as continuous map of X, M-TOP_prod(M --> Y)
+        by WAYBEL26:34;
+      reconsider y = g as
+        Element of oContMaps(X, M-TOP_prod(M --> Y)) by WAYBEL26:2;
+         commute commute x = x by A3,A5,PRALG_2:6;
+       then f.y = x & dom f = the carrier of oContMaps(X, M-TOP_prod(M --> Y))
+        by Def5,FUNCT_2:def 1;
+      hence thesis by FUNCT_1:def 5;
+     end;
+   hence thesis by FUNCT_2:def 3;
+  end;
+end;
+
+definition
+ let M be non empty set;
+ let X be non empty TopSpace;
+ cluster commute(X, M, Sierpinski_Space) -> isomorphic;
+ correctness
+  proof
+      M-POS_prod (M --> oContMaps(X, Sierpinski_Space))
+      = oContMaps(X, Sierpinski_Space)|^M by YELLOW_1:def 5;
+   then consider f1 being map of
+      oContMaps(X, M-TOP_prod (M --> Sierpinski_Space)),
+      oContMaps(X, Sierpinski_Space)|^M such that
+A1: f1 is isomorphic and
+A2: for f being continuous map of X, M-TOP_prod (M --> Sierpinski_Space)
+      holds f1.f = commute f by WAYBEL26:35;
+   thus thesis by A1,A2,Def5;
+  end;
+end;
+
+Lm2: for T being T_0-TopSpace st 4_10_2[T] holds 4_10_3[T]
+  proof let Y be T_0-TopSpace such that
+A1:  4_10_2[Y];
+   let X be non empty TopSpace;
+   set S = Sigma InclPoset the topology of Y;
+   let T be Scott TopAugmentation of InclPoset the topology of Y;
+      the RelStr of T = InclPoset the topology of Y &
+    the RelStr of S = InclPoset the topology of Y &
+    the topology of T = sigma InclPoset the topology of Y &
+    the topology of S = sigma InclPoset the topology of Y
+     by YELLOW_9:51,def 4;
+then the TopStruct of X = the TopStruct of X &
+    the TopRelStr of T = the TopRelStr of S;
+then A3:  ContMaps(X, T) = ContMaps(X, S) by Th13;
+   then reconsider F = Theta(X,Y)
+     as map of InclPoset the topology of [:X, Y:], ContMaps(X, T);
+A4:  F is isomorphic by A1,A3;
+   let f be continuous map of X, T;
+A5:  f in the carrier of ContMaps(X, T) by WAYBEL24:def 3;
+      rng F = the carrier of ContMaps(X, T) by A4,WAYBEL_0:66;
+   then consider W being set such that
+A6:  W in dom F & f = F.W by A5,FUNCT_1:def 5;
+      dom F = the carrier of InclPoset the topology of [:X, Y:] by FUNCT_2:def
+1
+         .= the topology of [:X, Y:] by YELLOW_1:1;
+   then reconsider W as open Subset of [:X,Y:] by A6,PRE_TOPC:def 5
+;
+      the carrier of [:X, Y:] = [:the carrier of X, the carrier of Y:]
+     by BORSUK_1:def 5;
+   then reconsider R = W as Relation of the carrier of X, the carrier of Y
+     by RELSET_1:def 1;
+      f = (W, the carrier of X)*graph & dom R c= the carrier of X
+     by A6,Def3;
+   hence *graph f is open Subset of [:X, Y:] by WAYBEL26:42;
+  end;
+
+theorem Th27:
+ for X,Y being non empty TopSpace
+ for S being Scott TopAugmentation of InclPoset the topology of Y
+ for f1, f2 being Element of ContMaps(X, S)
+  st f1 <= f2 holds *graph f1 c= *graph f2
+   proof
+    let X,Y be non empty TopSpace;
+    let S be Scott TopAugmentation of InclPoset the topology of Y;
+    let f1, f2 be Element of ContMaps(X, S);
+    assume A1: f1 <= f2;
+    let x be set;
+    assume A2: x in *graph f1; then consider a,b being set such that
+A3: x = [a,b] by RELAT_1:def 1;
+      f1 is map of X,S & f2 is map of X,S by WAYBEL24:21;
+    then A4:  dom f1 = the carrier of X & dom f2 = the carrier of X by FUNCT_2:
+def 1;
+A5:  a in dom f1 & b in f1.a by A2,A3,WAYBEL26:39;
+    then reconsider a as Element of X by A4;
+A6:  the RelStr of S = the RelStr of InclPoset the topology of Y
+    by YELLOW_9:def 4;
+    reconsider F1=f1,F2=f2 as map of X,S by WAYBEL24:21;
+      F1.a is Element of S;
+    then f1.a in the carrier of InclPoset the topology of Y by A6;
+then A7: f1.a in the topology of Y by YELLOW_1:1;
+      F2.a is Element of S;
+    then f2.a in the carrier of InclPoset the topology of Y by A6;
+then A8: f2.a in the topology of Y by YELLOW_1:1;
+      [f1.a,f2.a] in the InternalRel of S by A1,WAYBEL24:20;
+    then [f1.a,f2.a] in RelIncl the topology of Y by A6,YELLOW_1:1;
+    then f1.a c= f2.a by A7,A8,WELLORD2:def 1;
+    hence x in *graph f2 by A3,A4,A5,WAYBEL26:39;
+   end;
+
+Lm3: for T being T_0-TopSpace st 4_10_3[T] holds 4_10_2[T]
+  proof let Y be T_0-TopSpace such that
+A1:  4_10_3[Y];
+   let X be non empty TopSpace;
+   set T = Sigma InclPoset the topology of Y;
+   consider F be map of InclPoset the topology of [:X, Y:], oContMaps(X, T)
+   such that
+A2:  F is monotone and
+A3:  for W being open Subset of [:X,Y:]
+     holds F.W = (W, the carrier of X)*graph by WAYBEL26:46;
+A4:  ContMaps(X, T) = oContMaps(X, T) by Th22;
+   then reconsider F
+    as map of InclPoset the topology of [:X, Y:], ContMaps(X, T);
+   deffunc F(Function) = *graph $1;
+   consider G being Function such that
+A5:  dom G = the carrier of ContMaps(X, T) and
+A6:  for f being Element of ContMaps(X, T) holds G.f = F(f)
+     from LambdaB;
+      rng G c= the carrier of InclPoset the topology of [:X, Y:]
+    proof
+     let x be set; assume x in rng G; then consider a being set such that
+A7:   a in dom G & x=G.a by FUNCT_1:def 5;
+     reconsider a as Element of ContMaps(X,T) by A5,A7;
+     reconsider a as continuous map of X,T by WAYBEL24:21;
+       x = *graph a by A6,A7;
+     then x is open Subset of [:X,Y:] by A1;
+     then x in the topology of [:X,Y:] by PRE_TOPC:def 5;
+     hence x in
+ the carrier of InclPoset the topology of [:X, Y:] by YELLOW_1:1;
+    end;
+   then G is Function of the carrier of ContMaps(X, T),
+   the carrier of InclPoset the topology of [:X, Y:] by A5,FUNCT_2:4;
+   then reconsider G
+    as map of ContMaps(X, T), InclPoset the topology of [:X, Y:];
+A8: G is monotone
+    proof
+     let f1,f2 be Element of ContMaps(X, T);
+     assume f1 <= f2;
+     then *graph f1 c= *graph f2 by Th27;
+     then G.f1 c= *graph f2 by A6;
+     then G.f1 c= G.f2 by A6;
+     hence G.f1 <= G.f2 by YELLOW_1:3;
+    end;
+     dom F = the carrier of InclPoset the topology of [:X, Y:] by FUNCT_2:def 1
+;
+   then rng G c= dom F;
+   then A9: dom (F*G) = the carrier of ContMaps(X, T) by A5,RELAT_1:46;
+     now let x be set;
+   assume A10: x in the carrier of ContMaps(X, T);
+   then x is Element of ContMaps(X,T);
+   then reconsider x1=x as continuous map of X,T by WAYBEL24:21;
+   reconsider gx = *graph x1 as open Subset of [:X,Y:] by A1;
+A11: (F*G).x = F.(G.x1) by A9,A10,FUNCT_1:22
+          .= F.gx by A6,A10
+          .= (gx, the carrier of X)*graph by A3;
+A12: dom x1 = the carrier of X by FUNCT_2:def 1;
+     now let i be set; assume i in the carrier of X;
+    then A13: i in dom x1 by FUNCT_2:def 1;
+A14:  i in {i} by TARSKI:def 1;
+    thus x1.i = gx.:{i}
+     proof
+      thus x1.i c= gx.:{i}
+       proof
+        let b be set; assume b in x1.i;
+        then [i,b] in gx by A13,WAYBEL26:39;
+        hence b in gx.:{i} by A14,RELAT_1:def 13;
+       end;
+      let b be set; assume b in gx.:{i}; then consider j being set such that
+A15:    [j,b] in gx & j in {i} by RELAT_1:def 13;
+        [i,b] in gx by A15,TARSKI:def 1;
+      hence b in x1.i by WAYBEL26:39;
+     end;
+   end;
+   hence (F*G).x = x by A11,A12,WAYBEL26:def 5;
+   end;
+   then F*G = id the carrier of ContMaps(X, T) by A9,FUNCT_1:34;
+   then A16: F*G = id ContMaps(X, T) by GRCAT_1:def 11;
+   A17: dom (G*F) =
+   the carrier of InclPoset the topology of [:X, Y:] by FUNCT_2:def 1;
+     now let x be set;
+   assume A18: x in the carrier of InclPoset the topology of [:X, Y:];
+   then x in the topology of [:X, Y:] by YELLOW_1:1;
+   then reconsider x1=x as open Subset of [:X, Y:] by PRE_TOPC:def 5
+;
+     (x1,the carrier of X)*graph is continuous map of X,T by WAYBEL26:44;
+   then reconsider x1X = (x1,the carrier of X)*graph as Element of ContMaps(X,T
+)
+   by WAYBEL24:21;
+     x1 c= the carrier of [:X,Y:];
+then A19: x1 c= [:the carrier of X,the carrier of Y:] by BORSUK_1:def 5;
+A20: dom x1 c= the carrier of X
+    proof
+     let d be set; assume d in dom x1; then consider e being set such that
+     A21: [d,e] in x1 by RELAT_1:def 4;
+     thus d in the carrier of X by A19,A21,ZFMISC_1:106;
+    end;
+   thus (G*F).x = G.(F.x1) by A17,A18,FUNCT_1:22
+               .= G.x1X by A3
+               .= *graph x1X by A6
+               .= x by A20,WAYBEL26:42;
+   end;
+   then G*F = id the carrier of InclPoset the topology of [:X, Y:] by A17,
+FUNCT_1:34;
+   then G*F = id InclPoset the topology of [:X, Y:] by GRCAT_1:def 11;
+   then F is isomorphic by A2,A4,A8,A16,YELLOW16:17;
+   hence thesis by A3,Def3;
+  end;
+
+Lm4: for T being T_0-TopSpace st 4_10_3[T] holds 4_10_4[T]
+  proof let Y be T_0-TopSpace such that
+A1:  4_10_3[Y];
+   let X be Scott TopAugmentation of InclPoset the topology of Y;
+   reconsider f = id X as continuous map of X, X;
+A2:  the RelStr of X = the RelStr of InclPoset the topology of Y
+    by YELLOW_9:def 4;
+      *graph f = {[W,y] where W is open Subset of Y, y is Element of Y: y in W}
+     proof thus *graph f c=
+     {[W,y] where W is open Subset of Y, y is Element of Y: y in W}
+      proof
+       let e be set; assume A3: e in *graph f;
+       then consider a,b being set such that
+A4:    e=[a,b] by RELAT_1:def 1;
+A5:    a in dom f & b in f.a by A3,A4,WAYBEL26:39;
+         dom f = the carrier of InclPoset the topology of Y by A2,FUNCT_2:def 1
+       .= the topology of Y by YELLOW_1:1;
+       then reconsider a as open Subset of Y
+       by A5,PRE_TOPC:def 5;
+         f.a = a by A5,GRCAT_1:11;
+       then reconsider b as Element of Y by A5;
+         b in a by A5,GRCAT_1:11;
+       hence
+         e in {[W,y] where W is open Subset of Y, y is Element of Y: y in
+ W} by A4;
+      end;
+     let e be set;
+     assume e in {[W,y] where W is open Subset of Y, y is Element of Y: y in
+ W};
+     then consider W being open Subset of Y, y being Element of Y such that
+A6:   e=[W,y] & y in W;
+       W in the topology of Y by PRE_TOPC:def 5;
+then A7:   W in the carrier of InclPoset the topology of Y by YELLOW_1:1;
+then A8:   W in dom f by A2,FUNCT_2:def 1;
+       f.W = W by A2,A7,GRCAT_1:11;
+     hence e in *graph f by A6,A8,WAYBEL26:39;
+     end;
+   hence thesis by A1;
+  end;
+
+Lm5: for T being T_0-TopSpace st 4_10_4[T] holds 4_10_5[T]
+  proof let Y be T_0-TopSpace such that
+A1:  4_10_4[Y];
+   let S be Scott TopAugmentation of InclPoset the topology of Y;
+   let y be Element of Y, V be open a_neighborhood of y;
+A2: the RelStr of S=the RelStr of InclPoset the topology of Y by YELLOW_9:def 4
+;
+   reconsider A =
+    {[W,z] where W is open Subset of Y, z is Element of Y: z in W}
+     as open Subset of [:S, Y:] by A1;
+      the topology of S is Basis of S &
+    the topology of Y is Basis of Y by CANTOR_1:2;
+   then reconsider B = {[:a,b:] where a is Subset of S, b is Subset of Y:
+      a in the topology of S & b in the topology of Y} as Basis of [:S, Y:]
+     by YELLOW_9:40;
+      y in V by CONNSP_2:6;
+    then [V,y] in A;
+   then consider ab being Subset of [:S, Y:] such that
+A3:  ab in B & [V,y] in ab & ab c= A by YELLOW_9:31;
+   consider H being Subset of S, W being Subset of Y such that
+A4:  ab = [:H,W:] & H in the topology of S & W in the topology of Y by A3;
+   reconsider W as open Subset of Y by A4,PRE_TOPC:def 5;
+   reconsider H as open Subset of S by A4,PRE_TOPC:def 5;
+   take H;
+   thus V in H by A3,A4,ZFMISC_1:106;
+     meet H c= the carrier of Y
+    proof
+     let x be set;
+     assume A5: x in meet H;
+       H <> {} by A3,A4,ZFMISC_1:106; then consider A being set such that
+A6:   A in H by XBOOLE_0:def 1;
+       A in the carrier of S by A6;
+     then A7: A in the topology of Y by A2,YELLOW_1:1;
+       x in A by A5,A6,SETFAM_1:def 1;
+     hence x in the carrier of Y by A7;
+    end;
+   then reconsider mH=meet H as Subset of Y;
+A8: y in W by A3,A4,ZFMISC_1:106;
+     W c= mH
+    proof
+     let w be set; assume A9: w in W;
+A10:   H <> {} by A3,A4,ZFMISC_1:106;
+       now let a be set; assume a in H;
+      then [a,w] in ab by A4,A9,ZFMISC_1:106;
+      then [a,w] in A by A3;
+      then consider a1 being open Subset of Y, w1 being Element of Y such that
+A11:   [a,w] = [a1,w1] & w1 in a1;
+        a = a1 & w = w1 by A11,ZFMISC_1:33;
+      hence w in a by A11;
+     end;
+     hence w in mH by A10,SETFAM_1:def 1;
+    end;
+   then W c= Int mH by TOPS_1:56;
+   hence meet H is a_neighborhood of y by A8,CONNSP_2:def 1;
+  end;
+
+Lm6: for T being T_0-TopSpace st 4_10_5[T] holds 4_10_3[T]
+  proof let Y be T_0-TopSpace such that
+A1: 4_10_5[Y];
+   let X be non empty TopSpace;
+   let T be Scott TopAugmentation of InclPoset the topology of Y;
+   let f be continuous map of X, T;
+A2: the RelStr of T=the RelStr of InclPoset the topology of Y by YELLOW_9:def 4
+;
+      the topology of X is Basis of X &
+    the topology of Y is Basis of Y by CANTOR_1:2;
+   then reconsider B = {[:a,b:] where a is Subset of X, b is Subset of Y:
+         a in the topology of X & b in the topology of Y} as Basis of [:X, Y:]
+     by YELLOW_9:40;
+     now let s be set; assume A3: s in *graph f;
+    then consider s1,s2 being set such that
+A4:  s = [s1,s2] by RELAT_1:def 1;
+A5: s1 in dom f & s2 in f.s1 by A3,A4,WAYBEL26:39;
+    then f.s1 in rng f by FUNCT_1:def 5;
+    then f.s1 in the carrier of T;
+    then f.s1 in the topology of Y by A2,YELLOW_1:1;
+    then s in [:the carrier of X, the carrier of Y:] by A4,A5,ZFMISC_1:106;
+    hence s in the carrier of [:X,Y:] by BORSUK_1:def 5;
+   end; then *graph f c= the carrier of [:X,Y:] by TARSKI:def 3;
+   then reconsider A = *graph f as Subset of [:X,Y:];
+      now let p be Point of [:X, Y:]; assume
+A6:   p in A;
+     then consider x,y being set such that
+A7:   p = [x,y] by RELAT_1:def 1;
+A8:   x in dom f & y in f.x by A6,A7,WAYBEL26:39;
+     then reconsider x as Element of X;
+       f.x in the carrier of InclPoset the topology of Y by A2;
+then A9:  f.x in the topology of Y by YELLOW_1:1;
+     then reconsider y as Element of Y by A8;
+     reconsider W=f.x as open Subset of Y by A9,PRE_TOPC:def 5;
+       y in Int W by A8,TOPS_1:55;
+     then reconsider W as open a_neighborhood of y by CONNSP_2:def 1;
+     consider H being open Subset of T such that
+A10:    W in H & meet H is a_neighborhood of y by A1;
+     reconsider mH = meet H as a_neighborhood of y by A10;
+A11:   y in Int mH & Int Int mH = Int mH by CONNSP_2:def 1,TOPS_1:45;
+     then reconsider V = Int mH as open a_neighborhood of y by CONNSP_2:def 1;
+     reconsider fH = f"H as open Subset of X by TOPS_2:55;
+     reconsider a = [:fH, V:] as Subset of [:X, Y:];
+     take a;
+       V in the topology of Y & fH in the topology of X by PRE_TOPC:def 5;
+     hence a in B;
+       x in fH by A8,A10,FUNCT_1:def 13;
+     hence p in a by A7,A11,ZFMISC_1:106;
+     thus a c= A
+      proof
+       let s be set; assume A12: s in
+ a; then consider s1,s2 being set such that
+A13:     s = [s1,s2] by RELAT_1:def 1;
+A14:    s1 in fH & s2 in V by A12,A13,ZFMISC_1:106;
+then A15:     f.s1 in H by FUNCT_1:def 13;
+         V c= mH by TOPS_1:44;
+then A16:    s2 in f.s1 by A14,A15,SETFAM_1:def 1;
+         s1 in dom f by A14,FUNCT_1:def 13;
+       hence s in A by A13,A16,WAYBEL26:39;
+      end;
+    end;
+   hence *graph f is open Subset of [:X, Y:] by YELLOW_9:31;
+  end;
+
+Lm7: for T being T_0-TopSpace st 4_10_5[T]
+ holds InclPoset the topology of T is continuous
+  proof let Y be T_0-TopSpace such that
+A1:  4_10_5[Y];
+   set L = InclPoset the topology of Y;
+   consider S be Scott TopAugmentation of L;
+A2: the RelStr of S = the RelStr of L by YELLOW_9:def 4;
+A3: the carrier of L = the topology of Y by YELLOW_1:1;
+   thus for x being Element of L holds waybelow x is non empty directed;
+   thus L is up-complete;
+   let A be Element of L;
+      A in the topology of Y by A3;
+   then reconsider B = A as open Subset of Y by PRE_TOPC:def 5;
+   thus A c= sup waybelow A
+     proof let x be set; assume
+A4:     x in A;
+       then x in B;
+      then reconsider x' = x as Element of Y;
+      reconsider B as open a_neighborhood of x' by A4,CONNSP_2:5;
+      consider H being open Subset of S such that
+A5:     B in H & meet H is a_neighborhood of x' by A1;
+      reconsider H1 = H as Subset of L by A2;
+      reconsider mH = meet H as a_neighborhood of x' by A5;
+A6:  x in Int mH by CONNSP_2:def 1;
+        Int mH in the topology of Y by PRE_TOPC:def 5;
+      then Int mH in the carrier of L by YELLOW_1:1;
+      then reconsider ImH = Int mH as Element of L;
+        ImH << A
+       proof
+        let D be non empty directed Subset of L;
+        assume A7: A <= sup D;
+        A8: H1 is inaccessible upper by A2,WAYBEL_0:25,YELLOW_9:47;
+        then sup D in H1 by A5,A7,WAYBEL_0:def 20;
+        then D meets H1 by A8,WAYBEL11:def 1;
+        then consider d being set such that
+A9:      d in D & d in H1 by XBOOLE_0:3;
+        reconsider d as Element of L by A9;
+        take d;
+        thus d in D by A9;
+A10:     Int mH c= mH by TOPS_1:44;
+          mH c= d by A9,SETFAM_1:4;
+        then ImH c= d by A10,XBOOLE_1:1;
+        hence ImH <= d by YELLOW_1:3;
+       end;
+      then Int mH in waybelow A by WAYBEL_3:7;
+      then x in union waybelow A by A6,TARSKI:def 4;
+      hence x in sup waybelow A by YELLOW_1:22;
+     end;
+     waybelow A c= downarrow A by WAYBEL_3:11;
+   then union waybelow A c= union downarrow A by ZFMISC_1:95;
+   then sup waybelow A c= union downarrow A by YELLOW_1:22;
+   then sup waybelow A c= sup downarrow A by YELLOW_1:22;
+   hence sup waybelow A c= A by WAYBEL_0:34;
+  end;
+
+Lm8: for T being T_0-TopSpace st InclPoset the topology of T
+ is continuous holds 4_10_5[T]
+  proof
+   let T be T_0-TopSpace;
+    assume A1: InclPoset the topology of T is continuous;
+    let S be Scott TopAugmentation of InclPoset the topology of T;
+    let y be Element of T, V be open a_neighborhood of y;
+A2:  the RelStr of InclPoset the topology of T =
+    the RelStr of S by YELLOW_9:def 4;
+      V in the topology of T by PRE_TOPC:def 5;
+    then V in the carrier of InclPoset the topology of T by YELLOW_1:1;
+    then reconsider W=V as Element of InclPoset the topology of T;
+      InclPoset the topology of T is satisfying_axiom_of_approximation
+    by A1,WAYBEL_3:def 6;
+then A3:  W = sup waybelow W by WAYBEL_3:def 5
+     .= union waybelow W by YELLOW_1:22;
+A4:  Int V c= V by TOPS_1:44;
+      y in Int V by CONNSP_2:def 1;
+    then consider Z being set such that
+A5:  y in Z & Z in waybelow W by A3,A4,TARSKI:def 4;
+    reconsider Z as Element of InclPoset the topology of T by A5
+;
+    reconsider Z1=Z as Element of S by A2;
+      Z in the carrier of InclPoset the topology of T;
+    then Z in the topology of T by YELLOW_1:1;
+    then reconsider Z2=Z as open Subset of T by PRE_TOPC:def 5;
+      S is continuous by A1,A2,YELLOW12:15;
+    then reconsider H = wayabove Z1 as open Subset of S by WAYBEL11:36;
+    take H;
+      Z << W by A5,WAYBEL_3:7;
+    then A6: V in wayabove Z by WAYBEL_3:8;
+    hence A7: V in H by A2,YELLOW12:13;
+      meet H c= the carrier of T
+     proof
+      let s be set; assume s in meet H; then s in V by A7,SETFAM_1:def 1;
+      hence s in the carrier of T;
+     end;
+    then reconsider mH = meet H as Subset of T;
+      wayabove Z c= uparrow Z by WAYBEL_3:11;
+    then meet uparrow Z c= meet wayabove Z by A6,SETFAM_1:7;
+then A8:  meet uparrow Z c= meet wayabove Z1 by A2,YELLOW12:13;
+      Z c= meet uparrow Z
+     proof
+      let s be set; assume A9: s in Z;
+        now let z be set; assume A10: z in uparrow Z;
+       then reconsider z1=z as Element of InclPoset the topology of T
+      ;
+         Z <= z1 by A10,WAYBEL_0:18;
+       then Z c= z by YELLOW_1:3;
+       hence s in z by A9;
+      end;
+      hence s in meet uparrow Z by SETFAM_1:def 1;
+     end;
+    then Z2 c= mH by A8,XBOOLE_1:1;
+    then Z2 c= Int mH by TOPS_1:56;
+    hence meet H is a_neighborhood of y by A5,CONNSP_2:def 1;
+  end;
+
+begin :: The Poset of Open Sets
+
+:: 4.10. THEOREM, (1) <=> (1'), pp. 131-133
+theorem
+   for Y being T_0-TopSpace holds
+   (for X being non empty TopSpace
+    for L being Scott continuous complete TopLattice
+    for T being Scott TopAugmentation of ContMaps(Y, L)
+    ex f being map of ContMaps(X, T), ContMaps([:X, Y:], L),
+       g being map of ContMaps([:X, Y:], L), ContMaps(X, T)
+     st f is uncurrying one-to-one onto &
+        g is currying one-to-one onto)
+  iff
+    for X being non empty TopSpace
+    for L being Scott continuous complete TopLattice
+    for T being Scott TopAugmentation of ContMaps(Y, L)
+    ex f being map of ContMaps(X, T), ContMaps([:X, Y:], L),
+       g being map of ContMaps([:X, Y:], L), ContMaps(X, T)
+     st f is uncurrying isomorphic &
+        g is currying isomorphic by Lm1;
+
+:: 4.10. THEOREM, (6) <=> (2), pp. 131-133
+theorem
+   for Y being T_0-TopSpace holds
+   InclPoset the topology of Y is continuous
+  iff
+   for X being non empty TopSpace holds Theta(X, Y) is isomorphic
+  proof let Y be T_0-TopSpace;
+   hereby assume InclPoset the topology of Y is continuous;
+     then 4_10_5[Y] by Lm8;
+     then 4_10_3[Y] by Lm6;
+    hence 4_10_2[Y] by Lm3;
+   end;
+   assume 4_10_2[Y];
+    then 4_10_3[Y] by Lm2;
+    then 4_10_4[Y] by Lm4;
+    then 4_10_5[Y] by Lm5;
+   hence thesis by Lm7;
+  end;
+
+:: 4.10. THEOREM, (6) <=> (3), pp. 131-133
+theorem
+   for Y being T_0-TopSpace holds
+   InclPoset the topology of Y is continuous
+  iff
+   for X being non empty TopSpace
+   for f being continuous map of X, Sigma InclPoset the topology of Y
+    holds *graph f is open Subset of [:X, Y:]
+  proof let Y be T_0-TopSpace;
+   hereby assume InclPoset the topology of Y is continuous;
+     then 4_10_5[Y] by Lm8;
+    hence
+       for X being non empty TopSpace
+     for f being continuous map of X, Sigma InclPoset the topology of Y
+      holds *graph f is open Subset of [:X, Y:] by Lm6;
+   end;
+   assume
+A1:  for X being non empty TopSpace
+    for f being continuous map of X, Sigma InclPoset the topology of Y
+     holds *graph f is open Subset of [:X, Y:];
+      4_10_3[Y]
+     proof let X be non empty TopSpace;
+      let T be Scott TopAugmentation of InclPoset the topology of Y;
+      let f be continuous map of X, T;
+A2:     the RelStr of T = InclPoset the topology of Y &
+       the RelStr of Sigma InclPoset the topology of Y
+        = InclPoset the topology of Y &
+       the topology of T = the topology of Sigma InclPoset the topology of Y
+        by Th17,YELLOW_9:def 4;
+      then reconsider g = f as map of X, Sigma InclPoset the topology of Y;
+         the TopStruct of X = the TopStruct of X & the TopStruct of T
+        = the TopStruct of Sigma InclPoset the topology of Y by A2;
+       then [:X, T:] = [:X, Sigma InclPoset the topology of Y:] &
+       g is continuous by Th10,YELLOW12:36;
+      hence *graph f is open Subset of [:X, Y:] by A1;
+     end;
+    then 4_10_4[Y] by Lm4;
+    then 4_10_5[Y] by Lm5;
+   hence thesis by Lm7;
+  end;
+
+:: 4.10. THEOREM, (6) <=> (4), pp. 131-133
+theorem
+   for Y being T_0-TopSpace holds
+   InclPoset the topology of Y is continuous
+  iff
+   {[W,y] where W is open Subset of Y, y is Element of Y: y in W}
+     is open Subset of [:Sigma InclPoset the topology of Y, Y:]
+  proof let Y be T_0-TopSpace;
+   hereby assume InclPoset the topology of Y is continuous;
+     then 4_10_5[Y] by Lm8;
+     then 4_10_3[Y] by Lm6;
+    hence {[W,y] where W is open Subset of Y, y is Element of Y: y in W}
+     is open Subset of [:Sigma InclPoset the topology of Y, Y:]
+      by Lm4;
+   end;
+   assume
+A1:  {[W,y] where W is open Subset of Y, y is Element of Y: y in W}
+     is open Subset of [:Sigma InclPoset the topology of Y, Y:];
+      4_10_4[Y]
+     proof let T be Scott TopAugmentation of InclPoset the topology of Y;
+         the RelStr of T = InclPoset the topology of Y &
+       the RelStr of Sigma InclPoset the topology of Y
+        = InclPoset the topology of Y &
+       the topology of T = the topology of Sigma InclPoset the topology of Y
+        by Th17,YELLOW_9:def 4;
+       then the TopStruct of Y = the TopStruct of Y & the TopStruct of T
+        = the TopStruct of Sigma InclPoset the topology of Y;
+       then [:T, Y:] = [:Sigma InclPoset the topology of Y, Y:] by Th10;
+      hence thesis by A1;
+     end;
+    then 4_10_5[Y] by Lm5;
+   hence thesis by Lm7;
+  end;
+
+:: 4.10. THEOREM, (6) <=> (5), pp. 131-133
+theorem
+   for Y being T_0-TopSpace holds
+   InclPoset the topology of Y is continuous
+  iff
+   for y being Element of Y, V being open a_neighborhood of y
+   ex H being open Subset of Sigma InclPoset the topology of Y
+    st V in H & meet H is a_neighborhood of y
+  proof let Y be T_0-TopSpace;
+   thus InclPoset the topology of Y is continuous implies
+     for y being Element of Y, V being open a_neighborhood of y
+     ex H being open Subset of Sigma InclPoset the topology of Y
+      st V in H & meet H is a_neighborhood of y by Lm8;
+   assume
+A1:  for y being Element of Y, V being open a_neighborhood of y
+    ex H being open Subset of Sigma InclPoset the topology of Y
+     st V in H & meet H is a_neighborhood of y;
+      4_10_5[Y]
+     proof let T be Scott TopAugmentation of InclPoset the topology of Y;
+      let y be Element of Y, V be open a_neighborhood of y;
+      consider H being open Subset of Sigma InclPoset the topology of Y
+      such that
+A2:     V in H & meet H is a_neighborhood of y by A1;
+         the RelStr of T = InclPoset the topology of Y &
+       the RelStr of Sigma InclPoset the topology of Y
+        = InclPoset the topology of Y by YELLOW_9:def 4;
+      then reconsider G = H as Subset of T;
+         the topology of T = the topology of Sigma InclPoset the topology of Y
+        by Th17;
+       then G in the topology of T by PRE_TOPC:def 5;
+       then H is open Subset of T by PRE_TOPC:def 5;
+      hence thesis by A2;
+     end;
+   hence thesis by Lm7;
+  end;
+
+::Theorem II.4.11
+
+defpred 4_11_1[complete LATTICE] means
+InclPoset(sigma $1) is continuous;
+
+defpred 4_11_2[complete LATTICE] means
+for SL being Scott TopAugmentation of $1
+for S being complete LATTICE
+for SS being Scott TopAugmentation of S holds
+sigma [:S,$1:] = the topology of [:SS,SL:];
+
+defpred 4_11_3[complete LATTICE] means
+for SL being Scott TopAugmentation of $1
+for S being complete LATTICE
+for SS being Scott TopAugmentation of S
+for SSL being Scott TopAugmentation of [:S,$1:] holds
+the TopStruct of SSL = [:SS,SL:];
+
+Lm9:
+for L being complete LATTICE holds
+4_11_2[L] iff 4_11_3[L]
+  proof
+   let L be complete LATTICE;
+   thus
+      4_11_2[L] implies 4_11_3[L]
+     proof
+      assume
+A1:    4_11_2[L];
+      let SL be Scott TopAugmentation of L;
+      let S be complete LATTICE;
+      let SS be Scott TopAugmentation of S;
+      let SSL be Scott TopAugmentation of [:S,L:];
+A2:    the RelStr of SL = the RelStr of L &
+      the RelStr of SS = the RelStr of S by YELLOW_9:def 4;
+        the RelStr of SSL = the RelStr of [:S,L:] by YELLOW_9:def 4;
+      then A3:    the carrier of SSL
+                 = [:the carrier of SS,the carrier of SL:] by A2,YELLOW_3:def 2
+                .= the carrier of [:SS,SL:] by BORSUK_1:def 5;
+        the topology of [:SS,SL:] = sigma [:S,L:] by A1
+                .= the topology of SSL by YELLOW_9:51;
+      hence the TopStruct of SSL = [:SS,SL:] by A3;
+     end;
+   assume
+A4: 4_11_3[L];
+   let SL be Scott TopAugmentation of L;
+   let S be complete LATTICE;
+   let SS be Scott TopAugmentation of S;
+     now
+    let SSL be Scott TopAugmentation of [:S,L:];
+      the TopStruct of SSL = the TopStruct of [:SS,SL:] by A4;
+    hence the topology of [:SS,SL:] = sigma [:S,L:] by YELLOW_9:51;
+   end;
+   hence the topology of [:SS,SL:] = sigma [:S,L:];
+  end;
+
+begin :: The Poset of Scott Open Sets
+
+theorem
+  for R1,R2,R3 being non empty RelStr
+for f1 being map of R1,R3 st f1 is isomorphic
+for f2 being map of R2,R3 st f2=f1 & f2 is isomorphic
+holds the RelStr of R1 = the RelStr of R2
+ proof
+  let R1,R2,R3 be non empty RelStr;
+  let f1 be map of R1,R3;
+  assume
+A1: f1 is isomorphic;
+  let f2 be map of R2,R3;
+  assume
+A2: f2=f1 & f2 is isomorphic;
+then A3:  the carrier of R1 = rng (f2 qua Function") by A1,WAYBEL_0:67
+            .= the carrier of R2 by A2,WAYBEL_0:67;
+A4: the InternalRel of R1 c= the InternalRel of R2
+    proof
+     let x be set;
+     assume
+A5:   x in the InternalRel of R1;
+     then consider x1,x2 being set such that
+A6:  x = [x1,x2] &
+     x1 in the carrier of R1 & x2 in the carrier of R1 by RELSET_1:6;
+     reconsider x1,x2 as Element of R1 by A6;
+     reconsider y1=x1,y2=x2 as Element of R2 by A3;
+       x1 <= x2 by A5,A6,ORDERS_1:def 9;
+     then f1.x1 <= f1.x2 by A1,WAYBEL_0:66;
+     then y1 <= y2 by A2,WAYBEL_0:66;
+     hence x in the InternalRel of R2 by A6,ORDERS_1:def 9;
+    end;
+     the InternalRel of R2 c= the InternalRel of R1
+    proof
+     let x be set;
+     assume
+A7:   x in the InternalRel of R2;
+     then consider x1,x2 being set such that
+A8:  x = [x1,x2] &
+     x1 in the carrier of R2 & x2 in the carrier of R2 by RELSET_1:6;
+     reconsider x1,x2 as Element of R2 by A8;
+     reconsider y1=x1,y2=x2 as Element of R1 by A3;
+       x1 <= x2 by A7,A8,ORDERS_1:def 9;
+     then f2.x1 <= f2.x2 by A2,WAYBEL_0:66;
+     then y1 <= y2 by A1,A2,WAYBEL_0:66;
+     hence x in the InternalRel of R1 by A8,ORDERS_1:def 9;
+    end;
+  hence thesis by A3,A4,XBOOLE_0:def 10;
+ end;
+
+Lm10:
+for L being complete LATTICE holds
+4_11_1[L] implies 4_11_2[L]
+ proof
+  let L be complete LATTICE;
+  assume
+A1: 4_11_1[L];
+  let SL be Scott TopAugmentation of L;
+  let S be complete LATTICE;
+  let SS be Scott TopAugmentation of S;
+A2: the RelStr of SS = the RelStr of S &
+  the RelStr of SL = the RelStr of L by YELLOW_9:def 4;
+  set T = Sigma InclPoset the topology of SL;
+  set F = Theta(SS, SL);
+A3: the topology of SL = sigma L by YELLOW_9:51;
+  then 4_10_5[SL] by A1,Lm8;
+  then 4_10_3[SL] by Lm6;
+then A4: F is isomorphic &
+  for W being open Subset of [:SS, SL:]
+  holds F.W = (W, the carrier of S)*graph by A2,Def3,Lm3;
+  consider f1 being map of UPS([:S,L:], BoolePoset 1), InclPoset sigma [:S,L:]
+  such that
+A5: f1 is isomorphic &
+  for f being directed-sups-preserving map of [:S,L:], BoolePoset 1
+  holds f1.f = f"{1} by WAYBEL27:33;
+  set f2 = f1";
+A6: f2 is isomorphic by A5,YELLOW14:11;
+  consider f3 being map of
+  UPS(S, UPS(L, BoolePoset 1)), UPS([:S,L:], BoolePoset 1)
+  such that
+A7: f3 is uncurrying isomorphic by WAYBEL27:47;
+  set f4 = f3";
+A8: f4 is isomorphic by A7,YELLOW14:11;
+    UPS(L, BoolePoset 1) is non empty full SubRelStr of
+  (BoolePoset 1)|^the carrier of L by WAYBEL27:def 4;
+then A9: UPS(L, BoolePoset 1)|^the carrier of S is non empty full SubRelStr of
+  ((BoolePoset 1)|^the carrier of L)|^the carrier of S by YELLOW16:41;
+    UPS(S, UPS(L, BoolePoset 1)) is non empty full SubRelStr of
+  UPS(L, BoolePoset 1)|^the carrier of S by WAYBEL27:def 4;
+  then A10: UPS(S, UPS(L, BoolePoset 1)) is non empty full SubRelStr of
+  ((BoolePoset 1)|^the carrier of L)|^the carrier of S
+  by A9,WAYBEL15:1;
+A11: (BoolePoset 1)|^the carrier of [:S,L:] =
+  (BoolePoset 1)|^[:the carrier of S,the carrier of L:] by YELLOW_3:def 2;
+  A12: UPS([:S,L:], BoolePoset 1) is non empty full SubRelStr of
+  (BoolePoset 1)|^the carrier of [:S,L:] by WAYBEL27:def 4;
+    f3 is one-to-one onto by A7,WAYBEL_0:def 38,YELLOW14:10;
+  then A13: f4 is currying by A7,A10,A11,A12,Th3;
+  consider f5 being map of UPS(L, BoolePoset 1), InclPoset sigma L
+  such that
+A14: f5 is isomorphic &
+  for f being directed-sups-preserving map of L, BoolePoset 1
+  holds f5.f = f"{1} by WAYBEL27:33;
+  set f6 = UPS(id S, f5);
+    InclPoset sigma L = InclPoset the topology of SL by YELLOW_9:51;
+then A15: f6 is isomorphic by A14,WAYBEL27:35;
+  set G = f6*f4*f2;
+    f6*f4 is isomorphic by A8,A15,Th7;
+then A16: G is isomorphic by A6,Th7;
+A17: the RelStr of T = the RelStr of InclPoset sigma L by A3,YELLOW_9:def 4;
+A19: the carrier of UPS(S,InclPoset sigma L)
+  = the carrier of ContMaps(SS,T)
+   proof
+    thus the carrier of UPS(S,InclPoset sigma L)
+    c= the carrier of ContMaps(SS,T)
+     proof
+      let x be set; assume x in the carrier of UPS(S,InclPoset sigma L);
+      then A20: x is directed-sups-preserving map of S, InclPoset sigma L
+      by WAYBEL27:def 4;
+      then reconsider x1 = x as map of SS, T by A2,A17;
+        x1 is directed-sups-preserving by A2,A17,A20,WAYBEL21:6;
+      then x1 is continuous by WAYBEL17:22;
+      hence thesis by WAYBEL24:def 3;
+     end;
+    let x be set; assume x in the carrier of ContMaps(SS,T);
+    then consider x1 being map of SS,T such that
+    A21: x1 = x & x1 is continuous by WAYBEL24:def 3;
+    reconsider x2=x1 as map of S, InclPoset sigma L by A2,A17;
+      x1 is directed-sups-preserving by A21,WAYBEL17:22;
+    then x2 is directed-sups-preserving by A2,A17,WAYBEL21:6;
+    hence thesis by A21,WAYBEL27:def 4;
+   end;
+  reconsider G as map of InclPoset sigma [:S,L:], ContMaps(SS,T) by A19;
+
+A22: for V being Element of InclPoset sigma [:S, L:]
+  for s being Element of S
+  holds (G.V).s = {y where y is Element of L : [s,y] in V}
+   proof
+    let V be Element of InclPoset sigma [:S, L:];
+    let s be Element of S;
+    reconsider fff = f4.(f2.V)
+    as directed-sups-preserving map of S, UPS(L, BoolePoset 1)
+    by WAYBEL27:def 4;
+      f5 is sups-preserving by A14,WAYBEL13:20;
+    then for X being Subset of UPS(L, BoolePoset 1) st X is non empty directed
+    holds f5 preserves_sup_of X by WAYBEL_0:def 33;
+then A23: f5 is directed-sups-preserving by WAYBEL_0:def 37;
+A24: f5*fff*id the carrier of S = f5*fff by FUNCT_2:23;
+A25: (f4.(f2.V)).s is directed-sups-preserving map of L, BoolePoset 1
+    by WAYBEL27:def 4;
+      G.V = (f6*f4).(f2.V) by FUNCT_2:21
+    .= UPS(id S, f5).(f4.(f2.V)) by FUNCT_2:21
+    .= f5*fff*id S by A23,WAYBEL27:def 5
+    .= f5*fff by A24,GRCAT_1:def 11;
+then A26: (G.V).s = f5.(fff.s) by FUNCT_2:21
+    .= ((f4.(f2.V)).s)"{1} by A14,A25;
+    reconsider f2V = f2.V as directed-sups-preserving map of
+    [:S,L:], BoolePoset 1 by WAYBEL27:def 4;
+      dom f4 = the carrier of UPS([:S,L:], BoolePoset 1) by FUNCT_2:def 1;
+then A27: f4.(f2.V) = curry(f2.V) by A13,WAYBEL27:def 2;
+      f1 is onto by A5,YELLOW14:10;
+    then A28: rng f1 = the carrier of InclPoset sigma [:S,L:] by FUNCT_2:def 3;
+then A29: rng f1 = [#]InclPoset sigma [:S,L:] & f1 is one-to-one
+    by A5,PRE_TOPC:12,WAYBEL_0:def 38;
+A30: V = (id rng f1).V by A28,FUNCT_1:35
+     .=(f1*f2).V by A29,TOPS_2:65
+     .= f1.(f2.V) by FUNCT_2:21
+     .= f2V"{1} by A5;
+    thus (G.V).s c= {y where y is Element of L : [s,y] in V}
+     proof
+      let x be set; assume x in (G.V).s;
+then A31:    x in dom ((f4.(f2.V)).s) & ((f4.(f2.V)).s).x in {1} by A26,FUNCT_1
+:def 13;
+        dom ((f4.(f2.V)).s) = the carrier of L by A25,FUNCT_2:def 1;
+      then reconsider y = x as Element of L by A31;
+      A32: dom (f2V) = the carrier of [:S,L:] by FUNCT_2:def 1;
+        ((f4.(f2.V)).s).y = 1 by A31,TARSKI:def 1;
+      then (f2.V).([s,y]) = 1 by A27,A32,FUNCT_5:27;
+      then (f2.V).([s,y]) in {1} by TARSKI:def 1;
+      then [s,y] in (f2.V)"{1} by A32,FUNCT_1:def 13;
+      hence thesis by A30;
+     end;
+    let x be set; assume x in {y where y is Element of L : [s,y] in V};
+    then consider y being Element of L such that
+A33:  y=x & [s,y] in V;
+    A34: dom (f2V) = the carrier of [:S,L:] by FUNCT_2:def 1;
+    then [s,y] in dom (f2.V);
+    then reconsider cs = (curry(f2.V)).s as Function by FUNCT_5:26;
+      (f2.V).([s,y]) in {1} by A30,A33,FUNCT_1:def 13;
+    then (f2.V).([s,y]) = 1 by TARSKI:def 1;
+    then cs.y = 1 by A34,FUNCT_5:27;
+    then A35: ((f4.(f2.V)).s).y in {1} by A27,TARSKI:def 1;
+      dom ((f4.(f2.V)).s) = the carrier of L by A25,FUNCT_2:def 1;
+    hence x in (G.V).s by A26,A33,A35,FUNCT_1:def 13;
+   end;
+A36: the carrier of InclPoset sigma [:S,L:] c=
+  the carrier of InclPoset the topology of [:SS,SL:]
+   proof
+    let V be set;
+    assume
+      V in the carrier of InclPoset sigma [:S,L:];
+    then reconsider V1 = V as Element of InclPoset sigma [:S,L:];
+      F is onto by A4,YELLOW14:10;
+    then rng F = the carrier of ContMaps(SS,T) by FUNCT_2:def 3; then consider
+W being set such that
+A37:  W in dom F & F.W = G.V1 by FUNCT_1:def 5;
+A38: dom F = the carrier of InclPoset the topology of [:SS, SL:] by FUNCT_2:def
+1;
+    reconsider W2=W as Element of InclPoset the topology of [:SS,SL:]
+    by A37;
+      W in the topology of [:SS,SL:] by A37,A38,YELLOW_1:1;
+    then reconsider W1=W2 as open Subset of [:SS,SL:]
+    by PRE_TOPC:def 5;
+A39: W c= V
+     proof
+      let w be set; assume A40: w in W;
+        W1 c= the carrier of [:SS,SL:];
+      then W1 c= [:the carrier of SS, the carrier of SL:] by BORSUK_1:def 5;
+      then consider w1,w2 being set such that
+A41:   w1 in the carrier of S & w2 in the carrier of L & w=[w1,w2]
+      by A2,A40,ZFMISC_1:103;
+      reconsider w1 as Element of S by A41;
+      reconsider w2 as Element of L by A41;
+        [w1,w2] in W1 & w1 in {w1} by A40,A41,TARSKI:def 1;
+      then w2 in W1.:{w1} by RELAT_1:def 13;
+      then w2 in ((W1, the carrier of S)*graph).w1 by WAYBEL26:def 5;
+      then w2 in (F.W2).w1 by A2,Def3;
+      then w2 in {y where y is Element of L : [w1,y] in V} by A22,A37;
+      then consider w2' being Element of L such that
+A42:  w2' = w2 & [w1,w2'] in V;
+      thus w in V by A41,A42;
+     end;
+      V c= W
+     proof
+      let v be set; assume A43: v in V;
+        V1 in the carrier of InclPoset sigma [:S, L:];
+      then V in sigma [:S, L:] by YELLOW_1:1;
+      then V c= the carrier of [:S, L:];
+      then V c= [:the carrier of S, the carrier of L:] by YELLOW_3:def 2;
+      then consider v1,v2 being set such that
+A44:   v1 in the carrier of S & v2 in the carrier of L & v=[v1,v2]
+      by A43,ZFMISC_1:103;
+      reconsider v1 as Element of S by A44;
+      reconsider v2 as Element of L by A44;
+        v2 in {y where y is Element of L : [v1,y] in V} by A43,A44;
+      then v2 in (G.V1).v1 by A22;
+      then v2 in ((W1, the carrier of S)*graph).v1 by A2,A37,Def3;
+      then v2 in W1.:{v1} by WAYBEL26:def 5;
+      then consider v1' being set such that
+A45:  [v1',v2] in W & v1' in {v1} by RELAT_1:def 13;
+      thus v in W by A44,A45,TARSKI:def 1;
+     end;
+    then W2=V by A39,XBOOLE_0:def 10;
+    hence V in the carrier of InclPoset the topology of [:SS,SL:];
+   end;
+    the carrier of InclPoset the topology of [:SS,SL:] c=
+  the carrier of InclPoset sigma [:S,L:]
+   proof
+    let W be set;
+    assume
+A46:  W in the carrier of InclPoset the topology of [:SS,SL:];
+    then reconsider W2 = W as Element of InclPoset the topology of [:SS,SL:]
+   ;
+      W in the topology of [:SS,SL:] by A46,YELLOW_1:1;
+    then reconsider W1 = W2 as open Subset of [:SS,SL:]
+    by PRE_TOPC:def 5;
+      G is onto by A16,A19,YELLOW14:10;
+    then rng G = the carrier of ContMaps(SS,T) by FUNCT_2:def 3;
+    then consider V being set such that
+A47:  V in dom G & G.V = F.W2 by FUNCT_1:def 5;
+    reconsider V as Element of InclPoset sigma [:S, L:] by A47;
+A48: V c= W
+     proof
+      let v be set; assume A49: v in V;
+        V in the carrier of InclPoset sigma [:S, L:];
+      then V in sigma [:S, L:] by YELLOW_1:1;
+      then V c= the carrier of [:S, L:];
+      then V c= [:the carrier of S, the carrier of L:] by YELLOW_3:def 2;
+      then consider v1,v2 being set such that
+A50:   v1 in the carrier of S & v2 in the carrier of L & v=[v1,v2]
+      by A49,ZFMISC_1:103;
+      reconsider v1 as Element of S by A50;
+      reconsider v2 as Element of L by A50;
+        v2 in {y where y is Element of L : [v1,y] in V} by A49,A50;
+      then v2 in (G.V).v1 by A22;
+      then v2 in ((W1, the carrier of S)*graph).v1 by A2,A47,Def3;
+      then v2 in W1.:{v1} by WAYBEL26:def 5;
+      then consider v1' being set such that
+A51:  [v1',v2] in W & v1' in {v1} by RELAT_1:def 13;
+      thus v in W by A50,A51,TARSKI:def 1;
+     end;
+      W c= V
+     proof
+      let w be set; assume A52: w in W;
+        W1 c= the carrier of [:SS,SL:];
+      then W1 c= [:the carrier of SS, the carrier of SL:] by BORSUK_1:def 5;
+      then consider w1,w2 being set such that
+A53:   w1 in the carrier of S & w2 in the carrier of L & w=[w1,w2]
+      by A2,A52,ZFMISC_1:103;
+      reconsider w1 as Element of S by A53;
+      reconsider w2 as Element of L by A53;
+        [w1,w2] in W1 & w1 in {w1} by A52,A53,TARSKI:def 1;
+      then w2 in W1.:{w1} by RELAT_1:def 13;
+      then w2 in ((W1, the carrier of S)*graph).w1 by WAYBEL26:def 5;
+      then w2 in (F.W2).w1 by A2,Def3;
+      then w2 in {y where y is Element of L : [w1,y] in V} by A22,A47;
+      then consider w2' being Element of L such that
+A54:  w2' = w2 & [w1,w2'] in V;
+      thus w in V by A53,A54;
+     end;
+    then W = V by A48,XBOOLE_0:def 10;
+    hence W in the carrier of InclPoset sigma [:S,L:];
+   end;
+  then the carrier of InclPoset sigma [:S,L:] =
+  the carrier of InclPoset the topology of [:SS,SL:] by A36,XBOOLE_0:def 10;
+  hence sigma [:S,L:] = the carrier of InclPoset the topology of [:SS,SL:]
+  by YELLOW_1:1 .= the topology of [:SS,SL:] by YELLOW_1:1;
+ end;
+
+Lm11:
+for L being complete LATTICE holds
+4_11_2[L] implies 4_11_1[L]
+ proof
+  let L be complete LATTICE;
+  assume
+A1: 4_11_2[L];
+  consider SL being Scott TopAugmentation of L;
+A2: the RelStr of SL = the RelStr of L by YELLOW_9:def 4;
+    the TopStruct of SL = ConvergenceSpace Scott-Convergence SL by WAYBEL11:32;
+  then A3: the topology of SL = sigma SL by WAYBEL11:def 12;
+then A4: InclPoset (sigma L) = InclPoset(the topology of SL) by A2,YELLOW_9:52;
+  then reconsider S = InclPoset(sigma L) as complete LATTICE;
+  consider SS being Scott TopAugmentation of S;
+A5: sigma [:S,L:] = the topology of [:SS,SL:] by A1;
+A6: 4_10_4[SL] implies InclPoset the topology of SL is continuous
+   proof
+    assume 4_10_4[SL]; then 4_10_5[SL] by Lm5;
+    hence InclPoset the topology of SL is continuous by Lm7;
+   end;
+    4_10_4[SL]
+   proof
+    let T be Scott TopAugmentation of InclPoset(the topology of SL);
+    reconsider T1 = T as Scott TopAugmentation of S by A4;
+    set Wy = {[W,y] where W is open Subset of SL, y is Element of SL: y in W};
+      Wy c= the carrier of [:T, SL:]
+     proof
+      let x be set; assume x in Wy;
+      then consider W being open Subset of SL,y being Element of SL such that
+A7:    x = [W,y] & y in W;
+        W in the topology of SL by PRE_TOPC:def 5;
+then A8:   W in the carrier of InclPoset(the topology of SL) by YELLOW_1:1;
+        the RelStr of T = the RelStr of InclPoset(the topology of SL)
+      by YELLOW_9:def 4;
+      then [W,y] in [:the carrier of T,the carrier of SL:] by A8,ZFMISC_1:106;
+      hence x in the carrier of [:T, SL:] by A7,BORSUK_1:def 5;
+     end;
+    then reconsider WY = Wy as Subset of [:T,SL:];
+    A9: the RelStr of SS = the RelStr of InclPoset(the topology of SL)
+    by A4,YELLOW_9:def 4 .= the RelStr of T by YELLOW_9:def 4;
+      the topology of SS = sigma S by YELLOW_9:51
+         .= the topology of T1 by YELLOW_9:51
+         .= the topology of T;
+    then A10: the TopStruct of SS = the TopStruct of T by A9;
+      the TopStruct of SL = the TopStruct of SL;
+then A11:  [:SS, SL:] = [:T, SL:] by A10,Th10;
+    A12: the RelStr of SS = the RelStr of S by YELLOW_9:def 4;
+      the carrier of [:T, SL:] =
+    [:the carrier of T,the carrier of SL:] by BORSUK_1:def 5
+    .= the carrier of [:S,L:] by A2,A9,A12,YELLOW_3:def 2;
+    then reconsider wy = WY as Subset of [:S,L:];
+A13: wy is upper
+     proof
+      let x,y be Element of [:S,L:];
+      assume
+A14:    x in wy & x <= y;
+      the carrier of [:S,L:] = [:the carrier of S,the carrier of L:]
+      by YELLOW_3:def 2;
+      then consider y1,y2 being set such that
+A15:   y1 in the carrier of S & y2 in the carrier of L & y = [y1,y2]
+      by ZFMISC_1:def 2;
+        y1 in sigma L by A15,YELLOW_1:1;
+      then y1 in the topology of SL by A2,A3,YELLOW_9:52;
+      then reconsider y1 as open Subset of SL by PRE_TOPC:def 5;
+      reconsider y2 as Element of SL by A2,A15;
+      consider x1 being open Subset of SL, x2 being Element of SL such that
+A16:   x = [x1,x2] & x2 in x1 by A14;
+        x1 in the topology of SL by PRE_TOPC:def 5;
+      then x1 in sigma L by A2,A3,YELLOW_9:52;
+      then x1 in the carrier of S by YELLOW_1:1;
+      then reconsider u1=x1 as Element of S;
+        y1 in the topology of SL by PRE_TOPC:def 5;
+      then y1 in sigma L by A2,A3,YELLOW_9:52;
+      then y1 in the carrier of S by YELLOW_1:1;
+      then reconsider v1=y1 as Element of S;
+      reconsider u2=x2 as Element of L by A2;
+      reconsider v2=y2 as Element of L by A15;
+        [u1,u2] <= [v1,v2] by A14,A15,A16;
+then A17:   u1 <= v1 & u2 <= v2 by YELLOW_3:11;
+      then A18:   x2 <= y2 by A2,YELLOW_0:1;
+A19:   x1 c= y1 by A17,YELLOW_1:3;
+        y2 in x1 by A16,A18,WAYBEL_0:def 20;
+      hence y in wy by A15,A19;
+     end;
+      wy is inaccessible
+     proof
+      let D be non empty directed Subset of [:S,L:];
+      assume sup D in wy;
+      then [sup proj1 D,sup proj2 D] in wy by YELLOW_3:46; then consider
+      sp1D being open Subset of SL, sp2D being Element of SL
+      such that
+A20:   [sup proj1 D,sup proj2 D] = [sp1D,sp2D] & sp2D in sp1D;
+      reconsider proj2D = proj2 D as directed non empty Subset of L
+      by YELLOW_3:21,22;
+      reconsider sp1D' = sp1D as Subset of L by A2;
+      reconsider sp1D' as inaccessible upper Subset of L by A2,WAYBEL_0:25,
+YELLOW_9:47;
+        sup proj2D in sp1D' by A20,ZFMISC_1:33;
+      then proj2 D meets sp1D by WAYBEL11:def 1; then consider d being set
+      such that
+A21:   d in proj2 D & d in sp1D by XBOOLE_0:3;
+      reconsider d as Element of L by A21;
+      consider Y being set such that
+A22:    [Y,d] in D by A21,FUNCT_5:def 2;
+        Y in proj1 D by A22,FUNCT_5:def 1;
+      then reconsider Y as Element of S;
+      reconsider pD = proj1 D as Subset of InclPoset(the topology of SL) by A2,
+A3,YELLOW_9:52;
+A23:  sup proj1 D = union pD by A4,YELLOW_1:22;
+        d in sup proj1 D by A20,A21,ZFMISC_1:33;
+      then consider V being set such that
+A24:    d in V & V in proj1 D by A23,TARSKI:def 4;
+      reconsider V as Element of S by A24;
+      consider e being set such that
+A25:   [V,e] in D by A24,FUNCT_5:def 1;
+        e in proj2 D by A25,FUNCT_5:def 2;
+      then reconsider e as Element of L;
+      consider DD being Element of [:S,L:] such that
+A26:   DD in D & [V,e] <= DD & [Y,d] <= DD by A22,A25,WAYBEL_0:def 1;
+        D c= the carrier of [:S,L:];
+      then D c= [:the carrier of S,the carrier of L:] by YELLOW_3:def 2;
+      then consider DD1,DD2 being set such that
+A27:   DD = [DD1,DD2] by A26,ZFMISC_1:102;
+        DD1 in proj1 D by A26,A27,FUNCT_5:def 1;
+      then reconsider DD1 as Element of S;
+        DD2 in proj2 D by A26,A27,FUNCT_5:def 2;
+      then reconsider DD2 as Element of L;
+        [V,e] <= [DD1,DD2] & [Y,d] <= [DD1,DD2] by A26,A27;
+      then V <= DD1 & Y <= DD1 by YELLOW_3:11;
+      then A28: V c= DD1 & Y c= DD1 by YELLOW_1:3;
+        DD1 in the carrier of S;
+      then DD1 in sigma L by YELLOW_1:1;
+      then DD1 in the topology of SL by A2,A3,YELLOW_9:52;
+      then DD1 is open Subset of SL by PRE_TOPC:def 5;
+then A29:   DD1 is upper Subset of L by A2,WAYBEL_0:25;
+        [V,e] <= [DD1,DD2] & [Y,d] <= [DD1,DD2] by A26,A27;
+      then e <= DD2 & d <= DD2 by YELLOW_3:11;
+then A30:  DD2 in DD1 by A24,A28,A29,WAYBEL_0:def 20;
+        DD1 in the carrier of S;
+      then DD1 in sigma L by YELLOW_1:1;
+      then DD1 in the topology of SL by A2,A3,YELLOW_9:52;
+      then reconsider DD1 as open Subset of SL by PRE_TOPC:def 5
+;
+      reconsider DD2 as Element of SL by A2;
+        [DD1,DD2] in wy by A30;
+      hence D meets wy by A26,A27,XBOOLE_0:3;
+     end;
+    then wy in the topology of ConvergenceSpace Scott-Convergence [:S,L:]
+    by A13,WAYBEL11:31;
+    then WY in the topology of [:SS, SL:] by A5,WAYBEL11:def 12;
+    hence Wy is open Subset of [:T, SL:] by A11,PRE_TOPC:def 5;
+   end;
+  hence InclPoset(sigma L) is continuous by A2,A3,A6,YELLOW_9:52;
+ end;
+
+:: 4.11. THEOREM, (1) <=> (2), p. 133.
+theorem Th34:
+ for L being complete LATTICE holds
+   InclPoset sigma L is continuous
+  iff
+   for S being complete LATTICE
+     holds sigma [:S, L:] = the topology of [:Sigma S, Sigma L:]
+  proof let L be complete LATTICE;
+   thus InclPoset sigma L is continuous implies
+     for S being complete LATTICE
+       holds sigma [:S, L:] = the topology of [:Sigma S, Sigma L:]
+        by Lm10;
+   assume
+A1:  for S being complete LATTICE
+     holds sigma [:S, L:] = the topology of [:Sigma S, Sigma L:];
+      now let SL be Scott TopAugmentation of L;
+     let S be complete LATTICE, SS be Scott TopAugmentation of S;
+        the RelStr of SS = the RelStr of S &
+      the RelStr of Sigma S = the RelStr of S &
+      the RelStr of SL = the RelStr of L &
+      the RelStr of Sigma L = the RelStr of L by YELLOW_9:def 4;
+      then the TopStruct of Sigma S = the TopStruct of SS &
+      the TopStruct of Sigma L = the TopStruct of SL by Th17;
+      then [:SS, SL:] = [:Sigma S, Sigma L:] by Th10;
+     hence sigma [:S,L:] = the topology of [:SS,SL:] by A1;
+    end;
+   hence thesis by Lm11;
+  end;
+
+:: 4.11. THEOREM, (2) <=> (3), p. 133.
+theorem Th35:
+ for L being complete LATTICE holds
+   (for S being complete LATTICE
+      holds sigma [:S, L:] = the topology of [:Sigma S, Sigma L:])
+  iff
+   for S being complete LATTICE
+     holds the TopStruct of Sigma [:S, L:] = [:Sigma S, Sigma L:]
+  proof let L be complete LATTICE;
+   hereby assume
+A1:   for S being complete LATTICE
+      holds sigma [:S, L:] = the topology of [:Sigma S, Sigma L:];
+       4_11_2[L]
+      proof let SL be Scott TopAugmentation of L;
+       let S be complete LATTICE;
+       let SS be Scott TopAugmentation of S;
+          the RelStr of SS = the RelStr of S &
+        the RelStr of Sigma S = the RelStr of S &
+        the RelStr of SL = the RelStr of L &
+        the RelStr of Sigma L = the RelStr of L by YELLOW_9:def 4;
+        then the TopStruct of Sigma S = the TopStruct of SS &
+        the TopStruct of Sigma L = the TopStruct of SL by Th17;
+        then [:SS, SL:] = [:Sigma S, Sigma L:] by Th10;
+       hence sigma [:S,L:] = the topology of [:SS,SL:] by A1;
+      end;
+    hence
+       for S being complete LATTICE
+      holds the TopStruct of Sigma [:S, L:] = [:Sigma S, Sigma L:]
+       by Lm9;
+   end;
+   assume
+A2:  for S being complete LATTICE
+     holds the TopStruct of Sigma [:S, L:] = [:Sigma S, Sigma L:];
+   let S be complete LATTICE;
+      the TopStruct of Sigma [:S, L:] = [:Sigma S, Sigma L:] by A2;
+   hence sigma [:S, L:] = the topology of [:Sigma S, Sigma L:]
+     by YELLOW_9:51;
+  end;
+
+:: 4.11. THEOREM, (2) <=> (3+), p. 133.
+theorem Th36:
+ for L being complete LATTICE holds
+   (for S being complete LATTICE
+      holds sigma [:S, L:] = the topology of [:Sigma S, Sigma L:])
+  iff
+   for S being complete LATTICE
+     holds Sigma [:S, L:] = Omega [:Sigma S, Sigma L:]
+  proof let L be complete LATTICE;
+   hereby assume
+A1:   for S being complete LATTICE
+      holds sigma [:S, L:] = the topology of [:Sigma S, Sigma L:];
+    let S be complete LATTICE;
+       the TopStruct of Sigma [:S, L:] = [:Sigma S, Sigma L:] by A1,Th35;
+     then Omega Sigma [:S, L:] = Omega [:Sigma S, Sigma L:] by WAYBEL25:13;
+    hence Sigma [:S, L:] = Omega [:Sigma S, Sigma L:] by WAYBEL25:15;
+   end;
+   assume
+A2:  for S being complete LATTICE
+     holds Sigma [:S, L:] = Omega [:Sigma S, Sigma L:];
+   let S be complete LATTICE;
+      Sigma [:S, L:] = Omega [:Sigma S, Sigma L:] by A2;
+    then the TopStruct of Sigma [:S, L:]
+     = [:Sigma S, Sigma L:] by WAYBEL25:def 2;
+   hence thesis by YELLOW_9:51;
+  end;
+
+:: 4.11. THEOREM, (1) <=> (3+), p. 133.
+theorem
+   for L being complete LATTICE holds
+   InclPoset sigma L is continuous
+  iff
+   for S being complete LATTICE
+     holds Sigma [:S, L:] = Omega [:Sigma S, Sigma L:]
+  proof let L be complete LATTICE;
+       InclPoset sigma L is continuous
+    iff
+     for S being complete LATTICE
+       holds sigma [:S, L:] = the topology of [:Sigma S, Sigma L:] by Th34;
+   hence thesis by Th36;
+  end;
+
+

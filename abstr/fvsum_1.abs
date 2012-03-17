@@ -1,0 +1,639 @@
+:: Sum and Product of Finite Sequences of Elements of a Field
+::  by Katarzyna Zawadzka
+::
+:: Received December 29, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BINOP_1, FUNCT_1, VECTSP_1, ALGSTR_1, SETWISEO, LATTICES,
+      FUNCOP_1, ARYTM_1, FINSEQOP, FINSEQ_1, RELAT_1, FINSEQ_2, RVSUM_1,
+      SQUARE_1, FINSUB_1, BOOLE, SUBSET_1, FINSEQ_4, RLSUB_2, FINSET_1, CARD_1,
+      CAT_3, FVSUM_1, CARD_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, NAT_1, SQUARE_1,
+      RELAT_1, FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_4,
+      BINOP_1, FUNCOP_1, RLVECT_1, SETWISEO, FINSEQ_2, FINSEQOP, SETWOP_2,
+      TOPREAL1, ALGSTR_1, GROUP_4, VECTSP_1, CARD_1, FINSET_1, FINSUB_1,
+      MATRIX_2;
+ constructors DOMAIN_1, NAT_1, SQUARE_1, SETWISEO, FINSEQOP, SETWOP_2,
+      TOPREAL1, ALGSTR_1, GROUP_4, MATRIX_2, FINSOP_1, FINSEQ_4, MEMBERED,
+      PARTFUN1, XBOOLE_0;
+ clusters FUNCT_1, FINSEQ_1, VECTSP_1, RELSET_1, STRUCT_0, FINSEQ_2, ALGSTR_1,
+      FINSET_1, FINSUB_1, NAT_1, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin :: Auxiliary theorems
+
+ reserve i,j,k for Nat;
+
+canceled;
+
+theorem :: FVSUM_1:2
+for K being Abelian (non empty LoopStr) holds the add of K is commutative;
+
+theorem :: FVSUM_1:3
+for K being add-associative (non empty LoopStr)
+ holds the add of K is associative;
+
+theorem :: FVSUM_1:4
+for K being commutative (non empty HGrStr) holds
+  the mult of K is commutative;
+
+canceled;
+
+theorem :: FVSUM_1:6   :::multLoopStr
+ for K being commutative left_unital (non empty doubleLoopStr) holds
+  1_ K is_a_unity_wrt the mult of K;
+
+theorem :: FVSUM_1:7   :::multLoopStr
+ for K being commutative left_unital (non empty doubleLoopStr) holds
+   the_unity_wrt the mult of K = 1_ K;
+
+theorem :: FVSUM_1:8
+for K being left_zeroed right_zeroed (non empty LoopStr)
+ holds 0.K is_a_unity_wrt the add of K;
+
+theorem :: FVSUM_1:9
+for K being left_zeroed right_zeroed (non empty LoopStr) holds
+ the_unity_wrt the add of K = 0.K;
+
+theorem :: FVSUM_1:10
+for K being left_zeroed right_zeroed (non empty LoopStr)
+ holds the add of K has_a_unity;
+
+theorem :: FVSUM_1:11  :::multLoopStr
+ for K being commutative left_unital (non empty doubleLoopStr) holds
+   the mult of K has_a_unity;
+
+theorem :: FVSUM_1:12
+ for K being distributive (non empty doubleLoopStr) holds
+   the mult of K is_distributive_wrt the add of K;
+
+definition let K be non empty HGrStr;let a be Element of K;
+ func a multfield -> UnOp of the carrier of K equals
+:: FVSUM_1:def 1
+  (the mult of K)[;](a,id (the carrier of K));
+end;
+
+definition let K be non empty LoopStr;
+ func diffield(K) -> BinOp of the carrier of K equals
+:: FVSUM_1:def 2
+  (the add of K)*(id the carrier of K,comp K);
+end;
+
+canceled;
+
+theorem :: FVSUM_1:14
+ for K being non empty LoopStr,
+   a1,a2 being Element of K holds
+   (diffield(K)).(a1,a2) = a1 - a2;
+
+theorem :: FVSUM_1:15
+ for K being distributive (non empty doubleLoopStr),
+     a being Element of K holds
+   a multfield is_distributive_wrt the add of K;
+
+theorem :: FVSUM_1:16
+ for K being left_zeroed right_zeroed add-associative right_complementable
+    (non empty LoopStr) holds
+   comp K is_an_inverseOp_wrt the add of K;
+
+theorem :: FVSUM_1:17
+ for K being left_zeroed right_zeroed add-associative right_complementable
+    (non empty LoopStr) holds
+  the add of K has_an_inverseOp;
+
+theorem :: FVSUM_1:18
+  for K being left_zeroed right_zeroed add-associative right_complementable
+    (non empty LoopStr) holds
+   the_inverseOp_wrt the add of K = comp K;
+
+theorem :: FVSUM_1:19
+    for K being right_zeroed add-associative right_complementable
+    Abelian (non empty LoopStr) holds
+   comp K is_distributive_wrt the add of K;
+
+begin
+::
+:: Some Operations on the i-tuples on Element of K
+::
+
+definition let K be non empty LoopStr;
+ let p1,p2 be FinSequence of the carrier of K;
+  func p1 + p2 -> FinSequence of the carrier of K equals
+:: FVSUM_1:def 3
+  (the add of K).:(p1,p2);
+end;
+
+canceled;
+
+theorem :: FVSUM_1:21
+ for K being non empty LoopStr, p1, p2 be FinSequence of the carrier of K,
+     a1, a2 being Element of K, i being Nat
+  st i in dom (p1+p2) & a1 = p1.i & a2 = p2.i holds (p1+p2).i = a1 + a2;
+
+definition let i; let K be non empty LoopStr;
+  let R1,R2 be Element of i-tuples_on the carrier of K;
+  redefine func R1 + R2 -> Element of i-tuples_on the carrier of K;
+end;
+
+theorem :: FVSUM_1:22
+    for K being non empty LoopStr,
+   a1,a2 being Element of K,
+  R1,R2 being Element of i-tuples_on the carrier of K holds
+   j in Seg i & a1 = R1.j & a2 = R2.j implies (R1+R2).j = a1 + a2;
+
+theorem :: FVSUM_1:23
+   for K being non empty LoopStr,
+  p being FinSequence of the carrier of K holds
+   <*>(the carrier of K) + p = <*>(the carrier of K) & p +
+    <*>(the carrier of K) = <*>(the carrier of K);
+
+theorem :: FVSUM_1:24
+   for K being non empty LoopStr,
+    a1,a2 being Element of K holds
+  <*a1*> + <*a2*> = <*a1+a2*>;
+
+theorem :: FVSUM_1:25
+   for K being non empty LoopStr,
+    a1,a2 being Element of K holds
+   (i|->a1) + (i|->a2) = i|->(a1+a2);
+
+theorem :: FVSUM_1:26
+ for K being Abelian (non empty LoopStr),
+     R1,R2 being Element of i-tuples_on the carrier of K holds
+   R1 + R2 = R2 + R1;
+
+theorem :: FVSUM_1:27
+ for K be add-associative (non empty LoopStr),
+     R1,R2,R3 being Element of i-tuples_on the carrier of K holds
+   R1 + (R2 + R3) = R1 + R2 + R3;
+
+theorem :: FVSUM_1:28
+ for K being Abelian left_zeroed right_zeroed (non empty LoopStr),
+     R being Element of i-tuples_on the carrier of K holds
+   R + (i|->(0.K)) = R & R = (i|->(0.K)) + R;
+
+definition let K be non empty LoopStr;
+  let p be FinSequence of the carrier of K;
+  func -p -> FinSequence of the carrier of K equals
+:: FVSUM_1:def 4
+  (comp K)*p;
+end;
+
+ reserve K for non empty LoopStr,
+  a for Element of K,
+  p for FinSequence of the carrier of K,
+  R for Element of i-tuples_on the carrier of K;
+
+canceled;
+
+theorem :: FVSUM_1:30
+   i in dom -p & a = p.i implies (-p).i = -a;
+
+definition let i;let K be non empty LoopStr;
+  let R be Element of i-tuples_on the carrier of K;
+ redefine func -R -> Element of i-tuples_on the carrier of K;
+end;
+
+theorem :: FVSUM_1:31
+     j in Seg i & a = R.j implies (-R).j = -a;
+
+theorem :: FVSUM_1:32
+     -(<*>(the carrier of K)) = <*>(the carrier of K);
+
+theorem :: FVSUM_1:33
+     -<*a*> = <*-a*>;
+
+theorem :: FVSUM_1:34
+   -(i|->a) = i|->-a;
+
+theorem :: FVSUM_1:35
+ for K being Abelian right_zeroed add-associative right_complementable
+        (non empty LoopStr),
+     R being Element of i-tuples_on the carrier of K holds
+   R + -R = (i|->0.K) & -R + R = (i|->0.K);
+
+ reserve
+  K for left_zeroed right_zeroed add-associative right_complementable
+        (non empty LoopStr),
+  R,R1,R2 for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:36
+   R1 + R2 = (i|->0.K) implies R1 = -R2 & R2 = -R1;
+
+theorem :: FVSUM_1:37
+   --R = R;
+
+theorem :: FVSUM_1:38
+     -R1 = -R2 implies R1 = R2;
+
+theorem :: FVSUM_1:39
+   for K being Abelian right_zeroed add-associative right_complementable
+        (non empty LoopStr),
+   R,R1,R2 being Element of i-tuples_on the carrier of K holds
+   R1 + R = R2 + R or R1 + R = R + R2 implies R1 = R2;
+
+theorem :: FVSUM_1:40
+ for K being Abelian right_zeroed add-associative right_complementable
+        (non empty LoopStr),
+   R1,R2 being Element of i-tuples_on the carrier of K holds
+   -(R1 + R2) = -R1 + -R2;
+
+definition let K be non empty LoopStr;
+  let p1,p2 be FinSequence of the carrier of K;
+  func p1 - p2 -> FinSequence of the carrier of K equals
+:: FVSUM_1:def 5
+  (diffield(K)).:(p1,p2);
+end;
+
+ reserve K for non empty LoopStr,
+  a1,a2 for Element of K,
+  p1,p2 for FinSequence of the carrier of K,
+  R1,R2 for Element of i-tuples_on the carrier of K;
+
+canceled;
+
+theorem :: FVSUM_1:42
+   i in dom (p1-p2) & a1 = p1.i & a2 = p2.i implies (p1-p2).i = a1 - a2;
+
+definition let i;let K be non empty LoopStr;
+  let R1,R2 be Element of i-tuples_on the carrier of K;
+ redefine func R1 - R2 -> Element of i-tuples_on the carrier of K;
+end;
+
+theorem :: FVSUM_1:43
+     j in Seg i & a1 = R1.j & a2 = R2.j implies (R1-R2).j = a1 - a2;
+
+theorem :: FVSUM_1:44
+     <*>(the carrier of K) - p1 = <*>(the carrier of K) &
+   p1 - <*>(the carrier of K) = <*>(the carrier of K);
+
+theorem :: FVSUM_1:45
+     <*a1*> - <*a2*> = <*a1-a2*>;
+
+theorem :: FVSUM_1:46
+     (i|->a1) - (i|->a2) = i|->(a1-a2);
+
+theorem :: FVSUM_1:47
+   R1 - R2 = R1 + - R2;
+
+theorem :: FVSUM_1:48
+   for K being add-associative right_complementable left_zeroed right_zeroed
+        (non empty LoopStr),
+  R being Element of i-tuples_on the carrier of K holds
+   R - (i|->(0.K)) = R;
+
+theorem :: FVSUM_1:49
+   for K being Abelian left_zeroed right_zeroed (non empty LoopStr),
+     R being Element of i-tuples_on the carrier of K holds
+   (i|->(0.K)) - R = -R;
+
+theorem :: FVSUM_1:50
+   for K being left_zeroed right_zeroed add-associative right_complementable
+    (non empty LoopStr),
+  R1,R2 being Element of i-tuples_on the carrier of K holds
+   R1 - -R2 = R1 + R2;
+
+ reserve K for Abelian right_zeroed add-associative right_complementable
+    (non empty LoopStr),
+  R,R1,R2,R3 for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:51
+     -(R1 - R2) = R2 - R1;
+
+theorem :: FVSUM_1:52
+   -(R1 - R2) = -R1 + R2;
+
+theorem :: FVSUM_1:53
+   R - R = (i|->0.K);
+
+theorem :: FVSUM_1:54
+     R1 - R2 = (i|->0.K) implies R1 = R2;
+
+theorem :: FVSUM_1:55
+     R1 - R2 - R3 = R1 - (R2 + R3);
+
+theorem :: FVSUM_1:56
+   R1 + (R2 - R3) = R1 + R2 - R3;
+
+theorem :: FVSUM_1:57
+     R1 - (R2 - R3) = R1 - R2 + R3;
+
+theorem :: FVSUM_1:58
+     R1 = R1 + R - R;
+
+theorem :: FVSUM_1:59
+     R1 = R1 - R + R;
+
+ reserve K for non empty HGrStr,
+  a,a',a1,a2 for Element of K,
+  p for FinSequence of the carrier of K,
+  R for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:60
+for a,b being Element of K holds
+   ((the mult of K)[;](a,id the carrier of K)).b = a*b;
+
+theorem :: FVSUM_1:61
+  for a,b being Element of K holds
+   (a multfield).b = a*b;
+
+definition let K be non empty HGrStr;
+   let p be FinSequence of the carrier of K;
+   let a be Element of K;
+  func a*p -> FinSequence of the carrier of K equals
+:: FVSUM_1:def 6
+  (a multfield)*p;
+end;
+
+theorem :: FVSUM_1:62
+   i in dom (a*p) & a' = p.i implies (a*p).i = a*a';
+
+definition let i;let K be non empty HGrStr;
+  let R be Element of i-tuples_on the carrier of K;
+  let a be Element of K;
+ redefine func a*R -> Element of i-tuples_on the carrier of K;
+end;
+
+theorem :: FVSUM_1:63
+     j in Seg i & a' = R.j implies (a*R).j = a*a';
+
+theorem :: FVSUM_1:64
+    a*(<*>(the carrier of K)) = <*>(the carrier of K);
+
+theorem :: FVSUM_1:65
+     a*<*a1*> = <*a*a1*>;
+
+theorem :: FVSUM_1:66
+   a1*(i|->a2) = i|->(a1*a2);
+
+theorem :: FVSUM_1:67
+   for K being associative (non empty HGrStr),
+  a1,a2 being Element of K,
+  R being Element of i-tuples_on the carrier of K holds
+   (a1*a2)*R = a1*(a2*R);
+
+ reserve
+  K for distributive (non empty doubleLoopStr),
+  a,a1,a2 for Element of K,
+  R,R1,R2 for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:68
+     (a1 + a2)*R = a1*R + a2*R;
+
+theorem :: FVSUM_1:69
+     a*(R1+R2) = a*R1 + a*R2;
+
+theorem :: FVSUM_1:70
+   for K being distributive commutative left_unital (non empty doubleLoopStr),
+     R being Element of i-tuples_on the carrier of K holds
+   1_ K * R = R;
+
+theorem :: FVSUM_1:71
+   for K being add-associative right_zeroed right_complementable
+    distributive (non empty doubleLoopStr),
+  R being Element of i-tuples_on the carrier of K holds
+   0.K*R = i|->0.K;
+
+theorem :: FVSUM_1:72
+   for K being add-associative right_zeroed right_complementable
+   commutative left_unital distributive (non empty doubleLoopStr),
+  R being Element of i-tuples_on the carrier of K holds
+  (-1_ K) * R = -R;
+
+definition let M be non empty HGrStr,
+               p1, p2 be FinSequence of the carrier of M;
+  func mlt(p1,p2) -> FinSequence of the carrier of M equals
+:: FVSUM_1:def 7
+  (the mult of M).:(p1,p2);
+end;
+
+ reserve K for non empty HGrStr,
+  a1,a2,b1,b2 for Element of K,
+  p,p1,p2 for FinSequence of the carrier of K,
+  R1,R2 for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:73
+   i in dom mlt(p1,p2) & a1 = p1.i & a2 = p2.i
+     implies mlt(p1,p2).i = a1 * a2;
+
+definition let i;let K be non empty HGrStr;
+  let R1,R2 be Element of i-tuples_on the carrier of K;
+ redefine func mlt(R1,R2) -> Element of i-tuples_on the carrier of K;
+end;
+
+theorem :: FVSUM_1:74
+     j in Seg i & a1 = R1.j & a2 = R2.j implies mlt(R1,R2).j = a1 * a2;
+
+theorem :: FVSUM_1:75
+     mlt(<*>(the carrier of K),p) = <*>(the carrier of K) &
+    mlt(p,<*>(the carrier of K)) = <*>(the carrier of K);
+
+theorem :: FVSUM_1:76
+mlt(<*a1*>,<*a2*>) = <*a1*a2*>;
+
+ reserve K for commutative (non empty HGrStr),
+         p,q for FinSequence of the carrier of K,
+         R1,R2 for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:77
+   mlt(R1,R2) = mlt(R2,R1);
+
+theorem :: FVSUM_1:78
+mlt(p,q)=mlt(q,p);
+
+theorem :: FVSUM_1:79
+   for K being associative (non empty HGrStr),
+     R1,R2,R3 being Element of i-tuples_on the carrier of K holds
+ mlt(R1,mlt(R2,R3)) = mlt(mlt(R1,R2),R3);
+
+ reserve K for commutative associative (non empty HGrStr),
+         a,a1,a2 for Element of K,
+         R for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:80
+   mlt(i|->a,R) = a*R & mlt(R,i|->a) = a*R;
+
+theorem :: FVSUM_1:81
+     mlt(i|->a1,i|->a2) = i|->(a1*a2);
+
+theorem :: FVSUM_1:82
+ for K being associative (non empty HGrStr),
+     a being Element of K,
+     R1,R2 being Element of i-tuples_on the carrier of K holds
+   a*mlt(R1,R2) = mlt(a*R1,R2);
+
+ reserve K for commutative associative (non empty HGrStr),
+         a for Element of K,
+         R,R1,R2 for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:83
+     a*mlt(R1,R2) = mlt(a*R1,R2) & a*mlt(R1,R2) = mlt(R1,a*R2);
+
+theorem :: FVSUM_1:84
+     a*R = mlt(i|->a,R);
+
+begin
+::
+::The Sum of Finite Number of Elements
+::
+
+definition
+ cluster Abelian right_zeroed -> left_zeroed (non empty LoopStr);
+end;
+
+definition
+ let K be Abelian add-associative right_zeroed
+                 right_complementable (non empty LoopStr);
+ let p be FinSequence of the carrier of K;
+ redefine func Sum(p) equals
+:: FVSUM_1:def 8
+  (the add of K) $$ p;
+end;
+
+ reserve K for add-associative right_zeroed
+       right_complementable (non empty LoopStr),
+         a for Element of K,
+         p for FinSequence of the carrier of K;
+
+canceled 2;
+
+theorem :: FVSUM_1:87
+     Sum(p^<*a*>) = Sum p + a;
+
+canceled;
+
+theorem :: FVSUM_1:89
+     Sum(<*a*>^p) = a + Sum p;
+
+canceled 2;
+
+theorem :: FVSUM_1:92
+   for K being Abelian add-associative right_zeroed
+        right_complementable distributive(non empty doubleLoopStr),
+     a being Element of K,
+     p being FinSequence of the carrier of K holds
+   Sum(a*p) = a*(Sum p);
+
+theorem :: FVSUM_1:93
+   for K being non empty LoopStr
+   for R being Element of 0-tuples_on the carrier of K holds Sum R = 0.K;
+
+ reserve K for Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+         p for FinSequence of the carrier of K,
+         R1,R2 for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:94
+     Sum -p = -(Sum p);
+
+theorem :: FVSUM_1:95
+   Sum(R1 + R2) = Sum R1 + Sum R2;
+
+theorem :: FVSUM_1:96
+     Sum(R1 - R2) = Sum R1 - Sum R2;
+
+begin
+::
+::The Product of Finite Number of Elements
+::
+
+definition let K be non empty HGrStr;let p be FinSequence of the carrier of K;
+  func Product(p) -> Element of K equals
+:: FVSUM_1:def 9
+  (the mult of K) $$ p;
+end;
+
+canceled;
+
+theorem :: FVSUM_1:98   :::multLoopStr
+  for K being commutative left_unital (non empty doubleLoopStr) holds
+   Product(<*> (the carrier of K)) = 1_ K;
+
+theorem :: FVSUM_1:99
+ for K being non empty HGrStr,
+     a being Element of K holds
+   Product <*a*> = a;
+
+theorem :: FVSUM_1:100
+ for K being commutative left_unital (non empty doubleLoopStr),
+     a being Element of K,
+     p being FinSequence of the carrier of K holds
+   Product(p^<*a*>) = Product p * a;
+
+ reserve K for commutative associative left_unital (non empty doubleLoopStr),
+         a,a1,a2,a3 for Element of K,
+         p1,p2 for FinSequence of the carrier of K,
+         R1,R2 for Element of i-tuples_on the carrier of K;
+
+theorem :: FVSUM_1:101
+   Product(p1^p2) = Product p1 * Product p2;
+
+theorem :: FVSUM_1:102
+     Product(<*a*>^p1) = a * Product p1;
+
+theorem :: FVSUM_1:103
+   Product<*a1,a2*> = a1 * a2;
+
+theorem :: FVSUM_1:104
+     Product<*a1,a2,a3*> = a1 * a2 * a3;
+
+theorem :: FVSUM_1:105
+     for R being Element of 0-tuples_on the carrier of K holds Product R =1_ K;
+
+theorem :: FVSUM_1:106
+     Product(i|->(1_ K)) = 1_ K;
+
+theorem :: FVSUM_1:107
+   for K being add-associative right_zeroed right_complementable
+    Abelian commutative associative left_unital distributive
+      Field-like non degenerated (non empty doubleLoopStr)
+   for p being FinSequence of the carrier of K
+ holds
+   (ex k st k in dom p & p.k = 0.K) iff Product p = 0.K;
+
+theorem :: FVSUM_1:108
+     Product((i+j)|->a) = (Product(i|->a))*(Product(j|->a));
+
+theorem :: FVSUM_1:109
+     Product((i*j)|->a) = Product(j|->(Product(i|->a)));
+
+theorem :: FVSUM_1:110
+     Product(i|->(a1*a2)) = (Product(i|->a1))*(Product(i|->a2));
+
+theorem :: FVSUM_1:111
+   Product mlt(R1,R2) = Product R1 * Product R2;
+
+theorem :: FVSUM_1:112
+     Product(a*R1) = Product (i|->a) * Product R1;
+
+begin
+::
+::The Product of Vectors
+::
+
+definition let K be non empty doubleLoopStr;
+  let p,q be FinSequence of the carrier of K;
+ func p "*" q -> Element of K equals
+:: FVSUM_1:def 10
+ Sum(mlt(p,q));
+ end;
+
+theorem :: FVSUM_1:113
+   for K being commutative associative left_unital Abelian add-associative
+       right_zeroed right_complementable (non empty doubleLoopStr)
+ for a,b being Element of K holds
+  <*a*> "*" <*b*>= a * b;
+
+theorem :: FVSUM_1:114
+   for K being commutative associative left_unital Abelian add-associative
+       right_zeroed right_complementable (non empty doubleLoopStr)
+ for a1,a2,b1,b2 being Element of K holds
+  <*a1,a2*> "*" <*b1,b2*>= a1*b1 + a2*b2;
+
+theorem :: FVSUM_1:115
+   for p,q be FinSequence of the carrier of K holds
+     p "*" q = q "*" p;

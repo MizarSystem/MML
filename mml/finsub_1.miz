@@ -1,0 +1,399 @@
+:: Boolean Domains
+::  by Andrzej Trybulec and Agata Darmochwa\l
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, FINSET_1, FINSUB_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1;
+ constructors TARSKI, SUBSET_1, FINSET_1, XBOOLE_0;
+ clusters FINSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI, XBOOLE_0;
+ theorems FINSET_1, TARSKI, ZFMISC_1, XBOOLE_0, XBOOLE_1;
+ schemes XBOOLE_0;
+
+begin
+
+:::::::::::::: Auxiliary theorems :::::::::::::::::::
+
+reserve X,Y for set;
+
+definition let IT be set;
+  attr IT is cup-closed means :Def1:
+   for X,Y being set st X in IT & Y in IT holds X \/ Y in IT;
+  attr IT is cap-closed means
+     for X,Y being set st X in IT & Y in IT holds X /\ Y in IT;
+  attr IT is diff-closed means :Def3:
+   for X,Y being set st X in IT & Y in IT holds X \ Y in IT;
+end;
+
+definition let IT be set;
+  attr IT is preBoolean means :Def4:
+   IT is cup-closed diff-closed;
+end;
+
+definition
+  cluster preBoolean -> cup-closed diff-closed set;
+  coherence by Def4;
+  cluster cup-closed diff-closed -> preBoolean set;
+  coherence by Def4;
+end;
+
+definition
+ cluster non empty cup-closed cap-closed diff-closed set;
+  existence
+   proof
+    take {{}};
+    thus {{}} is non empty;
+    thus {{}} is cup-closed
+    proof let X,Y be set;
+    assume X in {{}} & Y in {{}};
+     then X = {} & Y = {} by TARSKI:def 1;
+    hence X \/ Y in {{}} by TARSKI:def 1;
+    end;
+    thus {{}} is cap-closed
+    proof let X,Y be set;
+    assume X in {{}} & Y in {{}};
+     then X = {} & Y = {} by TARSKI:def 1;
+    hence X /\ Y in {{}} by TARSKI:def 1;
+    end;
+    thus {{}} is diff-closed
+    proof let X,Y be set;
+    assume X in {{}} & Y in {{}};
+     then X = {} & Y = {} by TARSKI:def 1;
+    hence X \ Y in {{}} by TARSKI:def 1;
+    end;
+   end;
+end;
+
+reserve A for non empty preBoolean set;
+
+canceled 9;
+
+theorem Th10:
+ for A being set holds A is preBoolean iff
+  for X,Y being set st X in A & Y in A holds X \/ Y in A & X \ Y in A
+proof
+  let A be set;
+  hereby assume A is preBoolean;
+then A1:  A is cup-closed diff-closed by Def4;
+    let X,Y be set; assume X in A & Y in A;
+    hence X \/ Y in A & X \ Y in A by A1,Def1,Def3;
+  end;
+  assume A2: for X,Y being set st X in A & Y in A holds X \/ Y in A & X \ Y in
+ A;
+A3:A is cup-closed
+  proof
+    let X,Y be set; assume X in A & Y in A;
+    hence X \/ Y in A by A2;
+  end;
+    A is diff-closed
+  proof
+    let X,Y be set; assume X in A & Y in A;
+    hence X \ Y in A by A2;
+  end;
+  hence thesis by A3,Def4;
+end;
+
+definition let A; let X,Y be Element of A;
+ redefine func X \/ Y -> Element of A;
+   correctness by Th10;
+  func X \ Y -> Element of A;
+   correctness by Th10;
+end;
+
+canceled 2;
+
+theorem
+Th13: X is Element of A & Y is Element of A implies X /\ Y is Element of A
+ proof assume X is Element of A & Y is Element of A;
+   then reconsider X,Y as Element of A;
+     X /\ Y = X \ (X \ Y) by XBOOLE_1:48;
+  hence thesis;
+ end;
+
+theorem
+Th14: X is Element of A & Y is Element of A implies X \+\ Y is Element of A
+ proof assume X is Element of A & Y is Element of A;
+   then reconsider X,Y as Element of A;
+     X \+\ Y = (X \ Y) \/ (Y \ X) by XBOOLE_0:def 6;
+  hence thesis;
+ end;
+
+theorem
+   for A being non empty set st
+   for X,Y being Element of A holds X \+\ Y in A & X \ Y in A
+  holds A is preBoolean
+ proof let A be non empty set such that
+A1: for X,Y being Element of A holds X \+\ Y in A & X \ Y in A;
+    now let X,Y be set;
+  assume
+A2:  X in A & Y in A;
+   then reconsider Z = Y \ X as Element of A by A1;
+     X \/ Y = X \+\ Z by XBOOLE_1:98;
+  hence X \/ Y in A by A1,A2;
+  thus X \ Y in A by A1,A2;
+  end;
+  hence thesis by Th10;
+ end;
+
+theorem
+   for A being non empty set st
+   for X,Y being Element of A holds X \+\ Y in A & X /\ Y in A
+  holds A is preBoolean
+ proof let A be non empty set such that
+A1: for X,Y being Element of A holds X \+\ Y in A & X /\ Y in A;
+    now let X,Y be set;
+   assume
+A2:  X in A & Y in A;
+   then reconsider Z1 = X \+\ Y, Z2 = X /\ Y as Element of A by A1;
+     X \/ Y = Z1 \+\ Z2 by XBOOLE_1:94;
+  hence X \/ Y in A by A1;
+     X \ Y = X \+\ Z2 by XBOOLE_1:100;
+  hence X \ Y in A by A1,A2;
+  end;
+  hence thesis by Th10;
+ end;
+
+theorem
+   for A being non empty set st
+   for X,Y being Element of A holds X \+\ Y in A & X \/ Y in A
+  holds A is preBoolean
+ proof let A be non empty set such that
+A1: for X,Y being Element of A holds X \+\ Y in A & X \/ Y in A;
+    now let X,Y be set;
+  assume
+A2: X in A & Y in A;
+  hence X \/ Y in A by A1;
+   reconsider Z1 = X \+\ Y, Z2 = X \/ Y as Element of A by A1,A2;
+     X /\ Y = Z1 \+\ Z2 by XBOOLE_1:95;
+   then reconsider Z = X /\ Y as Element of A by A1;
+     X \ Y = X \+\ Z by XBOOLE_1:100;
+  hence X \ Y in A by A1,A2;
+  end;
+  hence thesis by Th10;
+ end;
+
+definition let A; let X,Y be Element of A;
+ redefine func X /\ Y -> Element of A;
+  coherence by Th13;
+  func X \+\ Y -> Element of A;
+  coherence by Th14;
+end;
+
+theorem Th18:
+ {} in A
+proof consider x being Element of A;
+    x \ x = {} by XBOOLE_1:37;
+ hence thesis;
+end;
+
+canceled;
+
+theorem
+  for A being set holds bool A is preBoolean
+ proof let A be set;
+    now let X,Y be set;
+   assume X in bool A & Y in bool A;
+   then reconsider X'=X,Y'=Y as Element of bool A;
+     X' \/ Y' in bool A & X' \ Y' in bool A;
+   hence X \/ Y in bool A & X \ Y in bool A;
+   end;
+  hence thesis by Th10;
+ end;
+
+theorem
+   for A,B being non empty preBoolean set holds A /\ B is non empty preBoolean
+  proof let A,B be non empty preBoolean set;
+      {} in A & {} in B by Th18;
+    then reconsider C = A /\ B as non empty set by XBOOLE_0:def 3;
+      C is preBoolean
+     proof now let X,Y be set;
+      assume X in C & Y in C;
+then A1:     X in A & Y in A & X in B & Y in B by XBOOLE_0:def 3;
+       then X \/ Y in A & X \/ Y in B by Th10;
+      hence X \/ Y in C by XBOOLE_0:def 3;
+         X \ Y in A & X \ Y in B by A1,Th10;
+      hence X \ Y in C by XBOOLE_0:def 3;
+      end;
+     hence thesis by Th10;
+     end;
+   hence thesis;
+  end;
+
+ reserve A,B,P for set;
+ reserve x for set;
+
+:::::::::::::: The set of all finite subsets of a set ::::::::::::::::
+
+definition let A;
+ func Fin A -> preBoolean set means
+  :Def5: for X being set holds X in it iff X c= A & X is finite;
+ existence
+  proof
+   defpred P[set] means ex y being set st y=$1 & y c= A & y is finite;
+   consider P such that A1:for x holds x in P iff
+    x in bool A & P[x] from Separation;
+     {} c= A by XBOOLE_1:2;
+   then reconsider Q=P as non empty set by A1;
+     for X,Y being set st X in Q & Y in Q holds X \/ Y in Q & X \ Y in Q
+    proof
+     let X,Y be set;
+     assume
+A2:    X in Q & Y in Q;
+     then consider Z1 being set such that
+     A3: Z1=X & Z1 c=A & Z1 is finite by A1;
+     consider Z2 being set such that
+     A4: Z2=Y & Z2 c= A & Z2 is finite by A1,A2;
+A5:     Z1 \/ Z2 = X \/ Y & Z1 \/ Z2 c= A & Z1 \/ Z2 is finite
+      by A3,A4,FINSET_1:14,XBOOLE_1:8;
+       Z1 \ Z2 c= Z1 & Z1 \ Z2 is finite by A3,FINSET_1:16,XBOOLE_1:36;
+     then Z1 \ Z2 = X \ Y & Z1 \ Z2 c= A & Z1 \ Z2 is finite by A3,A4,XBOOLE_1:
+1;
+     hence thesis by A1,A5;
+    end;
+   then reconsider R=Q as non empty preBoolean set by Th10;
+      for X being set holds X in R iff X c= A & X is finite
+      proof
+       let X be set;
+       thus X in R implies X c= A & X is finite
+        proof
+         assume X in R;
+         then ex Y being set st Y=X & Y c= A & Y is finite by A1;
+         hence thesis;
+        end;
+       thus (X c= A & X is finite) implies X in R by A1;
+      end;
+   hence thesis;
+  end;
+ uniqueness
+  proof
+   let P,Q be preBoolean set;
+    assume that
+ A6: for X being set holds X in P iff X c= A & X is finite and
+ A7: for X being set holds X in Q iff X c= A & X is finite;
+     for x being set holds x in P iff x in Q
+    proof
+    let x;
+    thus x in P implies x in Q
+     proof
+      assume x in P;
+      then x c= A & x is finite by A6;
+      hence thesis by A7;
+     end;
+    thus x in Q implies x in P
+     proof
+      assume x in Q;
+      then x c= A & x is finite by A7;
+      hence thesis by A6;
+     end;
+    end;
+   hence thesis by TARSKI:2;
+  end;
+ end;
+
+definition let A;
+ cluster Fin A -> non empty;
+coherence
+  proof
+      {} c= A by XBOOLE_1:2;
+    hence thesis by Def5;
+  end;
+end;
+
+definition let A;
+ cluster -> finite Element of Fin A;
+ coherence by Def5;
+end;
+
+canceled;
+
+theorem Th23:
+ A c= B implies Fin A c= Fin B
+  proof assume
+A1:  A c= B;
+      now let X;
+     assume X in Fin A;
+      then X c= A & X is finite by Def5;
+      then X c= B & X is finite by A1,XBOOLE_1:1;
+     hence X in Fin B by Def5;
+    end;
+   hence thesis by TARSKI:def 3;
+  end;
+
+theorem
+   Fin (A /\ B) = Fin A /\ Fin B
+ proof A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+   then Fin (A /\ B) c= Fin A & Fin (A /\ B) c= Fin B by Th23;
+  hence Fin (A /\ B) c= Fin A /\ Fin B by XBOOLE_1:19;
+     now let X;
+    assume X in Fin A /\ Fin B;
+     then X in Fin A & X in Fin B by XBOOLE_0:def 3;
+     then X c= A & X c= B & X is finite by Def5;
+     then X c= A /\ B & X is finite by XBOOLE_1:19;
+    hence X in Fin (A /\ B) by Def5;
+   end;
+  hence Fin A /\ Fin B c= Fin (A /\ B) by TARSKI:def 3;
+ end;
+
+theorem
+   Fin A \/ Fin B c= Fin (A \/ B)
+ proof A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+   then Fin A c= Fin (A \/ B) & Fin B c= Fin(A \/ B) by Th23;
+  hence thesis by XBOOLE_1:8;
+ end;
+
+theorem
+Th26: Fin A c= bool A
+  proof let x; assume x in Fin A;
+   then x c= A by Def5;
+   hence thesis;
+  end;
+
+theorem
+Th27: A is finite implies Fin A = bool A
+  proof
+   assume A1: A is finite;
+     bool A c= Fin A
+    proof
+     let x; assume A2: x in bool A;
+     then x is finite by A1,FINSET_1:13;
+     hence thesis by A2,Def5;
+    end;
+   then bool A c= Fin A & Fin A c= bool A by Th26;
+   hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem
+   Fin {} = { {} } by Th27,ZFMISC_1:1;
+
+:::::::::::::: Finite subsets ::::::::::::::::
+
+definition let A;
+  mode Finite_Subset of A is Element of Fin A;
+end;
+
+canceled;
+
+theorem
+   for X being Finite_Subset of A holds X is finite;
+
+canceled;
+
+theorem
+   for X being Finite_Subset of A holds X is Subset of A by Def5;
+
+canceled;
+
+theorem
+   A is finite implies
+  for X being Subset of A holds X is Finite_Subset of A
+ proof assume
+A1:  A is finite;
+  let X be Subset of A;
+     X is finite by A1,FINSET_1:13;
+  hence thesis by Def5;
+ end;

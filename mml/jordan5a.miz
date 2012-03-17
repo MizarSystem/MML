@@ -1,0 +1,1831 @@
+:: Some Properties of Real Maps
+::  by Adam Grabowski and Yatsuka Nakamura
+::
+:: Received September 10, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, EUCLID, TOPREAL1, COMPTS_1, BORSUK_1, RELAT_1, TOPS_2,
+      FUNCT_1, BOOLE, ORDINAL2, SUBSET_1, METRIC_1, PCOMPS_1, RCOMP_1, ARYTM_1,
+      CONNSP_2, TOPS_1, ARYTM_3, TOPMETR, COMPLEX1, ABSVALUE, BORSUK_2,
+      GRAPH_1, PARTFUN1, TMAP_1, FCONT_1, RFUNCT_2, SQUARE_1, SEQ_4, LATTICES,
+      SEQ_2, FINSEQ_4, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2, SQUARE_1, FCONT_1, RFUNCT_2,
+      TOPMETR, BINOP_1, RCOMP_1, PARTFUN1, NAT_1, FINSEQ_4, TOPS_1, SEQ_1,
+      SEQ_4, METRIC_1, CONNSP_2, STRUCT_0, TOPREAL1, PRE_TOPC, TOPS_2,
+      COMPTS_1, EUCLID, TMAP_1, ABSVALUE, PCOMPS_1, WEIERSTR, BORSUK_2;
+ constructors REAL_1, ABSVALUE, SQUARE_1, TOPS_1, TOPREAL1, TOPS_2, COMPTS_1,
+      RCOMP_1, SEQ_4, WEIERSTR, FCONT_1, RFUNCT_2, TMAP_1, BORSUK_2, TSP_1,
+      YELLOW_8, FINSEQ_4, SEQ_1;
+ clusters PRE_TOPC, RCOMP_1, RELSET_1, STRUCT_0, TOPMETR, EUCLID, BORSUK_2,
+      WAYBEL_9, PSCOMP_1, XREAL_0, METRIC_1, TOPREAL1, MEMBERED, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, BORSUK_2, XBOOLE_0;
+ theorems ABSVALUE, AXIOMS, BORSUK_1, BORSUK_2, COMPTS_1, CONNSP_2, EUCLID,
+      FCONT_1, FCONT_2, JORDAN1, FUNCT_1, FUNCT_2, GOBOARD7, GOBOARD9,
+      METRIC_1, PARTFUN1, PARTFUN2, PCOMPS_1, PRE_TOPC, RCOMP_1, REAL_1,
+      REAL_2, RELAT_1, RFUNCT_2, SEQ_2, SEQ_4, SQUARE_1, TARSKI, TBSP_1,
+      TMAP_1, TOPMETR, TOPREAL1, TOPS_2, TOPS_1, WEIERSTR, TOPREAL3, RELSET_1,
+      XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes ZFREFLE1;
+
+begin
+:: Preliminaries
+
+theorem Th1:
+ for n being Nat,
+     p, q being Point of TOP-REAL n,
+     P being Subset of TOP-REAL n st
+  P is_an_arc_of p, q holds P is compact
+proof
+ let n be Nat;
+ let p, q be Point of TOP-REAL n;
+ let P be Subset of TOP-REAL n;
+ assume P is_an_arc_of p, q;
+ then consider f be map of I[01], (TOP-REAL n)|P such that
+A1:   f is_homeomorphism & f.0 = p & f.1 = q by TOPREAL1:def 2;
+ per cases;
+ suppose P <> {};
+ then reconsider P' = P as non empty Subset of TOP-REAL n;
+   f is continuous & rng f = [#] ((TOP-REAL n)|P') by A1,TOPS_2:def 5;
+ then (TOP-REAL n)|P' is compact by COMPTS_1:23;
+ hence thesis by COMPTS_1:12;
+ suppose P = {}TOP-REAL n;
+ hence thesis by COMPTS_1:9;
+end;
+
+Lm1:
+for n being Nat holds
+the carrier of Euclid n = REAL n & the carrier of TOP-REAL n = REAL n
+ proof
+  let n be Nat;
+    Euclid n = MetrStruct(#REAL n, Pitag_dist n#) &
+   TOP-REAL n = TopSpaceMetr Euclid n by EUCLID:def 7,def 8;
+  hence thesis by TOPMETR:16;
+end;
+
+theorem Th2:
+ for r being real number holds
+  0 <= r & r <= 1 iff r in the carrier of I[01]
+proof
+ let r be real number;
+A1: r is Real by XREAL_0:def 1;
+A2: [.0,1.] = { r1 where r1 is Real : 0 <= r1 & r1 <= 1 } by RCOMP_1:def 1;
+ hence 0 <= r & r <= 1 implies r in the carrier of I[01] by A1,BORSUK_1:83;
+ assume r in the carrier of I[01];
+ then consider r2 being Real such that A3: r2 = r & 0 <= r2 & r2 <= 1
+    by A2,BORSUK_1:83;
+ thus thesis by A3;
+end;
+
+theorem Th3:
+ for n being Nat,
+     p1, p2 being Point of TOP-REAL n,
+     r1, r2 being real number st
+   (1-r1)*p1+r1*p2 = (1-r2)*p1+r2*p2 holds
+   r1 = r2 or p1 = p2
+proof
+ let n be Nat, p1, p2 be Point of TOP-REAL n, r1, r2 be real number;
+ assume A1: (1-r1)*p1+r1*p2 = (1-r2)*p1+r2*p2;
+A2:1*p1+(-r1*p1+r1*p2) = 1*p1+-r1*p1+r1*p2 by EUCLID:30
+                 .= 1*p1-r1*p1+r1*p2 by EUCLID:45
+                 .= (1-r2)*p1+r2*p2 by A1,EUCLID:54
+                 .= 1*p1-r2*p1+r2*p2 by EUCLID:54
+                 .= 1*p1+-r2*p1+r2*p2 by EUCLID:45
+                 .= 1*p1+(-r2*p1+r2*p2) by EUCLID:30;
+A3:  (r2-r1)*p1+r1*p2 = r2*p1-r1*p1+r1*p2 by EUCLID:54
+   .= r2*p1+-r1*p1+r1*p2 by EUCLID:45
+   .= r2*p1+(-r1*p1+r1*p2) by EUCLID:30
+   .= r2*p1+(-r2*p1+r2*p2) by A2,GOBOARD7:4
+   .= r2*p1+-r2*p1+r2*p2 by EUCLID:30
+   .= 0.REAL n + r2*p2 by EUCLID:40
+   .= r2*p2 by EUCLID:31;
+    (r2-r1)*p1 = (r2-r1)*p1 + 0.REAL n by EUCLID:31
+     .= (r2-r1)*p1+(r1*p2 - r1*p2) by EUCLID:46
+     .= r2*p2 - r1*p2 by A3,EUCLID:49
+     .= (r2-r1)*p2 by EUCLID:54;
+ then r2-r1=0 or p1 = p2 by EUCLID:38;
+ hence thesis by XCMPLX_1:15;
+end;
+
+theorem Th4:
+ for n being Nat
+ for p1,p2 being Point of TOP-REAL n st p1 <> p2
+  ex f being map of I[01], (TOP-REAL n) | LSeg(p1,p2) st
+   (for x being Real st x in [.0,1.] holds f.x = (1-x)*p1 + x*p2) &
+    f is_homeomorphism & f.0 = p1 & f.1 = p2
+proof
+ let n be Nat;
+ let p1, p2 be Point of TOP-REAL n;
+ assume A1: p1 <> p2;
+ set P = LSeg(p1,p2);
+   reconsider p1' = p1, p2' = p2 as Element of REAL n by Lm1;
+   defpred P[set,set] means
+   for x being Real st x = $1 holds $2 = (1-x)*p1 + x*p2;
+ A2: for a being set st a in [.0,1.] ex u being set st P[a,u]
+   proof
+    let a be set; assume a in [.0,1.];
+     then reconsider x = a as Real;
+     take (1-x)*p1 + x*p2; thus thesis;
+   end;
+  consider f being Function such that
+ A3: dom f = [.0,1.] and
+ A4: for a being set st a in [.0,1.] holds
+     P[a,f.a]
+      from NonUniqFuncEx(A2);
+     rng f c= the carrier of (TOP-REAL n)|P
+   proof
+    let y be set; assume y in rng f;
+    then consider x being set such that A5: x in dom f & y = f.x
+     by FUNCT_1:def 5;
+      x in { r where r is Real : 0 <= r & r <= 1 } by A3,A5,RCOMP_1:def 1;
+    then consider r being Real such that
+A6: r = x & 0 <= r & r <= 1;
+      y = (1-r)*p1 + r*p2 by A3,A4,A5,A6;
+    then y in { (1-l)*p1 + l*p2 where l is Real : 0 <= l & l <= 1 } by A6;
+    then y in P by TOPREAL1:def 4;
+    then y in [#]((TOP-REAL n)|P) by PRE_TOPC:def 10;
+    hence y in the carrier of (TOP-REAL n)|P;
+   end;
+   then f is Function of the carrier of I[01], the carrier of (TOP-REAL n)|P
+        by A3,BORSUK_1:83,FUNCT_2:def 1,RELSET_1:11;
+    then reconsider f as map of I[01], (TOP-REAL n)|P;
+A7: [#]((TOP-REAL n)|P) c= rng f
+    proof
+     let a be set; assume a in [#]((TOP-REAL n)|P);
+     then a in P by PRE_TOPC:def 10;
+     then a in { (1-l)*p1 + l*p2 where l is Real : 0 <= l & l <= 1 }
+      by TOPREAL1:def 4;
+     then consider lambda be Real such that
+    A8: a = (1-lambda)*p1 + lambda*p2 & 0 <= lambda & lambda <= 1;
+          lambda in { r where r is Real : 0 <= r & r <= 1} by A8;
+    then A9: lambda in dom f by A3,RCOMP_1:def 1;
+      then a = f.lambda by A3,A4,A8;
+      hence a in rng f by A9,FUNCT_1:def 5;
+    end;
+A10:[#]I[01] = [.0,1.] by BORSUK_1:83,PRE_TOPC:12;
+   rng f c= the carrier of (TOP-REAL n)|P
+   proof
+    let y be set; assume y in rng f;
+    then consider x being set such that A11: x in dom f & y = f.x
+     by FUNCT_1:def 5;
+      x in { r where r is Real : 0 <= r & r <= 1} by A3,A11,RCOMP_1:def 1;
+    then consider r being Real such that A12: r = x & 0 <= r & r <= 1;
+      y = (1-r)*p1 + r*p2 by A3,A4,A11,A12;
+    then y in { (1-l)*p1 + l*p2 where l is Real : 0 <= l & l <= 1 } by A12;
+    then y in P by TOPREAL1:def 4;
+    then y in [#]((TOP-REAL n)|P) by PRE_TOPC:def 10;
+    hence y in the carrier of (TOP-REAL n)|P;
+   end;
+ then rng f c= [#]((TOP-REAL n)|P) by PRE_TOPC:12;
+then A13: rng f = [#]((TOP-REAL n)|P) by A7,XBOOLE_0:def 10;
+     now let x1,x2 be set; assume
+   A14: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+     then x1 in {r where r is Real : 0 <= r & r <= 1} by A3,RCOMP_1:def 1;
+     then consider r1 being Real such that
+   A15: r1 = x1 & 0 <= r1 & r1 <= 1;
+       x2 in {r where r is Real : 0 <= r & r <= 1} by A3,A14,RCOMP_1:def 1;
+     then consider r2 being Real such that
+   A16: r2 = x2 & 0 <= r2 & r2 <= 1;
+       f.x1 = (1-r1)*p1 + r1*p2 & f.x2 = (1-r2)*p1 + r2*p2 by A3,A4,A14,A15,A16
+;
+     hence x1 = x2 by A1,A14,A15,A16,Th3;
+    end;
+then A17: f is one-to-one by FUNCT_1:def 8;
+   reconsider PP = P as Subset of Euclid n by TOPREAL3:13;
+   reconsider PP as non empty Subset of Euclid n;
+A18: (TOP-REAL n)|P = TopSpaceMetr((Euclid n)|PP) by TOPMETR:20;
+     for W being Point of I[01], G being a_neighborhood of f.W
+    ex H being a_neighborhood of W st f.:H c= G
+    proof
+     let W be Point of I[01], G be a_neighborhood of f.W;
+       f.W in Int G by CONNSP_2:def 1;
+     then consider Q being Subset of (TOP-REAL n)|P such that
+   A19: Q is open & Q c= G & f.W in Q by TOPS_1:54;
+       [#]((TOP-REAL n)|P) = P by PRE_TOPC:def 10;
+     then the carrier of (TOP-REAL n)|P = P &
+      the carrier of (Euclid n)|PP = P by PRE_TOPC:12,TOPMETR:def 2;
+     then reconsider Y = f.W as Point of (Euclid n)|PP;
+     consider r being real number such that
+   A20: r > 0 & Ball(Y,r) c= Q by A18,A19,TOPMETR:22;
+     reconsider r as Element of REAL by XREAL_0:def 1;
+     set delta = r/(Pitag_dist n).(p1',p2');
+     reconsider W' = W as Point of Closed-Interval-MSpace(0,1)
+      by BORSUK_1:83,TOPMETR:14;
+       Ball(W',delta) is Subset of I[01]
+       by BORSUK_1:83,TOPMETR:14;
+     then reconsider H = Ball(W',delta) as Subset of I[01];
+       I[01] = Closed-Interval-TSpace(0,1) & Closed-Interval-TSpace(0,1) =
+      TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:27,def 8;
+     then A21: H is open by TOPMETR:21;
+     reconsider p11=p1, p22=p2 as Point of Euclid n by TOPREAL3:13;
+       Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
+then A22:  (Pitag_dist n).(p1',p2') = dist(p11,p22) by METRIC_1:def 1;
+      A23: dist(p11,p22) >= 0 & dist(p11,p22) <> 0 by A1,METRIC_1:2,5;
+then A24:  delta > 0 by A20,A22,REAL_2:127;
+     then W in H by TBSP_1:16;
+     then W in Int H by A21,TOPS_1:55;
+     then reconsider H as a_neighborhood of W by CONNSP_2:def 1;
+     take H;
+     reconsider W1 = W as Real by BORSUK_1:83,TARSKI:def 3;
+       P = the carrier of (Euclid n)|PP & P c= the carrier of TOP-REAL n &
+      the carrier of TOP-REAL n =
+      the carrier of Euclid n by TOPMETR:def 2,TOPREAL3:13;
+     then reconsider WW' = Y as Point of Euclid n by TARSKI:def 3;
+       f.:H c= Ball(Y,r)
+      proof
+       let a be set; assume a in f.:H;
+       then consider u being set such that
+      A25: u in dom f & u in H & a = f.u by FUNCT_1:def 12;
+       reconsider u1 = u as Real by A3,A25;
+       reconsider u' = u as Point of Closed-Interval-MSpace(0,1) by A25;
+         f.u in rng f & rng f c= the carrier of (TOP-REAL n)|P &
+        [#]
+((TOP-REAL n)|P) = P by A25,FUNCT_1:def 5,PRE_TOPC:def 10,RELSET_1:12;
+       then the carrier of (TOP-REAL n)|P = P &
+        the carrier of (Euclid n)|PP = P &
+        f.u in the carrier of (TOP-REAL n)|P
+        by PRE_TOPC:12,TOPMETR:def 2;
+       then reconsider aa = a as Point of (Euclid n)|PP by A25;
+         P = the carrier of (Euclid n)|PP & P c= the carrier of TOP-REAL n &
+        the carrier of TOP-REAL n =
+        the carrier of Euclid n by TOPMETR:def 2,TOPREAL3:13;
+       then reconsider aa' = aa as Point of Euclid n by TARSKI:def 3;
+       reconsider aa1 = aa' as Element of REAL n by Lm1;
+       reconsider WW1 = WW' as Element of REAL n by Lm1;
+      A26: f.W = (1-W1)*p1 + W1*p2 by A4,BORSUK_1:83;
+         [#]((TOP-REAL n)|P) c= [#](TOP-REAL n) by PRE_TOPC:def 9;
+       then [#]((TOP-REAL n)|P) c= the carrier of TOP-REAL n &
+        a in rng f & rng f c= the carrier of (TOP-REAL n)|P
+         by A25,FUNCT_1:def 5,PRE_TOPC:12,RELSET_1:12;
+       then the carrier of (TOP-REAL n)|P c= the carrier of TOP-REAL n &
+        a in the carrier of (TOP-REAL n)|P by PRE_TOPC:12;
+       then reconsider a'=a, fW=f.W as Point of TOP-REAL n by TARSKI:def 3;
+       reconsider p12 = p1 - p2 as Element of REAL n by Lm1;
+         WW1 - aa1 = fW - a' by EUCLID:def 13
+         .= (1-W1)*p1 + W1*p2 - ((1-u1)*p1 + u1*p2) by A3,A4,A25,A26
+         .= W1*p2 + (1-W1)*p1 - (1-u1)*p1 - u1*p2 by EUCLID:50
+         .= W1*p2 + ((1-W1)*p1 - (1-u1)*p1) - u1*p2 by EUCLID:49
+         .= W1*p2 + ((1-W1)-(1-u1))*p1 - u1*p2 by EUCLID:54
+         .= W1*p2 + ((1-W1)+-(1-u1))*p1 - u1*p2 by XCMPLX_0:def 8
+         .= W1*p2 + (-W1+1+-(1-u1))*p1 - u1*p2 by XCMPLX_0:def 8
+         .= W1*p2 + (-W1+1-(1-u1))*p1 - u1*p2 by XCMPLX_0:def 8
+         .= W1*p2 + (-W1+u1)*p1 - u1*p2 by XCMPLX_1:31
+         .= (u1-W1)*p1 + W1*p2 - u1*p2 by XCMPLX_0:def 8
+         .= (u1-W1)*p1 + (W1*p2 - u1*p2) by EUCLID:49
+         .= (u1-W1)*p1 + (W1-u1)*p2 by EUCLID:54
+         .= (u1-W1)*p1 + (-(u1-W1))*p2 by XCMPLX_1:143
+         .= (u1-W1)*p1 + -(u1-W1)*p2 by EUCLID:44
+         .= (u1-W1)*p1 - (u1-W1)*p2 by EUCLID:45
+         .= (u1-W1)*(p1 - p2) by EUCLID:53
+         .= (u1-W1)*(p12) by EUCLID:def 11
+         .= (u1-W1)*(p1' - p2') by EUCLID:def 13;
+   then A27: |. WW1 -aa1 .| = abs(u1-W1)*|.p1' - p2'.| by EUCLID:14;
+   A28: dist(W',u') < delta by A25,METRIC_1:12;
+       reconsider W'' = W', u'' = u' as Point of RealSpace by TOPMETR:12;
+         dist(W',u') = (the distance of Closed-Interval-MSpace(0,1)).(W',u')
+        by METRIC_1:def 1 .= (the distance of RealSpace).(W'',u'')
+        by TOPMETR:def 1 .= dist(W'',u'') by METRIC_1:def 1;
+       then abs(W1-u1) < delta by A28,TOPMETR:15; then abs(-(u1-W1)) < delta
+       by XCMPLX_1:143;
+   then A29: abs(u1-W1) < delta by ABSVALUE:17;
+   A30: delta <> 0 & (Pitag_dist n).(p1',p2') <> 0 by A20,A22,A23,REAL_2:127;
+       then (Pitag_dist n).(p1',p2') = r/delta by XCMPLX_1:54;
+   then A31: |.p1' - p2'.| = r/delta by EUCLID:def 6;
+   A32:  Euclid n = MetrStruct(#REAL n,Pitag_dist n#) by EUCLID:def 7;
+         r/delta > 0 by A20,A24,REAL_2:127;
+       then |. WW1 - aa1.| < delta*(r/delta) by A27,A29,A31,REAL_1:70;
+       then |. WW1 - aa1 .| < r by A30,XCMPLX_1:88;
+       then (the distance of Euclid n).(WW',aa') < r by A32,EUCLID:def 6;
+       then (the distance of (Euclid n)|PP).(Y,aa) < r by TOPMETR:def 1;
+       then dist(Y,aa) < r by METRIC_1:def 1;
+       hence a in Ball(Y,r) by METRIC_1:12;
+      end;
+     then f.:H c= Q by A20,XBOOLE_1:1;
+     hence f.:H c= G by A19,XBOOLE_1:1;
+    end;
+then A33: f is continuous by BORSUK_1:def 2;
+   take f;
+  thus for x being Real st x in [.0,1.] holds f.x = (1-x)*p1 + x*p2 by A4;
+  thus f is_homeomorphism by A3,A10,A13,A17,A33,COMPTS_1:26;
+     0 in [.0,1.] by RCOMP_1:15;
+  hence f.0 = (1-0)*p1 + 0 * p2 by A4 .= p1 + 0 * p2
+   by EUCLID:33 .= p1 + 0.REAL n by EUCLID:33 .= p1 by EUCLID:31;
+   1 in [.0,1.] by RCOMP_1:15;
+  hence f.1 = (1-1)*p1 + 1*p2 by A4 .=
+ 0.REAL n + 1*p2 by EUCLID:33 .= 1*p2 by EUCLID:31
+    .= p2 by EUCLID:33;
+ end;
+
+Lm2:
+  for n being Nat holds TOP-REAL n is arcwise_connected
+proof
+ let n be Nat;
+ set T = TOP-REAL n;
+ let a, b be Point of T;
+ set L = LSeg (a, b);
+ per cases;
+ suppose a <> b;
+ then consider f being map of I[01], T | L such that
+A1:  (for x being Real st x in [.0,1.] holds f.x = (1-x)*a + x*b) &
+    f is_homeomorphism & f.0 = a & f.1 = b by Th4;
+A2: f is continuous by A1,TOPS_2:def 5;
+A3: dom f = [#] I[01] by TOPS_2:51
+       .= the carrier of I[01] by PRE_TOPC:12;
+   rng f c= [#](T|L) by TOPS_2:51;
+ then rng f c= L by PRE_TOPC:def 10;
+ then rng f c= the carrier of T by XBOOLE_1:1;
+ then f is Function of the carrier of I[01], the carrier of T by A3,FUNCT_2:def
+1,RELSET_1:11;
+ then reconsider g = f as map of I[01], T;
+   g is continuous by A2,TOPMETR:7;
+ hence thesis by A1;
+ suppose a = b;
+ hence thesis by BORSUK_2:4;
+end;
+
+definition let n be Nat;
+  cluster TOP-REAL n -> arcwise_connected;
+  coherence by Lm2;
+end;
+
+definition let n be Nat;
+  cluster compact non empty SubSpace of TOP-REAL n;
+  existence
+proof
+  consider A being compact non empty Subset of TOP-REAL n;
+  reconsider T = (TOP-REAL n) | A as non empty SubSpace of TOP-REAL n;
+    T is compact;
+  hence thesis;
+end;
+end;
+
+theorem
+   for a, b be Point of TOP-REAL 2,
+     f be Path of a, b,
+     P be non empty compact SubSpace of TOP-REAL 2,
+     g be map of I[01], P st f is one-to-one & g = f & [#]P = rng f holds
+  g is_homeomorphism
+  proof
+   let a, b be Point of TOP-REAL 2,
+       f be Path of a, b,
+       P be non empty compact SubSpace of TOP-REAL 2,
+       g be map of I[01], P;
+   assume A1: f is one-to-one & g = f & [#]P = rng f;
+A2: dom g = [#]I[01] by TOPS_2:51;
+     g is continuous by A1,TOPMETR:8;
+   hence thesis by A1,A2,COMPTS_1:26;
+  end;
+
+Lm3:
+ for X being Subset of REAL holds
+   X is open implies X in Family_open_set RealSpace
+proof
+ let X be Subset of REAL;
+ assume A1: X is open;
+A2: for x be Element of RealSpace
+  st x in X holds ex r be Real st r>0 & Ball(x,r) c= X
+ proof
+  let x be Element of RealSpace;
+  assume A3: x in X;
+  reconsider r = x as Real by METRIC_1:def 14;
+  consider N be Neighbourhood of r such that
+A4:    N c= X by A1,A3,RCOMP_1:42;
+  consider g be real number such that
+A5:     0<g & N = ].r-g,r+g.[ by RCOMP_1:def 7;
+   reconsider g as Real by XREAL_0:def 1;
+     N = Ball(x,g)
+   proof
+    thus N c= Ball(x,g)
+    proof
+     let a be set; assume A6: a in N;
+     then reconsider a' = a as Real;
+       a' is Element of REAL;
+     then reconsider a'' = a as Element of RealSpace
+        by METRIC_1:def 14;
+     reconsider r' = r as Element of RealSpace;
+     reconsider a1 = a', r1 = r' as Element of REAL;
+A7:   dist(r',a'') = real_dist.(r,a') by METRIC_1:def 1,def 14;
+       abs(a'-r) < g by A5,A6,RCOMP_1:8;
+     then real_dist.(a',r) < g by METRIC_1:def 13;
+     then real_dist.(r1,a1) < g by METRIC_1:10;
+     hence thesis by A7,METRIC_1:12;
+    end;
+    thus Ball(x,g) c= N
+    proof
+     let a be set; assume a in Ball(x,g);
+     then a in {q where q is Element of RealSpace : dist(x,q)<g
+}
+       by METRIC_1:18;
+     then consider q be Element of RealSpace such that
+A8:     q = a & dist(x,q) < g;
+     reconsider a' = a as Real by A8,METRIC_1:def 14;
+     reconsider x1 = x, q1 = q as Element of REAL by METRIC_1:def 14;
+       real_dist.(q1,x1) < g by A8,METRIC_1:def 1,def 14;
+     then abs(a'-r) < g by A8,METRIC_1:def 13;
+     hence thesis by A5,RCOMP_1:8;
+    end;
+   end;
+  hence thesis by A4,A5;
+ end;
+ reconsider V = X as Subset of RealSpace by METRIC_1:def 14;
+   V in Family_open_set RealSpace by A2,PCOMPS_1:def 5;
+ hence thesis;
+end;
+
+Lm4:
+ for X being Subset of REAL holds
+   X in Family_open_set RealSpace implies X is open
+proof
+ let X be Subset of REAL;
+ assume A1: X in Family_open_set RealSpace;
+   for r be real number st r in X holds ex N be Neighbourhood of r st N c= X
+ proof
+  let r be real number; assume A2: r in X;
+  reconsider r as Real by XREAL_0:def 1;
+  reconsider x = r as Element of RealSpace by METRIC_1:def 14;
+    ex N be Neighbourhood of r st N c= X
+  proof
+   consider r1 be Real such that
+A3:     r1 > 0 & Ball(x,r1) c= X by A1,A2,PCOMPS_1:def 5;
+   reconsider N1 = Ball (x, r1) as Subset of REAL by METRIC_1:def 14;
+     ex g be Real st 0<g & Ball(x,r1) = ].r-g,r+g.[
+   proof
+    take g = r1;
+     N1 = ].r-g,r+g.[
+   proof
+    thus N1 c= ].r-g,r+g.[
+    proof
+     let a be set; assume a in N1;
+     then a in {q where q is Element of RealSpace : dist(x,q)<g
+}
+       by METRIC_1:18;
+     then consider q be Element of RealSpace such that
+A4:     q = a & dist(x,q) < g;
+     reconsider a' = a as Real by A4,METRIC_1:def 14;
+     reconsider x1 = x, q1 = q as Element of REAL by METRIC_1:def 14;
+       real_dist.(q1,x1) < g by A4,METRIC_1:def 1,def 14;
+     then abs(a'-r) < g by A4,METRIC_1:def 13;
+     hence thesis by RCOMP_1:8;
+    end;
+    thus ].r-g,r+g.[ c= N1
+    proof
+     let a be set; assume A5: a in ].r-g,r+g.[;
+     then reconsider a' = a as Real;
+       a' is Element of REAL;
+     then reconsider a'' = a, r' = r as Element of RealSpace
+           by METRIC_1:def 14;
+     reconsider a1 = a', r1 = r' as Element of REAL;
+A6:   dist(r',a'') = real_dist.(r,a') by METRIC_1:def 1,def 14;
+       abs(a'-r) < g by A5,RCOMP_1:8;
+     then real_dist.(a',r) < g by METRIC_1:def 13;
+     then real_dist.(r1,a1) < g by METRIC_1:10;
+     hence thesis by A6,METRIC_1:12;
+    end;
+   end;
+    hence thesis by A3;
+   end;
+   then reconsider N = N1 as Neighbourhood of r by RCOMP_1:def 7;
+   take N;
+   thus thesis by A3;
+  end;
+  hence thesis;
+ end;
+ hence thesis by RCOMP_1:41;
+end;
+
+begin
+:: Equivalence of analytical and topological definitions of continuity
+
+theorem
+   for X being Subset of REAL holds
+   X in Family_open_set RealSpace iff X is open by Lm3,Lm4;
+
+theorem Th7:
+ for f being map of R^1, R^1, x being Point of R^1
+  for g being PartFunc of REAL, REAL, x1 being Real
+   st f is_continuous_at x & f = g & x = x1 holds
+    g is_continuous_in x1
+proof
+ let f be map of R^1, R^1, x be Point of R^1;
+ let g be PartFunc of REAL, REAL, x1 be Real;
+ assume A1: f is_continuous_at x & f = g & x = x1;
+A2: dom f = the carrier of R^1 by FUNCT_2:def 1;
+    for N1 being Neighbourhood of g.x1
+    ex N being Neighbourhood of x1 st g.:N c= N1
+  proof
+   let N1 be Neighbourhood of g.x1;
+   reconsider fx = f.x as Point of R^1;
+A3:  N1 c= the carrier of R^1 by TOPMETR:24;
+   reconsider N1' = N1 as Subset of R^1 by TOPMETR:24;
+     N1 c= the carrier of RealSpace by A3,TOPMETR:16,def 7;
+   then reconsider N2 = N1 as Subset of RealSpace;
+     N2 in Family_open_set RealSpace by Lm3;
+   then N2 in the topology of TopSpaceMetr RealSpace by TOPMETR:16;
+   then fx in N1' & N1' is open by A1,PRE_TOPC:def 5,RCOMP_1:37,TOPMETR:def 7;
+   then reconsider G = N1' as a_neighborhood of fx by CONNSP_2:5;
+   consider H being a_neighborhood of x such that
+A4:   f.:H c= G by A1,TMAP_1:def 2;
+   consider V being Subset of R^1 such that
+A5:     V is open & V c= H & x in V by CONNSP_2:8;
+     V in the topology of R^1 by A5,PRE_TOPC:def 5;
+then A6:  V in Family_open_set RealSpace by TOPMETR:16,def 7;
+   reconsider V1 = V as Subset of REAL by TOPMETR:24;
+     V1 is open by A6,Lm4;
+   then consider N being Neighbourhood of x1 such that
+A7:     N c= V1 by A1,A5,RCOMP_1:39;
+     N c= H by A5,A7,XBOOLE_1:1;
+   then g.:N c= g.:H by RELAT_1:156;
+   then g.:N c= N1 by A1,A4,XBOOLE_1:1;
+   hence thesis;
+  end;
+ hence thesis by A1,A2,FCONT_1:5;
+end;
+
+theorem Th8:
+ for f being continuous map of R^1, R^1,
+     g being PartFunc of REAL, REAL st
+   f = g holds g is_continuous_on REAL
+proof
+ let f be continuous map of R^1, R^1;
+A1: dom f = REAL by FUNCT_2:def 1,TOPMETR:24;
+ let g be PartFunc of REAL, REAL;
+ assume A2: f = g;
+    for x0 being real number st x0 in REAL holds g|REAL is_continuous_in x0
+ proof
+  let x0 be real number; assume x0 in REAL;
+  reconsider x0 as Real by XREAL_0:def 1;
+  reconsider x1=x0 as Point of R^1 by TOPMETR:24;
+A3:  f is_continuous_at x1 by TMAP_1:49;
+    dom g c= REAL;
+  then f = g|REAL by A2,RELAT_1:97;
+  hence thesis by A3,Th7;
+ end;
+ hence g is_continuous_on REAL by A1,A2,FCONT_1:def 2;
+end;
+
+Lm5:
+for f being continuous one-to-one map of R^1, R^1,
+    g being PartFunc of REAL, REAL st
+ f = g holds
+  g is_increasing_on [.0,1.] or g is_decreasing_on [.0,1.]
+proof
+ let f be continuous one-to-one map of R^1, R^1;
+ let g be PartFunc of REAL, REAL;
+ assume A1: f = g;
+ then g is_continuous_on REAL by Th8;
+ then g is_continuous_on [.0,1.] by FCONT_1:17;
+ hence g is_increasing_on [.0,1.] or g is_decreasing_on [.0,1.]
+   by A1,FCONT_2:18;
+end;
+
+theorem
+   for f being continuous one-to-one map of R^1, R^1 holds
+  (for x, y being Point of I[01],
+       p, q, fx, fy being Real st
+       x = p & y = q & p < q & fx = f.x & fy = f.y holds fx < fy) or
+  (for x, y being Point of I[01],
+       p, q, fx, fy being Real st
+       x = p & y = q & p < q & fx = f.x & fy = f.y holds fx > fy)
+proof
+ let f be continuous one-to-one map of R^1, R^1;
+A1: [.0,1.] c= the carrier of R^1 by BORSUK_1:35,83,TOPMETR:27;
+A2: [.0,1.] /\ dom f = [.0,1.] /\ the carrier of R^1 by FUNCT_2:def 1
+                .= [.0,1.] by A1,XBOOLE_1:28;
+ reconsider g = f as PartFunc of REAL, REAL
+       by TOPMETR:24;
+ per cases by Lm5;
+ suppose g is_increasing_on [.0,1.];
+ hence thesis by A2,BORSUK_1:83,RFUNCT_2:def 2;
+ suppose g is_decreasing_on [.0,1.];
+ hence thesis by A2,BORSUK_1:83,RFUNCT_2:def 3;
+end;
+
+theorem Th10:
+ for r, gg, a, b being Real,
+     x being Element of Closed-Interval-MSpace (a, b) st
+  a <= b &
+  x = r & gg > 0 & ].r-gg, r+gg.[ c= [.a,b.] holds
+   ].r-gg, r+gg.[ = Ball (x, gg)
+proof
+ let r, gg, a, b be Real,
+     x be Element of Closed-Interval-MSpace(a,b);
+ assume A1: a <= b & x=r & gg > 0 & ].r-gg, r+gg.[ c= [.a,b.];
+ set g = gg, CM = Closed-Interval-MSpace(a,b);
+A2:the carrier of CM c= the carrier of RealSpace by TOPMETR:def 1;
+ set N1 = Ball (x, g);
+      N1 = ].r-g,r+g.[
+   proof
+    thus N1 c= ].r-g,r+g.[
+    proof
+     let i be set; assume i in N1;
+     then i in {q where q is Element of CM : dist(x,q)<g}
+       by METRIC_1:18;
+     then consider q be Element of CM such that
+A3:     q = i & dist(x,q) < g;
+     reconsider a' = i as Real by A2,A3,METRIC_1:def 14,TARSKI:def 3;
+     reconsider x1 = x, q1 = q as Element of REAL by A2,METRIC_1:def 14,TARSKI:
+def 3;
+     reconsider x2 = x, q2 = q as Element of CM;
+       dist(x2,q2) = (the distance of CM).(x2,q2) by METRIC_1:def 1
+     .= real_dist.(x2,q2) by METRIC_1:def 14,TOPMETR:def 1;
+     then real_dist.(q1,x1) < g by A3,METRIC_1:10;
+     then abs(a'-r) < g by A1,A3,METRIC_1:def 13;
+     hence thesis by RCOMP_1:8;
+    end;
+    thus ].r-g,r+g.[ c= N1
+    proof
+     let i be set; assume A4: i in ].r-g,r+g.[;
+     then reconsider a' = i as Real;
+     reconsider a'' = i as Element of CM by A1,A4,TOPMETR:14;
+A5:   dist(x,a'') = (the distance of CM).(x,a'') by METRIC_1:def 1
+      .= real_dist.(x,a'') by METRIC_1:def 14,TOPMETR:def 1;
+       abs(a'-r) < g by A4,RCOMP_1:8;
+     then real_dist.(a',r) < g by METRIC_1:def 13;
+     then dist(x,a'') < g by A1,A5,METRIC_1:10;
+     hence thesis by METRIC_1:12;
+    end;
+    end;
+ hence thesis;
+end;
+
+theorem Th11:
+ for a, b being Real, X being Subset of REAL st
+  a < b & not a in X & not b in X holds
+   X in Family_open_set Closed-Interval-MSpace(a,b) implies X is open
+proof
+ let a, b be Real,
+     X be Subset of REAL;
+ assume A1: a < b & not a in X & not b in X;
+ assume A2: X in Family_open_set Closed-Interval-MSpace(a,b);
+ then reconsider V = X as Subset of Closed-Interval-MSpace(a,b);
+   for r be real number st r in X holds ex N be Neighbourhood of r st N c= X
+ proof
+  let r be real number; assume A3: r in X;
+  reconsider r as Real by XREAL_0:def 1;
+    r in V by A3;
+  then reconsider x = r as Element of Closed-Interval-MSpace(a,b
+);
+A4: r-a <> 0 by A1,A3,XCMPLX_1:15;
+    the carrier of Closed-Interval-MSpace(a,b) = [.a,b.] by A1,TOPMETR:14;
+  then x in [.a,b.];
+  then x in {l where l is Real : a <= l & l <= b } by RCOMP_1:def 1;
+  then consider r2 be Real such that
+A5:  r2 = x & a <= r2 & r2 <= b;
+    ex N be Neighbourhood of r st N c= X
+  proof
+   consider r1 be Real such that
+A6:     r1 > 0 & Ball(x,r1) c= X by A2,A3,PCOMPS_1:def 5;
+    per cases;
+    suppose A7: r <= (a+b)/2;
+    set gg = min(r-a, r1);
+A8: gg <= r-a & gg <= r1 by SQUARE_1:35;
+A9: gg > 0
+    proof
+      per cases by SQUARE_1:38;
+      suppose gg = r-a;
+      hence thesis by A4,A5,SQUARE_1:12;
+      suppose gg = r1;
+      hence thesis by A6;
+    end;
+A10:  ].r-gg,r+gg.[ c= Ball(x,r1)
+    proof
+       ].r-gg,r+gg.[ c= [.a,b.]
+     proof
+     let i be set; assume i in ].r-gg,r+gg.[;
+     then i in {l where l is Real : r-gg<l & l<r+gg } by RCOMP_1:def 2;
+     then consider j be Real such that
+A11:      j = i & r-gg < j & j < r+gg;
+       2*r <= 2*((a+b)/2) by A7,AXIOMS:25;
+     then 2*r <= a+b by XCMPLX_1:88;
+then A12:  2*r - a <= a+b -a by REAL_1:92;
+A13:   gg <= r-a by SQUARE_1:35;
+     then r + gg <= r + (r - a) by AXIOMS:24;
+     then r + gg <= r + r - a by XCMPLX_1:29;
+     then r + gg <= 2 * r - a by XCMPLX_1:11;
+     then r + gg <= a+b - a by A12,AXIOMS:22;
+then A14:  r + gg <= b by XCMPLX_1:26;
+       gg+a <= r by A13,REAL_1:84;
+     then r-gg >= a by REAL_1:84;
+then A15:   a <= j by A11,AXIOMS:22;
+       j <= b by A11,A14,AXIOMS:22;
+     then j in {l where l is Real : a <= l & l <= b } by A15;
+     hence thesis by A11,RCOMP_1:def 1;
+     end;
+     then ].r-gg,r+gg.[ = Ball (x, gg) by A1,A9,Th10;
+     hence thesis by A8,PCOMPS_1:1;
+     end;
+    reconsider N = ].r-gg,r+gg.[ as Neighbourhood of r by A9,RCOMP_1:def 7;
+    take N;
+    thus thesis by A6,A10,XBOOLE_1:1;
+
+    suppose A16: r > (a+b)/2;
+    set gg = min(b-r, r1);
+A17: b - r <> 0 by A1,A3,XCMPLX_1:15;
+A18: gg <= r1 by SQUARE_1:35;
+A19: gg > 0
+    proof
+      per cases by SQUARE_1:38;
+      suppose gg = b-r;
+      hence thesis by A5,A17,SQUARE_1:12;
+      suppose gg = r1;
+      hence thesis by A6;
+    end;
+    then reconsider N = ].r-gg,r+gg.[ as Neighbourhood of r by RCOMP_1:def 7;
+    take N;
+      N c= Ball(x,r1)
+    proof
+       ].r-gg,r+gg.[ c= [.a,b.]
+     proof
+     let i be set; assume i in ].r-gg,r+gg.[;
+     then i in {l where l is Real : r-gg<l & l<r+gg } by RCOMP_1:def 2;
+     then consider j be Real such that
+A20:      j = i & r-gg < j & j < r+gg;
+A21:   gg <= b - r by SQUARE_1:35;
+       2*r >= ((a+b)/2)*2 by A16,AXIOMS:25;
+     then 2*r >= a+b by XCMPLX_1:88;
+     then 2*r - b >= a+b - b by REAL_1:92;
+then A22:  2*r - b >= a by XCMPLX_1:26;
+       r-gg >= r-(b-r) by A21,REAL_1:92;
+     then r-gg >= r+(r-b) by XCMPLX_1:38;
+     then r-gg >= r+r-b by XCMPLX_1:29;
+     then r-gg >= 2*r-b by XCMPLX_1:11;
+     then r-gg >= a by A22,AXIOMS:22;
+then A23:   a <= j by A20,AXIOMS:22;
+       r + gg <= b by A21,REAL_1:84;
+     then j <= b by A20,AXIOMS:22;
+     then j in {l where l is Real : a <= l & l <= b } by A23;
+     hence thesis by A20,RCOMP_1:def 1;
+     end;
+     then ].r-gg,r+gg.[ = Ball (x, gg) by A1,A19,Th10;
+     hence thesis by A18,PCOMPS_1:1;
+     end;
+    hence thesis by A6,XBOOLE_1:1;
+  end;
+  hence thesis;
+ end;
+ hence thesis by RCOMP_1:41;
+end;
+
+theorem Th12:
+ for X being open Subset of REAL, a, b being Real st X c= [.a,b.] holds
+  not a in X & not b in X
+proof
+ let X be open Subset of REAL, a,b be Real;
+ assume A1: X c= [.a,b.];
+ assume A2: a in X or b in X;
+ per cases by A2;
+ suppose a in X;
+ then consider g be real number such that
+A3:  0<g & ].a-g,a+g.[ c= X by RCOMP_1:40;
+A4:g/2 <> 0 by A3,XCMPLX_1:50;
+     g/2 >= 0 by A3,SQUARE_1:27;
+then A5:  a - g/2 < a-0 by A4,REAL_1:92;
+A6:  a+0 < a+g by A3,REAL_1:67;
+A7: ].a-g,a+g.[ c= [.a,b.] by A1,A3,XBOOLE_1:1;
+A8: a-g/2 is Real by XREAL_0:def 1;
+   g > g/2 by A3,SEQ_2:4;
+  then a-g < a-g/2 & a-g/2 < a + g by A5,A6,AXIOMS:22,REAL_1:92;
+  then a-g/2 in {l where l is Real : a-g<l & l<a+g } by A8;
+  then a-g/2 in ].a-g,a+g.[ by RCOMP_1:def 2;
+  then a-g/2 in [.a,b.] by A7;
+  then a-g/2 in { l where l is Real : a <= l & l <= b } by RCOMP_1:def 1;
+  then consider l be Real such that
+A9: l = a-g/2 & a <= l & l <= b;
+ thus thesis by A5,A9;
+ suppose b in X;
+ then consider g be real number such that
+A10:   0 < g & ].b-g,b+g.[ c= X by RCOMP_1:40;
+A11:  g/2 <> 0 by A10,XCMPLX_1:50;
+     g/2 >= 0 by A10,SQUARE_1:27;
+then A12:  b+g/2 > b+0 by A11,REAL_1:53;
+A13: ].b-g,b+g.[ c= [.a,b.] by A1,A10,XBOOLE_1:1;
+A14:  g > g/2 by A10,SEQ_2:4;
+    A15: b-g < b-0 by A10,REAL_1:92;
+A16: b+g/2 is Real by XREAL_0:def 1;
+A17:  b+g/2 < b+g by A14,REAL_1:67;
+    b-g < b+g/2 by A12,A15,AXIOMS:22;
+ then b+g/2 in {l where l is Real : b-g<l & l<b+g } by A16,A17;
+ then b+g/2 in ].b-g,b+g.[ by RCOMP_1:def 2;
+  then b+g/2 in [.a,b.] by A13;
+  then b+g/2 in {l where l is Real : a <= l & l <= b} by RCOMP_1:def 1;
+  then consider l be Real such that
+A18:  l = b+g/2 & a<=l & l <=b;
+ thus thesis by A12,A18;
+end;
+
+theorem Th13:
+ for a, b being Real,
+     X being Subset of REAL,
+      V being Subset of Closed-Interval-MSpace(a,b) st
+      a <= b & V = X holds
+   X is open implies V in Family_open_set Closed-Interval-MSpace(a,b)
+proof
+ let a, b be Real;
+ let X be Subset of REAL, V be Subset of
+          Closed-Interval-MSpace(a,b);
+ assume A1: a <= b & V = X;
+ assume A2: X is open;
+   for x be Element of Closed-Interval-MSpace(a,b)
+  st x in V holds ex r be Real st r>0 & Ball(x,r) c= V
+ proof
+  let x be Element of Closed-Interval-MSpace(a,b);
+  assume A3: x in V;
+  then reconsider r = x as Real by A1;
+  consider N be Neighbourhood of r such that
+A4:    N c= X by A1,A2,A3,RCOMP_1:42;
+  consider g be real number such that
+A5:     0<g & N = ].r-g,r+g.[ by RCOMP_1:def 7;
+   reconsider g as Real by XREAL_0:def 1;
+     N = Ball(x,g)
+   proof
+    thus N c= Ball(x,g)
+    proof
+     let aa be set; assume A6: aa in N;
+then A7:     aa in X by A4;
+     reconsider a' = aa as Real by A6;
+     reconsider a'' = aa, r' = r as Element of
+               Closed-Interval-MSpace(a,b) by A1,A7;
+A8:   dist(r',a'') = (the distance of Closed-Interval-MSpace(a,b)).(r',a'')
+       by METRIC_1:def 1
+     .= real_dist.(r',a'') by METRIC_1:def 14,TOPMETR:def 1;
+       abs(a'-r) < g by A5,A6,RCOMP_1:8;
+     then real_dist.(a',r) < g by METRIC_1:def 13;
+     then dist(r',a'') < g by A8,METRIC_1:10;
+     hence thesis by METRIC_1:12;
+    end;
+    thus Ball(x,g) c= N
+    proof
+     let aa be set; assume aa in Ball(x,g);
+     then aa in {q where q is Element of
+     Closed-Interval-MSpace(a,b): dist(x,q)<g}
+       by METRIC_1:18;
+     then consider q be Element of Closed-Interval-MSpace(a,b)
+     such that
+A9:     q = aa & dist(x,q) < g;
+A10:  q in the carrier of Closed-Interval-MSpace(a,b);
+A11:   the carrier of Closed-Interval-MSpace(a,b) c=
+       the carrier of RealSpace by TOPMETR:def 1;
+     then reconsider a' = aa as Real by A9,A10,METRIC_1:def 14;
+     reconsider x1 = x, q1 = q as Element of REAL
+        by A1,A3,A10,A11,METRIC_1:def 14;
+       dist(x,q) = (the distance of Closed-Interval-MSpace(a,b)).(x,q)
+      by METRIC_1:def 1
+     .= real_dist.(x,q) by METRIC_1:def 14,TOPMETR:def 1;
+     then real_dist.(q1,x1) < g by A9,METRIC_1:10;
+     then abs(a'-r) < g by A9,METRIC_1:def 13;
+     hence thesis by A5,RCOMP_1:8;
+    end;
+   end;
+  hence thesis by A1,A4,A5;
+ end;
+ hence thesis by PCOMPS_1:def 5;
+end;
+
+Lm6:
+ for a, t, t1 be Real holds
+  t <> t1 implies a-t <> a-t1
+proof
+ let a, t, t1 be Real;
+ assume A1: t <> t1;
+ assume a-t = a-t1;
+ then t >= t1 & t <= t1 by REAL_2:105;
+ hence contradiction by A1,AXIOMS:21;
+end;
+
+Lm7:
+ for a, b, c being Real st a <= b holds
+  c in the carrier of Closed-Interval-TSpace(a,b)
+   iff a <= c & c <= b
+proof
+ let a, b, c be Real;
+ assume a <= b;
+then A1:  the carrier of Closed-Interval-TSpace(a,b) = [.a,b.] by TOPMETR:25;
+ hereby assume c in the carrier of Closed-Interval-TSpace(a,b);
+  then c in {l where l is Real : a <= l & l <= b} by A1,RCOMP_1:def 1;
+  then consider c1 be Real such that
+A2:   c1 = c & a <= c1 & c1 <= b;
+  thus a <= c & c <= b by A2;
+ end;
+ assume a <= c & c <= b;
+ then c in {l where l is Real : a <= l & l <= b};
+ hence thesis by A1,RCOMP_1:def 1;
+end;
+
+Lm8:
+ for a, b, c, d be Real,
+     f being map of Closed-Interval-TSpace(a,b),
+                     Closed-Interval-TSpace(c,d),
+     x being Point of Closed-Interval-TSpace(a,b)
+  for g being PartFunc of REAL, REAL, x1 being Real
+   st a < b & c < d & f is_continuous_at x & x <> a & x <> b &
+      f.a = c & f.b = d &
+      f is one-to-one & f = g & x = x1 holds
+      g is_continuous_in x1
+proof
+ let a, b, c, d be Real,
+     f be map of Closed-Interval-TSpace(a,b),
+                     Closed-Interval-TSpace(c,d),
+     x be Point of Closed-Interval-TSpace(a,b);
+ let g be PartFunc of REAL, REAL, x1 be Real;
+ assume A1: a < b & c < d &
+         f is_continuous_at x & x <> a & x <> b & f.a = c & f.b = d
+         & f is one-to-one & f = g & x = x1;
+A2: dom f = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:def 1;
+    for N1 being Neighbourhood of g.x1
+    ex N being Neighbourhood of x1 st g.:N c= N1
+  proof
+   let N1 be Neighbourhood of g.x1;
+   set Rm = min ( g.x1 - c , d - g.x1 );
+     Rm > 0
+   proof
+A3: a in dom f & b in dom f by A1,A2,Lm7;
+    per cases by SQUARE_1:38;
+    suppose A4: Rm = g.x1 - c;
+      g.x1 <> g.a by A1,A2,A3,FUNCT_1:def 8;
+then A5: Rm <> 0 by A1,A4,XCMPLX_1:15;
+      g.x1 in the carrier of Closed-Interval-TSpace(c,d) by A1,FUNCT_2:7;
+    then g.x1 >= c by A1,Lm7;
+    hence thesis by A4,A5,SQUARE_1:12;
+    suppose A6: Rm = d - g.x1;
+      g.x1 <> g.b by A1,A2,A3,FUNCT_1:def 8;
+    then d - g.x1 <> d - d by A1,Lm6;
+then A7: Rm <> 0 by A6,XCMPLX_1:14;
+      g.x1 in the carrier of Closed-Interval-TSpace(c,d) by A1,FUNCT_2:7;
+    then g.x1 <= d by A1,Lm7;
+    hence thesis by A6,A7,SQUARE_1:12;
+   end;
+   then reconsider Wuj = ].g.x1 - Rm, g.x1 + Rm.[ as Neighbourhood of g.x1
+    by RCOMP_1:def 7;
+   consider Ham be Neighbourhood of g.x1 such that
+A8:   Ham c= N1 & Ham c= Wuj by RCOMP_1:38;
+   reconsider fx = f.x as Point of Closed-Interval-TSpace(c,d);
+A9: ].c,d.[ c= [.c,d.] by RCOMP_1:15;
+    Wuj c= ].c,d.[
+   proof
+A10:  Rm <= g.x1-c & Rm <= d - g.x1 by SQUARE_1:35;
+    let aa be set; assume aa in Wuj;
+    then aa in {l where l is Real : g.x1 - Rm < l & l < g.x1 + Rm}
+             by RCOMP_1:def 2;
+    then consider A be Real such that
+A11:    A = aa & g.x1 - Rm < A & A < g.x1 + Rm;
+      c + Rm <= g.x1 by A10,REAL_1:84;
+  then c <= g.x1 - Rm by REAL_1:84;
+then A12: c < A by A11,AXIOMS:22;
+      g.x1 + Rm <= g.x1 + (d - g.x1) by A10,AXIOMS:24;
+    then g.x1 + Rm <= d by XCMPLX_1:27;
+ then A < d by A11,AXIOMS:22;
+    then A in {l where l is Real : c < l & l < d} by A12;
+    hence thesis by A11,RCOMP_1:def 2;
+   end;
+then A13: Wuj c= [.c,d.] by A9,XBOOLE_1:1;
+then A14:Wuj c= the carrier of Closed-Interval-MSpace(c,d) by A1,TOPMETR:14;
+A15:   Ham c= [.c,d.] by A8,A13,XBOOLE_1:1;
+A16:   the carrier of Closed-Interval-MSpace(c,d) =
+   the carrier of TopSpaceMetr(Closed-Interval-MSpace(c,d)) by TOPMETR:16
+   .= the carrier of Closed-Interval-TSpace(c,d) by TOPMETR:def 8;
+A17:   the carrier of Closed-Interval-MSpace(a,b) =
+   the carrier of TopSpaceMetr(Closed-Interval-MSpace(a,b))
+      by TOPMETR:16
+   .= the carrier of Closed-Interval-TSpace(a,b) by TOPMETR:def 8;
+   reconsider N21 = Ham
+    as Subset of Closed-Interval-MSpace(c,d)
+        by A8,A14,XBOOLE_1:1;
+   reconsider N1' = N21 as Subset of Closed-Interval-TSpace(c,d)
+     by A16;
+     Closed-Interval-TSpace(c,d)
+       = TopSpaceMetr Closed-Interval-MSpace(c,d) by TOPMETR:def 8;
+then A18:   the topology of Closed-Interval-TSpace(c,d)
+       = Family_open_set Closed-Interval-MSpace(c,d) by TOPMETR:16;
+     Closed-Interval-TSpace(a,b)
+       = TopSpaceMetr Closed-Interval-MSpace(a,b) by TOPMETR:def 8;
+then A19:   the topology of Closed-Interval-TSpace(a,b)
+       = Family_open_set Closed-Interval-MSpace(a,b) by TOPMETR:16;
+     N21 in Family_open_set Closed-Interval-MSpace(c,d)
+      by A1,Th13;
+   then fx in N1' & N1' is open by A1,A18,PRE_TOPC:def 5,RCOMP_1:37;
+   then reconsider G = N1' as a_neighborhood of fx by CONNSP_2:5;
+   consider H being a_neighborhood of x such that
+A20:   f.:H c= G by A1,TMAP_1:def 2;
+A21: f.:H c= N1 by A8,A20,XBOOLE_1:1;
+   consider V being Subset of Closed-Interval-TSpace(a,b)
+     such that
+A22:     V is open & V c= H & x in V by CONNSP_2:8;
+   reconsider V2 = V as Subset of
+     Closed-Interval-MSpace(a,b) by A17;
+      V c= the carrier of Closed-Interval-MSpace(a,b) by A17;
+then A23: V c= [.a,b.] by A1,TOPMETR:14;
+A24: V2 in
+ Family_open_set Closed-Interval-MSpace(a,b) by A19,A22,PRE_TOPC:def 5
+;
+   reconsider V1 = V as Subset of REAL by A23,XBOOLE_1:1;
+     not a in V1 & not b in V1
+   proof
+    assume A25: a in V1 or b in V1;
+    per cases by A25;
+    suppose a in V1;
+    then f.a in f.:H by A2,A22,FUNCT_1:def 12;
+    hence contradiction by A1,A15,A20,Th12;
+    suppose b in V1;
+    then f.b in f.:H by A2,A22,FUNCT_1:def 12;
+    hence contradiction by A1,A15,A20,Th12;
+   end;
+   then V1 is open by A1,A24,Th11;
+   then consider N being Neighbourhood of x1 such that
+A26:     N c= V1 by A1,A22,RCOMP_1:39;
+     N c= H by A22,A26,XBOOLE_1:1;
+   then g.:N c= g.:H by RELAT_1:156;
+   then g.:N c= N1 by A1,A21,XBOOLE_1:1;
+   hence thesis;
+  end;
+ hence thesis by A1,A2,FCONT_1:5;
+end;
+
+theorem Th14:
+ for a, b, c, d, x1 being Real,
+     f being map of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d),
+     x being Point of Closed-Interval-TSpace(a,b),
+     g being PartFunc of REAL, REAL
+   st a < b & c < d & f is_continuous_at x & f.a = c & f.b = d &
+    f is one-to-one & f = g & x = x1 holds
+     g| [.a,b.] is_continuous_in x1
+proof
+ let a, b, c, d, x1 be Real;
+ let f be map of Closed-Interval-TSpace(a,b),
+ Closed-Interval-TSpace(c,d), x be Point of Closed-Interval-TSpace(a,b);
+ let g be PartFunc of REAL, REAL;
+ assume A1: a < b & c < d &
+             f is_continuous_at x & f.a = c & f.b = d
+           & f is one-to-one & f = g & x = x1;
+ then dom g = the carrier of Closed-Interval-TSpace(a,b)
+    by FUNCT_2:def 1;
+ then dom g = [.a,b.] by A1,TOPMETR:25;
+then A2: dom g = dom g /\ [.a,b.];
+    for c be Element of REAL st c in dom g holds g/.c = g/.c;
+then A3: g = g| [.a,b.] by A2,PARTFUN2:32;
+ per cases;
+ suppose A4: x1 = a;
+A5: dom f = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:def 1;
+    for N1 being Neighbourhood of g.x1
+    ex N being Neighbourhood of x1 st g.:N c= N1
+  proof
+   let N1 be Neighbourhood of g.x1;
+   reconsider N2 = N1 as Subset of RealSpace by METRIC_1:def 14;
+     N2 in Family_open_set RealSpace by Lm3;
+   then A6: N2 in the topology of TopSpaceMetr RealSpace by TOPMETR:16;
+     f.a in the carrier of Closed-Interval-TSpace(c,d) by A1,Lm7;
+then A7:g.x1 in N1 & g.x1 in [.c,d.] by A1,A4,RCOMP_1:37,TOPMETR:25;
+   set NN1 = N1 /\ [.c,d.];
+A8:g.x1 in NN1 by A7,XBOOLE_0:def 3;
+A9:NN1 = N1 /\ the carrier of Closed-Interval-TSpace(c,d)
+       by A1,TOPMETR:25;
+then A10:NN1 = N1 /\ [#] Closed-Interval-TSpace(c,d)
+       by PRE_TOPC:12;
+     NN1 is Subset of Closed-Interval-TSpace(c,d)
+     by A9,XBOOLE_1:17;
+   then reconsider NN = NN1 as Subset of Closed-Interval-TSpace(c,d)
+    ;
+     NN in the topology of Closed-Interval-TSpace(c,d)
+     by A6,A10,PRE_TOPC:def 9,TOPMETR:def 7;
+   then A11: NN is open by PRE_TOPC:def 5;
+   reconsider f0 = f.a as Point of Closed-Interval-TSpace(c,d) by A1,Lm7;
+   reconsider N1' = NN as a_neighborhood of f0 by A1,A4,A8,A11,CONNSP_2:5;
+   consider H being a_neighborhood of x such that
+A12:    f.:H c= N1' by A1,A4,TMAP_1:def 2;
+   consider H1 being Subset of Closed-Interval-TSpace(a,b)
+        such that
+A13:    H1 is open & H1 c= H & x in H1 by CONNSP_2:8;
+     H1 in the topology of Closed-Interval-TSpace(a,b)
+     by A13,PRE_TOPC:def 5;
+   then consider Q being Subset of R^1 such that
+A14:    Q in the topology of R^1 & H1 = Q /\ [#] Closed-Interval-TSpace(a,b)
+       by PRE_TOPC:def 9;
+   reconsider Q' = Q as Subset of RealSpace by TOPMETR:16,def 7;
+A15:Q' in Family_open_set RealSpace by A14,TOPMETR:16,def 7;
+   reconsider Q1 = Q' as Subset of REAL by METRIC_1:def 14;
+A16:Q1 is open by A15,Lm4;
+     x1 in Q1 by A1,A13,A14,XBOOLE_0:def 3;
+   then consider N being Neighbourhood of x1 such that
+A17:   N c= Q1 by A16,RCOMP_1:39;
+   take N;
+     g.:N c= N1
+   proof
+    let aa be set; assume A18: aa in g.:N;
+      f.:N c= the carrier of Closed-Interval-TSpace(c,d);
+    then f.:N c= [.c,d.] by A1,TOPMETR:25;
+    then aa in [.c,d.] by A1,A18;
+    then reconsider a' = aa as Element of REAL;
+    consider cc be Element of REAL such that
+A19:    cc in dom g & cc in N & a' = g.cc by A18,PARTFUN2:78;
+   cc in the carrier of Closed-Interval-TSpace(a,b) by A1,A19,FUNCT_2:def 1;
+then cc in [#](Closed-Interval-TSpace(a,b)) by PRE_TOPC:12;
+    then cc in H1 by A14,A17,A19,XBOOLE_0:def 3;
+    then g.cc in f.:H by A1,A13,FUNCT_2:43;
+    hence thesis by A12,A19,XBOOLE_0:def 3;
+   end;
+   hence thesis;
+  end;
+ hence thesis by A1,A3,A5,FCONT_1:5;
+ suppose A20: x1 = b;
+A21: dom f = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:def 1;
+    for N1 being Neighbourhood of g.x1
+    ex N being Neighbourhood of x1 st g.:N c= N1
+  proof
+   let N1 be Neighbourhood of g.x1;
+   reconsider N2 = N1 as Subset of RealSpace by METRIC_1:def 14;
+     N2 in Family_open_set RealSpace by Lm3;
+   then A22: N2 in the topology of TopSpaceMetr RealSpace by TOPMETR:16;
+     f.b in the carrier of Closed-Interval-TSpace(c,d)
+      by A1,Lm7;
+then A23:g.x1 in N1 & g.x1 in [#] Closed-Interval-TSpace(c,d)
+       by A1,A20,PRE_TOPC:12,RCOMP_1:37;
+   set NN1 = N1 /\ [#]Closed-Interval-TSpace(c,d);
+A24:g.x1 in NN1 by A23,XBOOLE_0:def 3;
+     NN1 = N1 /\ the carrier of Closed-Interval-TSpace(c,d)
+      by PRE_TOPC:12;
+   then NN1 is Subset of Closed-Interval-TSpace(c,d) by XBOOLE_1
+:17;
+   then reconsider NN = NN1 as Subset of
+     Closed-Interval-TSpace(c,d);
+  NN in the topology of Closed-Interval-TSpace(c,d)
+                         by A22,PRE_TOPC:def 9,TOPMETR:def 7;
+then A25: NN is open by PRE_TOPC:def 5;
+   reconsider f0 = f.b as Point of Closed-Interval-TSpace(c,d)
+    by A1,Lm7;
+   reconsider N1' = NN as a_neighborhood of f0
+     by A1,A20,A24,A25,CONNSP_2:5;
+   consider H being a_neighborhood of x such that
+A26:    f.:H c= N1' by A1,A20,TMAP_1:def 2;
+   consider H1 being Subset of Closed-Interval-TSpace(a,b)
+    such that
+A27:    H1 is open & H1 c= H & x in H1 by CONNSP_2:8;
+     H1 in the topology of Closed-Interval-TSpace(a,b)
+      by A27,PRE_TOPC:def 5;
+   then consider Q being Subset of R^1 such that
+A28:    Q in the topology of R^1 & H1 = Q /\ [#](Closed-Interval-TSpace(a,b))
+       by PRE_TOPC:def 9;
+   reconsider Q' = Q as Subset of RealSpace by TOPMETR:16,def 7;
+A29:Q' in Family_open_set RealSpace by A28,TOPMETR:16,def 7;
+   reconsider Q1 = Q' as Subset of REAL by METRIC_1:def 14;
+A30:Q1 is open by A29,Lm4;
+     x1 in Q1 by A1,A27,A28,XBOOLE_0:def 3;
+   then consider N being Neighbourhood of x1 such that
+A31:   N c= Q1 by A30,RCOMP_1:39;
+   take N;
+     g.:N c= N1
+   proof
+    let aa be set; assume A32: aa in g.:N;
+      f.:N c= the carrier of Closed-Interval-TSpace(c,d);
+    then f.:N c= [.c,d.] by A1,TOPMETR:25;
+    then aa in [.c,d.] by A1,A32;
+    then reconsider a' = aa as Element of REAL;
+    consider cc be Element of REAL such that
+A33:    cc in dom g & cc in N & a' = g.cc by A32,PARTFUN2:78;
+      cc in the carrier of Closed-Interval-TSpace(a,b)
+      by A1,A33,FUNCT_2:def 1;
+ then cc in [#]Closed-Interval-TSpace(a,b) by PRE_TOPC:12;
+    then cc in H1 by A28,A31,A33,XBOOLE_0:def 3;
+    then g.cc in f.:H by A1,A27,FUNCT_2:43;
+    hence thesis by A26,A33,XBOOLE_0:def 3;
+   end;
+   hence thesis;
+  end;
+ hence thesis by A1,A3,A21,FCONT_1:5;
+ suppose x1 <> a & x1 <> b;
+ hence thesis by A1,A3,Lm8;
+end;
+
+theorem Th15:
+ for a, b, c, d being Real,
+     f being map of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d),
+     g being PartFunc of REAL, REAL st
+  f is continuous one-to-one & a < b & c < d & f = g & f.a = c & f.b = d
+  holds g is_continuous_on [.a,b.]
+proof
+ let a, b, c, d be Real;
+ let f be map of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d);
+ let g be PartFunc of REAL, REAL;
+ assume A1: f is continuous one-to-one & a < b & c < d &
+           f = g & f.a = c & f.b = d;
+A2: dom f = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:def 1
+        .= [.a,b.] by A1,TOPMETR:25;
+    for x0 being real number st x0 in [.a,b.] holds
+   g| [.a,b.] is_continuous_in x0
+ proof
+  let x0 be real number; assume x0 in [.a,b.];
+  then reconsider x1=x0 as Point of Closed-Interval-TSpace(a,b) by A1,TOPMETR:
+25;
+A3:  f is_continuous_at x1 by A1,TMAP_1:49;
+    x0 is Real by XREAL_0:def 1;
+  hence g| [.a,b.] is_continuous_in x0 by A1,A3,Th14;
+ end;
+ hence g is_continuous_on [.a,b.] by A1,A2,FCONT_1:def 2;
+end;
+
+begin
+:: On the monotonicity of continuous maps
+
+theorem Th16:
+ for a, b, c, d being Real
+ for f being map of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d)
+  st a < b & c < d &
+  f is continuous one-to-one & f.a = c & f.b = d holds
+  (for x, y be Point of Closed-Interval-TSpace(a,b),
+       p, q, fx, fy being Real st x = p & y = q & p < q &
+   fx = f.x & fy = f.y holds fx < fy)
+proof
+ let a, b, c, d be Real;
+ let f be map of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d);
+ assume A1: a < b & c < d &
+ f is continuous one-to-one & f.a = c & f.b = d;
+then A2: [.a,b.] = the carrier of Closed-Interval-TSpace(a,b)
+ by TOPMETR:25;
+A3: dom f = the carrier of Closed-Interval-TSpace(a,b) by FUNCT_2:def 1;
+A4: [.a,b.] /\ dom f = [.a,b.] /\ the carrier of Closed-Interval-TSpace(a,b)
+                       by FUNCT_2:def 1
+                  .= [.a,b.] by A2;
+    rng f c= the carrier of Closed-Interval-TSpace(c,d)
+   by RELSET_1:12;
+  then rng f c= [.c,d.] by A1,TOPMETR:25;
+ then rng f c= REAL by XBOOLE_1:1;
+ then reconsider g = f as PartFunc of [.a,b.], REAL by A2,A3,PARTFUN1:25;
+ reconsider g as PartFunc of REAL, REAL by A2,A3,PARTFUN1:28;
+A5: g is_continuous_on [.a,b.] by A1,Th15;
+ per cases by A1,A5,FCONT_2:18;
+ suppose A6: g is_increasing_on [.a,b.];
+   for x, y be Point of Closed-Interval-TSpace(a,b),
+  p, q, fx, fy be Real st x = p & y = q & p < q &
+   fx = f.x & fy = f.y holds fx < fy
+ proof
+  let x, y be Point of Closed-Interval-TSpace(a,b), p, q, fx, fy be Real;
+A7:  x in the carrier of Closed-Interval-TSpace(a,b) &
+  y in the carrier of Closed-Interval-TSpace(a,b);
+  assume A8: x = p & y = q & p < q & fx = f.x & fy = f.y;
+  then p in [.a,b.] /\ dom g & q in [.a,b.] /\ dom g by A1,A4,A7,TOPMETR:25;
+  hence thesis by A6,A8,RFUNCT_2:def 2;
+ end;
+ hence thesis;
+ suppose A9: g is_decreasing_on [.a,b.];
+    a in [.a,b.] /\ dom g & b in [.a,b.] /\ dom g & a<b by A1,A2,A4,Lm7;
+  hence thesis by A1,A9,RFUNCT_2:def 3;
+end;
+
+theorem
+   for f being continuous one-to-one map of I[01], I[01] st
+  f.0 = 0 & f.1 = 1 holds
+  (for x, y being Point of I[01],
+       p, q, fx, fy being Real st
+       x = p & y = q & p < q & fx = f.x & fy = f.y holds fx < fy)
+        by Th16,TOPMETR:27;
+
+theorem
+   for a, b, c, d being Real,
+     f being map of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d),
+     P being non empty Subset of Closed-Interval-TSpace(a,b),
+     PP, QQ being Subset of R^1 st a < b & c < d & PP = P &
+   f is continuous one-to-one &
+     PP is compact & f.a = c & f.b = d & f.:P = QQ
+    holds
+     f.(lower_bound [#]PP) = lower_bound [#]QQ
+proof
+ let a, b, c, d be Real;
+ let f be map of Closed-Interval-TSpace(a,b),
+                  Closed-Interval-TSpace(c,d),
+     P be non empty Subset of Closed-Interval-TSpace(a,b),
+  PP, QQ be Subset of R^1;
+ assume A1: a < b & c < d &
+           PP = P & f is continuous & f is one-to-one &
+           PP is compact & f.a = c & f.b = d & f.:P = QQ;
+ set IT = f.(lower_bound [#]PP);
+A2: [#]
+Closed-Interval-TSpace(a,b) = the carrier of Closed-Interval-TSpace(a,b) &
+   [#]
+Closed-Interval-TSpace(c,d) = the carrier of Closed-Interval-TSpace(c,d) &
+   [#](R^1) = the carrier of R^1 by PRE_TOPC:12;
+then A3: the carrier of Closed-Interval-TSpace(c,d) c= the carrier of R^1 &
+    the carrier of Closed-Interval-TSpace(a,b) c= the carrier of R^1
+           by PRE_TOPC:def 9;
+     P c= the carrier of Closed-Interval-TSpace(a,b);
+then A4: [#]PP c= the carrier of Closed-Interval-TSpace(a,b) by A1,WEIERSTR:def
+3;
+A5: [#]Closed-Interval-TSpace(a,b) = the carrier of Closed-Interval-TSpace(a,b)
+        by PRE_TOPC:12;
+     [#]PP is bounded by A1,WEIERSTR:17;
+then A6: [#]PP <> {} & [#]PP is closed & [#]PP is bounded_below
+   by A1,SEQ_4:def 3,WEIERSTR:18,def 3;
+then A7: lower_bound [#]PP in [#]PP by RCOMP_1:31;
+then A8: lower_bound [#]PP in the carrier of Closed-Interval-TSpace(a,b) by A4;
+   IT in the carrier of Closed-Interval-TSpace(c,d) by A4,A7,FUNCT_2:7;
+ then reconsider IT as Real by A3,TOPMETR:24;
+A9: lower_bound [#]PP in dom f by A8,FUNCT_2:def 1;
+A10: lower_bound [#]PP in P by A1,A7,WEIERSTR:def 3;
+then A11: IT in QQ by A1,A9,FUNCT_1:def 12;
+   P is compact by A1,A5,COMPTS_1:11;
+   then for P1 being Subset of Closed-Interval-TSpace(c,d)
+   st P1=QQ holds P1 is compact by A1,WEIERSTR:14;
+   then QQ is compact by A1,A2,COMPTS_1:11;
+   then [#]QQ is bounded by WEIERSTR:17;
+then A12: [#]QQ is bounded_below by SEQ_4:def 3;
+A13: IT in [#]QQ by A11,WEIERSTR:def 3;
+A14: for r be real number st r in [#]QQ holds IT<=r
+   proof
+    let r be real number;
+    assume r in [#]QQ;
+    then r in f.:P by A1,WEIERSTR:def 3;
+    then r in f.:[#]PP by A1,WEIERSTR:def 3;
+    then consider x be set such that
+A15:    x in dom f & x in [#]PP & r = f.x by FUNCT_1:def 12;
+    reconsider x1 = x, x2 = lower_bound [#]PP as Point of
+      Closed-Interval-TSpace(a,b) by A10,A15;
+      x1 in the carrier of Closed-Interval-TSpace(a,b)
+     & x2 in the carrier of Closed-Interval-TSpace(a,b);
+    then reconsider r1 = x, r2 = x2 as Real by A3,TOPMETR:24;
+      f.x1 in the carrier of Closed-Interval-TSpace(c,d)
+     & f.x2 in the carrier of Closed-Interval-TSpace(c,d);
+    then reconsider fr = f.x2, fx = f.x1 as Real by A3,TOPMETR:24;
+A16: r2 <= r1 by A6,A15,SEQ_4:def 5;
+    per cases;
+    suppose r2 <> r1;
+    then r2 < r1 by A16,REAL_1:def 5;
+    then fr < fx by A1,Th16;
+    hence thesis by A15;
+    suppose r2 = r1;
+    hence thesis by A15;
+   end;
+   for s be real number st 0<s ex r be real number st r in [#]QQ & r<IT+s
+ proof
+  assume not thesis;
+  then consider s be real number such that
+A17:  0<s & not ex r be real number st r in [#]QQ & r<IT+s;
+    IT + 0 < IT + s by A17,REAL_1:67;
+  hence thesis by A13,A17;
+ end;
+ hence thesis by A12,A13,A14,SEQ_4:def 5;
+end;
+
+theorem
+   for a, b, c, d being Real,
+     f being map of Closed-Interval-TSpace(a,b), Closed-Interval-TSpace(c,d),
+     P, Q being non empty Subset of Closed-Interval-TSpace(a,b),
+     PP, QQ being Subset of R^1 st a < b & c < d & PP = P & QQ = Q &
+   f is continuous one-to-one &
+     PP is compact & f.a = c & f.b = d & f.:P = Q
+    holds
+     f.(upper_bound [#]PP) = upper_bound [#]QQ
+proof
+ let a, b, c, d be Real;
+ let f be map of Closed-Interval-TSpace(a,b),
+             Closed-Interval-TSpace(c,d),
+     P, Q be non empty Subset of Closed-Interval-TSpace(a,b),
+  PP, QQ be Subset of R^1;
+ assume A1: a < b & c < d &
+           PP = P & QQ = Q & f is continuous one-to-one &
+           PP is compact & f.a = c & f.b = d & f.:P = Q;
+ set IT = f.(upper_bound [#]PP);
+A2: [#]
+Closed-Interval-TSpace(a,b) = the carrier of Closed-Interval-TSpace(a,b) &
+   [#]
+Closed-Interval-TSpace(c,d) = the carrier of Closed-Interval-TSpace(c,d) &
+   [#](R^1) = the carrier of R^1 by PRE_TOPC:12;
+then A3: the carrier of Closed-Interval-TSpace(c,d) c= the carrier of R^1 &
+    the carrier of Closed-Interval-TSpace(a,b) c= the carrier of R^1
+           by PRE_TOPC:def 9;
+     P c= the carrier of Closed-Interval-TSpace(a,b);
+then A4: [#]PP c= the carrier of Closed-Interval-TSpace(a,b) by A1,WEIERSTR:def
+3;
+A5: [#]Closed-Interval-TSpace(a,b) = the carrier of Closed-Interval-TSpace(a,b)
+        by PRE_TOPC:12;
+     [#]PP is bounded by A1,WEIERSTR:17;
+then A6: [#]PP <> {} & [#]PP is closed & [#]PP is bounded_above
+   by A1,SEQ_4:def 3,WEIERSTR:18,def 3;
+then A7: upper_bound [#]PP in [#]PP by RCOMP_1:30;
+then A8: upper_bound [#]PP in the carrier of Closed-Interval-TSpace(a,b) by A4;
+   IT in the carrier of Closed-Interval-TSpace(c,d) by A4,A7,FUNCT_2:7;
+ then reconsider IT as Real by A3,TOPMETR:24;
+A9: upper_bound [#]PP in dom f by A8,FUNCT_2:def 1;
+A10: upper_bound [#]PP in P by A1,A7,WEIERSTR:def 3;
+then A11: IT in QQ by A1,A9,FUNCT_1:def 12;
+   P is compact by A1,A5,COMPTS_1:11;
+   then for P1 being Subset of Closed-Interval-TSpace(c,d)
+     st P1=QQ holds P1 is compact by A1,WEIERSTR:14;
+   then QQ is compact by A1,A2,COMPTS_1:11;
+   then [#]QQ is bounded by WEIERSTR:17;
+then A12: [#]QQ is bounded_above by SEQ_4:def 3;
+A13: IT in [#]QQ by A11,WEIERSTR:def 3;
+A14: for r be real number st r in [#]QQ holds IT>=r
+   proof
+    let r be real number;
+    assume r in [#]QQ;
+    then r in f.:P by A1,WEIERSTR:def 3;
+    then r in f.:[#]PP by A1,WEIERSTR:def 3;
+    then consider x be set such that
+A15:    x in dom f & x in [#]PP & r = f.x by FUNCT_1:def 12;
+    reconsider x1 = x, x2 = upper_bound [#]PP as Point of
+      Closed-Interval-TSpace(a,b) by A10,A15;
+      x1 in the carrier of Closed-Interval-TSpace(a,b)
+     & x2 in the carrier of Closed-Interval-TSpace(a,b);
+    then reconsider r1 = x, r2 = x2 as Real by A3,TOPMETR:24;
+      f.x1 in the carrier of Closed-Interval-TSpace(c,d)
+     & f.x2 in the carrier of Closed-Interval-TSpace(c,d);
+    then reconsider fr = f.x2, fx = f.x1 as Real by A3,TOPMETR:24;
+A16: r2 >= r1 by A6,A15,SEQ_4:def 4;
+    per cases;
+    suppose r2 <> r1;
+    then r2 > r1 by A16,REAL_1:def 5;
+    then fr > fx by A1,Th16;
+    hence thesis by A15;
+    suppose r2 = r1;
+    hence thesis by A15;
+   end;
+   for s be real number st 0 < s ex r be real number st r in [#]QQ & r > IT-s
+ proof
+  assume not thesis;
+  then consider s be real number such that
+A17:  0<s & not ex r be real number st r in [#]QQ & r>IT-s;
+    IT-s<IT-0 by A17,REAL_1:92;
+  hence thesis by A13,A17;
+ end;
+ hence thesis by A12,A13,A14,SEQ_4:def 4;
+end;
+
+theorem
+    for a, b be Real st a <= b holds
+   lower_bound [.a,b.] = a & upper_bound [.a,b.] = b
+proof
+ let a, b be Real; assume A1: a <= b;
+ set X = [.a,b.];
+A2: ex p be real number st for r being real number st r in X holds p <= r
+  proof
+   take a;
+   let r be real number; assume r in X;
+   then r in { l where l is Real : a <= l & l <= b } by RCOMP_1:def 1;
+   then consider r1 being Real such that
+A3:   r1 = r & a <= r1 & r1 <= b;
+   thus thesis by A3;
+  end;
+A4: ex p be real number st for r being real number st r in X holds p >= r
+  proof
+   take b;
+   let r be real number; assume r in X;
+   then r in { l where l is Real : a <= l & l <= b } by RCOMP_1:def 1;
+   then consider r1 being Real such that
+A5:   r1 = r & a <= r1 & r1 <= b;
+   thus thesis by A5;
+  end;
+A6: a in { l where l is Real : a <= l & l <= b } &
+   b in { l1 where l1 is Real : a <= l1 & l1 <= b } by A1;
+then A7: a in X & b in X by RCOMP_1:def 1;
+then A8: (ex r being real number st r in X) & X is bounded_below by A2,SEQ_4:
+def 2;
+A9: (ex r being real number st r in X) & X is bounded_above
+   by A4,A7,SEQ_4:def 1;
+A10: for r being real number st r in X holds a <= r
+   proof
+    let r be real number; assume r in X;
+    then r in { l where l is Real : a <= l & l <= b } by RCOMP_1:def 1;
+    then consider r1 being Real such that
+A11:   r1 = r & a <= r1 & r1 <= b;
+    thus thesis by A11;
+   end;
+A12: for s be real number st 0 < s ex r being real number st r in X & r < a+s
+  proof
+   let s be real number; assume A13: 0 < s;
+   assume A14: for r being real number st r in X holds r >= a+s;
+     a in X & a < a+s by A6,A13,RCOMP_1:def 1,REAL_1:69;
+   hence thesis by A14;
+  end;
+A15: for r being real number st r in X holds b >= r
+   proof
+    let r be real number; assume r in X;
+    then r in { l where l is Real : a <= l & l <= b } by RCOMP_1:def 1;
+    then consider r1 being Real such that
+A16:   r1 = r & a <= r1 & r1 <= b;
+    thus thesis by A16;
+   end;
+   for s be real number st 0 < s ex r being real number st r in X & b-s<r
+  proof
+   let s be real number; assume A17: 0 < s;
+   assume A18: for r being real number st r in X holds r <= b-s;
+     b in X & b-s < b by A6,A17,RCOMP_1:def 1,SQUARE_1:29;
+   hence thesis by A18;
+  end;
+ hence thesis by A8,A9,A10,A12,A15,SEQ_4:def 4,def 5;
+end;
+
+theorem
+   for a, b, c, d, e, f, g, h being Real
+  for F being map of Closed-Interval-TSpace (a,b),
+                      Closed-Interval-TSpace (c,d) st
+  a < b & c < d & e < f & a <= e & f <= b &
+  F is_homeomorphism &
+   F.a = c & F.b = d &
+    g = F.e & h = F.f holds F.:[.e, f.] = [.g, h.]
+proof
+ let a, b, c, d, e, f, g, h be Real;
+ let F be map of Closed-Interval-TSpace (a,b),
+                      Closed-Interval-TSpace (c,d);
+ assume
+A1:  a < b & c < d & e < f & a <= e & f <= b &
+  F is_homeomorphism & F.a = c & F.b = d &
+   g = F.e & h = F.f;
+then A2: e <= b & a <= f by AXIOMS:22;
+A3:   F is continuous one-to-one by A1,TOPS_2:def 5;
+        e in { l1 where l1 is Real : a <= l1 & l1 <= b } &
+       f in { l1 where l1 is Real : a <= l1 & l1 <= b } by A1,A2;
+then A4:   e in [.a,b.] & f in [.a,b.] by RCOMP_1:def 1;
+      then e in the carrier of Closed-Interval-TSpace (a,b) &
+       f in the carrier of Closed-Interval-TSpace (a,b) by A1,TOPMETR:25;
+      then g in the carrier of Closed-Interval-TSpace (c,d) &
+      h in the carrier of Closed-Interval-TSpace (c,d) by A1,FUNCT_2:7;
+       then g in [.c,d.] & h in [.c,d.]
+        by A1,TOPMETR:25;
+      then [.g,h.] c= [.c,d.] by RCOMP_1:16;
+      then [.g,h.] c= the carrier of Closed-Interval-TSpace (c,d)
+            by A1,TOPMETR:25;
+then A5:    [.g,h.] c= [#] Closed-Interval-TSpace (c,d) by PRE_TOPC:12;
+
+      F.:[.e, f.] = [.g, h.]
+    proof
+     thus F.:[.e, f.] c= [.g, h.]
+     proof
+      let aa be set; assume aa in F.:[.e, f.];
+      then consider x be set such that
+A6:    x in dom F & x in [.e, f.] & aa = F.x by FUNCT_1:def 12;
+        x in { l where l is Real : e <= l & l <= f } by A6,RCOMP_1:def 1;
+      then consider x' be Real such that
+A7:      x' = x & e <= x' & x' <= f;
+        x' in the carrier of Closed-Interval-TSpace(a,b)
+         by A6,A7;
+      then x' in [#] Closed-Interval-TSpace (a,b) by PRE_TOPC:12;
+      then x' in dom F by A1,TOPS_2:def 5;
+      then F.x' in rng F by FUNCT_1:def 5;
+      then F.x' in [#] Closed-Interval-TSpace(c,d) by A1,TOPS_2:def 5;
+      then F.x' in the carrier of Closed-Interval-TSpace(c,d);
+then A8:    F.x' in [.c,d.] by A1,TOPMETR:25;
+      then reconsider Fx = F.x' as Real;
+      reconsider e1 = e, f1 = f, x1 = x'
+          as Point of Closed-Interval-TSpace (a, b)
+             by A1,A4,A6,A7,TOPMETR:25;
+      reconsider gg = F.e1, hh = F.f1, FFx = F.x1 as Real by A1,A8;
+A9:   g <= Fx
+      proof
+       per cases;
+       suppose e = x;
+       hence thesis by A1,A7;
+       suppose e <> x;
+       then e < x' by A7,REAL_1:def 5;
+       then gg < FFx by A1,A3,Th16;
+       hence thesis by A1;
+      end;
+        Fx <= h
+      proof
+       per cases;
+       suppose f = x;
+       hence thesis by A1,A7;
+       suppose f <> x;
+       then f > x' by A7,REAL_1:def 5;
+       then hh > FFx by A1,A3,Th16;
+       hence thesis by A1;
+      end;
+      then Fx in { l1 where l1 is Real : g <= l1 & l1 <= h } by A9;
+      hence thesis by A6,A7,RCOMP_1:def 1;
+     end;
+
+     thus [.g, h.] c= F.:[.e, f.]
+     proof
+      let aa be set; assume aa in [.g,h.];
+      then aa in { l1 where l1 is Real : g <= l1 & l1 <= h } by RCOMP_1:def 1;
+      then consider l be Real such that
+A10:       aa = l & g <= l & l <= h;
+A11:   F is one-to-one by A1,TOPS_2:def 5;
+      dom F = [#]Closed-Interval-TSpace (a,b) by A1,TOPS_2:def 5;
+then A12:      dom F = the carrier of Closed-Interval-TSpace (a,b) by PRE_TOPC:
+12;
+A13:    rng F = [#]Closed-Interval-TSpace (c,d) by A1,TOPS_2:def 5;
+        l in { l1 where l1 is Real : g <= l1 & l1 <= h } by A10;
+then A14:   l in [.g,h.] by RCOMP_1:def 1;
+      then l in rng F by A5,A13;
+      then l in dom (F") by A11,A13,TOPS_2:62;
+      then F".l in rng (F") by FUNCT_1:def 5;
+      then F".l in [#]Closed-Interval-TSpace (a,b) by A11,A13,TOPS_2:62;
+      then F".l in the carrier of Closed-Interval-TSpace (a,b);
+      then F".l in [.a,b.] by A1,TOPMETR:25;
+      then reconsider x = F".l as Real;
+A15:   x = (F qua Function)".l by A11,A13,TOPS_2:def 4;
+then A16:   x in dom F by A5,A11,A13,A14,FUNCT_1:54;
+      reconsider e' = e, f' = f, x' = x as
+        Point of Closed-Interval-TSpace (a,b)
+          by A1,A4,A5,A11,A12,A13,A14,A15,FUNCT_1:54,TOPMETR:25;
+      reconsider g' = F.e', h' = F.f', l' = F.x' as
+           Point of Closed-Interval-TSpace (c,d);
+        l' in the carrier of Closed-Interval-TSpace (c,d);
+      then l' in [.c,d.] by A1,TOPMETR:25;
+      then reconsider gg = g', hh = h', ll = l' as Real by A1;
+A17:   e <= x
+      proof
+       assume e > x;
+       then gg > ll by A1,A3,Th16;
+       hence thesis by A1,A5,A10,A11,A13,A14,A15,FUNCT_1:54;
+      end;
+        x <= f
+      proof
+       assume x > f;
+       then ll > hh by A1,A3,Th16;
+       hence thesis by A1,A5,A10,A11,A13,A14,A15,FUNCT_1:54;
+      end;
+      then x in { l1 where l1 is Real : e <= l1 & l1 <= f } by A17;
+then A18:   x in [.e, f.] by RCOMP_1:def 1;
+        aa = F.x by A5,A10,A11,A13,A14,A15,FUNCT_1:54;
+      hence thesis by A16,A18,FUNCT_1:def 12;
+     end;
+    end;
+  hence thesis;
+end;
+
+theorem
+   for P, Q being Subset of TOP-REAL 2,
+     p1, p2 being Point of TOP-REAL 2 st
+  P meets Q & P /\ Q is closed & P is_an_arc_of p1,p2 holds
+   ex EX being Point of TOP-REAL 2 st
+    ( EX in P /\ Q &
+     ex g being map of I[01], (TOP-REAL 2)|P, s2 being Real st
+      g is_homeomorphism & g.0 = p1 & g.1 = p2 &
+       g.s2 = EX & 0 <= s2 & s2 <= 1 &
+        (for t being Real st 0 <= t & t < s2 holds not g.t in Q))
+proof
+let P, Q be Subset of TOP-REAL 2,
+    p1,p2 be Point of TOP-REAL 2; assume
+A1:  P meets Q & P /\ Q is closed & P is_an_arc_of p1,p2;
+then P /\ Q <> {} by XBOOLE_0:def 7;
+   then consider x be set such that A2: x in P /\ Q by XBOOLE_0:def 1;
+   reconsider P as non empty Subset of TOP-REAL 2 by A2;
+ consider f being map of I[01], (TOP-REAL 2)|P such that
+A3: f is_homeomorphism & f.0 = p1 & f.1 = p2 by A1,TOPREAL1:def 2;
+   reconsider PP = P as Subset of TOP-REAL 2;
+A4: PP is compact by A1,Th1;
+A5:  P /\ Q c= P & P /\ Q c= Q by XBOOLE_1:17;
+then A6: P /\ Q is compact by A1,A4,COMPTS_1:18;
+ set g = f";
+A7:   g is_homeomorphism by A3,TOPS_2:70;
+  reconsider f1 = f as Function;
+A8: dom f = the carrier of I[01] by FUNCT_2:def 1;
+A9: dom f = [#]I[01] & rng f = [#]((TOP-REAL 2)|P) & f is one-to-one
+     by A3,TOPS_2:def 5;
+A10: g is continuous by A3,TOPS_2:def 5;
+    [#]((TOP-REAL 2)|P) = P by PRE_TOPC:def 10;
+  then P /\ Q c= the carrier of ((TOP-REAL 2)|P) by A5,PRE_TOPC:12;
+ then reconsider PQ = P /\ Q as non empty Subset of (TOP-REAL 2)|P
+    by A1,XBOOLE_0:def 7;
+A11:P /\ Q <> {}(TOP-REAL 2) & PQ <> {}((TOP-REAL 2)|P) by A1,XBOOLE_0:def 7;
+ reconsider P1 = P, Q1=Q as non empty Subset of TOP-REAL 2
+   by A1,XBOOLE_0:def 7;
+ reconsider PQ1 = P /\ Q as non empty Subset of (TOP-REAL 2)|P1
+    by A11;
+A12: (TOP-REAL 2)|(P1 /\ Q1) = (TOP-REAL 2)|P1|PQ1 by GOBOARD9:4;
+   (TOP-REAL 2)|(P /\ Q) is compact by A6,A11,COMPTS_1:12;
+then A13: PQ is compact by A12,COMPTS_1:12;
+A14: [#](I[01]) c= [#](R^1) by PRE_TOPC:def 9;
+      g.:PQ c= the carrier of I[01];
+then A15: g.:PQ c= [#] (I[01]) by PRE_TOPC:12;
+    then g.:PQ c= [#](R^1) by A14,XBOOLE_1:1;
+   then g.:PQ c= the carrier of R^1 by PRE_TOPC:12;
+   then reconsider GPQ = g.:PQ as Subset of R^1;
+     for P being Subset of I[01] st P=GPQ holds P is compact
+     by A10,A13,WEIERSTR:14;
+    then GPQ is compact by A15,COMPTS_1:11;
+then A16: [#](GPQ) is bounded & [#](GPQ) is closed by WEIERSTR:17,18;
+then A17: [#](GPQ) is bounded_below by SEQ_4:def 3;
+    consider OO be set such that A18: OO in PQ by XBOOLE_0:def 1;
+    dom g = the carrier of (TOP-REAL 2)|P by FUNCT_2:def 1;
+then A19:  g.OO in GPQ by A18,FUNCT_1:def 12;
+    set Ex = lower_bound ([#](GPQ));
+  take EX = f.Ex;
+    [#](GPQ)<>{} & [#](GPQ) is closed & [#](GPQ) is bounded_below
+     by A16,A19,SEQ_4:def 3,WEIERSTR:def 3;
+  then Ex in [#](GPQ) by RCOMP_1:31;
+then A20:  Ex in GPQ by WEIERSTR:def 3;
+  then reconsider EX as Point of (TOP-REAL 2)|P by FUNCT_2:7;
+  reconsider g1 = g as Function;
+A21:  dom g = the carrier of (TOP-REAL 2)|P by FUNCT_2:def 1;
+A22: rng g = [#]I[01] & dom g = [#]((TOP-REAL 2)|P)
+              by A7,TOPS_2:def 5;
+   g is one-to-one by A9,TOPS_2:63;
+  then (f")" = g1" by A22,TOPS_2:def 4;
+then A23:f = g1" & g is one-to-one by A9,TOPS_2:63,64;
+  consider pq be set such that A24: pq in dom g & pq in PQ & Ex = g.pq
+     by A20,FUNCT_1:def 12;
+A25:  f is_homeomorphism & f.0=p1 & f.1=p2
+          & f.Ex=EX & 0<=Ex & Ex<=1 by A3,A20,Th2;
+    for t being Real st 0<=t & t<Ex holds not f.t in Q
+  proof
+   let t be Real; assume A26: 0<=t & t<Ex;
+then A27:t <= 1 by A25,AXIOMS:22;
+then A28:t in the carrier of I[01] by A26,Th2;
+A29:t in dom f by A8,A26,A27,Th2;
+   assume A30: f.t in Q;
+  f.t in the carrier of ((TOP-REAL 2)|P) by A28,FUNCT_2:7;
+   then f.t in P by JORDAN1:1;
+   then f.t in PQ by A30,XBOOLE_0:def 3;
+then A31:g.(f.t) in GPQ by A21,FUNCT_1:def 12;
+  g = f1" by A9,TOPS_2:def 4;
+   then g.(f.t) = t by A9,A29,FUNCT_1:56;
+   then t in [#](GPQ) by A31,WEIERSTR:def 3;
+   hence thesis by A17,A26,SEQ_4:def 5;
+  end;
+  hence thesis by A23,A24,A25,FUNCT_1:56;
+end;
+
+theorem
+   for P, Q being Subset of TOP-REAL 2,
+     p1, p2 being Point of TOP-REAL 2 st
+  P meets Q & P /\ Q is closed & P is_an_arc_of p1,p2 holds
+   ex EX be Point of TOP-REAL 2 st
+    ( EX in P /\ Q &
+     ex g being map of I[01], (TOP-REAL 2)|P, s2 being Real st
+      g is_homeomorphism & g.0 = p1 & g.1 = p2 &
+       g.s2 = EX & 0 <= s2 & s2 <= 1 &
+        (for t being Real st 1 >= t & t > s2 holds not g.t in Q))
+proof
+let P, Q be Subset of TOP-REAL 2,
+               p1,p2 be Point of TOP-REAL 2; assume
+A1:  P meets Q & P /\ Q is closed & P is_an_arc_of p1,p2;
+then P /\ Q <> {} by XBOOLE_0:def 7;
+   then consider x be set such that A2: x in P /\ Q by XBOOLE_0:def 1;
+   reconsider P as non empty Subset of TOP-REAL 2 by A2;
+ consider f being map of I[01], (TOP-REAL 2)|P such that
+A3: f is_homeomorphism & f.0 = p1 & f.1 = p2 by A1,TOPREAL1:def 2;
+   reconsider PP = P as Subset of TOP-REAL 2;
+A4: PP is compact by A1,Th1;
+A5:  P /\ Q c= P & P /\ Q c= Q by XBOOLE_1:17;
+then A6: P /\ Q is compact by A1,A4,COMPTS_1:18;
+ set g = f";
+A7:   g is_homeomorphism by A3,TOPS_2:70;
+  reconsider f1 = f as Function;
+A8: dom f = the carrier of I[01] by FUNCT_2:def 1;
+A9: dom f = [#]I[01] & rng f = [#]((TOP-REAL 2)|P) & f is one-to-one
+     by A3,TOPS_2:def 5;
+A10: g is continuous by A3,TOPS_2:def 5;
+    [#]((TOP-REAL 2)|P) = P by PRE_TOPC:def 10;
+  then P /\ Q c= the carrier of ((TOP-REAL 2)|P) by A5,PRE_TOPC:12;
+ then reconsider PQ = P /\ Q as non empty Subset of (TOP-REAL 2)|P
+    by A1,XBOOLE_0:def 7;
+A11:P /\ Q <> {}(TOP-REAL 2) & PQ <> {}((TOP-REAL 2)|P) by A1,XBOOLE_0:def 7;
+ reconsider P1 = P, Q1=Q as non empty Subset of TOP-REAL 2
+   by A1,XBOOLE_0:def 7;
+ reconsider PQ1 = P /\ Q as non empty Subset of (TOP-REAL 2)|P1
+    by A11;
+A12: (TOP-REAL 2)|(P1 /\ Q1) = (TOP-REAL 2)|P1|PQ1 by GOBOARD9:4;
+   (TOP-REAL 2)|(P /\ Q) is compact by A6,A11,COMPTS_1:12;
+then A13:  PQ is compact by A12,COMPTS_1:12;
+A14: [#](I[01]) c= [#](R^1) by PRE_TOPC:def 9;
+      g.:PQ c= the carrier of I[01];
+then A15: g.:PQ c= [#] (I[01]) by PRE_TOPC:12;
+    then g.:PQ c= [#](R^1) by A14,XBOOLE_1:1;
+   then g.:PQ c= the carrier of R^1 by PRE_TOPC:12;
+   then reconsider GPQ = g.:PQ as Subset of R^1;
+     for P being Subset of I[01] st P=GPQ holds P is compact
+      by A10,A13,WEIERSTR:14;
+    then GPQ is compact by A15,COMPTS_1:11;
+then A16: [#](GPQ) is bounded & [#](GPQ) is closed by WEIERSTR:17,18;
+then A17: [#](GPQ) is bounded_above by SEQ_4:def 3;
+    consider OO be set such that A18: OO in PQ by XBOOLE_0:def 1;
+    dom g = the carrier of (TOP-REAL 2)|P by FUNCT_2:def 1;
+then A19:  g.OO in GPQ by A18,FUNCT_1:def 12;
+    set Ex = upper_bound ([#](GPQ));
+  take EX = f.Ex;
+    [#](GPQ)<>{} & [#](GPQ) is closed & [#](GPQ) is bounded_above
+     by A16,A19,SEQ_4:def 3,WEIERSTR:def 3;
+  then Ex in [#](GPQ) by RCOMP_1:30;
+then A20:  Ex in GPQ by WEIERSTR:def 3;
+  then reconsider EX as Point of (TOP-REAL 2)|P by FUNCT_2:7;
+  reconsider g1 = g as Function;
+A21:  dom g = the carrier of (TOP-REAL 2)|P by FUNCT_2:def 1;
+A22: rng g = [#]I[01] & dom g = [#]((TOP-REAL 2)|P)
+              by A7,TOPS_2:def 5;
+  g is one-to-one by A9,TOPS_2:63;
+ then (f")" = g1" by A22,TOPS_2:def 4;
+then A23:f = g1" & g is one-to-one by A9,TOPS_2:63,64;
+  consider pq be set such that A24: pq in dom g & pq in PQ & Ex = g.pq
+     by A20,FUNCT_1:def 12;
+A25:  f is_homeomorphism & f.0=p1 & f.1=p2
+          & f.Ex=EX & 0<=Ex & Ex<=1 by A3,A20,Th2;
+    for t being Real st 1>=t & t>Ex holds not f.t in Q
+  proof
+   let t be Real; assume A26: 1 >= t & t > Ex;
+then A27: 0 <= t by A25,AXIOMS:22;
+then A28:t in the carrier of I[01] by A26,Th2;
+A29:t in dom f by A8,A26,A27,Th2;
+   assume A30: f.t in Q;
+  f.t in the carrier of ((TOP-REAL 2)|P) by A28,FUNCT_2:7;
+   then f.t in P by JORDAN1:1;
+   then f.t in PQ by A30,XBOOLE_0:def 3;
+then A31:g.(f.t) in GPQ by A21,FUNCT_1:def 12;
+  g = f1" by A9,TOPS_2:def 4;
+   then g.(f.t) = t by A9,A29,FUNCT_1:56;
+   then t in [#](GPQ) by A31,WEIERSTR:def 3;
+   hence thesis by A17,A26,SEQ_4:def 4;
+  end;
+  hence thesis by A23,A24,A25,FUNCT_1:56;
+end;

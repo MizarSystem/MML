@@ -1,0 +1,338 @@
+:: Topological Spaces and Continuous Functions
+::  by Beata Padlewska and Agata Darmochwa\l
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary SETFAM_1, TARSKI, BOOLE, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL2,
+      PRE_TOPC;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_2, SETFAM_1,
+      STRUCT_0;
+ constructors STRUCT_0, FUNCT_2, MEMBERED;
+ clusters STRUCT_0, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1;
+ requirements BOOLE, SUBSET;
+
+
+begin
+
+definition
+  struct(1-sorted) TopStruct (# carrier -> set,
+                             topology -> Subset-Family of the carrier #);
+end;
+
+reserve T for TopStruct;
+
+::
+::                   The topological space
+::
+
+definition let IT be TopStruct;
+ attr IT is TopSpace-like means
+:: PRE_TOPC:def 1
+
+     the carrier of IT in the topology of IT &
+     (for a being Subset-Family of IT
+      st a c= the topology of IT
+       holds union a in the topology of IT) &
+     (for a,b being Subset of IT st
+      a in the topology of IT & b in the topology of IT
+       holds a /\ b in the topology of IT);
+end;
+
+definition
+ cluster non empty strict TopSpace-like TopStruct;
+end;
+
+definition
+  mode TopSpace is TopSpace-like TopStruct;
+end;
+
+definition let S be 1-sorted;
+ mode Point of S is Element of S;
+end;
+
+reserve GX for TopSpace;
+
+canceled 4;
+
+theorem :: PRE_TOPC:5
+ {} in the topology of GX;
+
+definition let T be 1-sorted;
+  func {}T -> Subset of T equals
+:: PRE_TOPC:def 2
+ {};
+  func [#]T -> Subset of T equals
+:: PRE_TOPC:def 3
+ the carrier of T;
+end;
+
+definition let T be 1-sorted;
+ cluster {}T -> empty;
+end;
+
+canceled 6;
+
+theorem :: PRE_TOPC:12
+   for T being 1-sorted holds [#]T = the carrier of T;
+
+definition let T be non empty 1-sorted;
+ cluster [#]T -> non empty;
+end;
+
+theorem :: PRE_TOPC:13
+ for T being non empty 1-sorted, p being Point of T holds p in [#]T;
+
+theorem :: PRE_TOPC:14
+ for T being 1-sorted, P being Subset of T holds P c= [#]T;
+
+theorem :: PRE_TOPC:15
+ for T being 1-sorted, P being Subset of T holds P /\ [#]T = P;
+
+theorem :: PRE_TOPC:16
+ for T being 1-sorted
+  for A being set st A c= [#]T holds A is Subset of T;
+
+theorem :: PRE_TOPC:17
+  for T being 1-sorted, P being Subset of T holds P` = [#]T \ P;
+
+theorem :: PRE_TOPC:18
+    for T being 1-sorted, P being Subset of T holds P \/ P` =
+[#]
+T;
+
+theorem :: PRE_TOPC:19
+   for T being 1-sorted, P,Q being Subset of T
+ holds P c= Q iff Q` c= P`;
+
+theorem :: PRE_TOPC:20
+   for T being 1-sorted, P being Subset of T
+ holds P = P``;
+
+theorem :: PRE_TOPC:21
+  for T being 1-sorted
+  for P,Q being Subset of T holds P c= Q` iff P misses Q;
+
+theorem :: PRE_TOPC:22
+  for T being 1-sorted, P being Subset of T
+     holds [#]T \ ([#]T \ P) = P;
+
+theorem :: PRE_TOPC:23
+  for T being 1-sorted, P being Subset of T
+    holds P <> [#]T iff [#]T \ P <> {};
+
+theorem :: PRE_TOPC:24
+    for T being 1-sorted, P,Q being Subset of T st [#]T \ P = Q
+    holds [#]T = P \/ Q;
+
+theorem :: PRE_TOPC:25
+    for T being 1-sorted, P,Q being Subset of T
+   st [#]T = P \/ Q & P misses Q
+   holds Q = [#]T \ P;
+
+theorem :: PRE_TOPC:26
+    for T being 1-sorted, P being Subset of T holds P misses P`;
+
+theorem :: PRE_TOPC:27
+   for T being 1-sorted holds [#]T = ({}T)`;
+
+definition let T be TopStruct, P be Subset of T;
+ canceled;
+
+  attr P is open means
+:: PRE_TOPC:def 5
+P in the topology of T;
+end;
+
+definition let T be TopStruct, P be Subset of T;
+  attr P is closed means
+:: PRE_TOPC:def 6
+[#]T \ P is open;
+end;
+
+definition let T be 1-sorted, F be Subset-Family of T;
+ redefine func union F -> Subset of T;
+end;
+
+definition let T be 1-sorted, F be Subset-Family of T;
+ redefine func meet F -> Subset of T;
+end;
+
+definition let T be 1-sorted, F be Subset-Family of T;
+ canceled;
+
+  pred F is_a_cover_of T means
+:: PRE_TOPC:def 8
+       [#]T = union F;
+end;
+
+definition let T be TopStruct;
+  mode SubSpace of T -> TopStruct means
+:: PRE_TOPC:def 9
+           [#]it c= [#]T &
+           for P being Subset of it
+            holds P in the topology of it iff
+           ex Q being Subset of T st Q in the topology of T &
+           P = Q /\ [#]it;
+end;
+
+definition let T be TopStruct;
+ cluster strict SubSpace of T;
+end;
+
+definition let T be non empty TopStruct;
+ cluster strict non empty SubSpace of T;
+end;
+
+scheme SubFamExS {A() -> TopStruct, P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B];
+
+definition let T be TopSpace;
+ cluster -> TopSpace-like SubSpace of T;
+end;
+
+definition let T be TopStruct, P be Subset of T;
+ func T|P -> strict SubSpace of T means
+:: PRE_TOPC:def 10
+  [#]it = P;
+end;
+
+definition let T be non empty TopStruct,
+               P be non empty Subset of T;
+ cluster T|P -> non empty;
+end;
+
+definition let T be TopSpace;
+ cluster TopSpace-like strict SubSpace of T;
+end;
+
+definition
+ let T be TopSpace, P be Subset of T;
+ cluster T|P -> TopSpace-like;
+end;
+
+definition let S, T be 1-sorted;
+  mode map of S, T is Function of the carrier of S, the carrier of T;
+ canceled;
+end;
+
+definition let S, T be 1-sorted,
+               f be Function of the carrier of S, the carrier of T,
+               P be set;
+  redefine func f.:P -> Subset of T;
+end;
+
+definition let S, T be 1-sorted,
+               f be Function of the carrier of S, the carrier of T,
+               P be set;
+  redefine func f"P -> Subset of S;
+end;
+
+definition let S, T be TopStruct, f be map of S,T;
+  attr f is continuous means
+:: PRE_TOPC:def 12
+      for P1 being Subset of T st P1 is closed holds f" P1 is closed;
+end;
+
+scheme TopAbstr{A() -> TopStruct,P[set]}:
+  ex P being Subset of A() st
+  for x being set st x in the carrier of A() holds x in P iff P[x];
+
+canceled 11;
+
+theorem :: PRE_TOPC:39
+  for X' being SubSpace of T, A being Subset of X'
+   holds A is Subset of T;
+
+canceled;
+
+theorem :: PRE_TOPC:41
+     for A being Subset of T st A <> {}T
+   ex x being Point of T st x in A;
+
+theorem :: PRE_TOPC:42
+ [#]GX is closed;
+
+definition let T be TopSpace;
+ cluster [#]T -> closed;
+end;
+
+definition let T be TopSpace;
+ cluster closed Subset of T;
+end;
+
+definition let T be non empty TopSpace;
+ cluster non empty closed Subset of T;
+end;
+
+theorem :: PRE_TOPC:43
+for X' being SubSpace of T,
+    B being Subset of X' holds
+  B is closed iff ex C being Subset of T st C is closed & C /\ [#](X') = B;
+
+theorem :: PRE_TOPC:44
+  for F being Subset-Family of GX st
+  for A being Subset of GX st A in F holds A is closed
+  holds meet F is closed;
+
+::
+::                    The closure of a set
+::
+
+definition
+ let GX be TopStruct, A be Subset of GX;
+   func Cl A -> Subset of GX means
+:: PRE_TOPC:def 13
+for p being set st p in the carrier of GX holds p in it iff
+    for G being Subset of GX st G is open holds
+                        p in G implies A meets G;
+end;
+
+theorem :: PRE_TOPC:45
+  for A being Subset of T, p being set
+    st p in the carrier of T holds
+  p in Cl A iff for C being Subset of T st C is closed
+  holds (A c= C implies p in C);
+
+theorem :: PRE_TOPC:46
+  for A being Subset of GX ex F being Subset-Family of GX st
+  (for C being Subset of GX holds C in F iff C is closed &
+  A c= C) & Cl A = meet F;
+
+theorem :: PRE_TOPC:47
+   for X' being SubSpace of T, A being Subset of T,
+ A1 being Subset of X'
+  st A = A1 holds Cl A1 = (Cl A) /\ ([#]X');
+
+theorem :: PRE_TOPC:48
+  for A being Subset of T holds A c= Cl A;
+
+theorem :: PRE_TOPC:49
+  for A,B being Subset of T st A c= B holds Cl A c= Cl B;
+
+theorem :: PRE_TOPC:50
+    for A,B being Subset of GX holds Cl(A \/ B) = Cl A \/ Cl B;
+
+theorem :: PRE_TOPC:51
+    for A, B being Subset of T holds
+    Cl (A /\ B) c= (Cl A) /\ Cl B;
+
+theorem :: PRE_TOPC:52
+ for A being Subset of T holds
+  (A is closed implies Cl A = A) &
+  (T is TopSpace-like & Cl A = A implies A is closed);
+
+theorem :: PRE_TOPC:53
+   for A being Subset of T holds
+  (A is open implies Cl([#](T) \ A) = [#](T) \ A) &
+  (T is TopSpace-like & Cl([#](T) \ A) = [#](T) \ A implies A is open);
+
+theorem :: PRE_TOPC:54
+    for A being Subset of T,
+      p being Point of T holds
+  p in Cl A iff
+  T is non empty & for G being Subset of T st G is open holds
+   p in G implies A meets G;

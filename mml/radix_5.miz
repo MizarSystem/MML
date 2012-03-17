@@ -1,0 +1,1571 @@
+:: Magnitude Relation Properties of Radix-$2^k$ SD Number
+::  by Masaaki Niimura and Yasushi Fuwa
+:: 
+:: Received November 7, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, NAT_1, INT_1, RADIX_1, FINSEQ_1, POWER, MIDSP_3, FINSEQ_4,
+      GROUP_1, RELAT_1, RLVECT_1, FUNCT_1, RADIX_5;
+ notation TARSKI, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1, BINARITH, RADIX_1, POWER,
+      MIDSP_3, FINSEQ_4, FINSEQ_1, FUNCT_1, WSIERP_1;
+ constructors RADIX_1, BINARITH, POWER, FINSEQ_4, EULER_2;
+ clusters REAL_1, NUMBERS, XREAL_0, INT_1, RELSET_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems RADIX_1, RADIX_4, AXIOMS, REAL_1, REAL_2, INT_1, NAT_1, XCMPLX_1,
+      SCMFSA_7, FINSEQ_1, JORDAN3, POWER, GOBOARD9, FINSEQ_2, NEWTON, RADIX_2,
+      NAT_2, PREPOWER, GR_CY_1, GROUP_4, BINARITH, PEPIN, JORDAN4, JORDAN5B,
+      FUNCT_1, FINSEQ_4, RVSUM_1, XCMPLX_0;
+ schemes BINOM, FINSEQ_2, INT_2;
+
+begin :: Some Useful Theorems
+
+theorem Lm1:
+  for k be Nat st k >= 2 holds Radix(k) - 1 in k-SD
+proof
+  let k be Nat;
+  assume
+A1: k >= 2;
+A2: k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
+                                                           by RADIX_1:def 2;
+    Radix(k) > 2 by A1,RADIX_4:1; then
+    Radix(k) > 1 by AXIOMS:22; then
+    Radix(k) + Radix(k) > 1 + 1 by REAL_1:67; then
+    Radix(k) - 1 > 0 + 1 - Radix(k) by REAL_2:169; then
+A4: Radix(k) - 1 > -Radix(k) + 1 + 0 by XCMPLX_1:155;
+    Radix(k) - 1 is Element of INT by INT_1:def 2;
+    hence thesis by A2,A4;
+end;
+
+Lm2:
+  for k be Nat holds Radix(k) > 0 by RADIX_2:6;
+
+theorem Th1:
+  for i,n be Nat st i > 1 & i in Seg n holds
+    i -' 1 in Seg n
+proof
+    let i,n be Nat;
+    assume
+A1:   i > 1 & i in Seg n; then
+    i - 1 > 1 - 1 by REAL_1:54; then
+    i -' 1 > 0 by A1,SCMFSA_7:3; then
+A2: i -' 1 >= 0 + 1 by NAT_1:38;
+    i >= 1 & i <= n by A1,FINSEQ_1:3; then
+    i -' 1 <= n by JORDAN3:7;
+    hence thesis by A2,FINSEQ_1:3;
+end;
+
+reserve k for Nat;
+
+theorem Th2:
+  for k be Nat st 2 <= k holds 4 <= Radix(k)
+proof
+  defpred P[Nat] means 4 <= Radix($1);
+      Radix(2) = 2 to_power (1+1)  by RADIX_1:def 1
+              .= 2 to_power 1 * 2 to_power 1 by POWER:32
+              .= 2 * (2 to_power 1) by POWER:30 
+              .= 2 * 2 by POWER:30;
+      then
+A1:     P[2];
+A2:  for kk be Nat st kk >= 2 & P[kk] holds P[kk + 1]
+      proof
+        let kk be Nat;
+        assume
+A6:       2 <= kk & 4 <= Radix(kk);
+A7:     Radix(kk + 1) = 2 to_power (kk + 1) by RADIX_1:def 1
+                 .= 2 to_power (1) * 2 to_power (kk) by POWER:32
+                 .= 2 * 2 to_power (kk) by POWER:30
+                 .= 2 * Radix(kk) by RADIX_1:def 1;
+        Radix(kk) >= 0 by A6,AXIOMS:22; then
+        Radix(kk + 1) >= Radix(kk) by A7,REAL_2:146;
+        hence thesis by A6, AXIOMS:22;
+      end;
+      for i being Nat st 2 <= i holds P[i] from Ind2(A1,A2);
+      hence thesis;
+end;
+
+theorem Th3:
+  for k be Nat, tx be Tuple of 1,k-SD holds
+    SDDec(tx) = DigA(tx,1)
+proof
+  let k be Nat, tx be Tuple of 1,k-SD;
+A3: 1 in Seg 1 by FINSEQ_1:3; then
+A4: (DigitSD(tx))/.1 = SubDigit(tx,1,k) by RADIX_1:def 6
+      .= ( Radix(k) |^ (1-'1) )*DigB(tx,1) by RADIX_1:def 5
+      .= (Radix(k) |^ (1-'1))*DigA(tx,1) by RADIX_1:def 4
+      .= (Radix(k) |^ 0)*DigA(tx,1) by GOBOARD9:1
+      .= 1 * DigA(tx,1) by NEWTON:9;
+A5: len DigitSD(tx) = 1 by FINSEQ_2:109; then
+    1 in dom DigitSD(tx) by A3,FINSEQ_1:def 3; then
+A6: DigitSD(tx).1 = DigA(tx,1) by FINSEQ_4:def 4,A4;
+    reconsider w = DigA(tx,1) as Element of INT by INT_1:def 2;
+    SDDec(tx) = Sum DigitSD(tx) by RADIX_1:def 7
+      .= Sum <*w*> by A5,A6,FINSEQ_1:57
+      .= DigA(tx,1) by RVSUM_1:103;
+    hence thesis;
+end;
+
+begin :: Properties of Primary Radix-$2^k$ SD Number
+
+theorem Th4:
+  for i,k,n be Nat st i in Seg n holds
+    DigA(DecSD(0,n,k),i) = 0
+proof
+  let i,k,n be Nat;
+  assume
+A1:   i in Seg n;
+A2: Radix(k) > 0 by Lm2;
+A3: i >= 1 by A1,FINSEQ_1:3;
+    DigA(DecSD(0,n,k),i)
+      = DigitDC(0,i,k) by A1,RADIX_1:def 9
+     .= (0 mod (Radix(k) |^ i)) div (Radix(k) |^ (i-'1)) by RADIX_1:def 8
+     .= (0 div (Radix(k) |^ (i-'1))) mod Radix(k) by A2,A3,RADIX_2:4
+     .= 0 mod Radix(k) by NAT_2:4;
+    hence thesis by GR_CY_1:6;
+end;
+
+theorem
+  for n,k be Nat st n >= 1 holds
+    SDDec(DecSD(0,n,k)) = 0
+proof
+  let n,k be Nat;
+  assume
+A1:   n >= 1;
+    Radix(k) > 0 by Lm2; then
+    Radix(k) >= 0 + 1 by INT_1:20; then
+    Radix(k) |^ n >= 1 by PREPOWER:19; then
+    Radix(k) |^ n > 0 by AXIOMS:22; then
+    0 is_represented_by n,k by RADIX_1:def 12;
+    hence thesis by A1,RADIX_1:25;
+end;
+
+theorem Th6:
+  for k,n be Nat st 1 in Seg n & k >= 2 holds
+    DigA(DecSD(1,n,k),1) = 1
+proof
+  let k,n be Nat;
+  assume
+A1:   1 in Seg n & k >= 2; then
+    Radix(k) > 2 by RADIX_4:1; then
+A2: Radix(k) > 1 by AXIOMS:22; then
+A3: Radix(k) > 0 by AXIOMS:22;
+    DigA(DecSD(1,n,k),1)
+      = DigitDC(1,1,k) by A1,RADIX_1:def 9
+     .= (1 mod (Radix(k) |^ 1)) div (Radix(k) |^ (1-'1)) by RADIX_1:def 8
+     .= (1 div (Radix(k) |^ (1-'1))) mod Radix(k) by A3,RADIX_2:4
+     .= (1 div (Radix(k) |^ 0)) mod Radix(k) by NAT_2:10
+     .= (1 div 1) mod Radix(k) by NEWTON:9
+     .= 1 mod Radix(k) by NAT_2:6;
+    hence thesis by A2,GROUP_4:102;
+end;
+
+theorem Th7:
+  for i,k,n be Nat st i in Seg n & i > 1 & k >= 2 holds
+    DigA(DecSD(1,n,k),i) = 0
+proof
+  let i,k,n be Nat;
+  assume
+A1:   i in Seg n & i > 1 & k >= 2; then
+    Radix(k) > 2 by RADIX_4:1; then
+A2: Radix(k) > 1 by AXIOMS:22; then
+A3: Radix(k) > 0 by AXIOMS:22;
+A4: DigA(DecSD(1,n,k),i)
+      = DigitDC(1,i,k) by A1,RADIX_1:def 9
+     .=(1 mod (Radix(k) |^ i)) div (Radix(k) |^ (i-'1)) by RADIX_1:def 8
+     .=(1 div (Radix(k) |^ (i-'1))) mod Radix(k) by A1,A3,RADIX_2:4;
+    i-1 > 1 - 1 by A1,REAL_1:92; then
+    i-'1 > 0 by BINARITH:def 3; then
+   (Radix(k) |^ (i-'1)) > 1 by A2,PEPIN:26; then
+    1 div (Radix(k) |^ (i-'1)) = 0 by JORDAN4:5;
+   hence thesis by A4,GR_CY_1:6;
+end;
+
+theorem 
+  for n,k be Nat st n >= 1 & k >= 2 holds
+    SDDec(DecSD(1,n,k)) = 1
+proof
+  let n,k be Nat;
+  assume
+A1:   n >= 1 & k >= 2; then
+A2:   Radix(k) > 2 by RADIX_4:1;
+      Radix(k) > 0 by Lm2; then
+      Radix(k) >= 0 + 1 by INT_1:20; then
+      Radix(k) |^ n >= Radix(k) by A1,PREPOWER:20; then
+      Radix(k) |^ n >= 2 by A2,AXIOMS:22; then
+      Radix(k) |^ n > 1 by AXIOMS:22; then
+      1 is_represented_by n,k by RADIX_1:def 12;
+      hence thesis by A1,RADIX_1:25;
+end;
+
+theorem Th9:
+  for k be Nat st k >= 2 holds SD_Add_Carry(Radix(k)) = 1
+proof
+  let k be Nat;
+  assume k >= 2; then
+  Radix(k) > 2 by RADIX_4:1;
+  hence thesis by RADIX_1:def 10;
+end;
+
+theorem Th10:
+  for k be Nat st k >= 2 holds SD_Add_Data(Radix(k),k) = 0
+proof
+  let k be Nat;
+  assume k >= 2; then
+A1: SD_Add_Carry(Radix(k)) = 1 by Th9;
+    SD_Add_Data(Radix(k),k)
+      = Radix(k) - SD_Add_Carry(Radix(k)) * Radix(k) by RADIX_1:def 11
+     .= Radix(k) - Radix(k) by A1;
+    hence thesis by XCMPLX_1:14;
+end;
+
+begin :: Primary Magnitude Relation of Radix-2^k SD Number
+
+Lm5:
+  for k be Nat st 2 <= k holds SD_Add_Carry(Radix(k) - 1) = 1
+proof
+    let k be Nat;
+    assume k >= 2; then
+      Radix(k) >= 4 by Th2; then
+      Radix(k) - 1 >= 4 - 1 by REAL_1:49; then
+      Radix(k) - 1 > 2 by AXIOMS:22;
+      hence thesis by RADIX_1:def 10;
+end;
+
+Lm6:
+  for n,k,i be Nat st k >= 2 & i in Seg n holds
+    SD_Add_Carry(DigA(DecSD(1,n,k),i)) = 0
+proof
+  let n,k,i be Nat;
+  assume
+A1: k >= 2 & i in Seg n; then
+A2: i >= 1 by FINSEQ_1:3;
+    now per cases by A2,REAL_1:def 5;
+    suppose
+      i = 1; then
+      SD_Add_Carry(DigA(DecSD(1,n,k),i))
+        = SD_Add_Carry(1) by A1,Th6;
+      hence thesis by RADIX_1:def 10;
+    suppose
+      i > 1; then
+      SD_Add_Carry(DigA(DecSD(1,n,k),i))
+        = SD_Add_Carry(0) by A1,Th7;
+      hence thesis by RADIX_1:def 10;
+    end;
+    hence thesis;
+end;
+
+theorem Th11:
+  for n be Nat st n >= 1 holds
+    for k be Nat, tx,ty be Tuple of n,k-SD st
+      (for i be Nat st i in Seg n holds DigA(tx,i) = DigA(ty,i)) holds
+        SDDec(tx) = SDDec(ty)
+proof
+  defpred P[Nat] means
+    for k be Nat, tx,ty be Tuple of $1,k-SD st
+      (for i be Nat st i in Seg $1 holds DigA(tx,i) = DigA(ty,i)) holds
+        SDDec(tx) = SDDec(ty);
+A1: P[1]
+    proof
+      let k be Nat, tx,ty be Tuple of 1,k-SD;
+      assume
+A2:     for i be Nat st i in Seg 1 holds DigA(tx,i) = DigA(ty,i);
+A3:   1 in Seg 1 by FINSEQ_1:3;
+A4:   SDDec(tx) = DigA(tx,1) by Th3;
+      SDDec(ty) = DigA(ty,1) by Th3;
+      hence thesis by A2,A3,A4;
+  end;
+A10: for n be Nat st n >= 1 & P[n] holds P[n+1]
+    proof
+      let n be Nat;
+      assume
+A11:    n >= 1 & P[n];
+      let k be Nat, tx,ty be Tuple of (n+1),k-SD;
+      assume
+A12:    for i be Nat st i in Seg (n+1) holds DigA(tx,i) = DigA(ty,i);
+     deffunc F(Nat) = DigB(tx,$1);
+      consider txn being FinSequence of INT such that
+A13:    len txn = n and
+A14:    for i be Nat st i in Seg n holds txn.i = F(i) from SeqLambdaD;
+      rng txn c= k-SD
+        proof
+          let z be set;
+          assume z in rng txn; then
+          consider xx be set such that
+A16:        xx in dom txn and
+A17:        z = txn.xx by FUNCT_1:def 5;
+          reconsider xx as Nat by A16;
+A18:      dom txn = Seg n by FINSEQ_1:def 3,A13; then
+A19:      z = DigB(tx,xx) by A14,A16,A17
+           .= DigA(tx,xx) by RADIX_1:def 4;
+          xx in Seg (n+1) by A16,A18,FINSEQ_2:9; then
+          DigA(tx,xx) is Element of k-SD by RADIX_1:19;
+          hence thesis by A19;
+        end;
+      then reconsider txn as FinSequence of k-SD by FINSEQ_1:def 4;
+A20:  for i be Nat st i in Seg n holds txn.i = tx.i
+        proof
+          let i be Nat;
+          assume
+A21:        i in Seg n; then
+A22:        i in Seg (n+1) by FINSEQ_2:9;
+            txn.i = DigB(tx,i) by A14,A21
+                 .= DigA(tx,i) by RADIX_1:def 4;
+          hence thesis by A22,RADIX_1:def 3;
+        end;
+        deffunc F(Nat) = DigB(ty,$1);
+      consider tyn being FinSequence of INT such that
+A23:    len tyn = n and
+A24:    for i be Nat st i in Seg n holds tyn.i = F(i) from SeqLambdaD;
+      rng tyn c= k-SD
+        proof
+          let z be set;
+          assume z in rng tyn; then
+          consider yy be set such that
+A26:        yy in dom tyn and
+A27:        z = tyn.yy by FUNCT_1:def 5;
+          reconsider yy as Nat by A26;
+A28:      dom tyn = Seg n by FINSEQ_1:def 3,A23; then
+A29:      z = DigB(ty,yy) by A24,A26,A27
+           .= DigA(ty,yy) by RADIX_1:def 4;
+          yy in Seg (n+1) by A26,A28,FINSEQ_2:9; then
+          DigA(ty,yy) is Element of k-SD by RADIX_1:19;
+          hence thesis by A29;
+        end;
+      then reconsider tyn as FinSequence of k-SD by FINSEQ_1:def 4;
+A30:  for i be Nat st i in Seg n holds tyn.i = ty.i
+        proof
+          let i be Nat;
+          assume
+A31:        i in Seg n; then
+A32:        i in Seg (n+1) by FINSEQ_2:9;
+            tyn.i = DigB(ty,i) by A24,A31
+                 .= DigA(ty,i) by RADIX_1:def 4;
+          hence thesis by A32,RADIX_1:def 3;
+        end;
+      reconsider txn as Tuple of n,k-SD by A13,FINSEQ_2:110;
+      reconsider tyn as Tuple of n,k-SD by A23,FINSEQ_2:110;
+A33:  SDDec(txn) + (Radix(k) |^ n)*DigA(tx,n+1) = SDDec(tx) by A20,RADIX_2:10;
+A34:  SDDec(tyn) + (Radix(k) |^ n)*DigA(ty,n+1) = SDDec(ty) by A30,RADIX_2:10;
+      for i be Nat st i in Seg n holds DigA(txn,i) = DigA(tyn,i)
+        proof
+          let i be Nat;
+          assume
+A35:        i in Seg n; then
+A36:      DigA(txn,i) = txn.i by RADIX_1:def 3
+            .= DigB(tx,i) by A14,A35
+            .= DigA(tx,i) by RADIX_1:def 4;
+A37:      DigA(tyn,i) = tyn.i by A35,RADIX_1:def 3
+            .= DigB(ty,i) by A24,A35
+            .= DigA(ty,i) by RADIX_1:def 4;
+          i in Seg (n+1) by A35,FINSEQ_2:9;
+          hence thesis by A12,A36,A37;
+        end;
+      then
+A38:    SDDec(txn) = SDDec(tyn) by A11;
+      (n+1) in Seg (n+1) by FINSEQ_1:6; then
+      SDDec(tx) = SDDec(tyn) + (Radix(k) |^ n)*DigA(ty,n+1) by A12,A33,A38;
+      hence thesis by A34;
+    end;
+  for n be Nat st n >= 1 holds P[n] from Ind1(A1,A10);
+  hence thesis;
+end;
+
+theorem
+  for n be Nat st n >= 1 holds
+    for k be Nat, tx,ty be Tuple of n,k-SD st
+      (for i be Nat st i in Seg n holds DigA(tx,i) >= DigA(ty,i)) holds
+        SDDec(tx) >= SDDec(ty)
+proof
+  defpred P[Nat] means
+    for k be Nat, tx,ty be Tuple of $1,k-SD st
+      (for i be Nat st i in Seg $1 holds DigA(tx,i) >= DigA(ty,i)) holds
+        SDDec(tx) >= SDDec(ty);
+A1: P[1]
+    proof
+      let k be Nat, tx,ty be Tuple of 1,k-SD;
+      assume
+A2:     for i be Nat st i in Seg 1 holds DigA(tx,i) >= DigA(ty,i);
+A3:     1 in Seg 1 by FINSEQ_1:3;
+A4:   SDDec(tx) = DigA(tx,1) by Th3;
+      SDDec(ty) = DigA(ty,1) by Th3;
+      hence thesis by A2,A3,A4;
+  end;
+A10: for n be Nat st n >= 1 & P[n] holds P[n+1]
+    proof
+      let n be Nat;
+      assume
+A11:    n >= 1 & P[n];
+      let k be Nat, tx,ty be Tuple of (n+1),k-SD;
+      assume
+A12:    for i be Nat st i in Seg (n+1) holds DigA(tx,i) >= DigA(ty,i);
+      deffunc F(Nat) = DigB(tx,$1);
+      consider txn being FinSequence of INT such that
+A13:    len txn = n and
+A14:    for i be Nat st i in Seg n holds txn.i = F(i) from SeqLambdaD;
+      rng txn c= k-SD
+        proof
+          let z be set;
+          assume z in rng txn; then
+          consider xx be set such that
+A16:        xx in dom txn and
+A17:        z = txn.xx by FUNCT_1:def 5;
+          reconsider xx as Nat by A16;
+A18:      dom txn = Seg n by FINSEQ_1:def 3,A13; then
+A19:      z = DigB(tx,xx) by A14,A16,A17
+           .= DigA(tx,xx) by RADIX_1:def 4;
+          xx in Seg (n+1) by A16,A18,FINSEQ_2:9; then
+          DigA(tx,xx) is Element of k-SD by RADIX_1:19;
+          hence thesis by A19;
+        end;
+      then reconsider txn as FinSequence of k-SD by FINSEQ_1:def 4;
+A20:  for i be Nat st i in Seg n holds txn.i = tx.i
+        proof
+          let i be Nat;
+          assume
+A21:        i in Seg n; then
+A22:        i in Seg (n+1) by FINSEQ_2:9;
+            txn.i = DigB(tx,i) by A14,A21
+                 .= DigA(tx,i) by RADIX_1:def 4;
+          hence thesis by A22,RADIX_1:def 3;
+        end;
+      deffunc F(Nat) = DigB(ty,$1);
+      consider tyn being FinSequence of INT such that
+A23:    len tyn = n and
+A24:    for i be Nat st i in Seg n holds tyn.i = F(i) from SeqLambdaD;
+      rng tyn c= k-SD
+        proof
+          let z be set;
+          assume z in rng tyn; then
+          consider yy be set such that
+A26:        yy in dom tyn and
+A27:        z = tyn.yy by FUNCT_1:def 5;
+          reconsider yy as Nat by A26;
+A28:      dom tyn = Seg n by FINSEQ_1:def 3,A23; then
+A29:      z = DigB(ty,yy) by A24,A26,A27
+           .= DigA(ty,yy) by RADIX_1:def 4;
+          yy in Seg (n+1) by A26,A28,FINSEQ_2:9; then
+          DigA(ty,yy) is Element of k-SD by RADIX_1:19;
+          hence thesis by A29;
+        end;
+      then reconsider tyn as FinSequence of k-SD by FINSEQ_1:def 4;
+A30:  for i be Nat st i in Seg n holds tyn.i = ty.i
+        proof
+          let i be Nat;
+          assume
+A31:        i in Seg n; then
+A32:        i in Seg (n+1) by FINSEQ_2:9;
+            tyn.i = DigB(ty,i) by A24,A31
+                 .= DigA(ty,i) by RADIX_1:def 4;
+          hence thesis by A32,RADIX_1:def 3;
+        end;
+      reconsider txn as Tuple of n,k-SD by A13,FINSEQ_2:110;
+      reconsider tyn as Tuple of n,k-SD by A23,FINSEQ_2:110;
+A33:  SDDec(txn) + (Radix(k) |^ n)*DigA(tx,n+1) = SDDec(tx) by A20,RADIX_2:10;
+A34:  SDDec(tyn) + (Radix(k) |^ n)*DigA(ty,n+1) = SDDec(ty) by A30,RADIX_2:10;
+      for i be Nat st i in Seg n holds DigA(txn,i) >= DigA(tyn,i)
+        proof
+          let i be Nat;
+          assume
+A35:        i in Seg n; then
+A36:      DigA(txn,i) = txn.i by RADIX_1:def 3
+            .= DigB(tx,i) by A14,A35
+            .= DigA(tx,i) by RADIX_1:def 4;
+A37:      DigA(tyn,i) = tyn.i by A35,RADIX_1:def 3
+            .= DigB(ty,i) by A24,A35
+            .= DigA(ty,i) by RADIX_1:def 4;
+          i in Seg (n+1) by A35,FINSEQ_2:9;
+          hence thesis by A12,A36,A37;
+        end;
+      then
+A38:    SDDec(txn) >= SDDec(tyn) by A11;
+      (n+1) in Seg (n+1) by FINSEQ_1:6; then
+A39:  DigA(tx,n+1) >= DigA(ty,n+1) by A12;
+      Radix(k) > 0 by Lm2; then
+      (Radix(k) |^ n) > 0 by PREPOWER:13; then
+      (Radix(k) |^ n)*DigA(tx,n+1) >= (Radix(k) |^ n)*DigA(ty,n+1)
+                                                     by A39,AXIOMS:25;
+      hence thesis by A33,A34,A38,REAL_1:55;
+    end;
+  for n be Nat st n >= 1 holds P[n] from Ind1(A1,A10);
+  hence thesis;
+end;
+
+theorem Th13:
+  for n be Nat st n >= 1 holds
+    for k be Nat st k >= 2 holds
+      for tx,ty,tz,tw be Tuple of n,k-SD st
+        (for i be Nat st i in Seg n holds
+          (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(tw,i))
+            or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(tw,i))) holds
+       SDDec(tz) + SDDec(tw) = SDDec(tx) + SDDec(ty)
+proof
+  defpred P[Nat] means
+    for k be Nat st k >= 2 holds
+      for tx,ty,tz,tw be Tuple of $1,k-SD st
+        (for i be Nat st i in Seg $1 holds
+          (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(tw,i))
+            or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(tw,i))) holds
+       SDDec(tz) + SDDec(tw) = SDDec(tx) + SDDec(ty);
+A1: P[1]
+    proof
+      let k be Nat;
+      assume
+A2:     k >= 2;
+      let tx,ty,tz,tw be Tuple of 1,k-SD;
+      assume
+A3:     for j be Nat st j in Seg 1 holds
+          (DigA(tx,j) = DigA(tz,j) & DigA(ty,j) = DigA(tw,j))
+            or (DigA(ty,j) = DigA(tz,j) & DigA(tx,j) = DigA(tw,j));
+A4:   1 in Seg 1 by FINSEQ_1:3;
+A5:   SDDec(tz '+' tw) = DigA(tz '+' tw,1) by Th3
+       .= Add(tz,tw,1,k) by A4,RADIX_1:def 14
+       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
+           + SD_Add_Carry(DigA(tz,1-'1)+DigA(tw,1-'1)) by A2,A4,RADIX_1:def 13
+       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
+           + SD_Add_Carry(DigA(tz,0)+DigA(tw,1-'1)) by GOBOARD9:1
+       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
+           + SD_Add_Carry(DigA(tz,0)+DigA(tw,0)) by GOBOARD9:1
+       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
+           + SD_Add_Carry(DigA(tz,0)+0) by RADIX_1:def 3
+       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k)
+           + SD_Add_Carry(0+0) by RADIX_1:def 3
+       .= SD_Add_Data(DigA(tz,1)+DigA(tw,1),k) + 0 by RADIX_1:def 10;
+A6:   SDDec(tx '+' ty) = DigA(tx '+' ty,1) by Th3
+       .= Add(tx,ty,1,k) by A4,RADIX_1:def 14
+       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
+           + SD_Add_Carry(DigA(tx,1-'1)+DigA(ty,1-'1)) by A2,A4,RADIX_1:def 13
+       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
+           + SD_Add_Carry(DigA(tx,0)+DigA(ty,1-'1)) by GOBOARD9:1
+       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
+           + SD_Add_Carry(DigA(tx,0)+DigA(ty,0)) by GOBOARD9:1
+       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
+           + SD_Add_Carry(DigA(tx,0)+0) by RADIX_1:def 3
+       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k)
+           + SD_Add_Carry(0+0) by RADIX_1:def 3
+       .= SD_Add_Data(DigA(tx,1)+DigA(ty,1),k) + 0 by RADIX_1:def 10;
+A7:   DigA(tx,1) = DigA(tz,1) & DigA(ty,1) = DigA(tw,1)
+        or DigA(ty,1) = DigA(tz,1) & DigA(tx,1) = DigA(tw,1) by A3,A4;
+A8:   DigA(tx,1) = DigA(tz,1) & DigA(ty,1) = DigA(tw,1) implies
+          SDDec(tz) + SDDec(tw) = SDDec(tx) + SDDec(ty)
+      proof
+        assume
+A9:       DigA(tx,1) = DigA(tz,1) & DigA(ty,1) = DigA(tw,1);
+        SDDec(tz) + SDDec(tw)
+         = (SDDec(tx '+' ty))
+             + (SD_Add_Carry(DigA(tx,1)+DigA(ty,1))*(Radix(k) |^ 1))
+                                                  by A2,A5,A6,A9,RADIX_2:11;
+        hence thesis by A2,RADIX_2:11;
+      end;
+     DigA(ty,1) = DigA(tz,1) & DigA(tx,1) = DigA(tw,1) implies
+          SDDec(tz) + SDDec(tw) = SDDec(tx) + SDDec(ty)
+      proof
+        assume
+          DigA(ty,1) = DigA(tz,1) & DigA(tx,1) = DigA(tw,1);
+        SDDec(tz) + SDDec(tw)
+          = (SDDec(tx '+' ty))
+             + SD_Add_Carry(DigA(tx,1)+DigA(ty,1))*(Radix(k) |^ 1)
+                                                  by A2,A5,A6,A7,RADIX_2:11;
+        hence thesis by A2,RADIX_2:11;
+      end;
+      hence thesis by A7,A8;
+  end;
+A20: for n be Nat st n >= 1 & P[n] holds P[n+1]
+    proof
+      let n be Nat;
+      assume
+A21:    n >= 1 & P[n];
+      let k be Nat;
+      assume
+A22:    k >= 2;
+      let tx,ty,tz,tw be Tuple of (n+1),k-SD;
+      assume
+A23:   for i be Nat st i in Seg (n+1) holds
+          (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(tw,i))
+            or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(tw,i));
+      deffunc F(Nat) = DigB(tx,$1);
+      consider txn being FinSequence of INT such that
+A24:   len txn = n and
+A25:   for i be Nat st i in Seg n holds txn.i = F(i) from SeqLambdaD;
+      rng txn c= k-SD
+        proof
+          let z be set;
+          assume z in rng txn; then
+          consider xx be set such that
+A26:       xx in dom txn and
+A27:       z = txn.xx by FUNCT_1:def 5;
+          reconsider xx as Nat by A26;
+A28:     dom txn = Seg n by FINSEQ_1:def 3,A24; then
+A29:     z = DigB(tx,xx) by A25,A26,A27
+           .= DigA(tx,xx) by RADIX_1:def 4;
+          xx in Seg (n+1) by A26,A28,FINSEQ_2:9; then
+          DigA(tx,xx) is Element of k-SD by RADIX_1:19;
+          hence thesis by A29;
+        end;
+      then reconsider txn as FinSequence of k-SD by FINSEQ_1:def 4;
+A30: for i be Nat st i in Seg n holds txn.i = tx.i
+        proof
+          let i be Nat;
+          assume
+A31:       i in Seg n; then
+A32:       i in Seg (n+1) by FINSEQ_2:9;
+            txn.i = DigB(tx,i) by A25,A31
+                 .= DigA(tx,i) by RADIX_1:def 4;
+          hence thesis by A32,RADIX_1:def 3;
+        end;
+      deffunc F(Nat) = DigB(ty,$1);
+      consider tyn being FinSequence of INT such that
+A33:   len tyn = n and
+A34:   for i be Nat st i in Seg n holds tyn.i = F(i) from SeqLambdaD;
+      rng tyn c= k-SD
+        proof
+          let z be set;
+          assume z in rng tyn; then
+          consider yy be set such that
+A36:       yy in dom tyn and
+A37:       z = tyn.yy by FUNCT_1:def 5;
+          reconsider yy as Nat by A36;
+A38:     dom tyn = Seg n by FINSEQ_1:def 3,A33; then
+A39:     z = DigB(ty,yy) by A34,A36,A37
+           .= DigA(ty,yy) by RADIX_1:def 4;
+          yy in Seg (n+1) by A36,A38,FINSEQ_2:9; then
+          DigA(ty,yy) is Element of k-SD by RADIX_1:19;
+          hence thesis by A39;
+        end;
+      then reconsider tyn as FinSequence of k-SD by FINSEQ_1:def 4;
+A40: for i be Nat st i in Seg n holds tyn.i = ty.i
+        proof
+          let i be Nat;
+          assume
+A41:       i in Seg n; then
+A42:       i in Seg (n+1) by FINSEQ_2:9;
+            tyn.i = DigB(ty,i) by A34,A41
+                 .= DigA(ty,i) by RADIX_1:def 4;
+          hence thesis by A42,RADIX_1:def 3;
+        end;
+      deffunc F(Nat) = DigB(tz,$1);
+      consider tzn being FinSequence of INT such that
+A43:   len tzn = n and
+A44:   for i be Nat st i in Seg n holds tzn.i = F(i) from SeqLambdaD;
+      rng tzn c= k-SD
+        proof
+          let z be set;
+          assume z in rng tzn; then
+          consider zz be set such that
+A46:       zz in dom tzn and
+A47:       z = tzn.zz by FUNCT_1:def 5;
+          reconsider zz as Nat by A46;
+A48:     dom tzn = Seg n by FINSEQ_1:def 3,A43; then
+A49:     z = DigB(tz,zz) by A44,A46,A47
+           .= DigA(tz,zz) by RADIX_1:def 4;
+          zz in Seg (n+1) by A46,A48,FINSEQ_2:9; then
+          DigA(tz,zz) is Element of k-SD by RADIX_1:19;
+          hence thesis by A49;
+        end;
+      then reconsider tzn as FinSequence of k-SD by FINSEQ_1:def 4;
+A50: for i be Nat st i in Seg n holds tzn.i = tz.i
+        proof
+          let i be Nat;
+          assume
+A51:       i in Seg n; then
+A52:       i in Seg (n+1) by FINSEQ_2:9;
+            tzn.i = DigB(tz,i) by A44,A51
+                 .= DigA(tz,i) by RADIX_1:def 4;
+          hence thesis by A52,RADIX_1:def 3;
+        end;
+      deffunc F(Nat) = DigB(tw,$1);
+      consider twn being FinSequence of INT such that
+A53:   len twn = n and
+A54:   for i be Nat st i in Seg n holds twn.i = F(i) from SeqLambdaD;
+      rng twn c= k-SD
+        proof
+          let w be set;
+          assume w in rng twn; then
+          consider ww be set such that
+A56:       ww in dom twn and
+A57:       w = twn.ww by FUNCT_1:def 5;
+          reconsider ww as Nat by A56;
+A58:     dom twn = Seg n by FINSEQ_1:def 3,A53; then
+A59:     w = DigB(tw,ww) by A54,A56,A57
+           .= DigA(tw,ww) by RADIX_1:def 4;
+          ww in Seg (n+1) by A56,A58,FINSEQ_2:9; then
+          DigA(tw,ww) is Element of k-SD by RADIX_1:19;
+          hence thesis by A59;
+        end;
+      then reconsider twn as FinSequence of k-SD by FINSEQ_1:def 4;
+A60:  for i be Nat st i in Seg n holds twn.i = tw.i
+        proof
+          let i be Nat;
+          assume
+A61:       i in Seg n; then
+A62:       i in Seg (n+1) by FINSEQ_2:9;
+            twn.i = DigB(tw,i) by A54,A61
+                 .= DigA(tw,i) by RADIX_1:def 4;
+          hence thesis by A62,RADIX_1:def 3;
+        end;
+      reconsider txn as Tuple of n,k-SD by A24,FINSEQ_2:110;
+      reconsider tyn as Tuple of n,k-SD by A33,FINSEQ_2:110;
+      reconsider tzn as Tuple of n,k-SD by A43,FINSEQ_2:110;
+      reconsider twn as Tuple of n,k-SD by A53,FINSEQ_2:110;
+A65:  SDDec(txn) + (Radix(k) |^ n)*DigA(tx,n+1) = SDDec(tx) by A30,RADIX_2:10;
+A66:  SDDec(tyn) + (Radix(k) |^ n)*DigA(ty,n+1) = SDDec(ty) by A40,RADIX_2:10;
+A67:  SDDec(tzn) + (Radix(k) |^ n)*DigA(tz,n+1) = SDDec(tz) by A50,RADIX_2:10;
+A68:  SDDec(twn) + (Radix(k) |^ n)*DigA(tw,n+1) = SDDec(tw) by A60,RADIX_2:10;
+     for i be Nat st i in Seg n holds
+        (DigA(txn,i) = DigA(tzn,i) & DigA(tyn,i) = DigA(twn,i))
+          or (DigA(tyn,i) = DigA(tzn,i) & DigA(txn,i) = DigA(twn,i))
+      proof
+        let i be Nat;
+        assume
+A70:      i in Seg n; then
+A71:    1 <= i & i <= n by FINSEQ_1:3; then
+        i <= n + 1 by NAT_1:37; then
+A72:    i in Seg (n+1) by A71,FINSEQ_1:3; then
+A73:    (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(tw,i))
+          or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(tw,i)) by A23;
+A74:    DigA(tx,i) = tx.i by A72,RADIX_1:def 3
+         .= txn.i by A70,A30
+         .= DigA(txn,i) by A70,RADIX_1:def 3;
+A75:    DigA(ty,i) = ty.i by A72,RADIX_1:def 3
+         .= tyn.i by A70,A40
+         .= DigA(tyn,i) by A70,RADIX_1:def 3;
+A76:    DigA(tz,i) = tz.i by A72,RADIX_1:def 3
+         .= tzn.i by A70,A50
+         .= DigA(tzn,i) by A70,RADIX_1:def 3;
+A77:    DigA(tw,i) = tw.i by A72,RADIX_1:def 3
+         .= twn.i by A70,A60
+         .= DigA(twn,i) by A70,RADIX_1:def 3;
+        thus thesis by A73,A74,A75,A76,A77;
+      end; then
+A83:  SDDec(tzn) + SDDec(twn) = SDDec(txn) + SDDec(tyn) by A21,A22;
+A84:  n+1 >= 1 by NAT_1:29;
+A85:  SDDec(tz) + SDDec(tw)
+        = SDDec(tzn) + (Radix(k) |^ n)*DigA(tz,n+1)
+          + SDDec(twn) + (Radix(k) |^ n)*DigA(tw,n+1) by A67,A68,XCMPLX_1:1
+       .= SDDec(tzn) + SDDec(twn) + (Radix(k) |^ n)*DigA(tz,n+1)
+             + (Radix(k) |^ n)*DigA(tw,n+1) by XCMPLX_1:1
+       .= SDDec(tzn) + SDDec(twn) + ((Radix(k) |^ n)*DigA(tz,n+1)
+             + (Radix(k) |^ n)*DigA(tw,n+1)) by XCMPLX_1:1;
+A86:  SDDec(tx) + SDDec(ty)
+       = SDDec(txn) + (Radix(k) |^ n)*DigA(tx,n+1)
+          + SDDec(tyn) + (Radix(k) |^ n)*DigA(ty,n+1) by A65,A66,XCMPLX_1:1
+       .= SDDec(txn) + SDDec(tyn) + (Radix(k) |^ n)*DigA(tx,n+1)
+             + (Radix(k) |^ n)*DigA(ty,n+1) by XCMPLX_1:1
+       .= SDDec(tzn) + SDDec(twn) + ((Radix(k) |^ n)*DigA(tx,n+1)
+             + (Radix(k) |^ n)*DigA(ty,n+1)) by A83,XCMPLX_1:1;
+      n+1 > 0 by A84,AXIOMS:22; then
+      n+1 in Seg (n+1) by FINSEQ_1:5; then
+A87:  (DigA(tx,n+1) = DigA(tz,n+1) & DigA(ty,n+1) = DigA(tw,n+1))
+        or (DigA(ty,n+1) = DigA(tz,n+1) & DigA(tx,n+1) = DigA(tw,n+1)) by A23;
+      thus thesis by A87,A85,A86;
+    end;
+  for n be Nat st n >= 1 holds P[n] from Ind1(A1,A20);
+  hence thesis;
+end;
+
+theorem
+  for n,k be Nat st n >= 1 & k >= 2 holds
+      for tx,ty,tz be Tuple of n,k-SD st
+        (for i be Nat st i in Seg n holds
+          (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = 0)
+            or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = 0)) holds
+       SDDec(tz) + SDDec(DecSD(0,n,k)) = SDDec(tx) + SDDec(ty)
+proof
+      let n,k be Nat;
+      assume
+A1:     n >= 1 & k >= 2;
+      let tx,ty,tz be Tuple of n,k-SD;
+      assume
+A2:     for i be Nat st i in Seg n holds
+          (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = 0)
+            or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = 0);
+      for i be Nat st i in Seg n holds
+        (DigA(tx,i) = DigA(tz,i) & DigA(ty,i) = DigA(DecSD(0,n,k),i))
+          or (DigA(ty,i) = DigA(tz,i) & DigA(tx,i) = DigA(DecSD(0,n,k),i))
+      proof
+        let i be Nat;
+        assume
+A3:       i in Seg n; then
+        DigA(DecSD(0,n,k),i) = 0 by Th4;
+        hence thesis by A2,A3;
+      end;
+      hence thesis by A1,Th13;
+end;
+
+begin :: Definiton of Max/Min Radix-2^k SD Number in Some Digits
+
+definition let i,m,k be Nat;
+  assume
+A1:  k >= 2;
+  func SDMinDigit(m,k,i) -> Element of k-SD equals
+    :Def1:
+    -Radix(k)+1 if 1 <= i & i < m
+    otherwise 0;
+coherence
+  proof
+A3: k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
+                                                           by RADIX_1:def 2;
+    Radix(k) > 2 by A1,RADIX_4:1; then
+    Radix(k) > 1 by AXIOMS:22; then
+    Radix(k) + Radix(k) > 1 + 1 by REAL_1:67; then
+    Radix(k) - 1 > 1 - Radix(k) by REAL_2:169; then
+A4: Radix(k) - 1 > -Radix(k) + 1 by XCMPLX_0:def 8;
+    -Radix(k) + 1 is Element of INT by INT_1:def 2; then
+    -Radix(k) + 1 in k-SD by A3,A4;
+    hence thesis by RADIX_1:16;
+  end;
+consistency;
+end;
+
+definition let n,m,k be Nat;
+  func SDMin(n,m,k) -> Tuple of n,k-SD means
+    :Def2:
+    for i be Nat st i in Seg n holds DigA(it,i) = SDMinDigit(m,k,i);
+existence
+  proof
+    deffunc F(Nat) = SDMinDigit(m,k,$1);
+    consider z being FinSequence of k-SD such that
+A2:   len z = n and
+A3:   for j be Nat st j in Seg n holds
+        z.j = F(j) from SeqLambdaD;
+    reconsider z as Tuple of n,(k-SD) by A2,FINSEQ_2:110;
+    take z;
+    let i be Nat;
+    assume
+A4:   i in Seg n; then
+    DigA(z,i) = z.i by RADIX_1:def 3;
+    hence thesis by A3,A4;
+  end;
+uniqueness
+  proof
+      let k1,k2 be Tuple of n,k-SD such that
+A10:  for i be Nat st i in Seg n holds DigA(k1,i) = SDMinDigit(m,k,i) and
+A11:  for i be Nat st i in Seg n holds DigA(k2,i) = SDMinDigit(m,k,i);
+A12:  len k1 = n & len k2 = n by FINSEQ_2:109;
+      now let j be Nat;
+        assume
+A13:      j in Seg n; then
+        k1.j = DigA(k1,j) by RADIX_1:def 3
+            .= SDMinDigit(m,k,j) by A10,A13
+            .= DigA(k2,j) by A11,A13
+            .= k2.j by A13,RADIX_1:def 3;
+        hence k1.j = k2.j;
+        end;
+      hence k1 = k2 by A12,FINSEQ_2:10;
+  end;
+end;
+
+definition let i,m,k be Nat;
+  assume
+A1:  k >= 2;
+  func SDMaxDigit(m,k,i) -> Element of k-SD equals
+    :Def3:
+    Radix(k)-1 if 1 <= i & i < m
+    otherwise 0;
+coherence by RADIX_1:16,A1,Lm1;
+consistency;
+end;
+
+definition let n,m,k be Nat;
+  func SDMax(n,m,k) -> Tuple of n,k-SD means
+    :Def4:
+    for i be Nat st i in Seg n holds DigA(it,i) = SDMaxDigit(m,k,i);
+existence
+  proof
+    deffunc F(Nat) = SDMaxDigit(m,k,$1);
+    consider z being FinSequence of k-SD such that
+A2:   len z = n and
+A3:   for j be Nat st j in Seg n holds
+        z.j = F(j) from SeqLambdaD;
+    reconsider z as Tuple of n,(k-SD) by A2,FINSEQ_2:110;
+    take z;
+    let i be Nat;
+    assume
+A4:   i in Seg n; then
+    DigA(z,i) = z.i by RADIX_1:def 3;
+    hence thesis by A3,A4;
+  end;
+uniqueness
+  proof
+      let k1,k2 be Tuple of n,k-SD such that
+A10:  for i be Nat st i in Seg n holds DigA(k1,i) = SDMaxDigit(m,k,i) and
+A11:  for i be Nat st i in Seg n holds DigA(k2,i) = SDMaxDigit(m,k,i);
+A12:  len k1 = n & len k2 = n by FINSEQ_2:109;
+      now let j be Nat;
+        assume
+A13:      j in Seg n; then
+        k1.j = DigA(k1,j) by RADIX_1:def 3
+            .= SDMaxDigit(m,k,j) by A10,A13
+            .= DigA(k2,j) by A11,A13
+            .= k2.j by A13,RADIX_1:def 3;
+        hence k1.j = k2.j;
+        end;
+      hence k1 = k2 by A12,FINSEQ_2:10;
+  end;
+end;
+
+definition let i,m,k be Nat;
+  assume
+A1:  k >= 2;
+  func FminDigit(m,k,i) -> Element of k-SD equals
+    :Def5:
+    1 if i = m
+    otherwise 0;
+coherence
+  proof
+    1 in k-SD
+    proof
+A3:   k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
+                                                      by RADIX_1:def 2;
+A4:   Radix(k) > 2 by A1, RADIX_4:1; then
+      Radix(k)+  -1 > 2 + -1 by REAL_1:53; then
+A5:   Radix(k) - 1 >= 1 by XCMPLX_0:def 8;
+      -Radix(k) < -2 by A4,REAL_1:50; then
+      -Radix(k) + 1 < -2 + 1 by REAL_1:53; then
+A6:   -Radix(k) + 1 <= 1 by AXIOMS:22;
+      1 is Element of INT by INT_1:def 2;
+      hence thesis by A3,A5,A6;
+    end;
+    hence thesis by RADIX_1:16;
+  end;
+consistency;
+end;
+
+definition let n,m,k be Nat;
+  func Fmin(n,m,k) -> Tuple of n,k-SD means
+    :Def6:
+    for i be Nat st i in Seg n holds DigA(it,i) = FminDigit(m,k,i);
+existence
+  proof
+    deffunc F(Nat) = FminDigit(m,k,$1);
+    consider z being FinSequence of k-SD such that
+A2:   len z = n and
+A3:   for j be Nat st j in Seg n holds
+        z.j = F(j) from SeqLambdaD;
+    reconsider z as Tuple of n,(k-SD) by A2,FINSEQ_2:110;
+    take z;
+    let i be Nat;
+    assume
+A4:   i in Seg n;
+    hence DigA(z,i) = z.i by RADIX_1:def 3
+                .= FminDigit(m,k,i) by A3,A4;
+  end;
+uniqueness
+  proof
+      let k1,k2 be Tuple of n,k-SD such that
+A10:  for i be Nat st i in Seg n holds DigA(k1,i) = FminDigit(m,k,i) and
+A11:  for i be Nat st i in Seg n holds DigA(k2,i) = FminDigit(m,k,i);
+A12:  len k1 = n & len k2 = n by FINSEQ_2:109;
+      now let j be Nat;
+        assume
+A13:      j in Seg n; then
+        k1.j = DigA(k1,j) by RADIX_1:def 3
+            .= FminDigit(m,k,j) by A10,A13
+            .= DigA(k2,j) by A11,A13
+            .= k2.j by A13,RADIX_1:def 3;
+        hence k1.j = k2.j;
+        end;
+      hence k1 = k2 by A12,FINSEQ_2:10;
+  end;
+end;
+
+definition let i,m,k be Nat;
+  assume
+A1:  k >= 2;
+  func FmaxDigit(m,k,i) -> Element of k-SD equals
+    :Def7:
+    Radix(k) - 1 if i = m
+    otherwise 0;
+coherence by A1,Lm1,RADIX_1:16;
+consistency;
+end;
+
+definition let n,m,k be Nat;
+  func Fmax(n,m,k) -> Tuple of n,k-SD means
+    :Def8:
+    for i be Nat st i in Seg n holds DigA(it,i) = FmaxDigit(m,k,i);
+existence
+  proof
+    deffunc F(Nat) = FmaxDigit(m,k,$1);
+    consider z being FinSequence of k-SD such that
+A2:   len z = n and
+A3:   for j be Nat st j in Seg n holds
+        z.j = F(j) from SeqLambdaD;
+    reconsider z as Tuple of n,(k-SD) by A2,FINSEQ_2:110;
+    take z;
+    let i be Nat;
+    assume
+A4:   i in Seg n;
+    hence DigA(z,i) = z.i by RADIX_1:def 3
+                .= FmaxDigit(m,k,i) by A3,A4;
+  end;
+uniqueness
+  proof
+      let k1,k2 be Tuple of n,k-SD such that
+A10:  for i be Nat st i in Seg n holds DigA(k1,i) = FmaxDigit(m,k,i) and
+A11:  for i be Nat st i in Seg n holds DigA(k2,i) = FmaxDigit(m,k,i);
+A12:  len k1 = n & len k2 = n by FINSEQ_2:109;
+      now let j be Nat;
+        assume
+A13:      j in Seg n; then
+        k1.j = DigA(k1,j) by RADIX_1:def 3
+            .= FmaxDigit(m,k,j) by A10,A13
+            .= DigA(k2,j) by A11,A13
+            .= k2.j by A13,RADIX_1:def 3;
+        hence k1.j = k2.j;
+        end;
+      hence k1 = k2 by A12,FINSEQ_2:10;
+  end;
+end;
+
+begin :: Properties of Max/Min Radix-$2^k$ SD Numbers
+
+theorem Th15:
+  for n,m,k be Nat st n >= 1 & k >= 2 & m in Seg n holds
+    for i be Nat st i in Seg n holds
+      DigA(SDMax(n,m,k),i)+DigA(SDMin(n,m,k),i) = 0
+proof
+      let n,m,k be Nat;
+      assume
+A1:     n >= 1 & k >= 2 & m in Seg n;
+      let i be Nat;
+      assume
+A2:     i in Seg n; then
+A3:   i >= 1 & i <= n by FINSEQ_1:3;
+      reconsider a = SDMinDigit(m,k,i) as Element of INT;
+      reconsider b = SDMaxDigit(m,k,i) as Element of INT;
+      DigA(SDMin(n,m,k),i) = SDMinDigit(m,k,i) by A2,Def2; then
+A9:   DigA(SDMax(n,m,k),i) + DigA(SDMin(n,m,k),i)
+        = b + a by A2,Def4;
+      now per cases;
+      suppose
+A10:    i < m; then
+        a + b
+          = -Radix(k) + 1 + b by A1,A3,Def1
+         .= -Radix(k) + 1 + (Radix(k) - 1) by A1,A3,A10,Def3
+         .= -Radix(k) + ( 1 + (Radix(k) - 1)) by XCMPLX_1:1
+         .= -Radix(k) + ( Radix(k) ) by XCMPLX_1:27
+         .= 0 by XCMPLX_0:def 6;
+        hence thesis by A9;
+      suppose
+A11:    i >= m; then
+        a + b
+          = 0 + b by A1,Def1
+         .= 0 + 0 by A1,A11,Def3;
+        hence thesis by A9;
+      end;
+      hence thesis;
+end;
+
+theorem
+  for n be Nat st n >= 1 holds
+    for m,k be Nat st m in Seg n & k >= 2 holds
+      SDDec(SDMax(n,m,k)) + SDDec(SDMin(n,m,k)) = SDDec(DecSD(0,n,k))
+proof
+      let n be Nat;
+      assume
+A1:     n >= 1;
+      let m,k be Nat;
+      assume
+A2:     m in Seg n & k >= 2;
+A4:   n in Seg n by A1,FINSEQ_1:3;
+      for i be Nat st i in Seg n holds
+        DigA(DecSD(0,n,k),i) = DigA(SDMax(n,m,k) '+' SDMin(n,m,k),i)
+      proof
+        let i be Nat;
+        assume
+A10:      i in Seg n; then
+A11:    i >= 1 & i <= n by FINSEQ_1:3;
+A12:    DigA(SDMax(n,m,k) '+' SDMin(n,m,k),i)
+          = Add(SDMax(n,m,k),SDMin(n,m,k),i,k) by A10,RADIX_1:def 14
+         .= SD_Add_Data(DigA(SDMax(n,m,k),i)+DigA(SDMin(n,m,k),i),k)
+           + SD_Add_Carry(DigA(SDMax(n,m,k),i-'1)+DigA(SDMin(n,m,k),i-'1))
+                                                    by A2,A10,RADIX_1:def 13
+         .= SD_Add_Data(0,k)
+           + SD_Add_Carry(DigA(SDMax(n,m,k),i-'1)+DigA(SDMin(n,m,k),i-'1))
+                                                    by A1,A2,A10,Th15
+         .= 0+SD_Add_Carry(DigA(SDMax(n,m,k),i-'1)+DigA(SDMin(n,m,k),i-'1))
+                                                    by RADIX_1:22;
+A13:  DigA(DecSD(0,n,k),i) = 0 by A10,Th4;
+        now per cases by A11,REAL_1:def 5;
+        suppose
+          i = 1; then
+A15:      i -' 1 = 0 by NAT_2:10; then
+          DigA(SDMin(n,m,k),i-'1) = 0 by RADIX_1:def 3; then
+          DigA(SDMax(n,m,k) '+' SDMin(n,m,k),i)
+            = SD_Add_Carry(0+0) by A12,A15,RADIX_1:def 3;
+          hence thesis by RADIX_1:def 10,A13;
+        suppose
+          i > 1; then
+          i -' 1 in Seg n by A10,Th1; then
+          DigA(SDMax(n,m,k) '+' SDMin(n,m,k),i)
+            = SD_Add_Carry(0) by A12,A1,A2,Th15;
+          hence thesis by RADIX_1:def 10,A13;
+        end;
+        hence thesis;
+      end; then
+A90:  SDDec(DecSD(0,n,k)) = SDDec(SDMax(n,m,k) '+' SDMin(n,m,k)) by A1,Th11;
+      SDDec(SDMax(n,m,k)) + SDDec(SDMin(n,m,k))
+        = SDDec(SDMax(n,m,k) '+' SDMin(n,m,k))
+            + SD_Add_Carry(DigA(SDMax(n,m,k),n)+DigA(SDMin(n,m,k),n))
+                * (Radix(k) |^ n) by A1,A2,RADIX_2:11
+       .= SDDec(SDMax(n,m,k) '+' SDMin(n,m,k))
+            + SD_Add_Carry(0) * (Radix(k) |^ n) by A1,A2,A4,Th15
+       .= SDDec(SDMax(n,m,k) '+' SDMin(n,m,k)) + 0 * (Radix(k) |^ n)
+                                                by RADIX_1:def 10;
+      hence thesis by A90;
+end;
+
+theorem
+  for n be Nat st n >= 1 holds
+    for m,k be Nat st m in Seg n & k >= 2 holds
+      SDDec(Fmin(n,m,k)) = SDDec(SDMax(n,m,k)) + SDDec(DecSD(1,n,k))
+proof
+      let n be Nat;
+      assume
+A1:     n >= 1;
+      let m,k be Nat;
+      assume
+A2:     m in Seg n & k >= 2; then
+A3:   n >= m & m >= 1 by FINSEQ_1:3;
+A4:   1 in Seg 1 by FINSEQ_1:3;
+A5:   1 in Seg n by A1,FINSEQ_1:3;
+      now per cases by A1,REAL_1:def 5;
+      suppose
+A10:    n = 1;
+A12:    SDDec(SDMax(1,m,k) '+' DecSD(1,1,k))
+          = DigA(SDMax(1,m,k) '+' DecSD(1,1,k),1) by Th3
+         .= Add(SDMax(1,m,k),DecSD(1,1,k),1,k) by A4,RADIX_1:def 14
+         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
+           + SD_Add_Carry(DigA(SDMax(1,m,k),1-'1)+DigA(DecSD(1,1,k),1-'1))
+                                                    by A2,A4,RADIX_1:def 13
+         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
+           + SD_Add_Carry(DigA(SDMax(1,m,k),0)+DigA(DecSD(1,1,k),1-'1))
+                                                          by GOBOARD9:1
+         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
+           + SD_Add_Carry(DigA(SDMax(1,m,k),0)+DigA(DecSD(1,1,k),0))
+                                                          by GOBOARD9:1
+         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
+           + SD_Add_Carry(DigA(SDMax(1,m,k),0)+0) by RADIX_1:def 3
+         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k)
+           + SD_Add_Carry(0+0) by RADIX_1:def 3
+         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1),k) + 0
+                                                         by RADIX_1:def 10
+         .= SD_Add_Data(DigA(SDMax(1,m,k),1)+1,k) by A2,A4,Th6;
+A13:    m = 1 by A3,A10,AXIOMS:21;
+A14:    DigA(SDMax(1,m,k),1) = SDMaxDigit(m,k,1) by A4,Def4
+         .= 0 by A13,A2,Def3; then
+A15:    SDDec(SDMax(1,m,k) '+' DecSD(1,1,k)) = SD_Add_Data(0+1,k) by A12
+         .= 1 - SD_Add_Carry(1) * Radix(k) by RADIX_1:def 11
+         .= 1 - 0 * Radix(k) by RADIX_1:def 10
+         .= 1;
+A16:    SDDec(SDMax(1,m,k)) + SDDec(DecSD(1,1,k))
+          = SDDec(SDMax(1,m,k) '+' DecSD(1,1,k))
+             + SD_Add_Carry(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1))
+                    *(Radix(k) |^ 1) by A2,RADIX_2:11
+         .= 1 + SD_Add_Carry(DigA(SDMax(1,m,k),1)+DigA(DecSD(1,1,k),1))
+                    *(Radix(k) |^ 1) by A15
+         .= 1 + SD_Add_Carry(0+1) *(Radix(k) |^ 1) by A2,A4,Th6,A14 
+         .= 1 + 0 * (Radix(k) |^ 1) by RADIX_1:def 10;
+        SDDec(Fmin(1,m,k))
+          = DigA(Fmin(1,m,k),1) by Th3
+         .= FminDigit(m,k,1) by A4,Def6
+         .= 1 by A2,A13,Def5;
+        hence thesis by A10,A16;
+      suppose
+A30:    n > 1;
+A31:    n in Seg n by A1,FINSEQ_1:3; then
+A32:    DigA(SDMax(n,m,k),n) = SDMaxDigit(m,k,n) by Def4
+          .= 0 by A2,A3,Def3;
+A33:    DigA(DecSD(1,n,k),n) = 0 by A31,A30,A2,Th7;
+A35:    SDDec(SDMax(n,m,k)) + SDDec(DecSD(1,n,k))
+          = SDDec(SDMax(n,m,k) '+' DecSD(1,n,k))
+            + SD_Add_Carry(DigA(SDMax(n,m,k),n)+DigA(DecSD(1,n,k),n))
+                * (Radix(k) |^ n) by A1,A2,RADIX_2:11
+         .= SDDec(SDMax(n,m,k) '+' DecSD(1,n,k))
+            + 0 * (Radix(k) |^ n) by RADIX_1:21,A32,A33;
+        for i be Nat st i in Seg n holds
+          DigA(Fmin(n,m,k),i) = DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+        proof
+          let i be Nat;
+          assume
+A40:        i in Seg n; then
+A41:      DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+            = Add(SDMax(n,m,k),DecSD(1,n,k),i,k) by RADIX_1:def 14
+           .= SD_Add_Data(DigA(SDMax(n,m,k),i)+DigA(DecSD(1,n,k),i),k)
+              + SD_Add_Carry(DigA(SDMax(n,m,k),i-'1)+DigA(DecSD(1,n,k),i-'1))
+                                                 by A2,A40,RADIX_1:def 13;
+A42:      DigA(Fmin(n,m,k),i) = FminDigit(m,k,i) by A40,Def6;
+A43:      DigA(SDMax(n,m,k),i) = SDMaxDigit(m,k,i) by A40,Def4;
+A44:      i >= 1 & i <= n by A40,FINSEQ_1:3;
+          now per cases;
+          suppose
+A50:        i >= m+1; then
+A52:        i > m by NAT_1:38; then
+A53:        i > 1 by A3,AXIOMS:22; then
+A54:        i -' 1 in Seg n by A40,Th1;
+A55:        DigA(Fmin(n,m,k),i) = 0 by A42,A2,A52,Def5;
+A56:        DigA(SDMax(n,m,k),i) = 0 by A43,A2,A52,Def3;
+A57:        DigA(DecSD(1,n,k),i) = 0 by A2,A40,A53,Th7;
+            now per cases by A50,REAL_1:def 5;
+            suppose
+A60:          i = m+1;
+              DigA(SDMax(n,m,k),i-'1) = DigA(SDMax(n,m,k),m) by A60,BINARITH:39
+                .= SDMaxDigit(m,k,m) by A2,Def4
+                .= 0 by A2,Def3; then
+              DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+                = SD_Add_Data(0+0,k) + SD_Add_Carry(0+DigA(DecSD(1,n,k),i-'1))
+                                                     by A41,A56,A57
+               .= SD_Add_Data(0+0,k) + 0 by A2,A54,Lm6
+               .= 0 by RADIX_1:22;
+              hence thesis by A55;
+            suppose i > m+1; then
+              i - 1 > m + 1 - 1 by REAL_1:92; then
+A63:          i - 1 > m by XCMPLX_1:26; then
+              i - 1 > 0 by A3,AXIOMS:22; then
+A64:          i -' 1 > m by A63,BINARITH:def 3;
+              i -' 1 in Seg n by A53,A40,Th1; then
+              DigA(SDMax(n,m,k),i-'1) = SDMaxDigit(m,k,i-'1) by Def4
+               .= 0 by A2,A64,Def3; then
+              DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+                = SD_Add_Data(0+0,k) + SD_Add_Carry(0+DigA(DecSD(1,n,k),i-'1))
+                                                     by A41,A56,A57
+               .= SD_Add_Data(0+0,k) + 0 by A2,A54,Lm6
+               .= 0 by RADIX_1:22;
+              hence thesis by A55;
+            end;
+            hence thesis;
+          suppose i < m+1; then
+A67:        i <= m by NAT_1:38;
+A68:        i >= 1 by A40,FINSEQ_1:3;
+            now per cases by A68,REAL_1:def 5;
+            suppose
+A69:          i > 1; then
+A70:          m > 1 by A67,AXIOMS:22; then
+A71:          m -' 1 in Seg n by A2,Th1; then
+A72:          m -' 1 >= 1 by FINSEQ_1:3;
+A73:          m -' 1 < m by A70,JORDAN5B:1;
+              now per cases by A67,REAL_1:def 5;
+              suppose
+A74:            i = m; then
+A75:            DigA(Fmin(n,m,k),i) = FminDigit(m,k,m) by A2,Def6
+                 .= 1 by A2,Def5;
+A76:            DigA(SDMax(n,m,k),i) = 0 by A43,A2,A74,Def3;
+A77:            DigA(DecSD(1,n,k),i) = 0 by A2,A70,A74,Th7;
+A78:            DigA(SDMax(n,m,k),i-'1) = DigA(SDMax(n,m,k),m-'1) by A74
+                 .= SDMaxDigit(m,k,m-'1) by A71,Def4
+                 .= Radix(k) - 1 by A2,A72,A73,Def3;
+A79:            i >= 1 + 1 by A69,INT_1:20;
+                now per cases by A79,REAL_1:def 5;
+                suppose
+                  i = 2; then
+                  i -' 1 = 2 - 1 by SCMFSA_7:3; then
+                  DigA(DecSD(1,n,k),i-'1) = 1 by A5,A2,Th6; then
+                  DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+                    = SD_Add_Data(0+0,k)
+                      +SD_Add_Carry(Radix(k) - 1 + 1) by A41,A76,A77,A78
+                   .= 0 + SD_Add_Carry(Radix(k) - 1 + 1) by RADIX_1:22
+                   .= SD_Add_Carry(Radix(k) + 1 - 1)  by XCMPLX_1:29
+                   .= SD_Add_Carry(Radix(k)) by XCMPLX_1:26
+                   .= 1  by A2,Th9;
+                  hence thesis by A75;
+                suppose
+A83:              i > 2; then
+A84:              i - 1 > 2 - 1 by REAL_1:92; then
+                  i - 1 > 0 by AXIOMS:22; then
+A85:              i -' 1 > 1 by A84,BINARITH:def 3;
+                  i > 1 by A83,AXIOMS:22; then
+                  i -' 1 in Seg n by A40,Th1; then
+                  DigA(DecSD(1,n,k),i-'1) = 0 by A2,A85,Th7; then
+                  DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+                    = SD_Add_Data(0+0,k)
+                      + SD_Add_Carry(Radix(k) - 1 + 0) by A41,A76,A77,A78
+                   .= 0 + SD_Add_Carry(Radix(k) - 1) by RADIX_1:22 
+                   .= 1 by A2,Lm5;
+                  hence thesis by A75;
+                end;
+                hence thesis;
+              suppose
+A87:            i < m;
+A89:            DigA(Fmin(n,m,k),i) = 0 by A42,A2,A87,Def5;
+A90:            DigA(SDMax(n,m,k),i) = Radix(k)-1 by A43,A2,A44,A87,Def3;
+A91:            DigA(DecSD(1,n,k),i) = 0 by A2,A40,A69,Th7;
+A92:            i >= 1 + 1 by A69,INT_1:20;
+                i -' 1 < i by A69,JORDAN5B:1; then
+A94:            i -' 1 < m by A87,AXIOMS:22;
+A95:            i -' 1 in Seg n by A40,A69,Th1;
+                now per cases by A92,REAL_1:def 5;
+                suppose i = 2; then
+A97:              i -' 1 = 2 - 1 by SCMFSA_7:3; then
+A98:              i -' 1 >= 1;
+A99:              DigA(DecSD(1,n,k),i-'1) = 1 by A97,A5,A2,Th6;
+                  DigA(SDMax(n,m,k),i-'1)
+                    = SDMaxDigit(m,k,i-'1) by A95,Def4
+                   .= Radix(k) - 1 by A98,A94,A2,Def3; then
+                  DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+                    = SD_Add_Data(Radix(k)-1+0,k)
+                      +SD_Add_Carry(Radix(k) - 1 + 1)  by A41,A90,A91,A99
+                   .= SD_Add_Data(Radix(k)-1,k)
+                      +SD_Add_Carry(Radix(k) + 1 - 1)  by XCMPLX_1:29 
+                   .= SD_Add_Data(Radix(k)-1,k)
+                      +SD_Add_Carry(Radix(k))  by XCMPLX_1:26 
+                   .= SD_Add_Data(Radix(k)-1,k) + 1  by A2,Th9
+                   .= (Radix(k)-1) - SD_Add_Carry(Radix(k)-1)*Radix(k) + 1
+                                                     by RADIX_1:def 11
+                   .= (Radix(k)-1) - 1*Radix(k) + 1 by A2,Lm5
+                   .= (Radix(k) - 1 ) + 1 - Radix(k) by XCMPLX_1:29 
+                   .= (Radix(k) + 1 - 1) - Radix(k) by XCMPLX_1:29
+                   .= Radix(k) - Radix(k) by XCMPLX_1:26
+                   .= 0 by XCMPLX_1:14;
+                  hence thesis by A89;
+                suppose
+A100:             i > 2; then
+A101:             i - 1 > 2 - 1 by REAL_1:92; then
+                  i - 1 > 0 by AXIOMS:22; then
+A102:             i -' 1 > 1 by A101,BINARITH:def 3;
+                  i > 1 by A100,AXIOMS:22; then
+                  i -' 1 in Seg n by A40,Th1; then
+A104:             DigA(DecSD(1,n,k),i-'1) = 0 by A2,A102,Th7;
+                  DigA(SDMax(n,m,k),i-'1)
+                    = SDMaxDigit(m,k,i-'1) by A95,Def4
+                   .= Radix(k) - 1 by A102,A94,A2,Def3; then
+                  DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+                    = SD_Add_Data(Radix(k)-1+0,k)
+                      +SD_Add_Carry(Radix(k) - 1 + 0)  by A41,A90,A91,A104
+                   .= SD_Add_Data(Radix(k)-1,k) + 1 by A2,Lm5
+                   .= (Radix(k)-1) - SD_Add_Carry(Radix(k)-1)*Radix(k) + 1
+                                                     by RADIX_1:def 11
+                   .= (Radix(k)-1) - 1*Radix(k) + 1 by A2,Lm5
+                   .= (Radix(k) - 1 ) + 1 - Radix(k) by XCMPLX_1:29 
+                   .= (Radix(k) + 1 - 1) - Radix(k) by XCMPLX_1:29
+                   .= Radix(k) - Radix(k) by XCMPLX_1:26
+                   .= 0 by XCMPLX_1:14;
+                  hence thesis by A89;
+                end;
+                hence thesis;
+              end;
+              hence thesis;
+            suppose
+A106:         i = 1;
+A107:         i -' 1 = 0 by A106,NAT_2:10; then
+A108:         DigA(SDMax(n,m,k),i-'1) = 0 by RADIX_1:def 3;
+A109:         DigA(DecSD(1,n,k),i-'1) = 0 by A107,RADIX_1:def 3;
+              now per cases by A67,REAL_1:def 5;
+              suppose
+A110:           i < m;
+A111:           i >= 1 by A106;
+A112:           DigA(Fmin(n,m,k),i) = 0 by A110,A42,A2,Def5;
+A113:           DigA(SDMax(n,m,k),i)=Radix(k)-1 by A43,A2,A110,A111,Def3;
+                DigA(DecSD(1,n,k),i) = 1 by A2,A5,A106,Th6; then
+                DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+                  = SD_Add_Data(Radix(k)-1+1,k)
+                    + SD_Add_Carry(0+0) by A41,A108,A109,A113
+                 .= SD_Add_Data(Radix(k)-1+1,k) + 0 by RADIX_1:21
+                 .= SD_Add_Data(Radix(k)+1-1,k) + 0 by XCMPLX_1:29
+                 .= SD_Add_Data(Radix(k),k) + 0 by XCMPLX_1:26
+                 .= Radix(k) - SD_Add_Carry(Radix(k)) * Radix(k)
+                                                          by RADIX_1:def 11
+                 .= Radix(k) - 1 * Radix(k) by A2,Th9
+                 .= 0 by XCMPLX_1:14;
+                hence thesis by A112;
+              suppose
+A115:           i = m;
+A116:           DigA(Fmin(n,m,k),i) = 1 by A115,A42,A2,Def5;
+A117:           DigA(SDMax(n,m,k),i) = 0 by A43,A2,A115,Def3;
+                DigA(DecSD(1,n,k),i) = 1 by A2,A5,A106,Th6; then
+                DigA(SDMax(n,m,k) '+' DecSD(1,n,k),i)
+                  = SD_Add_Data(1+0,k)+SD_Add_Carry(0+0) by A41,A108,A109,A117
+                 .= SD_Add_Data(1,k) + 0 by RADIX_1:21
+                 .= 1 - SD_Add_Carry(1) * Radix(k)  by RADIX_1:def 11
+                 .= 1 - 0 * Radix(k) by RADIX_1:def 10
+                 .= 1;
+                hence thesis by A116;
+              end;
+              hence thesis;
+            end;
+            hence thesis;
+          end;
+          hence thesis;
+        end;
+        hence thesis by A1,A35,Th11;
+      end;
+      hence thesis;
+end;
+
+theorem
+    for n,m,k be Nat st m in Seg n & k >= 2 holds
+      SDDec(Fmin(n+1,m+1,k)) = SDDec(Fmin(n+1,m,k)) + SDDec(Fmax(n+1,m,k))
+proof
+    let n,m,k be Nat;
+    assume
+A2:     m in Seg n & k >= 2; then
+A3:   n >= m & m >= 1 by FINSEQ_1:3; then
+A4:   n + 1 > m by NAT_1:38;
+A5:   n+1 >= 1 by NAT_1:29; then
+      n+1 > 0 by AXIOMS:22; then
+A6:   n+1 in Seg(n+1) by FINSEQ_1:5; then
+A7:   DigA(Fmin(n+1,m,k),n+1) = FminDigit(m,k,n+1) by Def6
+       .= 0 by A2,A4,Def5;
+A8:   DigA(Fmax(n+1,m,k),n+1) = FmaxDigit(m,k,n+1) by A6,Def8
+       .= 0 by A2,A4,Def7;
+A9:   SDDec(Fmin(n+1,m,k)) + SDDec(Fmax(n+1,m,k))
+        = SDDec(Fmin(n+1,m,k) '+' Fmax(n+1,m,k))
+          + SD_Add_Carry(DigA(Fmin(n+1,m,k),n+1)+DigA(Fmax(n+1,m,k),n+1))
+              * (Radix(k) |^ (n+1)) by A2,A5,RADIX_2:11
+       .= SDDec(Fmin(n+1,m,k) '+' Fmax(n+1,m,k))
+          + 0 * (Radix(k) |^ (n+1)) by RADIX_1:21,A7,A8;
+A10:  m in Seg (n+1) by A2,FINSEQ_2:9;
+      for i be Nat st i in Seg (n+1) holds
+        DigA(Fmin(n+1,m+1,k),i)
+          = DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
+      proof
+        let i be Nat;
+        assume
+A12:      i in Seg (n+1); then
+A13:    DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
+          = Add(Fmin(n+1,m,k),Fmax(n+1,m,k),i,k) by RADIX_1:def 14
+         .= SD_Add_Data(DigA(Fmin(n+1,m,k),i)+DigA(Fmax(n+1,m,k),i),k)
+            + SD_Add_Carry(DigA(Fmin(n+1,m,k),i-'1)+DigA(Fmax(n+1,m,k),i-'1))
+                                                 by A2,A12,RADIX_1:def 13;
+A14:    m + 1 > m by NAT_1:38;
+A16:    DigA(Fmin(n+1,m,k),i) = FminDigit(m,k,i) by A12,Def6;
+A17:    DigA(Fmax(n+1,m,k),i) = FmaxDigit(m,k,i) by A12,Def8;
+A18:    DigA(Fmin(n+1,m+1,k),i) = FminDigit(m+1,k,i) by A12,Def6;
+A19:    i >= 1 by A12,FINSEQ_1:3;
+        now per cases;
+        suppose
+A21:      i >= m+1;
+          now per cases;
+          suppose
+A22:        i = m+1;
+A24:        DigA(Fmin(n+1,m,k),i) = FminDigit(m,k,m+1) by A12,A22,Def6
+             .= 0 by A2,A14,Def5;
+A25:        DigA(Fmax(n+1,m,k),i) = FmaxDigit(m,k,m+1) by A12,A22,Def8
+             .= 0 by A2,A14,Def7;
+A26:        DigA(Fmin(n+1,m,k),i-'1) = DigA(Fmin(n+1,m,k),m) by A22,BINARITH:39
+             .= FminDigit(m,k,m) by A10,Def6
+             .= 1 by A2,Def5;
+A27:        DigA(Fmax(n+1,m,k),i-'1) = DigA(Fmax(n+1,m,k),m) by A22,BINARITH:39
+             .= FmaxDigit(m,k,m) by A10,Def8
+             .= Radix(k) - 1 by A2,Def7;
+A29:        DigA(Fmin(n+1,m+1,k),i) = FminDigit(m+1,k,m+1) by A18,A22
+             .= 1 by A2,Def5;
+            DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
+              = SD_Add_Data(0+0,k) + SD_Add_Carry(1+(Radix(k)-1))
+                                                        by A13,A24,A25,A26,A27
+             .= 0 + SD_Add_Carry(1+(Radix(k)-1)) by RADIX_1:22
+             .= SD_Add_Carry(Radix(k)) by XCMPLX_1:27
+             .= 1 by A2,Th9;
+            hence thesis by A29;
+          suppose i <> m + 1; then
+A31:        i > m + 1 by A21,REAL_1:def 5; then
+A32:        i > m by A14,AXIOMS:22; then
+            i > 1 by A3,AXIOMS:22; then
+A34:        i -' 1 in Seg (n+1) by A12,Th1;
+            i - 1 > m + 1 - 1 by A31,REAL_1:92; then
+A35:        i - 1 > m by XCMPLX_1:26; then
+            i - 1 > 0 by A3,AXIOMS:22; then
+A36:        i -' 1 > m by A35,BINARITH:def 3;
+A37:        DigA(Fmin(n+1,m,k),i) = 0 by A16,A2,A32,Def5;
+A38:        DigA(Fmax(n+1,m,k),i) = 0 by A17,A2,A32,Def7;
+A39:        DigA(Fmin(n+1,m,k),i-'1) = FminDigit(m,k,i-'1) by A34,Def6
+             .= 0 by A2,A36,Def5;
+A40:        DigA(Fmax(n+1,m,k),i-'1) = FmaxDigit(m,k,i-'1) by A34,Def8
+             .= 0 by A2,A36,Def7;
+A41:        DigA(Fmin(n+1,m+1,k),i) = 0 by A18,A2,A31,Def5;
+            DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
+              = SD_Add_Data(0+0,k) + SD_Add_Carry(0+0) by A13,A37,A38,A39,A40;
+            hence thesis by RADIX_1:22,RADIX_1:21,A41;
+          end;
+          hence thesis;
+        suppose i < m+1; then
+A50:      i <= m by NAT_1:38;
+          now per cases by A19,REAL_1:def 5;
+          suppose
+A51:        i > 1; then
+A60:        m > 1 by A50,AXIOMS:22; then
+A61:        m -' 1 in Seg (n+1) by A10,Th1;
+A62:        m -' 1 < m by A60,JORDAN5B:1;
+            now per cases by A50,REAL_1:def 5;
+            suppose
+A63:          i = m; then
+A64:          DigA(Fmin(n+1,m,k),i) = 1 by A16,A2,Def5;
+A65:          DigA(Fmax(n+1,m,k),i) = Radix(k) - 1 by A17,A2,A63,Def7;
+A66:          DigA(Fmin(n+1,m,k),i-'1) = DigA(Fmin(n+1,m,k),m-'1) by A63
+               .= FminDigit(m,k,m-'1) by A61,Def6
+               .= 0 by A2,A62,Def5;
+A67:          DigA(Fmax(n+1,m,k),i-'1) = DigA(Fmax(n+1,m,k),m-'1) by A63
+               .= FmaxDigit(m,k,m-'1) by A61,Def8
+               .= 0 by A2,A62,Def7;
+A68:          DigA(Fmin(n+1,m+1,k),i) = FminDigit(m+1,k,m) by A18,A63
+               .= 0 by A2,A14,Def5;
+              DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
+                = SD_Add_Data(1 + (Radix(k) - 1),k)
+                  + SD_Add_Carry(0+0) by A13,A64,A65,A66,A67
+               .= SD_Add_Data(1 + (Radix(k) - 1),k) + 0 by RADIX_1:21
+               .= SD_Add_Data(Radix(k),k) by XCMPLX_1:27
+               .= 0 by A2,Th10;
+              hence thesis by A68;
+            suppose
+A70:          i < m;
+              i -' 1 < i by A19,JORDAN5B:1; then
+A71:          i -' 1 < m by A70,AXIOMS:22; then
+A72:          i -' 1 <= n+1 by A4,AXIOMS:22;
+              i -' 1 >= 1 by A51,JORDAN3:12; then
+A73:          i -' 1 in Seg (n+1) by A72,FINSEQ_1:3;
+A74:          DigA(Fmin(n+1,m,k),i) = 0 by A16,A2,A70,Def5;
+A75:          DigA(Fmax(n+1,m,k),i) = 0 by A17,A2,A70,Def7;
+A76:          DigA(Fmin(n+1,m,k),i-'1)
+                = FminDigit(m,k,i-'1) by A73,Def6
+               .= 0 by A2,A71,Def5;
+A77:          DigA(Fmax(n+1,m,k),i-'1)
+                = FmaxDigit(m,k,i-'1) by A73,Def8
+               .= 0 by A2,A71,Def7;
+              i < m + 1 by A70,NAT_1:38; then
+A78:          DigA(Fmin(n+1,m+1,k),i) = 0 by A18,A2,Def5;
+              DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
+                = SD_Add_Data(0+0,k) + SD_Add_Carry(0+0) by A13,A74,A75,A76,A77
+               .= 0 + 0 by RADIX_1:22,RADIX_1:21;
+              hence thesis by A78;
+            end;
+            hence thesis;
+          suppose
+A80:        i = 1;
+A81:        i -' 1 = 0 by A80,NAT_2:10;
+A82:        DigA(Fmin(n+1,m,k),i-'1) = 0 by A81,RADIX_1:def 3;
+A83:        DigA(Fmax(n+1,m,k),i-'1) = 0 by A81,RADIX_1:def 3;
+            now per cases by A50,REAL_1:def 5;
+            suppose
+A86:          i < m; then
+A87:          DigA(Fmin(n+1,m,k),i) = 0 by A16,A2,Def5;
+A88:          DigA(Fmax(n+1,m,k),i) = 0 by A17,A2,A86,Def7;
+              i < m + 1 by A86,NAT_1:38; then
+A89:          DigA(Fmin(n+1,m+1,k),i) = 0 by A18,A2,Def5;
+              DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
+                = SD_Add_Data(0+0,k) + SD_Add_Carry(0+0) by A13,A82,A83,A87,A88
+               .= 0 + 0 by RADIX_1:22,RADIX_1:21;
+              hence thesis by A89;
+            suppose
+A90:          i = m; then
+A91:          DigA(Fmin(n+1,m,k),i) = 1 by A16,A2,Def5;
+A92:          DigA(Fmax(n+1,m,k),i) = Radix(k) - 1 by A17,A2,A90,Def7;
+              i < m + 1 by A90,NAT_1:38; then
+A93:          DigA(Fmin(n+1,m+1,k),i) = 0 by A18,A2,Def5;
+              DigA(Fmin(n+1,m,k) '+' Fmax(n+1,m,k),i)
+                = SD_Add_Data(1+(Radix(k)-1),k)
+                   + SD_Add_Carry(0+0) by A13,A82,A83,A91,A92
+               .= SD_Add_Data(1 + (Radix(k) - 1),k) + 0 by RADIX_1:21
+               .= SD_Add_Data(Radix(k),k) by XCMPLX_1:27
+               .= 0 by A2,Th10;
+              hence thesis by A93;
+            end;
+            hence thesis;
+          end;
+          hence thesis;
+        end;
+        hence thesis;
+      end;
+      hence thesis by A9,A5,Th11;
+end;
+

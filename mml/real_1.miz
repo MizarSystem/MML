@@ -1,0 +1,458 @@
+:: Basic Properties of Real Numbers
+::  by Krzysztof Hryniewiecki
+::
+:: Received January 8, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, ARYTM_1, RELAT_1, ARYTM_3;
+ notation TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0;
+ constructors ARYTM_0, XREAL_0, XCMPLX_0, XBOOLE_0;
+ clusters NUMBERS, XREAL_0, ARYTM_3, ZFMISC_1, XBOOLE_0;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+ definitions TARSKI, XREAL_0;
+ theorems AXIOMS, XREAL_0, XCMPLX_0, XCMPLX_1;
+ schemes XBOOLE_0;
+
+begin
+
+ reserve x,y,z,t for real number;
+
+definition
+ cluster -> real Element of REAL;
+coherence
+proof
+  let r be Element of REAL;
+  thus r in REAL;
+end;
+end;
+
+definition
+  mode Real is Element of REAL;
+end;
+
+definition let x be Real;
+  redefine func -x -> Real;
+coherence by XREAL_0:def 1;
+  redefine func x" -> Real;
+coherence by XREAL_0:def 1;
+end;
+
+definition let x,y be Real;
+  redefine func x+y -> Real;
+coherence by XREAL_0:def 1;
+  redefine func x*y -> Real;
+coherence by XREAL_0:def 1;
+  redefine func x-y -> Real;
+coherence by XREAL_0:def 1;
+  redefine func x/y -> Real;
+coherence by XREAL_0:def 1;
+end;
+
+canceled 24;
+
+theorem
+    x-0=x;
+
+theorem
+    -0=0;
+
+canceled 22;
+
+theorem Th49:
+  x <= y implies x - z <= y - z
+proof
+    x <= y implies x + -z <= y + -z by AXIOMS:24;
+  then x <= y implies x - z <= y + -z by XCMPLX_0:def 8;
+  hence thesis by XCMPLX_0:def 8;
+end;
+
+theorem Th50:
+  x<=y iff -y<=-x
+  proof
+A1:  for x,y holds x<=y implies -y<=-x
+     proof
+         let x,y;
+         assume x<=y;
+         then x-y<=y-y by Th49;
+         then x-y<=y+ -y by XCMPLX_0:def 8;
+         then x-y<=0 by XCMPLX_0:def 6;
+         then x-y-x<=0-x by Th49;
+         then x-y-x<=-x by XCMPLX_1:150;
+         then -x+(x-y)<=-x by XCMPLX_0:def 8;
+         then -x+(x+ -y)<=-x by XCMPLX_0:def 8;
+         then -x+x+ -y<=-x by XCMPLX_1:1;
+         then 0+ -y<=-x by XCMPLX_0:def 6;
+         hence thesis;
+     end;
+      -y<=-x implies x<=y
+     proof
+       assume -y<=-x;
+       then -(-x)<=-(-y) by A1;
+       hence thesis;
+     end;
+     hence thesis by A1;
+  end;
+
+canceled;
+
+theorem Th52:
+  x<=y & z<=0 implies y*z<=x*z
+proof
+  assume A1: x<=y;
+  assume z<=0;
+  then -0<=-z by Th50;
+  then x*(-z)<=y*(-z) by A1,AXIOMS:25;
+  then -(x*z)<=y*(-z) by XCMPLX_1:175;
+  then -(x*z)<=-(y*z) by XCMPLX_1:175;
+  hence thesis by Th50;
+end;
+
+theorem Th53:
+  x+z<=y+z implies x <= y
+proof
+   assume x+z<=y+z;
+   then x+z+(-z)<=y+z+(-z) by AXIOMS:24;
+   then x+(z+(-z))<=y+z+(-z) by XCMPLX_1:1;
+   then x+0<=y+z+(-z) by XCMPLX_0:def 6;
+   then x+0<=y+(z+(-z)) by XCMPLX_1:1;
+   then x<=y+0 by XCMPLX_0:def 6;
+   hence thesis;
+end;
+
+theorem
+    x-z<=y-z implies x <= y
+proof
+  assume x-z<=y-z;
+  then x+ -z<=y-z by XCMPLX_0:def 8;
+  then x+ -z<=y+ -z by XCMPLX_0:def 8;
+  then x+ (-z) + z<=y+ (-z)+z by AXIOMS:24;
+  then x+ ((-z) + z)<=y+ (-z)+z by XCMPLX_1:1;
+  then x+ ((-z) + z)<=y+ ((-z)+z) by XCMPLX_1:1;
+  then x+ 0<=y+ ((-z)+z) by XCMPLX_0:def 6;
+  then x<=y+ 0 by XCMPLX_0:def 6;
+  hence thesis;
+end;
+
+theorem Th55:
+  x<=y & z<=t implies x+z<=y+t
+proof
+  assume A1: x<=y;
+  assume z<=t;
+then A2: y+z<=y+t by AXIOMS:24;
+    x+z<=y+z by A1,AXIOMS:24;
+  hence thesis by A2,AXIOMS:22;
+end;
+
+definition let y,x be real number;
+  redefine canceled 4;
+
+pred x<y means x<=y & x<>y;
+  compatibility by AXIOMS:21;
+end;
+
+canceled 10;
+
+theorem
+    x < 0 iff 0 < -x
+proof
+  thus x < 0 implies 0 < -x
+  proof
+    assume x < 0;
+    then x+ (-x) < 0 + (-x) by Th53;
+    hence thesis by XCMPLX_0:def 6;
+  end;
+  assume 0 < -x;
+  then 0 + x <-x + x by Th53;
+  hence thesis by XCMPLX_0:def 6;
+end;
+
+theorem Th67:
+  x<y & z<=t implies x+z<y+t
+  proof
+    assume A1: x<y & z<=t;
+  for x,y,z,t holds x<y & z<=t implies x+z<y+t
+    proof
+      let x,y,z,t;
+      assume A2: x<y;
+      assume A3: z<=t;
+      then A4: x+z<=y+t by A2,Th55;
+        x+z<>y+t
+      proof
+        assume A5: x+z=y+t;
+          y<=x
+        proof
+             x+z<=t+x by A3,AXIOMS:24;
+           then x+z-t<=x+t-t by Th49;
+           then x+z-t<=x+t+ -t by XCMPLX_0:def 8;
+           then x+z-t<=x+(t+ -t) by XCMPLX_1:1;
+           then x+z-t<=x+0 by XCMPLX_0:def 6;
+           hence thesis by A5,XCMPLX_1:26;
+         end;
+         hence contradiction by A2;
+       end;
+       hence thesis by A4,AXIOMS:21;
+     end;
+    hence thesis by A1;
+  end;
+
+canceled;
+
+theorem
+    0<x implies y<y+x
+proof
+  assume 0<x;
+  then y+0<y+x by Th67;
+  hence thesis;
+end;
+
+theorem Th70:
+  0<z & x<y implies x*z<y*z
+proof
+ A1: for x,y,z holds 0<z & x<y implies x*z<y*z
+   proof
+      let x,y,z;
+      assume A2: 0<z;
+      assume A3: x<y;
+      then A4: x*z<=y*z by A2,AXIOMS:25;
+         x*z<>y*z
+        proof
+          assume x*z=y*z;
+          then x*(z*z")=y*z*z" by XCMPLX_1:4;
+          then x*(z*z")=y*(z*z") by XCMPLX_1:4;
+          then x*1=y*(z*z") by A2,XCMPLX_0:def 7;
+          then x=y*1 by A2,XCMPLX_0:def 7;
+         hence contradiction by A3;
+       end;
+     hence thesis by A4,AXIOMS:21;
+    end;
+    assume 0<z & x<y;
+  hence thesis by A1;
+end;
+
+theorem Th71:
+  z<0 & x<y implies y*z<x*z
+proof
+A1: for x,y,z holds z<0 & x<y implies y*z<x*z
+  proof
+    let x,y,z;
+    assume A2: z<0;
+    assume A3: x<y;
+      -0<-z by A2,Th50;
+    then x*(-z)<y*(-z) by A3,Th70;
+    then -(x*z)<y*(-z) by XCMPLX_1:175;
+    then -(x*z)<-(y*z) by XCMPLX_1:175;
+    hence thesis by Th50;
+ end;
+ assume z<0 & x<y;
+ hence thesis by A1;
+end;
+
+theorem Th72:
+  0<z implies 0<z"
+proof
+   assume A1:0<z;
+   assume A2:not 0<z";
+     z"<>0 by A1,XCMPLX_1:203;
+   then z*z"<0*z" by A1,A2,Th71;
+   then 1<0 by XCMPLX_0:def 7;
+   hence contradiction;
+end;
+
+theorem Th73:
+  0<z implies (x<y iff x/z<y/z)
+proof
+  assume A1: 0<z;
+  then A2: 0<z" by Th72;
+  A3:x<y implies x/z<y/z
+   proof
+     assume x<y;
+     then x*z"<y*z" by A2,Th70;
+     then x/z <y*z" by XCMPLX_0:def 9;
+     hence thesis by XCMPLX_0:def 9;
+   end;
+    x/z<y/z implies x<y
+    proof
+      assume x/z<y/z;
+      then x/z*z<y/z*z by A1,Th70;
+      then x<y/z*z by A1,XCMPLX_1:88;
+      hence thesis by A1,XCMPLX_1:88;
+    end;
+  hence thesis by A3;
+end;
+
+theorem
+    z<0 implies (x<y iff y/z<x/z)
+proof
+  assume A1: z<0;
+  A2: x<y implies y/z<x/z
+    proof
+      assume A3:x<y;
+        -0<-z by A1,Th50;
+      then x/(-z)<y/(-z) by A3,Th73;
+      then -x/z < y/(-z) by XCMPLX_1:189;
+      then -x/z < -y/z by XCMPLX_1:189;
+      hence thesis by Th50;
+    end;
+    y/z<x/z implies x<y
+  proof
+    assume y/z<x/z;
+    then x/z*z<y/z*z by A1,Th71;
+    then x<y/z*z by A1,XCMPLX_1:88;
+    hence thesis by A1,XCMPLX_1:88;
+  end;
+ hence thesis by A2;
+end;
+
+:: REAL is dense
+
+theorem
+    x<y implies ex z st x<z & z<y
+proof
+  assume A1:x<y;
+  take z=(x+y)/2;
+  thus x<z
+  proof
+      1*x+x<x+y by A1,Th53;
+    then (1+1)*x<x+y by XCMPLX_1:8;
+    then 2"*(2*x)<2"*(x+y) by Th70;
+    then (2"*2)*x<(x+y)*2" by XCMPLX_1:4;
+    hence thesis by XCMPLX_0:def 9;
+  end;
+    x+y<1*y+y by A1,Th53;
+  then x+y<(1+1)*y by XCMPLX_1:8;
+  then 2"*(x+y)<2"*(2*y) by Th70;
+  then (x+y)*2"<(2"*2)*y by XCMPLX_1:4;
+  hence thesis by XCMPLX_0:def 9;
+end;
+
+:: REAL is unlimited
+
+theorem
+    for x ex y st x<y
+proof
+   let x;
+   take x+1;
+     x+0<x+1 by Th67;
+   hence thesis;
+end;
+
+theorem
+    for x ex y st y<x
+proof
+   let x;
+   take x-1;
+     x+ -1<x+ -0 by Th67;
+   hence thesis by XCMPLX_0:def 8;
+end;
+
+:: Continuity of REAL
+
+scheme SepReal { P[Real]}:
+   ex X being Subset of REAL st
+     for x being Real holds x in X iff P[x]
+proof
+  defpred Z[set] means  ex x being Real st x=$1 & P[x];
+  consider X being set such that
+A1:  for r being set holds r in X iff r in REAL & Z[r] from Separation;
+       X c= REAL
+     proof
+      let r be set;
+      assume r in X;
+      hence thesis by A1;
+     end;
+     then reconsider X as Subset of REAL;
+     take X;
+     let x be Real;
+       x in X implies P[x]
+       proof
+         assume x in X;
+          then ex y being Real st y = x & P[y] by A1;
+         hence thesis;
+       end;
+   hence thesis by A1;
+end;
+
+canceled 6;
+
+theorem Th84:
+  x+y <= z iff x <= z-y
+proof
+   thus x+y<=z implies x <= z-y
+   proof assume x+y<=z;
+     then x+y-y<=z-y by Th49;
+     then x+(y-y)<=z-y by XCMPLX_1:29;
+     then x+0 <= z-y by XCMPLX_1:14;
+     hence x <= z-y;
+   end;
+   assume x <= z-y;
+   then x+y <= z - y + y by AXIOMS:24;
+   then x+y <= z - (y-y) by XCMPLX_1:37;
+   then x+y <= z - 0 by XCMPLX_1:14;
+   hence x+y <= z;
+end;
+
+canceled;
+
+theorem
+    x <= y+z iff x-y <= z
+proof
+   thus x<=y+z implies x-y <= z
+     proof assume x<=y+z;
+        then x-y <= z+y-y by Th49;
+        then x-y <= z+(y-y) by XCMPLX_1:29;
+        then x-y <= z+0 by XCMPLX_1:14;
+      hence x-y <= z;
+    end;
+  assume x-y <= z;
+  then x + -y <= z by XCMPLX_0:def 8;
+  then x <= z - -y by Th84;
+  then x <= z + - -y by XCMPLX_0:def 8;
+  hence x <= y + z;
+end;
+
+canceled 5;
+
+theorem
+    (x <= y & z <= t implies x - t <= y - z) &
+  (x < y & z <= t or x <= y & z < t implies x-t < y-z)
+proof
+ A1: (x <= y & z <= t) implies x - t <= y - z
+    proof
+      assume A2: x <= y & z <= t;
+      then -t <= -z by Th50;
+      then x+ -t <= y+ -z by A2,Th55;
+      then x-t <= y+ -z by XCMPLX_0:def 8;
+     hence thesis by XCMPLX_0:def 8;
+    end;
+ A3: for x,y,z,t st x < y & z <= t holds x-t < y-z
+   proof let x,y,z,t;
+     assume A4: x < y & z <= t;
+     then - t <= - z by Th50;
+     then x+ -t < y+ -z by A4,Th67;
+     then x-t < y+ -z by XCMPLX_0:def 8;
+     hence thesis by XCMPLX_0:def 8;
+   end;
+     x <= y & z < t implies x-t < y-z
+   proof
+     assume x <= y & z < t;
+     then z-y < t-x by A3;
+     then -(t-x) < -(z-y) by Th50;
+     then x-t<-(z-y) by XCMPLX_1:143;
+     hence thesis by XCMPLX_1:143;
+   end;
+   hence thesis by A1,A3;
+end;
+
+theorem
+    0 <= x*x
+proof
+  per cases;
+  suppose 0 <= x;
+  then 0*x <= x*x by AXIOMS:25;
+  hence thesis;
+  suppose not 0 <= x;
+  then 0*x <= x*x by Th52;
+  hence thesis;
+end;

@@ -1,0 +1,2602 @@
+:: The Subformula Tree of a Formula of the First Order Language
+::  by Oleg Okhotnikov
+::
+:: Received October 2, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, RELAT_1, TREES_1, ZFMISC_1, FUNCT_1, TREES_2, FINSET_1,
+      TREES_4, BOOLE, TREES_9, ORDINAL1, CARD_1, MCART_1, ORDERS_1, TARSKI,
+      QC_LANG1, ZF_LANG, QC_LANG4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, FINSEQ_1, FINSEQ_4, CARD_1, TREES_1,
+      TREES_2, TREES_4, TREES_9, QC_LANG1, QC_LANG2, MCART_1;
+ constructors NAT_1, FINSEQ_4, TREES_4, TREES_9, QC_LANG2, XREAL_0, MEMBERED;
+ clusters SUBSET_1, TREES_1, TREES_2, TREES_9, RELSET_1, TREES_A, FINSET_1,
+      FINSEQ_1, NAT_1, MEMBERED, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, XBOOLE_0, TREES_2, TREES_4;
+ theorems TARSKI, AXIOMS, NAT_1, REAL_1, RELAT_1, FUNCT_1, FINSEQ_1, TREES_1,
+      TREES_2, TREES_9, GRFUNC_1, QC_LANG1, QC_LANG2, TREES_A, FINSET_1,
+      MCART_1, ZFMISC_1, FUNCT_2, CARD_1, CARD_2, AMI_1, XBOOLE_0, XBOOLE_1,
+      FINSEQ_6, XCMPLX_1;
+ schemes NAT_1, TREES_2, FINSEQ_1, FUNCT_1, FUNCT_2, ZFREFLE1;
+
+begin
+
+canceled 3;
+
+theorem Th4:
+  for n being Nat, r being FinSequence ex q being FinSequence st
+    q = r|Seg n & q is_a_prefix_of r
+proof let n be Nat, r be FinSequence;
+    r|Seg n is FinSequence by FINSEQ_1:19;
+  then consider q being FinSequence such that A1: q = r|Seg n;
+    q is_a_prefix_of r by A1,TREES_1:def 1;
+  hence ex q being FinSequence st q = r|Seg n & q is_a_prefix_of r by A1;
+end;
+
+canceled;
+
+theorem Th6:
+  for D being non empty set, r being FinSequence of D,
+    r1,r2 being FinSequence, k being Nat
+      st k+1 <= len r & r1 = r|Seg (k+1) & r2 = r|Seg k holds
+        ex x being Element of D st r1 = r2^<*x*>
+proof let D be non empty set, r be FinSequence of D, r1,r2 be FinSequence,
+    k be Nat; assume A1: k+1 <= len r & r1 = r|Seg (k+1) & r2 = r|Seg k;
+then A2:len r1 = k+1 by FINSEQ_1:21;
+    k < len r by A1,NAT_1:38;
+then A3:len r2 = k by A1,FINSEQ_1:21;
+    r1 is_a_prefix_of r by A1,TREES_1:def 1;
+  then consider q1 being FinSequence such that A4: r = r1^q1 by TREES_1:8;
+  reconsider r' = r1 as FinSequence of D by A4,FINSEQ_1:50;
+    r2 is_a_prefix_of r by A1,TREES_1:def 1;
+  then consider q2 being FinSequence such that A5: r = r2^q2 by TREES_1:8;
+  reconsider r'' = r2 as FinSequence of D by A5,FINSEQ_1:50;
+    r'' is_a_prefix_of r'
+    proof
+A6:   r',r'' are_c=-comparable by A4,A5,TREES_A:1;
+        now assume r' is_a_prefix_of r'';
+        then k+1 <= k+0 by A2,A3,CARD_1:80;
+        hence contradiction by REAL_1:53;
+      end;
+      hence thesis by A6,XBOOLE_0:def 9;
+    end;
+  then consider s being FinSequence such that A7: r' = r''^s by TREES_1:8;
+  reconsider s as FinSequence of D by A7,FINSEQ_1:50;
+A8:len s = 1
+    proof
+      consider m being Nat such that A9: m = len s;
+        k + 1 = k + m by A2,A3,A7,A9,FINSEQ_1:35;
+      hence len s = 1 by A9,XCMPLX_1:2;
+    end;
+  consider x being set such that A10: x = s.1;
+A11:s = <*x*> by A8,A10,FINSEQ_1:57;
+    1 in {1} by TARSKI:def 1;
+  then 1 in dom s by A8,FINSEQ_1:4,def 3;
+then A12:x in rng s by A10,FUNCT_1:def 5;
+    rng s c= D by FINSEQ_1:def 4;
+  hence ex x being Element of D st r1 = r2^<*x*> by A7,A11,A12;
+end;
+
+theorem Th7:
+  for D being non empty set, r being FinSequence of D, r1 being FinSequence
+    st 1 <= len r & r1 = r|Seg 1 holds ex x being Element of D st r1 = <*x*>
+proof let D be non empty set, r be FinSequence of D, r1 be FinSequence; assume
+ A1: 1 <= len r & r1 = r|Seg 1;
+then A2:len r1 = 1 by FINSEQ_1:21;
+    r1 is_a_prefix_of r by A1,TREES_1:def 1;
+  then consider q1 being FinSequence such that A3: r = r1^q1 by TREES_1:8;
+  reconsider r' = r1 as FinSequence of D by A3,FINSEQ_1:50;
+  consider x being set such that A4: x = r1.1;
+A5:r1 = <*x*> by A2,A4,FINSEQ_1:57;
+    1 in {1} by TARSKI:def 1;
+  then 1 in dom r1 by A1,FINSEQ_1:4,21;
+then A6:x in rng r1 by A4,FUNCT_1:def 5;
+    rng r' c= D by FINSEQ_1:def 4;
+  hence ex x being Element of D st r1 = <*x*> by A5,A6;
+end;
+
+definition let D be non empty set, T be DecoratedTree of D;
+ cluster -> Function-like Relation-like Element of dom T;
+ coherence;
+end;
+
+definition let D be non empty set, T be DecoratedTree of D;
+ cluster -> FinSequence-like Element of dom T;
+ coherence;
+end;
+
+definition let D be non empty set;
+ cluster finite DecoratedTree of D;
+ existence
+   proof
+     consider d being Element of D;
+     take root-tree d;
+     thus root-tree d is finite;
+   end;
+end;
+
+reserve T for DecoratedTree,
+        p for FinSequence of NAT;
+
+theorem Th8:
+  T.p = (T|p).{}
+proof
+  <*>NAT in (dom T)|p by TREES_1:47;
+  then (T|p).<*>NAT = T.(p^<*>NAT) by TREES_2:def 11
+              .= T.p by FINSEQ_1:47;
+  hence T.p = (T|p).{};
+end;
+
+reserve T for finite-branching DecoratedTree,
+        t for Element of dom T,
+        x for FinSequence,
+        n, k, m for Nat;
+
+theorem Th9:
+  succ(T,t) = T*(t succ)
+proof
+  consider q being Element of dom T such that
+A1:  q = t & succ(T,t) = T*(q succ) by TREES_9:def 6;
+  thus thesis by A1;
+end;
+
+theorem Th10:
+  dom (T*(t succ)) = dom (t succ)
+proof
+    rng (t succ) c= dom T by FINSEQ_1:def 4;
+  hence thesis by RELAT_1:46;
+end;
+
+theorem Th11:
+  dom succ(T,t) = dom (t succ)
+proof thus
+    dom succ(T,t) = dom (T*(t succ)) by Th9
+               .= dom (t succ) by Th10;
+end;
+
+theorem Th12:
+  t^<*n*> in dom T iff n+1 in dom (t succ)
+proof
+    now assume A1: t^<*n*> in dom T;
+      succ t = { t^<*k*>: t^<*k*> in dom T } by TREES_2:def 5;
+    then t^<*n*> in succ t by A1;
+    then n < card succ t by TREES_9:7;
+then A2:  n < len (t succ) by TREES_9:def 5;
+      0 <= n by NAT_1:18; then 0+1 <= n+1 by AXIOMS:24;
+    then 1 <= n+1 & n+1 <= len (t succ) by A2,NAT_1:38;
+    then n+1 in Seg len (t succ) by FINSEQ_1:3;
+    hence n+1 in dom (t succ) by FINSEQ_1:def 3;
+  end;
+  hence t^<*n*> in dom T implies n+1 in dom (t succ);
+  assume n+1 in dom (t succ);
+  then n+1 in Seg len (t succ) by FINSEQ_1:def 3;
+  then 1 <= n+1 & n+1 <= len (t succ) by FINSEQ_1:3;
+  then n < len (t succ) by NAT_1:38;
+  then n < card succ t by TREES_9:def 5;
+then t^<*n*> in succ t by TREES_9:7;
+  hence t^<*n*> in dom T;
+end;
+
+theorem Th13:
+  for T, x, n st x^<*n*> in dom T holds T.(x^<*n*>) = succ(T,x).(n+1)
+proof
+  let T, x, n; assume A1: x^<*n*> in dom T;
+    x is_a_prefix_of x^<*n*> by TREES_1:8;
+  then x in dom T by A1,TREES_1:45;
+  then consider q being Element of dom T such that
+A2:  q = x & succ(T,x) = T*(q succ) by TREES_9:def 6;
+A3:n+1 in dom (q succ) by A1,A2,Th12;
+then A4:n+1 in dom (T*(q succ)) by Th10;
+    n+1 in Seg len (q succ) by A3,FINSEQ_1:def 3;
+  then 1 <= n+1 & n+1 <= len (q succ) by FINSEQ_1:3;
+then A5:n < len (q succ) by NAT_1:38;
+    succ(T,x).(n+1) = T.((q succ).(n+1)) by A2,A4,FUNCT_1:22
+                 .= T.(x^<*n*>) by A2,A5,TREES_9:def 5;
+  hence T.(x^<*n*>) = succ(T,x).(n+1);
+end;
+
+reserve x, x' for Element of dom T,
+        y' for set;
+
+theorem Th14:
+  x' in succ x implies T.x' in rng succ(T,x)
+proof assume A1: x' in succ x;
+    succ x = { x^<*n*>: x^<*n*> in dom T } by TREES_2:def 5;
+  then consider n such that A2: x' = x^<*n*> & x^<*n*> in dom T by A1;
+    dom (succ(T,x)) = dom (T*(x succ)) by Th9
+                 .= dom (x succ) by Th10;
+then A3:n+1 in dom succ(T,x) by A2,Th12;
+    T.x' = (succ(T,x)).(n+1) by A2,Th13;
+  hence T.x' in rng succ(T,x) by A3,FUNCT_1:def 5;
+end;
+
+theorem Th15:
+  y' in rng succ(T,x) implies ex x' st y' = T.x' & x' in succ x
+proof assume y' in rng succ(T,x);
+  then consider n' being set such that
+A1:  n' in dom succ(T,x) & y' = (succ(T,x)).n' by FUNCT_1:def 5;
+  consider k such that A2: dom succ(T,x) = Seg k by FINSEQ_1:def 2;
+    Seg k = { m : 1 <= m & m <= k } by FINSEQ_1:def 1;
+  then consider m' being Nat such that A3: n' = m' & 1 <= m' & m' <= k by A1,A2
+;
+    m' <> 0 by A3;
+  then consider n such that A4: n+1 = m' by NAT_1:22;
+    n+1 in dom (x succ) by A1,A3,A4,Th11;
+then x^<*n*> in dom T by Th12;
+  then consider x' such that A5: x' = x^<*n*>;
+    succ x = { x^<*m*>: x^<*m*> in dom T } by TREES_2:def 5;
+then A6:x' in succ x by A5;
+    y' = T.x' by A1,A3,A4,A5,Th13;
+  hence ex x' st y' = T.x' & x' in succ x by A6;
+end;
+
+reserve n,k1,k2,l,k,m for Nat,
+        x,y,y1,y2 for set;
+
+scheme ExDecTrees { D() -> non empty set, d() -> Element of D(),
+    G(set) -> FinSequence of D() }:
+ ex T being finite-branching DecoratedTree of D() st
+    T.{} = d() &
+    for t being Element of dom T, w being Element of D() st w = T.t
+      holds succ(T,t) = G(w)
+proof
+   defpred P[set,set] means (len G($1) = 0 & $2 = {}) or
+     len G($1) <> 0 & ex m st m+1 = len G($1) & $2 = {0} \/ Seg m;
+   A1: for x,y1,y2 st x in D() & P[x,y1] & P[x,y2] holds y1 = y2 by XCMPLX_1:2;
+   A2: for x st x in D() ex y st P[x,y]
+     proof let x such that x in D();
+       per cases;
+         suppose len G(x) = 0;
+         hence ex y st P[x,y];
+         suppose len G(x) <> 0;
+           then consider m such that A3: m+1 = len G(x) by NAT_1:22;
+             ex y st y = {0} \/ Seg m;
+         hence ex y st P[x,y] by A3;
+     end;
+     ex F being Function st dom F = D() & for x st x in D() holds P[x,F.x]
+     from FuncEx(A1,A2);
+   then consider F being Function such that
+A4:  for x st x in D() holds (len G(x) = 0 & F.x = {}) or
+       len G(x) <> 0 & ex m st m+1 = len G(x) & F.x = {0} \/ Seg m;
+   deffunc F(set) = F.$1;
+A5:for k,x st x in D() holds k in F(x) iff k+1 in Seg len G(x)
+     proof let k,x such that A6: x in D();
+         now assume A7: k in F(x);
+         then consider m such that
+A8:     m+1 = len G(x) & F.x = {0} \/ Seg m by A4,A6;
+           0 <= k & k <= m
+           proof per cases by A7,A8,XBOOLE_0:def 2;
+             suppose k in {0}; then k = 0 by TARSKI:def 1;
+             hence thesis by NAT_1:18;
+             suppose k in
+ Seg m; then 0+1 <= k & k <= m by FINSEQ_1:3;
+             hence thesis by NAT_1:38;
+           end; then 0+1 <= k+1 & k+1 <= m+1 by AXIOMS:24;
+         hence k+1 in Seg len G(x) by A8,FINSEQ_1:3;
+       end;
+       hence k in F(x) implies k+1 in Seg len G(x);
+       assume A9: k+1 in Seg len G(x);
+         then consider m such that A10: m+1 = len G(x) & F.x = {0} \/
+          Seg m by A4,A6,FINSEQ_1:4;
+           k in {0} \/ Seg m
+           proof per cases;
+             suppose k = 0; then k in {0} by TARSKI:def 1;
+             hence thesis by XBOOLE_0:def 2;
+             suppose k <> 0; then 0 < k by NAT_1:19;
+then A11:            0+1 <= k by NAT_1:38;
+                 1 <= k+1 & k+1 <= len G(x) by A9,FINSEQ_1:3;
+               then 1 <= k & k <= m by A10,A11,REAL_1:53;
+               then k in Seg m by FINSEQ_1:3;
+             hence thesis by XBOOLE_0:def 2;
+           end;
+       hence k in F(x) by A10;
+     end;
+A12:for x being set, t being Element of dom T st x in D() holds
+     { t^<*k*>: k in F(x)} = { t^<*m*>: m+1 in Seg len G(x)}
+     proof let x be set, t be Element of dom T such that A13: x in D();
+       thus { t^<*k*>: k in F(x)} c= { t^<*m*>: m+1 in Seg len G(x)}
+         proof let y be set; assume y in { t^<*k*>: k in F(x)};
+           then consider k such that A14: y = t^<*k*> & k in F(x);
+             y = t^<*k*> & k+1 in Seg len G(x) by A5,A13,A14;
+           hence y in { t^<*m*>: m+1 in Seg len G(x)};
+         end;
+       thus { t^<*m*>: m+1 in Seg len G(x)} c= { t^<*k*>: k in F(x)}
+         proof let y be set; assume y in { t^<*m*>: m+1 in Seg len G(x)};
+           then consider m such that A15: y = t^<*m*> & m+1 in Seg len G(x);
+             y = t^<*m*> & m in F(x) by A5,A13,A15;
+           hence y in { t^<*k*>: k in F(x)};
+         end;
+     end;
+   defpred P[set,set] means ex x,n st x in D() & $1 = [x,n] &
+     (n in F(x) & $2 = G(x).(n+1) or not n in F(x) & $2 = d());
+   A16: for c being Element of [:D(),NAT:] ex y being Element of D() st P[c,y]
+     proof let c be Element of [:D(),NAT:];
+         c`1 in D() & c`2 in NAT by MCART_1:10;
+       then consider x being Element of D(), n being Nat such that
+A17:       x = c`1 & n = c`2;
+A18:     c = [x,n] by A17,MCART_1:23;
+       per cases;
+         suppose A19: n in F(x);
+         then n+1 in Seg len G(x) by A5;
+         then n+1 in dom G(x) by FINSEQ_1:def 3;
+then A20:       G(x).(n+1) in rng G(x) by FUNCT_1:def 5;
+           rng G(x) c= D() by FINSEQ_1:def 4;
+         then consider y being Element of D() such that
+A21:      y = G(x).(n+1) by A20;
+         thus ex y being Element of D() st P[c,y] by A18,A19,A21;
+         suppose not n in F(x);
+         hence ex y being Element of D() st P[c,y] by A18;
+     end;
+     ex S being Function of [:D(),NAT:],D() st for c being
+          Element of [:D(),NAT:] holds P[c,S.c] from FuncExD(A16);
+   then consider S being Function of [: D(), NAT :],D() such that
+A22:  for c being Element of [: D(), NAT :] holds P[c,S.c];
+A23: for n, x st x in D() & n in F(x) holds S.[x,n] = G(x).(n+1)
+     proof let n, x such that A24: x in D() & n in F(x);
+A25:    [x,n]`1 = x by MCART_1:def 1;
+         [x,n]`2 = n by MCART_1:def 2;
+       then [x,n] in [: D(), NAT :] by A24,A25,MCART_1:11;
+       then consider c being Element of [:D(),NAT:] such that A26: c = [x,n];
+       consider x' being set, n' being Nat such that
+A27:      x' in D() & c = [x',n'] & (n' in F(x') & S.c = G(x').(n'+1) or
+           not n' in F(x') & S.c = d()) by A22;
+         x' = x & n' = n by A26,A27,ZFMISC_1:33;
+       hence S.[x,n] = G(x).(n+1) by A24,A27;
+     end;
+A28:for n,x,m st m+1 = len G(x) & x in D() holds n in F(x) iff 0 <= n & n <= m
+  proof let n,x,m such that A29: m+1 = len G(x) & x in D();
+    thus n in F(x) implies 0 <= n & n <= m
+      proof assume A30: n in F(x);
+        consider k such that A31: k+1 = len G(x) & F(x) = {0} \/ Seg k
+            by A4,A29;
+        A32: m = k by A29,A31,XCMPLX_1:2;
+        per cases by A30,A31,A32,XBOOLE_0:def 2;
+          suppose n in {0}; then n = 0 by TARSKI:def 1;
+          hence 0 <= n & n <= m by NAT_1:18;
+          suppose n in Seg m;
+        then 1 <= n & n <= m by FINSEQ_1:3;
+          hence 0 <= n & n <= m by AXIOMS:22;
+      end;
+    thus 0 <= n & n <= m implies n in F(x)
+      proof assume
+A33:    0 <= n & n <= m;
+        consider k such that
+        A34: k+1 = len G(x) & F(x) = {0} \/ Seg k by A4,A29;
+        A35: m = k by A29,A34,XCMPLX_1:2;
+        per cases;
+          suppose n = 0; then n in {0} by TARSKI:def 1;
+          hence n in F(x) by A34,XBOOLE_0:def 2;
+          suppose n <> 0; then 0 < n by NAT_1:19; then 0+1 <= n by NAT_1:38;
+          then n in Seg m by A33,FINSEQ_1:3;
+          hence n in F(x) by A34,A35,XBOOLE_0:def 2;
+      end;
+  end;
+A36: for d being Element of D(), k1,k2 st k1 <= k2 & k2 in F(d) holds k1 in
+ F(d)
+     proof let d be Element of D(), k1,k2; assume A37: k1 <= k2 & k2 in F(d);
+       then len G(d) <> 0 & ex m st m+1 = len G(d) & F.d = {0} \/ Seg m by A4;
+       then consider m such that A38: m+1 = len G(d);
+         0 <= k2 & k2 <= m by A28,A37,A38;
+       then 0 <= k1 & k1 <= m by A37,AXIOMS:22,NAT_1:18;
+       hence k1 in F(d) by A28,A38;
+     end;
+   consider T being DecoratedTree of D() such that
+A39:   T.{} = d() &
+     for t being Element of dom T holds succ t = { t^<*k*>: k in F(T.t)} &
+       for n,x st x = T.t & n in F(x) holds T.(t^<*n*>) = S.[x,n]
+         from DTreeStructEx(A36);
+     T is finite-branching
+     proof
+         for t being Element of dom T holds succ t is finite
+         proof let t be Element of dom T;
+A40:         succ t = { t^<*k*>: k in F(T.t)} by A39;
+           defpred P[set,set] means ex m st m+1 = $1 & $2 = t^<*m*>;
+           A41: for k,y1,y2 st k in Seg len G(T.t) & P[k,y1] & P[k,y2]
+              holds y1=y2 by XCMPLX_1:2;
+           A42: for k st k in Seg len G(T.t) ex x st P[k,x]
+             proof let k; assume k in Seg len G(T.t);
+               then k <> 0 by FINSEQ_1:3;
+               then consider m such that A43: m+1 = k by NAT_1:22;
+               consider x such that A44: x = t^<*m*>;
+               thus ex x st P[k,x] by A43,A44;
+             end;
+             ex L being FinSequence st dom L = Seg len G(T.t) &
+             for k st k in Seg len G(T.t) holds P[k,L.k] from SeqEx(A41,A42);
+           then consider L being FinSequence such that
+A45:          dom L = Seg len G(T.t) &
+             for k st k in Seg len G(T.t) holds P[k,L.k];
+A46:        for k st 1 <= k+1 & k+1 <= len G(T.t) holds L.(k+1) = t^<*k*>
+             proof let k; assume 1 <= k+1 & k+1 <= len G(T.t);
+               then k+1 in Seg len G(T.t) by FINSEQ_1:3;
+               then consider m such that
+               A47: m+1 = k+1 & L.(k+1) = t^<*m*> by A45;
+               thus L.(k+1) = t^<*k*> by A47,XCMPLX_1:2;
+             end;
+             succ t = rng L
+             proof
+               thus succ t c= rng L
+               proof let x; assume x in succ t;
+                 then consider k such that
+A48:                x = t^<*k*> & k in F(T.t) by A40;
+A49:              k+1 in Seg len G(T.t) by A5,A48;
+                 then 1 <= k+1 & k+1 <= len G(T.t) by FINSEQ_1:3;
+                 then L.(k+1) = t^<*k*> by A46;
+                 hence x in rng L by A45,A48,A49,FUNCT_1:def 5;
+               end;
+               thus rng L c= succ t
+               proof let y be set; assume y in rng L;
+                 then consider m being set such that
+A50:                 m in dom L & y = L.m by FUNCT_1:def 5;
+                 reconsider m as Nat by A50;
+A51:              1 <= m & m <= len G(T.t) by A45,A50,FINSEQ_1:3;
+                   m <> 0 by A45,A50,FINSEQ_1:3;
+                 then consider k such that A52: k+1 = m by NAT_1:22;
+                   y = t^<*k*> & k in F(T.t) by A5,A45,A46,A50,A51,A52;
+                 hence y in succ t by A40;
+               end;
+             end;
+           hence thesis;
+         end;
+       then dom T is finite-branching by TREES_9:def 2;
+       hence thesis by TREES_9:def 4;
+     end;
+   then reconsider T as finite-branching DecoratedTree of D();
+     now let t be Element of dom T, w be Element of D() such that A53: w = T.t;
+A54:   dom succ(T,t) = dom G(w)
+       proof
+A55:      dom G(w) = Seg len G(w) by FINSEQ_1:def 3;
+A56:      dom (t succ) = Seg len (t succ) by FINSEQ_1:def 3;
+            succ t = { t^<*k*>: k in F(w)} by A39,A53;
+         then A57:      succ t = { t^<*k*>: k+1 in Seg len G(w)} by A12;
+           dom G(w) = dom (t succ)
+           proof
+             thus dom G(w) c= dom (t succ)
+             proof let n' be set; assume A58: n' in dom G(w);
+A59:            Seg len G(w) = { k : 1 <= k & k <=
+ len G(w)} by FINSEQ_1:def 1;
+               then consider m such that A60: n' = m & 1 <= m & m <=
+ len G(w) by A55,A58;
+                 0 <> m by A60;
+               then consider n such that A61: m = n+1 by NAT_1:22;
+                 n+1 in Seg len G(w) by A59,A60,A61;
+               then t^<*n*> in succ t by A57;
+               hence n' in dom (t succ) by A60,A61,Th12;
+             end;
+             thus dom (t succ) c= dom G(w)
+             proof let n' be set; assume A62: n' in dom (t succ);
+A63:            Seg len (t succ) = { k : 1 <= k & k <= len (t succ)}
+                 by FINSEQ_1:def 1;
+               then consider m such that A64: n' = m & 1 <= m & m <=
+ len (t succ) by A56,A62;
+                 0 <> m by A64;
+               then consider n such that A65: m = n+1 by NAT_1:22;
+                 n+1 in dom (t succ) by A56,A63,A64,A65;
+then A66:            t^<*n*> in dom T by Th12;
+                 succ t = { t^<*k*>: t^<*k*> in dom T } by TREES_2:def 5;
+               then t^<*n*> in succ t by A66;
+               then consider k such that
+A67:             t^<*k*> = t^<*n*> & k+1 in Seg len G(w) by A57;
+                 <*k*> = <*n*> by A67,FINSEQ_1:46;
+               hence n' in dom G(w) by A55,A64,A65,A67,TREES_1:23;
+             end;
+           end;
+         hence thesis by Th11;
+       end;
+       for m st m in dom succ(T,t) holds (succ(T,t)).m = G(w).m
+       proof let m; assume A68: m in dom succ(T,t);
+         then A69:      m in Seg len G(w) by A54,FINSEQ_1:def 3;
+           Seg len G(w) = { k : 1 <= k & k <= len G(w)} by FINSEQ_1:def 1;
+         then consider k such that A70: m = k & 1 <= k & k <= len G(w) by A69;
+           0 <> k by A70;
+         then consider n such that A71: m = n+1 by A70,NAT_1:22;
+           n+1 in dom (t succ) by A68,A71,Th11;
+then A72:       t^<*n*> in dom T by Th12;
+         consider l such that
+A73:      l+1 = len G(T.t) & F.(T.t) = {0} \/ Seg l by A4,A53,A69,FINSEQ_1:4;
+           0+1 <= n+1 & n+1 <= l+1 by A53,A70,A71,A73;
+then A74:       0 <= n & n <= l by REAL_1:53;
+         A75: n in {0} \/ Seg l
+           proof per cases;
+             suppose n = 0; then n in {0} by TARSKI:def 1;
+             hence thesis by XBOOLE_0:def 2;
+             suppose n <> 0; then 0 < n by NAT_1:19; then 0+1 <= n by NAT_1:38;
+             then n in Seg l by A74,FINSEQ_1:3;
+             hence thesis by XBOOLE_0:def 2;
+           end;
+           succ(T,t).(n+1) = T.(t^<*n*>) by A72,Th13
+                        .= S.[T.t,n] by A39,A73,A75
+                        .= G(w).(n+1) by A23,A53,A73,A75;
+         hence succ(T,t).m = G(w).m by A71;
+       end;
+     hence succ(T,t) = G(w) by A54,FINSEQ_1:17;
+   end;
+   hence thesis by A39;
+end;
+
+theorem Th16:
+  for T being Tree, t being Element of T holds
+    ProperPrefixes t is finite Chain of T
+proof let T be Tree, t be Element of T;
+A1:ProperPrefixes t c= T by TREES_1:def 5;
+    for p,q being FinSequence of NAT st p in ProperPrefixes t &
+    q in ProperPrefixes t holds p,q are_c=-comparable by TREES_1:42;
+  hence ProperPrefixes t is finite Chain of T by A1,TREES_2:def 3;
+end;
+
+theorem Th17:
+  for T being Tree holds T-level 0 = {{}}
+proof let T be Tree;
+    { w where w is Element of T : len w = 0 } = {{}}
+    proof
+      thus { w where w is Element of T : len w = 0 } c= {{}}
+        proof let x; assume x in
+ { w where w is Element of T : len w = 0 };
+          then consider w being Element of T such that A1: w = x & len w = 0;
+            w = {} by A1,FINSEQ_1:25;
+          hence x in {{}} by A1,TARSKI:def 1;
+        end;
+      thus {{}} c= { w where w is Element of T : len w = 0 }
+        proof let x; assume x in {{}}; then A2: x = {} by TARSKI:def 1;
+            {} in T by TREES_1:47;
+          then consider t being Element of T such that A3: t = {};
+            len t = 0 by A3,FINSEQ_1:25;
+          hence x in { w where w is Element of T : len w = 0 } by A2,A3;
+        end;
+    end;
+  hence thesis by TREES_2:def 6;
+end;
+
+theorem Th18:
+  for T being Tree holds
+    T-level (n+1) = union { succ w where w is Element of T : len w = n }
+proof let T be Tree;
+  thus T-level (n+1) c= union { succ w where w is Element of T : len w = n }
+    proof let x; assume A1: x in T-level (n+1);
+      then reconsider t = x as Element of T;
+        t in { w' where w' is Element of T : len w' = n+1 } by A1,TREES_2:def 6
+;
+      then consider w' being Element of T such that
+      A2: t = w' & len w' = n+1;
+        t|Seg n is FinSequence of NAT by FINSEQ_1:23;
+      then consider s being FinSequence of NAT such that A3: s = t|Seg n;
+        s is_a_prefix_of t by A3,TREES_1:def 1;
+      then reconsider s as Element of T by TREES_1:45;
+        n+0 <= n+1 by AXIOMS:24;
+      then A4:    len s = n by A2,A3,FINSEQ_1:21;
+        Seg (n+1) = dom t by A2,FINSEQ_1:def 3;
+      then n+1 <= len t & t = t|Seg (n+1) by A2,RELAT_1:98;
+      then consider m such that A5: t = s^<*m*> by A3,Th6;
+A6:   t in succ s by A5,TREES_2:14;
+        succ s in { succ w where w is Element of T : len w = n } by A4;
+      hence x in union { succ w where w is Element of T : len w = n }
+        by A6,TARSKI:def 4;
+    end;
+  thus union { succ w where w is Element of T : len w = n } c= T-level (n+1)
+    proof let x;
+      set X = { succ w where w is Element of T : len w = n };
+      assume x in union X;
+      then consider Y being set such that
+A7:      x in Y & Y in X by TARSKI:def 4;
+      consider w being Element of T such that A8: Y = succ w & len w = n by A7;
+      reconsider t = x as Element of T by A7,A8;
+        t in { w^<*k*>: w^<*k*> in T } by A7,A8,TREES_2:def 5;
+      then consider k such that A9: t = w^<*k*> & w^<*k*> in T;
+          len <*k*> = 1 by FINSEQ_1:57;
+      then len t = n+1 by A8,A9,FINSEQ_1:35;
+        then t in { s where s is Element of T : len s = n+1 };
+      hence x in T-level (n+1) by TREES_2:def 6;
+    end;
+end;
+
+theorem Th19:
+  for T being finite-branching Tree, n being Nat holds T-level n is finite
+proof let T be finite-branching Tree;
+  defpred Q[Nat] means T-level $1 is finite;
+  A1: Q[0] by Th17;
+  A2: for n st Q[n] holds Q[n+1]
+    proof let n such that
+A3:    T-level n is finite;
+A4:    T-level (n+1) =
+        union { succ w where w is Element of T : len w = n } by Th18;
+      set X = { succ w where w is Element of T : len w = n };
+A5:    X is finite
+        proof
+          defpred P[set,set] means ex w be Element of T st $1=w & $2=succ w;
+          A6: for x st x in T-level n ex y being set st P[x,y]
+            proof let x; assume x in T-level n;
+              then consider w being Element of T such that A7: w = x;
+              consider y such that A8: y = succ w;
+              take y,w;
+              thus thesis by A7,A8;
+            end;
+          consider f being Function such that
+A9:          dom f = T-level n &
+              for x st x in T-level n holds P[x,f.x] from NonUniqFuncEx(A6);
+A10:          X c= rng f
+              proof let x; assume x in X;
+                then consider w being Element of T such that
+A11:                x = succ w & len w = n;
+                  T-level n = { t where t is Element of T : len t = n }
+                  by TREES_2:def 6;
+then A12:              w in T-level n by A11;
+                then consider w' being Element of T such that
+A13:                w = w' & f.w = succ w' by A9;
+                thus x in rng f by A9,A11,A12,A13,FUNCT_1:def 5;
+              end;
+              Card rng f <=` Card dom f by CARD_1:28;
+            then rng f is finite by A3,A9,CARD_2:68;
+          hence thesis by A10,FINSET_1:13;
+        end;
+        for Y being set st Y in X holds Y is finite
+        proof let Y be set; assume Y in X;
+          then consider w being Element of T such that
+A14:          Y = succ w & len w = n;
+          thus Y is finite by A14;
+        end;
+      hence T-level (n+1) is finite by A4,A5,FINSET_1:25;
+    end;
+  thus for n holds Q[n] from Ind(A1,A2);
+end;
+
+theorem Th20:
+  for T being finite-branching Tree holds
+    T is finite iff ex n being Nat st T-level n = {}
+proof let T be finite-branching Tree;
+    now assume A1: T is finite;
+      now assume A2: not ex n being Nat st T-level n = {};
+A3:    for n ex C being finite Chain of T st card C = n
+        proof let n; T-level n <> {} by A2;
+          then consider t being set such that A4: t in T-level n by XBOOLE_0:
+def 1;
+            T-level n = { w where w is Element of T : len w = n }
+            by TREES_2:def 6;
+          then consider w being Element of T such that A5: t = w & len w = n
+by A4;
+            ProperPrefixes w is finite Chain of T by Th16;
+          then consider C being finite Chain of T such that
+A6:          C = ProperPrefixes w;
+            card C = n by A5,A6,TREES_1:68;
+          hence ex C being finite Chain of T st card C = n;
+        end;
+        for t being Element of T holds succ t is finite;
+      then ex C being Chain of T st not C is finite by A3,TREES_2:31;
+     hence contradiction by A1,FINSET_1:13;
+    end;
+    hence ex n being Nat st T-level n = {};
+  end;
+  hence T is finite implies ex n being Nat st T-level n = {};
+  given n such that A7: T-level n = {};
+  deffunc F(Nat) = T-level $1;
+  set X = { F(m) where m is Nat : m <= n };
+A8:T c= union X
+    proof let x; assume x in T;
+      then reconsider t = x as Element of T;
+A9:   len t < n
+        proof assume A10: n <= len t;
+          consider q being FinSequence such that
+A11:          q = t|Seg n & q is_a_prefix_of t by Th4;
+A12:        len q = n & q is_a_prefix_of t by A10,A11,FINSEQ_1:21;
+          reconsider q as Element of T by A11,TREES_1:45;
+             T-level n = { w where w is Element of T : len w = n }
+            by TREES_2:def 6;
+          then q in T-level n by A12;
+          hence contradiction by A7;
+        end;
+      consider m such that A13: m = len t;
+A14:   F(m) in X by A9,A13;
+       T-level m = { w where w is Element of T : len w = m } by TREES_2:def 6;
+      then t in F(m) by A13;
+      hence x in union X by A14,TARSKI:def 4;
+    end;
+A15:X is finite
+    proof
+      defpred P[set,set] means ex l,m st m = l+1 & $1 = m & F(l) = $2;
+      A16: for k,y1,y2 st k in Seg(n+1) & P[k,y1] & P[k,y2] holds y1=y2 by
+XCMPLX_1:2;
+      A17: for k st k in Seg(n+1) ex x st P[k,x]
+        proof let k; assume k in Seg(n+1);
+          then 0 <> k by FINSEQ_1:3;
+          then consider l such that A18: k = l+1 by NAT_1:22;
+          consider x such that A19: x = F(l);
+          thus ex x st P[k,x] by A18,A19;
+        end;
+      consider p being FinSequence such that A20: dom p = Seg(n+1) &
+        for k st k in Seg(n+1) holds P[k,p.k] from SeqEx(A16,A17);
+A21:    dom p = Seg (n+1) & for k st k+1 in Seg (n+1) holds p.(k+1) = F(k)
+        proof
+          thus dom p = Seg (n+1) by A20;
+          thus for k st k+1 in Seg (n+1) holds p.(k+1) = F(k)
+            proof let k; assume k+1 in Seg (n+1);
+              then ex l,m st m = l+1 & k+1 = m & F(l) = p.(k+1) by A20;
+             hence p.(k+1) = F(k) by XCMPLX_1:2;
+            end;
+        end;
+    rng p = X
+        proof
+          thus rng p c= X
+            proof let y; assume y in rng p;
+              then consider x such that A22: x in dom p & p.x = y by FUNCT_1:
+def 5;
+                dom p = { k : 1 <= k & k <= n+1 } by A21,FINSEQ_1:def 1;
+              then consider k such that A23: x = k & 1 <= k & k <= n+1 by A22;
+                0+1 <= k by A23; then 0 < k by NAT_1:38;
+              then consider m such that A24: m+1 = k by NAT_1:22;
+                m+1 in Seg (n+1) by A23,A24,FINSEQ_1:3;
+then A25:           p.(m+1) = F(m) by A21;
+                 m <= n by A23,A24,REAL_1:53;
+              hence y in X by A22,A23,A24,A25;
+            end;
+          thus X c= rng p
+            proof let y; assume y in X;
+              then consider m such that A26: y = F(m) & m <= n;
+                0 <= m by NAT_1:18; then 0+1 <= m+1 by AXIOMS:24;
+              then 1 <= m+1 & m+1 <= n+1 by A26,AXIOMS:24;
+then A27:           m+1 in Seg (n+1) by FINSEQ_1:3;
+               then p.(m+1) = F(m) by A21;
+              hence y in rng p by A21,A26,A27,FUNCT_1:def 5;
+            end;
+        end;
+      hence thesis;
+    end;
+    for Y being set st Y in X holds Y is finite
+    proof let Y be set; assume Y in X;
+      then ex m st Y = F(m) & m <= n;
+     hence Y is finite by Th19;
+    end;
+  then union X is finite by A15,FINSET_1:25;
+  hence T is finite by A8,FINSET_1:13;
+end;
+
+theorem Th21:
+  for T being finite-branching Tree st not T is finite
+    ex C being Chain of T st not C is finite
+proof let T be finite-branching Tree such that A1: not T is finite;
+A2:for n ex C being finite Chain of T st card C = n
+    proof let n;
+        T-level n <> {} by A1,Th20;
+      then consider t being set such that A3: t in T-level n by XBOOLE_0:def 1;
+        T-level n = { w where w is Element of T : len w = n } by TREES_2:def 6;
+      then consider w being Element of T such that
+A4:      t = w & len w = n by A3;
+      reconsider t as Element of T by A4;
+        ProperPrefixes t is finite Chain of T by Th16;
+      then consider C being finite Chain of T such that
+A5:      C = ProperPrefixes t;
+        card C = n by A4,A5,TREES_1:68;
+      hence ex C being finite Chain of T st card C = n;
+    end;
+    for t being Element of T holds succ t is finite;
+  hence ex C being Chain of T st not C is finite by A2,TREES_2:31;
+end;
+
+theorem Th22:
+  for T being finite-branching Tree st not T is finite
+    ex B being Branch of T st not B is finite
+proof let T be finite-branching Tree; assume not T is finite;
+  then consider C being Chain of T such that A1: not C is finite by Th21;
+  consider B being Branch of T such that A2: C c= B by TREES_2:30;
+    not B is finite by A1,A2,FINSET_1:13;
+  hence ex B being Branch of T st not B is finite;
+end;
+
+theorem Th23:
+  for T being Tree, C being Chain of T, t being Element of T
+    st t in C & not C is finite
+      ex t' being Element of T st t' in C & t is_a_proper_prefix_of t'
+proof let T be Tree, C be Chain of T, t be Element of T such that
+A1:  t in C & not C is finite;
+    now assume
+A2:  not ex t' being Element of T st t' in C & t is_a_proper_prefix_of t';
+A3:  for t' being Element of T st t' in C holds t' is_a_prefix_of t
+      proof let t' be Element of T such that A4: t' in C;
+          now assume A5: not t' is_a_prefix_of t;
+            t,t' are_c=-comparable by A1,A4,TREES_2:def 3;
+           then t is_a_prefix_of t' by A5,XBOOLE_0:def 9;
+          then t is_a_proper_prefix_of t' by A5,XBOOLE_0:def 8;
+          hence contradiction by A2,A4;
+        end;
+        hence t' is_a_prefix_of t;
+      end;
+       C c= ProperPrefixes t \/ {t}
+      proof let x be set; assume A6: x in C;
+      then reconsider t' = x as Element of T;
+A7:    t' is_a_prefix_of t by A3,A6;
+          t' in ProperPrefixes t \/ {t}
+          proof
+            per cases by A7,XBOOLE_0:def 8;
+              suppose t' is_a_proper_prefix_of t;
+                then t' in ProperPrefixes t by TREES_1:36;
+              hence thesis by XBOOLE_0:def 2;
+              suppose t' = t;
+                then t' in {t} by TARSKI:def 1;
+              hence thesis by XBOOLE_0:def 2;
+          end;
+        hence x in ProperPrefixes t \/ {t};
+      end;
+    hence contradiction by A1,FINSET_1:13;
+  end;
+  hence ex t' being Element of T st t' in C & t is_a_proper_prefix_of t';
+end;
+
+theorem Th24:
+  for T being Tree, B being Branch of T, t being Element of T
+    st t in B & not B is finite
+      ex t' being Element of T st t' in B & t' in succ t
+proof let T be Tree, B be Branch of T, t be Element of T;
+  assume t in B & not B is finite;
+  then consider t'' being Element of T such that
+A1:  t'' in B & t is_a_proper_prefix_of t'' by Th23;
+    t is_a_prefix_of t'' by A1,XBOOLE_0:def 8;
+  then consider r being FinSequence such that A2: t'' = t^r by TREES_1:8;
+  reconsider r as FinSequence of NAT by A2,FINSEQ_1:50;
+    r|Seg 1 is FinSequence of NAT by FINSEQ_1:23;
+  then consider r1 being FinSequence of NAT such that A3: r1 = r|Seg 1;
+    1 <= len r
+    proof
+     len t < len t'' by A1,TREES_1:24;
+      then consider m such that A4: (len t) + m = len t'' by NAT_1:28;
+        m <> 0 by A1,A4,TREES_1:24;
+      then 0 < m by NAT_1:19;
+then A5:    0+1 <= m by NAT_1:38;
+        len t'' = (len t) + len r by A2,FINSEQ_1:35;
+      hence thesis by A4,A5,XCMPLX_1:2;
+    end;
+  then consider n such that A6: r1 = <*n*> by A3,Th7;
+    r1 is_a_prefix_of r by A3,TREES_1:def 1;
+then A7:t^r1 is_a_prefix_of t'' by A2,FINSEQ_6:15;
+  then t^<*n*> in T by A6,TREES_1:45;
+  then consider t' being Element of T such that A8: t' = t^<*n*>;
+A9:t' in B by A1,A6,A7,A8,TREES_2:27;
+    t' in succ t
+    proof
+        succ t = { t^<*k*>: t^<*k*> in T } by TREES_2:def 5;
+      hence thesis by A8;
+    end;
+  hence ex t' being Element of T st t' in B & t' in succ t by A9;
+end;
+
+theorem Th25:
+  for f being Function of NAT,NAT st
+   (for n holds f.(n+1) qua Nat <= f.n qua Nat)
+     ex m st for n st m <= n holds f.n = f.m
+proof let f be Function of NAT,NAT such that
+A1: for n holds f.(n+1) qua Nat <= f.n qua Nat;
+A2:for m,k st m <= k holds f.k qua Nat <= f.m qua Nat
+    proof let m,k such that A3: m <= k;
+      defpred P[Nat] means for m st m <= $1 holds f.$1 qua Nat <= f.m qua Nat;
+      A4: P[0]
+        proof let m such that A5: m <= 0; 0 <= m by NAT_1:18;
+          hence f.0 qua Nat <= f.m qua Nat by A5,AXIOMS:21;
+        end;
+      A6: for k st P[k] holds P[k + 1]
+        proof let k such that A7: P[k];
+            now let m;
+           assume
+A8:         m <= k+1;
+            per cases by A8,NAT_1:26;
+              suppose A9: m <= k;
+              reconsider fk = f.k, fm = f.m, fk1 = f.(k+1) as Nat;
+A10:            fk <= fm by A7,A9;
+                fk1 <= fk by A1;
+              hence f.(k+1) qua Nat <= f.m qua Nat by A10,AXIOMS:22;
+              suppose m = k+1;
+              hence f.(k+1) qua Nat <= f.m qua Nat;
+          end;
+          hence P[k + 1];
+        end;
+        for k holds P[k] from Ind(A4,A6);
+      hence f.k qua Nat <= f.m qua Nat by A3;
+    end;
+  defpred P[Nat] means $1 in rng f;
+  A11: ex k st P[k]
+    proof
+      consider y such that A12: y = f.0;
+      A13: dom f = NAT by FUNCT_2:def 1;
+      reconsider k = y as Nat by A12;
+      take k;
+      thus thesis by A12,A13,FUNCT_1:def 5;
+    end;
+    ex k st P[k] & for n st P[n] holds k <= n from Min(A11);
+  then consider l such that A14: l in rng f & for n st n in rng f holds l <= n;
+  consider x such that A15: x in dom f & l = f.x by A14,FUNCT_1:def 5;
+A16:dom f = NAT by FUNCT_2:def 1;
+  reconsider m = x as Nat by A15,FUNCT_2:def 1;
+    for k st m <= k holds f.k = f.m
+    proof let k such that A17: m <= k;
+        now assume A18: f.k <> f.m;
+        reconsider fk = f.k, fm = f.m as Nat;
+          fk <= fm by A2,A17;
+then A19:      fk < fm by A18,REAL_1:def 5;
+          f.k in rng f by A16,FUNCT_1:def 5;
+        hence contradiction by A14,A15,A19;
+      end;
+      hence f.k = f.m;
+    end;
+  hence ex m st for k st m <= k holds f.k = f.m;
+end;
+
+scheme FinDecTree { D() -> non empty set,
+    T() -> finite-branching DecoratedTree of D(), F(Element of D()) -> Nat }:
+  T() is finite
+provided
+A1:for t,t' being Element of dom T(), d being Element of D()
+    st t' in succ t & d = T().t' holds F(d) < F(T().t)
+proof
+    now assume not T() is finite;
+    then not dom T() is finite by AMI_1:21;
+    then consider B being Branch of dom T() such that A2: not B is finite by
+Th22;
+    defpred Q[set] means ex t being Element of dom T() st t in B & $1 = T().t;
+    defpred P[set,set] means ex t,t' being Element of dom T() st
+      t' in succ t & t in B & t' in B & $1 = T().t & $2 = T().t';
+    A3: T().{} in D() & Q[T().{}]
+      proof
+          {} in B by TREES_2:28;
+        then Q[T().{}];
+        hence thesis;
+      end;
+    A4: for x st x in D() & Q[x] ex y st y in D() & P[x,y] & Q[y]
+      proof let x; assume x in D() & Q[x];
+        then consider t being Element of dom T() such that A5: t in B & x = T()
+.t;
+        consider t' being Element of dom T() such that
+A6:        t' in B & t' in succ t by A2,A5,Th24;
+          ex y st y = T().t';
+        hence ex y st y in D() & P[x,y] & Q[y] by A5,A6;
+      end;
+      ex g being Function st dom g = NAT & rng g c= D() & g.0 = T().{} &
+      for k holds P[g.k,g.(k+1)] & Q[g.k] from InfiniteChain(A3,A4);
+    then consider g being Function such that A7: dom g = NAT & rng g c= D() &
+      g.0 = T().{} & for k holds (ex t,t' being Element of dom T() st
+        t' in succ t & t in B & t' in B & g.k = T().t & g.(k+1) = T().t') &
+        ex t being Element of dom T() st t in B & g.k = T().t;
+    defpred P[set,set] means
+      ex d being Element of D() st d = g.$1 & $2 = F(d);
+    A8: for x st x in NAT ex y st y in NAT & P[x,y]
+      proof let x; assume x in NAT;
+        then reconsider k = x as Nat;
+        consider t being Element of dom T() such that
+A9:       t in B & g.k = T().t by A7;
+        consider y such that A10: y = F(T().t);
+        thus ex y st y in NAT & P[x,y] by A9,A10;
+      end;
+      ex f being Function of NAT,NAT st for x st x in NAT holds P[x,f.x]
+      from FuncEx1(A8);
+    then consider f being Function of NAT,NAT such that
+A11:   for x st x in NAT ex d being Element of D() st d = g.x & f.x = F(d);
+A12:  (ex d being Element of D() st d = T().{} & f.0 = F(d)) &
+      for k ex t,t' being Element of dom T() st t' in succ t & t in B & t' in
+ B &
+        f.k = F(T().t) & f.(k+1) = F(T().t')
+      proof
+        thus ex d being Element of D() st d = T().{} & f.0 = F(d) by A7,A11;
+        thus for k ex t,t' being Element of dom T() st t' in succ t &
+          t in B & t' in B & f.k = F(T().t) & f.(k+1) = F(T().t')
+          proof let k;
+            consider d being Element of D() such that
+A13:           d = g.k & f.k = F(d) by A11;
+            consider d1 being Element of D() such that
+A14:           d1 = g.(k+1) & f.(k+1) = F(d1) by A11;
+            consider t,t' being Element of dom T() such that
+A15:           t' in succ t & t in B & t' in B & g.k = T().t & g.(k+1) = T().t'
+                by A7;
+            thus ex t,t' being Element of dom T() st t' in succ t &
+              t in B & t' in B & f.k = F(T().t) & f.(k+1) = F(T().t')
+                by A13,A14,A15;
+          end;
+      end;
+A16:  for n ex t,t' being Element of dom T() st t' in succ t & f.n = F(T().t) &
+      f.(n+1) = F(T().t') & f.(n+1) qua Nat < f.n qua Nat
+      proof let n;
+        consider t,t' being Element of dom T() such that
+A17:        t' in succ t & t in B & t' in
+ B & f.n = F(T().t) & f.(n+1) = F(T().t')
+            by A12;
+          f.(n+1) qua Nat < f.n qua Nat by A1,A17;
+        hence thesis by A17;
+      end;
+      ex m st for n st m <= n holds f.n = f.m
+      proof
+          for n holds f.(n+1) qua Nat <= f.n qua Nat
+          proof let n;
+            consider t,t' being Element of dom T() such that
+A18:            t' in succ t & f.n = F(T().t) &
+                f.(n+1) = F(T().t') & f.(n+1) qua Nat < f.n qua Nat by A16;
+            thus thesis by A18;
+          end;
+        hence ex m st for n st m <= n holds f.n = f.m by Th25;
+      end;
+    then consider m such that A19: for n st m <= n holds f.n = f.m;
+    consider k such that A20: k = m+1;
+    consider t,t' being Element of dom T() such that
+A21:    t' in succ t & f.m = F(T().t) &
+        f.(m+1) = F(T().t') & f.(m+1) qua Nat < f.m qua Nat by A16;
+        m <= k
+      proof m+0 <= m+1 by AXIOMS:24;
+        hence thesis by A20;
+      end;
+    hence contradiction by A19,A20,A21;
+  end;
+  hence T() is finite;
+end;
+
+reserve D for non empty set,
+        T for DecoratedTree of D;
+
+theorem Th26:
+  for y being set st y in rng T holds y is Element of D
+proof rng T c= D by TREES_2:def 9;
+  hence thesis;
+end;
+
+theorem Th27:
+  for x being set st x in dom T holds T.x is Element of D
+proof let x be set such that A1: x in dom T;
+  consider y being set such that A2: y = T.x;
+A3:y in rng T by A1,A2,FUNCT_1:def 5;
+    rng T c= D by TREES_2:def 9;
+  hence T.x is Element of D by A2,A3;
+end;
+
+begin
+
+reserve F, G, G',H, H' for Element of QC-WFF;
+
+theorem Th28:
+  F is_subformula_of G implies len @ F <= len @ G
+proof
+  assume A1: F is_subformula_of G;
+  per cases;
+    suppose F = G;
+    hence len @ F <= len @ G;
+    suppose F <> G;
+      then F is_proper_subformula_of G by A1,QC_LANG2:def 22;
+    hence len @ F <= len @ G by QC_LANG2:74;
+end;
+
+theorem
+    F is_subformula_of G & len @ F = len @ G implies F = G
+proof
+  assume A1: F is_subformula_of G & len @ F = len @ G;
+    now assume F <> G;
+    then F is_proper_subformula_of G by A1,QC_LANG2:def 22;
+    hence contradiction by A1,QC_LANG2:74;
+  end;
+  hence F = G;
+end;
+
+definition let p be Element of QC-WFF;
+  func list_of_immediate_constituents(p) -> FinSequence of QC-WFF equals :Def1:
+     <*> QC-WFF if p = VERUM or p is atomic,
+     <* the_argument_of p *> if p is negative,
+     <* the_left_argument_of p, the_right_argument_of p *> if
+      p is conjunctive
+    otherwise <* the_scope_of p *>;
+  coherence;
+  consistency by QC_LANG1:51;
+end;
+
+theorem Th30:
+  k in dom list_of_immediate_constituents(F) &
+    G = (list_of_immediate_constituents(F)).k implies
+      G is_immediate_constituent_of F
+proof
+  assume A1: k in dom list_of_immediate_constituents(F) &
+    G = (list_of_immediate_constituents(F)).k;
+A2:F <> VERUM
+    proof assume F = VERUM;
+    then list_of_immediate_constituents(F) = <*> QC-WFF by Def1;
+      hence contradiction by A1,FINSEQ_1:26;
+    end;
+  A3: not F is atomic
+    proof assume F is atomic;
+    then list_of_immediate_constituents(F) = <*> QC-WFF by Def1;
+      hence contradiction by A1,FINSEQ_1:26;
+    end;
+  per cases by A2,A3,QC_LANG1:33;
+    suppose A4: F is negative;
+then A5:    list_of_immediate_constituents(F) = <* the_argument_of F *> by Def1
+;
+      then k in Seg 1 by A1,FINSEQ_1:def 8;
+      then k = 1 by FINSEQ_1:4,TARSKI:def 1;
+      then G = the_argument_of F by A1,A5,FINSEQ_1:def 8;
+    hence G is_immediate_constituent_of F by A4,QC_LANG2:65;
+    suppose A6: F is conjunctive;
+then A7:    list_of_immediate_constituents(F)
+        = <* the_left_argument_of F, the_right_argument_of F *> by Def1;
+A8:    len <* the_left_argument_of F, the_right_argument_of F *> = 2 &
+        <* the_left_argument_of F, the_right_argument_of F *>.1 =
+          the_left_argument_of F &
+        <* the_left_argument_of F, the_right_argument_of F *>.2 =
+          the_right_argument_of F by FINSEQ_1:61;
+      then A9: k in {1,2} by A1,A7,FINSEQ_1:4,def 3;
+        now per cases by A9,TARSKI:def 2;
+      suppose k = 1;
+      hence G is_immediate_constituent_of F by A1,A6,A7,A8,QC_LANG2:66;
+      suppose k = 2;
+      hence G is_immediate_constituent_of F by A1,A6,A7,A8,QC_LANG2:66;
+      end;
+      hence G is_immediate_constituent_of F;
+    suppose A10: F is universal;
+      then not (F = VERUM or F is atomic or F is negative or
+        F is conjunctive) by QC_LANG1:51;
+then A11:    list_of_immediate_constituents(F) = <* the_scope_of F *> by Def1;
+      then k in Seg 1 by A1,FINSEQ_1:def 8;
+      then k = 1 by FINSEQ_1:4,TARSKI:def 1;
+       then G = the_scope_of F by A1,A11,FINSEQ_1:def 8;
+    hence G is_immediate_constituent_of F by A10,QC_LANG2:67;
+end;
+
+theorem Th31:
+  rng list_of_immediate_constituents(F) =
+    { G where G is Element of QC-WFF : G is_immediate_constituent_of F }
+proof
+  thus rng list_of_immediate_constituents(F) c=
+    { G where G is Element of QC-WFF : G is_immediate_constituent_of F }
+  proof let y be set; assume
+    A1: y in rng list_of_immediate_constituents(F);
+then A2: ex x being set st x in dom list_of_immediate_constituents(F) &
+        y = (list_of_immediate_constituents(F)).x by FUNCT_1:def 5;
+      rng list_of_immediate_constituents(F) c= QC-WFF by FINSEQ_1:def 4;
+    then reconsider G = y as Element of QC-WFF by A1;
+      G is_immediate_constituent_of F by A2,Th30;
+    hence y in { G1 where G1 is Element of QC-WFF :
+      G1 is_immediate_constituent_of F };
+  end;
+  thus { G where G is Element of QC-WFF : G is_immediate_constituent_of F }
+    c= rng list_of_immediate_constituents(F)
+  proof let x be set; assume
+      x in { G where G is Element of QC-WFF : G is_immediate_constituent_of F }
+;
+    then consider G such that A3: x = G & G is_immediate_constituent_of F;
+      ex n st n in dom list_of_immediate_constituents(F) &
+      G = (list_of_immediate_constituents(F)).n
+      proof
+A4:      F <> VERUM by A3,QC_LANG2:58;
+        A5: not F is atomic by A3,QC_LANG2:64;
+        per cases by A4,A5,QC_LANG1:33;
+        suppose A6: F is negative;
+then A7:        list_of_immediate_constituents(F) = <* the_argument_of F *> by
+Def1
+;
+A8:        dom <* the_argument_of F *> = Seg 1 by FINSEQ_1:def 8;
+          consider n such that A9: n = 1;
+        A10: n in Seg n by A9,FINSEQ_1:5;
+A11:        <* the_argument_of F *>.n = the_argument_of F by A9,FINSEQ_1:def 8
+;
+            G = the_argument_of F by A3,A6,QC_LANG2:65;
+        hence thesis by A7,A8,A9,A10,A11;
+        suppose A12: F is conjunctive;
+then A13:        list_of_immediate_constituents(F)
+            = <* the_left_argument_of F, the_right_argument_of F *> by Def1;
+A14:       len <* the_left_argument_of F, the_right_argument_of F *> = 2 &
+            <* the_left_argument_of F, the_right_argument_of F *>.1 =
+              the_left_argument_of F &
+            <* the_left_argument_of F, the_right_argument_of F *>.2 =
+              the_right_argument_of F by FINSEQ_1:61;
+then A15:        dom <* the_left_argument_of F, the_right_argument_of F *> =
+Seg 2
+            by FINSEQ_1:def 3;
+            now per cases by A3,A12,QC_LANG2:66;
+          suppose A16: G = the_left_argument_of F;
+           1 in {1,2} by TARSKI:def 2;
+          hence ex n st n in dom list_of_immediate_constituents(F) &
+            G = (list_of_immediate_constituents(F)).n by A13,A14,A15,A16,
+FINSEQ_1:4;
+          suppose A17: G = the_right_argument_of F;
+          consider n such that A18: n = 2;
+         n in dom list_of_immediate_constituents(F) by A13,A15,A18,FINSEQ_1:5;
+          hence ex n st n in dom list_of_immediate_constituents(F) &
+            G = (list_of_immediate_constituents(F)).n by A13,A14,A17,A18;
+          end;
+          hence thesis;
+        suppose A19: F is universal;
+          then not (F = VERUM or F is atomic or F is negative or
+            F is conjunctive) by QC_LANG1:51;
+then A20:        list_of_immediate_constituents(F) = <* the_scope_of F *> by
+Def1;
+A21:        dom <* the_scope_of F *> = Seg 1 by FINSEQ_1:def 8;
+          consider n such that A22: n = 1;
+        A23: n in Seg n by A22,FINSEQ_1:5;
+A24:        <* the_scope_of F *>.n = the_scope_of F by A22,FINSEQ_1:def 8;
+            G = the_scope_of F by A3,A19,QC_LANG2:67;
+        hence thesis by A20,A21,A22,A23,A24;
+      end;
+    hence x in rng list_of_immediate_constituents(F) by A3,FUNCT_1:def 5;
+  end;
+end;
+
+definition let p be Element of QC-WFF;
+  func tree_of_subformulae(p) -> finite DecoratedTree of QC-WFF means :Def2:
+    it.{} = p & for x being Element of dom it holds
+      succ(it,x) = list_of_immediate_constituents(it.x);
+ existence
+   proof
+     deffunc G(Element of QC-WFF) = list_of_immediate_constituents($1);
+     consider W being finite-branching DecoratedTree of QC-WFF such that
+A1:   W.{} = p & for x being Element of dom W, w being Element of QC-WFF
+       st w = W.x holds succ(W,x) = G(w) from ExDecTrees;
+     deffunc F(Element of QC-WFF) = len @ $1;
+     A2: for t,t' being Element of dom W, d being Element of QC-WFF
+       st t' in succ t & d = W.t' holds F(d) < F(W.t)
+       proof let t,t' be Element of dom W, d be Element of QC-WFF such that
+A3:         t' in succ t & d = W.t';
+           succ t = { t^<*n*>: t^<*n*> in dom W} by TREES_2:def 5;
+         then consider n such that A4: t' = t^<*n*> & t^<*n*> in dom W by A3;
+           dom list_of_immediate_constituents(W.t) = dom succ(W,t) by A1
+                                                  .= dom (t succ) by Th11;
+then A5:       n+1 in dom list_of_immediate_constituents(W.t) by A4,Th12;
+           W.t' = succ(W,t).(n+1) by A4,Th13
+               .= (list_of_immediate_constituents(W.t)).(n+1) by A1;
+         then W.t' is_immediate_constituent_of W.t by A5,Th30;
+         hence F(d) < F(W.t) by A3,QC_LANG2:71;
+       end;
+       W is finite from FinDecTree(A2);
+     then reconsider W as finite DecoratedTree of QC-WFF;
+     take W;
+     thus thesis by A1;
+   end;
+ uniqueness
+   proof
+     let t1, t2 be finite DecoratedTree of QC-WFF;
+     assume that A6: t1.{} = p & for x being Element of dom t1 holds
+       succ(t1,x) = list_of_immediate_constituents(t1.x)
+     and A7: t2.{} = p & for x being Element of dom t2 holds
+       succ(t2,x) = list_of_immediate_constituents(t2.x);
+       for t1, t2 being finite DecoratedTree of QC-WFF st
+       ( t1.{} = p & for x being Element of dom t1 holds
+       succ(t1,x) = list_of_immediate_constituents(t1.x) )
+     & ( t2.{} = p & for x being Element of dom t2 holds
+     succ(t2,x) = list_of_immediate_constituents(t2.x) ) holds t1 c= t2
+       proof
+         let t1, t2 be finite DecoratedTree of QC-WFF;
+         assume that A8: t1.{} = p & for x being Element of dom t1 holds
+           succ(t1,x) = list_of_immediate_constituents(t1.x)
+         and A9: t2.{} = p & for x being Element of dom t2 holds
+           succ(t2,x) = list_of_immediate_constituents(t2.x);
+         defpred P[set] means $1 in dom t2 & t1.$1 = t2.$1;
+         A10: P[{}] by A8,A9,TREES_1:47;
+         A11: for t being Element of dom t1, n
+           st P[t] & t^<*n*> in dom t1 holds P[t^<*n*>]
+             proof
+               let t be Element of dom t1, n; assume
+ A12: P[t] & t^<*n*> in dom t1;
+               then reconsider t' = t as Element of dom t2;
+               A13: succ(t1,t) = list_of_immediate_constituents(t2.t') by A8,
+A12
+                             .= succ(t2,t') by A9;
+                 t^<*n*> in succ t by A12,TREES_2:14;
+               then n < card succ t by TREES_9:7;
+               then n < len (t succ) by TREES_9:def 5;
+               then n < len succ(t1,t) by TREES_9:29;
+               then n < len (t' succ) by A13,TREES_9:29;
+               then n < card succ t' by TREES_9:def 5;
+               then A14: t'^<*n*> in succ t' by TREES_9:7;
+               hence t^<*n*> in dom t2;
+               thus t1.(t^<*n*>) = succ(t2,t').(n+1) by A12,A13,Th13
+                                .= t2.(t^<*n*>) by A14,Th13;
+             end;
+         A15: for t being Element of dom t1
+           holds P[t] from TreeStruct_Ind(A10,A11);
+         then for t being set st t in dom t1 holds t in dom t2;
+         then A16: dom t1 c= dom t2 by TARSKI:def 3;
+           for x being set st x in dom t1 holds t1.x = t2.x by A15;
+         hence t1 c= t2 by A16,GRFUNC_1:8;
+       end;
+     then t1 c= t2 & t2 c= t1 by A6,A7;
+     hence t1 = t2 by XBOOLE_0:def 10;
+   end;
+end;
+
+reserve t, t', t'' for Element of dom tree_of_subformulae(F);
+
+canceled 2;
+
+theorem Th34:
+  F in rng tree_of_subformulae(F)
+proof
+    (tree_of_subformulae(F)).{} = F & {} in dom tree_of_subformulae(F)
+    by Def2,TREES_1:47;
+  hence thesis by FUNCT_1:def 5;
+end;
+
+theorem Th35:
+  t^<*n*> in dom tree_of_subformulae(F) implies
+    ex G st G = (tree_of_subformulae(F)).(t^<*n*>) &
+      G is_immediate_constituent_of (tree_of_subformulae(F)).t
+proof
+  assume t^<*n*> in dom tree_of_subformulae(F);
+  then consider t' such that A1: t' = t^<*n*>;
+  consider G such that A2: G = (tree_of_subformulae(F)).t';
+A3:succ t = {t^<*k*>: t^<*k*> in dom tree_of_subformulae(F)} by TREES_2:def 5;
+    t' in {t^<*k*>: t^<*k*> in dom tree_of_subformulae(F)} by A1;
+then G in rng succ((tree_of_subformulae(F)),t) by A2,A3,Th14;
+then A4:G in rng list_of_immediate_constituents((tree_of_subformulae(F)).t) by
+Def2;
+    rng list_of_immediate_constituents((tree_of_subformulae(F)).t) =
+    { G1 where G1 is Element of QC-WFF :
+      G1 is_immediate_constituent_of (tree_of_subformulae(F)).t } by Th31;
+  then consider G' such that A5: G' = G &
+    G' is_immediate_constituent_of (tree_of_subformulae(F)).t by A4;
+  thus ex G st G = (tree_of_subformulae(F)).(t^<*n*>) &
+    G is_immediate_constituent_of (tree_of_subformulae(F)).t by A1,A2,A5;
+end;
+
+theorem Th36:
+  H is_immediate_constituent_of (tree_of_subformulae(F)).t iff
+    ex n st t^<*n*> in dom tree_of_subformulae(F) &
+      H = (tree_of_subformulae(F)).(t^<*n*>)
+proof
+    now
+    assume A1: H is_immediate_constituent_of (tree_of_subformulae(F)).t;
+    set G = (tree_of_subformulae(F)).t;
+   H in {H1 where H1 is Element of QC-WFF : H1 is_immediate_constituent_of G}
+      by A1;
+then A2:  H in rng list_of_immediate_constituents(G) by Th31;
+      succ(tree_of_subformulae(F),t) = list_of_immediate_constituents(G)
+      by Def2;
+    then consider t' such that
+A3:    H = (tree_of_subformulae(F)).t' & t' in succ t by A2,Th15;
+      succ t = { t^<*n*>: t^<*n*> in dom tree_of_subformulae(F) }
+      by TREES_2:def 5;
+    then consider n such that
+A4:    t' = t^<*n*> & t^<*n*> in dom tree_of_subformulae(F) by A3;
+    thus ex n st t^<*n*> in dom tree_of_subformulae(F) &
+      H = (tree_of_subformulae(F)).(t^<*n*>) by A3,A4;
+  end;
+  hence H is_immediate_constituent_of (tree_of_subformulae(F)).t implies
+    ex n st t^<*n*> in dom tree_of_subformulae(F) &
+      H = (tree_of_subformulae(F)).(t^<*n*>);
+  given n such that A5: t^<*n*> in dom tree_of_subformulae(F) &
+    H = (tree_of_subformulae(F)).(t^<*n*>);
+  consider G such that A6: G = (tree_of_subformulae(F)).(t^<*n*>) &
+      G is_immediate_constituent_of (tree_of_subformulae(F)).t by A5,Th35;
+  thus H is_immediate_constituent_of (tree_of_subformulae(F)).t by A5,A6;
+end;
+
+theorem Th37:
+  G in rng tree_of_subformulae(F) & H is_immediate_constituent_of G
+    implies H in rng tree_of_subformulae(F)
+proof
+  assume A1: G in rng tree_of_subformulae(F) & H is_immediate_constituent_of G;
+  then consider x being set such that
+A2:  x in dom tree_of_subformulae(F) & G = (tree_of_subformulae(F)).x
+      by FUNCT_1:def 5;
+  consider t such that A3: t = x by A2;
+  consider n such that
+A4:  t^<*n*> in dom tree_of_subformulae(F) &
+      H = (tree_of_subformulae(F)).(t^<*n*>) by A1,A2,A3,Th36;
+  thus H in rng tree_of_subformulae(F) by A4,FUNCT_1:def 5;
+end;
+
+theorem Th38:
+  G in rng tree_of_subformulae(F) & H is_subformula_of G implies
+    H in rng tree_of_subformulae(F)
+proof
+  assume A1: G in rng tree_of_subformulae(F) & H is_subformula_of G;
+  then consider n being Nat, L being FinSequence such that
+A2:  1 <= n & len L = n & L.1 = H & L.n = G &
+    for k st 1 <= k & k < n
+      ex H1,G1 being Element of QC-WFF st L.k = H1 & L.(k+1) = G1 &
+        H1 is_immediate_constituent_of G1 by QC_LANG2:def 21;
+    defpred P[Nat] means ex H' st H' = L.($1+1) &
+      ($1+1) in dom L & H' in rng tree_of_subformulae(F);
+  A3: ex k st P[k]
+    proof
+      A4: 0 <> n by A2;
+      then consider k such that A5: k+1 = n by NAT_1:22; A6: Seg n = dom L by
+A2,FINSEQ_1:def 3;
+        n in Seg n by A4,FINSEQ_1:5;
+      hence thesis by A1,A2,A5,A6;
+    end;
+  A7: for k st k <> 0 & P[k] ex m st m < k & P[m]
+    proof
+      let k; assume A8: k <> 0 & P[k];
+then A9:    0 < k & ex G' st G' = L.(k+1) & k+1 in dom L &
+        G' in rng tree_of_subformulae(F) by NAT_1:19;
+      consider G' such that A10: G' = L.(k+1) & k+1 in dom L &
+        G' in rng tree_of_subformulae(F) by A8;
+      consider m such that A11: m+1 = k by A8,NAT_1:22;
+A12:    m < k by A11,NAT_1:38;
+A13:   0+1 <= k by A9,NAT_1:38;
+      A14: Seg len L = dom L by FINSEQ_1:def 3; A15: Seg n = dom L by A2,
+FINSEQ_1:def 3;
+      A16: 1 <= k+1 & k+1 <= n by A2,A8,A14,FINSEQ_1:3;
+then 1 <= k & k < n by A13,NAT_1:38;
+      then consider H1,G1 being Element of QC-WFF such that
+A17:      L.k = H1 & L.(k+1) = G1 & H1 is_immediate_constituent_of G1 by A2;
+        1 <= k & k <= n by A13,A16,NAT_1:38;
+then A18:   k in dom L by A15,FINSEQ_1:3;
+        H1 in rng tree_of_subformulae(F) by A10,A17,Th37;
+      hence ex m st m < k & P[m] by A11,A12,A17,A18;
+    end;
+    P[0] from Regr(A3,A7);
+  then consider H' such that A19: H' = L.1 & H' in rng tree_of_subformulae(F);
+  thus H in rng tree_of_subformulae(F) by A2,A19;
+end;
+
+theorem Th39:
+  G in rng tree_of_subformulae(F) iff G is_subformula_of F
+proof
+    now
+    assume A1: G in rng tree_of_subformulae(F);
+    defpred P[set] means
+      ex H st (tree_of_subformulae(F)).$1 = H & H is_subformula_of F;
+    set T = dom tree_of_subformulae(F);
+    A2: P[{}] proof take F; thus thesis by Def2; end;
+    A3: for t being Element of T, n st P[t] & t^<*n*> in T holds P[t^<*n*>]
+      proof
+        let t be Element of T, n; assume
+A4:      P[t] & t^<*n*> in T;
+        then consider H such that
+A5:        (tree_of_subformulae(F)).t = H & H is_subformula_of F;
+          (tree_of_subformulae(F)).(t^<*n*>) is Element of QC-WFF by A4,Th27;
+        then consider H' such that
+A6:        (tree_of_subformulae(F)).(t^<*n*>) = H';
+        consider G' such that
+A7:        G' = (tree_of_subformulae(F)).(t^<*n*>) &
+          G' is_immediate_constituent_of (tree_of_subformulae(F)).t by A4,Th35;
+          H' is_subformula_of H by A5,A6,A7,QC_LANG2:72;
+        then H' is_subformula_of F by A5,QC_LANG2:77;
+        hence P[t^<*n*>] by A6;
+      end;
+A8:  for t being Element of T holds P[t] from TreeStruct_Ind(A2,A3);
+    consider t being set such that
+A9:    t in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).t = G
+        by A1,FUNCT_1:def 5;
+    reconsider t as Element of T by A9;
+    consider H such that
+A10:    (tree_of_subformulae(F)).t = H & H is_subformula_of F by A8;
+    thus G is_subformula_of F by A9,A10;
+  end;
+  hence G in rng tree_of_subformulae(F) implies G is_subformula_of F;
+  assume A11: G is_subformula_of F;
+    F in rng tree_of_subformulae(F) by Th34;
+  hence G in rng tree_of_subformulae(F) by A11,Th38;
+end;
+
+theorem
+    rng tree_of_subformulae(F) = Subformulae(F)
+proof
+  thus rng tree_of_subformulae(F) c= Subformulae(F)
+    proof let y be set; assume
+A1:    y in rng tree_of_subformulae(F);
+      then y is Element of QC-WFF by Th26;
+      then consider G such that A2: G = y;
+        G is_subformula_of F by A1,A2,Th39;
+      hence y in Subformulae(F) by A2,QC_LANG2:def 23;
+    end;
+  thus Subformulae(F) c= rng tree_of_subformulae(F)
+    proof let y be set; assume y in Subformulae(F);
+      then consider G such that
+A3:      G = y & G is_subformula_of F by QC_LANG2:def 23;
+      thus y in rng tree_of_subformulae(F) by A3,Th39;
+    end;
+end;
+
+theorem
+    t' in succ t implies (tree_of_subformulae(F)).t'
+    is_immediate_constituent_of (tree_of_subformulae(F)).t
+proof
+  assume A1: t' in succ t;
+    succ t = { t^<*n*>: t^<*n*> in dom tree_of_subformulae(F) }
+    by TREES_2:def 5; then consider n such that
+A2:  t' = t^<*n*> & t^<*n*> in dom tree_of_subformulae(F) by A1;
+  thus (tree_of_subformulae(F)).t'
+    is_immediate_constituent_of (tree_of_subformulae(F)).t by A2,Th36;
+end;
+
+reserve x,y1,y2 for set;
+
+theorem Th42:
+  t is_a_prefix_of t' implies (tree_of_subformulae(F)).t'
+    is_subformula_of (tree_of_subformulae(F)).t
+proof
+  assume t is_a_prefix_of t';
+  then consider r being FinSequence such that A1: t' = t^r by TREES_1:8;
+  reconsider r as FinSequence of NAT by A1,FINSEQ_1:50;
+  consider n such that A2: n = len r;
+        0 < n+1 by NAT_1:19;
+      then A3: 0+1 <= n+1 by NAT_1:38;
+      defpred P[set,set] means
+        ex G being QC-formula, m,k1 being Nat, r1 being FinSequence st
+          G = $2 & m = $1 & m+k1 = n+1 & r1 = r|Seg k1 &
+            G = (tree_of_subformulae(F)).(t^r1);
+      A4: for k,y1,y2 st k in Seg(n+1) & P[k,y1] & P[k,y2] holds y1=y2
+        by XCMPLX_1:2;
+      A5:  for k st k in Seg(n+1) ex x st P[k,x]
+        proof
+          let k; assume k in Seg(n+1);
+          then 1 <= k & k <= n+1 by FINSEQ_1:3;
+          then consider k1 being Nat such that
+A6:         k+k1 = n+1 by NAT_1:28;
+            r|Seg k1 is FinSequence by FINSEQ_1:19;
+          then consider r1 being FinSequence such that
+A7:         r1 = r|Seg k1;
+            t^r1 in dom tree_of_subformulae(F)
+            proof
+              consider q being FinSequence such that
+A8:              q = r|Seg k1 & q is_a_prefix_of r by Th4;
+             t^r1 is_a_prefix_of t^r by A7,A8,FINSEQ_6:15;
+              hence t^r1 in dom tree_of_subformulae(F) by A1,TREES_1:45;
+            end;
+          then reconsider t1 = t^r1 as Element of dom tree_of_subformulae(F);
+          consider G being QC-formula such that
+A9:         G = (tree_of_subformulae(F)).t1;
+           thus ex x st P[k,x] by A6,A7,A9;
+        end;
+        ex L being FinSequence st
+        dom L = Seg(n+1) & for k st k in Seg(n+1) holds P[k,L.k]
+          from SeqEx(A4,A5
+);
+      then consider L being FinSequence such that
+A10:      dom L = Seg (n+1) & for k st k in Seg (n+1) holds
+        ex G being QC-formula, m,k1 being Nat, r1 being FinSequence st
+          G = L.k & m = k & m+k1 = n+1 & r1 = r|Seg k1 &
+            G = (tree_of_subformulae(F)).(t^r1);
+A11:     len L = n+1 by A10,FINSEQ_1:def 3;
+A12:     for k st 1 <= k & k <= n+1
+          ex G being QC-formula, k1 being Nat, r1 being FinSequence st
+            G = L.k & k+k1 = n+1 & r1 = r|Seg k1 &
+              G = (tree_of_subformulae(F)).(t^r1)
+          proof let k; assume 1 <= k & k <= n+1;
+            then k in Seg (n+1) by FINSEQ_1:3; then consider G being
+QC-formula,
+              m,k1 being Nat, r1 being FinSequence such that
+A13:            G = L.k & m = k & m+k1 = n+1 & r1 = r|Seg k1 &
+                G = (tree_of_subformulae(F)).(t^r1) by A10;
+            thus thesis by A13;
+          end; then consider G being QC-formula,
+            k1 being Nat, r1 being FinSequence such that
+A14:            G = L.1 & 1+k1 = n+1 & r1 = r|Seg k1 &
+                G = (tree_of_subformulae(F)).(t^r1) by A3; k1 = n by A14,
+XCMPLX_1:2;
+          then dom r = Seg k1 by A2,FINSEQ_1:def 3;
+          then A15: t' = t^r1 by A1,A14,RELAT_1:98;
+A16:    L.(n+1) = (tree_of_subformulae(F)).t
+        proof consider G being QC-formula,
+            k1 being Nat, r1 being FinSequence such that
+A17:            G = L.(n+1) & (n+1)+k1 = n+1 & r1 = r|Seg k1 &
+                G = (tree_of_subformulae(F)).(t^r1) by A3,A12; k1+(n+1) = 0+(
+n
++1) by A17;
+          then k1 = 0 by XCMPLX_1:2;
+          then r1 = {} by A17,FINSEQ_1:4,RELAT_1:110;
+          hence thesis by A17,FINSEQ_1:47;
+        end;
+        for k st 1 <= k & k < n+1
+        ex H1,G1 being Element of QC-WFF st L.k = H1 & L.(k+1) = G1 &
+          H1 is_immediate_constituent_of G1
+        proof
+          let k; assume A18: 1 <= k & k < n+1; then consider
+            H1 being QC-formula, k1 being Nat, r1 being FinSequence such that
+A19:           H1 = L.k & k+k1 = n+1 & r1 = r|Seg k1 &
+                H1 = (tree_of_subformulae(F)).(t^r1) by A12;
+            1 <= k+1 & k+1 <= n+1 by A18,NAT_1:38; then consider
+            G1 being QC-formula, k2 being Nat, r2 being FinSequence such that
+A20:           G1 = L.(k+1) & (k+1)+k2 = n+1 & r2 = r|Seg k2 &
+                G1 = (tree_of_subformulae(F)).(t^r2) by A12;
+A21:        k1 = k2+1
+            proof k+(1+k2) = k+k1 by A19,A20,XCMPLX_1:1; hence thesis by
+XCMPLX_1:2;
+            end;
+            t^r2 in dom tree_of_subformulae(F)
+            proof
+              consider q being FinSequence such that
+A22:              q = r|Seg k2 & q is_a_prefix_of r by Th4;
+             t^r2 is_a_prefix_of t^r by A20,A22,FINSEQ_6:15;
+              hence t^r2 in dom tree_of_subformulae(F) by A1,TREES_1:45;
+            end;
+          then reconsider t2 = t^r2 as Element of dom tree_of_subformulae(F);
+            k2+1 <= len r
+            proof
+                k1+1 <= n+1 by A18,A19,AXIOMS:24;
+              hence thesis by A2,A21,REAL_1:53;
+            end;
+          then consider m such that
+A23:          r1 = r2^<*m*> by A19,A20,A21,Th6;
+A24:       t2^<*m*> = t^r1 by A23,FINSEQ_1:45;
+        t2^<*m*> in dom tree_of_subformulae(F)
+            proof
+              consider q being FinSequence such that
+A25:              q = r|Seg k1 & q is_a_prefix_of r by Th4;
+             t^r1 is_a_prefix_of t^r by A19,A25,FINSEQ_6:15;
+              hence thesis by A1,A24,TREES_1:45;
+            end;
+          then H1 is_immediate_constituent_of G1 by A19,A20,A24,Th36;
+          hence ex H1,G1 being Element of QC-WFF st L.k = H1 & L.(k+1) = G1 &
+            H1 is_immediate_constituent_of G1 by A19,A20;
+        end;
+    hence (tree_of_subformulae(F)).t'
+      is_subformula_of (tree_of_subformulae(F)).t
+        by A3,A11,A14,A15,A16,QC_LANG2:def 21;
+end;
+
+theorem Th43:
+  t is_a_proper_prefix_of t' implies
+    len @((tree_of_subformulae(F)).t') < len @((tree_of_subformulae(F)).t)
+proof
+  set G = (tree_of_subformulae(F)).t;
+  set H = (tree_of_subformulae(F)).t';
+  assume A1: t is_a_proper_prefix_of t';
+then A2:t is_a_prefix_of t' by XBOOLE_0:def 8;
+  then H is_subformula_of G by Th42;
+then A3:len @ H <= len @ G by Th28;
+    now assume A4: len @ H = len @ G;
+    consider r being FinSequence such that A5: t' = t^r by A2,TREES_1:8;
+    reconsider r as FinSequence of NAT by A5,FINSEQ_1:50;
+    defpred P[set,set] means ex t1 being Element of dom tree_of_subformulae(F),
+      r1 being FinSequence, m being Nat st m = $1 & r1 = r|Seg m & t1 = t^r1 &
+        $2 = (tree_of_subformulae(F)).t1;
+    A6: for k,y1,y2 st k in Seg len r & P[k,y1] & P[k,y2] holds y1=y2;
+    A7:  for k st k in Seg len r ex x st P[k,x]
+      proof let k such that k in Seg len r;
+          r|Seg k is FinSequence by FINSEQ_1:19;
+        then consider r1 being FinSequence such that A8: r1 = r|Seg k;
+          r1 is_a_prefix_of r by A8,TREES_1:def 1;
+then t^r1 is_a_prefix_of t^r by FINSEQ_6:15;
+        then t^r1 in dom tree_of_subformulae(F) by A5,TREES_1:45;
+        then consider t1 being Element of dom tree_of_subformulae(F) such that
+A9:       t1 = t^r1;
+        consider x such that A10: x = (tree_of_subformulae(F)).t1;
+        thus ex x st P[k,x] by A8,A9,A10;
+      end;
+      ex L being FinSequence st
+        dom L = Seg len r & for k st k in Seg len r holds P[k,L.k]
+          from SeqEx(A6,A7);
+    then consider L being FinSequence such that A11: dom L = Seg len r &
+      for k st k in Seg len r holds
+        ex t1 being Element of dom tree_of_subformulae(F),
+          r1 being FinSequence, m being Nat st m = k & r1 = r|Seg m &
+            t1 = t^r1 & L.k = (tree_of_subformulae(F)).t1;
+A12:  for k st 1 <= k & k <= len r holds
+      ex t1 being Element of dom tree_of_subformulae(F),
+        r1 being FinSequence st r1 = r|Seg k & t1 = t^r1 &
+          L.k = (tree_of_subformulae(F)).t1
+      proof let k; assume 1 <= k & k <=
+ len r; then k in Seg len r by FINSEQ_1:3;
+        then consider t1 being Element of dom tree_of_subformulae(F),
+          r1 being FinSequence, m being Nat such that
+A13:         m = k & r1 = r|Seg m &
+              t1 = t^r1 & L.k = (tree_of_subformulae(F)).t1 by A11;
+        thus thesis by A13;
+      end;
+A14:  1 <= len r
+    proof
+      A15: r <> {} by A1,A5,FINSEQ_1:47;
+      reconsider t1 = {} as Element of dom tree_of_subformulae(F) by TREES_1:47
+;
+        t1 is_a_prefix_of r by XBOOLE_1:2;
+      then A16: t1 is_a_proper_prefix_of r by A15,XBOOLE_0:def 8;
+        len t1 = 0 by FINSEQ_1:25;
+      then 0 < len r by A16,TREES_1:24; then 0+1 <= len r by NAT_1:38; hence
+ thesis;
+    end;
+    then consider t1 being Element of dom tree_of_subformulae(F),
+      r1 being FinSequence such that A17: r1 = r|Seg 1 & t1 = t^r1 &
+        L.1 = (tree_of_subformulae(F)).t1 by A12;
+    set H1 = (tree_of_subformulae(F)).t1;
+A18:  len @ H1 = len @ G
+      proof t is_a_prefix_of t1 by A17,TREES_1:8;
+        then H1 is_subformula_of G by Th42;
+then A19:     len @ H1 <= len @ G by Th28;
+          r1 is_a_prefix_of r by A17,TREES_1:def 1;
+        then t1 is_a_prefix_of t' by A5,A17,FINSEQ_6:15;
+        then H is_subformula_of H1 by Th42;
+then len @ H <= len @ H1 by Th28;
+        hence len @ H1 = len @ G by A4,A19,REAL_1:def 5;
+      end;
+      H1 is_immediate_constituent_of G
+      proof
+        consider m being Nat such that A20: r1 = <*m*> by A14,A17,Th7;
+        thus thesis by A17,A20,Th36;
+      end;
+    hence contradiction by A18,QC_LANG2:71;
+  end;
+  hence len @H < len @G by A3,REAL_1:def 5;
+end;
+
+theorem Th44:
+  t is_a_proper_prefix_of t' implies
+    (tree_of_subformulae(F)).t' <> (tree_of_subformulae(F)).t
+proof
+  set G = (tree_of_subformulae(F)).t;
+  set H = (tree_of_subformulae(F)).t';
+  assume t is_a_proper_prefix_of t';
+then len @H < len @G by Th43;
+  hence H <> G;
+end;
+
+theorem Th45:
+  t is_a_proper_prefix_of t' implies (tree_of_subformulae(F)).t'
+    is_proper_subformula_of (tree_of_subformulae(F)).t
+proof
+  set G = (tree_of_subformulae(F)).t;
+  set H = (tree_of_subformulae(F)).t';
+  assume A1: t is_a_proper_prefix_of t';
+  then t is_a_prefix_of t' by XBOOLE_0:def 8;
+then A2:H is_subformula_of G by Th42;
+    H <> G by A1,Th44;
+  hence H is_proper_subformula_of G by A2,QC_LANG2:def 22;
+end;
+
+theorem
+    (tree_of_subformulae(F)).t = F iff t = {}
+proof
+    now
+    assume A1: (tree_of_subformulae(F)).t = F;
+    assume A2: t <> {};
+    reconsider t1 = {} as Element of dom tree_of_subformulae(F) by TREES_1:47;
+      t1 is_a_prefix_of t by XBOOLE_1:2;
+    then t1 is_a_proper_prefix_of t by A2,XBOOLE_0:def 8;
+    then (tree_of_subformulae(F)).t
+      is_proper_subformula_of (tree_of_subformulae(F)).t1 by Th45;
+    hence contradiction by A1,Def2;
+  end;
+  hence (tree_of_subformulae(F)).t = F implies t = {};
+  assume t = {};
+  hence (tree_of_subformulae(F)).t = F by Def2;
+end;
+
+theorem Th47:
+  t <> t' & (tree_of_subformulae(F)).t = (tree_of_subformulae(F)).t' implies
+    not t,t' are_c=-comparable
+proof
+  assume A1: t <> t' & (tree_of_subformulae(F)).t = (tree_of_subformulae(F)).t'
+;
+  assume A2: t,t' are_c=-comparable;
+  per cases by A2,XBOOLE_0:def 9;
+    suppose t is_a_prefix_of t';
+      then t is_a_proper_prefix_of t' by A1,XBOOLE_0:def 8;
+    hence contradiction by A1,Th45;
+    suppose t' is_a_prefix_of t;
+      then t' is_a_proper_prefix_of t by A1,XBOOLE_0:def 8;
+    hence contradiction by A1,Th45;
+end;
+
+definition let F, G be Element of QC-WFF;
+  func F-entry_points_in_subformula_tree_of G ->
+    AntiChain_of_Prefixes of dom tree_of_subformulae(F) means :Def3:
+      for t being Element of dom tree_of_subformulae(F) holds
+        t in it iff (tree_of_subformulae(F)).t = G;
+existence
+  proof consider X being set such that
+A1:  X = { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F)).t = G };
+A2:  for t being Element of dom tree_of_subformulae(F) holds
+      t in X iff (tree_of_subformulae(F)).t = G
+      proof let t be Element of dom tree_of_subformulae(F);
+        thus t in X iff (tree_of_subformulae(F)).t = G
+          proof
+              now assume t in X;
+             then consider t' being Element of dom tree_of_subformulae(F) such
+that
+A3:              t' = t & (tree_of_subformulae(F)).t' = G by A1;
+              thus (tree_of_subformulae(F)).t = G by A3;
+            end;
+            hence t in X implies (tree_of_subformulae(F)).t = G;
+            assume (tree_of_subformulae(F)).t = G;
+            hence t in X by A1;
+          end;
+      end;
+      X is AntiChain_of_Prefixes of dom tree_of_subformulae(F)
+    proof
+A4:   for x being set st x in X holds x is FinSequence
+       proof let x be set; assume x in X;
+         then consider t being Element of dom tree_of_subformulae(F) such that
+A5:         t = x & (tree_of_subformulae(F)).t = G by A1;
+         thus x is FinSequence by A5;
+       end;
+    for p1,p2 being FinSequence st p1 in X & p2 in X & p1 <> p2 holds
+       not p1,p2 are_c=-comparable
+       proof let p1,p2 be FinSequence; assume
+A6:        p1 in X & p2 in X & p1 <> p2;
+         then consider t1 being Element of dom tree_of_subformulae(F) such that
+A7:        t1 = p1 & (tree_of_subformulae(F)).t1 = G by A1;
+         consider t2 being Element of dom tree_of_subformulae(F) such that
+A8:        t2 = p2 & (tree_of_subformulae(F)).t2 = G by A1,A6;
+         thus not p1,p2 are_c=-comparable by A6,A7,A8,Th47;
+       end;
+      then reconsider X as AntiChain_of_Prefixes by A4,TREES_1:def 13;
+        X c= dom tree_of_subformulae(F)
+        proof let x be set; assume x in X;
+          then consider t being Element of dom tree_of_subformulae(F) such that
+A9:          t = x & (tree_of_subformulae(F)).t = G by A1;
+          thus x in dom tree_of_subformulae(F) by A9;
+        end;
+      hence thesis by TREES_1:def 14;
+    end;
+    hence thesis by A2;
+  end;
+uniqueness
+  proof let P1,P2 be AntiChain_of_Prefixes of dom tree_of_subformulae(F);
+    assume A10: for t being Element of dom tree_of_subformulae(F) holds
+      t in P1 iff (tree_of_subformulae(F)).t = G;
+    assume A11: for t being Element of dom tree_of_subformulae(F) holds
+      t in P2 iff (tree_of_subformulae(F)).t = G;
+    thus P1 c= P2
+      proof let x be set such that A12: x in P1;
+          P1 c= dom tree_of_subformulae(F) by TREES_1:def 14;
+        then reconsider t = x as Element of dom tree_of_subformulae(F) by A12;
+          (tree_of_subformulae(F)).t = G by A10,A12;
+        hence x in P2 by A11;
+      end;
+    thus P2 c= P1
+      proof let x be set such that A13: x in P2;
+          P2 c= dom tree_of_subformulae(F) by TREES_1:def 14;
+        then reconsider t = x as Element of dom tree_of_subformulae(F) by A13;
+          (tree_of_subformulae(F)).t = G by A11,A13;
+        hence x in P1 by A10;
+      end;
+  end;
+end;
+
+canceled;
+
+theorem Th49:
+  F-entry_points_in_subformula_tree_of G =
+    { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F)).t = G }
+proof
+  thus F-entry_points_in_subformula_tree_of G c=
+    { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F)).t = G }
+  proof let x be set; assume A1: x in F-entry_points_in_subformula_tree_of G;
+      F-entry_points_in_subformula_tree_of G c= dom tree_of_subformulae(F)
+      by TREES_1:def 14;
+    then reconsider t' = x as Element of dom tree_of_subformulae(F) by A1;
+      (tree_of_subformulae(F)).t' = G by A1,Def3;
+    hence x in { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F)).t = G };
+  end;
+  thus { t where t is Element of dom tree_of_subformulae(F) :
+    (tree_of_subformulae(F)).t = G } c=
+      F-entry_points_in_subformula_tree_of G
+  proof let x be set;
+    assume x in { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F)).t = G }; then consider t' such that
+A2:  t' = x & (tree_of_subformulae(F)).t' = G;
+    thus x in F-entry_points_in_subformula_tree_of G by A2,Def3;
+  end;
+end;
+
+theorem Th50:
+  G is_subformula_of F iff F-entry_points_in_subformula_tree_of G <> {}
+proof
+    now assume G is_subformula_of F;
+    then G in rng tree_of_subformulae(F) by Th39;
+    then ex x being set st x in dom tree_of_subformulae(F) &
+      G = (tree_of_subformulae(F)).x by FUNCT_1:def 5;
+    hence F-entry_points_in_subformula_tree_of G <> {} by Def3;
+  end;
+  hence G is_subformula_of F implies
+    F-entry_points_in_subformula_tree_of G <> {};
+  assume F-entry_points_in_subformula_tree_of G <> {};
+  then consider x being set such that
+A1:  x in F-entry_points_in_subformula_tree_of G by XBOOLE_0:def 1;
+    x in { t where t is Element of dom tree_of_subformulae(F) :
+    (tree_of_subformulae(F)).t = G } by A1,Th49;
+  then consider t such that A2: x = t & (tree_of_subformulae(F)).t = G;
+    G in rng tree_of_subformulae(F) by A2,FUNCT_1:def 5;
+  hence G is_subformula_of F by Th39;
+end;
+
+theorem Th51:
+  t' = t^<*m*> & (tree_of_subformulae(F)).t is negative implies
+    (tree_of_subformulae(F)).t' = the_argument_of (tree_of_subformulae(F)).t &
+      m = 0
+proof
+  set G = (tree_of_subformulae(F)).t;
+  set H = (tree_of_subformulae(F)).t';
+  assume A1: t' = t^<*m*> & G is negative;
+  then A2: H is_immediate_constituent_of G by Th36;
+A3:succ(tree_of_subformulae(F),t) = list_of_immediate_constituents(G) by Def2;
+  A4: list_of_immediate_constituents(G) = <* the_argument_of G *> by A1,Def1;
+  consider q being Element of dom tree_of_subformulae(F) such that
+A5:  q = t & succ(tree_of_subformulae(F),t)
+      = tree_of_subformulae(F)*(q succ) by TREES_9:def 6;
+ dom <* the_argument_of G *> = dom (t succ) by A3,A4,A5,Th10;
+then A6:m+1 in dom <* the_argument_of G *> by A1,Th12;
+    dom <* the_argument_of G *> = Seg 1 by FINSEQ_1:def 8; then m+1 = 0+1 by A6
+,FINSEQ_1:4,TARSKI:def 1;
+  hence H = the_argument_of G & m = 0 by A1,A2,QC_LANG2:65,XCMPLX_1:2;
+end;
+
+theorem Th52:
+  t' = t^<*m*> & (tree_of_subformulae(F)).t is conjunctive implies
+    (tree_of_subformulae(F)).t'
+      = the_left_argument_of (tree_of_subformulae(F)).t & m = 0 or
+    (tree_of_subformulae(F)).t'
+      = the_right_argument_of (tree_of_subformulae(F)).t & m = 1
+proof
+  set G = (tree_of_subformulae(F)).t;
+  set H = (tree_of_subformulae(F)).t';
+  assume A1: t' = t^<*m*> & G is conjunctive;
+A2:succ(tree_of_subformulae(F),t) = list_of_immediate_constituents(G) by Def2;
+  A3: list_of_immediate_constituents(G)
+    = <* the_left_argument_of G, the_right_argument_of G *> by A1,Def1;
+  consider q being Element of dom tree_of_subformulae(F) such that
+A4:  q = t & succ(tree_of_subformulae(F),t)
+      = tree_of_subformulae(F)*(q succ) by TREES_9:def 6;
+ dom <* the_left_argument_of G, the_right_argument_of G *> = dom (t succ)
+    by A2,A3,A4,Th10;
+then A5:m+1 in dom <* the_left_argument_of G, the_right_argument_of G *> by A1,
+Th12;
+    len <* the_left_argument_of G, the_right_argument_of G *> = 2 by FINSEQ_1:
+61
+;
+  then dom <* the_left_argument_of G, the_right_argument_of G *> = Seg 2
+    by FINSEQ_1:def 3;
+  then A6: m+1 = 0+1 or m+1 = 1+1 by A5,FINSEQ_1:4,TARSKI:def 2;
+  per cases by A6,XCMPLX_1:2;
+  suppose A7: m = 0;
+      H = succ(tree_of_subformulae(F),t).(m+1) by A1,Th13
+     .= the_left_argument_of G by A2,A3,A7,FINSEQ_1:61;
+  hence thesis by A7;
+  suppose A8: m = 1;
+      H = succ(tree_of_subformulae(F),t).(m+1) by A1,Th13
+     .= the_right_argument_of G by A2,A3,A8,FINSEQ_1:61;
+  hence thesis by A8;
+end;
+
+theorem Th53:
+  t' = t^<*m*> & (tree_of_subformulae(F)).t is universal implies
+    (tree_of_subformulae(F)).t' = the_scope_of (tree_of_subformulae(F)).t &
+      m = 0
+proof
+  set G = (tree_of_subformulae(F)).t;
+  set H = (tree_of_subformulae(F)).t';
+  assume A1: t' = t^<*m*> & G is universal;
+  then A2: H is_immediate_constituent_of G by Th36;
+A3:succ(tree_of_subformulae(F),t) = list_of_immediate_constituents(G) by Def2;
+    G <> VERUM & G is non atomic non negative non conjunctive by A1,QC_LANG1:51
+;
+  then A4: list_of_immediate_constituents(G) = <* the_scope_of G *> by Def1;
+  consider q being Element of dom tree_of_subformulae(F) such that
+A5:  q = t & succ(tree_of_subformulae(F),t)
+      = tree_of_subformulae(F)*(q succ) by TREES_9:def 6;
+ dom <* the_scope_of G *> = dom (t succ) by A3,A4,A5,Th10;
+then A6:m+1 in dom <* the_scope_of G *> by A1,Th12;
+    dom <* the_scope_of G *> = Seg 1 by FINSEQ_1:def 8; then m+1 = 0+1 by A6,
+FINSEQ_1:4,TARSKI:def 1;
+  hence H = the_scope_of G & m = 0 by A1,A2,QC_LANG2:67,XCMPLX_1:2;
+end;
+
+theorem Th54:
+  (tree_of_subformulae(F)).t is negative implies
+    t^<*0*> in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>)
+      = the_argument_of (tree_of_subformulae(F)).t
+proof
+  set G = (tree_of_subformulae(F)).t;
+  assume A1: G is negative;
+  consider H such that A2: H = the_argument_of G;
+    H is_immediate_constituent_of G by A1,A2,QC_LANG2:65;
+  then consider m such that A3: t^<*m*> in dom tree_of_subformulae(F) &
+    H = (tree_of_subformulae(F)).(t^<*m*>) by Th36;
+  consider t' such that A4: t' = t^<*m*> by A3;
+    (tree_of_subformulae(F)).t' = the_argument_of (tree_of_subformulae(F)).t &
+    m = 0 by A1,A4,Th51;
+  hence t^<*0*> in dom tree_of_subformulae(F) &
+    (tree_of_subformulae(F)).(t^<*0*>) = the_argument_of G by A4;
+end;
+
+reserve x,y for set;
+
+Lm1: dom <* x, y *> = Seg 2
+  proof thus
+      dom <* x, y *> = Seg len <* x, y *> by FINSEQ_1:def 3
+                  .= Seg 2 by FINSEQ_1:61;
+  end;
+
+theorem Th55:
+  (tree_of_subformulae(F)).t is conjunctive implies
+    t^<*0*> in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>)
+      = the_left_argument_of (tree_of_subformulae(F)).t &
+    t^<*1*> in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*1*>)
+      = the_right_argument_of (tree_of_subformulae(F)).t
+proof
+  set G = (tree_of_subformulae(F)).t;
+  assume A1: G is conjunctive;
+ (tree_of_subformulae(F))*(t succ)
+    = (succ(tree_of_subformulae(F),t))
+    proof
+      consider q being Element of dom tree_of_subformulae(F) such that
+A2:     q = t &
+          succ(tree_of_subformulae(F),t) = (tree_of_subformulae(F))*(q succ)
+            by TREES_9:def 6;
+      thus thesis by A2;
+    end;
+then A3:dom (t succ) = dom (succ(tree_of_subformulae(F),t)) by Th10
+    .= dom (list_of_immediate_constituents(G)) by Def2
+    .= dom <* the_left_argument_of G, the_right_argument_of G *> by A1,Def1
+    .= {1,2} by Lm1,FINSEQ_1:4;
+  A4: 0+1 in {1,2} by TARSKI:def 2;
+then t^<*0*> in dom tree_of_subformulae(F) by A3,Th12;
+  then (tree_of_subformulae(F)).(t^<*0*>)
+    = (succ(tree_of_subformulae(F),t)).(0+1) by Th13
+   .= (list_of_immediate_constituents(G)).1 by Def2
+   .= <* the_left_argument_of G, the_right_argument_of G *>.1 by A1,Def1
+   .= the_left_argument_of G by FINSEQ_1:61;
+  hence t^<*0*> in dom tree_of_subformulae(F) &
+    (tree_of_subformulae(F)).(t^<*0*>)
+      = the_left_argument_of (tree_of_subformulae(F)).t by A3,A4,Th12;
+  A5: 1+1 in {1,2} by TARSKI:def 2;
+then t^<*1*> in dom tree_of_subformulae(F) by A3,Th12;
+  then (tree_of_subformulae(F)).(t^<*1*>)
+    = (succ(tree_of_subformulae(F),t)).(1+1) by Th13
+   .= (list_of_immediate_constituents(G)).2 by Def2
+   .= <* the_left_argument_of G, the_right_argument_of G *>.2 by A1,Def1
+   .= the_right_argument_of G by FINSEQ_1:61;
+  hence t^<*1*> in dom tree_of_subformulae(F) &
+    (tree_of_subformulae(F)).(t^<*1*>)
+      = the_right_argument_of (tree_of_subformulae(F)).t by A3,A5,Th12;
+end;
+
+theorem Th56:
+  (tree_of_subformulae(F)).t is universal implies
+    t^<*0*> in dom tree_of_subformulae(F) & (tree_of_subformulae(F)).(t^<*0*>)
+      = the_scope_of (tree_of_subformulae(F)).t
+proof
+  set G = (tree_of_subformulae(F)).t;
+  assume A1: G is universal;
+  consider H such that A2: H = the_scope_of G;
+    H is_immediate_constituent_of G by A1,A2,QC_LANG2:67;
+  then consider m such that A3: t^<*m*> in dom tree_of_subformulae(F) &
+    H = (tree_of_subformulae(F)).(t^<*m*>) by Th36;
+  consider t' such that A4: t' = t^<*m*> by A3;
+    (tree_of_subformulae(F)).t' = the_scope_of (tree_of_subformulae(F)).t &
+    m = 0 by A1,A4,Th53;
+  hence t^<*0*> in dom tree_of_subformulae(F) &
+    (tree_of_subformulae(F)).(t^<*0*>) = the_scope_of G by A4;
+end;
+
+reserve t for Element of dom tree_of_subformulae(F),
+        s for Element of dom tree_of_subformulae(G);
+
+theorem Th57:
+  t in F-entry_points_in_subformula_tree_of G &
+  s in G-entry_points_in_subformula_tree_of H implies
+  t^s in F-entry_points_in_subformula_tree_of H
+proof
+  assume A1: t in F-entry_points_in_subformula_tree_of G &
+    s in G-entry_points_in_subformula_tree_of H;
+  defpred P[Nat] means for F,G,H,t,s holds G = (tree_of_subformulae(F)).t &
+    H = (tree_of_subformulae(G)).s & len s = $1 implies
+      t^s in F-entry_points_in_subformula_tree_of H;
+  A2: P[0]
+    proof let F,G,H,t,s; assume A3: G = (tree_of_subformulae(F)).t &
+        H = (tree_of_subformulae(G)).s & len s = 0;
+then A4:    s = {} by FINSEQ_1:25;
+then A5:    H = G by A3,Def2;
+        t^s = t by A4,FINSEQ_1:47;
+      hence t^s in F-entry_points_in_subformula_tree_of H by A3,A5,Def3;
+    end;
+  A6: for k st P[k] holds P[k + 1]
+    proof let k such that A7: P[k];
+      thus P[k + 1]
+        proof let F,G,H,t,s; assume A8: G = (tree_of_subformulae(F)).t &
+            H = (tree_of_subformulae(G)).s & len s = k+1;
+          then consider v being FinSequence, x being set such that
+A9:          s = v^<*x*> & len v = k by TREES_2:4;
+          reconsider v as FinSequence of NAT by A9,FINSEQ_1:50;
+          reconsider s' = v as Element of dom tree_of_subformulae(G) by A9,
+TREES_1:46;
+          reconsider u = <*x*> as FinSequence of NAT by A9,FINSEQ_1:50;
+A10:        dom u = Seg 1 & u.1 = x by FINSEQ_1:def 8;
+            1 in {1} by TARSKI:def 1;
+then A11:       x in rng u by A10,FINSEQ_1:4,FUNCT_1:def 5;
+            rng u c= NAT by FINSEQ_1:def 4;
+          then reconsider m = x as Nat by A11;
+A12:        s = s'^<*m*> by A9;
+          consider H' such that A13: H' = (tree_of_subformulae(G)).s';
+A14:        t^s' in F-entry_points_in_subformula_tree_of H' by A7,A8,A9,A13;
+            F-entry_points_in_subformula_tree_of H' c=
+            dom tree_of_subformulae(F) by TREES_1:def 14;
+          then consider t' being Element of dom tree_of_subformulae(F) such
+that
+A15:          t' = t^s' by A14;
+A16:        H' = (tree_of_subformulae(F)).t' by A14,A15,Def3;
+A17:        H is_immediate_constituent_of H' by A8,A12,A13,Th36;
+A18:        t^s = t'^<*m*> by A9,A15,FINSEQ_1:45;
+         H = (tree_of_subformulae(F)).(t'^<*m*>) &
+            t'^<*m*> in dom tree_of_subformulae(F)
+            proof
+A19:            H' <> VERUM by A17,QC_LANG2:58;
+              A20: H' is non atomic by A17,QC_LANG2:64;
+                now per cases by A19,A20,QC_LANG1:33;
+              suppose A21: H' is negative;
+                then H = the_argument_of H' & m = 0 by A8,A12,A13,Th51;
+              hence H = (tree_of_subformulae(F)).(t'^<*m*>) &
+                t'^<*m*> in dom tree_of_subformulae(F) by A16,A21,Th54;
+              suppose A22: H' is conjunctive;
+                then H = the_left_argument_of H' & m = 0 or
+                H = the_right_argument_of H' & m = 1 by A8,A12,A13,Th52;
+              hence H = (tree_of_subformulae(F)).(t'^<*m*>) &
+                t'^<*m*> in dom tree_of_subformulae(F) by A16,A22,Th55;
+              suppose A23: H' is universal;
+                then H = the_scope_of H' & m = 0 by A8,A12,A13,Th53;
+              hence H = (tree_of_subformulae(F)).(t'^<*m*>) &
+                t'^<*m*> in dom tree_of_subformulae(F) by A16,A23,Th56;
+              end;
+              hence thesis;
+            end;
+          hence t^s in F-entry_points_in_subformula_tree_of H by A18,Def3;
+        end;
+    end;
+ for k holds P[k] from Ind(A2,A6);
+  then G = (tree_of_subformulae(F)).t &
+    H = (tree_of_subformulae(G)).s & len s = len s implies
+      t^s in F-entry_points_in_subformula_tree_of H;
+  hence t^s in F-entry_points_in_subformula_tree_of H by A1,Def3;
+end;
+
+reserve t for Element of dom tree_of_subformulae(F),
+        s for FinSequence;
+
+theorem Th58:
+  t in F-entry_points_in_subformula_tree_of G &
+  t^s in F-entry_points_in_subformula_tree_of H implies
+  s in G-entry_points_in_subformula_tree_of H
+proof assume A1: t in F-entry_points_in_subformula_tree_of G &
+    t^s in F-entry_points_in_subformula_tree_of H;
+  defpred P[Nat] means for F,G,H,t,s holds G = (tree_of_subformulae(F)).t &
+    t^s in F-entry_points_in_subformula_tree_of H & len s = $1 implies
+      s in G-entry_points_in_subformula_tree_of H;
+  A2: P[0]
+    proof let F,G,H,t,s; assume A3: G = (tree_of_subformulae(F)).t &
+        t^s in F-entry_points_in_subformula_tree_of H & len s = 0;
+        F-entry_points_in_subformula_tree_of H =
+        { t1 where t1 is Element of dom tree_of_subformulae(F) :
+          (tree_of_subformulae(F)).t1 = H } by Th49;
+      then consider t' such that A4: t' = t^s & (tree_of_subformulae(F)).t' = H
+by A3;
+A5:   s = {} by A3,FINSEQ_1:25;
+then A6:   H = G by A3,A4,FINSEQ_1:47;
+      reconsider s' = s as Element of dom tree_of_subformulae(G)
+        by A5,TREES_1:47;
+        G = (tree_of_subformulae(G)).s' by A5,Def2;
+      hence s in G-entry_points_in_subformula_tree_of H by A6,Def3;
+    end;
+  A7: for k st P[k] holds P[k + 1]
+    proof let k such that A8: P[k];
+      thus P[k + 1]
+        proof let F,G,H,t,s; assume A9: G = (tree_of_subformulae(F)).t &
+            t^s in F-entry_points_in_subformula_tree_of H & len s = k+1;
+          then consider v being FinSequence, x being set such that
+A10:          s = v^<*x*> & len v = k by TREES_2:4;
+            F-entry_points_in_subformula_tree_of H =
+            { t1 where t1 is Element of dom tree_of_subformulae(F) :
+              (tree_of_subformulae(F)).t1 = H } by Th49;
+          then consider t'' such that
+A11:         t'' = t^s & (tree_of_subformulae(F)).t'' = H by A9;
+          reconsider s1 = s as FinSequence of NAT by A11,FINSEQ_1:50;
+A12:       s1 = v^<*x*> by A10;
+          then reconsider v as FinSequence of NAT by FINSEQ_1:50;
+          reconsider u = <*x*> as FinSequence of NAT by A12,FINSEQ_1:50;
+A13:        dom u = Seg 1 & u.1 = x by FINSEQ_1:def 8;
+            1 in {1} by TARSKI:def 1;
+then A14:       x in rng u by A13,FINSEQ_1:4,FUNCT_1:def 5;
+            rng u c= NAT by FINSEQ_1:def 4;
+          then reconsider m = x as Nat by A14;
+          consider t' being FinSequence of NAT such that A15: t' = t^v;
+A16:        t'' = t'^<*m*> by A10,A11,A15,FINSEQ_1:45;
+          then t' is_a_prefix_of t'' by TREES_1:8;
+          then reconsider t' as Element of dom tree_of_subformulae(F) by
+TREES_1:45;
+          consider H' such that A17: H' = (tree_of_subformulae(F)).t';
+            t^v in F-entry_points_in_subformula_tree_of H' by A15,A17,Def3;
+then A18:        v in G-entry_points_in_subformula_tree_of H' by A8,A9,A10;
+            G-entry_points_in_subformula_tree_of H' =
+            { v1 where v1 is Element of dom tree_of_subformulae(G) :
+              (tree_of_subformulae(G)).v1 = H' } by Th49;
+          then consider v1 being Element of dom tree_of_subformulae(G) such
+that
+A19:         v = v1 & (tree_of_subformulae(G)).v1 = H' by A18;
+          reconsider v as Element of dom tree_of_subformulae(G) by A19;
+A20:        H is_immediate_constituent_of H' by A11,A16,A17,Th36;
+         H = (tree_of_subformulae(G)).(v^<*m*>) &
+            v^<*m*> in dom tree_of_subformulae(G)
+            proof
+A21:            H' <> VERUM by A20,QC_LANG2:58;
+              A22: H' is non atomic by A20,QC_LANG2:64;
+                now per cases by A21,A22,QC_LANG1:33;
+              suppose A23: H' is negative;
+                then H = the_argument_of H' & m = 0 by A11,A16,A17,Th51;
+              hence H = (tree_of_subformulae(G)).(v^<*m*>) &
+                v^<*m*> in dom tree_of_subformulae(G) by A19,A23,Th54;
+              suppose A24: H' is conjunctive;
+                then H = the_left_argument_of H' & m = 0 or
+                H = the_right_argument_of H' & m = 1 by A11,A16,A17,Th52;
+              hence H = (tree_of_subformulae(G)).(v^<*m*>) &
+                v^<*m*> in dom tree_of_subformulae(G) by A19,A24,Th55;
+              suppose A25: H' is universal;
+                then H = the_scope_of H' & m = 0 by A11,A16,A17,Th53;
+              hence H = (tree_of_subformulae(G)).(v^<*m*>) &
+                v^<*m*> in dom tree_of_subformulae(G) by A19,A25,Th56;
+              end;
+              hence thesis;
+            end;
+          hence s in G-entry_points_in_subformula_tree_of H by A10,Def3;
+        end;
+    end;
+ for k holds P[k] from Ind(A2,A7);
+  then G = (tree_of_subformulae(F)).t &
+    t^s in F-entry_points_in_subformula_tree_of H & len s = len s implies
+      s in G-entry_points_in_subformula_tree_of H;
+  hence s in G-entry_points_in_subformula_tree_of H by A1,Def3;
+end;
+
+theorem Th59: for F,G,H holds
+  { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G) :
+      t in F-entry_points_in_subformula_tree_of G &
+      s in G-entry_points_in_subformula_tree_of H } c=
+  F-entry_points_in_subformula_tree_of H
+proof let F,G,H; let x be set; assume
+    x in { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G) :
+      t in F-entry_points_in_subformula_tree_of G &
+      s in G-entry_points_in_subformula_tree_of H };
+  then consider t being Element of dom tree_of_subformulae(F),
+    s being Element of dom tree_of_subformulae(G) such that A1: x = t^s &
+      t in F-entry_points_in_subformula_tree_of G &
+      s in G-entry_points_in_subformula_tree_of H;
+  thus x in F-entry_points_in_subformula_tree_of H by A1,Th57;
+end;
+
+theorem Th60:
+  (tree_of_subformulae(F))|t
+    = tree_of_subformulae((tree_of_subformulae(F)).t)
+proof
+  set T1 = (tree_of_subformulae(F))|t;
+  set T2 = tree_of_subformulae((tree_of_subformulae(F)).t);
+  thus A1: dom T1 = dom T2
+    proof
+      let p be FinSequence of NAT;
+        now
+        assume p in dom T1;
+then A2:      p in (dom tree_of_subformulae(F))|t by TREES_2:def 11;
+        consider G such that A3: G = (tree_of_subformulae(F)).t;
+A4:      t in F-entry_points_in_subformula_tree_of G by A3,Def3;
+        consider t' being FinSequence of NAT such that A5: t' = t^p;
+        reconsider t' as Element of dom tree_of_subformulae(F) by A2,A5,TREES_1
+:def 9;
+        consider H such that A6: H = (tree_of_subformulae(F)).t';
+          t' in F-entry_points_in_subformula_tree_of H by A6,Def3;
+then A7:      p in G-entry_points_in_subformula_tree_of H by A4,A5,Th58;
+          G-entry_points_in_subformula_tree_of H c= dom T2 by A3,TREES_1:def 14
+;
+        hence p in dom T2 by A7;
+      end;
+      hence p in dom T1 implies p in dom T2;
+        now assume A8: p in dom T2;
+        consider G such that A9: G = (tree_of_subformulae(F)).t;
+A10:      t in F-entry_points_in_subformula_tree_of G by A9,Def3;
+        reconsider s = p as Element of dom tree_of_subformulae(G) by A8,A9;
+        consider H such that A11: H = (tree_of_subformulae(G)).s;
+          s in G-entry_points_in_subformula_tree_of H by A11,Def3;
+then A12:      t^s in F-entry_points_in_subformula_tree_of H by A10,Th57;
+          F-entry_points_in_subformula_tree_of H c=
+          dom tree_of_subformulae(F) by TREES_1:def 14;
+then s in (dom tree_of_subformulae(F))|t by A12,TREES_1:def 9;
+        hence p in dom T1 by TREES_2:def 11;
+      end;
+      hence p in dom T2 implies p in dom T1;
+    end;
+    now let p be Node of T1;
+    consider G such that A13: G = (tree_of_subformulae(F)).t;
+A14:  t in F-entry_points_in_subformula_tree_of G by A13,Def3;
+    consider H such that A15: H = T1.p;
+    A16: dom T1 = (dom tree_of_subformulae(F))|t by TREES_2:def 11;
+    then A17: T1.p = (tree_of_subformulae(F)).(t^p) by TREES_2:def 11;
+    reconsider s = p as Element of dom tree_of_subformulae(G) by A1,A13;
+    reconsider t'= t^s as Element of dom tree_of_subformulae(F) by A16,TREES_1:
+def 9;
+      t' in F-entry_points_in_subformula_tree_of H by A15,A17,Def3;
+    then s in G-entry_points_in_subformula_tree_of H by A14,Th58;
+    hence T1.p = T2.p by A13,A15,Def3;
+  end;
+  hence for p being Node of T1 holds T1.p = T2.p;
+end;
+
+theorem Th61:
+  t in F-entry_points_in_subformula_tree_of G iff
+    (tree_of_subformulae(F))|t = tree_of_subformulae(G)
+proof
+    now assume t in F-entry_points_in_subformula_tree_of G;
+    then (tree_of_subformulae(F)).t = G by Def3;
+    hence (tree_of_subformulae(F))|t = tree_of_subformulae(G) by Th60;
+  end;
+  hence t in F-entry_points_in_subformula_tree_of G implies
+    (tree_of_subformulae(F))|t = tree_of_subformulae(G);
+    now assume (tree_of_subformulae(F))|t = tree_of_subformulae(G);
+then A1:  (tree_of_subformulae(F)).t = (tree_of_subformulae(G)).{} by Th8;
+      (tree_of_subformulae(G)).{} = G by Def2;
+    hence t in F-entry_points_in_subformula_tree_of G by A1,Def3;
+  end;
+  hence (tree_of_subformulae(F))|t = tree_of_subformulae(G) implies
+    t in F-entry_points_in_subformula_tree_of G;
+end;
+
+theorem
+    F-entry_points_in_subformula_tree_of G =
+    { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F))|t = tree_of_subformulae(G) }
+proof
+  thus F-entry_points_in_subformula_tree_of G c=
+    { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F))|t = tree_of_subformulae(G) }
+  proof let x be set; assume A1: x in F-entry_points_in_subformula_tree_of G;
+      F-entry_points_in_subformula_tree_of G c= dom tree_of_subformulae(F)
+      by TREES_1:def 14;
+    then reconsider t' = x as Element of dom tree_of_subformulae(F) by A1;
+      (tree_of_subformulae(F))|t' = tree_of_subformulae(G) by A1,Th61;
+    hence x in { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F))|t = tree_of_subformulae(G) };
+  end;
+  thus { t where t is Element of dom tree_of_subformulae(F) :
+    (tree_of_subformulae(F))|t = tree_of_subformulae(G) } c=
+      F-entry_points_in_subformula_tree_of G
+  proof let x be set;
+    assume x in { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F))|t = tree_of_subformulae(G) };
+    then consider t' such that
+A2:    t' = x & (tree_of_subformulae(F))|t' = tree_of_subformulae(G);
+    thus x in F-entry_points_in_subformula_tree_of G by A2,Th61;
+  end;
+end;
+
+reserve C for Chain of dom tree_of_subformulae(F);
+
+theorem
+    for F,G,H,C st
+  G in { (tree_of_subformulae(F)).t
+    where t is Element of dom tree_of_subformulae(F) : t in C } &
+  H in { (tree_of_subformulae(F)).t
+    where t is Element of dom tree_of_subformulae(F) : t in C } holds
+      G is_subformula_of H or H is_subformula_of G
+proof let F,G,H,C;
+  assume A1: G in { (tree_of_subformulae(F)).t
+    where t is Element of dom tree_of_subformulae(F) : t in C } &
+    H in { (tree_of_subformulae(F)).t
+    where t is Element of dom tree_of_subformulae(F) : t in C };
+  then consider t' such that
+A2:  G = (tree_of_subformulae(F)).t' & t' in C;
+  consider t'' such that
+A3:  H = (tree_of_subformulae(F)).t'' & t'' in C by A1;
+  A4: t',t'' are_c=-comparable by A2,A3,TREES_2:def 3;
+  per cases by A4,XBOOLE_0:def 9;
+    suppose t' is_a_prefix_of t'';
+    hence G is_subformula_of H or H is_subformula_of G by A2,A3,Th42;
+    suppose t'' is_a_prefix_of t';
+    hence G is_subformula_of H or H is_subformula_of G by A2,A3,Th42;
+end;
+
+definition let F be Element of QC-WFF;
+  mode Subformula of F -> Element of QC-WFF means :Def4:
+    it is_subformula_of F;
+existence;
+end;
+
+definition let F be Element of QC-WFF; let G be Subformula of F;
+  mode Entry_Point_in_Subformula_Tree of G ->
+    Element of dom tree_of_subformulae(F) means :Def5:
+      (tree_of_subformulae(F)).it = G;
+existence
+  proof
+      G is_subformula_of F by Def4;
+    then G in rng tree_of_subformulae(F) by Th39;
+    then consider x being set such that A1: x in dom tree_of_subformulae(F) &
+      (tree_of_subformulae(F)).x = G by FUNCT_1:def 5;
+    thus thesis by A1;
+  end;
+end;
+
+reserve G for Subformula of F;
+
+reserve t, t' for Entry_Point_in_Subformula_Tree of G;
+
+canceled;
+
+theorem
+    t <> t' implies not t,t' are_c=-comparable
+proof assume A1: t <> t';
+A2: (tree_of_subformulae(F)).t = G by Def5;
+    (tree_of_subformulae(F)).t' = G by Def5;
+  hence thesis by A1,A2,Th47;
+end;
+
+definition let F be Element of QC-WFF; let G be Subformula of F;
+  func entry_points_in_subformula_tree(G) ->
+    non empty AntiChain_of_Prefixes of dom tree_of_subformulae(F) equals :Def6:
+      F-entry_points_in_subformula_tree_of G;
+coherence
+  proof G is_subformula_of F by Def4;
+    hence thesis by Th50;
+  end;
+end;
+
+canceled;
+
+theorem Th67:
+  t in entry_points_in_subformula_tree(G)
+proof
+    (tree_of_subformulae(F)).t = G by Def5;
+  then t in F-entry_points_in_subformula_tree_of G by Def3;
+  hence thesis by Def6;
+end;
+
+theorem Th68:
+  entry_points_in_subformula_tree(G) =
+    { t where t is Entry_Point_in_Subformula_Tree of G : t = t }
+proof
+  thus entry_points_in_subformula_tree(G) c=
+    { t where t is Entry_Point_in_Subformula_Tree of G : t = t }
+  proof let x be set; assume x in entry_points_in_subformula_tree(G);
+    then x in F-entry_points_in_subformula_tree_of G by Def6;
+    then x in { t where t is Element of dom tree_of_subformulae(F) :
+      (tree_of_subformulae(F)).t = G } by Th49;
+    then consider t' being Element of dom tree_of_subformulae(F) such that
+A1:    t' = x & (tree_of_subformulae(F)).t' = G;
+    reconsider t' as Entry_Point_in_Subformula_Tree of G by A1,Def5; t' = t';
+   hence x in
+ { t where t is Entry_Point_in_Subformula_Tree of G : t = t } by A1
+;
+  end;
+  thus { t where t is Entry_Point_in_Subformula_Tree of G : t = t } c=
+    entry_points_in_subformula_tree(G)
+  proof let x be set; assume
+      x in { t where t is Entry_Point_in_Subformula_Tree of G : t = t };
+    then consider t such that A2: t = x & t = t;
+    thus x in entry_points_in_subformula_tree(G) by A2,Th67;
+  end;
+end;
+
+reserve G1, G2 for Subformula of F,
+        t1 for Entry_Point_in_Subformula_Tree of G1,
+        s for Element of dom tree_of_subformulae(G1);
+
+theorem Th69:
+  s in G1-entry_points_in_subformula_tree_of G2 implies
+    t1^s is Entry_Point_in_Subformula_Tree of G2
+proof assume A1: s in G1-entry_points_in_subformula_tree_of G2;
+    (tree_of_subformulae(F)).t1 = G1 by Def5;
+  then t1 in F-entry_points_in_subformula_tree_of G1 by Def3;
+then A2:t1^s in F-entry_points_in_subformula_tree_of G2 by A1,Th57;
+    F-entry_points_in_subformula_tree_of G2 c= dom tree_of_subformulae(F)
+    by TREES_1:def 14;
+  then reconsider t' = t1^s as Element of dom tree_of_subformulae(F) by A2;
+    (tree_of_subformulae(F)).t' = G2 by A2,Def3;
+  hence t1^s is Entry_Point_in_Subformula_Tree of G2 by Def5;
+end;
+
+reserve s for FinSequence;
+
+theorem
+    t1^s is Entry_Point_in_Subformula_Tree of G2 implies
+  s in G1-entry_points_in_subformula_tree_of G2
+proof assume A1: t1^s is Entry_Point_in_Subformula_Tree of G2;
+    (tree_of_subformulae(F)).t1 = G1 by Def5;
+then A2:t1 in F-entry_points_in_subformula_tree_of G1 by Def3;
+  consider t' being FinSequence such that A3: t' = t1^s;
+ t' in { t2 where t2 is Entry_Point_in_Subformula_Tree of G2 : t2 = t2 } by A1,
+A3;
+  then A4: t' in entry_points_in_subformula_tree(G2) by Th68;
+    entry_points_in_subformula_tree(G2) =
+    F-entry_points_in_subformula_tree_of G2 by Def6;
+  hence s in G1-entry_points_in_subformula_tree_of G2 by A2,A3,A4,Th58;
+end;
+
+theorem Th71: for F,G1,G2 holds
+  { t^s where t is Entry_Point_in_Subformula_Tree of G1,
+    s is Element of dom tree_of_subformulae(G1) :
+      s in G1-entry_points_in_subformula_tree_of G2 } =
+  { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G1) :
+      t in F-entry_points_in_subformula_tree_of G1 &
+      s in G1-entry_points_in_subformula_tree_of G2 }
+proof let F,G1,G2;
+  thus { t^s where t is Entry_Point_in_Subformula_Tree of G1,
+    s is Element of dom tree_of_subformulae(G1) :
+      s in G1-entry_points_in_subformula_tree_of G2 } c=
+  { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G1) :
+      t in F-entry_points_in_subformula_tree_of G1 &
+      s in G1-entry_points_in_subformula_tree_of G2 }
+  proof let x be set; assume
+      x in { t^s where t is Entry_Point_in_Subformula_Tree of G1,
+    s is Element of dom tree_of_subformulae(G1) :
+      s in G1-entry_points_in_subformula_tree_of G2 };
+    then consider t1 being Entry_Point_in_Subformula_Tree of G1,
+      s1 being Element of dom tree_of_subformulae(G1) such that
+A1:      x = t1^s1 & s1 in G1-entry_points_in_subformula_tree_of G2;
+      (tree_of_subformulae(F)).t1 = G1 by Def5;
+    then x = t1^s1 & t1 in F-entry_points_in_subformula_tree_of G1 &
+      s1 in G1-entry_points_in_subformula_tree_of G2 by A1,Def3;
+    hence x in { t^s where t is Element of dom tree_of_subformulae(F),
+      s is Element of dom tree_of_subformulae(G1) :
+        t in F-entry_points_in_subformula_tree_of G1 &
+        s in G1-entry_points_in_subformula_tree_of G2 };
+  end;
+  thus { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G1) :
+      t in F-entry_points_in_subformula_tree_of G1 &
+      s in G1-entry_points_in_subformula_tree_of G2 } c=
+    { t^s where t is Entry_Point_in_Subformula_Tree of G1,
+      s is Element of dom tree_of_subformulae(G1) :
+      s in G1-entry_points_in_subformula_tree_of G2 }
+  proof let x be set; assume
+      x in { t^s where t is Element of dom tree_of_subformulae(F),
+      s is Element of dom tree_of_subformulae(G1) :
+        t in F-entry_points_in_subformula_tree_of G1 &
+        s in G1-entry_points_in_subformula_tree_of G2 };
+    then consider t1 being Element of dom tree_of_subformulae(F),
+      s1 being Element of dom tree_of_subformulae(G1) such that
+A2:      x = t1^s1 & t1 in F-entry_points_in_subformula_tree_of G1 &
+          s1 in G1-entry_points_in_subformula_tree_of G2;
+      (tree_of_subformulae(F)).t1 = G1 by A2,Def3;
+    then reconsider t1 as Entry_Point_in_Subformula_Tree of G1 by Def5;
+      x = t1^s1 & s1 in G1-entry_points_in_subformula_tree_of G2 by A2;
+    hence x in { t^s where t is Entry_Point_in_Subformula_Tree of G1,
+      s is Element of dom tree_of_subformulae(G1) :
+        s in G1-entry_points_in_subformula_tree_of G2 };
+  end;
+end;
+
+theorem
+    for F,G1,G2 holds
+  { t^s where t is Entry_Point_in_Subformula_Tree of G1,
+    s is Element of dom tree_of_subformulae(G1) :
+      s in G1-entry_points_in_subformula_tree_of G2 } c=
+  entry_points_in_subformula_tree(G2)
+proof let F,G1,G2;
+A1:{ t^s where t is Entry_Point_in_Subformula_Tree of G1,
+    s is Element of dom tree_of_subformulae(G1) :
+      s in G1-entry_points_in_subformula_tree_of G2 } =
+  { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G1) :
+      t in F-entry_points_in_subformula_tree_of G1 &
+      s in G1-entry_points_in_subformula_tree_of G2 } by Th71;
+ { t^s where t is Element of dom tree_of_subformulae(F),
+    s is Element of dom tree_of_subformulae(G1) :
+      t in F-entry_points_in_subformula_tree_of G1 &
+      s in G1-entry_points_in_subformula_tree_of G2 } c=
+  F-entry_points_in_subformula_tree_of G2 by Th59;
+  hence thesis by A1,Def6;
+end;
+
+reserve G1, G2 for Subformula of F,
+        t1 for Entry_Point_in_Subformula_Tree of G1,
+        t2 for Entry_Point_in_Subformula_Tree of G2;
+
+theorem
+    (ex t1,t2 st t1 is_a_prefix_of t2) implies G2 is_subformula_of G1
+proof
+  given t1,t2 such that A1: t1 is_a_prefix_of t2;
+A2:(tree_of_subformulae(F)).t1 = G1 by Def5;
+    (tree_of_subformulae(F)).t2 = G2 by Def5;
+  hence G2 is_subformula_of G1 by A1,A2,Th42;
+end;
+
+theorem
+    G2 is_subformula_of G1 implies for t1 ex t2 st t1 is_a_prefix_of t2
+proof assume A1: G2 is_subformula_of G1;
+    now let t1;
+    consider H being Element of QC-WFF such that A2: H = G2;
+    reconsider H as Subformula of G1 by A1,A2,Def4;
+    consider s being Entry_Point_in_Subformula_Tree of H;
+      (tree_of_subformulae(G1)).s = H by Def5;
+  then s in G1-entry_points_in_subformula_tree_of G2 by A2,Def3;
+    then t1^s is Entry_Point_in_Subformula_Tree of G2 by Th69;
+    then consider t2 such that A3: t2 = t1^s;
+    take t2;
+    thus t1 is_a_prefix_of t2 by A3,TREES_1:8;
+  end;
+  hence thesis;
+end;
+
+

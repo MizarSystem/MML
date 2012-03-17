@@ -1,0 +1,284 @@
+:: A theory of partitions, { I }
+::  by Shunichi Kobayashi and Kui Jia
+::
+:: Received October 5, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary EQREL_1, BOOLE, SETFAM_1, TARSKI, CANTOR_1, FUNCT_1, RELAT_1,
+      T_1TOPSP, SUBSET_1, FINSEQ_1, ARYTM_1, LATTICES, PUA2MSS1, PARTIT1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, PUA2MSS1, FINSEQ_1, FINSEQ_4,
+      EQREL_1, CANTOR_1, T_1TOPSP;
+ constructors NAT_1, FINSEQ_4, PUA2MSS1, CANTOR_1, T_1TOPSP, XREAL_0, MEMBERED;
+ clusters SUBSET_1, RELSET_1, ARYTM_3, SETFAM_1, MEMBERED, EQREL_1, PARTFUN1;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+::Chap. 1  Preliminaries
+
+reserve Y,Z for non empty set;
+reserve PA,PB for a_partition of Y;
+reserve A,B for Subset of Y;
+reserve i,j,k for Nat;
+reserve x,y,z,x1,x2,y1,z0,X,V,a,b,d,t,SFX,SFY for set;
+
+theorem :: PARTIT1:1
+X in PA & V in PA & X c= V implies X=V;
+
+definition let SFX,SFY;
+ redefine pred SFX is_finer_than SFY;
+ synonym SFX '<' SFY;
+ synonym SFY '>' SFX;
+end;
+
+canceled;
+
+theorem :: PARTIT1:3
+   union (SFX \ {{}}) = union SFX;
+
+theorem :: PARTIT1:4
+for PA,PB being a_partition of Y st
+  PA '>' PB & PB '>' PA holds PB c= PA;
+
+theorem :: PARTIT1:5
+for PA,PB being a_partition of Y st
+  PA '>' PB & PB '>' PA holds PA = PB;
+
+canceled;
+
+theorem :: PARTIT1:7
+for PA,PB being a_partition of Y st
+  PA '>' PB holds PA is_coarser_than PB;
+
+definition let Y;let PA be a_partition of Y,b be set;
+ pred b is_a_dependent_set_of PA means
+:: PARTIT1:def 1
+  ex B being set st B c= PA & B<>{} & b = union B;
+end;
+
+definition let Y;let PA,PB be a_partition of Y,b be set;
+  pred b is_min_depend PA,PB means
+:: PARTIT1:def 2
+   b is_a_dependent_set_of PA &
+   b is_a_dependent_set_of PB &
+  for d being set st d c= b
+    & d is_a_dependent_set_of PA &
+      d is_a_dependent_set_of PB holds d=b;
+end;
+
+theorem :: PARTIT1:8
+for PA,PB being a_partition of Y
+   st PA '>' PB holds for b being set st b in PA holds
+      b is_a_dependent_set_of PB;
+
+theorem :: PARTIT1:9
+for PA being a_partition of Y holds
+    Y is_a_dependent_set_of PA;
+
+theorem :: PARTIT1:10
+for F being Subset-Family of Y st (Intersect(F)<>{} &
+   for X st X in F holds X is_a_dependent_set_of PA)
+    holds (Intersect(F) is_a_dependent_set_of PA);
+
+theorem :: PARTIT1:11
+for X0,X1 being Subset of Y st
+   (X0 is_a_dependent_set_of PA &
+    X1 is_a_dependent_set_of PA & X0 meets X1)
+    holds X0 /\ X1 is_a_dependent_set_of PA;
+
+theorem :: PARTIT1:12
+for X being Subset of Y holds
+  X is_a_dependent_set_of PA & X<>Y
+  implies X` is_a_dependent_set_of PA;
+
+theorem :: PARTIT1:13
+for y being Element of Y
+  ex X being Subset of Y st y in X & X is_min_depend PA,PB;
+
+theorem :: PARTIT1:14
+for P being a_partition of Y
+  for y being Element of Y
+   ex A being Subset of Y st y in A & A in P;
+
+definition
+ let Y be non empty set;
+ cluster -> non empty a_partition of Y;
+end;
+
+definition let Y be set;
+func PARTITIONS(Y) means
+:: PARTIT1:def 3
+ for x being set holds x in it iff x is a_partition of Y;
+end;
+
+definition
+let Y be set;
+cluster PARTITIONS(Y) -> non empty;
+end;
+
+begin
+
+::Chap. 2  Join and Meet Operation between Partitions
+
+definition let Y;let PA,PB be a_partition of Y;
+ func PA '/\' PB -> a_partition of Y equals
+:: PARTIT1:def 4
+  INTERSECTION(PA,PB) \ {{}};
+commutativity;
+end;
+
+theorem :: PARTIT1:15
+for PA being a_partition of Y holds
+  PA '/\' PA = PA;
+
+theorem :: PARTIT1:16
+for PA,PB,PC being a_partition of Y holds
+  (PA '/\' PB) '/\' PC = PA '/\' (PB '/\' PC);
+
+theorem :: PARTIT1:17
+for PA,PB being a_partition of Y holds
+  PA '>' PA '/\' PB;
+
+definition let Y;let PA,PB be a_partition of Y;
+ func PA '\/' PB -> a_partition of Y means
+:: PARTIT1:def 5
+  for d holds d in it iff d is_min_depend PA,PB;
+commutativity;
+end;
+
+canceled;
+
+theorem :: PARTIT1:19
+for PA,PB being a_partition of Y holds
+  PA '<' PA '\/' PB;
+
+theorem :: PARTIT1:20
+for PA being a_partition of Y holds
+  PA '\/' PA = PA;
+
+theorem :: PARTIT1:21
+for PA,PC being a_partition of Y st
+  PA '<' PC & x in PC & z0 in PA & t in x & t in z0 holds z0 c= x;
+
+theorem :: PARTIT1:22
+for PA,PB being a_partition of Y st
+  x in (PA '\/' PB) & z0 in PA & t in x & t in z0 holds z0 c= x;
+
+begin
+
+::Chap. 3  Partitions and Equivalence Relations
+
+theorem :: PARTIT1:23
+for PA being a_partition of Y
+  ex RA being Equivalence_Relation of Y st
+     for x,y holds [x,y] in RA iff ex A st A in PA & x in A & y in A;
+
+definition let Y; let PA be a_partition of Y;
+ func ERl PA -> Equivalence_Relation of Y means
+:: PARTIT1:def 6
+  for x1,x2 being set holds
+   [x1,x2] in it iff ex A st A in PA & x1 in A & x2 in A;
+end;
+
+definition let Y;
+ func Rel(Y) -> Function means
+:: PARTIT1:def 7
+     dom it = PARTITIONS(Y) &
+   for x st x in PARTITIONS(Y) ex PA st PA = x & it.x = ERl PA;
+end;
+
+theorem :: PARTIT1:24
+for PA,PB being a_partition of Y holds
+  PA '<' PB iff ERl(PA) c= ERl(PB);
+
+theorem :: PARTIT1:25
+for PA,PB being a_partition of Y,p0,x,y being set,
+f being FinSequence of Y st p0 c= Y &
+x in p0 & f.1=x & f.len f=y & 1 <= len f &
+(for i st 1<=i & i<len f
+ex p2,p3,u being set st p2 in PA & p3 in PB &
+  f.i in p2 & u in p2 & u in p3 & f.(i+1) in p3) &
+p0 is_a_dependent_set_of PA &
+p0 is_a_dependent_set_of PB holds
+y in p0;
+
+theorem :: PARTIT1:26
+for R1,R2 being Equivalence_Relation of Y,f being FinSequence of Y,
+  x,y being set st x in Y & y in Y & f.1=x & f.len f=y & 1 <= len f &
+   (for i st 1<=i & i<len f
+    ex u being set st u in Y & [f.i,u] in (R1 \/ R2) & [u,f.(i+1)] in (R1 \/
+ R2))
+    holds [x,y] in (R1 "\/" R2);
+
+theorem :: PARTIT1:27
+for PA,PB being a_partition of Y holds
+  ERl(PA '\/' PB) = ERl(PA) "\/" ERl(PB);
+
+theorem :: PARTIT1:28
+for PA,PB being a_partition of Y holds
+  ERl(PA '/\' PB) = ERl(PA) /\ ERl(PB);
+
+theorem :: PARTIT1:29
+for PA,PB being a_partition of Y st
+  ERl(PA) = ERl(PB) holds PA = PB;
+
+theorem :: PARTIT1:30
+for PA,PB,PC being a_partition of Y holds
+  (PA '\/' PB) '\/' PC = PA '\/' (PB '\/' PC);
+
+theorem :: PARTIT1:31
+for PA,PB being a_partition of Y holds
+  PA '/\' (PA '\/' PB) = PA;
+
+theorem :: PARTIT1:32
+for PA,PB being a_partition of Y holds
+  PA '\/' (PA '/\' PB) = PA;
+
+theorem :: PARTIT1:33
+for PA,PB,PC being a_partition of Y st
+  PA '<' PC & PB '<' PC holds PA '\/' PB '<' PC;
+
+theorem :: PARTIT1:34
+for PA,PB,PC being a_partition of Y st
+  PA '>' PC & PB '>' PC holds PA '/\' PB '>' PC;
+
+definition let Y;
+ redefine func SmallestPartition Y;
+ synonym %I(Y);
+end;
+
+definition let Y;
+ canceled;
+
+func %O(Y) -> a_partition of Y equals
+:: PARTIT1:def 9
+  {Y};
+end;
+
+theorem :: PARTIT1:35
+%I(Y)={B:ex x being set st B={x} & x in Y};
+
+theorem :: PARTIT1:36
+for PA being a_partition of Y holds
+  %O(Y) '>' PA & PA '>' %I(Y);
+
+theorem :: PARTIT1:37
+ERl(%O(Y)) = nabla Y;
+
+theorem :: PARTIT1:38
+ERl(%I(Y)) = id Y;
+
+theorem :: PARTIT1:39
+%I(Y) '<' %O(Y);
+
+theorem :: PARTIT1:40
+for PA being a_partition of Y holds
+  %O(Y) '\/' PA = %O(Y) & %O(Y) '/\' PA = PA;
+
+theorem :: PARTIT1:41
+for PA being a_partition of Y holds
+  %I(Y) '\/' PA = PA & %I(Y) '/\' PA = %I(Y);

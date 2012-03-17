@@ -1,0 +1,1472 @@
+:: Binary Arithmetics. Binary Sequences
+::  by Robert Milewski
+::
+:: Received February 24, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary MIDSP_3, MARGREL1, BINARITH, POWER, FINSEQ_1, CQC_LANG, FINSEQ_5,
+      EUCLID, FINSEQ_2, ZF_LANG, FUNCT_1, ARYTM_1, RELAT_1, BINARI_2, NAT_1,
+      ARYTM_3, MATRIX_2, BINARI_3, FINSEQ_4, REALSET1;
+ notation SUBSET_1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, POWER, ABIAN, SERIES_1,
+      MARGREL1, FUNCT_1, CQC_LANG, FINSEQ_1, FINSEQ_4, FINSEQ_5, FINSEQOP,
+      REALSET1, BINARITH, BINARI_2, EUCLID, MIDSP_3;
+ constructors REAL_1, ABIAN, SERIES_1, FINSEQ_5, FINSEQOP, BINARITH, BINARI_2,
+      EUCLID, FINSEQ_4, REALSET1, MEMBERED;
+ clusters RELSET_1, NAT_2, MARGREL1, REALSET1, NAT_1, MEMBERED;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ theorems TARSKI, REAL_1, SQUARE_1, NAT_1, NAT_2, MARGREL1, ALGSEQ_1, POWER,
+      CQC_LANG, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQ_5, FINSEQ_6, BINARITH,
+      AMI_5, BINARI_2, GROUP_4, RLVECT_1, EUCLID, JORDAN2B, JORDAN4, GOBOARD9,
+      SCMFSA_7, GR_CY_1, AXIOMS, XCMPLX_1;
+ schemes NAT_1, NAT_2, FINSEQ_2, BINARITH;
+
+begin :: Binary Arithmetics
+
+  theorem Th1:
+   for n be non empty Nat
+   for F be Tuple of n,BOOLEAN holds
+    Absval F < 2 to_power n
+   proof defpred _P[non empty Nat] means
+      for F be Tuple of $1,BOOLEAN holds Absval F < 2 to_power $1;
+    A1: _P[1] proof
+     let F be Tuple of 1,BOOLEAN;
+     consider d be Element of BOOLEAN such that
+      A2: F = <*d*> by FINSEQ_2:117;
+       d = TRUE or d = FALSE by MARGREL1:39;
+     then Absval F = 1 or Absval F = 0 by A2,BINARITH:41,42;
+     then Absval F < 2;
+     hence Absval F < 2 to_power 1 by POWER:30;
+    end;
+    A3: for n be non empty Nat st _P[n] holds _P[n+1] proof
+     let n be non empty Nat;
+     assume A4: _P[n];
+     let F be Tuple of n+1,BOOLEAN;
+     consider T be Tuple of n,BOOLEAN,
+              d be Element of BOOLEAN such that
+      A5: F = T^<*d*> by FINSEQ_2:137;
+     A6: Absval F = Absval T + IFEQ(d,FALSE,0,2 to_power n) by A5,BINARITH:46;
+       n < n+1 by NAT_1:38;
+     then A7: 2 to_power n < 2 to_power (n+1) by POWER:44;
+A8:  Absval T < 2 to_power n by A4;
+     per cases by MARGREL1:39;
+      suppose d = FALSE;
+       then Absval F = Absval T + 0 by A6,CQC_LANG:def 1;
+       then Absval F < 2 to_power n by A4;
+       then Absval F + 2 to_power n < 2 to_power n + 2 to_power (n+1)
+                                                             by A7,REAL_1:67;
+       hence thesis by AXIOMS:24;
+      suppose d = TRUE;
+       then Absval F = Absval T + 2 to_power n by A6,CQC_LANG:def 1,MARGREL1:38
+;
+       then Absval F < 2 to_power n + 2 to_power n by A8,REAL_1:53;
+       then Absval F < 2 to_power n * 2 by XCMPLX_1:11;
+       then Absval F < 2 to_power n * 2 to_power 1 by POWER:30;
+       hence thesis by POWER:32;
+    end;
+    thus for n being non empty Nat holds _P[n] from Ind_from_1(A1,A3);
+   end;
+
+  theorem Th2:
+   for n be non empty Nat
+   for F1,F2 be Tuple of n,BOOLEAN st Absval F1 = Absval F2 holds
+    F1 = F2
+   proof defpred _P[non empty Nat] means
+      for F1,F2 be Tuple of $1,BOOLEAN st Absval F1 = Absval F2 holds F1 = F2;
+    A1: _P[1] proof let F1,F2 be Tuple of 1,BOOLEAN;
+     consider d1 be Element of BOOLEAN such that
+      A2: F1 = <*d1*> by FINSEQ_2:117;
+     consider d2 be Element of BOOLEAN such that
+      A3: F2 = <*d2*> by FINSEQ_2:117;
+     assume A4: Absval F1 = Absval F2;
+     assume A5: F1 <> F2;
+     per cases by MARGREL1:39;
+      suppose A6: d1 = FALSE;
+       then d2 = TRUE by A2,A3,A5,MARGREL1:39;
+       then Absval F1 = 0 & Absval F2 = 1 by A2,A3,A6,BINARITH:41,42;
+       hence contradiction by A4;
+      suppose A7: d1 = TRUE;
+       then d2 = FALSE by A2,A3,A5,MARGREL1:39;
+       then Absval F1 = 1 & Absval F2 = 0 by A2,A3,A7,BINARITH:41,42;
+       hence contradiction by A4;
+    end;
+    A8: for k be non empty Nat st _P[k] holds _P[k+1]    proof
+     let k be non empty Nat;
+     assume A9: for F1,F2 be Tuple of k,BOOLEAN st
+      Absval F1 = Absval F2 holds F1 = F2;
+     let F1,F2 be Tuple of k+1,BOOLEAN;
+     consider T1 be Tuple of k,BOOLEAN,
+              d1 be Element of BOOLEAN such that
+      A10: F1 = T1^<*d1*> by FINSEQ_2:137;
+     consider T2 be Tuple of k,BOOLEAN,
+              d2 be Element of BOOLEAN such that
+      A11: F2 = T2^<*d2*> by FINSEQ_2:137;
+     assume A12: Absval F1 = Absval F2;
+     A13: Absval T1 + IFEQ(d1,FALSE,0 qua Real,2 to_power k) = Absval F1
+                                                            by A10,BINARITH:46
+        .= Absval T2 + IFEQ(d2,FALSE,0,2 to_power k) by A11,A12,BINARITH:46;
+     A14: d1 = d2
+     proof
+      assume A15: d1 <> d2;
+      per cases by MARGREL1:39;
+       suppose A16: d1 = FALSE;
+        then A17: IFEQ(d2,FALSE,0 qua Real,2 to_power k) = 2 to_power k
+                                                           by A15,CQC_LANG:def
+1;
+          IFEQ(d1,FALSE,0 qua Real,2 to_power k) = 0 by A16,CQC_LANG:def 1;
+        then Absval T1 >= 2 to_power k by A13,A17,NAT_1:29;
+        hence contradiction by Th1;
+       suppose A18: d1 = TRUE;
+        then d2 = FALSE by A15,MARGREL1:39;
+        then A19: IFEQ(d2,FALSE,0 qua Real,2 to_power k) = 0 by CQC_LANG:def 1;
+          IFEQ(d1,FALSE,0 qua Real,2 to_power k) = 2 to_power k by A18,CQC_LANG
+:def 1,MARGREL1:38;
+        then Absval T2 >= 2 to_power k by A13,A19,NAT_1:29;
+        hence contradiction by Th1;
+     end;
+     then Absval T1 = Absval T2 by A13,XCMPLX_1:2;
+     hence F1 = F2 by A9,A10,A11,A14;
+    end;
+    thus for n being non empty Nat holds _P[n] from Ind_from_1(A1,A8);
+   end;
+
+  theorem
+     for t1,t2 be FinSequence st Rev t1 = Rev t2 holds t1 = t2
+   proof
+    let t1,t2 be FinSequence;
+    assume A1: Rev t1 = Rev t2;
+    thus t1 = Rev Rev t1 by FINSEQ_6:29
+           .= t2 by A1,FINSEQ_6:29;
+   end;
+
+  theorem Th4:
+   for n be Nat holds
+    0*(n + 1) = 0*n ^ <* 0 *>
+   proof
+    let n be Nat;
+    thus 0*(n+1) = (n+1) |-> (0 qua Real) by EUCLID:def 4
+       .= (n |-> (0 qua Real)) ^ <* 0 *> by FINSEQ_2:74
+       .= 0*n ^ <* 0 *> by EUCLID:def 4;
+   end;
+
+  theorem Th5:
+   for n be Nat holds
+    0*n in BOOLEAN*
+   proof
+    let n be Nat;
+      n |-> 0 is FinSequence of BOOLEAN by FINSEQ_2:77,MARGREL1:def 13;
+    then 0*n is FinSequence of BOOLEAN by EUCLID:def 4;
+    hence 0*n in BOOLEAN* by FINSEQ_1:def 11;
+   end;
+
+  theorem Th6:
+   for n be Nat
+   for y be Tuple of n,BOOLEAN st y = 0*n holds
+    'not' y = n |-> 1
+   proof
+    let n be Nat;
+    let y be Tuple of n,BOOLEAN;
+    assume A1: y = 0*n;
+    A2: len 'not' y = n by FINSEQ_2:109
+       .= len (n |-> 1) by FINSEQ_2:69;
+      now let i be Nat;
+     assume that
+      A3: 1 <= i and
+      A4: i <= len 'not' y;
+     A5: len 'not' y = n & len y = n by FINSEQ_2:109;
+     then A6: i in Seg n by A3,A4,FINSEQ_1:3;
+     A7: y.i = (n |-> (0 qua Real)).i by A1,EUCLID:def 4
+        .= FALSE by A6,FINSEQ_2:70,MARGREL1:36;
+     thus 'not' y.i = ('not' y)/.i by A3,A4,FINSEQ_4:24
+        .= 'not' (y/.i) by A6,BINARITH:def 4
+        .= 'not' FALSE by A3,A4,A5,A7,FINSEQ_4:24
+        .= 1 by MARGREL1:36,41
+        .= (n |-> 1).i by A6,FINSEQ_2:70;
+    end;
+    hence thesis by A2,FINSEQ_1:18;
+   end;
+
+  theorem Th7:
+   for n be non empty Nat
+   for F be Tuple of n,BOOLEAN st F = 0*n holds Absval F = 0
+   proof defpred _P[Nat] means
+         for F be Tuple of $1,BOOLEAN st F = 0*$1 holds Absval F = 0;
+    A1: _P[1] proof
+     let F be Tuple of 1,BOOLEAN;
+     assume F = 0*1;
+     then F = 1 |-> (0 qua Real) by EUCLID:def 4
+           .= <*FALSE*> by FINSEQ_2:73,MARGREL1:36;
+     hence Absval F = 0 by BINARITH:41;
+    end;
+    A2: for n be non empty Nat st _P[n] holds _P[n+1] proof
+     let n be non empty Nat;
+     assume A3: for F be Tuple of n,BOOLEAN st F = 0*n holds Absval F = 0;
+     let F be Tuple of n+1,BOOLEAN;
+       0*n in BOOLEAN* by Th5;
+     then A4: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
+       len (0*n) = n by JORDAN2B:8;
+     then reconsider F1 = 0*n as Tuple of n,BOOLEAN by A4,FINSEQ_2:110;
+     assume F = 0*(n+1);
+     hence Absval F = Absval(F1 ^ <*FALSE*>) by Th4,MARGREL1:36
+        .= Absval(F1) + IFEQ(FALSE,FALSE,0,2 to_power n) by BINARITH:46
+        .= 0 + IFEQ(FALSE,FALSE,0,2 to_power n) by A3
+        .= 0 by CQC_LANG:def 1;
+    end;
+    thus for n being non empty Nat holds _P[n] from Ind_from_1(A1,A2);
+   end;
+
+  theorem
+     for n be non empty Nat
+   for F be Tuple of n,BOOLEAN st F = 0*n holds
+    Absval 'not' F = 2 to_power n - 1
+   proof
+    let n be non empty Nat;
+    let F be Tuple of n,BOOLEAN;
+    assume A1: F = 0*n;
+    thus Absval 'not' F = - Absval F + 2 to_power n - 1 by BINARI_2:15
+       .= - 0 + 2 to_power n - 1 by A1,Th7
+       .= 2 to_power n - 1;
+   end;
+
+  theorem
+     for n be Nat holds Rev (0*n) = 0*n
+   proof
+    let n be Nat;
+    A1: dom Rev (0*n) = Seg len Rev (0*n) by FINSEQ_1:def 3
+       .= Seg len 0*n by FINSEQ_5:def 3
+       .= dom 0*n by FINSEQ_1:def 3;
+      now let k be Nat;
+     assume A2: k in dom 0*n;
+     then k in Seg len 0*n by FINSEQ_1:def 3;
+     then A3: k in Seg n by EUCLID:2;
+     then n - k + 1 in Seg n by FINSEQ_5:2;
+     then A4: len 0*n - k + 1 in Seg n by EUCLID:2;
+     thus (Rev 0*n).k = (0*n).(len 0*n - k + 1) by A2,FINSEQ_5:61
+        .= (n |-> (0 qua Real)).(len 0*n - k + 1) by EUCLID:def 4
+        .= 0 by A4,FINSEQ_2:70
+        .= (n |-> (0 qua Real)).k by A3,FINSEQ_2:70
+        .= (0*n).k by EUCLID:def 4;
+    end;
+    hence thesis by A1,FINSEQ_1:17;
+   end;
+
+  theorem
+     for n be Nat
+   for y be Tuple of n,BOOLEAN st y = 0*n holds
+    Rev 'not' y = 'not' y
+   proof
+    let n be Nat;
+    let y be Tuple of n,BOOLEAN;
+    assume A1: y = 0*n;
+    A2: dom Rev 'not' y = Seg len Rev 'not' y by FINSEQ_1:def 3
+       .= Seg len 'not' y by FINSEQ_5:def 3
+       .= dom 'not' y by FINSEQ_1:def 3;
+      now let k be Nat;
+     assume A3: k in dom 'not' y;
+     then k in Seg len 'not' y by FINSEQ_1:def 3;
+     then A4: k in Seg n by FINSEQ_2:109;
+     then n - k + 1 in Seg n by FINSEQ_5:2;
+     then A5: len 'not' y - k + 1 in Seg n by FINSEQ_2:109;
+     thus (Rev 'not' y).k = 'not' y.(len 'not' y - k + 1) by A3,FINSEQ_5:61
+        .= (n |-> 1).(len 'not' y - k + 1) by A1,Th6
+        .= 1 by A5,FINSEQ_2:70
+        .= (n |-> 1).k by A4,FINSEQ_2:70
+        .= 'not' y.k by A1,Th6;
+    end;
+    hence thesis by A2,FINSEQ_1:17;
+   end;
+
+  theorem Th11:
+   Bin1 1 = <*TRUE*>
+   proof
+    consider d be Element of BOOLEAN such that
+     A1: Bin1 1 = <*d*> by FINSEQ_2:117;
+      1 in Seg 1 by FINSEQ_1:5;
+    then (Bin1 1)/.1 = TRUE by BINARI_2:7;
+    hence thesis by A1,FINSEQ_4:25;
+   end;
+
+  theorem Th12:
+   for n be non empty Nat holds Absval (Bin1 n) = 1
+   proof defpred _P[Nat] means Absval (Bin1 $1) = 1;
+    A1: _P[1] by Th11,BINARITH:42;
+    A2: for n be non empty Nat st _P[n] holds _P[n+1] proof
+     let n be non empty Nat;
+     assume A3: Absval (Bin1 n) = 1;
+     thus Absval (Bin1 (n+1)) = Absval (Bin1 n ^ <*FALSE*>) by BINARI_2:9
+        .= Absval Bin1 n + IFEQ(FALSE,FALSE,0,2 to_power n) by BINARITH:46
+        .= Absval Bin1 n + 0 by CQC_LANG:def 1
+        .= 1 by A3;
+    end;
+    thus for n being non empty Nat holds _P[n] from Ind_from_1(A1,A2);
+   end;
+
+  theorem Th13:
+   for x,y be Element of BOOLEAN holds
+    (x 'or' y = TRUE iff x = TRUE or y = TRUE) &
+    (x 'or' y = FALSE iff x = FALSE & y = FALSE)
+   proof
+    let x,y be Element of BOOLEAN;
+    thus x 'or' y = TRUE implies x = TRUE or y = TRUE
+    proof
+     assume x 'or' y = TRUE;
+     then 'not' x '&' 'not' y = 'not' TRUE by BINARITH:10;
+     then 'not' x '&' 'not' y = FALSE by MARGREL1:41;
+     then 'not' x = FALSE or 'not' y = FALSE by MARGREL1:45;
+     hence x = TRUE or y = TRUE by MARGREL1:41;
+    end;
+    thus x = TRUE or y = TRUE implies x 'or' y = TRUE by BINARITH:19;
+    thus x 'or' y = FALSE implies x = FALSE & y = FALSE
+    proof
+     assume x 'or' y = FALSE;
+     then 'not' x '&' 'not' y = 'not' FALSE by BINARITH:10;
+     then 'not' x '&' 'not' y = TRUE by MARGREL1:41;
+     then 'not' x = TRUE & 'not' y = TRUE by MARGREL1:45;
+     hence x = FALSE & y = FALSE by MARGREL1:41;
+    end;
+    thus thesis by BINARITH:7;
+   end;
+
+  theorem Th14:
+   for x,y be Element of BOOLEAN holds
+    add_ovfl(<*x*>,<*y*>) = TRUE iff x = TRUE & y = TRUE
+   proof
+    let x,y be Element of BOOLEAN;
+    thus add_ovfl(<*x*>,<*y*>) = TRUE implies x = TRUE & y = TRUE
+    proof
+     assume add_ovfl(<*x*>,<*y*>) = TRUE;
+     then (<*x*>/.1) '&' (<*y*>/.1) 'or'
+          (<*x*>/.1) '&' ((carry(<*x*>,<*y*>))/.1) 'or'
+          (<*y*>/.1) '&' ((carry(<*x*>,<*y*>))/.1) = TRUE by BINARITH:def 9;
+     then A1: (<*x*>/.1) '&' (<*y*>/.1) 'or'
+              (<*x*>/.1) '&' ((carry(<*x*>,<*y*>))/.1) = TRUE or
+              (<*y*>/.1) '&' ((carry(<*x*>,<*y*>))/.1) = TRUE by Th13;
+       now per cases by A1,Th13;
+      suppose (<*x*>/.1) '&' (<*y*>/.1) = TRUE;
+       then (<*x*>/.1) = TRUE & (<*y*>/.1) = TRUE by MARGREL1:45;
+       hence x = TRUE & y = TRUE by FINSEQ_4:25;
+      suppose (<*x*>/.1) '&' ((carry(<*x*>,<*y*>))/.1) = TRUE;
+       then (carry(<*x*>,<*y*>))/.1 = TRUE by MARGREL1:45;
+       hence x = TRUE & y = TRUE by BINARITH:def 5,MARGREL1:38;
+      suppose (<*y*>/.1) '&' ((carry(<*x*>,<*y*>))/.1) = TRUE;
+       then (carry(<*x*>,<*y*>))/.1 = TRUE by MARGREL1:45;
+       hence x = TRUE & y = TRUE by BINARITH:def 5,MARGREL1:38;
+     end;
+     hence x = TRUE & y = TRUE;
+    end;
+    assume that
+     A2: x = TRUE and
+     A3: y = TRUE;
+      <*TRUE*>/.1 = TRUE by FINSEQ_4:25;
+    then (<*TRUE*>/.1) '&' (<*TRUE*>/.1) = TRUE by MARGREL1:45;
+    then A4: (<*TRUE*>/.1) '&' (<*TRUE*>/.1) 'or'
+    (<*TRUE*>/.1) '&' ((carry(<*TRUE*>,<*TRUE*>))/.1) = TRUE by BINARITH:19;
+    thus add_ovfl(<*x*>,<*y*>) = (<*TRUE*>/.1) '&' (<*TRUE*>/.1) 'or'
+           (<*TRUE*>/.1) '&' ((carry(<*TRUE*>,<*TRUE*>))/.1) 'or'
+           (<*TRUE*>/.1) '&' (((carry(<*TRUE*>,<*TRUE*>))/.1))
+                                                     by A2,A3,BINARITH:def 9
+       .= TRUE by A4,BINARITH:19;
+   end;
+
+  theorem Th15:
+   'not' <*FALSE*> = <*TRUE*>
+   proof
+      now let i be Nat;
+     assume A1: i in Seg 1;
+     then A2: i = 1 by FINSEQ_1:4,TARSKI:def 1;
+       len <*FALSE*> = 1 by FINSEQ_2:109;
+     then A3: (<*FALSE*>/.i) = <*FALSE*>.1 by A2,FINSEQ_4:24;
+       len 'not' <*FALSE*> = 1 by FINSEQ_2:109;
+     hence 'not' <*FALSE*>.i = ('not' <*FALSE*>)/.i by A2,FINSEQ_4:24
+        .= 'not' (<*FALSE*>/.i) by A1,BINARITH:def 4
+        .= 'not' FALSE by A3,FINSEQ_1:57
+        .= TRUE by MARGREL1:41
+        .= <*TRUE*>.i by A2,FINSEQ_1:57;
+    end;
+    hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem
+     'not' <*TRUE*> = <*FALSE*>
+   proof
+      now let i be Nat;
+     assume A1: i in Seg 1;
+     then A2: i = 1 by FINSEQ_1:4,TARSKI:def 1;
+       len <*TRUE*> = 1 by FINSEQ_2:109;
+     then A3: (<*TRUE*>/.i) = <*TRUE*>.1 by A2,FINSEQ_4:24;
+       len 'not' <*TRUE*> = 1 by FINSEQ_2:109;
+     hence 'not' <*TRUE*>.i = ('not' <*TRUE*>)/.i by A2,FINSEQ_4:24
+        .= 'not' (<*TRUE*>/.i) by A1,BINARITH:def 4
+        .= 'not' TRUE by A3,FINSEQ_1:57
+        .= FALSE by MARGREL1:41
+        .= <*FALSE*>.i by A2,FINSEQ_1:57;
+    end;
+    hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem
+     <*FALSE*> + <*FALSE*> = <*FALSE*>
+   proof
+      add_ovfl(<*FALSE*>,<*FALSE*>) <> TRUE by Th14,MARGREL1:38;
+    then add_ovfl(<*FALSE*>,<*FALSE*>) = FALSE by MARGREL1:39;
+    then <*FALSE*>,<*FALSE*> are_summable by BINARITH:def 10;
+    then Absval(<*FALSE*> + <*FALSE*>) = Absval <*FALSE*> + Absval <*FALSE*>
+                                                              by BINARITH:48
+       .= Absval <*FALSE*> + 0 by BINARITH:41
+       .= Absval <*FALSE*>;
+    hence thesis by Th2;
+   end;
+
+  theorem Th18:
+   <*FALSE*> + <*TRUE*> = <*TRUE*> & <*TRUE*> + <*FALSE*> = <*TRUE*>
+   proof
+      add_ovfl(<*FALSE*>,<*TRUE*>) <> TRUE by Th14,MARGREL1:38;
+    then add_ovfl(<*FALSE*>,<*TRUE*>) = FALSE by MARGREL1:39;
+    then <*FALSE*>,<*TRUE*> are_summable by BINARITH:def 10;
+    then Absval(<*FALSE*> + <*TRUE*>) = Absval <*FALSE*> + Absval <*TRUE*>
+                                                               by BINARITH:48
+       .= Absval <*FALSE*> + 1 by BINARITH:42
+       .= 0 + 1 by BINARITH:41
+       .= Absval <*TRUE*> by BINARITH:42;
+    hence <*FALSE*> + <*TRUE*> = <*TRUE*> by Th2;
+      add_ovfl(<*TRUE*>,<*FALSE*>) <> TRUE by Th14,MARGREL1:38;
+    then add_ovfl(<*TRUE*>,<*FALSE*>) = FALSE by MARGREL1:39;
+    then <*TRUE*>,<*FALSE*> are_summable by BINARITH:def 10;
+    then Absval(<*TRUE*> + <*FALSE*>) = Absval <*TRUE*> + Absval <*FALSE*>
+                                                               by BINARITH:48
+       .= Absval <*TRUE*> + 0 by BINARITH:41
+       .= Absval <*TRUE*>;
+    hence thesis by Th2;
+   end;
+
+  theorem
+     <*TRUE*> + <*TRUE*> = <*FALSE*>
+   proof
+    A1: add_ovfl(<*TRUE*>,<*TRUE*>) = TRUE by Th14;
+      Absval(<*TRUE*> + <*TRUE*>) =
+          Absval(<*TRUE*> + <*TRUE*>) + 2 - 2 by XCMPLX_1:26
+       .= Absval(<*TRUE*> + <*TRUE*>) + 2 to_power 1 - 2 by POWER:30
+       .= Absval(<*TRUE*> + <*TRUE*>) + IFEQ(add_ovfl(<*TRUE*>,<*TRUE*>),
+                     FALSE,0,2 to_power (1)) - 2 by A1,CQC_LANG:def 1,MARGREL1:
+38
+       .= Absval <*TRUE*> + Absval <*TRUE*> - 2 by BINARITH:47
+       .= Absval <*TRUE*> + 1 - 2 by BINARITH:42
+       .= 1 + 1 - 2 by BINARITH:42
+       .= Absval <*FALSE*> by BINARITH:41;
+    hence thesis by Th2;
+   end;
+
+  theorem Th20:
+   for n be non empty Nat
+   for x,y be Tuple of n,BOOLEAN st
+    x/.n = TRUE & (carry(x,Bin1 n))/.n = TRUE holds
+     for k be non empty Nat st k <> 1 & k <= n holds
+      x/.k = TRUE & (carry(x,Bin1 n))/.k = TRUE
+   proof
+    let n be non empty Nat;
+    let x,y be Tuple of n,BOOLEAN;
+    assume that
+     A1: x/.n = TRUE and
+     A2: (carry(x,Bin1 n))/.n = TRUE;
+    let k be non empty Nat;
+    A3: 1 <= n by RLVECT_1:99;
+    assume that
+     A4: k <> 1 and
+     A5: k <= n;
+      defpred _P[Nat] means  ($1 in Seg (n -' 1) implies
+      x/.(n -' $1 + 1) = TRUE & (carry(x,Bin1 n))/.(n -' $1 + 1) = TRUE);
+    A6: _P[1] by A1,A2,A3,AMI_5:4;
+    A7: for j be non empty Nat st _P[j] holds  _P[j+1] proof
+     let j be non empty Nat;
+     assume that
+      A8: _P[j] and
+      A9: j + 1 in Seg (n -' 1);
+     A10: 1 <= j + 1 & j + 1 <= n -' 1 by A9,FINSEQ_1:3;
+     A11: 1 <= j by RLVECT_1:99;
+     A12: j < n -' 1 by A10,NAT_1:38;
+     then j < n - 1 by A3,SCMFSA_7:3;
+     then j + 1 < n by REAL_1:86;
+     then A13: j < n by NAT_1:38;
+     A14: n -' j < n by NAT_2:11;
+       j + 1 <= n - 1 by A3,A10,SCMFSA_7:3;
+     then 1 <= n - 1 - j by REAL_1:84;
+     then 1 <= n - j - 1 by XCMPLX_1:21;
+     then 1 + 1 <= n - j by REAL_1:84;
+     then 1 + 1 <= n -' j by A13,SCMFSA_7:3;
+     then A15: n -' j > 1 by NAT_1:38;
+     then n -' j in Seg n by A14,FINSEQ_1:3;
+     then (Bin1 n)/.(n -' j) = FALSE by A15,BINARI_2:8;
+     then A16: (x/.(n -' j)) '&' ((Bin1 n)/.(n -' j)) = FALSE &
+      ((Bin1 n)/.(n -' j)) '&' ((carry(x,Bin1 n))/.(n -' j)) = FALSE
+        by MARGREL1:45;
+       TRUE = (x/.(n -' j)) '&' ((Bin1 n)/.(n -' j)) 'or'
+             (x/.(n -' j)) '&' ((carry(x,Bin1 n))/.(n -' j)) 'or'
+             ((Bin1 n)/.(n -' j)) '&' ((carry(x,Bin1 n))/.(n -' j))
+                            by A8,A11,A12,A14,A15,BINARITH:def 5,FINSEQ_1:3
+        .= (x/.(n -' j)) '&' ((Bin1 n)/.(n -' j)) 'or'
+           (x/.(n -' j)) '&' ((carry(x,Bin1 n))/.(n -' j)) by A16,BINARITH:7
+        .= (x/.(n -' j)) '&' ((carry(x,Bin1 n))/.(n -' j)) by A16,BINARITH:7;
+     then A17: x/.(n -' j) = TRUE & (carry(x,Bin1 n))/.(n -' j) = TRUE
+                                                              by MARGREL1:45;
+     hence x/.(n -' (j+1) + 1) = TRUE by A13,NAT_2:9;
+     thus (carry(x,Bin1 n))/.(n -' (j+1) + 1) = TRUE by A13,A17,NAT_2:9;
+    end;
+    A18: for j be non empty Nat holds _P[j] from Ind_from_1(A6,A7);
+    set i = n -' k + 1;
+    A19: 1 <= i by NAT_1:29;
+    A20: i = n - k + 1 by A5,SCMFSA_7:3
+     .= n - (k - 1) by XCMPLX_1:37;
+      1 < k by A4,NAT_2:21;
+    then 1 + 1 <= k by NAT_1:38;
+    then 1 <= k - 1 by REAL_1:84;
+    then A21: i <= n - 1 by A20,REAL_1:92;
+    then A22: i <= n -' 1 by A3,SCMFSA_7:3;
+      i + 1 <= n by A21,REAL_1:84;
+    then i < n by NAT_1:38;
+    then A23: k = n -' i + 1 by A5,NAT_2:7;
+      i in Seg (n -' 1) by A19,A22,FINSEQ_1:3;
+    hence thesis by A18,A23;
+   end;
+
+  theorem Th21:
+   for n be non empty Nat
+   for x be Tuple of n,BOOLEAN st
+    x/.n = TRUE & (carry(x,Bin1 n))/.n = TRUE holds
+     carry(x,Bin1 n) = 'not' Bin1 n
+   proof
+    let n be non empty Nat;
+    let x be Tuple of n,BOOLEAN;
+    assume that
+     A1: x/.n = TRUE and
+     A2: (carry(x,Bin1 n))/.n = TRUE;
+       now let i be Nat;
+      assume A3: i in Seg n;
+      then A4: 1 <= i & i <= n by FINSEQ_1:3;
+      A5: len carry(x,Bin1 n) = n by FINSEQ_2:109;
+      A6: len 'not' Bin1 n = n by FINSEQ_2:109;
+      per cases;
+       suppose A7: i = 1;
+        thus carry(x,Bin1 n).i = (carry(x,Bin1 n))/.i by A4,A5,FINSEQ_4:24
+           .= FALSE by A7,BINARITH:def 5
+           .= 'not' TRUE by MARGREL1:41
+           .= 'not' ((Bin1 n)/.i) by A3,A7,BINARI_2:7
+           .= ('not' Bin1 n)/.i by A3,BINARITH:def 4
+           .= ('not' Bin1 n).i by A4,A6,FINSEQ_4:24;
+       suppose A8: i <> 1;
+        A9: i is non empty by A3,BINARITH:5;
+        thus carry(x,Bin1 n).i = (carry(x,Bin1 n))/.i by A4,A5,FINSEQ_4:24
+           .= TRUE by A1,A2,A4,A8,A9,Th20
+           .= 'not' FALSE by MARGREL1:41
+           .= 'not' ((Bin1 n)/.i) by A3,A8,BINARI_2:8
+           .= ('not' Bin1 n)/.i by A3,BINARITH:def 4
+           .= ('not' Bin1 n).i by A4,A6,FINSEQ_4:24;
+     end;
+     hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem Th22:
+   for n be non empty Nat
+   for x,y be Tuple of n,BOOLEAN st
+    y = 0*n & x/.n = TRUE & (carry(x,Bin1 n))/.n = TRUE holds
+     x = 'not' y
+   proof
+    let n be non empty Nat;
+    let x,y be Tuple of n,BOOLEAN;
+    assume that
+     A1: y = 0*n and
+     A2: x/.n = TRUE and
+     A3: (carry(x,Bin1 n))/.n = TRUE;
+     A4: len x = n by FINSEQ_2:109;
+     A5: len y = n by FINSEQ_2:109;
+     A6: len 'not' y = n by FINSEQ_2:109;
+     A7: len carry(x,Bin1 n) = n by FINSEQ_2:109;
+       now let i be Nat;
+      assume A8: i in Seg n;
+      then A9: 1 <= i & i <= n by FINSEQ_1:3;
+      A10: y.i = (n |-> (0 qua Real)).i by A1,EUCLID:def 4
+              .= FALSE by A8,FINSEQ_2:70,MARGREL1:36;
+        now per cases;
+       suppose A11: i = 1;
+        A12: n >= 1 by RLVECT_1:99;
+          now per cases by A12,REAL_1:def 5;
+         suppose n = 1;
+          hence x .i = 'not' y.i by A3,BINARITH:def 5,MARGREL1:38;
+         suppose A13: n > 1;
+          then A14: (1+1) <= n by NAT_1:38;
+          then A15: 2 in Seg n by FINSEQ_1:3;
+          A16: len 'not' Bin1 n = n by FINSEQ_2:109;
+            (carry(x,Bin1 n))/.i = FALSE by A11,BINARITH:def 5;
+          then A17: (x/.i) '&' ((carry(x,Bin1 n))/.i) = FALSE &
+           ((Bin1 n)/.i) '&' ((carry(x,Bin1 n))/.i) = FALSE by MARGREL1:45;
+            carry(x,Bin1 n).(i+1) = ('not' Bin1 n).2 by A2,A3,A11,Th21
+             .= ('not' Bin1 n)/.2 by A14,A16,FINSEQ_4:24
+             .= 'not' ((Bin1 n)/.2) by A15,BINARITH:def 4
+             .= 'not' FALSE by A15,BINARI_2:8
+             .= TRUE by MARGREL1:41;
+       then A18: TRUE = (carry(x,Bin1 n))/.(i+1) by A7,A11,A14,FINSEQ_4:24
+             .= (x/.i) '&' ((Bin1 n)/.i) 'or'
+                (x/.i) '&' ((carry(x,Bin1 n))/.i) 'or'
+                ((Bin1 n)/.i) '&' ((carry(x,Bin1 n))/.i)
+                                                  by A11,A13,BINARITH:def 5
+             .= (x/.i) '&' ((Bin1 n)/.i) 'or'
+                (x/.i) '&' ((carry(x,Bin1 n))/.i) by A17,BINARITH:7
+             .= (x/.i) '&' ((Bin1 n)/.i) by A17,BINARITH:7;
+          thus x .i = x/.i by A4,A9,FINSEQ_4:24
+             .= TRUE by A18,MARGREL1:45
+             .= 'not' FALSE by MARGREL1:41
+             .= 'not' (y/.i) by A5,A9,A10,FINSEQ_4:24
+             .= ('not' y)/.i by A8,BINARITH:def 4
+             .= 'not' y.i by A6,A9,FINSEQ_4:24;
+        end;
+        hence x .i = 'not' y.i;
+       suppose A19: i <> 1;
+        A20: i is non empty by A8,BINARITH:5;
+        thus x .i = x/.i by A4,A9,FINSEQ_4:24
+           .= TRUE by A2,A3,A9,A19,A20,Th20
+           .= 'not' FALSE by MARGREL1:41
+           .= 'not' (y/.i) by A5,A9,A10,FINSEQ_4:24
+           .= ('not' y)/.i by A8,BINARITH:def 4
+           .= 'not' y.i by A6,A9,FINSEQ_4:24;
+      end;
+      hence x .i = 'not' y.i;
+     end;
+     hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem Th23:
+   for n be non empty Nat
+   for y be Tuple of n,BOOLEAN st y = 0*n holds
+    carry('not' y,Bin1 n) = 'not' Bin1 n
+   proof
+    let n be non empty Nat;
+    let y be Tuple of n,BOOLEAN;
+    assume A1: y = 0*n;
+    A2: n in Seg n by FINSEQ_1:5;
+    A3: n >= 1 by RLVECT_1:99;
+    A4: y.n = (n |-> (0 qua Real)).n by A1,EUCLID:def 4
+       .= 0 by A2,FINSEQ_2:70;
+    A5: len y = n by FINSEQ_2:109;
+    A6: ('not' y)/.n = 'not' (y/.n) by A2,BINARITH:def 4
+       .= 'not' FALSE by A3,A4,A5,FINSEQ_4:24,MARGREL1:36
+       .= TRUE by MARGREL1:41;
+    per cases;
+     suppose A7: n = 1;
+        now let i be Nat;
+       assume A8: i in Seg n;
+       then A9: i = 1 by A7,FINSEQ_1:4,TARSKI:def 1;
+       A10: len 'not' Bin1 n = n by FINSEQ_2:109;
+         len carry('not' y,Bin1 n) = n by FINSEQ_2:109;
+       hence carry('not' y,Bin1 n).i = (carry('not'
+y,Bin1 n))/.i by A7,A9,FINSEQ_4:24
+          .= FALSE by A9,BINARITH:def 5
+          .= 'not' TRUE by MARGREL1:41
+          .= 'not' ((Bin1 n)/.i) by A8,A9,BINARI_2:7
+          .= ('not' Bin1 n)/.i by A8,BINARITH:def 4
+          .= ('not' Bin1 n).i by A7,A9,A10,FINSEQ_4:24;
+      end;
+      hence thesis by FINSEQ_2:139;
+     suppose n <> 1;
+      then A11: n is non trivial by NAT_2:def 1;
+      defpred _P[Nat] means $1 <= n implies (carry('not' y,Bin1 n))/.$1 = TRUE;
+      A12: _P[2] proof
+       assume 2 <= n;
+       then 1 + 1 <= n;
+       then A13: 1 < n by NAT_1:38;
+       then A14: 1 in Seg n by FINSEQ_1:3;
+       then A15: (Bin1 n)/.1 = TRUE by BINARI_2:7;
+       A16: y.1 = (n |-> (0 qua Real)).1 by A1,EUCLID:def 4
+               .= FALSE by A14,FINSEQ_2:70,MARGREL1:36;
+         ('not' y)/.1 = 'not' (y/.1) by A14,BINARITH:def 4
+          .= 'not' FALSE by A5,A13,A16,FINSEQ_4:24
+          .= TRUE by MARGREL1:41;
+       then (('not' y)/.1) '&' ((Bin1 n)/.1) = TRUE by A15,MARGREL1:45;
+       then A17: (('not' y)/.1) '&' ((Bin1 n)/.1) 'or'
+       (('not' y)/.1) '&' ((carry('not'
+y,Bin1 n))/.1) = TRUE by BINARITH:19;
+       thus (carry('not' y,Bin1 n))/.2 = (carry('not' y,Bin1 n))/.(1 + 1)
+          .= (('not' y)/.1) '&' ((Bin1 n)/.1) 'or'
+             (('not' y)/.1) '&' ((carry('not' y,Bin1 n))/.1) 'or'
+             ((Bin1 n)/.1) '&' (
+(carry('not' y,Bin1 n))/.1) by A13,BINARITH:def 5
+          .= TRUE by A17,BINARITH:19;
+      end;
+      A18: for i be non trivial Nat st _P[i] holds _P[i+1] proof
+       let i be non trivial Nat;
+       assume that
+        A19: i <= n implies (carry('not' y,Bin1 n))/.i = TRUE and
+        A20: i + 1 <= n;
+       A21: 1 <= i by RLVECT_1:99;
+       A22: i < n by A20,NAT_1:38;
+       then A23: i in Seg n by A21,FINSEQ_1:3;
+       A24: y.i = (n |-> (0 qua Real)).i by A1,EUCLID:def 4
+               .= FALSE by A23,FINSEQ_2:70,MARGREL1:36;
+       A25: ('not' y)/.i = 'not' (y/.i) by A23,BINARITH:def 4
+          .= 'not' FALSE by A5,A21,A22,A24,FINSEQ_4:24
+          .= TRUE by MARGREL1:41;
+         i <> 1 by NAT_2:def 1;
+       then ((Bin1 n)/.i) = FALSE by A23,BINARI_2:8;
+       then A26: (('not' y)/.i) '&' ((Bin1 n)/.i) = FALSE &
+        ((Bin1 n)/.i) '&' ((carry('not' y,Bin1 n))/.i) = FALSE by MARGREL1:45;
+       thus (carry('not' y,Bin1 n))/.(i + 1) =
+             (('not' y)/.i) '&' ((Bin1 n)/.i) 'or'
+             (('not' y)/.i) '&' ((carry('not' y,Bin1 n))/.i) 'or'
+             ((Bin1 n)/.i) '&' ((carry('not'
+y,Bin1 n)/.i)) by A21,A22,BINARITH:def 5
+          .= (('not' y)/.i) '&' ((Bin1 n)/.i) 'or'
+          (('not' y)/.i) '&' ((carry('not' y,Bin1 n))/.i) by A26,BINARITH:7
+       .= (('not' y)/.i) '&' ((carry('not' y,Bin1 n))/.i) by A26,BINARITH:7
+       .= TRUE by A19,A20,A25,MARGREL1:45,NAT_1:38;
+      end;
+        for i be non trivial Nat holds _P[i] from Ind_from_2(A12,A18);
+      then (carry('not' y,Bin1 n))/.n = TRUE by A11;
+      hence thesis by A6,Th21;
+   end;
+
+  theorem Th24:
+   for n be non empty Nat
+   for x,y be Tuple of n,BOOLEAN st y = 0*n holds
+    add_ovfl(x,Bin1 n) = TRUE iff x = 'not' y
+   proof
+    let n be non empty Nat;
+    let x,y be Tuple of n,BOOLEAN;
+    assume A1: y = 0*n;
+    A2: n in Seg n by FINSEQ_1:5;
+    A3: 1 in Seg 1 by FINSEQ_1:5;
+    thus add_ovfl(x,Bin1 n) = TRUE implies x = 'not' y
+    proof
+     assume A4: add_ovfl(x,Bin1 n) = TRUE;
+     then A5: (x/.n) '&' ((Bin1 n)/.n) 'or' (x/.n) '&' ((carry(x,Bin1 n))/.n)
+      'or' ((Bin1 n)/.n) '&' ((carry(x,Bin1 n))/.n) = TRUE by BINARITH:def 9;
+     per cases;
+      suppose A6: n <> 1;
+         now per cases by A5,Th13;
+        suppose A7: (x/.n) '&' ((Bin1 n)/.n) 'or'
+                    (x/.n) '&' ((carry(x,Bin1 n))/.n) = TRUE;
+           now per cases by A7,Th13;
+          suppose (x/.n) '&' ((Bin1 n)/.n) = TRUE;
+           then A8: (x/.n) = TRUE & ((Bin1 n)/.n) = TRUE by MARGREL1:45;
+           assume x <> 'not' y;
+           thus contradiction by A2,A6,A8,BINARI_2:8,MARGREL1:38;
+          suppose (x/.n) '&' ((carry(x,Bin1 n))/.n) = TRUE;
+           then (x/.n) = TRUE & (carry(x,Bin1 n))/.n = TRUE by MARGREL1:45;
+           hence x = 'not' y by A1,Th22;
+         end;
+         hence x = 'not' y;
+        suppose ((Bin1 n)/.n) '&' ((carry(x,Bin1 n))/.n) = TRUE;
+         then A9: ((Bin1 n)/.n) = TRUE & (carry(x,Bin1 n))/.n = TRUE
+                                                              by MARGREL1:45;
+         assume x <> 'not' y;
+         thus contradiction by A2,A6,A9,BINARI_2:8,MARGREL1:38;
+       end;
+       hence x = 'not' y;
+      suppose A10: n = 1;
+       then consider d be Element of BOOLEAN such that
+        A11: x = <*d*> by FINSEQ_2:117;
+       A12: d = TRUE by A4,A10,A11,Th11,Th14;
+         len y = 1 by A10,FINSEQ_2:109;
+       then 1 in dom y by A3,FINSEQ_1:def 3;
+       then A13: (y/.1) = y.1 by FINSEQ_4:def 4
+          .= (1 |-> (0 qua Real)).1 by A1,A10,EUCLID:def 4
+          .= 0 by A3,FINSEQ_2:70;
+         now let i be Nat;
+        assume i in Seg n;
+        then A14: i = 1 by A10,FINSEQ_1:4,TARSKI:def 1;
+        hence x/.i = d by A11,FINSEQ_4:25
+           .= 'not' (y/.i) by A12,A13,A14,MARGREL1:36,41;
+       end;
+       hence x = 'not' y by BINARITH:def 4;
+    end;
+    assume A15: x = 'not' y;
+    per cases;
+     suppose A16: n <> 1;
+        len y = n by FINSEQ_2:109;
+      then n in dom y by A2,FINSEQ_1:def 3;
+      then A17: (y/.n) = y.n by FINSEQ_4:def 4
+         .= (n |-> (0 qua Real)).n by A1,EUCLID:def 4
+         .= 0 by A2,FINSEQ_2:70;
+      A18: x/.n = 'not' (y/.n) by A2,A15,BINARITH:def 4
+         .= TRUE by A17,MARGREL1:36,41;
+        (carry(x,Bin1 n))/.n = ('not' Bin1 n)/.n by A1,A15,Th23
+         .= 'not' ((Bin1 n)/.n) by A2,BINARITH:def 4
+         .= 'not' FALSE by A2,A16,BINARI_2:8
+         .= TRUE by MARGREL1:41;
+      then (x/.n) '&' ((carry(x,Bin1 n))/.n) = TRUE by A18,MARGREL1:45;
+    then A19: (x/.n) '&' ((Bin1 n)/.n) 'or' (x/.n) '&' ((carry(x,Bin1 n))/.n)
+                                                       = TRUE by BINARITH:19;
+      thus add_ovfl(x,Bin1 n) = (x/.n) '&' ((Bin1 n)/.n) 'or'
+                    (x/.n) '&' ((carry(x,Bin1 n))/.n) 'or'
+                    ((Bin1 n)/.n) '&' ((carry(x,Bin1 n))/.n) by BINARITH:def 9
+         .= TRUE by A19,BINARITH:19;
+     suppose A20: n = 1;
+      then consider d be Element of BOOLEAN such that
+       A21: x = <*d*> by FINSEQ_2:117;
+        len y = 1 by A20,FINSEQ_2:109;
+      then 1 in dom y by A3,FINSEQ_1:def 3;
+      then A22: (y/.1) = y.1 by FINSEQ_4:def 4
+         .= (1 |-> (0 qua Real)).1 by A1,A20,EUCLID:def 4
+         .= 0 by A3,FINSEQ_2:70;
+        d = ('not' y)/.1 by A15,A21,FINSEQ_4:25
+       .= 'not' (y/.1) by A3,A20,BINARITH:def 4
+       .= TRUE by A22,MARGREL1:36,41;
+      hence thesis by A20,A21,Th11,Th14;
+   end;
+
+  theorem Th25:
+   for n be non empty Nat
+   for z be Tuple of n,BOOLEAN st z = 0*n holds
+    'not' z + Bin1 n = z
+   proof
+    let n be non empty Nat;
+    let z be Tuple of n,BOOLEAN;
+    assume A1: z = 0*n;
+    then A2: add_ovfl('not' z,Bin1 n) = TRUE by Th24;
+      Absval ('not' z + Bin1 n) =
+        Absval ('not' z + Bin1 n) + 2 to_power n - 2 to_power n by XCMPLX_1:26
+     .= Absval ('not' z + Bin1 n) + IFEQ(add_ovfl('not' z,Bin1 n),FALSE,
+                0,2 to_power (n)) - 2 to_power n by A2,CQC_LANG:def 1,MARGREL1:
+38
+     .= Absval 'not' z + Absval Bin1 n - 2 to_power n by BINARITH:47
+     .= - Absval(z) + 2 to_power n - 1 + Absval Bin1 n - 2 to_power n
+                                                               by BINARI_2:15
+     .= - Absval(z) + 2 to_power n - 1 + 1 - 2 to_power n by Th12
+     .= - Absval(z) + 2 to_power n - 2 to_power n by XCMPLX_1:27
+     .= - Absval(z) by XCMPLX_1:26
+     .= 0 by A1,Th7,REAL_1:26
+     .= Absval z by A1,Th7;
+    hence thesis by Th2;
+   end;
+
+begin :: Binary Sequences
+
+  definition
+   let n,k be Nat;
+   func n-BinarySequence k -> Tuple of n,BOOLEAN means :Def1:
+    for i be Nat st i in Seg n holds
+     it/.i = IFEQ((k div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE);
+   existence
+   proof
+      deffunc _F(Nat) = IFEQ((k div 2 to_power ($1-'1)) mod 2,0,FALSE,TRUE);
+    consider p be FinSequence of BOOLEAN such that
+     A1: len p = n and
+     A2: for i be Nat st i in Seg n holds p.i = _F(i) from SeqLambdaD;
+     reconsider p as Tuple of n,BOOLEAN by A1,FINSEQ_2:110;
+     take p;
+     let i be Nat;
+     assume A3: i in Seg n;
+     then i in dom p by A1,FINSEQ_1:def 3;
+     hence p/.i = p.i by FINSEQ_4:def 4
+             .= IFEQ((k div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE) by A2,A3;
+   end;
+   uniqueness
+   proof
+    let p1,p2 be Tuple of n,BOOLEAN such that
+     A4: for i be Nat st i in Seg n holds
+      p1/.i = IFEQ((k div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE) and
+     A5: for i be Nat st i in Seg n holds
+      p2/.i = IFEQ((k div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE);
+    A6: len p1 = n & len p2 = n by FINSEQ_2:109;
+      now let i be Nat;
+    assume A7: i in Seg n;
+    then A8: i in dom p1 & i in dom p2 by A6,FINSEQ_1:def 3;
+    hence p1.i = p1/.i by FINSEQ_4:def 4
+             .= IFEQ((k div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE) by A4,A7
+             .= p2/.i by A5,A7
+             .= p2.i by A8,FINSEQ_4:def 4;
+    end;
+    hence p1 = p2 by A6,FINSEQ_2:10;
+   end;
+  end;
+
+  theorem Th26:
+   for n be Nat holds n-BinarySequence 0 = 0*n
+   proof
+    let n be Nat;
+      0*n in BOOLEAN* by Th5;
+    then A1: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
+      len (0*n) = n by JORDAN2B:8;
+    then reconsider F = 0*n as Tuple of n,BOOLEAN by A1,FINSEQ_2:110;
+      now let i be Nat;
+     assume A2: i in Seg n;
+       len (n-BinarySequence 0) = n by FINSEQ_2:109;
+     then i in dom (n-BinarySequence 0) by A2,FINSEQ_1:def 3;
+     hence (n-BinarySequence 0).i = (n-BinarySequence 0)/.i by FINSEQ_4:def 4
+        .= IFEQ((0 div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE) by A2,Def1
+        .= IFEQ(0 mod 2,0,FALSE,TRUE) by NAT_2:4
+        .= IFEQ(0,0,FALSE,TRUE) by GR_CY_1:6
+        .= 0 by CQC_LANG:def 1,MARGREL1:36
+        .= (n |-> (0 qua Real)).i by A2,FINSEQ_2:70
+        .= F.i by EUCLID:def 4;
+    end;
+    hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem Th27:
+   for n,k be Nat st k < 2 to_power n holds
+    ((n+1)-BinarySequence k).(n+1) = FALSE
+   proof
+    let n,k be Nat;
+    assume A1: k < 2 to_power n;
+      n+1-'1 = n+1-1 by JORDAN4:2
+       .= n by XCMPLX_1:26;
+    then A2: (k div 2 to_power (n+1-'1)) mod 2 = 0 mod 2 by A1,JORDAN4:5
+       .= 0 by GR_CY_1:6;
+    A3: n + 1 in Seg (n+1) by FINSEQ_1:6;
+    then n + 1 in Seg len ((n+1)-BinarySequence k) by FINSEQ_2:109;
+    then n + 1 in dom ((n+1)-BinarySequence k) by FINSEQ_1:def 3;
+    hence ((n+1)-BinarySequence k).(n+1) =
+          ((n+1)-BinarySequence k)/.(n+1) by FINSEQ_4:def 4
+       .= IFEQ((k div 2 to_power (n+1-'1)) mod 2,0,FALSE,TRUE) by A3,Def1
+       .= FALSE by A2,CQC_LANG:def 1;
+   end;
+
+  theorem Th28:
+   for n be non empty Nat
+   for k be Nat st k < 2 to_power n holds
+    (n+1)-BinarySequence k = (n-BinarySequence k)^<*FALSE*>
+   proof
+    let n be non empty Nat;
+    let k be Nat;
+    assume A1: k < 2 to_power n;
+      now let i be Nat;
+     assume A2: i in Seg (n + 1);
+     then i in Seg len ((n+1)-BinarySequence k) by FINSEQ_2:109;
+     then A3: i in dom ((n+1)-BinarySequence k) by FINSEQ_1:def 3;
+       now per cases by A2,FINSEQ_2:8;
+      suppose A4: i in Seg n;
+       then i in Seg len (n-BinarySequence k) by FINSEQ_2:109;
+       then A5: i in dom (n-BinarySequence k) by FINSEQ_1:def 3;
+       thus ((n+1)-BinarySequence k).i = ((n+1)-BinarySequence k)/.i
+                                                 by A3,FINSEQ_4:def 4
+          .= IFEQ((k div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE) by A2,Def1
+          .= (n-BinarySequence k)/.i by A4,Def1
+          .= (n-BinarySequence k).i by A5,FINSEQ_4:def 4
+          .= ((n-BinarySequence k)^<*FALSE*>).i by A5,FINSEQ_1:def 7;
+      suppose A6: i = n + 1;
+       hence ((n+1)-BinarySequence k).i = FALSE by A1,Th27
+          .= ((n-BinarySequence k)^<*FALSE*>).i by A6,FINSEQ_2:136;
+     end;
+     hence ((n+1)-BinarySequence k).i = ((n-BinarySequence k)^<*FALSE*>).i;
+    end;
+    hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem Th29:
+   for n be non empty Nat holds
+    (n+1)-BinarySequence 2 to_power n = 0*n^<*TRUE*>
+   proof
+    let n be non empty Nat;
+      0*n in BOOLEAN* by Th5;
+    then A1: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
+      len (0*n) = n by JORDAN2B:8;
+    then reconsider 0n = 0*n as Tuple of n,BOOLEAN by A1,FINSEQ_2:110;
+      now let i be Nat;
+     assume A2: i in Seg (n+1);
+       now per cases by A2,FINSEQ_2:8;
+      suppose A3: i in Seg n;
+       then i in Seg len 0n by FINSEQ_2:109;
+       then A4: i in dom 0n by FINSEQ_1:def 3;
+       A5: i >= 1 by A3,FINSEQ_1:3;
+         i <= n + 1 by A2,FINSEQ_1:3;
+       then i - 1 <= n + 1 - 1 by REAL_1:49;
+       then i-'1 <= n + 1 - 1 by A5,SCMFSA_7:3;
+       then A6: i-'1 <= n by XCMPLX_1:26;
+         n >= i by A3,FINSEQ_1:3;
+       then n + 1 > i by NAT_1:38;
+       then n > i - 1 by REAL_1:84;
+       then n - (i - 1) > 0 by SQUARE_1:11;
+       then n - (i-'1) > 0 by A5,SCMFSA_7:3;
+       then n-'(i-'1) > 0 by A6,SCMFSA_7:3;
+       then consider n1 be Nat such that
+        A7: n-'(i-'1) = n1 + 1 by NAT_1:22;
+       A8: 2 to_power (n -' (i-'1)) =
+        2 to_power n1 * 2 to_power 1 by A7,POWER:32
+          .= 2 to_power n1 * 2 by POWER:30;
+       A9: 2 to_power (i-'1) > 0 by POWER:39;
+         n = n-(i-'1)+(i-'1) by XCMPLX_1:27
+        .= n-'(i-'1)+(i-'1) by A6,SCMFSA_7:3;
+       then 2 to_power n = 2 to_power (n-'(i-'1)) * 2 to_power (i-'1) by POWER:
+32;
+       then A10: ((2 to_power n) div 2 to_power (i-'1)) mod 2 =
+             (2 to_power (n-'(i-'1))) mod 2 by A9,AMI_5:3
+          .= 0 by A8,GROUP_4:101;
+         i in Seg len ((n+1)-BinarySequence 2 to_power n) by A2,FINSEQ_2:109;
+       then i in dom ((n+1)-BinarySequence 2 to_power n) by FINSEQ_1:def 3;
+       hence ((n+1)-BinarySequence 2 to_power n).i =
+             ((n+1)-BinarySequence 2 to_power n)/.i by FINSEQ_4:def 4
+          .= IFEQ(((2 to_power n) div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE)
+                                                                  by A2,Def1
+          .= 0 by A10,CQC_LANG:def 1,MARGREL1:36
+          .= (n |-> (0 qua Real)).i by A3,FINSEQ_2:70
+          .= 0n.i by EUCLID:def 4
+          .= (0n^<*TRUE*>).i by A4,FINSEQ_1:def 7;
+      suppose A11: i = n + 1;
+         n + 1 in Seg (n+1) by FINSEQ_1:6;
+       then n + 1 in Seg len ((n+1)-BinarySequence 2 to_power n)
+                                                             by FINSEQ_2:109;
+       then A12: n + 1 in dom ((n+1)-BinarySequence 2 to_power n)
+                                                          by FINSEQ_1:def 3;
+       A13: 2 to_power n > 0 by POWER:39;
+         i-'1 = n+1-1 by A11,JORDAN4:2
+          .= n by XCMPLX_1:26;
+       then A14: ((2 to_power n) div 2 to_power (i-'1)) mod 2 =
+             1 mod 2 by A13,NAT_2:5
+          .= 1 by GROUP_4:102;
+       thus ((n+1)-BinarySequence 2 to_power n).i =
+             ((n+1)-BinarySequence 2 to_power n)/.i by A11,A12,FINSEQ_4:def 4
+          .= IFEQ(((2 to_power n) div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE)
+                                                                  by A2,Def1
+          .= TRUE by A14,CQC_LANG:def 1
+          .= (0n^<*TRUE*>).i by A11,FINSEQ_2:136;
+     end;
+     hence ((n+1)-BinarySequence 2 to_power n).i = (0n^<*TRUE*>).i;
+    end;
+    hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem Th30:
+   for n be non empty Nat
+   for k be Nat st 2 to_power n <= k & k < 2 to_power (n+1) holds
+    ((n+1)-BinarySequence k).(n+1) = TRUE
+   proof
+    let n be non empty Nat;
+    let k be Nat;
+    assume that
+     A1: 2 to_power n <= k and
+     A2: k < 2 to_power (n+1);
+      k < 2 to_power n * 2 to_power 1 by A2,POWER:32;
+    then k < 2 * 2 to_power n by POWER:30;
+    then A3: k < 2 to_power n + 2 to_power n by XCMPLX_1:11;
+      n+1-'1 = n+1-1 by JORDAN4:2
+       .= n by XCMPLX_1:26;
+    then A4:(k div 2 to_power (n+1-'1)) mod 2 = 1 mod 2 by A1,A3,NAT_2:22
+      .= 1 by GR_CY_1:4;
+    A5: n + 1 in Seg (n+1) by FINSEQ_1:6;
+    then n + 1 in Seg len ((n+1)-BinarySequence k) by FINSEQ_2:109;
+    then n + 1 in dom ((n+1)-BinarySequence k) by FINSEQ_1:def 3;
+    hence ((n+1)-BinarySequence k).(n+1) =
+          ((n+1)-BinarySequence k)/.(n+1) by FINSEQ_4:def 4
+       .= IFEQ((k div 2 to_power (n+1-'1)) mod 2,0,FALSE,TRUE) by A5,Def1
+       .= TRUE by A4,CQC_LANG:def 1;
+   end;
+
+  theorem Th31:
+   for n be non empty Nat
+   for k be Nat st 2 to_power n <= k & k < 2 to_power (n+1) holds
+    (n+1)-BinarySequence k = (n-BinarySequence (k -' 2 to_power n))^<*TRUE*>
+   proof
+    let n be non empty Nat;
+    let k be Nat;
+    assume that
+     A1: 2 to_power n <= k and
+     A2: k < 2 to_power (n+1);
+      now let i be Nat;
+     assume A3: i in Seg (n+1);
+     then i in Seg len ((n+1)-BinarySequence k) by FINSEQ_2:109;
+     then A4: i in dom ((n+1)-BinarySequence k) by FINSEQ_1:def 3;
+       now per cases by A3,FINSEQ_2:8;
+      suppose A5: i in Seg n;
+       then i in Seg len (n-BinarySequence (k -' 2 to_power n))
+                                                             by FINSEQ_2:109;
+       then A6: i in dom (n-BinarySequence (k -' 2 to_power n))
+                                                          by FINSEQ_1:def 3;
+         2 to_power (i-'1) > 0 by POWER:39;
+       then A7: 0 + 1 <= 2 to_power (i-'1) by NAT_1:38;
+       A8: 1 <= i & i <= n by A5,FINSEQ_1:3;
+         2 * 2 to_power (i-'1) = 2 to_power (i-'1) * 2 to_power 1 by POWER:30
+          .= 2 to_power (i-'1+1) by POWER:32
+          .= 2 to_power (i-1+1) by A8,SCMFSA_7:3
+          .= 2 to_power i by XCMPLX_1:27;
+       then A9: 2 * 2 to_power (i-'1) divides 2 to_power n by A8,NAT_2:13;
+       A10: now per cases;
+        suppose A11: k div 2 to_power (i-'1) is even;
+         then A12: (k div 2 to_power (i-'1)) mod 2 = 0 by NAT_2:23;
+           (k-' 2 to_power n) div 2 to_power (i-'1) is even
+                                                     by A1,A7,A9,A11,NAT_2:25;
+         hence (k div 2 to_power (i-'1)) mod 2 =
+          ((k -' 2 to_power n) div 2 to_power (i-'1)) mod 2 by A12,NAT_2:23;
+        suppose A13: k div 2 to_power (i-'1) is odd;
+         then A14: (k div 2 to_power (i-'1)) mod 2 = 1 by NAT_2:24;
+           (k -' 2 to_power n) div 2 to_power (i-'1) is odd
+                                                     by A1,A7,A9,A13,NAT_2:25;
+         hence (k div 2 to_power (i-'1)) mod 2 =
+          ((k -' 2 to_power n) div 2 to_power (i-'1)) mod 2 by A14,NAT_2:24;
+       end;
+       thus ((n+1)-BinarySequence k).i = ((n+1)-BinarySequence k)/.i
+                                                    by A4,FINSEQ_4:def 4
+          .= IFEQ((k div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE) by A3,Def1
+          .= (n-BinarySequence (k -' 2 to_power n))/.i by A5,A10,Def1
+          .= (n-BinarySequence (k -' 2 to_power n)).i by A6,FINSEQ_4:def 4
+          .= ((n-BinarySequence (k -' 2 to_power n))^<*TRUE*>).i
+                                                       by A6,FINSEQ_1:def 7;
+      suppose A15: i = n + 1;
+       hence ((n+1)-BinarySequence k).i = TRUE by A1,A2,Th30
+          .= ((n-BinarySequence (k -' 2 to_power n))^<*TRUE*>).i
+                                                          by A15,FINSEQ_2:136;
+     end;
+     hence ((n+1)-BinarySequence k).i =
+                         ((n-BinarySequence (k -' 2 to_power n))^<*TRUE*>).i;
+    end;
+    hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem Th32:
+   for n be non empty Nat
+   for k be Nat st k < 2 to_power n
+   for x be Tuple of n,BOOLEAN st x = 0*n holds
+    n-BinarySequence k = 'not' x iff k = 2 to_power n - 1
+   proof
+    let n be non empty Nat;
+    let k be Nat;
+    assume A1: k < 2 to_power n;
+    let x be Tuple of n,BOOLEAN;
+    assume A2: x = 0*n;
+    thus n-BinarySequence k = 'not' x implies k = 2 to_power n - 1
+    proof
+     assume A3: n-BinarySequence k = 'not' x;
+     defpred _P[Nat] means
+     for k be Nat holds
+      (k < 2 to_power $1 implies for y be Tuple of $1,BOOLEAN st y = 0*$1 holds
+       $1-BinarySequence k = 'not' y implies k = 2 to_power $1 - 1);
+     A4: _P[1]  proof   let k be Nat;
+      assume A5: k < 2 to_power 1;
+      let y be Tuple of 1,BOOLEAN;
+      assume y = 0*1;
+      then A6: y = 1 |-> (0 qua Real) by EUCLID:def 4
+            .= <*FALSE*> by FINSEQ_2:73,MARGREL1:36;
+      assume A7: 1-BinarySequence k = 'not' y;
+      A8: 1 <= len (1-BinarySequence k) by FINSEQ_2:109;
+      A9: 1 in Seg 1 by FINSEQ_1:5;
+      A10: k < 2 by A5,POWER:30;
+      A11: 1 = <*1*>.1 by FINSEQ_1:57
+        .= (1-BinarySequence k)/.1 by A6,A7,A8,Th15,FINSEQ_4:24,MARGREL1:36
+        .= IFEQ((k div 2 to_power (1-'1)) mod 2,0,FALSE,TRUE) by A9,Def1;
+        k = 1
+      proof
+       assume k <> 1;
+       then k = 0 by A10,ALGSEQ_1:4;
+       then k < 2 to_power (1-'1) by POWER:39;
+       then k div 2 to_power (1-'1) = 0 by JORDAN4:5;
+       then (k div 2 to_power (1-'1)) mod 2 = 0 by GR_CY_1:6;
+       hence contradiction by A11,CQC_LANG:def 1,MARGREL1:36;
+      end;
+      hence k = 1 + 1 - 1
+         .= 2 to_power 1 - 1 by POWER:30;
+     end;
+     A12: for m be non empty Nat st _P[m] holds _P[m+1] proof
+      let m be non empty Nat;
+      assume A13: _P[m];
+      let k be Nat;
+      assume A14: k < 2 to_power (m+1);
+      let y be Tuple of m+1,BOOLEAN;
+      assume that
+       A15: y = 0*(m+1) and
+       A16: (m+1)-BinarySequence k = 'not' y;
+      A17: len y = m + 1 by FINSEQ_2:109;
+      A18: len 'not' y = m + 1 by FINSEQ_2:109;
+      A19: m + 1 in Seg (m + 1) by FINSEQ_1:6;
+        0 <= m by NAT_1:18;
+      then A20: 0 + 1 <= m + 1 by AXIOMS:24;
+      A21: y.(m + 1) = ((m + 1) |-> (0 qua Real)).(m + 1) by A15,EUCLID:def 4
+         .= FALSE by A19,FINSEQ_2:70,MARGREL1:36;
+        ((m+1)-BinarySequence k).(m+1) = ('not' y)/.(m+1)
+        by A16,A18,A20,FINSEQ_4:24
+         .= 'not' (y/.(m+1)) by A19,BINARITH:def 4
+         .= 'not' FALSE by A17,A20,A21,FINSEQ_4:24
+         .= TRUE by MARGREL1:41;
+      then A22: k >= 2 to_power m by Th27,MARGREL1:38;
+      then A23: (m+1)-BinarySequence k =
+       (m-BinarySequence (k -' 2 to_power m))^<*TRUE*> by A14,Th31;
+        k < (2 to_power m) * (2 to_power 1) by A14,POWER:32;
+      then k < 2 * (2 to_power m) by POWER:30;
+      then k < 2 to_power m + 2 to_power m by XCMPLX_1:11;
+      then k - 2 to_power m < 2 to_power m by REAL_1:84;
+      then A24: k -' 2 to_power m < 2 to_power m by A22,SCMFSA_7:3;
+        0*m in BOOLEAN* by Th5;
+      then A25: 0*m is FinSequence of BOOLEAN by FINSEQ_1:def 11;
+        len (0*m) = m by JORDAN2B:8;
+      then reconsider y1 = 0*m as Tuple of m,BOOLEAN by A25,FINSEQ_2:110;
+        y = y1 ^ <* 0 *> by A15,Th4;
+      then (m-BinarySequence (k -' 2 to_power m))^<*TRUE*> = 'not' y1^<*'not'
+FALSE*>
+                                            by A16,A23,BINARI_2:11,MARGREL1:36;
+      then m-BinarySequence (k -' 2 to_power m) = 'not' y1 by FINSEQ_2:20;
+      then k -' 2 to_power m = 2 to_power m - 1 by A13,A24;
+      then k - 2 to_power m = 2 to_power m - 1 by A22,SCMFSA_7:3;
+      hence k = 2 to_power m - 1 + 2 to_power m by XCMPLX_1:27
+         .= 2 to_power m + 2 to_power m - 1 by XCMPLX_1:29
+         .= (2 to_power m) * 2 - 1 by XCMPLX_1:11
+         .= (2 to_power m) * (2 to_power 1) - 1 by POWER:30
+         .= 2 to_power (m+1) - 1 by POWER:32;
+     end;
+     for m be non empty Nat holds _P[m] from Ind_from_1(A4,A12);
+     hence k = 2 to_power n - 1 by A1,A2,A3;
+    end;
+    assume A26: k = 2 to_power n - 1;
+      now let i be Nat;
+     assume A27: i in Seg n;
+     then i in Seg len (n-BinarySequence k) by FINSEQ_2:109;
+     then A28: i in dom (n-BinarySequence k) by FINSEQ_1:def 3;
+     A29: len x = n by FINSEQ_2:109;
+     A30: len 'not' x = n by FINSEQ_2:109;
+     A31: 1 <= i & i <= n by A27,FINSEQ_1:3;
+     A32: (x).i = (n |-> (0 qua Real)).i by A2,EUCLID:def 4
+            .= FALSE by A27,FINSEQ_2:70,MARGREL1:36;
+       2 to_power (i-'1) > 0 by POWER:39;
+     then A33: 2 to_power (i-'1) >= 0 + 1 by NAT_1:38;
+     A34: 1 <= i & i <= n by A27,FINSEQ_1:3;
+     then i < n + 1 by NAT_1:38;
+     then i - 1 < n + 1 - 1 by REAL_1:54;
+     then i - 1 < n by XCMPLX_1:26;
+     then A35: 0 + (i-'1) < n by A34,SCMFSA_7:3;
+     then A36: 2 to_power (i-'1) divides 2 to_power n by NAT_2:13;
+       n - (i-'1) > 0 by A35,REAL_1:86;
+     then n-'(i-'1) > 0 by A35,SCMFSA_7:3;
+     then A37: 2 to_power (n-'(i-'1)) mod 2 = 0 by NAT_2:19;
+     A38: 2 to_power (n-'(i-'1)) > 0 by POWER:39;
+     then A39: 2 to_power (n-'(i-'1)) >= 0 + 1 by NAT_1:38;
+       2 to_power n > 0 by POWER:39;
+     then A40: 2 to_power n >= 0 + 1 by NAT_1:38;
+     then k div 2 to_power (i-'1) = (2 to_power n -' 1) div 2 to_power (i-'1)
+                                                             by A26,SCMFSA_7:3
+        .= (2 to_power n div 2 to_power (i-'1)) - 1 by A33,A36,A40,NAT_2:17
+        .= (2 to_power (n-'(i-'1))) - 1 by A35,NAT_2:18
+        .= (2 to_power (n-'(i-'1))) -' 1 by A39,SCMFSA_7:3;
+     then A41: (k div 2 to_power (i-'1)) mod 2 = 1 by A37,A38,NAT_2:20;
+     thus (n-BinarySequence k).i = (n-BinarySequence k)/.i
+       by A28,FINSEQ_4:def 4
+        .= IFEQ((k div 2 to_power (i-'1)) mod 2,0,FALSE,TRUE) by A27,Def1
+        .= TRUE by A41,CQC_LANG:def 1
+        .= 'not' FALSE by MARGREL1:41
+        .= 'not' (x/.i) by A29,A31,A32,FINSEQ_4:24
+        .= ('not' x)/.i by A27,BINARITH:def 4
+        .= ('not' x).i by A30,A31,FINSEQ_4:24;
+    end;
+    hence thesis by FINSEQ_2:139;
+   end;
+
+  theorem Th33:
+   for n be non empty Nat
+   for k be Nat st k + 1 < 2 to_power n holds
+    add_ovfl(n-BinarySequence k,Bin1 n) = FALSE
+   proof
+    let n be non empty Nat;
+    let k be Nat;
+    assume A1: k + 1 < 2 to_power n;
+    then A2: k < 2 to_power n - 1 by REAL_1:86;
+      0*n in BOOLEAN* by Th5;
+    then A3: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
+      len (0*n) = n by JORDAN2B:8;
+    then reconsider y = 0*n as Tuple of n,BOOLEAN by A3,FINSEQ_2:110;
+      k < 2 to_power n by A1,NAT_1:38;
+    then n-BinarySequence k <> 'not' y by A2,Th32;
+    then add_ovfl(n-BinarySequence k,Bin1 n) <> TRUE by Th24;
+    hence thesis by MARGREL1:39;
+   end;
+
+  theorem Th34:
+   for n be non empty Nat
+   for k be Nat st k + 1 < 2 to_power n holds
+    n-BinarySequence (k+1) = n-BinarySequence k + Bin1 n
+   proof
+      defpred _P[non empty Nat] means
+      for k be Nat st k + 1 < 2 to_power $1 holds
+          $1-BinarySequence (k+1) = $1-BinarySequence k + Bin1 $1;
+    A1: _P[1]  proof
+     let k be Nat;
+     assume A2: k + 1 < 2 to_power 1;
+     then k + 1 < 1 + 1 by POWER:30;
+     then k < 1 by AXIOMS:24;
+     then A3: k = 0 by RLVECT_1:98;
+     then A4: k + 1 = 2 - 1
+        .= 2 to_power 1 - 1 by POWER:30;
+       0*1 in BOOLEAN* by Th5;
+     then A5: 0*1 is FinSequence of BOOLEAN by FINSEQ_1:def 11;
+       len (0*1) = 1 by JORDAN2B:8;
+     then reconsider x = 0*1 as Tuple of 1,BOOLEAN by A5,FINSEQ_2:110;
+     A6: 0*1 = 1 |-> (0 qua Real) by EUCLID:def 4
+        .= <*FALSE*> by FINSEQ_2:73,MARGREL1:36;
+     thus 1-BinarySequence (k+1) = 'not' x by A2,A4,Th32
+        .= 1-BinarySequence k + Bin1 1 by A3,A6,Th11,Th15,Th18,Th26;
+    end;
+    A7: for n be non empty Nat st _P[n] holds _P[n+1]  proof
+     let n be non empty Nat;
+     assume A8: _P[n];
+     let k be Nat;
+     assume A9: k + 1 < 2 to_power (n+1);
+     then A10: k < 2 to_power (n+1) by NAT_1:38;
+       now per cases by REAL_1:def 5;
+      suppose A11: k + 1 < 2 to_power n;
+       then A12: k < 2 to_power n by NAT_1:38;
+       A13: add_ovfl(n-BinarySequence k,Bin1 n) = FALSE by A11,Th33;
+       thus (n+1)-BinarySequence (k+1) =
+             (n-BinarySequence (k+1))^<*FALSE*> by A11,Th28
+          .= (n-BinarySequence k + Bin1 n)^<*FALSE*> by A8,A11
+          .= (n-BinarySequence k + Bin1 n)^<*FALSE 'xor'
+                      add_ovfl(n-BinarySequence k,Bin1 n)*> by A13,BINARITH:14
+          .= (n-BinarySequence k + Bin1 n)^<*FALSE 'xor' FALSE 'xor'
+                         add_ovfl(n-BinarySequence k,Bin1 n)*> by BINARITH:14
+          .= ((n-BinarySequence k)^<*FALSE*>) + (Bin1 n^<*FALSE*>)
+                                                               by BINARITH:45
+          .= ((n-BinarySequence k)^<*FALSE*>) + Bin1 (n+1) by BINARI_2:9
+          .= (n+1)-BinarySequence k + Bin1 (n+1) by A12,Th28;
+      suppose A14: k + 1 > 2 to_power n;
+       then A15: k >= 2 to_power n by NAT_1:38;
+         k + 1 < (2 to_power n) * (2 to_power 1) by A9,POWER:32;
+       then k + 1 < (2 to_power n) * 2 by POWER:30;
+       then k + 1 < 2 to_power n + 2 to_power n by XCMPLX_1:11;
+       then k + 1 - 2 to_power n < 2 to_power n by REAL_1:84;
+       then k - 2 to_power n + 1 < 2 to_power n by XCMPLX_1:29;
+       then A16: k -' 2 to_power n + 1 < 2 to_power n by A15,SCMFSA_7:3;
+       then A17: add_ovfl(n-BinarySequence (k -' 2 to_power n),Bin1 n) = FALSE
+                                                                     by Th33;
+       thus (n+1)-BinarySequence (k+1) =
+            (n-BinarySequence (k + 1 -' 2 to_power n))^<*TRUE*> by A9,A14,Th31
+         .= (n-BinarySequence (k-'2 to_power n + 1))^<*TRUE*> by A15,JORDAN4:3
+         .= (n-BinarySequence (k -' 2 to_power n) + Bin1 n)^<*TRUE*> by A8,A16
+         .= (n-BinarySequence (k -' 2 to_power n) + Bin1 n)^<*TRUE 'xor'
+            add_ovfl(n-BinarySequence (k -' 2 to_power n),Bin1 n)*>
+                                                           by A17,BINARITH:14
+         .= (n-BinarySequence (k -' 2 to_power n) + Bin1 n)^<*TRUE 'xor'
+           FALSE 'xor' add_ovfl(n-BinarySequence (k -' 2 to_power n),Bin1 n)*>
+                                                               by BINARITH:14
+         .= (n-BinarySequence (k -' 2 to_power n))^<*TRUE*> + Bin1 n^<*FALSE*>
+                                                               by BINARITH:45
+         .= (n-BinarySequence (k -' 2 to_power n))^<*TRUE*> + Bin1 (n+1)
+                                                                by BINARI_2:9
+         .= (n+1)-BinarySequence k + Bin1 (n+1) by A10,A15,Th31;
+      suppose A18: k + 1 = 2 to_power n;
+       then A19: k < 2 to_power n by NAT_1:38;
+         0*n in BOOLEAN* by Th5;
+       then A20: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
+         len (0*n) = n by JORDAN2B:8;
+       then reconsider z = 0*n as Tuple of n,BOOLEAN by A20,FINSEQ_2:110;
+       A21: k = 2 to_power n - 1 by A18,XCMPLX_1:26;
+       then n-BinarySequence k = 'not' z by A19,Th32;
+       then A22: add_ovfl(n-BinarySequence k,Bin1 n) = TRUE by Th24;
+       thus (n+1)-BinarySequence (k+1) = 0*n^<*TRUE*> by A18,Th29
+         .= ('not' z + Bin1 n)^<*TRUE*> by Th25
+         .= (n-BinarySequence k + Bin1 n)^<*TRUE*> by A19,A21,Th32
+         .= (n-BinarySequence k + Bin1 n)^<*FALSE 'xor'
+                     add_ovfl(n-BinarySequence k,Bin1 n)*> by A22,BINARITH:14
+         .= (n-BinarySequence k + Bin1 n)^<*FALSE 'xor' FALSE 'xor'
+                         add_ovfl(n-BinarySequence k,Bin1 n)*> by BINARITH:14
+         .= (n-BinarySequence k)^<*FALSE*> + Bin1 n^<*FALSE*> by BINARITH:45
+         .= (n-BinarySequence k)^<*FALSE*> + Bin1 (n+1) by BINARI_2:9
+         .= (n+1)-BinarySequence k + Bin1 (n+1) by A19,Th28;
+     end;
+     hence (n+1)-BinarySequence (k+1) = (n+1)-BinarySequence k + Bin1 (n+1);
+    end;
+    thus for n being non empty Nat holds _P[n] from Ind_from_1(A1,A7);
+   end;
+
+  theorem
+     for n,i be Nat holds
+    (n+1)-BinarySequence i = <*i mod 2*> ^ (n-BinarySequence (i div 2))
+   proof
+    let n,i be Nat;
+    A1: len ((n+1)-BinarySequence i) = n + 1 by FINSEQ_2:109;
+    A2: len (<*i mod 2*> ^ (n-BinarySequence (i div 2))) =
+          1 + len (n-BinarySequence (i div 2)) by FINSEQ_5:8
+       .= n + 1 by FINSEQ_2:109;
+      now let j be Nat;
+     assume A3: j in Seg (n+1);
+     then A4: 1 <= j & j <= n + 1 by FINSEQ_1:3;
+     A5: len <*i mod 2*> = 1 by FINSEQ_1:56;
+       now per cases by A4,REAL_1:def 5;
+      suppose A6: j > 1;
+       then j - 1 > 1 - 1 by REAL_1:54;
+       then j-'1 > 0 by A4,SCMFSA_7:3;
+       then A7: j-'1 >= 0 + 1 by NAT_1:38;
+         j - 1 <= n by A4,REAL_1:86;
+       then A8: j-'1 <= n by A4,SCMFSA_7:3;
+       then A9: j-'1 <= len (n-BinarySequence (i div 2)) by FINSEQ_2:109;
+       A10: j-'1 in Seg n by A7,A8,FINSEQ_1:3;
+       A11: 2 to_power (j-'1-'1 + 1) =
+ (2 to_power (j-'1-'1)) * (2 to_power 1) by POWER:32
+          .= 2 * 2 to_power (j-'1-'1) by POWER:30;
+       A12: i div 2 to_power (j-'1) = i div 2 to_power (j-'1-'1 + 1)
+                                                               by A7,AMI_5:4
+          .= (i div 2) div 2 to_power (j-'1-'1) by A11,NAT_2:29;
+         j <= len ((n+1)-BinarySequence i) by A4,FINSEQ_2:109;
+       hence ((n+1)-BinarySequence i).j = ((n+1)-BinarySequence i)/.j
+                                                            by A4,FINSEQ_4:24
+          .= IFEQ((i div 2 to_power (j-'1)) mod 2,0,FALSE,TRUE) by A3,Def1
+          .= (n-BinarySequence (i div 2))/.(j-'1) by A10,A12,Def1
+          .= (n-BinarySequence (i div 2)).(j-'1) by A7,A9,FINSEQ_4:24
+          .= (n-BinarySequence (i div 2)).(j - 1) by A4,SCMFSA_7:3
+          .= (<*i mod 2*> ^ (n-BinarySequence (i div 2))).j
+                                                by A2,A4,A5,A6,FINSEQ_1:37;
+      suppose A13: j = 1;
+       A14: 2 to_power 0 = 1 by POWER:29;
+       A15: now per cases;
+        suppose i mod 2 = 0;
+         hence IFEQ(i mod 2,0,FALSE,TRUE) = i mod 2 by CQC_LANG:def 1,MARGREL1:
+36;
+        suppose A16: i mod 2 <> 0;
+         hence IFEQ(i mod 2,0,FALSE,TRUE) = 1 by CQC_LANG:def 1,MARGREL1:36
+            .= i mod 2 by A16,GROUP_4:100;
+       end;
+       thus ((n+1)-BinarySequence i).j = ((n+1)-BinarySequence i)/.j
+                                                         by A1,A4,FINSEQ_4:24
+          .= IFEQ((i div 2 to_power (1-'1)) mod 2,0,FALSE,TRUE) by A3,A13,Def1
+          .= IFEQ((i div 1) mod 2,0,FALSE,TRUE) by A14,GOBOARD9:1
+          .= IFEQ(i mod 2,0,FALSE,TRUE) by NAT_2:6
+          .= (<*i mod 2*> ^ (n-BinarySequence (i div 2))).j
+                                                       by A13,A15,FINSEQ_1:58;
+     end;
+     hence ((n+1)-BinarySequence i).j =
+      (<*i mod 2*> ^ (n-BinarySequence (i div 2))).j;
+    end;
+    hence thesis by A1,A2,FINSEQ_2:10;
+   end;
+
+  theorem Th36:
+   for n be non empty Nat
+   for k be Nat holds k < 2 to_power n implies
+   Absval (n-BinarySequence k) = k
+   proof
+    let n be non empty Nat;
+    defpred _P[Nat] means
+         $1 < 2 to_power n implies Absval (n-BinarySequence $1) = $1;
+    A1: _P[0] proof
+     assume 0 < 2 to_power n;
+       n-BinarySequence 0 = 0*n by Th26;
+     hence Absval (n-BinarySequence 0) = 0 by Th7;
+    end;
+    A2: for k be Nat st _P[k] holds _P[k+1] proof
+     let k be Nat;
+     assume A3: k < 2 to_power n implies
+     Absval (n-BinarySequence k) = k;
+     assume A4: k + 1 < 2 to_power n;
+     then A5: k < 2 to_power n by NAT_1:38;
+       0*n in BOOLEAN* by Th5;
+     then A6: 0*n is FinSequence of BOOLEAN by FINSEQ_1:def 11;
+       len (0*n) = n by JORDAN2B:8;
+     then reconsider 0n = 0*n as Tuple of n,BOOLEAN by A6,FINSEQ_2:110;
+       k + 1 - 1 < 2 to_power n - 1 by A4,REAL_1:54;
+     then k < 2 to_power n - 1 by XCMPLX_1:26;
+     then n-BinarySequence k <> 'not' 0n by A5,Th32;
+     then add_ovfl(n-BinarySequence k,Bin1 n) <> TRUE by Th24;
+     then add_ovfl(n-BinarySequence k,Bin1 n) = FALSE by MARGREL1:39;
+     then A7: n-BinarySequence k,Bin1 n are_summable by BINARITH:def 10;
+     thus Absval (n-BinarySequence (k+1)) =
+           Absval (n-BinarySequence k + Bin1 n) by A4,Th34
+        .= Absval (n-BinarySequence k) + Absval (Bin1 n) by A7,BINARITH:48
+        .= k + 1 by A3,A4,Th12,NAT_1:38;
+    end;
+    thus for n being Nat holds _P[n] from Ind(A1,A2);
+   end;
+
+  theorem
+     for n be non empty Nat
+   for x be Tuple of n,BOOLEAN holds
+    n-BinarySequence (Absval x) = x
+   proof
+    let n be non empty Nat;
+    let x be Tuple of n,BOOLEAN;
+      Absval x < 2 to_power n by Th1;
+    then Absval (n-BinarySequence Absval x) = Absval x by Th36;
+    hence thesis by Th2;
+   end;
+

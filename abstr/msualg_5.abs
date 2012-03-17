@@ -1,0 +1,238 @@
+:: Lattice of Congruences in a Many Sorted Algebra
+::  by Robert Milewski
+::
+:: Received January 11, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, RELAT_1, EQREL_1, LATTICES, BOOLE, FUNCT_1, BINOP_1,
+      MSUALG_4, CARD_3, MSUALG_1, AMI_1, ZF_REFLE, FINSEQ_1, QC_LANG1, TDGROUP,
+      RELAT_2, ARYTM_1, NAT_LAT, PRALG_2, MSUALG_5, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, RELAT_2,
+      FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, RELSET_1, EQREL_1, BINOP_1, PBOOLE,
+      MSUALG_1, MSUALG_3, MSUALG_4, LATTICES, NAT_LAT, CARD_3, PRALG_2,
+      FINSEQ_1, FINSEQ_4, REAL_1, NAT_1;
+ constructors BINOP_1, MSUALG_3, MSUALG_4, NAT_LAT, REAL_1, NAT_1, FINSEQ_4,
+      MEMBERED, EQREL_1;
+ clusters SUBSET_1, STRUCT_0, MSUALG_1, LATTICES, NAT_LAT, RELSET_1, MSUALG_4,
+      MSUALG_3, PRALG_1, PBOOLE, FINSEQ_1, NAT_1, EQREL_1, PARTFUN1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::                MORE  OF  EQUIVALENCE  RELATIONS               ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  reserve I,X,x,y,z,d,i for set;
+  reserve M for ManySortedSet of I;
+  reserve R1 for Relation of X;
+  reserve EqR1,EqR2,EqR3,EqR4 for Equivalence_Relation of X;
+
+  theorem :: MSUALG_5:1
+   (EqR1 "\/" EqR2) "\/" EqR3 = EqR1 "\/" (EqR2 "\/" EqR3);
+
+  definition
+   let X be set, R be Relation of X;
+   func EqCl R -> Equivalence_Relation of X means
+:: MSUALG_5:def 1
+     R c= it & for EqR2 be Equivalence_Relation of X st R c= EqR2 holds
+      it c= EqR2;
+  end;
+
+  theorem :: MSUALG_5:2
+   EqR1 "\/" EqR2 = EqCl (EqR1 \/ EqR2);
+
+   theorem :: MSUALG_5:3
+    EqCl EqR1 = EqR1;
+
+   theorem :: MSUALG_5:4
+    nabla X \/ R1 = nabla X;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::               LATTICE  OF  EQUIVALENCE  RELATIONS             ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let X be set;
+   func EqRelLatt X -> strict Lattice means
+:: MSUALG_5:def 2
+      the carrier of it = {x where x is Relation of X,X :
+                         x is Equivalence_Relation of X} &
+    for x,y being Equivalence_Relation of X holds
+     (the L_meet of it).(x,y) = x /\ y &
+     (the L_join of it).(x,y) = x "\/" y;
+  end;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::              MANY  SORTED  EQUIVALENCE  RELATIONS             ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let I,M;
+   cluster MSEquivalence_Relation-like ManySortedRelation of M;
+  end;
+
+  definition
+   let I,M;
+   mode Equivalence_Relation of M is
+       MSEquivalence_Relation-like ManySortedRelation of M;
+  end;
+
+  reserve I for non empty set;
+  reserve M for ManySortedSet of I;
+  reserve EqR,EqR1,EqR2,EqR3,EqR4 for Equivalence_Relation of M;
+
+  definition
+   let I be non empty set;
+   let M be ManySortedSet of I, R be ManySortedRelation of M;
+   func EqCl R -> Equivalence_Relation of M means
+:: MSUALG_5:def 3
+     for i being Element of I holds it.i = EqCl(R.i);
+  end;
+
+  theorem :: MSUALG_5:5
+     EqCl EqR = EqR;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::       LATTICE  OF  MANY  SORTED  EQUIVALENCE  RELATIONS       ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let I be non empty set,
+       M be ManySortedSet of I;
+   let EqR1,EqR2 be Equivalence_Relation of M;
+   func EqR1 "\/" EqR2 -> Equivalence_Relation of M means
+:: MSUALG_5:def 4
+     ex EqR3 being ManySortedRelation of M st EqR3 = EqR1 \/ EqR2 &
+      it = EqCl EqR3;
+   commutativity;
+  end;
+
+  theorem :: MSUALG_5:6
+   EqR1 \/ EqR2 c= EqR1 "\/" EqR2;
+
+  theorem :: MSUALG_5:7
+   for EqR be Equivalence_Relation of M st
+    EqR1 \/ EqR2 c= EqR holds EqR1 "\/" EqR2 c= EqR;
+
+  theorem :: MSUALG_5:8
+   ( EqR1 \/ EqR2 c= EqR3 & for EqR be Equivalence_Relation of M st
+       EqR1 \/ EqR2 c= EqR holds EqR3 c= EqR ) implies
+        EqR3 = EqR1 "\/" EqR2;
+
+  theorem :: MSUALG_5:9
+     EqR "\/" EqR = EqR;
+
+  theorem :: MSUALG_5:10
+   (EqR1 "\/" EqR2) "\/" EqR3 = EqR1 "\/" (EqR2 "\/" EqR3);
+
+  theorem :: MSUALG_5:11
+   EqR1 /\ (EqR1 "\/" EqR2) = EqR1;
+
+  theorem :: MSUALG_5:12
+   for EqR be Equivalence_Relation of M st EqR = EqR1 /\ EqR2 holds
+    EqR1 "\/" EqR = EqR1;
+
+  theorem :: MSUALG_5:13
+   for EqR1,EqR2 be Equivalence_Relation of M holds
+                                     EqR1 /\ EqR2 is Equivalence_Relation of M;
+
+  definition
+   let I be non empty set;
+   let M be ManySortedSet of I;
+   func EqRelLatt M -> strict Lattice means
+:: MSUALG_5:def 5
+     (for x being set holds x in the carrier of it
+     iff x is Equivalence_Relation of M) &
+    for x,y being Equivalence_Relation of M holds
+     (the L_meet of it).(x,y) = x /\ y &
+     (the L_join of it).(x,y) = x "\/" y;
+  end;
+
+begin
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+     ::    LATTICE  OF  CONGRUENCES  IN  A  MANY  SORTED  ALGEBRA     ::
+     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+  definition
+   let S be non empty ManySortedSign;
+   let A be MSAlgebra over S;
+   cluster MSEquivalence-like ->
+          MSEquivalence_Relation-like ManySortedRelation of A;
+  end;
+
+  reserve S for non void non empty ManySortedSign;
+  reserve A for non-empty MSAlgebra over S;
+
+  theorem :: MSUALG_5:14
+   for o be OperSymbol of S
+   for C1,C2 being MSCongruence of A
+   for x1,y1 be set
+   for a1,b1 be FinSequence holds
+    [x1,y1] in C1.((the_arity_of o)/.(len a1 + 1)) \/
+                             C2.((the_arity_of o)/.(len a1 + 1)) implies
+     for x,y be Element of Args(o,A) st x = (a1 ^ <*x1*> ^ b1) &
+      y = (a1 ^ <*y1*> ^ b1) holds
+       [Den(o,A).x,Den(o,A).y] in
+       C1.(the_result_sort_of o) \/ C2.(the_result_sort_of o);
+
+  theorem :: MSUALG_5:15
+   for o be OperSymbol of S
+   for C1,C2 being MSCongruence of A
+   for C being MSEquivalence-like ManySortedRelation of A st C = C1 "\/" C2
+   for x1,y1 be set
+   for n be Nat
+   for a1,a2,b1 being FinSequence st len a1 = n & len a1 = len a2 &
+    for k be Nat st k in dom a1 holds [a1.k,a2.k] in
+ C.((the_arity_of o)/.k) holds
+    ( [Den(o,A).(a1 ^ <*x1*> ^ b1),Den(o,A).(a2 ^ <*x1*> ^ b1)] in
+    C.(the_result_sort_of o) & [x1,y1] in C.((the_arity_of o)/.(n+1)) implies
+     for x be Element of Args(o,A) st x = a1 ^ <*x1*> ^ b1 holds
+      [Den(o,A).x,Den(o,A).(a2 ^ <*y1*> ^ b1)] in C.(the_result_sort_of o));
+
+  theorem :: MSUALG_5:16
+   for o be OperSymbol of S
+   for C1,C2 being MSCongruence of A
+   for C being MSEquivalence-like ManySortedRelation of A st C = C1 "\/" C2
+   for x,y be Element of Args(o,A) holds
+    (( for n be Nat st n in dom x holds [x.n,y.n] in C.((the_arity_of o)/.n))
+     implies
+    [Den(o,A).x,Den(o,A).y] in C.(the_result_sort_of o));
+
+  theorem :: MSUALG_5:17
+   for C1,C2 being MSCongruence of A holds C1 "\/" C2 is MSCongruence of A;
+
+  theorem :: MSUALG_5:18
+   for C1,C2 being MSCongruence of A holds C1 /\ C2 is MSCongruence of A;
+
+  definition
+   let S;
+   let A be non-empty MSAlgebra over S;
+   func CongrLatt A -> strict SubLattice of EqRelLatt the Sorts of A means
+:: MSUALG_5:def 6
+     for x being set holds x in the carrier of it iff
+      x is MSCongruence of A;
+  end;
+
+  theorem :: MSUALG_5:19
+   id (the Sorts of A) is MSCongruence of A;
+
+  theorem :: MSUALG_5:20
+   [|the Sorts of A,the Sorts of A|] is MSCongruence of A;
+
+  definition
+   let S, A;
+   cluster CongrLatt A -> bounded;
+  end;
+
+  theorem :: MSUALG_5:21
+     Bottom CongrLatt A = id (the Sorts of A);
+
+  theorem :: MSUALG_5:22
+     Top CongrLatt A = [|the Sorts of A,the Sorts of A|];
+

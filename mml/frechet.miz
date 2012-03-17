@@ -1,0 +1,2507 @@
+:: First-countable, Sequential, and { F } rechet Spaces
+::  by Bart{\l}omiej Skorulski
+::
+:: Received May 13, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_3, ARYTM_1, NORMSP_1, RELAT_1, FUNCT_1, PRE_TOPC, CANTOR_1,
+      BOOLE, SUBSET_1, SETFAM_1, TARSKI, METRIC_1, RCOMP_1, ABSVALUE, TOPMETR,
+      PCOMPS_1, CARD_4, FUNCT_4, FUNCOP_1, SEQ_2, ORDINAL2, ORDINAL1, FRECHET,
+      RLVECT_3, ARYTM;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XREAL_0, REAL_1, NAT_1,
+      SETFAM_1, STRUCT_0, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, ORDINAL1,
+      CARD_4, FUNCT_4, ABSVALUE, RCOMP_1, PRE_TOPC, TOPS_2, METRIC_1, PCOMPS_1,
+      TOPMETR, NORMSP_1, CANTOR_1, YELLOW_8;
+ constructors REAL_1, NAT_1, RAT_1, NORMSP_1, YELLOW_8, CARD_4, TOPS_2,
+      TOPMETR, CANTOR_1, FUNCT_4, RCOMP_1, MEMBERED;
+ clusters SUBSET_1, XREAL_0, PRE_TOPC, STRUCT_0, COMPLSP1, NORMSP_1, METRIC_1,
+      PCOMPS_1, TOPMETR, FUNCOP_1, RELSET_1, XBOOLE_0, NAT_1, MEMBERED,
+      ZFMISC_1, FUNCT_1, FUNCT_2, PARTFUN1, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, TOPS_2, XBOOLE_0;
+ theorems REAL_1, REAL_2, TARSKI, ZFMISC_1, SUBSET_1, SETFAM_1, PRE_TOPC,
+      FUNCT_1, FUNCT_2, FUNCT_4, ABSVALUE, FUNCOP_1, NORMSP_1, NAT_1, ORDINAL1,
+      RELAT_1, CARD_1, CARD_5, WAYBEL12, YELLOW_8, AXIOMS, TOPS_1, TOPS_2,
+      TOPMETR, RCOMP_1, CANTOR_1, METRIC_1, PCOMPS_1, GOBOARD6, RELSET_1,
+      XREAL_0, XBOOLE_0, XBOOLE_1, SEQ_4, XCMPLX_0, XCMPLX_1;
+ schemes DOMAIN_1, ZFREFLE1, NAT_1, CARD_4, COMPTS_1;
+
+begin
+
+Lm1:
+for n being Nat st n<>0 holds 1/n > 0
+proof
+  let n be Nat;
+  assume
+A1:  n<>0;
+    n >= 0 by NAT_1:18;
+  hence 1/n>0 by A1,REAL_2:127;
+end;
+
+Lm2:
+for r being Real st r>0
+  ex n being Nat st 1/n < r & n<>0
+proof
+  let r be Real;
+  assume
+A1:  r>0;
+  consider n being Nat such that
+A2:  1/r < n by SEQ_4:10;
+  take n;
+    1/r > 0 by A1,REAL_2:127;
+  then 1/(1/r) > 1/n by A2,REAL_2:151;
+  hence 1/n < r by XCMPLX_1:56;
+  thus n <> 0 by A1,A2,REAL_2:127;
+end;
+
+::
+:: Preliminaries
+::
+
+theorem Th1:
+for T being non empty 1-sorted,S being sequence of T holds
+  rng S is Subset of T
+proof
+  let T be non empty 1-sorted,S be sequence of T;
+    rng S c= the carrier of T
+  proof
+    let y be set;
+    assume y in rng S;
+    then consider x being set such that
+A1:    x in dom S & S.x = y by FUNCT_1:def 5;
+      x in NAT by A1,NORMSP_1:17;
+    then S.x is Element of T by NORMSP_1:17;
+    hence y in the carrier of T by A1;
+  end;
+  hence rng S is Subset of T;
+end;
+
+definition
+ let T be non empty 1-sorted;
+ let S be sequence of T;
+ redefine func rng S -> Subset of T;
+ coherence by Th1;
+end;
+
+theorem Th2:
+for T1 being non empty 1-sorted, T2 being 1-sorted, S being sequence of T1 st
+rng S c= the carrier of T2 holds
+  S is sequence of T2
+proof
+  let T1 be non empty 1-sorted, T2 be 1-sorted, S be sequence of T1;
+  assume
+A1:  rng S c= the carrier of T2;
+    dom S = NAT by FUNCT_2:def 1;
+  then S is Function of NAT,the carrier of T2 by A1,FUNCT_2:4;
+  hence S is sequence of T2 by NORMSP_1:def 3;
+end;
+
+theorem Th3:
+for T being non empty TopSpace, x being Point of T, B being Basis of x
+holds B <> {}
+proof
+    let T be non empty TopSpace, x be Point of T, B be Basis of x;
+A1: x in the carrier of T;
+      the carrier of T in the topology of T by PRE_TOPC:def 1;
+then A2:       [#]T in the topology of T & x in [#]T by A1,PRE_TOPC:12;
+    set U1=[#]T;
+    reconsider T as non empty TopStruct;
+      x in U1 & U1 is open by A2,PRE_TOPC:def 5;
+    then ex U2 be Subset of T st U2 in B & U2 c= U1 by YELLOW_8:22;
+    hence B <> {};
+  end;
+
+definition
+ let T be non empty TopSpace;
+ let x be Point of T;
+ cluster -> non empty Basis of x;
+ coherence by Th3;
+end;
+
+Lm3:
+for T being TopStruct,A being Subset of T holds
+  A is open iff [#]T \ A is closed
+proof
+   let T be TopStruct,A be Subset of T;
+   thus A is open implies [#]T \ A is closed
+     proof
+       assume A is open;
+       then [#](T) \ ([#](T) \ A) is open by PRE_TOPC:22;
+       hence thesis by PRE_TOPC:def 6;
+     end;
+   assume [#]T \ A is closed;
+   then [#](T) \ ([#](T) \ A) is open by PRE_TOPC:def 6;
+   hence thesis by PRE_TOPC:22;
+ end;
+
+theorem Th4:
+for T being TopSpace, A,B being Subset of T st
+    A is open & B is closed holds
+    A \ B is open
+proof
+    let T be TopSpace, A,B be Subset of T;
+    assume
+A1:    A is open & B is closed;
+    then [#](T)\B is open by PRE_TOPC:def 6;
+    then A /\ ([#](T)\B) is open by A1,TOPS_1:38;
+    then A2:    A /\ [#](T) \ A /\ B is open by XBOOLE_1:50;
+      A c= the carrier of T;
+    then A c= [#](T) by PRE_TOPC:12;
+    then A /\ [#](T) = A by XBOOLE_1:28;
+    hence A\B is open by A2,XBOOLE_1:47;
+end;
+
+theorem Th5:
+for T being TopStruct st
+  {}T is closed & [#]T is closed &
+  (for A,B being Subset of T st A is closed & B is closed
+        holds A \/ B is closed) &
+  for F being Subset-Family of T st F is closed holds meet F is closed
+holds T is TopSpace
+proof
+   let T be TopStruct;
+   assume that
+A1: {}T is closed & [#]T is closed and
+A2: (for A,B being Subset of T st A is closed & B is closed
+        holds A \/ B is closed) and
+A3: for F being Subset-Family of T st F is closed holds
+        meet F is closed;
+
+A4: the carrier of T in the topology of T
+   proof
+       [#]T \ {}T is open by A1,PRE_TOPC:def 6;
+     then [#]T in the topology of T by PRE_TOPC:def 5;
+     hence thesis by PRE_TOPC:12;
+   end;
+
+A5: for G being Subset-Family of T
+      st G c= the topology of T
+      holds union G in the topology of T
+   proof
+    let G be Subset-Family of T;
+    reconsider G' = G as Subset-Family of T;
+    assume
+A6:    G c= the topology of T;
+    per cases;
+    suppose A7: G = {};
+      [#]T \ {}T = [#]T;
+    then {}T is open by A1,Lm3;
+    hence thesis by A7,PRE_TOPC:def 5,ZFMISC_1:2;
+
+    suppose
+A8:   G<>{};
+A9: for A being Subset of T holds
+      A in G implies [#]T \ A is closed
+    proof
+        let A be Subset of T;
+        assume A in G;
+        then A is open by A6,PRE_TOPC:def 5;
+        hence [#]T \ A is closed by Lm3;
+    end;
+    reconsider CG = COMPLEMENT(G) as Subset-Family of T;
+      COMPLEMENT(G) is closed
+    proof
+        let A be Subset of T;
+        assume A in COMPLEMENT(G);
+        then A` in G' by YELLOW_8:13;
+        then [#]T \ A` is closed by A9;
+        then [#]T \([#]T \ A) is closed by PRE_TOPC:17;
+        hence A is closed by PRE_TOPC:22;
+    end;
+    then meet CG is closed by A3;
+    then (union G')` is closed by A8,TOPS_2:11;
+    then [#]T \ union G is closed by PRE_TOPC:17;
+    then union G is open by Lm3;
+    hence thesis by PRE_TOPC:def 5;
+   end;
+
+  for A,B being Subset of T st
+      A in the topology of T & B in the topology of T
+      holds A /\ B in the topology of T
+    proof
+      let A,B be Subset of T;
+      assume that
+A10:     A in the topology of T and
+A11:     B in the topology of T;
+      reconsider A, B as Subset of T;
+        A is open by A10,PRE_TOPC:def 5;
+      then A12:      [#]T \ A is closed by Lm3;
+        B is open by A11,PRE_TOPC:def 5;
+      then [#]T \ B is closed by Lm3;
+      then ([#]T \ A) \/ ([#]T \ B) is closed by A2,A12;
+      then [#]T \ (A /\ B) is closed by XBOOLE_1:54;
+      then (A /\ B) is open by Lm3;
+      hence thesis by PRE_TOPC:def 5;
+    end;
+
+   hence thesis by A4,A5,PRE_TOPC:def 1;
+  end;
+
+theorem Th6:
+ for T being TopSpace, S being non empty TopStruct, f being map of T,S
+  st for A being Subset of S holds A is closed iff f"A is closed
+  holds S is TopSpace
+proof
+   let T be TopSpace, S be non empty TopStruct, f be map of T,S;
+   assume
+A1:  for A being Subset of S holds A is closed iff f"A is closed;
+
+A2: {}S is closed
+  proof
+A3:  {}T is closed by TOPS_1:22;
+      f"{}={} by RELAT_1:171;
+    hence thesis by A1,A3;
+  end;
+
+A4: [#]S is closed
+  proof
+      f"([#]S) = [#]T by TOPS_2:52;
+    hence thesis by A1;
+  end;
+
+A5: for A,B being Subset of S st A is closed & B is closed
+        holds A \/ B is closed
+  proof
+    let A,B be Subset of S;
+    assume
+      A is closed & B is closed;
+    then f"A is closed & f"B is closed by A1;
+    then f"A \/ f"B is closed by TOPS_1:36;
+    then f"(A \/ B) is closed by RELAT_1:175;
+    hence thesis by A1;
+  end;
+
+  for F being Subset-Family of S st F is closed holds meet F is closed
+  proof
+    let F be Subset-Family of S;
+    assume
+A6:   F is closed;
+
+    per cases;
+    suppose F = {}S;
+    hence meet F is closed by A2,SETFAM_1:def 1;
+
+    suppose
+A7:        F <> {};
+    set F1 = {f"A where A is Subset of S : A in F};
+      ex A being set st A in F
+    proof
+      consider A being Element of F;
+      take A;
+      thus A in F by A7;
+    end;
+    then consider A being Subset of S such that
+A8:     A in F;
+    reconsider A as Subset of S;
+    A9: f"A in F1 by A8;
+      F1 c= bool the carrier of T
+    proof
+      let B be set;
+      assume B in F1;
+      then consider A being Subset of S such that
+A10:     B=f"A & A in F;
+      thus B in bool the carrier of T by A10;
+    end;
+    then F1 is Subset-Family of T by SETFAM_1:def 7;
+    then reconsider F1 as Subset-Family of T;
+A11:  meet(F1) = f"(meet F)
+    proof
+      thus meet(F1) c= f"(meet F)
+      proof
+        let x be set;
+        assume A12: x in meet(F1);
+               then x in the carrier of T;
+then A13:        x in dom f by FUNCT_2:def 1;
+          for A be set st A in F holds f.x in A
+        proof
+          let A be set;
+          assume
+A14:         A in F;
+          then reconsider A as Subset of S;
+            f"A in F1 by A14;
+          then x in f"A by A12,SETFAM_1:def 1;
+          hence thesis by FUNCT_1:def 13;
+        end;
+        then f.x in meet F by A7,SETFAM_1:def 1;
+        hence x in f"(meet F) by A13,FUNCT_1:def 13;
+      end;
+      thus f"(meet F) c= meet(F1)
+      proof
+        let x be set;
+        assume x in f"(meet F);
+        then A15:        x in dom f & f.x in meet F by FUNCT_1:def 13;
+          for B be set st B in F1 holds x in B
+        proof
+          let B be set;
+          assume B in F1;
+          then consider A being Subset of S such that
+A16:          B = f"A & A in F;
+            f.x in A by A15,A16,SETFAM_1:def 1;
+          hence thesis by A15,A16,FUNCT_1:def 13;
+        end;
+        hence x in meet(F1) by A9,SETFAM_1:def 1;
+      end;
+    end;
+      F1 is closed
+    proof
+      let B be Subset of T;
+      assume B in F1;
+      then consider A being Subset of S such that
+A17:      f"A = B & A in F;
+        A is closed by A6,A17,TOPS_2:def 2;
+      hence B is closed by A1,A17;
+    end;
+    then meet F1 is closed by TOPS_2:29;
+    hence thesis by A1,A11;
+  end;
+
+  hence thesis by A2,A4,A5,Th5;
+ end;
+
+theorem Th7:
+for x being Point of RealSpace, x',r being Real st x' = x & r > 0 holds
+   Ball(x,r) = ].x'-r, x'+r.[
+proof
+  let x be Point of RealSpace, x',r be Real;
+  assume
+A1:
+     x' = x & r > 0;
+  thus Ball(x,r) c= ].x'-r, x'+r.[
+  proof
+    let y be set;
+    assume
+A2:    y in Ball(x,r);
+    then reconsider y1=y as Element of RealSpace;
+A3:  dist(x,y1)<r by A2,METRIC_1:12;
+    reconsider x2=x,y2=y1 as Element of REAL by METRIC_1:def 14;
+      dist(x,y1)=real_dist.(x2,y2) by METRIC_1:def 1,def 14
+              .=abs(x2 - y2 ) by METRIC_1:def 13
+              .=abs(-(y2 - x2) ) by XCMPLX_1:143
+              .=abs(y2 - x2 ) by ABSVALUE:17;
+    hence y in ].x'-r, x'+r.[ by A1,A3,RCOMP_1:8;
+  end;
+  let y be set;
+  assume
+A4:  y in ].x'-r, x'+r.[;
+  then reconsider y2=y as Real;
+    abs(y2 - x' )=abs(-(y2 - x') ) by ABSVALUE:17
+              .=abs(x' - y2 ) by XCMPLX_1:143
+              .=real_dist.(x',y2) by METRIC_1:def 13;
+  then A5:  real_dist.(x',y2) < r by A4,RCOMP_1:8;
+  reconsider x1=x',y1=y2 as Element of RealSpace
+                                                  by METRIC_1:def 14;
+    dist(x1,y1)=real_dist.(x',y2) by METRIC_1:def 1,def 14;
+  hence y in Ball(x,r) by A1,A5,METRIC_1:12;
+end;
+
+theorem
+  for A being Subset of R^1 holds A is open iff
+  for x being Real st x in A ex r being Real st r >0 & ].x-r, x+r.[ c= A
+proof
+  let A be Subset of R^1;
+  thus A is open implies
+   for x being Real st x in A ex r being Real st r >0 & ].x-r, x+r.[ c= A
+  proof
+    assume
+A1:    A is open;
+    let x be Real;
+    assume
+A2:    x in A;
+    reconsider x1=x as Element of REAL;
+    reconsider x1 as Element of RealSpace by METRIC_1:def 14;
+    reconsider A1=A as Subset of R^1;
+A3:  A1 in the topology of R^1 by A1,PRE_TOPC:def 5;
+      the topology of R^1 = Family_open_set(RealSpace) by TOPMETR:16,def 7;
+    then consider r being Real such that
+A4:      r>0 & Ball(x1,r) c= A1 by A2,A3,PCOMPS_1:def 5;
+      ].x-r, x+r.[ c=A1 by A4,Th7;
+    hence ex r being Real st r >0 & ].x-r, x+r.[ c= A by A4;
+  end;
+
+  assume
+A5:  for x being Real st x in A ex r being Real st r >0 & ].x-r, x+r.[ c= A;
+  reconsider A1=A as Subset of RealSpace by TOPMETR:16,def 7;
+    for x being Element of RealSpace
+     st x in A1 holds ex r being Real st r>0 & Ball(x,r) c= A1
+  proof
+    let x be Element of RealSpace;
+    assume
+A6:    x in A1;
+    reconsider x1=x as Real by METRIC_1:def 14;
+    consider r being Real such that
+A7:      r >0 & ].x1-r, x1+r.[ c= A1 by A5,A6;
+      Ball(x,r) c= A1 by A7,Th7;
+    hence ex r being Real st r>0 & Ball(x,r) c= A1 by A7;
+  end;
+  then A8:  A1 in Family_open_set(RealSpace) by PCOMPS_1:def 5;
+    the topology of R^1 = Family_open_set(RealSpace) by TOPMETR:16,def 7;
+  hence A is open by A8,PRE_TOPC:def 5;
+end;
+
+theorem Th9:
+for S being sequence of R^1
+  st (for n being Nat holds S.n in ]. n - 1/4 , n + 1/4 .[)
+holds rng S is closed
+proof
+ let S be sequence of R^1;
+ assume
+A1: for n being Nat holds S.n in ]. n - 1/4 , n + 1/4 .[;
+ reconsider B=rng S as Subset of TopSpaceMetr(RealSpace) by TOPMETR:def 7;
+   for x being Point of RealSpace
+   st x in B` ex r being real number st r>0 & Ball(x,r) c= B`
+ proof
+  let x be Point of RealSpace;
+  assume
+A2: x in B`;
+  reconsider x1=x as Real by METRIC_1:def 14;
+  per cases;
+  suppose ]. x1 - 1/4 , x1 + 1/4 .[ /\ B = {};
+  then ]. x1 - 1/4 , x1 + 1/4 .[ /\ B`` = {};
+  then A3:  Ball(x,1/4) /\ B`` = {} by Th7;
+  reconsider C=Ball(x,1/4)
+    as Subset of TopSpaceMetr(RealSpace) by TOPMETR:16;
+    C misses B`` by A3,XBOOLE_0:def 7;
+  then Ball(x,1/4) c= B` by TOPS_1:20;
+  hence thesis;
+
+  suppose
+A4:  ]. x1 - 1/4 , x1 + 1/4 .[ /\ B <> {};
+  consider y being Element of ]. x1 - 1/4 , x1 + 1/4 .[ /\ B;
+  A5:  y in ]. x1 - 1/4 , x1 + 1/4 .[ & y in B by A4,XBOOLE_0:def 3;
+  then reconsider y as Real;
+  consider n1 being set such that
+A6:  n1 in dom S and
+A7:  y = S.n1 by A5,FUNCT_1:def 5;
+  reconsider n1 as Nat by A6,NORMSP_1:17;
+  consider r being Real such that
+A8:  r=abs( x1 - y );
+    x1 <> y
+  proof
+    assume x1 = y;
+    then y in B /\ (B`) by A2,A5,XBOOLE_0:def 3;
+    then B meets (B`) by XBOOLE_0:4;
+    hence contradiction by TOPS_1:20;
+  end;
+  then x1 + (-y) <> y + (-y) by XCMPLX_1:2;
+  then x1 + -y <> 0 by XCMPLX_0:def 6;
+  then A9: x1 - y <> 0 by XCMPLX_0:def 8;
+  then A10: abs(x1-y) > 0 by ABSVALUE:6;
+  A11:   r>0 by A8,A9,ABSVALUE:6;
+    abs(y-x1) < 1/4 by A5,RCOMP_1:8;
+  then abs(-(x1-y)) < 1/4 by XCMPLX_1:143;
+  then A12: r<=1/4 by A8,ABSVALUE:17;
+
+    Ball(x,r) misses rng S
+  proof
+    assume Ball(x,r) meets rng S;
+    then consider z being set such that
+A13:   z in Ball(x,r) & z in rng S by XBOOLE_0:3;
+    consider n2 being set such that
+A14:    n2 in dom S and
+A15:    z = S.n2 by A13,FUNCT_1:def 5;
+    reconsider z as Real by A13,METRIC_1:def 14;
+    reconsider n2 as Nat by A14,NORMSP_1:17;
+    per cases by REAL_1:def 5;
+    suppose n1=n2;
+    then A16: y in ].x1-r,x1+r.[ by A7,A11,A13,A15,Th7;
+      r = abs( 0 + -y + x1 ) by A8,XCMPLX_0:def 8
+                 .= abs( 0 - y + x1 ) by XCMPLX_0:def 8
+                 .= abs( 0 - (y - x1) ) by XCMPLX_1:37
+                 .= abs( 0 + -(y - x1) ) by XCMPLX_0:def 8
+                 .= abs( y - x1 ) by ABSVALUE:17;
+    hence contradiction by A16,RCOMP_1:8;
+
+    suppose n1>n2;
+    then A17:   n2 + 1 <= n1 by NAT_1:38;
+      S.n2 in ].n2-1/4,n2+1/4.[ by A1;
+    then S.n2 in {a where a is Real : n2-1/4<a & a<n2+1/4} by RCOMP_1:def 2;
+    then consider a2 being Real such that
+A18:      S.n2=a2 & n2-1/4<a2 & a2<n2+1/4;
+      z - 1/4 < n2 by A15,A18,REAL_1:84;
+    then A19: n2 + 1 > z - 1/4 + 1 by REAL_1:53;
+      S.n1 in ]. n1 - 1/4 , n1 + 1/4 .[ by A1;
+    then S.n1 in {a where a is Real : n1-1/4<a & a<n1+1/4} by RCOMP_1:def 2;
+    then consider a1 being Real such that
+A20:      S.n1=a1 & n1 - 1/4 < a1 & a1 < n1 + 1/4;
+      n1 < y + 1/4 by A7,A20,REAL_1:84;
+    then n2 +1 < y + 1/4 by A17,AXIOMS:22;
+    then z - 1/4 + 1 < y + 1/4 by A19,AXIOMS:22;
+    then z + -1/4 + 1 < y + 1/4 by XCMPLX_0:def 8;
+    then z + (-1/4 + 1) < y + 1/4 by XCMPLX_1:1;
+    then z < y + 1/4 - (-1/4 + 1) by REAL_1:86;
+    then z < y + 1/4 + -(-1/4 + 1) by XCMPLX_0:def 8;
+    then A21: z < y + (1/4 + -(-1/4 + 1)) by XCMPLX_1:1;
+      Ball(x,r) c= Ball(x,1/4) by A12,PCOMPS_1:1;
+    then z in Ball(x,1/4) by A13;
+    then z in ].x1-1/4 ,x1 +1/4.[ by Th7;
+    then z in {a where a is Real : x1-1/4<a & a<x1 +1/4} by RCOMP_1:def 2;
+    then consider a1 being Real such that
+A22:   a1=z & x1-1/4<a1 & a1<x1 +1/4;
+    A23:     z + 1/4 > x1 by A22,REAL_1:84;
+      y in {a where a is Real : x1 - 1/4 < a & a < x1 + 1/4 }
+      by A5,RCOMP_1:def 2;
+    then consider a1 being Real such that
+A24:    y=a1 & x1 - 1/4 < a1 & a1 < x1 + 1/4;
+      y -1/4 < x1 + 1/4 - 1/4 by A24,REAL_1:54;
+    then y -1/4 < x1 + 1/4 + -1/4 by XCMPLX_0:def 8;
+    then y - 1/4 < x1 + (1/4 + -1/4) by XCMPLX_1:1;
+    then z + 1/4 > y - 1/4 by A23,AXIOMS:22;
+    then z + 1/4 + -1/4 > y - 1/4 + -1/4 by REAL_1:53;
+    then z + (1/4 + -1/4) > y - 1/4 + -1/4 by XCMPLX_1:1;
+    then z > y + -1/4 + -1/4 by XCMPLX_0:def 8;
+    then z > y + (-1/4 + -1/4) by XCMPLX_1:1;
+    hence contradiction by A21;
+
+    suppose n1<n2;
+then A25:   n1 + 1 <= n2 by NAT_1:38;
+      S.n2 in ].n2-1/4,n2+1/4.[ by A1;
+    then S.n2 in {a where a is Real : n2-1/4<a & a<n2+1/4} by RCOMP_1:def 2;
+    then consider a2 being Real such that
+A26:      S.n2=a2 & n2-1/4<a2 & a2<n2+1/4;
+      z + 1/4 > n2 - 1/4 + 1/4 by A15,A26,REAL_1:53;
+    then z + 1/4 > n2 + -1/4 + 1/4 by XCMPLX_0:def 8;
+    then z + 1/4 > n2 + (-1/4 + 1/4) by XCMPLX_1:1;
+    then A27:   z + 1/4 > n1 + 1 by A25,AXIOMS:22;
+      S.n1 in ]. n1 - 1/4 , n1 + 1/4 .[ by A1;
+    then S.n1 in {a where a is Real : n1-1/4<a & a<n1+1/4} by RCOMP_1:def 2;
+    then consider a1 being Real such that
+A28:    S.n1=a1 & n1-1/4<a1 & a1<n1+1/4;
+      n1 + 1/4 - 1/4 > y - 1/4 by A7,A28,REAL_1:54;
+    then n1 + 1/4 + -1/4 > y - 1/4 by XCMPLX_0:def 8;
+    then n1 + (1/4 + -1/4) > y - 1/4 by XCMPLX_1:1;
+    then n1 + 1 > y - 1/4 + 1 by REAL_1:53;
+    then z + 1/4 > y - 1/4 + 1 by A27,AXIOMS:22;
+    then y + -1/4 + 1 < z + 1/4 by XCMPLX_0:def 8;
+    then y + (-1/4 + 1) < z + 1/4 by XCMPLX_1:1;
+    then y + (-1/4 + 1) - (-1/4 + 1) < z + 1/4 - (-1/4 + 1) by REAL_1:54;
+    then y + (-1/4 + 1) + -(-1/4 + 1) < z + 1/4 - (-1/4 + 1) by XCMPLX_0:def 8
+;
+    then y + ((-1/4 + 1) + -(-1/4 + 1)) < z + 1/4 - (-1/4 + 1) by XCMPLX_1:1;
+    then y < z + 1/4 + -(-1/4 + 1) by XCMPLX_0:def 8;
+    then A29: y < z + (1/4 + -(-1/4 + 1)) by XCMPLX_1:1;
+      Ball(x,r) c= Ball(x,1/4) by A12,PCOMPS_1:1;
+    then z in Ball(x,1/4) by A13;
+    then z in ].x1-1/4 ,x1 +1/4.[ by Th7;
+    then z in {a where a is Real : x1-1/4<a & a<x1 +1/4} by RCOMP_1:def 2;
+    then consider a1 being Real such that
+A30:   a1=z & x1-1/4<a1 & a1<x1 +1/4;
+    A31:   z - 1/4 < x1 by A30,REAL_1:84;
+      y in {a where a is Real : x1 - 1/4 < a & a < x1 + 1/4 }
+      by A5,RCOMP_1:def 2;
+    then consider a1 being Real such that
+A32:  y=a1 & x1 - 1/4 < a1 & a1 < x1 + 1/4;
+      x1 - 1/4 + 1/4 < y + 1/4 by A32,REAL_1:53;
+    then x1 + -1/4 + 1/4 < y + 1/4 by XCMPLX_0:def 8;
+    then x1 + (-1/4 + 1/4) < y + 1/4 by XCMPLX_1:1;
+    then z - 1/4 < y + 1/4 by A31,AXIOMS:22;
+    then z - 1/4 + 1/4< y + 1/4 + 1/4 by REAL_1:53;
+    then z + -1/4 + 1/4< y + 1/4 + 1/4 by XCMPLX_0:def 8;
+    then z + (-1/4 + 1/4)< y + 1/4 + 1/4 by XCMPLX_1:1;
+    then z < y + (1/4 + 1/4) by XCMPLX_1:1;
+    then z - 1/2 < y + 1/2 - 1/2 by REAL_1:54;
+    then z - 1/2 < y + 1/2 + -1/2 by XCMPLX_0:def 8;
+    then z - 1/2 < y + (1/2 + -1/2) by XCMPLX_1:1;
+    hence contradiction by A29,XCMPLX_0:def 8;
+  end;
+then A33:  Ball(x,r) /\ B = {} by XBOOLE_0:def 7;
+  reconsider C=Ball(x,r)
+    as Subset of TopSpaceMetr(RealSpace) by TOPMETR:16;
+    C /\ B`` = {} by A33;
+  then C misses B`` by XBOOLE_0:def 7;
+  then C c= B` by TOPS_1:20;
+  hence ex r being real number st r>0 & Ball(x,r) c= B` by A8,A10;
+ end;
+ then (rng S)` is open by TOPMETR:22,def 7;
+ then [#](R^1)\(rng S) is open by PRE_TOPC:17;
+ hence rng S is closed by PRE_TOPC:def 6;
+end;
+
+theorem Th10:
+for B being Subset of R^1 holds B = NAT implies B is closed
+proof
+  let B be Subset of R^1;
+  assume
+A1:  B = NAT;
+A2:
+  dom (id NAT) = NAT by FUNCT_1:34;
+A3:
+  rng (id NAT) = NAT
+  proof
+    thus rng (id NAT) c= NAT
+    proof
+      let y be set;
+      assume y in rng (id NAT);
+      then consider x being set such that
+A4:      x in dom (id NAT) & y = (id NAT).x by FUNCT_1:def 5;
+      thus y in NAT by A2,A4,FUNCT_1:34;
+    end;
+    let y be set;
+    assume
+A5:    y in NAT;
+    then (id NAT).y = y by FUNCT_1:34;
+    hence y in rng (id NAT) by A2,A5,FUNCT_1:def 5;
+  end;
+  then id NAT is Function of NAT,the carrier of R^1 by A2,FUNCT_2:4,TOPMETR:24
+;
+  then reconsider S=(id NAT) as sequence of R^1 by NORMSP_1:def 3;
+
+   for n being Nat holds S.n in ].n-1/4,n + 1/4.[
+  proof
+    let n be Nat;
+    reconsider x=S.n as Real by FUNCT_1:34;
+A6:    x=n by FUNCT_1:34;
+A7:    n < n + 1/4 by REAL_1:69;
+      - 1/4 + n < 0 + n by REAL_1:67;
+    then n - 1/4 < 0 + n by XCMPLX_0:def 8;
+    then x in {r where r is Real : n - 1/4 < r & r < n + 1/4} by A6,A7;
+    hence S.n in ].n - 1/4 , n + 1/4.[ by RCOMP_1:def 2;
+  end;
+  hence B is closed by A1,A3,Th9;
+end;
+
+theorem Th11:
+for M being non empty MetrSpace,x being Point of TopSpaceMetr(M),
+x' being Point of M st x=x'
+  ex B being Basis of x st
+    B={Ball(x',1/n) where n is Nat:n<>0} &
+    B is countable &
+    ex f being Function of NAT,B st for n being set st n in NAT holds
+      ex n' being Nat st n=n' & f.n = Ball(x',1/(n'+1))
+proof
+  let M be non empty MetrSpace,x be Point of TopSpaceMetr(M),x' be Point of M;
+  assume
+A1: x=x';
+  set B = { Ball(x',1/n) where n is Nat:n<>0};
+    B c= bool(the carrier of TopSpaceMetr(M))
+  proof
+    let A be set;
+    assume A in B;
+    then consider n being Nat such that
+A2:    A = Ball(x',1/n) and
+        n<>0;
+      Ball(x',1/n) c= the carrier of M;
+    then Ball(x',1/n) c= the carrier of TopSpaceMetr(M) by TOPMETR:16;
+    hence A in bool(the carrier of TopSpaceMetr(M)) by A2;
+  end;
+  then B is Subset-Family of TopSpaceMetr(M)
+    by SETFAM_1:def 7;
+  then reconsider B as Subset-Family of TopSpaceMetr(M);
+A3:
+  B c= the topology of TopSpaceMetr(M)
+  proof
+    let A be set;
+    assume A in B;
+    then consider n being Nat such that
+A4:    A = Ball(x',1/n) and
+        n<>0;
+      Ball(x',1/n) in Family_open_set M by PCOMPS_1:33;
+    hence A in the topology of TopSpaceMetr(M) by A4,TOPMETR:16;
+  end;
+A5:
+  x in Intersect B
+  proof
+A6: Ball(x',1/1) in B;
+then A7:    Intersect B = meet B by CANTOR_1:def 3;
+      for O being set st O in B holds x in O
+    proof
+      let O be set;
+      assume O in B;
+      then consider n being Nat such that
+A8:      O = Ball(x',1/n) and
+A9:     n<>0;
+        1/n > 0 by A9,Lm1;
+      hence x in O by A1,A8,GOBOARD6:4;
+    end;
+    hence x in Intersect B by A6,A7,SETFAM_1:def 1;
+  end;
+
+   for O being Subset of TopSpaceMetr(M) st O is open & x in O
+    ex V being Subset of TopSpaceMetr(M) st V in B & V c= O
+  proof
+    let O be Subset of TopSpaceMetr(M);
+    assume
+      O is open & x in O;
+    then consider r being real number such that
+A10:    r>0 and
+A11:   Ball(x',r) c= O by A1,TOPMETR:22;
+    reconsider r as Real by XREAL_0:def 1;
+    consider n being Nat such that
+A12:   1/n < r and
+A13:   n <> 0 by A10,Lm2;
+    A14: Ball(x',1/n) c= Ball(x',r) by A12,PCOMPS_1:1;
+    reconsider Ba=Ball(x',1/n) as Subset of
+      TopSpaceMetr(M) by TOPMETR:16;
+    reconsider Ba as Subset of TopSpaceMetr(M);
+    take Ba;
+    thus Ba in B by A13;
+    thus Ba c= O by A11,A14,XBOOLE_1:1;
+  end;
+  then reconsider B as Basis of x by A3,A5,YELLOW_8:def 2;
+  take B;
+  deffunc F(Nat) = Ball(x',1/$1);
+  defpred P[Nat] means $1 <> 0;
+  thus B={Ball(x',1/n) where n is Nat:n<>0};
+  { F(n) where n is Nat : P[n] } is countable from FraenCoun1;
+  hence B is countable;
+  defpred P[set,set] means
+    ex n' being Nat st $1=n' & $2 = Ball(x',1/(n'+1));
+A15: for n being set st n in NAT ex O being set st O in B & P[n,O]
+  proof
+    let n be set;
+    assume n in NAT;
+    then reconsider n'=n as Nat;
+    reconsider O=Ball(x',1/(n'+1)) as set;
+    take O;
+    thus O in B;
+    take n';
+    thus n=n';
+    thus O = Ball(x',1/(n'+1));
+  end;
+  consider f being Function such that
+A16: dom f = NAT and
+A17: rng f c= B and
+A18: for n being set st n in NAT holds P[n,f.n]
+      from NonUniqBoundFuncEx(A15);
+   reconsider f as Function of NAT,B by A16,A17,FUNCT_2:4;
+   take f;
+   thus for n being set st n in NAT holds
+     ex n' being Nat st n=n' & f.n = Ball(x',1/(n'+1)) by A18;
+end;
+
+theorem Th12:
+for f,g being Function holds
+  rng(f+*g)=f.:(dom f\dom g) \/ rng g
+proof
+  let f,g be Function;
+  thus rng(f+*g)c=f.:(dom f\dom g) \/ rng g
+  proof
+    let y be set;
+    assume y in rng(f+*g);
+    then consider x being set such that
+A1:   x in dom(f+*g) and
+A2:   (f+*g).x = y by FUNCT_1:def 5;
+    per cases;
+    suppose
+A3:    x in dom g;
+    then y = g.x by A2,FUNCT_4:14;
+    then y in rng g by A3,FUNCT_1:def 5;
+    hence y in f.:(dom f\dom g) \/ rng g by XBOOLE_0:def 2;
+    suppose
+A4:    not x in dom g;
+    then A5:    y = f.x by A2,FUNCT_4:12;
+      x in dom f \/ dom g by A1,FUNCT_4:def 1;
+    then A6:    x in dom f by A4,XBOOLE_0:def 2;
+    then x in dom f \ dom g by A4,XBOOLE_0:def 4;
+    then y in f.:(dom f \ dom g) by A5,A6,FUNCT_1:def 12;
+    hence y in f.:(dom f\dom g) \/ rng g by XBOOLE_0:def 2;
+  end;
+  let y be set;
+  assume
+  A7: y in f.:(dom f\dom g) \/ rng g;
+  per cases by A7,XBOOLE_0:def 2;
+  suppose y in f.:(dom f\dom g);
+  then consider x being set such that
+A8:  x in dom f and
+A9:  x in dom f \ dom g and
+A10:  f.x = y by FUNCT_1:def 12;
+    x in dom f \/ dom g by A8,XBOOLE_0:def 2;
+  then A11: x in dom(f+*g) by FUNCT_4:def 1;
+    not x in dom g by A9,XBOOLE_0:def 4;
+  then (f+*g).x = f.x by FUNCT_4:12;
+  hence y in rng(f+*g) by A10,A11,FUNCT_1:def 5;
+  suppose
+A12:  y in rng g;
+    rng g c= rng(f +* g) by FUNCT_4:19;
+  hence y in rng(f +* g) by A12;
+end;
+
+theorem Th13:
+for A,B being set holds
+  B c= A implies (id A).:(B) = B
+proof
+  let A,B be set;
+  assume
+A1:  B c= A;
+A2:  dom(id A) = A by FUNCT_1:34;
+  thus (id A).:(B) c= B
+  proof
+    let y be set;
+    assume y in (id A).:(B);
+    then consider x being set such that
+A3:   x in dom(id A) and
+A4:   x in B and
+A5:   (id A).x = y by FUNCT_1:def 12;
+    thus y in B by A2,A3,A4,A5,FUNCT_1:34;
+  end;
+
+  let y be set;
+  assume
+A6:  y in B;
+  then (id A).y = y by A1,FUNCT_1:34;
+  hence y in (id A).:(B) by A1,A2,A6,FUNCT_1:def 12;
+end;
+
+canceled;
+
+theorem Th15:
+for A,B,x being set holds
+  dom((id A)+*(B --> x)) = A \/ B
+proof
+  let A,B,x be set;
+    dom((id A)+*(B --> x)) = dom (id A) \/ dom (B --> x) by FUNCT_4:def 1;
+  then dom((id A)+*(B --> x)) = A \/ dom (B --> x) by FUNCT_1:34;
+  hence dom((id A)+*(B --> x)) = A \/ B by FUNCOP_1:19;
+end;
+
+theorem Th16:
+for A,B,x being set st B <> {} holds
+  rng((id A)+*(B --> x)) = (A \ B) \/ {x}
+proof
+  let A,B,x be set;
+  assume
+A1:  B <> {};
+  set f = ((id A)+*(B --> x));
+  thus rng((id A)+*(B --> x)) c= (A \ B) \/ {x}
+  proof
+    let y be set;
+    assume
+      y in rng f;
+    then consider x1 being set such that
+A2:    x1 in dom f & y = f.x1 by FUNCT_1:def 5;
+A3:  x1 in dom (id A) \/ dom (B --> x) by A2,FUNCT_4:def 1;
+    per cases;
+    suppose
+A4:       x1 in dom (B --> x);
+    then A5:       f.x1 = (B --> x).x1 by A3,FUNCT_4:def 1;
+      x1 in B by A4,FUNCOP_1:19;
+    then (B --> x).x1 = x by FUNCOP_1:13;
+    then y in {x} by A2,A5,TARSKI:def 1;
+    hence y in (A \ B) \/ {x} by XBOOLE_0:def 2;
+
+    suppose
+A6:     not x1 in dom (B --> x);
+    then A7:     f.x1 = (id A).x1 by A3,FUNCT_4:def 1;
+A8:  not x1 in B by A6,FUNCOP_1:19;
+      x1 in dom (id A) by A3,A6,XBOOLE_0:def 2;
+    then A9:    x1 in A by FUNCT_1:34;
+    then x1 in A \ B by A8,XBOOLE_0:def 4;
+    then x1 in (A \ B) \/ {x} by XBOOLE_0:def 2;
+    hence thesis by A2,A7,A9,FUNCT_1:35;
+  end;
+
+  let y be set;
+  assume
+A10:  y in (A \ B) \/ {x};
+A11:
+  rng (B --> x)={x} by A1,FUNCOP_1:14;
+    A \ B c= A by XBOOLE_1:36;
+  then (id A).:(A \ B)=A \ B by Th13;
+  then (id A).:(dom(id A) \ B)=A \ B by FUNCT_1:34;
+  then (id A).:(dom(id A) \ dom( B --> x))=A \ B by FUNCOP_1:19;
+  hence y in rng((id A)+*(B --> x)) by A10,A11,Th12;
+end;
+
+theorem Th17:
+for A,B,C,x being set holds
+  C c= A implies ((id A)+*(B --> x))"(C \ {x}) = C \ B \ {x}
+proof
+  let A,B,C,x be set;
+  assume
+A1:  C c= A;
+  set f=((id A)+*(B --> x));
+  thus f"(C \ {x}) c= C \ B \ {x}
+  proof
+    let x1 be set;
+    assume x1 in f"(C \ {x});
+    then A2:    x1 in dom f & f.x1 in (C \ {x}) by FUNCT_1:def 13;
+A3:  not x1 in B
+    proof
+      assume
+A4:     x1 in B;
+      A5:     not f.x1 in {x} by A2,XBOOLE_0:def 4;
+A6:    x1 in dom(B --> x) by A4,FUNCOP_1:19;
+      then x1 in dom(id A) \/ dom(B --> x) by XBOOLE_0:def 2;
+      then f.x1=(B --> x).x1 by A6,FUNCT_4:def 1;
+      then f.x1=x by A4,FUNCOP_1:13;
+      hence contradiction by A5,TARSKI:def 1;
+    end;
+    then A7:    not x1 in dom(B --> x) by FUNCOP_1:19;
+      x1 in A \/ B by A2,Th15;
+    then A8: x1 in A or x1 in B by XBOOLE_0:def 2;
+    then x1 in dom(id A) by A3,FUNCT_1:34;
+    then x1 in dom(id A) \/ dom(B --> x) by XBOOLE_0:def 2;
+    then f.x1 = (id A).x1 by A7,FUNCT_4:def 1;
+    then f.x1 = x1 by A3,A8,FUNCT_1:34;
+    then A9:    x1 in C & not x1 in {x} by A2,XBOOLE_0:def 4;
+    then x1 in C \ B by A3,XBOOLE_0:def 4;
+    hence x1 in C \ B \ {x} by A9,XBOOLE_0:def 4;
+  end;
+
+  let x1 be set;
+  assume x1 in C \ B \ {x};
+  then x1 in C \ B & not x1 in {x} by XBOOLE_0:def 4;
+  then A10:  x1 in C & not x1 in B & not x1 in {x} by XBOOLE_0:def 4;
+  then A11: x1 in A by A1;
+A12:
+  not x1 in dom(B --> x) by A10,FUNCOP_1:19;
+A13:  x1 in C \ {x} by A10,XBOOLE_0:def 4;
+    x1 in dom(id A) by A11,FUNCT_1:34;
+  then A14:  x1 in dom(id A) \/ dom(B --> x) by XBOOLE_0:def 2;
+  then A15:  x1 in dom f by FUNCT_4:def 1;
+    f.x1 = (id A).x1 by A12,A14,FUNCT_4:def 1;
+  then f.x1 = x1 by A1,A10,FUNCT_1:34;
+  hence x1 in f"(C \ {x}) by A13,A15,FUNCT_1:def 13;
+end;
+
+theorem Th18:
+for A,B,x being set holds
+  not x in A implies ((id A)+*(B --> x))"({x}) = B
+proof
+  let A,B,x be set;
+  assume
+A1:  not x in A;
+  set f = (id A)+*(B --> x);
+  thus f"({x}) c= B
+  proof
+    let y be set;
+    assume y in f"({x});
+    then A2:    y in dom f & f.y in {x} by FUNCT_1:def 13;
+    per cases;
+    suppose y in dom (B --> x);
+    hence y in B by FUNCOP_1:19;
+
+    suppose
+A3:    not y in dom (B --> x);
+    then A4:   f.y = (id A).y by FUNCT_4:12;
+    A5: y in dom (B --> x) or y in dom (id A) by A2,FUNCT_4:13;
+    then y in A by A3,FUNCT_1:34;
+    then (id A).y = y by FUNCT_1:35;
+    then y = x by A2,A4,TARSKI:def 1;
+    hence y in B by A1,A3,A5,FUNCT_1:34;
+  end;
+  let y be set;
+  assume
+A6: y in B;
+  then A7:  y in dom (B-->x) by FUNCOP_1:19;
+  then f.y = (B-->x).y by FUNCT_4:14;
+  then f.y = x by A6,FUNCOP_1:13;
+  then A8:  f.y in {x} by TARSKI:def 1;
+    y in dom f by A7,FUNCT_4:13;
+  hence y in f"({x}) by A8,FUNCT_1:def 13;
+end;
+
+theorem Th19:
+for A,B,C,x being set holds
+  (C c= A & not x in A) implies ((id A)+*(B --> x))"(C \/ {x}) = C \/ B
+proof
+  let A,B,C,x be set;
+  assume
+A1:  C c= A & not x in A;
+  set f = ((id A)+*(B --> x));
+A2:
+  C \ {x} = C
+  proof
+    thus C \ {x} c= C by XBOOLE_1:36;
+    let y be set;
+    assume
+A3:   y in C;
+      not y in {x}
+    proof
+      assume y in {x};
+      then y = x by TARSKI:def 1;
+      hence contradiction by A1,A3;
+    end;
+    hence y in C\ {x} by A3,XBOOLE_0:def 4;
+  end;
+
+   f"({x})=B by A1,Th18;
+  then A4: f"(C \/ {x}) = f"(C) \/ B by RELAT_1:175;
+    C \ B \ {x} \/ B = C \/ B
+  proof
+    thus C \ B \ {x} \/ B c= C \/ B
+    proof
+      let y be set;
+      assume y in C \ B \ {x} \/ B;
+      then y in C \ B \ {x} or y in B by XBOOLE_0:def 2;
+      then y in C \ B or y in B by XBOOLE_0:def 4;
+      then y in C or y in B by XBOOLE_0:def 4;
+      hence y in C \/ B by XBOOLE_0:def 2;
+    end;
+    let y be set;
+    assume y in C \/ B;
+    then A5: y in (C \ B) \/ B by XBOOLE_1:39;
+    per cases by A5,XBOOLE_0:def 2;
+    suppose
+A6:    y in C \ B;
+    then A7:    y in C by XBOOLE_0:def 4;
+      not y in {x}
+    proof
+      assume y in {x};
+      then x in C by A7,TARSKI:def 1;
+      hence contradiction by A1;
+    end;
+    then y in C \ B \ {x} by A6,XBOOLE_0:def 4;
+    hence y in (C \ B \ {x}) \/ B by XBOOLE_0:def 2;
+    suppose y in B;
+    hence y in (C \ B \ {x}) \/ B by XBOOLE_0:def 2;
+  end;
+  hence ((id A)+*(B --> x))"(C \/ {x}) = C \/ B by A1,A2,A4,Th17;
+end;
+
+theorem Th20:
+for A,B,C,x being set holds
+  C c= A & not x in A implies ((id A)+*(B --> x))"(C \ {x}) = C \ B
+proof
+  let A,B,C,x be set;
+  assume
+A1:  C c= A & not x in A;
+    not x in C \ B
+  proof
+    assume x in C \ B;
+    then x in C by XBOOLE_0:def 4;
+    hence contradiction by A1;
+  end;
+  then (C \ B) misses {x} by ZFMISC_1:56;
+  then C \ B \ {x} = C \ B by XBOOLE_1:83;
+  hence ((id A)+*(B --> x))"(C \ {x}) = C \ B by A1,Th17;
+end;
+
+Lm4:
+for A,B,C,x being set holds
+  not x in A implies ((id A)+*(B --> x))"((A \ C) \ {x}) = A \ C \ B
+proof
+  let A,B,C,x be set;
+  assume
+A1:  not x in A;
+    A \ C c= A by XBOOLE_1:36;
+  hence thesis by A1,Th20;
+end;
+
+begin
+
+::
+::  Convergent Sequences in Topological Spaces,
+::  FIRST-COUNTABLE, SEQUENTIAL, FRECHET SPACES
+::
+
+definition
+let T be non empty TopStruct;
+attr T is first-countable means :Def1:
+  for x be Point of T ex B be Basis of x st B is countable;
+end;
+
+theorem Th21:
+for M being non empty MetrSpace holds TopSpaceMetr(M) is first-countable
+proof
+  let M be non empty MetrSpace;
+  let x be Point of TopSpaceMetr(M);
+  reconsider x' = x as Element of TopSpaceMetr(M);
+  reconsider x' as Element of M by TOPMETR:16;
+  reconsider x' as Point of M;
+  consider B being Basis of x such that
+      B={Ball(x',1/n) where n is Nat:n<>0} and
+A1:  B is countable and
+      ex f being Function of NAT,B st for n being set st n in NAT holds
+      ex n' being Nat st n=n' & f.n = Ball(x',1/(n'+1)) by Th11;
+  take B;
+  thus B is countable by A1;
+end;
+
+theorem
+ R^1 is first-countable by Th21,TOPMETR:def 7;
+
+definition
+cluster R^1 -> first-countable;
+coherence by Th21,TOPMETR:def 7;
+end;
+
+definition
+let T be TopStruct, S be sequence of T, x be Point of T;
+pred S is_convergent_to x means :Def2:
+   for U1 being Subset of T st (U1 is open & x in U1)
+   ex n being Nat st for m being Nat st n <= m holds S.m in U1;
+end;
+
+theorem Th23:
+for T being non empty TopStruct, x being Point of T, S being sequence of T
+  holds S = (NAT --> x) implies S is_convergent_to x
+proof
+  let T be non empty TopStruct, x be Point of T, S be sequence of T;
+  assume
+A1:  S = (NAT --> x);
+  thus S is_convergent_to x
+  proof
+    let U1 be Subset of T;
+    assume
+A2:    U1 is open & x in U1;
+    take 0;
+    thus for m being Nat st 0 <= m holds S.m in U1 by A1,A2,FUNCOP_1:13;
+  end;
+end;
+
+definition
+let T be TopStruct, S be sequence of T;
+attr S is convergent means :Def3:
+  ex x being Point of T st S is_convergent_to x;
+end;
+
+definition
+let T be non empty TopStruct, S be sequence of T;
+func Lim S -> Subset of T means :Def4:
+for x being Point of T holds
+x in it iff S is_convergent_to x;
+existence
+proof
+  defpred P[Element of T] means S is_convergent_to $1;
+  {x where x is Element of T : P[x]}
+   is Subset of T from SubsetD; then
+  reconsider X={x where x is Point of T : P[x]}
+   as Subset of T;
+  take X;
+  let y be Point of T;
+    y in X iff ex x being Point of T st x=y & S is_convergent_to x;
+  hence thesis;
+end;
+uniqueness
+proof
+  let A,B be Subset of T such that
+A1:  for x being Point of T holds x in A iff S is_convergent_to x and
+A2:  for x being Point of T holds x in B iff S is_convergent_to x;
+    for x being Point of T holds x in A iff x in B
+  proof
+    let x be Point of T;
+      x in A iff S is_convergent_to x by A1;
+    hence thesis by A2;
+  end;
+  hence A=B by SUBSET_1:8;
+end;
+end;
+
+definition
+let T be non empty TopStruct;
+attr T is Frechet means :Def5:
+  for A being Subset of T,x being Point of T st x in Cl(A)
+     ex S being sequence of T st (rng S c= A & x in Lim S );
+end;
+
+definition
+let T be non empty TopStruct;
+attr T is sequential means
+    for A being Subset of T holds A is closed iff
+  for S being sequence of T st ( S is convergent & rng S c= A ) holds
+     Lim S c= A;
+end;
+
+theorem Th24:
+for T being non empty TopSpace holds
+    T is first-countable implies T is Frechet
+proof
+  let T be non empty TopSpace;
+  assume
+A1:   T is first-countable;
+  let A be Subset of T;
+  let x be Point of T such that
+A2:  x in Cl(A);
+  consider B being Basis of x such that
+A3:   B is countable by A1,Def1;
+  consider f being Function of NAT,B such that
+A4:   rng f = B by A3,WAYBEL12:4;
+  defpred P[set,set] means $2 in A /\ meet (f.:succ $1);
+A5: for n being set st n in NAT ex y being set st y in the carrier of T &
+         P[n,y]
+  proof
+    let n be set;
+    assume n in NAT;
+    then reconsider n as Nat;
+    defpred P[Nat] means ex H being Subset of T st
+      H = meet (f.:succ $1) & H is open;
+      for n being Nat holds P[n]
+    proof
+A6: P[0]
+      proof
+          0 in NAT;
+then A7:        0 in dom f by FUNCT_2:def 1;
+           f.0 in B;
+        then consider H being Subset of T such that
+A8:         H = f.0;
+        reconsider H as Subset of T;
+        take H;
+          meet (f.:succ 0) = meet {f.0} by A7,CARD_5:1,FUNCT_1:117
+                            .= H by A8,SETFAM_1:11;
+        hence thesis by A8,YELLOW_8:21;
+      end;
+
+A9: for n being Nat st P[n] holds P[n+1]
+      proof
+        let n be Nat;
+        given G being Subset of T such that
+A10:        G = meet (f.:succ n) and
+A11:        G is open;
+          n+1 in NAT;
+        then A12:        n+1 in dom f by FUNCT_2:def 1;
+          f.(n+1) in B;
+        then consider H1 being Subset of T such that
+A13:        H1 = f.(n+1);
+        reconsider H1 as Subset of T;
+A14:        H1 is open by A13,YELLOW_8:21;
+          n in succ n & dom f = NAT by FUNCT_2:def 1,ORDINAL1:10;
+        then A15: f.n in f.:succ n by FUNCT_1:def 12;
+        consider H being Subset of T such that
+A16:        H = H1 /\ G;
+        reconsider H as Subset of T;
+        take H;
+          meet (f.:succ (n+1)) = meet (f.:({n+1} \/ (n+1))) by ORDINAL1:def 1
+                     .= meet ((f.:({n+1} \/ (succ n)))) by CARD_1:52
+                     .= meet ((f.:{n+1}) \/ (f.:succ n)) by RELAT_1:153
+                     .= meet ({f.(n+1)} \/ (f.:succ n)) by A12,FUNCT_1:117
+                     .= meet {f.(n+1)} /\ meet (f.:succ n) by A15,SETFAM_1:10
+                     .= H by A10,A13,A16,SETFAM_1:11;
+        hence thesis by A11,A14,A16,TOPS_1:38;
+      end;
+      thus for n being Nat holds P[n] from Ind(A6,A9);
+    end;
+
+    then consider H being Subset of T such that
+A17:       H = meet (f.:succ n) & H is open;
+      n in succ n & dom f = NAT by FUNCT_2:def 1,ORDINAL1:10;
+    then A18: f.n in f.:succ n by FUNCT_1:def 12;
+      for G being set st G in (f.:succ n) holds x in G
+    proof
+      let G be set;
+      assume G in (f.:succ n);
+      then consider k be set such that
+A19:     k in dom f & k in succ n & G = f.k by FUNCT_1:def 12;
+        k in NAT by A19,FUNCT_2:def 1;
+      then A20: f.k in B by FUNCT_2:7;
+      then reconsider G1=G as Subset of T by A19;
+      reconsider G1 as Subset of T;
+        x in G1 by A19,A20,YELLOW_8:21;
+      hence thesis;
+    end;
+    then x in meet (f.:succ n) by A18,SETFAM_1:def 1;
+    then A meets meet (f.:succ n) by A2,A17,PRE_TOPC:def 13;
+    then consider y being set such that
+A21:y in A /\ meet (f.:succ n) by XBOOLE_0:4;
+    take y;
+      y in A by A21,XBOOLE_0:def 3;
+    hence thesis by A21;
+  end;
+  consider S being Function such that
+A22:  dom S = NAT & rng S c= the carrier of T & for n being set st n in NAT
+     holds P[n,S.n] from NonUniqBoundFuncEx(A5);
+
+A23: for m,n being Nat st n <= m holds
+       ( A /\ meet (f.:succ m) ) c= A /\ meet (f.:succ n)
+       proof
+         let m,n be Nat;
+         assume
+A24:      n <= m;
+           n in succ n & dom f = NAT by FUNCT_2:def 1,ORDINAL1:10;
+         then A25: f.n in f.:succ n by FUNCT_1:def 12;
+           n + 1 <= m + 1 by A24,AXIOMS:24;
+         then n + 1 c= m + 1 by CARD_1:56;
+         then succ n c= m +1 by CARD_1:52;
+         then succ n c= succ m by CARD_1:52;
+         then f.:(succ n) c= f.:(succ m) by RELAT_1:156;
+         then meet (f.:succ m) c= meet (f.:succ n) by A25,SETFAM_1:7;
+         hence thesis by XBOOLE_1:26;
+       end;
+A26:  rng S c= A
+      proof
+        let y be set;
+        assume
+             y in rng S;
+        then consider a be set such that
+A27:           a in dom S & y = S.a by FUNCT_1:def 5;
+          y in A /\ meet (f.:succ a) by A22,A27;
+        hence thesis by XBOOLE_0:def 3;
+      end;
+       S is Function of NAT, the carrier of T by A22,FUNCT_2:def 1,RELSET_1:11;
+     then reconsider S as sequence of T by NORMSP_1:def 3;
+       S is_convergent_to x
+      proof
+        let U1 be Subset of T;
+        assume that
+A28:          U1 is open and
+A29:          x in U1;
+        reconsider U1 as Subset of T;
+        consider U2 being Subset of T such that
+A30:            U2 in B & U2 c= U1 by A28,A29,YELLOW_8:22;
+        consider n be set such that
+A31:            n in dom f & U2 = f.n by A4,A30,FUNCT_1:def 5;
+        reconsider n as Nat by A31,FUNCT_2:def 1;
+          for m being Nat st n <= m holds S.m in U1
+          proof
+            let m be Nat;
+            assume
+                n <= m;
+then A32:          ( A /\ meet (f.:succ m) ) c= A /\ meet (f.:succ n) by A23;
+              S.m in A /\ meet (f.:succ m) by A22;
+            then A33:               S.m in meet (f.:succ n) by A32,XBOOLE_0:def
+3;
+              n in succ n & dom f = NAT by FUNCT_2:def 1,ORDINAL1:10;
+            then f.n in f.:succ n by FUNCT_1:def 12;
+            then S.m in f.n by A33,SETFAM_1:def 1;
+            hence S.m in U1 by A30,A31;
+          end;
+        hence thesis;
+      end;
+     then x in Lim S by Def4;
+     hence ex S be sequence of T st (rng S c= A & x in Lim S ) by A26;
+end;
+
+definition
+ cluster first-countable -> Frechet (non empty TopSpace);
+ coherence by Th24;
+end;
+
+canceled;
+
+theorem Th26:
+for T being non empty TopSpace,A being Subset of T holds
+A is closed implies
+  for S being sequence of T st S is convergent & rng S c= A holds Lim S c= A
+proof
+  let T be non empty TopSpace,A be Subset of T;
+  assume
+A1:   A is closed;
+  let S be sequence of T such that
+A2: S is convergent & rng S c= A;
+  thus Lim S c= A
+  proof
+    reconsider
+      L = Lim S as Subset of T;
+    reconsider A as Subset of T;
+      L c= A
+    proof
+      let y be set;
+      assume
+A3:  y in L;
+      then reconsider p=y as Point of T;
+      A4: S is_convergent_to p by A3,Def4;
+        for U1 being Subset of T st U1 is open
+         holds p in U1 implies A meets U1
+      proof
+         let U1 be Subset of T;
+         assume
+A5:     U1 is open;
+         assume
+A6:     p in U1;
+         reconsider U2 = U1 as Subset of T;
+         consider n being Nat such that
+A7:     for m being Nat st n <= m holds S.m in U2 by A4,A5,A6,Def2;
+A8:   S.n in U1 by A7;
+           dom S = NAT by FUNCT_2:def 1;
+         then S.n in rng S by FUNCT_1:def 5;
+         then S.n in A /\ U1 by A2,A8,XBOOLE_0:def 3;
+         hence thesis by XBOOLE_0:def 7;
+      end;
+      then p in Cl A by PRE_TOPC:def 13;
+      hence y in A by A1,PRE_TOPC:52;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th27:
+for T being non empty TopSpace holds
+(for A being Subset of T holds
+(for S being sequence of T st S is convergent & rng S c= A holds Lim S c= A)
+implies A is closed) implies
+T is sequential
+proof
+  let T be non empty TopSpace;
+  assume
+A1: for A being Subset of T holds
+   (for S being sequence of T st S is convergent & rng S c= A holds
+     Lim S c= A) implies A is closed;
+  let A be Subset of T;
+  thus A is closed implies for S being sequence of T
+    st ( S is convergent & rng S c= A ) holds Lim S c= A by Th26;
+  assume for S being sequence of T st S is convergent & rng S c= A holds
+     Lim S c= A;
+  hence A is closed by A1;
+end;
+
+theorem Th28:
+for T being non empty TopSpace holds T is Frechet implies T is sequential
+proof
+  let T be non empty TopSpace;
+  assume
+A1: T is Frechet;
+    for A being Subset of T holds
+    (for S being sequence of T st S is convergent & rng S c= A holds
+      Lim S c= A) implies A is closed
+  proof
+    let A be Subset of T;
+    assume
+A2: for S being sequence of T st S is convergent & rng S c= A holds
+        Lim S c= A;
+A3: A c= Cl(A) by PRE_TOPC:48;
+  Cl(A) c= A
+    proof
+      let x be set;
+      assume
+A4:   x in Cl(A);
+      then reconsider p=x as Point of T;
+      consider S being sequence of T such that
+A5:   rng S c= A and
+A6:   p in Lim S by A1,A4,Def5;
+         S is_convergent_to p by A6,Def4;
+       then S is convergent by Def3;
+       then Lim S c= A by A2,A5;
+       hence x in A by A6;
+     end;
+     then A = Cl(A) by A3,XBOOLE_0:def 10;
+     hence A is closed by PRE_TOPC:52;
+  end;
+  hence T is sequential by Th27;
+end;
+
+definition
+ cluster Frechet -> sequential (non empty TopSpace);
+ coherence by Th28;
+end;
+
+begin
+
+::
+::  Not (for T holds T is Frechet implies T is first-countable)
+::
+
+definition
+ func REAL? -> strict non empty TopSpace means :Def7:
+  the carrier of it = (REAL \ NAT) \/ {REAL} &
+  ex f being map of R^1, it st
+   f = (id REAL)+*(NAT --> REAL) &
+   for A being Subset of it holds A is closed iff f"A is closed;
+existence
+proof
+   reconsider X = (REAL \ NAT) \/ {REAL} as non empty set;
+   set f = (id REAL)+*(NAT --> REAL);
+     REAL \/ NAT = REAL by XBOOLE_1:12;
+then A1:   dom f = the carrier of R^1 by Th15,TOPMETR:24;
+     rng f c= (REAL \ NAT) \/ {REAL} by Th16;
+   then reconsider f as Function of the carrier of R^1,X by A1,FUNCT_2:4;
+   set O = {X\A where A is Subset of X: ex fA being Subset of R^1 st
+     fA = f"A & fA is closed};
+     O c= bool X
+   proof
+     let B be set;
+     assume B in O;
+     then consider A being Subset of X such that
+A2:     B = X\A & ex fA being Subset of R^1 st
+      fA = f"A & fA is closed;
+       X \ A c= X by XBOOLE_1:36;
+     hence B in bool X by A2;
+   end;
+   then reconsider O as Subset-Family of X by SETFAM_1:def 7;
+   set T = TopStruct(#X,O#);
+   reconsider f as map of R^1,T;
+A3: for A being Subset of T holds A is closed iff f"A is closed
+   proof
+     let A be Subset of T;
+     thus A is closed implies f"A is closed
+     proof
+       assume A is closed;
+       then [#]T \ A is open by PRE_TOPC:def 6;
+       then [#]T \ A in the topology of T by PRE_TOPC:def 5;
+       then consider B being Subset of X such that
+A4:         X \ B = [#]T \ A & ex fA being Subset of R^1 st
+       fA = f"B & fA is closed;
+         [#]T \ B = [#]T \ A by A4,PRE_TOPC:12;
+       then B = [#]T \ ([#]T \ A) by PRE_TOPC:22;
+       hence f"A is closed by A4,PRE_TOPC:22;
+     end;
+     assume f"A is closed;
+     then X \ A in O;
+     then [#]T \ A in O by PRE_TOPC:12;
+     then [#]T \ A is open by PRE_TOPC:def 5;
+     hence A is closed by PRE_TOPC:def 6;
+   end;
+   then reconsider T as strict non empty TopSpace by Th6;
+   take T; thus the carrier of T = (REAL \ NAT) \/ {REAL};
+   reconsider f as map of R^1,T;
+   take f;
+   thus thesis by A3;
+end;
+uniqueness
+proof
+  let X,Y be strict non empty TopSpace such that
+A5:
+  the carrier of X = (REAL \ NAT) \/ {REAL} &
+    ex f being map of R^1, X st f = (id REAL)+*(NAT --> REAL) &
+    for A being Subset of X holds A is closed iff f"A is closed and
+A6: the carrier of Y = (REAL \ NAT) \/ {REAL} &
+    ex f being map of R^1, Y st f = (id REAL)+*(NAT --> REAL) &
+    for A being Subset of Y holds A is closed iff f"A is closed;
+    the carrier of X = [#]Y by A5,A6,PRE_TOPC:12;
+  then A7:  [#]X = [#]Y by PRE_TOPC:12;
+  consider f being map of R^1, X such that
+A8:     f = (id REAL)+*(NAT --> REAL) and
+A9:     for A being Subset of X holds A is closed iff f"A is closed by A5;
+  consider g being map of R^1, Y such that
+A10:     g = (id REAL)+*(NAT --> REAL) and
+A11:     for A being Subset of Y holds A is closed iff g"A is closed by A6;
+
+
+   the topology of X = the topology of Y
+  proof
+    thus
+       the topology of X c= the topology of Y
+    proof
+            let V be set;
+      assume
+A12:      V in the topology of X;
+      then reconsider V1=V as Subset of X;
+      reconsider V1 as Subset of X;
+        V1 is open by A12,PRE_TOPC:def 5;
+      then [#](X)\V1 is closed by Lm3;
+      then A13: g"([#]X\V1) is closed by A8,A9,A10;
+      reconsider V2=V as Subset of Y by A5,A6,A12;
+      reconsider V2 as Subset of Y;
+        [#]Y\V2 is closed by A7,A11,A13;
+      then V2 is open by Lm3;
+      hence V in the topology of Y by PRE_TOPC:def 5;
+    end;
+
+    thus the topology of Y c= the topology of X
+    proof
+      let V be set;
+      assume
+A14:      V in the topology of Y;
+      then reconsider V1=V as Subset of Y;
+      reconsider V1 as Subset of Y;
+        V1 is open by A14,PRE_TOPC:def 5;
+      then [#](Y)\V1 is closed by Lm3;
+      then A15: f"([#]Y\V1) is closed by A8,A10,A11;
+      reconsider V2=V as Subset of X by A5,A6,A14;
+      reconsider V2 as Subset of X;
+        [#]X\V2 is closed by A7,A9,A15;
+      then V2 is open by Lm3;
+      hence V in the topology of X by PRE_TOPC:def 5;
+    end;
+  end;
+  hence X=Y by A5,A6;
+end;
+
+end;
+
+Lm5:
+{REAL} c= the carrier of REAL?
+proof
+  let x be set;
+  assume x in {REAL};
+  then x in (REAL\NAT) \/ {REAL} by XBOOLE_0:def 2;
+  hence x in the carrier of REAL? by Def7;
+end;
+
+canceled;
+
+theorem Th30:
+REAL is Point of REAL?
+proof
+    REAL in {REAL} by TARSKI:def 1;
+  hence REAL is Point of REAL? by Lm5;
+end;
+
+theorem Th31:
+for A being Subset of REAL? holds
+  A is open & REAL in A iff
+  ex O being Subset of R^1 st O is open & NAT c= O & A=(O\NAT) \/ {REAL}
+proof
+ let A be Subset of REAL?;
+ consider f being map of R^1, REAL? such that
+A1: f = (id REAL)+*(NAT --> REAL) and
+A2: for A being Subset of REAL? holds A is closed iff f"A is closed by Def7;
+ thus A is open & REAL in A implies
+ ex O being Subset of R^1 st O is open & NAT c= O & A=(O\NAT) \/ {REAL}
+ proof
+  assume that
+A3: A is open and
+A4: REAL in A;
+  consider O being Subset of R^1 such that
+A5:  O=(f"(A`))`;
+    A` is closed by A3,TOPS_1:30;
+  then f"(A`) is closed by A2;
+  then A6: (f"(A`))` is open by TOPS_1:29;
+    not REAL in [#](REAL?) \ A by A4,XBOOLE_0:def 4;
+  then A7:  not REAL in A` by PRE_TOPC:17;
+A8:
+  A` = A` \ {REAL}
+  proof
+    thus A` c= A` \ {REAL}
+    proof
+      let x be set;
+      assume
+A9:     x in A`;
+      then not x in {REAL} by A7,TARSKI:def 1;
+      hence x in A` \ {REAL} by A9,XBOOLE_0:def 4;
+    end;
+    thus A` \ {REAL} c= A` by XBOOLE_1:36;
+  end;
+A10:
+  REAL \ NAT c= REAL by XBOOLE_1:36;
+    A` c= the carrier of REAL?;
+  then A11: A` c= (REAL \ NAT) \/ {REAL} by Def7;
+A12: A` c= REAL \ NAT
+  proof
+    let x be set;
+    assume
+A13:   x in A`;
+    then x in (REAL \ NAT) or x in {REAL} by A11,XBOOLE_0:def 2;
+    hence x in REAL\NAT by A7,A13,TARSKI:def 1;
+  end;
+  then A14:  A` c= REAL by A10,XBOOLE_1:1;
+    not REAL in REAL;
+  then A15: ((id REAL)+*(NAT --> REAL))"(A` \ {REAL}) = A` \ NAT by A14,Th20;
+    NAT c= the carrier of R^1 by TOPMETR:24;
+  then A16:  NAT c= [#](R^1) by PRE_TOPC:12;
+    O = [#](R^1) \ f"(A`) by A5,PRE_TOPC:17
+        .= ([#](R^1) \ A`) \/ (NAT /\ [#](R^1)) by A1,A8,A15,XBOOLE_1:52;
+  then A17:  O = ([#](R^1) \ A`) \/ NAT by A16,XBOOLE_1:28;
+  then A18: NAT c= O by XBOOLE_1:7;
+A19: NAT c= REAL \ A`
+  proof
+    let x be set;
+    assume
+A20:   x in NAT;
+    then not x in A` by A12,XBOOLE_0:def 4;
+    hence x in REAL \ A` by A20,XBOOLE_0:def 4;
+  end;
+    O = NAT \/ (REAL \ A`) by A17,PRE_TOPC:12,TOPMETR:24;
+  then A21:  O = REAL \ A` by A19,XBOOLE_1:12;
+    A = A``
+    .= [#](REAL?) \ A` by PRE_TOPC:17
+    .= (the carrier of REAL?) \ A` by PRE_TOPC:12;
+  then A22:  A = ((REAL \ NAT) \/ {REAL}) \ A` by Def7;
+    A = (REAL \ A`) \ NAT \/ {REAL}
+  proof
+    thus A c= (REAL \ A`) \ NAT \/ {REAL}
+    proof
+      let x be set;
+      assume x in A;
+      then x in (REAL \ NAT) \/ {REAL} & not x in A` by A22,XBOOLE_0:def 4;
+      then (x in (REAL \ NAT) or x in {REAL}) & not x in A` by XBOOLE_0:def 2;
+      then (x in REAL & not x in NAT & not x in A`) or x in {REAL}
+                                                     by XBOOLE_0:def 4;
+      then (x in (REAL\ A`) & not x in NAT) or x in {REAL} by XBOOLE_0:def 4;
+      then (x in (REAL\ A`) \ NAT) or x in {REAL} by XBOOLE_0:def 4;
+      hence x in (REAL\ A`) \ NAT \/ {REAL} by XBOOLE_0:def 2;
+    end;
+    let x be set;
+    assume x in (REAL \ A`) \ NAT \/ {REAL};
+    then x in (REAL \ A`) \ NAT or x in {REAL} by XBOOLE_0:def 2;
+    then (x in (REAL \ A`) & not x in NAT) or (x in {REAL} & not x in A`)
+                                                        by A7,TARSKI:def 1,
+XBOOLE_0:def 4;
+    then (x in REAL & not x in A` & not x in NAT) or (x in {REAL} & not x in
+ A`)
+                                                        by XBOOLE_0:def 4;
+    then (x in REAL\ NAT or x in {REAL}) & not x in A` by XBOOLE_0:def 4;
+    then x in (REAL \ NAT) \/ {REAL} & not x in A` by XBOOLE_0:def 2;
+    hence x in A by A22,XBOOLE_0:def 4;
+  end;
+  hence thesis by A5,A6,A18,A21;
+ end;
+
+ given O being Subset of R^1 such that
+A23: O is open and
+A24: NAT c= O and
+A25: A=(O\NAT) \/ {REAL};
+ consider B being Subset of R^1 such that
+A26:  B = [#](R^1) \ O;
+A27:
+ B is closed by A23,A26,Lm3;
+   f"(A`)=B
+ proof
+   A28: A` = [#](REAL?) \ A by PRE_TOPC:17
+     .= (the carrier of REAL?) \ A by PRE_TOPC:12
+     .= ((REAL \ NAT) \/ {REAL}) \ ((O\NAT) \/ {REAL}) by A25,Def7
+     .= ((REAL \ NAT) \((O\NAT) \/ {REAL})) \/ ({REAL} \ ({REAL} \/
+ (O\NAT))) by XBOOLE_1:42
+     .= ((REAL \ NAT) \((O\NAT) \/ {REAL})) \/ {} by XBOOLE_1:46
+     .= ((REAL \ NAT) \ (O\NAT)) \ {REAL} by XBOOLE_1:41
+     .= (REAL \ (NAT \/ (O \ NAT))) \ {REAL} by XBOOLE_1:41
+     .= (REAL \ (NAT \/ O )) \ {REAL} by XBOOLE_1:39
+     .= (REAL \ O) \ {REAL} by A24,XBOOLE_1:12;
+     not REAL in REAL;
+   then ((id REAL)+*(NAT --> REAL))"((REAL \ O) \ {REAL})= REAL \ O \ NAT
+                                                               by Lm4;
+   then A29: f"((REAL \ O) \ {REAL}) = REAL \ (O \/ NAT) by A1,XBOOLE_1:41;
+     B = REAL \ O by A26,PRE_TOPC:12,TOPMETR:24;
+   hence thesis by A24,A28,A29,XBOOLE_1:12;
+ end;
+ then A` is closed by A2,A27;
+ then [#](REAL?) \ A is closed by PRE_TOPC:17;
+ hence A is open by Lm3;
+   REAL in {REAL} by TARSKI:def 1;
+ hence REAL in A by A25,XBOOLE_0:def 2;
+end;
+
+theorem Th32:
+for A being set holds
+A is Subset of REAL? & not REAL in A iff
+A is Subset of R^1 & NAT /\ A = {}
+proof
+  let A be set;
+  thus A is Subset of REAL? & not REAL in A implies
+    A is Subset of R^1 & NAT /\ A = {}
+  proof
+    assume
+A1:    A is Subset of REAL? & not REAL in A;
+    then A c= the carrier of REAL?;
+    then A2:    A c= (REAL \ NAT) \/ {REAL} by Def7;
+      A c= REAL
+    proof
+      let x be set;
+      assume
+A3:      x in A;
+then x in REAL \ NAT or x in {REAL} by A2,XBOOLE_0:def 2;
+      hence x in REAL by A1,A3,TARSKI:def 1,XBOOLE_0:def 4;
+    end;
+    hence A is Subset of R^1 by TOPMETR:24;
+    thus NAT /\ A = {}
+    proof
+      assume
+A4:      NAT /\ A <> {};
+      consider x being Element of NAT /\ A;
+      A5:      x in NAT & x in A by A4,XBOOLE_0:def 3;
+      per cases by A2,A5,XBOOLE_0:def 2;
+      suppose x in REAL \ NAT;
+      hence contradiction by A5,XBOOLE_0:def 4;
+      suppose x in {REAL};
+      then x = REAL by TARSKI:def 1;
+      then REAL in REAL by A5;
+      hence contradiction;
+    end;
+  end;
+
+  assume
+A6:  A is Subset of R^1 & NAT /\ A = {};
+A7:A c= REAL \ NAT
+  proof
+    let x be set;
+    assume
+A8:    x in A;
+    then not x in NAT by A6,XBOOLE_0:def 3;
+    hence x in REAL \ NAT by A6,A8,TOPMETR:24,XBOOLE_0:def 4;
+  end;
+    REAL \ NAT c= (REAL \ NAT) \/ {REAL} by XBOOLE_1:7;
+  then A c= (REAL \ NAT) \/ {REAL} by A7,XBOOLE_1:1;
+  then A is Subset of REAL? by Def7;
+  hence A is Subset of REAL?;
+  thus not REAL in A
+  proof
+    assume REAL in A;
+    then REAL in REAL by A6,TOPMETR:24;
+    hence contradiction;
+  end;
+end;
+
+theorem Th33:
+for A being Subset of R^1,B being Subset of REAL? st A = B holds
+    NAT /\ A = {} & A is open iff not REAL in B & B is open
+proof
+  let A be Subset of R^1,B be Subset of REAL?;
+  assume
+A1:  A = B;
+  consider f being map of R^1, REAL? such that
+A2: f = (id REAL)+*(NAT --> REAL) and
+A3: for A being Subset of REAL? holds A is closed iff f"A is closed by Def7;
+A4:
+  (NAT /\ A = {} & not REAL in B) implies f"(B`) = A`
+  proof
+    assume
+A5:   NAT /\ A = {} & not REAL in B;
+      REAL in the carrier of REAL? by Th30;
+    then REAL in [#](REAL?) by PRE_TOPC:12;
+    then REAL in [#](REAL?) \ B by A5,XBOOLE_0:def 4;
+    then A6:   REAL in B` by PRE_TOPC:17;
+      B` c= the carrier of REAL?;
+    then A7:   B` c= (REAL \ NAT) \/ {REAL} by Def7;
+A8: B` \ {REAL} c= REAL
+    proof
+      let x be set;
+      assume A9: x in B` \ {REAL};
+      then x in B` & not x in {REAL} by XBOOLE_0:def 4;
+      then x in (REAL \ NAT) or x in {REAL} by A7,XBOOLE_0:def 2;
+      hence x in REAL by A9,XBOOLE_0:def 4;
+    end;
+A10:not REAL in REAL;
+      {REAL} c= B`
+    proof
+      let x be set;
+      assume x in {REAL};
+      hence x in B` by A6,TARSKI:def 1;
+    end;
+    then B` = (B`\{REAL}) \/ {REAL} by XBOOLE_1:45;
+    then A11: ((id REAL)+*(NAT --> REAL))"(B`)
+             = (B`\{REAL}) \/ NAT by A8,A10,Th19
+            .= (([#](REAL?) \ B)\{REAL}) \/ NAT by PRE_TOPC:17
+            .= (((the carrier of REAL?) \ B)\{REAL}) \/ NAT by PRE_TOPC:12
+            .= ((((REAL\NAT)\/{REAL})\A)\{REAL}) \/ NAT by A1,Def7;
+      REAL \ A = ((((REAL\NAT)\/{REAL})\A)\{REAL}) \/ NAT
+    proof
+      thus REAL \ A c= ((((REAL\NAT)\/{REAL})\A)\{REAL}) \/ NAT
+      proof
+        let x be set;
+        assume x in REAL\A;
+        then A12:       x in REAL & not x in A by XBOOLE_0:def 4;
+A13:    not x in {REAL}
+        proof
+          assume x in {REAL};
+          then x = REAL by TARSKI:def 1;
+          hence contradiction by A12;
+        end;
+        per cases;
+
+        suppose x in NAT;
+        hence x in ((((REAL\NAT)\/{REAL})\A)\{REAL}) \/ NAT by XBOOLE_0:def 2;
+
+        suppose not x in NAT;
+        then x in REAL \ NAT by A12,XBOOLE_0:def 4;
+        then x in (REAL\NAT) \/ {REAL} by XBOOLE_0:def 2;
+        then x in ((REAL\NAT)\/{REAL})\A by A12,XBOOLE_0:def 4;
+        then x in (((REAL\NAT)\/{REAL})\A)\{REAL} by A13,XBOOLE_0:def 4;
+        hence x in ((((REAL\NAT)\/{REAL})\A)\{REAL}) \/ NAT by XBOOLE_0:def 2;
+      end;
+      let x be set;
+      assume A14: x in ((((REAL\NAT)\/{REAL})\A)\{REAL}) \/ NAT;
+      per cases by A14,XBOOLE_0:def 2;
+      suppose
+A15:     x in NAT;
+      then not x in A by A5,XBOOLE_0:def 3;
+      hence x in REAL \ A by A15,XBOOLE_0:def 4;
+      suppose A16: x in (((REAL\NAT)\/{REAL})\A)\{REAL};
+      then x in ((REAL\NAT)\/{REAL})\A & not x in {REAL} by XBOOLE_0:def 4
+;
+      then A17:    x in (REAL\NAT)\/{REAL} & not x in A by XBOOLE_0:def 4;
+      then x in REAL\NAT or x in {REAL} by XBOOLE_0:def 2;
+      then x in REAL by A16,XBOOLE_0:def 4;
+      hence x in REAL \ A by A17,XBOOLE_0:def 4;
+    end;
+    then [#](R^1) \ A = ((((REAL\NAT)\/ {REAL})\A)\{REAL}) \/
+ NAT by PRE_TOPC:12,TOPMETR:24;
+    hence f"(B`) = A` by A2,A11,PRE_TOPC:17;
+  end;
+
+  thus NAT /\ A = {} & A is open implies not REAL in B & B is open
+  proof
+    assume
+A18:   NAT /\ A = {} & A is open;
+    hence
+     not REAL in B by A1,Th32;
+      A` is closed by A18,TOPS_1:30;
+    then B` is closed by A1,A3,A4,A18,Th32;
+    hence B is open by TOPS_1:30;
+  end;
+
+  assume
+A19: not REAL in B & B is open;
+  hence
+   NAT /\ A = {} by A1,Th32;
+    B` is closed by A19,TOPS_1:30;
+  then A` is closed by A1,A3,A4,A19,Th32;
+  hence A is open by TOPS_1:30;
+end;
+
+theorem Th34:
+for A being Subset of REAL? st A = {REAL} holds A is closed
+proof
+  let A be Subset of REAL?;
+  assume
+A1:  A = {REAL};
+  reconsider B = REAL \ NAT as Subset of R^1 by TOPMETR:24,
+XBOOLE_1:36;
+  reconsider B as Subset of R^1;
+A2:B is open
+  proof
+    reconsider N=NAT as Subset of R^1 by TOPMETR:24;
+    reconsider N as Subset of R^1;
+    A3: N is closed by Th10;
+      N` = [#](R^1) \ N by PRE_TOPC:17
+      .= B by PRE_TOPC:12,TOPMETR:24;
+    hence B is open by A3,TOPS_1:29;
+  end;
+   B misses NAT by XBOOLE_1:79;
+then A4:  B /\ NAT = {} by XBOOLE_0:def 7;
+  then reconsider C=B as Subset of REAL? by Th32;
+A5:  C is open by A2,A4,Th33;
+    (REAL\NAT) = ((REAL\NAT) \/ {REAL})\{REAL}
+  proof
+    thus (REAL\NAT) c= ((REAL\NAT) \/ {REAL})\{REAL}
+    proof
+      let x be set;
+      assume
+A6:     x in REAL \ NAT;
+      then A7:     x in REAL by XBOOLE_0:def 4;
+A8:   not x in {REAL}
+      proof
+        assume x in {REAL};
+        then x = REAL by TARSKI:def 1;
+        hence contradiction by A7;
+      end;
+        x in (REAL \ NAT) \/ {REAL} by A6,XBOOLE_0:def 2;
+      hence x in ((REAL\NAT) \/ {REAL})\{REAL} by A8,XBOOLE_0:def 4;
+    end;
+    let x be set;
+    assume x in ((REAL\NAT) \/ {REAL})\{REAL};
+    then x in (REAL\NAT) \/ {REAL} & not x in {REAL} by XBOOLE_0:def 4;
+    hence x in REAL \ NAT by XBOOLE_0:def 2;
+  end;
+  then C = (the carrier of REAL?) \ A by A1,Def7
+        .= [#](REAL?) \ A by PRE_TOPC:12
+        .= A` by PRE_TOPC:17;
+  hence A is closed by A5,TOPS_1:29;
+end;
+
+theorem Th35:
+REAL? is not first-countable
+proof
+  assume
+A1:  REAL? is first-countable;
+  reconsider y = REAL as Point of REAL? by Th30;
+  consider B being Basis of y such that
+A2:    B is countable by A1,Def1;
+  consider h being Function of NAT,B such that
+A3:    rng h = B by A2,WAYBEL12:4;
+  defpred P[set,set] means
+    ex m being Nat st m=$1 & $2 in h.$1 /\ ]. m - 1/4 , m + 1/4 .[;
+A4:for n being set st n in NAT
+    ex x being set st x in REAL \ NAT & P[n,x]
+  proof
+    let n be set;
+    assume
+A5:    n in NAT;
+    then n in dom h by FUNCT_2:def 1;
+    then A6: h.n in rng h by FUNCT_1:def 5;
+    then reconsider Bn=h.n as Subset of REAL? by A3;
+    reconsider Bn as Subset of REAL?;
+      Bn is open & y in Bn by A3,A6,YELLOW_8:21;
+    then consider An being Subset of R^1 such that
+A7:   An is open and
+A8:   NAT c= An and
+A9:   Bn = (An \ NAT) \/ {REAL} by Th31;
+    reconsider An'=An as Subset of TopSpaceMetr(RealSpace) by TOPMETR:def 7;
+    reconsider m = n as Nat by A5;
+    reconsider m'=m as Point of RealSpace by METRIC_1:def 14;
+A10: Ball(m',1/4) = ]. m - 1/4 , m + 1/4 .[ by Th7;
+      dist(m',m')=0 by METRIC_1:1;
+    then m' in Ball(m',1/4) by METRIC_1:12;
+    then A11:   n in An /\ Ball(m',1/4) by A5,A8,XBOOLE_0:def 3;
+      Ball(m',1/4) c= the carrier of RealSpace;
+    then Ball(m',1/4) c= the carrier of TopSpaceMetr(RealSpace) by TOPMETR:16;
+    then reconsider Kn = Ball(m',1/4) as
+                       Subset of TopSpaceMetr(RealSpace);
+      Kn is open by TOPMETR:21;
+    then An' /\ Kn is open by A7,TOPMETR:def 7,TOPS_1:38;
+    then consider r being real number such that
+A12:   r>0 and
+A13:   Ball(m',r) c= An /\ Kn by A11,TOPMETR:22;
+    reconsider r as Real by XREAL_0:def 1;
+A14: r < 1
+    proof
+      assume r>=1;
+      then 1/2 < r by AXIOMS:22;
+      then -r < -(1/2) by REAL_1:50;
+      then -r + m < -(1/2) + m by REAL_1:53;
+      then m - r < m + -(1/2) by XCMPLX_0:def 8;
+      then A15:    m - r < m - 1/2 by XCMPLX_0:def 8;
+        -(1/2) < r by A12,AXIOMS:22;
+      then -(1/2) + m < r + m by REAL_1:53;
+      then m - 1/2 < m + r by XCMPLX_0:def 8;
+      then m - 1/2 in {a where a is Real:m-r<a & a<m+r} by A15;
+      then m - 1/2 in ].m-r,m+r.[ by RCOMP_1:def 2;
+      then m - 1/2 in Ball(m',r) by A12,Th7;
+      then m - 1/2 in Kn by A13,XBOOLE_0:def 3;
+      then m - 1/2 in ]. m - 1/4,m+1/4.[ by Th7;
+      then m - 1/2 in {a where a is Real: m - 1/4 < a & a < m + 1/4 }
+                                                             by RCOMP_1:def 2;
+      then consider a being Real such that
+A16:    a= m - 1/2 & m - 1/4 < a & a < m + 1/4;
+        m + -(1/4) < m - 1/2 by A16,XCMPLX_0:def 8;
+      then m + -(1/4) < m + -(1/2) by XCMPLX_0:def 8;
+      hence contradiction by AXIOMS:24;
+    end;
+      m < m + r by A12,REAL_1:69;
+    then m - r < m by REAL_1:84;
+    then consider x being real number such that
+A17:   m - r < x and
+A18:   x < m by REAL_1:75;
+    reconsider x as Real by XREAL_0:def 1;
+    take x;
+      x + 0 < m + r by A12,A18,REAL_1:67;
+    then x in {a where a is Real : m - r < a & a < m + r} by A17;
+    then x in ].m - r,m + r.[ by RCOMP_1:def 2;
+    then A19: x in Ball(m',r) by A12,Th7;
+    then A20:   x in ]. m - 1/4 , m + 1/4 .[ by A10,A13,XBOOLE_0:def 3;
+A21:  not x in NAT
+    proof
+      assume x in NAT;
+      then reconsider x as Nat;
+      per cases by REAL_1:def 5;
+      suppose x = m;
+      hence contradiction by A18;
+      suppose x > m;
+      hence contradiction by A18;
+
+      suppose x < m;
+      then A22:     m >= x + 1 by NAT_1:38;
+        m < x + r by A17,REAL_1:84;
+      then m - x < r by REAL_1:84;
+      then m - x < 1 by A14,AXIOMS:22;
+      hence contradiction by A22,REAL_1:84;
+    end;
+    x in An by A13,A19,XBOOLE_0:def 3;
+    then x in An \ NAT by A21,XBOOLE_0:def 4;
+    then A23: x in Bn by A9,XBOOLE_0:def 2;
+    thus x in REAL \ NAT by A21,XBOOLE_0:def 4;
+    take m;
+    m=n & x in h.n /\ ]. m - 1/4 , m + 1/4 .[ by A20,A23,XBOOLE_0:def 3;
+    hence thesis;
+  end;
+  consider S being Function such that
+A24:    dom S = NAT and
+A25:    rng S c= REAL \ NAT and
+A26:    for n being set st n in NAT holds P[n,S.n]
+    from NonUniqBoundFuncEx(A4);
+    REAL \ NAT c= REAL by XBOOLE_1:36;
+  then rng S c= REAL by A25,XBOOLE_1:1;
+  then S is Function of NAT, the carrier of R^1 by A24,FUNCT_2:4,TOPMETR:24;
+  then reconsider S as sequence of R^1 by NORMSP_1:def 3;
+A27:
+  for n being Nat holds S.n in ]. n - 1/4 , n + 1/4 .[
+  proof
+    let n be Nat;
+    consider m being Nat such that
+A28:   m=n and
+A29:   S.n in h.n /\ ]. m - 1/4 , m + 1/4 .[ by A26;
+    thus S.n in ]. n - 1/4 , n + 1/4 .[ by A28,A29,XBOOLE_0:def 3;
+  end;
+  reconsider O=rng S as Subset of R^1;
+    O is closed by A27,Th9;
+  then [#](R^1)\O is open by PRE_TOPC:def 6;
+  then A30:  O` is open by PRE_TOPC:17;
+A31:
+  NAT c= O`
+  proof
+    let x be set;
+    assume
+A32:   x in NAT;
+    then x in the carrier of R^1 by TOPMETR:24;
+    then A33:   x in [#](R^1) by PRE_TOPC:12;
+      not x in rng S by A25,A32,XBOOLE_0:def 4;
+    then x in [#](R^1) \ O by A33,XBOOLE_0:def 4;
+    hence x in O` by PRE_TOPC:17;
+  end;
+  set A = (O` \ NAT) \/ {REAL};
+    A c= (REAL \ NAT) \/ {REAL}
+  proof
+    let x be set;
+    assume x in A;
+    then x in (O` \ NAT) or x in {REAL} by XBOOLE_0:def 2;
+    then (x in O` & not x in NAT) or x in {REAL} by XBOOLE_0:def 4;
+    then (x in REAL \ NAT) or x in {REAL} by TOPMETR:24,XBOOLE_0:def 4;
+    hence x in (REAL \ NAT) \/ {REAL} by XBOOLE_0:def 2;
+  end;
+  then reconsider A as Subset of REAL? by Def7;
+  reconsider A as Subset of REAL?;
+    A is open & REAL in A by A30,A31,Th31;
+  then consider V being Subset of REAL? such that
+A34:  V in B & V c= A by YELLOW_8:22;
+A35:
+  for n being Nat ex x being set st x in h.n & not (x in A)
+  proof
+    let n be Nat;
+    consider xn being set such that
+A36:   xn=S.n;
+    take xn;
+    A37: ex m being Nat st m=n & S.n in h.n /\ ]. m - 1/4 , m + 1/4 .[ by A26;
+    A38:  S.n in rng S by A24,FUNCT_1:def 5;
+    then not xn in [#](R^1) \ O by A36,XBOOLE_0:def 4;
+    then A39: not xn in O` by PRE_TOPC:17;
+      not xn = REAL
+    proof
+      assume xn = REAL;
+      then REAL in REAL by A25,A36,A38,XBOOLE_0:def 4;
+      hence contradiction;
+    end;
+    then not xn in (O` \ NAT) & not xn in {REAL} by A39,TARSKI:def 1,XBOOLE_0:
+def 4;
+    hence xn in h.n & not (xn in A) by A36,A37,XBOOLE_0:def 2,def 3;
+  end;
+  consider n1 being set such that
+A40: n1 in dom h and
+A41: V = h.n1 by A3,A34,FUNCT_1:def 5;
+  reconsider n=n1 as Nat by A40,FUNCT_2:def 1;
+  consider x being set such that
+A42:  x in h.n & not (x in A) by A35;
+  thus contradiction by A34,A41,A42;
+end;
+
+theorem Th36:
+REAL? is Frechet
+proof
+  let A be Subset of REAL?,x be Point of REAL?;
+  assume
+A1: x in Cl(A);
+    x in the carrier of REAL?;
+  then x in (REAL \ NAT) \/ {REAL} by Def7;
+  then A2: x in (REAL \ NAT) or x in {REAL} by XBOOLE_0:def 2;
+  per cases by A2,TARSKI:def 1;
+
+  suppose
+A3: x in (REAL \ NAT);
+  then A4: x in REAL by XBOOLE_0:def 4;
+  reconsider x'=x as Point of R^1 by A3,TOPMETR:24,XBOOLE_0:def 4;
+    A c= the carrier of REAL?;
+  then A5:  A c= REAL \ NAT \/ {REAL} by Def7;
+    A\{REAL} c= REAL
+  proof
+    let a be set;
+    assume a in A\{REAL};
+    then a in A & not a in{REAL} by XBOOLE_0:def 4;
+    then (a in REAL\NAT or a in {REAL}) & not a in {REAL} by A5,XBOOLE_0:def 2
+;
+    hence a in REAL by XBOOLE_0:def 4;
+  end;
+  then reconsider A' = A\{REAL} as Subset of R^1 by TOPMETR:24;
+  reconsider A' as Subset of R^1;
+    for B' being Subset of R^1 st B' is open holds
+                        x' in B' implies A' meets B'
+  proof
+    let B' be Subset of R^1;
+    assume
+A6:    B' is open;
+    assume
+A7:   x' in B';
+    reconsider B1=B' as Subset of R^1;
+    reconsider C=NAT as Subset of R^1 by TOPMETR:24;
+    reconsider C as Subset of R^1;
+      C is closed by Th10;
+    then A8:   B1 \ C is open by A6,Th4;
+   (B' \ NAT) misses NAT by XBOOLE_1:79;
+then A9:  (B' \ NAT) /\ NAT = {} by XBOOLE_0:def 7;
+    then reconsider D=B1 \ C as Subset of REAL? by Th32;
+A10:D is open by A8,A9,Th33;
+      not x' in NAT by A3,XBOOLE_0:def 4;
+    then A11: x' in B' \ NAT by A7,XBOOLE_0:def 4;
+    reconsider D as Subset of REAL?;
+      A meets D by A1,A10,A11,PRE_TOPC:def 13;
+    then A12:   A /\ D <> {} by XBOOLE_0:def 7;
+      A' /\ B' <> {}
+    proof
+      consider a being Element of A /\ D;
+      A13: a in D by A12,XBOOLE_0:def 3;
+      then A14:     a in B' by XBOOLE_0:def 4;
+      A15:     a in REAL by A13,TOPMETR:24;
+A16:   not a in {REAL}
+      proof
+        assume a in {REAL};
+        then a = REAL by TARSKI:def 1;
+        hence contradiction by A15;
+      end;
+        a in A by A12,XBOOLE_0:def 3;
+      then a in A \ {REAL} by A16,XBOOLE_0:def 4;
+      hence A' /\ B' <> {} by A14,XBOOLE_0:def 3;
+    end;
+    hence A' meets B' by XBOOLE_0:def 7;
+  end;
+  then x' in Cl(A') by PRE_TOPC:def 13;
+  then consider S' being sequence of R^1 such that
+A17: rng S' c= A' and
+A18: x' in Lim S' by Def5;
+  A19: S' is_convergent_to x' by A18,Def4;
+A20:
+  rng S' c= A
+  proof
+    let a be set;
+    assume a in rng S';
+    hence a in A by A17,XBOOLE_0:def 4;
+  end;
+  then rng S' c= the carrier of REAL? by XBOOLE_1:1;
+  then reconsider S=S' as sequence of REAL? by Th2;
+  take S;
+  thus rng S c= A by A20;
+    S is_convergent_to x
+  proof
+    let V be Subset of REAL?;
+    assume
+A21:    V is open & x in V;
+    reconsider C={REAL} as Subset of REAL? by Lm5;
+    reconsider C as Subset of REAL?;
+      C is closed by Th34;
+    then A22:   V \ C is open by A21,Th4;
+      REAL in {REAL} by TARSKI:def 1;
+    then A23: not REAL in V \ {REAL} by XBOOLE_0:def 4;
+    then reconsider V' = V \ C as Subset of R^1 by Th32;
+A24:  V' is open by A22,A23,Th33;
+      not x in C
+    proof
+      assume x in C;
+      then x = REAL by TARSKI:def 1;
+      hence contradiction by A4;
+    end;
+    then x in V \ C by A21,XBOOLE_0:def 4;
+    then consider n being Nat such that
+A25:    for m being Nat st n <= m holds S'.m in V' by A19,A24,Def2;
+    take n;
+    thus for m being Nat st n <= m holds S.m in V
+    proof
+      let m be Nat;
+      assume n <= m;
+      then S'.m in V' by A25;
+      hence S.m in V by XBOOLE_0:def 4;
+    end;
+  end;
+  hence x in Lim S by Def4;
+
+  suppose
+A26: x = REAL & x in A;
+A27: rng (NAT --> x) = {x} by FUNCOP_1:14;
+    dom (NAT --> x) = NAT by FUNCOP_1:19;
+  then (NAT --> x) is Function of NAT,the carrier of REAL? by A27,FUNCT_2:4;
+  then reconsider S=(NAT --> x) as sequence of REAL? by NORMSP_1:def 3;
+  take S;
+    {x} c= A by A26,ZFMISC_1:37;
+  hence rng S c= A by FUNCOP_1:14;
+    S is_convergent_to x by Th23;
+  hence x in Lim S by Def4;
+
+  suppose
+A28:  x = REAL & not x in A;
+  then reconsider A'=A as Subset of R^1 by Th32;
+    ex k being Point of R^1 st k in NAT & ex S' being sequence of R^1 st
+    rng S' c= A' & S' is_convergent_to k
+  proof
+    assume
+      A29: not (ex k being Point of R^1 st k in NAT & ex S' being sequence of
+R^1 st
+      rng S' c= A' & S' is_convergent_to k);
+    defpred P[set,set] means
+    $1 in $2 & $2 in the topology of R^1 & $2 /\ A' = {};
+A30:  for k being set st k in NAT ex U1 being set st P[k,U1]
+    proof
+       given k being set such that
+A31:     k in NAT and
+A32:     for U1 being set holds
+        (k in U1 & U1 in the topology of R^1) implies not U1 /\ A' = {};
+      reconsider k as Point of R^1 by A31,TOPMETR:24;
+      reconsider k''=k as Point of TopSpaceMetr(RealSpace) by TOPMETR:def 7;
+      reconsider k'=k'' as Point of RealSpace by TOPMETR:16;
+      consider Bs being Basis of k'' such that
+A33:    Bs={Ball(k',1/n) where n is Nat:n<>0} and
+          Bs is countable and
+A34:     ex f being Function of NAT,Bs st for n being set st n in NAT holds
+          ex n' being Nat st n=n' & f.n = Ball(k',1/(n'+1)) by Th11;
+      consider h being Function of NAT,Bs such that
+A35:     for n being set st n in NAT holds
+         ex n' being Nat st n=n' & h.n = Ball(k',1/(n'+1)) by A34;
+      defpred P[set,set] means $2 in h.$1 /\ A';
+A36:   for n being set st n in NAT
+         ex z being set st z in the carrier of R^1 & P[n,z]
+      proof
+        let n be set;
+        assume
+          n in NAT;
+        then consider n' being Nat such that
+            n=n' and
+A37:      h.n=Ball(k',1/(n'+1)) by A35;
+        A38:       h.n in Bs by A33,A37;
+        A39: Bs c= the topology of TopSpaceMetr(RealSpace) by YELLOW_8:def 2;
+        reconsider H=h.n as
+          Subset of TopSpaceMetr(RealSpace) by A38;
+        reconsider H as Subset of TopSpaceMetr(RealSpace);
+               k in H by A38,YELLOW_8:21;
+        then A40:       H /\ A' <> {} by A32,A38,A39,TOPMETR:def 7;
+        consider z being Element of H /\ A';
+        A41: z in H by A40,XBOOLE_0:def 3;
+        take z;
+        thus z in the carrier of R^1 & z in h.n /\ A' by A40,A41,TOPMETR:def 7
+;
+      end;
+      consider S' being Function such that
+A42:     dom S' = NAT & rng S' c= the carrier of R^1 and
+A43:     for n being set st n in NAT holds P[n,S'.n]
+                                             from NonUniqBoundFuncEx(A36);
+      reconsider S' as Function of NAT,the carrier of R^1 by A42,FUNCT_2:4;
+      reconsider S' as sequence of R^1 by NORMSP_1:def 3;
+   A44: rng S' c= A'
+      proof
+        let z be set;
+        assume z in rng S';
+        then consider z' being set such that
+A45:       z' in dom S' and
+A46:       z = S'.z' by FUNCT_1:def 5;
+          S'.z' in h.z' /\ A' by A42,A43,A45;
+        hence z in A' by A46,XBOOLE_0:def 3;
+      end;
+        S' is_convergent_to k
+      proof
+        let U1 be Subset of R^1;
+        assume
+A47:        U1 is open & k in U1;
+        reconsider U2=U1 as Subset of TopSpaceMetr(RealSpace)
+          by TOPMETR:def 7;
+        consider r being real number such that
+A48:       r > 0 and
+A49:      Ball(k',r) c= U2 by A47,TOPMETR:22,def 7;
+        reconsider r as Real by XREAL_0:def 1;
+        consider n being Nat such that
+A50:      1/n < r and
+A51:      n <> 0 by A48,Lm2;
+        take n;
+        thus for m being Nat st n <= m holds S'.m in U1
+        proof
+          let m be Nat;
+          assume
+              n <= m;
+          then A52:        n < m + 1 by NAT_1:38;
+            n > 0 by A51,NAT_1:19;
+          then 1/(m+1) < 1/n by A52,REAL_2:151;
+          then 1/(m+1) < r by A50,AXIOMS:22;
+          then Ball(k',1/(m+1)) c= Ball(k',r) by PCOMPS_1:1;
+          then A53:      Ball(k',1/(m+1)) c= U2 by A49,XBOOLE_1:1;
+          consider m' being Nat such that
+A54:       m=m' and
+A55:       h.m = Ball(k',1/(m'+1)) by A35;
+            S'.m in h.m /\ A' by A43;
+          then S'.m in h.m by XBOOLE_0:def 3;
+          hence S'.m in U1 by A53,A54,A55;
+        end;
+      end;
+      hence contradiction by A29,A31,A44;
+    end;
+    consider g being Function such that
+A56:   dom g =NAT and
+A57:   for k being set st k in NAT holds P[k,g.k]
+          from NonUniqFuncEx(A30);
+      rng g c= bool the carrier of R^1
+    proof
+      let z be set;
+      assume z in rng g;
+      then consider k being set such that
+A58:     k in dom g and
+A59:     z=g.k by FUNCT_1:def 5;
+        g.k in the topology of R^1 by A56,A57,A58;
+      hence z in bool the carrier of R^1 by A59;
+    end;
+    then rng g is Subset-Family of R^1 by SETFAM_1:def 7;
+    then reconsider F = rng g as Subset-Family of R^1;
+      F is open
+    proof
+      let O be Subset of R^1;
+      assume O in F;
+      then consider k being set such that
+A60:     k in dom g and
+A61:     O=g.k by FUNCT_1:def 5;
+        g.k in the topology of R^1 by A56,A57,A60;
+      hence O is open by A61,PRE_TOPC:def 5;
+    end;
+    then A62:   union F is open by TOPS_2:26;
+A63: NAT c= union F
+    proof
+      let k be set;
+      assume
+A64:      k in NAT;
+then A65:     k in g.k by A57;
+        g.k in rng g by A56,A64,FUNCT_1:def 5;
+      hence k in union F by A65,TARSKI:def 4;
+    end;
+      (union F)\NAT c= REAL \ NAT by TOPMETR:24,XBOOLE_1:33;
+    then ((union F)\NAT) \/ {REAL} c= (REAL \ NAT) \/ {REAL} by XBOOLE_1:9;
+    then reconsider B = ((union F)\NAT) \/ {REAL} as
+      Subset of REAL? by Def7;
+    reconsider B as Subset of REAL?;
+ B is open & REAL in B by A62,A63,Th31;
+    then A66: A meets B by A1,A28,PRE_TOPC:def 13;
+      B /\ A = {}
+    proof
+      assume
+A67:  B /\ A <> {};
+      consider z being Element of B /\ A;
+A68:  z in B & z in A by A67,XBOOLE_0:def 3;
+      per cases by A68,XBOOLE_0:def 2;
+
+      suppose z in (union F)\NAT;
+      then z in union F by XBOOLE_0:def 4;
+      then consider C being set such that
+A69:     z in C and
+A70:     C in F by TARSKI:def 4;
+      consider l being set such that
+A71:    l in dom g and
+A72:    C = g.l by A70,FUNCT_1:def 5;
+           g.l /\ A = {} by A56,A57,A71;
+      hence contradiction by A68,A69,A72,XBOOLE_0:def 3;
+
+      suppose z in {REAL};
+      then z = REAL by TARSKI:def 1;
+      hence contradiction by A28,A67,XBOOLE_0:def 3;
+    end;
+    hence contradiction by A66,XBOOLE_0:def 7;
+  end;
+  then consider k being Point of R^1 such that
+A73: k in NAT and
+A74: ex S' being sequence of R^1 st rng S' c= A' & S' is_convergent_to k;
+  consider S' being sequence of R^1 such that
+A75: rng S' c= A' and
+A76: S' is_convergent_to k by A74;
+    rng S' c= the carrier of REAL? by A75,XBOOLE_1:1;
+  then reconsider S = S' as sequence of REAL? by Th2;
+  take S;
+  thus rng S c= A by A75;
+    S is_convergent_to x
+  proof
+    let U1 be Subset of REAL?;
+    assume (U1 is open & x in U1);
+    then consider O being Subset of R^1 such that
+A77:   O is open and
+A78:   NAT c= O and
+A79:   U1=(O\NAT) \/ {REAL} by A28,Th31;
+    consider n being Nat such that
+A80:   for m being Nat st n <= m holds S'.m in O by A73,A76,A77,A78,Def2;
+    take n;
+    thus for m being Nat st n <= m holds S.m in U1
+    proof
+      let m be Nat;
+      assume n <= m;
+      then A81:     S'.m in O by A80;
+        m in NAT;
+      then m in dom S' by NORMSP_1:17;
+      then S'.m in rng S' by FUNCT_1:def 5;
+      then S'.m in A' by A75;
+      then S'.m in the carrier of REAL?;
+      then S'.m in (REAL \ NAT) \/ {REAL} by Def7;
+      then A82: S'.m in (REAL \ NAT) or S'.m in {REAL} by XBOOLE_0:def 2;
+        S'.m <> REAL
+      proof
+        assume
+A83:    S'.m = REAL;
+          S'.m in REAL by TOPMETR:24;
+        hence contradiction by A83;
+      end;
+      then not S'.m in NAT by A82,TARSKI:def 1,XBOOLE_0:def 4;
+      then S'.m in O \ NAT by A81,XBOOLE_0:def 4;
+      hence S.m in U1 by A79,XBOOLE_0:def 2;
+    end;
+  end;
+  hence x in Lim S by Def4;
+end;
+
+theorem
+  not (for T being non empty TopSpace holds
+         T is Frechet implies T is first-countable) by Th35,Th36;
+
+begin
+
+::
+:: Auxiliary theorems
+::
+
+canceled 2;
+
+theorem
+    for r being Real st r>0 ex n being Nat st (1/n < r & n<>0) by Lm2;

@@ -1,0 +1,1192 @@
+:: Cross Products and Tripple Vector Products in 3-dimensional Euclidian Space
+::  by Kanchun, Hiroshi Yamazakiand Yatsuka Nakamura
+::
+:: Received August 8, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, ARYTM, FINSEQ_1, FINSEQ_2, EUCLID, EUCLID_2, RLVECT_1,
+      RVSUM_1, ARYTM_1, RELAT_1, FUNCT_1, MCART_1, EUCLID_5, VECTSP_1;
+ notation SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1, NAT_1, FUNCT_1,
+      BINOP_1, VECTSP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP,
+      PRE_TOPC, RVSUM_1, EUCLID, STRUCT_0, EUCLID_2;
+ constructors REAL_1, VECTSP_1, FINSEQOP, FINSEQ_4, SEQ_1, EUCLID_2, MEMBERED;
+ clusters XREAL_0, RELSET_1, ARYTM_3, MEMBERED;
+ requirements REAL, SUBSET, NUMERALS, ARITHM;
+ theorems EUCLID, RVSUM_1, FINSEQ_2, FINSEQ_1, XCMPLX_0, XCMPLX_1, EUCLID_2,
+      VECTSP_1;
+
+begin
+
+reserve
+  i, n, j for Nat,
+  a,x,y,z for Real,
+  x1,y1,z1,x2,y2,z2,x3,y3,z3 for Element of REAL,
+  v for Element of n-tuples_on REAL,
+  f1, f2 for FinSequence of REAL,
+  p for Point of TOP-REAL 3;
+
+theorem Th1: ex x, y, z st p= <* x, y, z *>
+  proof
+    the carrier of TOP-REAL 3 = REAL 3 &
+    REAL 3 = 3-tuples_on REAL by EUCLID:25,def 1;
+    then reconsider p'=p as Element of 3-tuples_on REAL;
+    ex x,y,z st p'=<*x,y,z*> by FINSEQ_2:123;
+    hence thesis;
+  end;
+
+definition let p;
+  func p`1 -> Real means
+    :Def1: for f being FinSequence st p=f holds it = f.1;
+    existence
+    proof
+      reconsider f=p as FinSequence of REAL by EUCLID:27;
+      reconsider x=f.1 as Real;
+      take x;
+      thus thesis;
+    end;
+    uniqueness
+    proof
+      let y,z;
+      assume that
+        A1: for f being FinSequence st p = f holds y = f.1 and
+        A2: for f being FinSequence st p = f holds z = f.1;
+        reconsider f = p as FinSequence by EUCLID:27;
+        thus y = f.1 by A1 .= z by A2;
+    end;
+  func p`2 -> Real means
+    :Def2: for f being FinSequence st p=f holds it = f.2;
+    existence
+    proof
+      reconsider f=p as FinSequence of REAL by EUCLID:27;
+      reconsider x=f.2 as Real;
+      take x;
+      thus thesis;
+    end;
+    uniqueness
+    proof
+      let y,z;
+      assume that
+        A3: for f being FinSequence st p = f holds y = f.2 and
+        A4: for f being FinSequence st p = f holds z = f.2;
+        reconsider f = p as FinSequence by EUCLID:27;
+        thus y = f.2 by A3 .= z by A4;
+    end;
+
+  func p`3 -> Real means
+    :Def3: for f being FinSequence st p=f holds it = f.3;
+    existence
+    proof
+      reconsider f=p as FinSequence of REAL by EUCLID:27;
+      reconsider x=f.3 as Real;
+      take x;
+      thus thesis;
+    end;
+    uniqueness
+    proof
+      let y,z;
+      assume that
+        A5: for f being FinSequence st p = f holds y = f.3 and
+        A6: for f being FinSequence st p = f holds z = f.3;
+        reconsider f = p as FinSequence by EUCLID:27;
+        thus y = f.3 by A5 .= z by A6;
+    end;
+end;
+
+definition let x, y, z;
+  func |[ x,y,z ]| -> Point of TOP-REAL 3 equals :Def4: <*x,y,z*>;
+    coherence
+    proof
+      <*x,y,z*> is Element of 3-tuples_on REAL by FINSEQ_2:124;
+      then <*x,y,z*> is Element of REAL 3 by EUCLID:def 1;
+      hence <*x,y,z*> is Point of TOP-REAL 3 by EUCLID:25;
+    end;
+  end;
+
+theorem Th2: |[ x,y,z ]|`1 = x & |[x,y,z]|`2 = y & |[x,y,z]|`3 = z
+  proof
+A1: |[x,y,z]| = <*x,y,z*> by Def4;
+
+A2:   |[x,y,z]|`1 = <*x,y,z*>.1 by A1,Def1
+                     .= x by FINSEQ_1:62;
+A3:   |[x,y,z]|`2 = <*x,y,z*>.2 by A1,Def2
+                     .= y by FINSEQ_1:62;
+      |[x,y,z]|`3 = <*x,y,z*>.3 by A1,Def3
+                     .= z by FINSEQ_1:62;
+    hence thesis by A2,A3;
+ end;
+
+theorem Th3: p = |[ p`1, p`2, p`3 ]|
+  proof
+    consider x,y,z such that
+A1:   p = <*x,y,z*> by Th1;
+    reconsider f = p as FinSequence by EUCLID:27;
+A2: p`1 = f.1 by Def1
+       .= x by A1,FINSEQ_1:62;
+A3: p`2 = f.2 by Def2
+       .= y by A1,FINSEQ_1:62;
+    p`3 = f.3 by Def3
+       .= z by A1,FINSEQ_1:62;
+    hence thesis by A1,A2,A3,Def4;
+  end;
+
+theorem Th4: 0.REAL 3 = |[ 0,0,0 ]|
+  proof
+A1: 0.REAL 3 = 0*3 by EUCLID:def 9
+            .= 3 |-> 0 by EUCLID:def 4
+            .= <* 0, 0, 0 *> by FINSEQ_2:76;
+    then
+A2: (0.REAL 3)`1 = <* 0, 0, 0 *>.1 by Def1
+                .= 0 by FINSEQ_1:62;
+A3: (0.REAL 3)`2 = <* 0, 0, 0 *>.2 by A1,Def2
+                .= 0 by FINSEQ_1:62;
+    (0.REAL 3)`3 = <* 0, 0, 0 *>.3 by A1,Def3
+                .= 0 by FINSEQ_1:62;
+    hence |[0,0,0]| = 0.REAL 3 by A2,A3,Th3;
+  end;
+
+reserve p1,p2,p3,p4 for Point of TOP-REAL 3,
+        x1,x2,y1,y2,z1,z2,n for Real;
+
+theorem Th5: p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]|
+  proof
+    reconsider p1'=p1, p2'=p2 as Element of REAL 3 by EUCLID:25;
+A1: p1 + p2 = p1' + p2' by EUCLID:def 10;
+    then
+      len(p1'+p2') = 3 by EUCLID:28;
+    then
+A2:   dom(p1'+p2') = Seg 3 by FINSEQ_1:def 3;
+A3:   1 in dom(p1'+p2') by A2,FINSEQ_1:3;
+A4: 2 in dom(p1'+p2') by A2,FINSEQ_1:3;
+A5:   3 in dom(p1'+p2') by A2,FINSEQ_1:3;
+A6: p1`1 = p1'.1 & p2`1 = p2'.1 by Def1;
+A7: (p1+p2)`1 = (p1' + p2').1 by A1,Def1
+             .= p1`1 + p2`1 by A3,A6,RVSUM_1:26;
+A8: p1`2 = p1'.2 &
+    p2`2 = p2'.2 by Def2;
+A9: (p1+p2)`2 = (p1' + p2').2 by A1,Def2
+             .= p1`2 + p2`2 by A4,A8,RVSUM_1:26;
+A10: p1`3 = p1'.3 &
+    p2`3 = p2'.3 by Def3;
+    (p1+p2)`3 = (p1' + p2').3 by A1,Def3
+             .= p1`3 + p2`3 by A5,A10,RVSUM_1:26;
+    hence p1 + p2 =
+          |[ p1`1 + p2`1, p1`2 + p2`2, p1`3 + p2`3]| by A7,A9,Th3;
+ end;
+
+theorem Th6: |[x1,y1,z1]| + |[x2,y2,z2]| = |[x1+x2, y1+y2, z1+z2]|
+ proof
+  |[x1, y1, z1]|`1 = x1 & |[x1, y1, z1]|`2 = y1 &
+  |[x1, y1, z1]|`3 = z1 & |[x2, y2, z2]|`1 = x2 &
+  |[x2, y2, z2]|`2 = y2 & |[x2, y2, z2]|`3 = z2 by Th2;
+  hence thesis by Th5;
+ end;
+
+theorem Th7: x*p = |[ x*p`1, x*p`2, x*p`3]|
+  proof
+    reconsider p1=p as Element of REAL 3 by EUCLID:25;
+A1: x*p = x*p1 by EUCLID:def 11;
+A2: p`1 = p1.1 & p`2 = p1.2 & p`3 = p1.3 by Def1,Def2,Def3;
+A3: (x*p)`1 = (x*p1).1 by A1,Def1
+           .= x*(p`1) by A2,RVSUM_1:66;
+A4: (x*p)`2 = (x*p1).2 by A1,Def2
+           .= x*(p`2) by A2,RVSUM_1:66;
+    (x*p)`3 = (x*p1).3 by A1,Def3
+           .= x*(p`3) by A2,RVSUM_1:66;
+    hence x*p = |[ x*p`1, x*p`2, x*p`3]| by A3,A4,Th3;
+ end;
+
+theorem Th8: x * |[x1,y1,z1]| = |[ x*x1, x*y1, x*z1]|
+  proof
+    |[x1,y1,z1]|`1 = x1 & |[x1,y1,z1]|`2 = y1 & |[x1,y1,z1]|`3 = z1 by Th2;
+    hence thesis by Th7;
+  end;
+
+theorem  (x*p)`1 = x * p`1 &
+                 (x*p)`2 = x * p`2 &
+                 (x*p)`3 = x * p`3
+  proof
+A1:  (x*p)`1 = |[ x*p`1 ,x*p`2 ,x*p`3]|`1 by Th7;
+A2:  (x*p)`2 = |[ x*p`1 ,x*p`2 ,x*p`3]|`2 by Th7;
+    (x*p)`3 = |[ x*p`1 ,x*p`2 ,x*p`3]|`3 by Th7;
+    hence thesis by A1,A2,Th2;
+  end;
+
+theorem Th10: -p = |[ -p`1, -p`2, -p`3]|
+  proof
+    thus
+    -p = (-1)*p by EUCLID:43
+    .= |[ (-1)*p`1, (-1)*p`2, (-1)*p`3]| by Th7
+    .= |[ -p`1, (-1)*p`2, (-1)*p`3]| by XCMPLX_1:180
+     .= |[ -p`1, -p`2, (-1)*p`3]| by XCMPLX_1:180
+     .= |[ -p`1, -p`2, -p`3]| by XCMPLX_1:180;
+ end;
+
+theorem  -|[x1,y1,z1]| = |[ -x1, -y1, -z1]|
+  proof
+    |[x1,y1,z1]|`1 = x1 & |[x1,y1,z1]|`2 = y1 & |[x1,y1,z1]|`3 = z1 by Th2;
+    hence thesis by Th10;
+ end;
+
+theorem Th12: p1 - p2 = |[ p1`1 - p2`1, p1`2 - p2`2, p1`3 - p2`3]|
+  proof
+    -p2 = |[ -p2`1, -p2`2, -p2`3]| by Th10;
+    then A1: (-p2)`1 = -p2`1 & (-p2)`2 = -p2`2 & (-p2)`3 = -p2`3 by Th2;
+    thus p1 - p2 = p1 + -p2 by EUCLID:45
+      .= |[ p1`1 + -p2`1, p1`2 + -p2`2, p1`3 + -p2`3]| by A1,Th5
+      .= |[ p1`1 - p2`1, p1`2 + -p2`2, p1`3 + -p2`3]|  by XCMPLX_0:def 8
+      .= |[ p1`1 - p2`1, p1`2 - p2`2, p1`3 + -p2`3]| by XCMPLX_0:def 8
+      .= |[ p1`1 - p2`1, p1`2 - p2`2, p1`3 - p2`3]| by XCMPLX_0:def 8;
+  end;
+
+theorem Th13:
+  |[x1, y1, z1]| - |[x2, y2, z2]| = |[ x1-x2, y1-y2, z1-z2]|
+proof
+  |[x1, y1, z1]|`1 = x1 & |[x1, y1, z1]|`2 = y1 & |[x1, y1, z1]|`3 = z1 &
+  |[x2, y2, z2]|`1 = x2 & |[x2, y2, z2]|`2 = y2 & |[x2, y2, z2]|`3 = z2
+  by Th2;
+  hence thesis by Th12;
+end;
+
+definition let p1, p2;
+  func p1 <X> p2 -> Point of TOP-REAL 3 equals :Def5:
+        |[ (p1`2 * p2`3) - (p1`3 * p2`2) ,
+           (p1`3 * p2`1) - (p1`1 * p2`3) ,
+           (p1`1 * p2`2) - (p1`2 * p2`1) ]|;
+  correctness;
+end;
+
+theorem p = |[x, y, z]| implies
+                p`1 = x & p`2 = y & p`3 = z by Th2;
+
+theorem Th15:
+  |[x1, y1, z1]| <X> |[x2, y2, z2]|
+              = |[ (y1 * z2) - (z1 * y2) ,
+                   (z1 * x2) - (x1 * z2) ,
+                   (x1 * y2) - (y1 * x2) ]|
+proof
+  consider p1 such that
+  A1:  p1 = |[x1, y1, z1]|;
+  A2: p1`1 = x1 & p1`2 = y1 & p1`3 = z1 by A1,Th2;
+  consider p2 such that
+  A3:  p2 = |[x2, y2, z2]|;
+  p2`1 = x2 & p2`2 = y2 & p2`3 = z2 by A3,Th2;
+  hence thesis by A1,A2,A3,Def5;
+end;
+
+theorem (x*p1) <X> p2 =  x* (p1 <X> p2) &
+                 (x*p1) <X> p2 =  p1 <X> (x*p2)
+  proof
+A1:  (x*p1) <X> p2
+        = |[ x*p1`1 ,x*p1`2 ,x*p1`3]| <X> p2 by Th7
+       .= |[ x*p1`1 ,x*p1`2 ,x*p1`3]| <X> |[ p2`1,p2`2,p2`3]| by Th3
+       .= |[ (x*p1`2 * p2`3) - (x*p1`3 * p2`2) ,
+             (x*p1`3 * p2`1) - (x*p1`1 * p2`3) ,
+             (x*p1`1 * p2`2) - (x*p1`2 * p2`1) ]| by Th15;
+     then
+A2:     (x*p1) <X> p2
+        = |[ x * (p1`2 * p2`3) - (x*p1`3 * p2`2),
+             (x*p1`3 * p2`1) - (x*p1`1 * p2`3) ,
+             (x*p1`1 * p2`2) - (x*p1`2 * p2`1) ]| by XCMPLX_1:4
+       .= |[ x * (p1`2 * p2`3) - (x*p1`3 * p2`2),
+             x * (p1`3 * p2`1) - (x*p1`1 * p2`3) ,
+             (x*p1`1 * p2`2) - (x*p1`2 * p2`1) ]| by XCMPLX_1:4
+       .= |[ x * (p1`2 * p2`3) - (x*p1`3 * p2`2),
+             x * (p1`3 * p2`1) - (x*p1`1 * p2`3) ,
+             x * (p1`1 * p2`2) - (x*p1`2 * p2`1) ]| by XCMPLX_1:4
+       .= |[ x * (p1`2 * p2`3) - x * (p1`3 * p2`2),
+             x * (p1`3 * p2`1) - (x*p1`1 * p2`3) ,
+             x * (p1`1 * p2`2) - (x*p1`2 * p2`1) ]| by XCMPLX_1:4
+       .= |[ x * (p1`2 * p2`3) - x * (p1`3 * p2`2),
+             x * (p1`3 * p2`1) - x * (p1`1 * p2`3) ,
+             x * (p1`1 * p2`2) - (x*p1`2 * p2`1) ]| by XCMPLX_1:4
+       .= |[ x * (p1`2 * p2`3) - x * (p1`3 * p2`2),
+             x * (p1`3 * p2`1) - x * (p1`1 * p2`3) ,
+             x * (p1`1 * p2`2) - x * (p1`2 * p2`1) ]| by XCMPLX_1:4
+       .= |[ x * ( (p1`2 * p2`3) - (p1`3 * p2`2) ),
+             x * (p1`3 * p2`1) - x * (p1`1 * p2`3) ,
+             x * (p1`1 * p2`2) - x * (p1`2 * p2`1) ]| by XCMPLX_1:40
+       .= |[ x * ( (p1`2 * p2`3) - (p1`3 * p2`2) ),
+             x * ( (p1`3 * p2`1) - (p1`1 * p2`3) ),
+             x * (p1`1 * p2`2) - x * (p1`2 * p2`1) ]| by XCMPLX_1:40
+       .= |[ x * ( (p1`2 * p2`3) - (p1`3 * p2`2) ),
+             x * ( (p1`3 * p2`1) - (p1`1 * p2`3) ),
+             x * ( (p1`1 * p2`2) - (p1`2 * p2`1) ) ]| by XCMPLX_1:40
+       .= x * |[ (p1`2 * p2`3) - (p1`3 * p2`2),
+                 (p1`3 * p2`1) - (p1`1 * p2`3) ,
+                 (p1`1 * p2`2) - (p1`2 * p2`1) ]| by Th8
+       .= x * (p1 <X> p2) by Def5;
+      (x*p1) <X> p2
+        = |[ p1`2 * (x * p2`3) - (p1`3 * x * p2`2),
+             (p1`3 * x * p2`1) - (p1`1 * x * p2`3),
+             (p1`1 * x * p2`2) - (p1`2 * x * p2`1) ]| by A1,XCMPLX_1:4
+       .= |[ p1`2 * (x * p2`3) - (p1`3 * x * p2`2),
+             p1`3 * (x * p2`1) - (p1`1 * x * p2`3),
+             (p1`1 * x * p2`2) - (p1`2 * x * p2`1) ]| by XCMPLX_1:4
+       .= |[ p1`2 * (x * p2`3) - (p1`3 * x * p2`2),
+             p1`3 * (x * p2`1) - (p1`1 * x * p2`3),
+             p1`1 * (x * p2`2) - (p1`2 * x * p2`1) ]| by XCMPLX_1:4
+       .= |[ p1`2 * (x * p2`3) - p1`3 * (x * p2`2),
+             p1`3 * (x * p2`1) - (p1`1 * x * p2`3),
+             p1`1 * (x * p2`2) - (p1`2 * x * p2`1) ]| by XCMPLX_1:4
+       .= |[ p1`2 * (x * p2`3) - p1`3 * (x * p2`2),
+             p1`3 * (x * p2`1) - p1`1 * (x * p2`3),
+             p1`1 * (x * p2`2) - (p1`2 * x * p2`1) ]| by XCMPLX_1:4
+       .= |[ p1`2 * (x * p2`3) - p1`3 * (x * p2`2),
+             p1`3 * (x * p2`1) - p1`1 * (x * p2`3),
+             p1`1 * (x * p2`2) - p1`2 * (x * p2`1) ]| by XCMPLX_1:4
+       .= |[ p1`1, p1`2, p1`3]| <X> |[ x*p2`1 ,x*p2`2 ,x*p2`3]| by Th15
+       .= p1 <X> |[ x*p2`1 ,x*p2`2 ,x*p2`3]| by Th3
+       .= p1 <X> (x*p2) by Th7;
+     hence thesis by A2;
+  end;
+
+theorem Th17: p1<X>p2 = - p2<X>p1
+  proof
+A1:  (-1) * ( (p2`2 * p1`3) - (p2`3 * p1`2) )
+        = - ( (p2`2 * p1`3) - (p2`3 * p1`2) ) by XCMPLX_1:180
+       .= (p2`3 * p1`2) - (p2`2 * p1`3) by XCMPLX_1:143;
+A2:  (-1) * ( (p2`3 * p1`1) - (p2`1 * p1`3) )
+        = - ( (p2`3 * p1`1) - (p2`1 * p1`3) ) by XCMPLX_1:180
+       .= (p2`1 * p1`3) - (p2`3 * p1`1) by XCMPLX_1:143;
+A3:  (-1) * ( (p2`1 * p1`2) - (p2`2 * p1`1) )
+        = - ( (p2`1 * p1`2) - (p2`2 * p1`1) ) by XCMPLX_1:180
+       .= (p2`2 * p1`1) - (p2`1 * p1`2) by XCMPLX_1:143;
+    - p2 <X> p1  = (-1) * ( p2 <X> p1 ) by EUCLID:43
+          .= (-1) * |[ (p2`2 * p1`3) - (p2`3 * p1`2) ,
+                     (p2`3 * p1`1) - (p2`1 * p1`3) ,
+                     (p2`1 * p1`2) - (p2`2 * p1`1) ]| by Def5
+          .=  |[ (-1) * ( (p2`2 * p1`3) - (p2`3 * p1`2) ),
+                 (-1) * ( (p2`3 * p1`1) - (p2`1 * p1`3) ),
+                 (-1) * ( (p2`1 * p1`2) - (p2`2 * p1`1) ) ]| by Th8
+          .= p1 <X> p2 by A1,A2,A3,Def5;
+      hence thesis;
+  end;
+
+theorem (-p1) <X> p2 = p1 <X> (-p2)
+  proof
+    (-p1) <X> p2
+    = |[ -p1`1, -p1`2, -p1`3 ]| <X> p2 by Th10
+    .= |[ -p1`1, -p1`2, -p1`3 ]| <X> |[ p2`1, p2`2, p2`3 ]| by Th3
+    .= |[ ((-p1`2) * p2`3) - ((-p1`3) * p2`2) ,
+           ((-p1`3) * p2`1) - ((-p1`1) * p2`3) ,
+           ((-p1`1) * p2`2) - ((-p1`2) * p2`1) ]| by Th15
+    .= |[ (p1`2 * (-p2`3)) - ((-p1`3) * p2`2) ,
+           ((-p1`3) * p2`1) - ((-p1`1) * p2`3) ,
+           ((-p1`1) * p2`2) - ((-p1`2) * p2`1) ]| by XCMPLX_1:176
+    .= |[ (p1`2 * (-p2`3)) - (p1`3 * (-p2`2)) ,
+           ((-p1`3) * p2`1) - ((-p1`1) * p2`3) ,
+           ((-p1`1) * p2`2) - ((-p1`2) * p2`1) ]| by XCMPLX_1:176
+    .= |[ (p1`2 * (-p2`3)) - (p1`3 * (-p2`2)) ,
+           (p1`3 * (-p2`1)) - ((-p1`1) * p2`3) ,
+           ((-p1`1) * p2`2) - ((-p1`2) * p2`1) ]| by XCMPLX_1:176
+    .= |[ (p1`2 * (-p2`3)) - (p1`3 * (-p2`2)) ,
+           (p1`3 * (-p2`1)) - (p1`1 * (-p2`3)) ,
+           ((-p1`1) * p2`2) - ((-p1`2) * p2`1) ]| by XCMPLX_1:176
+    .= |[ (p1`2 * (-p2`3)) - (p1`3 * (-p2`2)) ,
+           (p1`3 * (-p2`1)) - (p1`1 * (-p2`3)) ,
+           (p1`1 * (-p2`2)) - ((-p1`2) * p2`1) ]| by XCMPLX_1:176
+    .= |[ (p1`2 * (-p2`3)) - (p1`3 * (-p2`2)) ,
+           (p1`3 * (-p2`1)) - (p1`1 * (-p2`3)) ,
+           (p1`1 * (-p2`2)) - (p1`2 * (-p2`1)) ]| by XCMPLX_1:176
+    .= |[ p1`1, p1`2, p1`3 ]| <X> |[ -p2`1, -p2`2, -p2`3 ]| by Th15
+    .= |[ p1`1, p1`2, p1`3 ]| <X> -p2 by Th10;
+    hence thesis by Th3;
+  end;
+
+theorem |[0, 0, 0]| <X> |[x, y, z]| = 0.REAL 3
+  proof
+    |[0, 0, 0]| <X> |[x, y, z]|
+    = |[ (0 * z) - (0 * y) ,
+         (0 * x) - (0 * z) ,
+         (0 * y) - (0 * x) ]| by Th15
+    .= |[ 0 * (z - y) ,
+          0 * (x - z) ,
+          0 * (y - x) ]|
+    .= 0 * |[ (z - y), (x - z), (y - x) ]| by Th8;
+    hence thesis by EUCLID:33;
+  end;
+
+theorem |[x1, 0, 0]| <X> |[x2, 0, 0]| = 0.REAL 3
+  proof
+     |[x1, 0, 0]| <X> |[x2, 0, 0]|
+     = |[ (0 * 0) - (0 * 0) ,
+          (0 * x2) - (x1 * 0) ,
+          (x1 * 0) - (0 * x2) ]| by Th15
+     .= |[ 0 * (0 - 0),
+           0 * (x2 - x1),
+           0 * (x1 - x2) ]|
+     .= 0 * |[ (0 - 0), (x2 - x1), (x1 - x2) ]| by Th8
+     .= 0.REAL 3 by EUCLID:33;
+     hence thesis;
+  end;
+
+theorem |[0, y1, 0]| <X> |[0, y2, 0]| = 0.REAL 3
+  proof
+     |[0, y1, 0]| <X> |[0, y2, 0]|
+     = |[ (y1 * 0) - (0 * y2),
+          (0  * 0) - (0 * 0 ),
+          (0 * y2) - (y1 * 0) ]| by Th15
+     .= |[ 0 * (y1 - y2),
+           0 * (0 - 0),
+           0 * (y2 - y1) ]|
+     .= 0 * |[ (y1 - y2), (0 - 0), (y2 - y1) ]| by Th8
+     .= 0.REAL 3 by EUCLID:33;
+     hence thesis;
+  end;
+
+theorem  |[0, 0, z1]| <X> |[0, 0, z2]| = 0.REAL 3
+  proof
+     |[0, 0, z1]| <X> |[0, 0, z2]|
+     = |[ (0 * z2) - (z1 * 0),
+          (z1 * 0) - (0 * z2),
+          (0 * 0) - (0 * 0) ]| by Th15
+     .= |[ 0 * (z2 - z1),
+           0 * (z1 - z2),
+           0 * (0 * 0) ]|
+     .= 0 * |[ (z2 - z1), (z1 - z2), (0 - 0) ]| by Th8
+     .= 0.REAL 3 by EUCLID:33;
+     hence thesis;
+  end;
+
+theorem Th23: p1 <X> (p2+p3) = ( p1 <X> p2 ) + ( p1 <X> p3 )
+  proof
+A1:    p2+p3 = |[ p2`1 + p3`1, p2`2 + p3`2, p2`3 + p3`3]| by Th5;
+A2:    (p2+p3)`1 = p2`1 + p3`1 by A1,Th2;
+A3:    (p2+p3)`2 = p2`2 + p3`2 by A1,Th2;
+A4:    (p2+p3)`3 = p2`3 + p3`3 by A1,Th2;
+A5: p1 <X> (p2+p3)
+       = |[  (p1`2 * (p2+p3)`3) - (p1`3 * (p2+p3)`2),
+             (p1`3 * (p2+p3)`1) - (p1`1 * (p2+p3)`3),
+             (p1`1 * (p2+p3)`2) - (p1`2 * (p2+p3)`1) ]| by Def5
+      .= |[  (p1`2 * p2`3 + p1`2 * p3`3 ) - (p1`3 * (p2`2 + p3`2) ),
+             (p1`3 * (p2`1 + p3`1) ) - (p1`1 * (p2`3 + p3`3) ),
+             (p1`1 * (p2`2 + p3`2) ) - (p1`2 * (p2`1 + p3`1) ) ]|
+                      by A2,A3,A4,XCMPLX_1:8
+
+      .= |[  (p1`2 * p2`3 + p1`2 * p3`3 ) - (p1`3 * p2`2 + p1`3 * p3`2 ),
+             (p1`3 * (p2`1 + p3`1) ) - (p1`1 * (p2`3 + p3`3) ),
+             (p1`1 * (p2`2 + p3`2) ) - (p1`2 * (p2`1 + p3`1) ) ]|
+                      by XCMPLX_1:8
+
+      .= |[  (p1`2 * p2`3 + p1`2 * p3`3 ) - (p1`3 * p2`2 + p1`3 * p3`2 ),
+             (p1`3 * p2`1 + p1`3 * p3`1 ) - (p1`1 * (p2`3 + p3`3) ),
+             (p1`1 * (p2`2 + p3`2) ) - (p1`2 * (p2`1 + p3`1) ) ]|
+                      by XCMPLX_1:8
+
+      .= |[  (p1`2 * p2`3 + p1`2 * p3`3 ) - (p1`3 * p2`2 + p1`3 * p3`2 ),
+             (p1`3 * p2`1 + p1`3 * p3`1 ) - (p1`1 * p2`3 + p1`1 * p3`3 ),
+             (p1`1 * (p2`2 + p3`2) ) - (p1`2 * (p2`1 + p3`1) ) ]|
+                      by XCMPLX_1:8
+
+      .= |[  (p1`2 * p2`3 + p1`2 * p3`3) - (p1`3 * p2`2 + p1`3 * p3`2),
+             (p1`3 * p2`1 + p1`3 * p3`1) - (p1`1 * p2`3 + p1`1 * p3`3),
+             (p1`1 * p2`2 + p1`1 * p3`2) - (p1`2 * (p2`1 + p3`1) ) ]|
+                      by XCMPLX_1:8
+
+      .= |[  (p1`2 * p2`3 + p1`2 * p3`3) - (p1`3 * p2`2 + p1`3 * p3`2),
+             (p1`3 * p2`1 + p1`3 * p3`1) - (p1`1 * p2`3 + p1`1 * p3`3),
+             (p1`1 * p2`2 + p1`1 * p3`2) - (p1`2 * p2`1 + p1`2 * p3`1) ]|
+                      by XCMPLX_1:8
+      .= |[  p1`2 * p2`3 + p1`2 * p3`3 - p1`3 * p2`2 - p1`3 * p3`2,
+             p1`3 * p2`1 + p1`3 * p3`1 - (p1`1 * p2`3 + p1`1 * p3`3),
+             p1`1 * p2`2 + p1`1 * p3`2 - (p1`2 * p2`1 + p1`2 * p3`1) ]|
+                      by XCMPLX_1:36
+
+      .= |[  p1`2 * p2`3 + p1`2 * p3`3 - p1`3 * p2`2 - p1`3 * p3`2,
+             p1`3 * p2`1 + p1`3 * p3`1 - p1`1 * p2`3 - p1`1 * p3`3,
+             p1`1 * p2`2 + p1`1 * p3`2 - (p1`2 * p2`1 + p1`2 * p3`1) ]|
+                      by XCMPLX_1:36
+
+      .= |[  p1`2 * p2`3 + p1`2 * p3`3 - p1`3 * p2`2 - p1`3 * p3`2,
+             p1`3 * p2`1 + p1`3 * p3`1 - p1`1 * p2`3 - p1`1 * p3`3,
+             p1`1 * p2`2 + p1`1 * p3`2 - p1`2 * p2`1 - p1`2 * p3`1 ]|
+                      by XCMPLX_1:36
+
+      .= |[  p1`2 * p2`3 - p1`3 * p2`2 + p1`2 * p3`3 - p1`3 * p3`2,
+             p1`3 * p2`1 + p1`3 * p3`1 - p1`1 * p2`3 - p1`1 * p3`3,
+             p1`1 * p2`2 + p1`1 * p3`2 - p1`2 * p2`1 - p1`2 * p3`1 ]|
+                      by XCMPLX_1:29
+
+      .= |[  p1`2 * p2`3 - p1`3 * p2`2 + p1`2 * p3`3 - p1`3 * p3`2,
+             p1`3 * p2`1 - p1`1 * p2`3 + p1`3 * p3`1 - p1`1 * p3`3,
+             p1`1 * p2`2 + p1`1 * p3`2 - p1`2 * p2`1 - p1`2 * p3`1 ]|
+                      by XCMPLX_1:29
+
+      .= |[  p1`2 * p2`3 - p1`3 * p2`2 + p1`2 * p3`3 - p1`3 * p3`2,
+             p1`3 * p2`1 - p1`1 * p2`3 + p1`3 * p3`1 - p1`1 * p3`3,
+             p1`1 * p2`2 - p1`2 * p2`1 + p1`1 * p3`2 - p1`2 * p3`1 ]|
+                      by XCMPLX_1:29;
+
+    ( p1 <X> p2 ) + ( p1 <X> p3 )
+       = |[  (p1`2 * p2`3) - (p1`3 * p2`2),
+             (p1`3 * p2`1) - (p1`1 * p2`3),
+             (p1`1 * p2`2) - (p1`2 * p2`1) ]| + ( p1 <X> p3 ) by Def5
+
+      .= |[ (p1`2 * p2`3) - (p1`3 * p2`2),
+            (p1`3 * p2`1) - (p1`1 * p2`3),
+            (p1`1 * p2`2) - (p1`2 * p2`1) ]| +
+
+         |[ (p1`2 * p3`3) - (p1`3 * p3`2),
+            (p1`3 * p3`1) - (p1`1 * p3`3),
+            (p1`1 * p3`2) - (p1`2 * p3`1) ]| by Def5
+
+       .= |[ (p1`2 * p2`3 - p1`3 * p2`2) + (p1`2 * p3`3 - p1`3 * p3`2),
+             (p1`3 * p2`1 - p1`1 * p2`3) + (p1`3 * p3`1 - p1`1 * p3`3),
+             (p1`1 * p2`2 - p1`2 * p2`1) + (p1`1 * p3`2 - p1`2 * p3`1) ]|
+                   by Th6
+       .= |[ p1`2 * p2`3 - p1`3 * p2`2 - (p1`3 * p3`2 - p1`2 * p3`3),
+             p1`3 * p2`1 - p1`1 * p2`3 + (p1`3 * p3`1 - p1`1 * p3`3),
+             p1`1 * p2`2 - p1`2 * p2`1 + (p1`1 * p3`2 - p1`2 * p3`1) ]|
+                  by XCMPLX_1:38
+
+       .= |[ p1`2 * p2`3 - p1`3 * p2`2 - (p1`3 * p3`2 - p1`2 * p3`3),
+             p1`3 * p2`1 - p1`1 * p2`3 - (p1`1 * p3`3- p1`3 * p3`1),
+             p1`1 * p2`2 - p1`2 * p2`1 + (p1`1 * p3`2 - p1`2 * p3`1) ]|
+                  by XCMPLX_1:38
+
+       .= |[ p1`2 * p2`3 - p1`3 * p2`2 - (p1`3 * p3`2 - p1`2 * p3`3),
+             p1`3 * p2`1 - p1`1 * p2`3 - (p1`1 * p3`3 - p1`3 * p3`1),
+             p1`1 * p2`2 - p1`2 * p2`1 - (p1`2 * p3`1 - p1`1 * p3`2) ]|
+                  by XCMPLX_1:38
+
+       .= |[ p1`2 * p2`3 - p1`3 * p2`2 - p1`3 * p3`2 + p1`2 * p3`3,
+             p1`3 * p2`1 - p1`1 * p2`3 - (p1`1 * p3`3 - p1`3 * p3`1),
+             p1`1 * p2`2 - p1`2 * p2`1 - (p1`2 * p3`1 - p1`1 * p3`2) ]|
+                  by XCMPLX_1:37
+
+       .= |[ p1`2 * p2`3 - p1`3 * p2`2 - p1`3 * p3`2 + p1`2 * p3`3,
+             p1`3 * p2`1 - p1`1 * p2`3 - p1`1 * p3`3 + p1`3 * p3`1,
+             p1`1 * p2`2 - p1`2 * p2`1 - (p1`2 * p3`1 - p1`1 * p3`2) ]|
+                  by XCMPLX_1:37
+
+       .= |[ p1`2 * p2`3 - p1`3 * p2`2 - p1`3 * p3`2 + p1`2 * p3`3,
+             p1`3 * p2`1 - p1`1 * p2`3 - p1`1 * p3`3 + p1`3 * p3`1,
+             p1`1 * p2`2 - p1`2 * p2`1 - p1`2 * p3`1 + p1`1 * p3`2 ]|
+                  by XCMPLX_1:37
+
+      .= |[  p1`2 * p2`3 - p1`3 * p2`2 + p1`2 * p3`3 - p1`3 * p3`2,
+             p1`3 * p2`1 - p1`1 * p2`3 - p1`1 * p3`3 + p1`3 * p3`1,
+             p1`1 * p2`2 - p1`2 * p2`1 - p1`2 * p3`1 + p1`1 * p3`2 ]|
+                  by XCMPLX_1:29
+      .= |[  p1`2 * p2`3 - p1`3 * p2`2 + p1`2 * p3`3 - p1`3 * p3`2,
+             p1`3 * p2`1 - p1`1 * p2`3 + p1`3 * p3`1 - p1`1 * p3`3,
+             p1`1 * p2`2 - p1`2 * p2`1 - p1`2 * p3`1 + p1`1 * p3`2 ]|
+                  by XCMPLX_1:29
+      .= |[  p1`2 * p2`3 - p1`3 * p2`2 + p1`2 * p3`3 - p1`3 * p3`2,
+             p1`3 * p2`1 - p1`1 * p2`3 + p1`3 * p3`1 - p1`1 * p3`3,
+             p1`1 * p2`2 - p1`2 * p2`1 + p1`1 * p3`2 - p1`2 * p3`1 ]|
+                  by XCMPLX_1:29;
+       hence thesis by A5;
+  end;
+
+theorem Th24: (p1+p2) <X> p3 = ( p1 <X> p3 ) + ( p2 <X> p3 )
+  proof
+    (p1+p2) <X> p3
+        = - ( p3 <X> (p1+p2) ) by Th17
+       .= - ( ( p3 <X> p1 ) + ( p3 <X> p2 ) ) by Th23
+       .= - ( ( p3 <X> p1 ) + -( p2 <X> p3 ) ) by Th17
+       .= - ( ( p3 <X> p1 ) - ( p2 <X> p3 ) ) by EUCLID:45
+       .= - ( p3 <X> p1 ) + ( p2 <X> p3 ) by EUCLID:48;
+    hence thesis by Th17;
+  end;
+
+theorem  p1 <X> p1 = 0.REAL 3
+  proof
+    p1 <X> p1
+      = |[ (p1`2 * p1`3) - (p1`3 * p1`2) ,
+           (p1`3 * p1`1) - (p1`1 * p1`3) ,
+           (p1`1 * p1`2) - (p1`2 * p1`1) ]| by Def5
+     .= |[ 0 ,
+           (p1`3 * p1`1) - (p1`1 * p1`3) ,
+           (p1`1 * p1`2) - (p1`2 * p1`1) ]| by XCMPLX_1:14
+     .= |[ 0, 0,
+           (p1`1 * p1`2) - (p1`2 * p1`1) ]| by XCMPLX_1:14;
+    hence thesis by Th4,XCMPLX_1:14;
+  end;
+
+theorem (p1+p2) <X> (p3+p4) = p1<X>p3 + p1<X>p4 + p2<X>p3 + p2<X>p4
+  proof
+    (p1+p2) <X> (p3+p4)
+        = ( p1 <X> (p3+p4) ) + ( p2 <X> (p3+p4) ) by Th24
+       .= ( p1 <X> p3 + p1 <X> p4 )
+          + ( p2 <X> (p3+p4) ) by Th23
+       .= ( p1 <X> p3 + p1 <X> p4 )
+          +  (p2 <X> p3 + p2 <X> p4 ) by Th23;
+      hence thesis by EUCLID:30;
+  end;
+
+::
+:: Inner Product for Point of TOP-REAL 3
+::
+
+theorem Th27:
+  p = <* p`1, p`2, p`3 *>
+proof
+  consider x, y, z being Element of REAL such that
+  A1: p = <* x, y, z *> by Th1;
+  reconsider f = p as FinSequence by EUCLID:27;
+  <* x, y, z *> = <* f.1, y, z *> by A1,FINSEQ_1:62
+  .= <* f.1, f.2, z *> by A1,FINSEQ_1:62
+  .= <* f.1, f.2, f.3 *> by A1,FINSEQ_1:62
+  .= <* p`1, f.2, f.3 *> by Def1
+  .= <* p`1, p`2, f.3 *> by Def2
+  .= <* p`1, p`2, p`3 *> by Def3;
+  hence thesis by A1;
+end;
+
+theorem Th28:
+  for f1, f2 be FinSequence of REAL st len f1 = 3 & len f2 = 3 holds
+  mlt(f1, f2) = <* f1.1*f2.1, f1.2*f2.2, f1.3*f2.3 *>
+proof
+  let f1, f2 be FinSequence of REAL such that
+  A1:len f1 = 3 & len f2 = 3;
+  A2: f2 = <* f2.1, f2.2, f2.3 *> by A1,FINSEQ_1:62;
+  mlt(f1, f2) = multreal.:(f1, f2) by RVSUM_1:def 9
+  .= multreal.:(<* f1.1, f1.2, f1.3 *>, <* f2.1, f2.2, f2.3 *>)
+      by A1,A2,FINSEQ_1:62
+  .= <* multreal.(f1.1, f2.1),
+  multreal.(f1.2, f2.2), multreal.(f1.3, f2.3)*>
+  by FINSEQ_2:90
+  .= <* f1.1*f2.1, multreal.(f1.2, f2.2), multreal.(f1.3, f2.3)*>
+  by VECTSP_1:def 14
+  .= <* f1.1*f2.1, f1.2*f2.2, multreal.(f1.3, f2.3)*>
+  by VECTSP_1:def 14;
+  hence thesis by VECTSP_1:def 14;
+end;
+
+theorem Th29:
+  |(p1,p2)| = p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3
+proof
+  consider f1, f2 being FinSequence of REAL such that
+  A1: f1 = p1 & f2 = p2 & |(p1,p2)| = |(f1,f2)| by EUCLID_2:def 2;
+  A2: len f1 = len <* p1`1, p1`2, p1`3 *> by A1,Th27
+  .= 3 by FINSEQ_1:62;
+  A3: len f2 = len <* p2`1, p2`2, p2`3 *> by A1,Th27
+  .= 3 by FINSEQ_1:62;
+  |(p1,p2)| = Sum mlt(f1, f2) by A1,EUCLID_2:def 1
+  .= Sum <* f1.1*f2.1, f1.2*f2.2, f1.3*f2.3 *> by A2,A3,Th28
+  .= f1.1*f2.1 + f1.2*f2.2 + f1.3*f2.3 by RVSUM_1:108
+  .= p1`1*f2.1 + f1.2*f2.2 + f1.3*f2.3 by A1,Def1
+  .= p1`1*p2`1 + f1.2*f2.2 + f1.3*f2.3 by A1,Def1
+  .= p1`1*p2`1 + p1`2*f2.2 + f1.3*f2.3 by A1,Def2
+  .= p1`1*p2`1 + p1`2*p2`2 + f1.3*f2.3 by A1,Def2
+  .= p1`1*p2`1 + p1`2*p2`2 + p1`3*f2.3 by A1,Def3;
+  hence thesis by A1,Def3;
+end;
+
+theorem Th30:
+  |( |[ x1, x2, x3 ]|, |[ y1, y2, y3 ]| )| = x1*y1 + x2*y2 + x3*y3
+proof
+  consider p1 such that
+  A1: p1 = |[x1, x2, x3]|;
+  A2: p1`1 = x1 & p1`2 = x2 & p1`3 = x3 by A1,Th2;
+  consider p2 such that
+  A3: p2 = |[y1, y2, y3]|;
+  p2`1 = y1 & p2`2 = y2 & p2`3 = y3 by A3,Th2;
+  hence thesis by A1,A2,A3,Th29;
+end;
+
+::
+:: Scalar and Vector : Triple Products
+::
+definition let p1, p2, p3;
+     func |{ p1,p2,p3 }| -> real number equals :Def6:
+      |(p1, p2<X>p3)|;
+  coherence;
+end;
+
+theorem |{ p1, p1, p2 }| = 0 &
+        |{ p2, p1, p2 }| = 0
+  proof
+ A1: p1<X>p2 = |[ (p1`2 * p2`3) - (p1`3 * p2`2),
+                  (p1`3 * p2`1) - (p1`1 * p2`3),
+                  (p1`1 * p2`2) - (p1`2 * p2`1) ]| by Def5;
+ A2: |{ p1, p1, p2 }|
+        = |(p1, p1<X>p2)| by Def6
+       .= p1`1*(p1<X>p2)`1 + p1`2*(p1<X>p2)`2 + p1`3*(p1<X>p2)`3
+              by Th29
+       .= p1`1*((p1`2 * p2`3) - (p1`3 * p2`2)) +
+          p1`2*(p1<X>p2)`2 + p1`3*(p1<X>p2)`3 by A1,Th2
+       .= p1`1*( (p1`2 * p2`3) - (p1`3 * p2`2) ) +
+          p1`2*( (p1`3 * p2`1) - (p1`1 * p2`3) ) +
+          p1`3*(p1<X>p2)`3 by A1,Th2
+       .= p1`1*( (p1`2 * p2`3) - (p1`3 * p2`2) ) +
+          p1`2*( (p1`3 * p2`1) - (p1`1 * p2`3) ) +
+          p1`3*( (p1`1 * p2`2) - (p1`2 * p2`1) ) by A1,Th2
+       .= ( p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2) ) +
+          p1`2*( (p1`3 * p2`1) - (p1`1 * p2`3) ) +
+          p1`3*( (p1`1 * p2`2) - (p1`2 * p2`1) ) by XCMPLX_1:40
+       .= ( p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2) ) +
+          ( p1`2*(p1`3 * p2`1) - p1`2*(p1`1 * p2`3) ) +
+          p1`3*( (p1`1 * p2`2) - (p1`2 * p2`1) ) by XCMPLX_1:40
+
+       .= ( p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2) ) +
+          ( p1`2*(p1`3 * p2`1) - p1`2*(p1`1 * p2`3) ) +
+          ( p1`3*(p1`1 * p2`2) - p1`3*(p1`2 * p2`1) ) by XCMPLX_1:40
+       .=   p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2)   -
+          ( p1`2*(p1`1 * p2`3) - p1`2*(p1`3 * p2`1) ) +
+          ( p1`3*(p1`1 * p2`2) - p1`3*(p1`2 * p2`1) )
+              by XCMPLX_1:38
+       .=   p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2)   -
+            p1`2*(p1`1 * p2`3) +  p1`2*(p1`3 * p2`1)  +
+          ( p1`3*(p1`1 * p2`2) - p1`3*(p1`2 * p2`1) )
+              by XCMPLX_1:37
+       .=   p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2)   -
+            p1`2*(p1`1 * p2`3) +  p1`2*(p1`3 * p2`1)  -
+          ( p1`3*(p1`2 * p2`1) - p1`3*(p1`1 * p2`2) )
+              by XCMPLX_1:38
+       .=   p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2)  -
+            p1`2*(p1`1 * p2`3) + p1`2*(p1`3 * p2`1)  -
+            p1`3*(p1`2 * p2`1) + p1`3*(p1`1 * p2`2)
+              by XCMPLX_1:37
+
+       .=   p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2)  -
+            p1`1*(p1`2 * p2`3) + p1`2*(p1`3 * p2`1)  -
+            p1`3*(p1`2 * p2`1) + p1`3*(p1`1 * p2`2)
+            by XCMPLX_1:4
+
+       .=   p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2)  -
+            p1`1*(p1`2 * p2`3) + p1`2*(p1`3 * p2`1)  -
+            p1`3*(p1`2 * p2`1) + p1`1*(p1`3 * p2`2)
+            by XCMPLX_1:4
+
+       .=   p1`1*(p1`2 * p2`3) - p1`1*(p1`3 * p2`2)  -
+            p1`1*(p1`2 * p2`3) + p1`2*(p1`3 * p2`1)  -
+            p1`2*(p1`3 * p2`1) + p1`1*(p1`3 * p2`2)
+            by XCMPLX_1:4
+
+       .=   - p1`1*(p1`3 * p2`2) - p1`1*(p1`2 * p2`3) + p1`1*(p1`2 * p2`3)
+            + p1`2*(p1`3 * p2`1) - p1`2*(p1`3 * p2`1) + p1`1*(p1`3 * p2`2)
+            by XCMPLX_1:158
+
+       .=   - p1`1*(p1`3 * p2`2) + p1`2*(p1`3 * p2`1) - p1`2*(p1`3 * p2`1)
+            + p1`1*(p1`3 * p2`2)
+                by XCMPLX_1:27
+       .=   - p1`1*(p1`3 * p2`2) + p1`1*(p1`3 * p2`2)
+                by XCMPLX_1:26
+       .=   0 - p1`1*(p1`3 * p2`2) + p1`1*(p1`3 * p2`2)
+                by XCMPLX_1:150
+        .=  0  by XCMPLX_1:27;
+    |{ p2, p1, p2 }|
+        = |(p2, p1<X>p2)| by Def6
+       .= p2`1*(p1<X>p2)`1 + p2`2*(p1<X>p2)`2 + p2`3*(p1<X>p2)`3
+              by Th29
+       .= p2`1*((p1`2 * p2`3) - (p1`3 * p2`2)) +
+          p2`2*(p1<X>p2)`2 + p2`3*(p1<X>p2)`3 by A1,Th2
+       .= p2`1*( (p1`2 * p2`3) - (p1`3 * p2`2) ) +
+          p2`2*( (p1`3 * p2`1) - (p1`1 * p2`3) ) +
+          p2`3*(p1<X>p2)`3 by A1,Th2
+       .= p2`1*( (p1`2 * p2`3) - (p1`3 * p2`2) ) +
+          p2`2*( (p1`3 * p2`1) - (p1`1 * p2`3) ) +
+          p2`3*( (p1`1 * p2`2) - (p1`2 * p2`1) ) by A1,Th2
+
+       .= ( p2`1*(p1`2 * p2`3) - p2`1*(p1`3 * p2`2) ) +
+          p2`2*( (p1`3 * p2`1) - (p1`1 * p2`3) ) +
+          p2`3*( (p1`1 * p2`2) - (p1`2 * p2`1) ) by XCMPLX_1:40
+       .= ( p2`1*(p1`2 * p2`3) - p2`1*(p1`3 * p2`2) ) +
+          ( p2`2*(p1`3 * p2`1) - p2`2*(p1`1 * p2`3) ) +
+          p2`3*( (p1`1 * p2`2) - (p1`2 * p2`1) ) by XCMPLX_1:40
+
+       .= ( p2`1*(p1`2 * p2`3) - p2`1*(p1`3 * p2`2) ) +
+          ( p2`2*(p1`3 * p2`1) - p2`2*(p1`1 * p2`3) ) +
+          ( p2`3*(p1`1 * p2`2) - p2`3*(p1`2 * p2`1) ) by XCMPLX_1:40
+       .=   p2`1*(p1`2 * p2`3) - p2`1*(p1`3 * p2`2)   -
+          ( p2`2*(p1`1 * p2`3) - p2`2*(p1`3 * p2`1) ) +
+          ( p2`3*(p1`1 * p2`2) - p2`3*(p1`2 * p2`1) )
+              by XCMPLX_1:38
+
+       .=   p2`1*(p1`2 * p2`3) - p2`1*(p1`3 * p2`2)  -
+            p2`2*(p1`1 * p2`3) + p2`2*(p1`3 * p2`1)  +
+          ( p2`3*(p1`1 * p2`2) - p2`3*(p1`2 * p2`1) )
+              by XCMPLX_1:37
+
+       .=   p2`1*(p1`2 * p2`3) - p2`1*(p1`3 * p2`2)  -
+            p2`2*(p1`1 * p2`3) + p2`2*(p1`3 * p2`1)  -
+          ( p2`3*(p1`2 * p2`1) - p2`3*(p1`1 * p2`2) )
+              by XCMPLX_1:38
+
+       .=   p2`1*(p1`2 * p2`3) - p2`1*(p1`3 * p2`2)
+            - p2`2*(p1`1 * p2`3) + p2`2*(p1`3 * p2`1)
+            - p2`3*(p1`2 * p2`1) + p2`3*(p1`1 * p2`2)
+              by XCMPLX_1:37
+
+       .=   p2`3*(p1`2 * p2`1) - p2`1*(p1`3 * p2`2)
+            - p2`2*(p1`1 * p2`3) + p2`2*(p1`3 * p2`1)
+            - p2`3*(p1`2 * p2`1) + p2`3*(p1`1 * p2`2)
+              by XCMPLX_1:4
+
+       .=   p2`3*(p1`2 * p2`1) - p2`1*(p1`3 * p2`2)
+          - p2`2*(p1`1 * p2`3) + p2`2*(p1`3 * p2`1)
+          - p2`3*(p1`2 * p2`1) + p2`2*(p1`1 * p2`3)
+              by XCMPLX_1:4
+
+       .=   p2`3*(p1`2 * p2`1) - p2`1*(p1`3 * p2`2)
+          - p2`2*(p1`1 * p2`3) + p2`1*(p1`3 * p2`2)
+          - p2`3*(p1`2 * p2`1) + p2`2*(p1`1 * p2`3)
+              by XCMPLX_1:4
+
+       .= - p2`2*(p1`1 * p2`3) + p2`3*(p1`2 * p2`1)
+          - p2`1*(p1`3 * p2`2) + p2`1*(p1`3 * p2`2)
+          - p2`3*(p1`2 * p2`1) + p2`2*(p1`1 * p2`3)
+              by XCMPLX_1:159
+
+       .= - p2`2*(p1`1 * p2`3) + p2`3*(p1`2 * p2`1)
+          - p2`3*(p1`2 * p2`1) + p2`2*(p1`1 * p2`3)
+              by XCMPLX_1:27
+
+       .=   p2`3*(p1`2 * p2`1) - p2`3*(p1`2 * p2`1)
+          - p2`2*(p1`1 * p2`3) + p2`2*(p1`1 * p2`3)
+              by XCMPLX_1:159
+       .= 0 - p2`2*(p1`1 * p2`3) + p2`2*(p1`1 * p2`3)
+              by XCMPLX_1:14;
+      hence thesis by A2,XCMPLX_1:27;
+  end;
+
+theorem
+  p1 <X> ( p2<X>p3 ) = ( |(p1,p3)| * p2 ) - ( |(p1,p2)| * p3 )
+  proof
+  A1: p1 <X> (p2 <X> p3)
+  = |[ p1`1, p1`2, p1`3 ]| <X> (p2 <X> p3) by Th3
+  .= |[ p1`1, p1`2, p1`3 ]| <X> (|[ (p2`2 * p3`3) - (p2`3 * p3`2) ,
+  (p2`3 * p3`1) - (p2`1 * p3`3) , (p2`1 * p3`2) - (p2`2 * p3`1) ]|) by Def5
+  .= |[(p1`2*((p2`1 * p3`2) - (p2`2 * p3`1)))
+  - (p1`3*((p2`3 * p3`1) - (p2`1 * p3`3))),
+  (p1`3*((p2`2 * p3`3) - (p2`3 * p3`2)))
+  - (p1`1*((p2`1 * p3`2) - (p2`2 * p3`1))),
+  (p1`1*((p2`3 * p3`1) - (p2`1 * p3`3)))
+  - (p1`2*((p2`2 * p3`3) - (p2`3 * p3`2)))]| by Th15;
+
+  A2:
+(p1`2*((p2`1 * p3`2) - (p2`2 * p3`1)))
+  - (p1`3*((p2`3 * p3`1) - (p2`1 * p3`3)))
+  = (p1`2*(p2`1 * p3`2) - p1`2*(p2`2 * p3`1))
+  - (p1`3*((p2`3 * p3`1) - (p2`1 * p3`3))) by XCMPLX_1:40
+  .= (p1`2*(p2`1 * p3`2) - p1`2*(p2`2 * p3`1))
+  - (p1`3*(p2`3 * p3`1) - p1`3*(p2`1 * p3`3)) by XCMPLX_1:40
+  .= (p1`2*(p2`1 * p3`2) - p1`2*(p2`2 * p3`1))
+  - p1`3*(p2`3 * p3`1) + p1`3*(p2`1 * p3`3) by XCMPLX_1:37
+  .= (p1`2*(p2`1 * p3`2) - p1`2*(p2`2 * p3`1))
+  + p1`3*(p2`1 * p3`3) - p1`3*(p2`3 * p3`1) by XCMPLX_1:29
+  .= p1`2*(p2`1 * p3`2) + p1`3*(p2`1 * p3`3)
+  - p1`2*(p2`2 * p3`1) - p1`3*(p2`3 * p3`1) by XCMPLX_1:29
+  .= p1`2*(p2`1 * p3`2) + p1`3*(p2`1 * p3`3)
+  - (p1`2*(p2`2 * p3`1) + p1`3*(p2`3 * p3`1)) by XCMPLX_1:36
+  .= (p1`2*p3`2)*p2`1 + p1`3*(p2`1 * p3`3)
+  - (p1`2*(p2`2 * p3`1) + p1`3*(p2`3 * p3`1)) by XCMPLX_1:4
+  .= (p1`2*p3`2)*p2`1 + (p1`3*p3`3)*p2`1
+  - (p1`2*(p2`2 * p3`1) + p1`3*(p2`3 * p3`1)) by XCMPLX_1:4
+  .= (p1`2*p3`2)*p2`1 + (p1`3*p3`3)*p2`1
+  - ((p1`2*p2`2)*p3`1 + p1`3*(p2`3 * p3`1)) by XCMPLX_1:4
+  .= (p1`2*p3`2)*p2`1 + (p1`3*p3`3)*p2`1
+  - ((p1`2*p2`2)*p3`1 + (p1`3*p2`3)*p3`1) by XCMPLX_1:4
+  .= (p1`2*p3`2)*p2`1 + (p1`3*p3`3)*p2`1 + p1`1*p2`1*p3`1
+  - ((p1`2*p2`2)*p3`1 + (p1`3*p2`3)*p3`1 + p1`1*p2`1*p3`1) by XCMPLX_1:32
+  .= (p1`2*p3`2)*p2`1 + (p1`3*p3`3)*p2`1 + p1`1*p3`1*p2`1
+  - ((p1`2*p2`2)*p3`1 + (p1`3*p2`3)*p3`1 + p1`1*p2`1*p3`1) by XCMPLX_1:4
+  .= (p1`2*p3`2 + p1`3*p3`3 + p1`1*p3`1)*p2`1
+  - ((p1`2*p2`2)*p3`1 + (p1`3*p2`3)*p3`1 + p1`1*p2`1*p3`1) by XCMPLX_1:9
+  .= (p1`2*p3`2 + p1`3*p3`3 + p1`1*p3`1)*p2`1
+  - (p1`2*p2`2 + p1`3*p2`3 + p1`1*p2`1)*p3`1 by XCMPLX_1:9;
+
+  A3:
+p1`2*p3`2 + p1`3*p3`3 + p1`1*p3`1
+   = p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3 by XCMPLX_1:1;
+A4:  p1`2*p2`2 + p1`3*p2`3 + p1`1*p2`1
+   = p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3 by XCMPLX_1:1;
+
+  A5:
+(p1`3*((p2`2 * p3`3) - (p2`3 * p3`2)))
+  - (p1`1*((p2`1 * p3`2) - (p2`2 * p3`1)))
+  = (p1`3*(p2`2 * p3`3) - p1`3*(p2`3 * p3`2))
+  - (p1`1*((p2`1 * p3`2) - (p2`2 * p3`1))) by XCMPLX_1:40
+  .= (p1`3*(p2`2 * p3`3) - p1`3*(p2`3 * p3`2))
+  - (p1`1*(p2`1 * p3`2) - p1`1*(p2`2 * p3`1)) by XCMPLX_1:40
+  .= (p1`3*(p2`2 * p3`3) - p1`3*(p2`3 * p3`2))
+  - p1`1*(p2`1 * p3`2) + p1`1*(p2`2 * p3`1) by XCMPLX_1:37
+  .= (p1`3*(p2`2 * p3`3) - p1`3*(p2`3 * p3`2))
+  + p1`1*(p2`2 * p3`1) - p1`1*(p2`1 * p3`2) by XCMPLX_1:29
+  .= p1`3*(p2`2 * p3`3) + p1`1*(p2`2 * p3`1)
+  - p1`3*(p2`3 * p3`2) - p1`1*(p2`1 * p3`2) by XCMPLX_1:29
+  .= p1`3*(p2`2 * p3`3) + p1`1*(p2`2 * p3`1)
+  - (p1`3*(p2`3 * p3`2) + p1`1*(p2`1 * p3`2)) by XCMPLX_1:36
+  .= p1`3*p3`3*p2`2 + p1`1*(p2`2 * p3`1)
+  - (p1`3*(p2`3 * p3`2) + p1`1*(p2`1 * p3`2)) by XCMPLX_1:4
+  .= p1`3*p3`3*p2`2 + p1`1*p3`1*p2`2
+  - (p1`3*(p2`3 * p3`2) + p1`1*(p2`1 * p3`2)) by XCMPLX_1:4
+  .= p1`3*p3`3*p2`2 + p1`1*p3`1*p2`2
+  - (p1`3*p2`3*p3`2 + p1`1*(p2`1 * p3`2)) by XCMPLX_1:4
+  .= p1`3*p3`3*p2`2 + p1`1*p3`1*p2`2
+  - (p1`3*p2`3*p3`2 + p1`1*p2`1*p3`2) by XCMPLX_1:4
+  .= p1`3*p3`3*p2`2 + p1`1*p3`1*p2`2 + p1`2*p2`2*p3`2
+  - (p1`3*p2`3*p3`2 + p1`1*p2`1*p3`2 + p1`2*p2`2*p3`2) by XCMPLX_1:32
+  .= p1`3*p3`3*p2`2 + p1`1*p3`1*p2`2 + p1`2*p3`2*p2`2
+  - (p1`3*p2`3*p3`2 + p1`1*p2`1*p3`2 + p1`2*p2`2*p3`2) by XCMPLX_1:4
+  .= (p1`3*p3`3 + p1`1*p3`1 + p1`2*p3`2)*p2`2
+  - (p1`3*p2`3*p3`2 + p1`1*p2`1*p3`2 + p1`2*p2`2*p3`2) by XCMPLX_1:9
+  .= (p1`3*p3`3 + p1`1*p3`1 + p1`2*p3`2)*p2`2
+  - (p1`3*p2`3 + p1`1*p2`1 + p1`2*p2`2)*p3`2 by XCMPLX_1:9;
+
+  A6:
+p1`3*p3`3 + p1`1*p3`1 + p1`2*p3`2
+  = p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3 by XCMPLX_1:1;
+A7:  p1`3*p2`3 + p1`1*p2`1 + p1`2*p2`2
+  = p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3 by XCMPLX_1:1;
+(p1`1*((p2`3 * p3`1) - (p2`1 * p3`3)))
+  - (p1`2*((p2`2 * p3`3) - (p2`3 * p3`2)))
+  = (p1`1*(p2`3 * p3`1) - p1`1*(p2`1 * p3`3))
+  - (p1`2*((p2`2 * p3`3) - (p2`3 * p3`2))) by XCMPLX_1:40
+  .= (p1`1*(p2`3 * p3`1) - p1`1*(p2`1 * p3`3))
+  - (p1`2*(p2`2 * p3`3) - p1`2*(p2`3 * p3`2)) by XCMPLX_1:40
+  .= (p1`1*(p2`3 * p3`1) - p1`1*(p2`1 * p3`3))
+  - p1`2*(p2`2 * p3`3) + p1`2*(p2`3 * p3`2) by XCMPLX_1:37
+  .= (p1`1*(p2`3 * p3`1) - p1`1*(p2`1 * p3`3))
+  + p1`2*(p2`3 * p3`2) - p1`2*(p2`2 * p3`3) by XCMPLX_1:29
+  .= p1`1*(p2`3 * p3`1) + p1`2*(p2`3 * p3`2)
+  - p1`1*(p2`1 * p3`3) - p1`2*(p2`2 * p3`3) by XCMPLX_1:29
+  .= p1`1*(p2`3 * p3`1) + p1`2*(p2`3 * p3`2)
+  - (p1`1*(p2`1 * p3`3) + p1`2*(p2`2 * p3`3)) by XCMPLX_1:36
+  .= p1`1*p3`1*p2`3 + p1`2*(p2`3 * p3`2)
+  - (p1`1*(p2`1 * p3`3) + p1`2*(p2`2 * p3`3)) by XCMPLX_1:4
+  .= p1`1*p3`1*p2`3 + p1`2*p3`2*p2`3
+  - (p1`1*(p2`1 * p3`3) + p1`2*(p2`2 * p3`3)) by XCMPLX_1:4
+  .= p1`1*p3`1*p2`3 + p1`2*p3`2*p2`3
+  - (p1`1*p2`1*p3`3 + p1`2*(p2`2 * p3`3)) by XCMPLX_1:4
+  .= p1`1*p3`1*p2`3 + p1`2*p3`2*p2`3
+  - (p1`1*p2`1*p3`3 + p1`2*p2`2*p3`3) by XCMPLX_1:4
+  .= p1`1*p3`1*p2`3 + p1`2*p3`2*p2`3 + p1`3*p2`3*p3`3
+  - (p1`1*p2`1*p3`3 + p1`2*p2`2*p3`3 + p1`3*p2`3*p3`3) by XCMPLX_1:32
+  .= p1`1*p3`1*p2`3 + p1`2*p3`2*p2`3 + p1`3*p3`3*p2`3
+  - (p1`1*p2`1*p3`3 + p1`2*p2`2*p3`3 + p1`3*p2`3*p3`3) by XCMPLX_1:4
+  .= (p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3)*p2`3
+  - (p1`1*p2`1*p3`3 + p1`2*p2`2*p3`3 + p1`3*p2`3*p3`3) by XCMPLX_1:9
+  .= (p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3)*p2`3
+  - (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3)*p3`3 by XCMPLX_1:9;
+  then
+  p1 <X> (p2 <X> p3)
+  = |[ (p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3)*p2`1,
+  (p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3)*p2`2,
+  (p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3)*p2`3 ]|
+  - |[ (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3)*p3`1,
+  (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3)*p3`2,
+  (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3)*p3`3 ]| by A1,A2,A3,A4,A5,A6,A7,Th13
+  .= (p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3) * |[p2`1, p2`2, p2`3 ]|
+  - |[ (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3)*p3`1,
+  (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3)*p3`2,
+  (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3)*p3`3 ]| by Th8
+  .= (p1`1*p3`1 + p1`2*p3`2 + p1`3*p3`3) * |[ p2`1, p2`2, p2`3 ]|
+  - (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3) * |[ p3`1, p3`2, p3`3 ]| by Th8
+  .= |(p1, p3)| * |[ p2`1, p2`2, p2`3 ]|
+  - (p1`1*p2`1 + p1`2*p2`2 + p1`3*p2`3) * |[ p3`1, p3`2, p3`3 ]| by Th29
+  .= |(p1, p3)| * |[ p2`1, p2`2, p2`3 ]|
+  - |(p1, p2 )| * |[ p3`1, p3`2, p3`3 ]| by Th29
+  .= |(p1, p3)| * p2 - |(p1, p2 )| * |[ p3`1, p3`2, p3`3 ]| by Th3;
+  hence thesis by Th3;
+  end;
+
+theorem Th33:
+  |{ p1, p2, p3 }| = |{ p2, p3, p1 }|
+proof
+|{ p1, p2, p3 }| = |(p1, p2<X>p3)| by Def6
+  .= |(p1,
+  |[ (p2`2*p3`3) - (p2`3*p3`2),
+  (p2`3*p3`1) - (p2`1*p3`3), (p2`1*p3`2) - (p2`2*p3`1) ]|)| by Def5
+  .= |(|[ p1`1, p1`2, p1`3 ]|,
+  |[ (p2`2*p3`3) - (p2`3*p3`2),
+  (p2`3*p3`1) - (p2`1*p3`3), (p2`1*p3`2) - (p2`2*p3`1) ]|)| by Th3
+  .= p1`1*((p2`2*p3`3) - (p2`3*p3`2))
+  + p1`2*((p2`3*p3`1) - (p2`1*p3`3))
+  + p1`3*((p2`1*p3`2) - (p2`2*p3`1)) by Th30
+  .= p1`1*(p2`2*p3`3) - p1`1*(p2`3*p3`2)
+  + p1`2*((p2`3*p3`1) - (p2`1*p3`3))
+  + p1`3*((p2`1*p3`2) - (p2`2*p3`1)) by XCMPLX_1:40
+  .= p1`1*(p2`2*p3`3) - p1`1*(p2`3*p3`2)
+  + (p1`2*(p2`3*p3`1) - p1`2*(p2`1*p3`3))
+  + p1`3*((p2`1*p3`2) - (p2`2*p3`1)) by XCMPLX_1:40
+  .= p1`1*(p2`2*p3`3) - p1`1*(p2`3*p3`2)
+  + (p1`2*(p2`3*p3`1) - p1`2*(p2`1*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:40
+  .= p2`2*(p1`1*p3`3) - p1`1*(p2`3*p3`2)
+  + (p1`2*(p2`3*p3`1) - p1`2*(p2`1*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p1`2*(p2`3*p3`1) - p1`2*(p2`1*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p1`2*(p2`1*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  + (p2`1*(p1`3*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  + (p2`1*(p1`3*p3`2) - p2`2*(p1`3*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  - (p2`2*(p1`3*p3`1) - p2`1*(p1`3*p3`2)) by XCMPLX_1:38
+  .= p2`2*(p1`1*p3`3)
+  - p2`3*(p1`1*p3`2) + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  - p2`2*(p1`3*p3`1) + p2`1*(p1`3*p3`2) by XCMPLX_1:37
+  .= p2`1*(p1`3*p3`2)
+  + (p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2) - p2`2*(p1`3*p3`1)
+  + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))) by XCMPLX_1:29
+  .= p2`1*(p1`3*p3`2)
+  + (p2`3*(p1`2*p3`1)
+  + (p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2) - p2`2*(p1`3*p3`1))
+  - p2`1*(p1`2*p3`3)) by XCMPLX_1:29
+  .= p2`1*(p1`3*p3`2)
+  - (p2`1*(p1`2*p3`3) - (p2`3*(p1`2*p3`1)
+   + (p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2) - p2`2*(p1`3*p3`1)))) by XCMPLX_1:38
+  .= p2`1*(p1`3*p3`2) - p2`1*(p1`2*p3`3)
+  + (p2`3*(p1`2*p3`1)
+   + (p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2) - p2`2*(p1`3*p3`1))) by XCMPLX_1:37
+  .= p2`1*(p1`3*p3`2 - p1`2*p3`3)
+  + (p2`3*(p1`2*p3`1)
+   + (p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2) - p2`2*(p1`3*p3`1))) by XCMPLX_1:40
+  .= p2`1*(p1`3*p3`2 - p1`2*p3`3)
+  + (p2`3*(p1`2*p3`1)
+   + (p2`2*(p1`1*p3`3) - p2`2*(p1`3*p3`1) - p2`3*(p1`1*p3`2))) by XCMPLX_1:21
+  .= p2`1*(p1`3*p3`2 - p1`2*p3`3)
+  + (p2`3*(p1`2*p3`1)
+   + (p2`2*(p1`1*p3`3 - p1`3*p3`1) - p2`3*(p1`1*p3`2))) by XCMPLX_1:40
+  .= p2`1*(p1`3*p3`2 - p1`2*p3`3)
+  + (p2`2*(p1`1*p3`3 - p1`3*p3`1)
+  - (p2`3*(p1`1*p3`2) - p2`3*(p1`2*p3`1))) by XCMPLX_1:37
+  .= p2`1*(p1`3*p3`2 - p1`2*p3`3)
+  + (p2`2*(p1`1*p3`3 - p1`3*p3`1)
+  + (p2`3*(p1`2*p3`1) - p2`3*(p1`1*p3`2))) by XCMPLX_1:38
+  .= p2`1*(p1`3*p3`2 - p1`2*p3`3)
+  + (p2`2*(p1`1*p3`3 - p1`3*p3`1) + p2`3*(p1`2*p3`1 - p1`1*p3`2))
+  by XCMPLX_1:40
+  .= p2`1*(p3`2*p1`3 - p3`3*p1`2)
+  + p2`2*(p3`3*p1`1 - p3`1*p1`3)
+  + p2`3*(p3`1*p1`2 - p3`2*p1`1) by XCMPLX_1:1
+  .= |( |[ p2`1, p2`2, p2`3 ]|,
+  |[ p3`2*p1`3 - p3`3*p1`2, p3`3*p1`1 - p3`1*p1`3, p3`1*p1`2 - p3`2*p1`1 ]| )|
+  by Th30
+  .= |( p2,
+  |[ p3`2*p1`3 - p3`3*p1`2, p3`3*p1`1 - p3`1*p1`3, p3`1*p1`2 - p3`2*p1`1 ]| )|
+  by Th3
+  .= |( p2, p3 <X> p1 )| by Def5;
+    hence thesis by Def6;
+  end;
+
+theorem
+  |{ p1, p2, p3 }| = |{ p3, p1, p2 }| by Th33;
+
+theorem
+  |{ p1, p2, p3 }| = |( p1<X>p2, p3 )|
+proof
+  A1: |{ p1, p2, p3 }| = |(p1, p2<X>p3)| by Def6
+  .= |(p1,
+  |[ (p2`2*p3`3) - (p2`3*p3`2),
+  (p2`3*p3`1) - (p2`1*p3`3), (p2`1*p3`2) - (p2`2*p3`1) ]|)| by Def5
+  .= |(|[ p1`1, p1`2, p1`3 ]|,
+  |[ (p2`2*p3`3) - (p2`3*p3`2),
+  (p2`3*p3`1) - (p2`1*p3`3), (p2`1*p3`2) - (p2`2*p3`1) ]|)| by Th3
+  .= p1`1*((p2`2*p3`3) - (p2`3*p3`2))
+  + p1`2*((p2`3*p3`1) - (p2`1*p3`3))
+  + p1`3*((p2`1*p3`2) - (p2`2*p3`1)) by Th30
+  .= p1`1*(p2`2*p3`3) - p1`1*(p2`3*p3`2)
+  + p1`2*((p2`3*p3`1) - (p2`1*p3`3))
+  + p1`3*((p2`1*p3`2) - (p2`2*p3`1)) by XCMPLX_1:40
+  .= p1`1*(p2`2*p3`3) - p1`1*(p2`3*p3`2)
+  + (p1`2*(p2`3*p3`1) - p1`2*(p2`1*p3`3))
+  + p1`3*((p2`1*p3`2) - (p2`2*p3`1)) by XCMPLX_1:40
+  .= p1`1*(p2`2*p3`3) - p1`1*(p2`3*p3`2)
+  + (p1`2*(p2`3*p3`1) - p1`2*(p2`1*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:40
+  .= p2`2*(p1`1*p3`3) - p1`1*(p2`3*p3`2)
+  + (p1`2*(p2`3*p3`1) - p1`2*(p2`1*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p1`2*(p2`3*p3`1) - p1`2*(p2`1*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p1`2*(p2`1*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  + (p1`3*(p2`1*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  + (p2`1*(p1`3*p3`2) - p1`3*(p2`2*p3`1)) by XCMPLX_1:4
+  .= p2`2*(p1`1*p3`3) - p2`3*(p1`1*p3`2)
+  + (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  + (p2`1*(p1`3*p3`2) - p2`2*(p1`3*p3`1)) by XCMPLX_1:4;
+
+  |{ p1, p2, p3 }|
+  = (p2`3*(p1`2*p3`1) - p2`1*(p1`2*p3`3))
+  - p2`3*(p1`1*p3`2) + p2`2*(p1`1*p3`3)
+  + (p2`1*(p1`3*p3`2) - p2`2*(p1`3*p3`1)) by A1,XCMPLX_1:30
+  .= p2`3*(p1`2*p3`1) - (p2`1*(p1`2*p3`3) + p2`3*(p1`1*p3`2))
+  + p2`2*(p1`1*p3`3)
+  + (p2`1*(p1`3*p3`2) - p2`2*(p1`3*p3`1)) by XCMPLX_1:36
+  .= p2`3*(p1`2*p3`1)
+  - ((p2`1*(p1`2*p3`3) + p2`3*(p1`1*p3`2)) - p2`2*(p1`1*p3`3))
+  + (p2`1*(p1`3*p3`2) - p2`2*(p1`3*p3`1)) by XCMPLX_1:37
+  .= p2`3*(p1`2*p3`1)
+  + (p2`2*(p1`1*p3`3) - (p2`1*(p1`2*p3`3) + p2`3*(p1`1*p3`2)))
+  + (p2`1*(p1`3*p3`2) - p2`2*(p1`3*p3`1)) by XCMPLX_1:38
+  .= p2`3*(p1`2*p3`1)
+  + (p2`1*(p1`3*p3`2) - p2`2*(p1`3*p3`1))
+  + (p2`2*(p1`1*p3`3) - (p2`1*(p1`2*p3`3) + p2`3*(p1`1*p3`2))) by XCMPLX_1:1
+  .= p2`3*(p1`2*p3`1)
+  - (p2`2*(p1`3*p3`1) - p2`1*(p1`3*p3`2))
+  + (p2`2*(p1`1*p3`3) - (p2`1*(p1`2*p3`3) + p2`3*(p1`1*p3`2))) by XCMPLX_1:38
+  .= p2`3*(p1`2*p3`1) - p2`2*(p1`3*p3`1)
+  + p2`1*(p1`3*p3`2)
+  + (p2`2*(p1`1*p3`3) - (p2`1*(p1`2*p3`3) + p2`3*(p1`1*p3`2))) by XCMPLX_1:37
+  .= p2`3*(p1`2*p3`1) - p2`2*(p1`3*p3`1)
+  + p2`1*(p1`3*p3`2)
+  + ((p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3)) - p2`3*(p1`1*p3`2)) by XCMPLX_1:36
+  .= p2`3*(p1`2*p3`1) - p2`2*(p1`3*p3`1)
+  + (p2`1*(p1`3*p3`2)
+  + ((p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3)) - p2`3*(p1`1*p3`2))) by XCMPLX_1:1
+  .= p2`3*(p1`2*p3`1) - p2`2*(p1`3*p3`1)
+  + (p2`1*(p1`3*p3`2)
+  - (p2`3*(p1`1*p3`2) - (p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3)))) by XCMPLX_1:38
+  .= p2`3*(p1`2*p3`1) - p2`2*(p1`3*p3`1)
+  + ((p2`1*(p1`3*p3`2) - p2`3*(p1`1*p3`2))
+  + (p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3))) by XCMPLX_1:37
+  .= p2`3*(p1`2*p3`1) - p2`2*(p1`3*p3`1)
+  + (p2`1*(p1`3*p3`2) - p2`3*(p1`1*p3`2))
+  + (p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3)) by XCMPLX_1:1
+  .= (p2`3*p1`2)*p3`1 - p2`2*(p1`3*p3`1)
+  + (p2`1*(p1`3*p3`2) - p2`3*(p1`1*p3`2))
+  + (p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3)) by XCMPLX_1:4
+  .= (p2`3*p1`2)*p3`1 - (p2`2*p1`3)*p3`1
+  + (p2`1*(p1`3*p3`2) - p2`3*(p1`1*p3`2))
+  + (p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3)) by XCMPLX_1:4
+  .= (p2`3*p1`2)*p3`1 - (p2`2*p1`3)*p3`1
+  + ((p2`1*p1`3)*p3`2 - p2`3*(p1`1*p3`2))
+  + (p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3)) by XCMPLX_1:4
+  .= (p2`3*p1`2)*p3`1 - (p2`2*p1`3)*p3`1
+  + ((p2`1*p1`3)*p3`2 - (p2`3*p1`1)*p3`2)
+  + (p2`2*(p1`1*p3`3) - p2`1*(p1`2*p3`3)) by XCMPLX_1:4
+  .= (p2`3*p1`2)*p3`1 - (p2`2*p1`3)*p3`1
+  + ((p2`1*p1`3)*p3`2 - (p2`3*p1`1)*p3`2)
+  + ((p2`2*p1`1)*p3`3 - p2`1*(p1`2*p3`3)) by XCMPLX_1:4
+  .= (p2`3*p1`2)*p3`1 - (p2`2*p1`3)*p3`1
+  + ((p2`1*p1`3)*p3`2 - (p2`3*p1`1)*p3`2)
+  + ((p2`2*p1`1)*p3`3 - (p2`1*p1`2)*p3`3) by XCMPLX_1:4
+  .= (p2`3*p1`2 - p2`2*p1`3)*p3`1
+  + ((p2`1*p1`3)*p3`2 - (p2`3*p1`1)*p3`2)
+  + ((p2`2*p1`1)*p3`3 - (p2`1*p1`2)*p3`3) by XCMPLX_1:40
+  .= (p2`3*p1`2 - p2`2*p1`3)*p3`1
+  + (p2`1*p1`3 - p2`3*p1`1)*p3`2
+  + ((p2`2*p1`1)*p3`3 - (p2`1*p1`2)*p3`3) by XCMPLX_1:40
+  .= (p2`3*p1`2 - p2`2*p1`3)*p3`1
+  + (p2`1*p1`3 - p2`3*p1`1)*p3`2
+  + (p2`2*p1`1 - p2`1*p1`2)*p3`3 by XCMPLX_1:40
+  .= |( |[ p2`3*p1`2 - p2`2*p1`3,
+  p2`1*p1`3 - p2`3*p1`1, p2`2*p1`1 - p2`1*p1`2 ]|,
+  |[ p3`1, p3`2, p3`3 ]| )| by Th30
+  .= |( p1 <X> p2, |[ p3`1, p3`2, p3`3 ]| )| by Def5
+  .= |( p1 <X> p2, p3 )| by Th3;
+  hence thesis;
+end;

@@ -1,0 +1,13 @@
+HIDDEN
+TARSKI
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+SETFAM_1
+#
+SubFamEx
+#
+M1 ;;
+ªM5 F1 ;;ªM2 K10 F1 ;;;&ª&R2 B2 B1 ;ªP1 B2 ;;ª&P1 B2 ;ªR2 B2 B1 ;;;;
+#
+!

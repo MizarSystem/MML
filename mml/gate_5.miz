@@ -1,0 +1,1006 @@
+:: Correctness of the High Speed Array Multiplier Circuits
+::  by Hiroshi Yamazaki and Katsumi Wasaki
+::
+:: Received August 28, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary GATE_1, BOOLE, GATE_5;
+ notation XBOOLE_0, GATE_1;
+ constructors GATE_1, XBOOLE_0;
+ clusters XBOOLE_0;
+ theorems GATE_1;
+
+begin :: Logical Equivalence of Plain Array Multiplier.
+
+Lm1:
+ for a,b being set holds ($XOR3(a,b,{}) iff $XOR2(a,b)) &
+  ($XOR3(a,{},b) iff $XOR2(a,b)) & ($XOR3({},a,b) iff $XOR2(a,b))
+proof let a,b be set;
+      ($XOR3(a,b,{}) iff ($a & not $b) or (not $a & $b)) &
+    ($XOR3(a,{},b) iff ($a & not $b) or (not $a & $b)) &
+    ($XOR3({},a,b) iff ($a & not $b) or (not $a & $b)) by GATE_1:18;
+   hence thesis by GATE_1:8;
+end;
+
+Lm2:
+ for a,b being set holds ($MAJ3(a,b,{}) iff $AND2(a,b)) &
+  ($MAJ3(a,{},b) iff $AND2(a,b)) & ($MAJ3({},a,b) iff $AND2(a,b))
+proof let a,b be set;
+      ($MAJ3(a,b,{}) iff $a & $b) &
+    ($MAJ3(a,{},b) iff $a & $b) &
+    ($MAJ3({},a,b) iff $a & $b) by GATE_1:19;
+   hence thesis by GATE_1:6;
+end;
+
+::The following 4 definitions are for normal 2-by-2 bit multiplier.
+
+definition let x0,x1,y0,y1 be set;
+  func MULT210(x1,y1,x0,y0) -> set equals
+  :Def1:      AND2(x0,y0);
+  correctness;
+
+  func MULT211(x1,y1,x0,y0) -> set equals
+  :Def2: ADD1(AND2(x1,y0),AND2(x0,y1),{});
+  correctness;
+
+  func MULT212(x1,y1,x0,y0) -> set equals
+  :Def3: ADD2({},AND2(x1,y1),AND2(x1,y0),AND2(x0,y1),{});
+  correctness;
+
+  func MULT213(x1,y1,x0,y0) -> set equals
+  :Def4: CARR2({},AND2(x1,y1),AND2(x1,y0),AND2(x0,y1),{});
+  correctness;
+end;
+
+::
+:: Logical Equivalence of 2-by-2 bit Plain Array Multiplier.
+::
+
+::The following theorem shows that
+:: outputs of '2-by-2 bit plain Array Multiplier' are equivalent to
+:: outputs of '2-by-2 normal Multiplier'
+:: We assume that there is no feedback loop in multiplier.
+
+theorem ::2AM:
+  for x0,x1,y0,y1,z0,z1,z2,z3,q00,q01,c01,q11,c11 being set holds
+  ($q00 iff $AND2(x0,y0))&
+  ($q01 iff $XOR3(AND2(x1,y0),AND2(x0,y1),{} ))&
+  ($c01 iff $MAJ3(AND2(x1,y0),AND2(x0,y1),{} ))&
+  ($q11 iff $XOR3(AND2(x1,y1),{} ,c01))&
+  ($c11 iff $MAJ3(AND2(x1,y1),{} ,c01))&
+  ($z0 iff $q00)&
+  ($z1 iff $q01)&
+  ($z2 iff $q11)&
+  ($z3 iff $c11)
+ implies
+  ($z0 iff $MULT210(x1,y1,x0,y0))&
+  ($z1 iff $MULT211(x1,y1,x0,y0))&
+  ($z2 iff $MULT212(x1,y1,x0,y0))&
+  ($z3 iff $MULT213(x1,y1,x0,y0))
+
+proof
+ let x0,x1,y0,y1,z0,z1,z2,z3,q00,q01,c01,q11,c11 be set;
+ assume that A1: ($q00 iff $AND2(x0,y0)) and
+  A2: ($q01 iff $XOR3(AND2(x1,y0),AND2(x0,y1),{} )) and
+  A3: ($c01 iff $MAJ3(AND2(x1,y0),AND2(x0,y1),{} )) and
+  A4: ($q11 iff $XOR3(AND2(x1,y1),{} ,c01)) and
+  A5: ($c11 iff $MAJ3(AND2(x1,y1),{} ,c01)) and
+  A6: ($z0 iff $q00) and
+  A7: ($z1 iff $q01) and
+  A8: ($z2 iff $q11) and
+  A9: ($z3 iff $c11);
+::
+:: set AND2
+::
+  set x1y0 = AND2(x1,y0);
+  set x0y1 = AND2(x0,y1); set x1y1 = AND2(x1,y1);
+
+         A10: $q11 iff $XOR2(AND2(x1,y1),c01) by A4,Lm1;
+
+         A11: $c11 iff $AND2(AND2(x1,y1),c01) by A5,Lm2;
+::
+:: z0
+::
+  thus $z0 iff $MULT210(x1,y1,x0,y0) by A1,A6,Def1;
+  thus $z1 iff $MULT211(x1,y1,x0,y0) by A2,A7,Def2;
+::
+:: z2
+::
+     set m212 = MULT212(x1,y1,x0,y0);
+       m212 = ADD2({},x1y1,x1y0,x0y1,{}) by Def3
+         .= XOR3({},x1y1,MAJ3(x1y0,x0y1,{})) by GATE_1:def 37;
+     then $m212 iff $XOR2(x1y1,MAJ3(x1y0,x0y1,{})) by Lm1;
+     then $m212 iff ( $x1y1 & not $MAJ3(x1y0,x0y1,{}))
+            or (not $x1y1 & $MAJ3(x1y0,x0y1,{})) by GATE_1:8;
+
+  hence $z2 iff $MULT212(x1,y1,x0,y0) by A3,A8,A10,GATE_1:8;
+::
+:: z3
+::
+     set m213 = MULT213(x1,y1,x0,y0);
+       m213 = CARR2({},x1y1,x1y0,x0y1,{}) by Def4
+         .= MAJ3({},x1y1,MAJ3(x1y0,x0y1,{})) by GATE_1:def 38;
+     then $m213 iff $AND2(x1y1,MAJ3(x1y0,x0y1,{})) by Lm2;
+     then $m213 iff $x1y1 & $MAJ3(x1y0,x0y1,{}) by GATE_1:6;
+
+  hence $z3 iff $MULT213(x1,y1,x0,y0) by A3,A9,A11,GATE_1:6;
+end;
+
+::
+:: Logical Equivalence of 3-by-3 bit Plain Array Multiplier.
+::
+
+::[sequence 1]
+::The following 5 definitions are for normal 3-by-2 bit multiplier.
+
+definition let x0,x1,x2,y0,y1 be set;
+  func MULT310(x2,x1,y1,x0,y0) -> set equals
+  :Def5:      AND2(x0,y0);
+  correctness;
+
+  func MULT311(x2,x1,y1,x0,y0) -> set equals
+  :Def6: ADD1(AND2(x1,y0),AND2(x0,y1),{});
+  correctness;
+
+  func MULT312(x2,x1,y1,x0,y0) -> set equals
+  :Def7: ADD2(AND2(x2,y0),AND2(x1,y1),
+              AND2(x1,y0),AND2(x0,y1),{});
+  correctness;
+
+  func MULT313(x2,x1,y1,x0,y0) -> set equals
+  :Def8: ADD3({} ,AND2(x2,y1),
+              AND2(x2,y0),AND2(x1,y1),
+              AND2(x1,y0),AND2(x0,y1),{});
+  correctness;
+
+  func MULT314(x2,x1,y1,x0,y0) -> set equals
+  :Def9: CARR3({} ,AND2(x2,y1),
+               AND2(x2,y0),AND2(x1,y1),
+               AND2(x1,y0),AND2(x0,y1),{});
+  correctness;
+end;
+
+::[sequence 2]
+::The following 4 definitions are for normal 3-by-3 bit multiplier.
+
+definition let x0,x1,x2,y0,y1,y2 be set;
+  func MULT321(x2,y2,x1,y1,x0,y0) -> set equals
+  :Def10: ADD1(MULT312(x2,x1,y1,x0,y0),AND2(x0,y2),{});
+  correctness;
+
+  func MULT322(x2,y2,x1,y1,x0,y0) -> set equals
+  :Def11: ADD2(MULT313(x2,x1,y1,x0,y0),AND2(x1,y2),
+              MULT312(x2,x1,y1,x0,y0),AND2(x0,y2),{});
+  correctness;
+
+  func MULT323(x2,y2,x1,y1,x0,y0) -> set equals
+  :Def12: ADD3(MULT314(x2,x1,y1,x0,y0),AND2(x2,y2),
+              MULT313(x2,x1,y1,x0,y0),AND2(x1,y2),
+              MULT312(x2,x1,y1,x0,y0),AND2(x0,y2),{});
+  correctness;
+
+  func MULT324(x2,y2,x1,y1,x0,y0) -> set equals
+  :Def13: CARR3(MULT314(x2,x1,y1,x0,y0),AND2(x2,y2),
+               MULT313(x2,x1,y1,x0,y0),AND2(x1,y2),
+               MULT312(x2,x1,y1,x0,y0),AND2(x0,y2),{});
+  correctness;
+end;
+
+::The following theorem shows that
+:: outputs of '3-by-3 bit plain Array Multiplier' are equivalent to
+:: outputs of '3-by-3 normal (sequencial) Multiplier'
+:: We assume that there is no feedback loop in multiplier.
+
+theorem ::3AM:
+  for x0,x1,x2,y0,y1,y2,z0,z1,z2,z3,z4,z5,
+ q00,q01,q02,c01,c02,q11,q12,c11,c12,q21,q22,c21,c22 being set holds
+  ($q00 iff $AND2(x0,y0))&
+  ($q01 iff $XOR3(AND2(x1,y0),AND2(x0,y1),{} ))&
+  ($c01 iff $MAJ3(AND2(x1,y0),AND2(x0,y1),{} ))&
+  ($q02 iff $XOR3(AND2(x2,y0),AND2(x1,y1),{} ))&
+  ($c02 iff $MAJ3(AND2(x2,y0),AND2(x1,y1),{} ))&
+  ($q11 iff $XOR3(q02 ,AND2(x0,y2),c01))&
+  ($c11 iff $MAJ3(q02 ,AND2(x0,y2),c01))&
+  ($q12 iff $XOR3(AND2(x2,y1),AND2(x1,y2),c02))&
+  ($c12 iff $MAJ3(AND2(x2,y1),AND2(x1,y2),c02))&
+  ($q21 iff $XOR3(q12 ,{} ,c11))&
+  ($c21 iff $MAJ3(q12 ,{} ,c11))&
+  ($q22 iff $XOR3(AND2(x2,y2),c21 ,c12))&
+  ($c22 iff $MAJ3(AND2(x2,y2),c21, c12))&
+  ($z0 iff $q00)&
+  ($z1 iff $q01)&
+  ($z2 iff $q11)&
+  ($z3 iff $q21)&
+  ($z4 iff $q22)&
+  ($z5 iff $c22)
+ implies
+  ($z0 iff $MULT310(x2, x1,y1,x0,y0))&
+  ($z1 iff $MULT311(x2, x1,y1,x0,y0))&
+  ($z2 iff $MULT321(x2,y2,x1,y1,x0,y0))&
+  ($z3 iff $MULT322(x2,y2,x1,y1,x0,y0))&
+  ($z4 iff $MULT323(x2,y2,x1,y1,x0,y0))&
+  ($z5 iff $MULT324(x2,y2,x1,y1,x0,y0))
+
+proof
+ let x0,x1,x2,y0,y1,y2,z0,z1,z2,z3,z4,z5,
+     q00,q01,q02,c01,c02,q11,q12,c11,c12,q21,q22,c21,c22 be set;
+ assume that A1: ($q00 iff $AND2(x0,y0)) and
+  A2: ($q01 iff $XOR3(AND2(x1,y0),AND2(x0,y1),{} )) and
+  A3: ($c01 iff $MAJ3(AND2(x1,y0),AND2(x0,y1),{} )) and
+  A4: ($q02 iff $XOR3(AND2(x2,y0),AND2(x1,y1),{} )) and
+  A5: ($c02 iff $MAJ3(AND2(x2,y0),AND2(x1,y1),{} )) and
+  A6: ($q11 iff $XOR3(q02 ,AND2(x0,y2),c01)) and
+  A7: ($c11 iff $MAJ3(q02 ,AND2(x0,y2),c01)) and
+  A8: ($q12 iff $XOR3(AND2(x2,y1),AND2(x1,y2),c02)) and
+  A9: ($c12 iff $MAJ3(AND2(x2,y1),AND2(x1,y2),c02)) and
+  A10: ($q21 iff $XOR3(q12 ,{} ,c11)) and
+  A11: ($c21 iff $MAJ3(q12 ,{} ,c11)) and
+  A12: ($q22 iff $XOR3(AND2(x2,y2),c21 ,c12)) and
+  A13: ($c22 iff $MAJ3(AND2(x2,y2),c21 ,c12)) and
+  A14: ($z0 iff $q00) and
+  A15: ($z1 iff $q01) and
+  A16: ($z2 iff $q11) and
+  A17: ($z3 iff $q21) and
+  A18: ($z4 iff $q22) and
+  A19: ($z5 iff $c22);
+::
+:: set AND2
+::
+  set x1y0 = AND2(x1,y0);
+  set x2y0 = AND2(x2,y0);
+  set x0y1 = AND2(x0,y1); set x1y1 = AND2(x1,y1);
+  set x2y1 = AND2(x2,y1);
+  set x0y2 = AND2(x0,y2); set x1y2 = AND2(x1,y2);
+  set x2y2 = AND2(x2,y2);
+::
+:: extract operators
+::
+         A20: $c01 iff $AND2(AND2(x1,y0),AND2(x0,y1)) by A3,Lm2;
+  then A21: $c01 iff $x1y0 & $x0y1 by GATE_1:6;
+
+         A22: $q02 iff $XOR2(AND2(x2,y0),AND2(x1,y1)) by A4,Lm1;
+  then A23: $q02 iff ($x2y0 & not $x1y1) or (not $x2y0 & $x1y1)
+              by GATE_1:8;
+
+         A24: $c02 iff $AND2(AND2(x2,y0),AND2(x1,y1)) by A5,Lm2;
+  then A25: $c02 iff $x2y0 & $x1y1 by GATE_1:6;
+
+  A26: $q11 iff (($q02 & not $x0y2) or (not $q02 & $x0y2)) & not $c01 or
+              not (($q02 & not $x0y2) or (not $q02 & $x0y2)) & $c01
+              by A6,GATE_1:18;
+
+  A27: $c11 iff ($q02 & $x0y2) or ($x0y2 & $c01) or ($c01 & $q02)
+              by A7,GATE_1:19;
+
+  A28: $q12 iff (($x2y1 & not $x1y2) or (not $x2y1 & $x1y2)) & not $c02 or
+              not (($x2y1 & not $x1y2) or (not $x2y1 & $x1y2)) & $c02
+              by A8,GATE_1:18;
+
+  A29: $c12 iff ($x2y1 & $x1y2) or ($x1y2 & $c02) or ($c02 & $x2y1)
+               by A9,GATE_1:19;
+
+         A30: $q21 iff $XOR2(q12,c11) by A10,Lm1;
+
+           $c21 iff $AND2(q12,c11) by A11,Lm2;
+  then A31: $c21 iff $q12 & $c11 by GATE_1:6;
+
+  A32: $q22 iff (($x2y2 & not $c21) or (not $x2y2 & $c21)) & not $c12 or
+              not (($x2y2 & not $c21) or (not $x2y2 & $c21)) & $c12
+              by A12,GATE_1:18;
+
+  A33: $c22 iff ($x2y2 & $c21) or ($c21 & $c12) or ($c12 & $x2y2)
+              by A13,GATE_1:19;
+::
+:: z0
+::
+  thus $z0 iff $MULT310(x2,x1,y1,x0,y0) by A1,A14,Def5;
+  thus $z1 iff $MULT311(x2,x1,y1,x0,y0) by A2,A15,Def6;
+::
+:: z2
+::
+     set m312 = MULT312(x2,x1,y1,x0,y0);
+       m312 = ADD2(x2y0,x1y1,x1y0,x0y1,{}) by Def7
+         .= XOR3(x2y0,x1y1,MAJ3(x1y0,x0y1,{})) by GATE_1:def 37;
+     then A34: $m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & not $MAJ3(x1y0,x0y1,{}) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & $MAJ3(x1y0,x0y1,{}) by GATE_1:18;
+     then $m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & not ($AND2(x1y0,x0y1)) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & $AND2(x1y0,x0y1) by Lm2;
+then A35:$m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                & not ($x1y0 & $x0y1) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                & ($x1y0 & $x0y1) by GATE_1:6;
+
+     set m321 = MULT321(x2,y2,x1,y1,x0,y0);
+       m321 = XOR3(m312,x0y2,{}) by Def10;
+     then $m321 iff $XOR2(m312,x0y2) by Lm1;
+
+  hence $z2 iff $MULT321(x2,y2,x1,y1,x0,y0)
+     by A3,A16,A22,A26,A34,GATE_1:8;
+
+::
+:: z3
+::
+           $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $MAJ3(x1y0,x0y1,{})
+               or $MAJ3(x1y0,x0y1,{}) & $x2y0 by GATE_1:19;
+         then A36: $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $AND2(x1y0,x0y1)
+               or $AND2(x1y0,x0y1) & $x2y0 by Lm2;
+then A37: $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+               or $x1y0 & $x0y1 & $x2y0 by GATE_1:6;
+
+     set m313 = MULT313(x2,x1,y1,x0,y0);
+       m313 = ADD3({},x2y1,x2y0,x1y1,x1y0,x0y1,{}) by Def8
+         .= XOR3({},x2y1,CARR2(x2y0,x1y1,x1y0,x0y1,{})) by GATE_1:def 39
+         .= XOR3({},x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by GATE_1:def 38
+;
+     then $m313 iff $XOR2(x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by Lm1;
+then A38:$m313 iff ( $x2y1 & not ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                            or $x1y0 & $x0y1 & $x2y0) )
+         or (not $x2y1 & ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                            or $x1y0 & $x0y1 & $x2y0) )
+         by A36,GATE_1:6,8;
+
+     set m322 = MULT322(x2,y2,x1,y1,x0,y0);
+       m322 = ADD2(m313,x1y2,m312,x0y2,{}) by Def11
+         .= XOR3(m313,x1y2,MAJ3(m312,x0y2,{})) by GATE_1:def 37;
+     then $m322 iff (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & not $MAJ3(m312,x0y2,{}) or
+           not (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & $MAJ3(m312,x0y2,{}) by GATE_1:18;
+     then $m322 iff (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & not ($AND2(m312,x0y2)) or
+           not (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & $AND2(m312,x0y2) by Lm2;
+  hence $z3 iff $MULT322(x2,y2,x1,y1,x0,y0)
+    by A17,A20,A22,A24,A27,A28,A30,A35,A38,GATE_1:6,8;
+::
+:: z4
+::
+     set m314 = MULT314(x2,x1,y1,x0,y0);
+       m314 = CARR3({},x2y1,x2y0,x1y1,x1y0,x0y1,{}) by Def9
+         .= MAJ3({},x2y1,CARR2(x2y0,x1y1,x1y0,x0y1,{})) by GATE_1:def 40
+         .= MAJ3({},x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by GATE_1:def 38
+;
+     then $m314 iff $AND2(x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by Lm2;
+then A39:$m314 iff $x2y1 & ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                      or $x1y0 & $x0y1 & $x2y0)
+            by A37,GATE_1:6;
+
+     set m323 = MULT323(x2,y2,x1,y1,x0,y0);
+       m323 = ADD3(m314,x2y2,m313,x1y2,m312,x0y2,{}) by Def12
+         .= XOR3(m314,x2y2,CARR2(m313,x1y2,m312,x0y2,{})) by GATE_1:def 39
+         .= XOR3(m314,x2y2,MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) by GATE_1:def 38
+;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not ($MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & $MAJ3(m313,x1y2,MAJ3(m312,x0y2,{})) by GATE_1:18;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not (($m313 & $x1y2) or ($x1y2 & $MAJ3(m312,x0y2,{}))
+                  or ($MAJ3(m312,x0y2,{}) & $m313)) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & (($m313 & $x1y2) or ($x1y2 & $MAJ3(m312,x0y2,{}))
+                  or ($MAJ3(m312,x0y2,{}) & $m313)) by GATE_1:19;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not (($m313 & $x1y2) or ($x1y2 & $AND2(m312,x0y2))
+                  or ($AND2(m312,x0y2) & $m313)) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & (($m313 & $x1y2) or ($x1y2 & $AND2(m312,x0y2))
+                  or ($AND2(m312,x0y2) & $m313)) by Lm2;
+
+  hence $z4 iff $MULT323(x2,y2,x1,y1,x0,y0)
+    by A18,A21,A23,A25,A27,A28,A29,A31,A32,A35,A38,A39,GATE_1:6;
+::
+:: z5
+::
+     set m324 = MULT324(x2,y2,x1,y1,x0,y0);
+       m324 = CARR3(m314,x2y2,m313,x1y2,m312,x0y2,{}) by Def13
+         .= MAJ3(m314,x2y2,CARR2(m313,x1y2,m312,x0y2,{})) by GATE_1:def 40
+         .= MAJ3(m314,x2y2,MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) by GATE_1:def 38
+;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & $MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) or
+               ($MAJ3(m313,x1y2,MAJ3(m312,x0y2,{})) & $m314) by GATE_1:19;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & (($m313 & $x1y2) or
+                         ($x1y2 & $MAJ3(m312,x0y2,{})) or
+                         ($MAJ3(m312,x0y2,{}) & $m313)) ) or
+               ((($m313 & $x1y2) or
+                ($x1y2 & $MAJ3(m312,x0y2,{})) or
+                ($MAJ3(m312,x0y2,{}) & $m313) ) & $m314) by GATE_1:19;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & (($m313 & $x1y2) or
+                         ($x1y2 & $AND2(m312,x0y2)) or
+                         ($AND2(m312,x0y2) & $m313)) ) or
+               ((($m313 & $x1y2) or
+                ($x1y2 & $AND2(m312,x0y2)) or
+                ($AND2(m312,x0y2) & $m313) ) & $m314) by Lm2;
+
+  hence $z5 iff $MULT324(x2,y2,x1,y1,x0,y0)
+    by A19,A21,A23,A25,A27,A28,A29,A31,A33,A35,A38,A39,GATE_1:6;
+end;
+
+
+begin :: Logical Equivalence of Wallace tree Multiplier.
+
+::
+:: Logical Equivalence of 3-by-3 bit Wallace tree Multiplier.
+::
+
+::The following theorem shows that
+:: outputs of '3-by-3 bit Wallace tree Multiplier' are equivalent to
+:: outputs of '3-by-3 normal (sequencial) Multiplier'
+:: We assume that there is no feedback loop in multiplier.
+
+theorem ::3WTM:
+  for x0,x1,x2,y0,y1,y2,z0,z1,z2,z3,z4,z5,
+ q00,q01,q02,q03,c01,c02,c03,q11,q12,q13,c11,c12,c13 being set holds
+  ($q00 iff $AND2(x0,y0))&
+  ($q01 iff $XOR3(AND2(x1,y0),AND2(x0,y1),{}))&
+  ($c01 iff $MAJ3(AND2(x1,y0),AND2(x0,y1),{}))&
+  ($q02 iff $XOR3(AND2(x2,y0),AND2(x1,y1),AND2(x0,y2)))&
+  ($c02 iff $MAJ3(AND2(x2,y0),AND2(x1,y1),AND2(x0,y2)))&
+  ($q03 iff $XOR3(AND2(x2,y1),AND2(x1,y2),{}))&
+  ($c03 iff $MAJ3(AND2(x2,y1),AND2(x1,y2),{}))&
+  ($q11 iff $XOR3(q02 ,c01 ,{}))&
+  ($c11 iff $MAJ3(q02 ,c01 ,{}))&
+  ($q12 iff $XOR3(q03 ,c02 ,c11))&
+  ($c12 iff $MAJ3(q03 ,c02 ,c11))&
+  ($q13 iff $XOR3(AND2(x2,y2),c03 ,c12))&
+  ($c13 iff $MAJ3(AND2(x2,y2),c03 ,c12))&
+  ($z0 iff $q00)&
+  ($z1 iff $q01)&
+  ($z2 iff $q11)&
+  ($z3 iff $q12)&
+  ($z4 iff $q13)&
+  ($z5 iff $c13)
+ implies
+  ($z0 iff $MULT310(x2, x1,y1,x0,y0))&
+  ($z1 iff $MULT311(x2, x1,y1,x0,y0))&
+  ($z2 iff $MULT321(x2,y2,x1,y1,x0,y0))&
+  ($z3 iff $MULT322(x2,y2,x1,y1,x0,y0))&
+  ($z4 iff $MULT323(x2,y2,x1,y1,x0,y0))&
+  ($z5 iff $MULT324(x2,y2,x1,y1,x0,y0))
+
+proof
+ let x0,x1,x2,y0,y1,y2,z0,z1,z2,z3,z4,z5,
+     q00,q01,q02,q03,c01,c02,c03,q11,q12,q13,c11,c12,c13 be set;
+ assume that A1: ($q00 iff $AND2(x0,y0)) and
+  A2: ($q01 iff $XOR3(AND2(x1,y0),AND2(x0,y1),{})) and
+  A3: ($c01 iff $MAJ3(AND2(x1,y0),AND2(x0,y1),{})) and
+  A4: ($q02 iff $XOR3(AND2(x2,y0),AND2(x1,y1),AND2(x0,y2))) and
+  A5: ($c02 iff $MAJ3(AND2(x2,y0),AND2(x1,y1),AND2(x0,y2))) and
+  A6: ($q03 iff $XOR3(AND2(x2,y1),AND2(x1,y2),{})) and
+  A7: ($c03 iff $MAJ3(AND2(x2,y1),AND2(x1,y2),{})) and
+  A8: ($q11 iff $XOR3(q02 ,c01 ,{})) and
+  A9: ($c11 iff $MAJ3(q02 ,c01 ,{})) and
+  A10: ($q12 iff $XOR3(q03 ,c02 ,c11)) and
+  A11: ($c12 iff $MAJ3(q03 ,c02 ,c11)) and
+  A12: ($q13 iff $XOR3(AND2(x2,y2),c03 ,c12)) and
+  A13: ($c13 iff $MAJ3(AND2(x2,y2),c03 ,c12)) and
+  A14: ($z0 iff $q00) and
+  A15: ($z1 iff $q01) and
+  A16: ($z2 iff $q11) and
+  A17: ($z3 iff $q12) and
+  A18: ($z4 iff $q13) and
+  A19: ($z5 iff $c13);
+::
+:: set AND2
+::
+  set x1y0 = AND2(x1,y0); set x2y0 = AND2(x2,y0);
+  set x0y1 = AND2(x0,y1); set x1y1 = AND2(x1,y1);
+  set x2y1 = AND2(x2,y1); set x0y2 = AND2(x0,y2); set x1y2 = AND2(x1,y2);
+  set x2y2 = AND2(x2,y2);
+::
+:: extract operators
+::
+           $c01 iff $AND2(AND2(x1,y0),AND2(x0,y1)) by A3,Lm2;
+  then A20: $c01 iff $x1y0 & $x0y1 by GATE_1:6;
+
+  A21: $q02 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1)) & not $x0y2 or
+              not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1)) & $x0y2
+              by A4,GATE_1:18;
+
+  A22: $c02 iff ($x2y0 & $x1y1) or ($x1y1 & $x0y2) or ($x0y2 & $x2y0)
+               by A5,GATE_1:19;
+
+           $q03 iff $XOR2(AND2(x2,y1),AND2(x1,y2)) by A6,Lm1;
+  then A23: $q03 iff ($x2y1 & not $x1y2) or (not $x2y1 & $x1y2)
+               by GATE_1:8;
+
+           $c03 iff $AND2(AND2(x2,y1),AND2(x1,y2)) by A7,Lm2;
+  then A24: $c03 iff $x2y1 & $x1y2 by GATE_1:6;
+
+           $q11 iff $XOR2(q02,c01) by A8,Lm1;
+  then A25: $q11 iff ($q02 & not $c01) or (not $q02 & $c01) by GATE_1:8;
+
+           $c11 iff $AND2(q02,c01) by A9,Lm2;
+  then A26: $c11 iff $q02 & $c01 by GATE_1:6;
+
+  A27: $q12 iff (($q03 & not $c02) or (not $q03 & $c02)) & not $c11 or
+              not (($q03 & not $c02) or (not $q03 & $c02)) & $c11
+              by A10,GATE_1:18;
+
+  A28: $c12 iff ($q03 & $c02) or ($c02 & $c11) or ($c11 & $q03)
+              by A11,GATE_1:19;
+
+  A29: $q13 iff (($x2y2 & not $c03) or (not $x2y2 & $c03)) & not $c12 or
+              not (($x2y2 & not $c03) or (not $x2y2 & $c03)) & $c12
+              by A12,GATE_1:18;
+
+  A30: $c13 iff ($x2y2 & $c03) or ($c03 & $c12) or ($c12 & $x2y2)
+              by A13,GATE_1:19;
+::
+:: z0
+::
+  thus $z0 iff $MULT310(x2,x1,y1,x0,y0) by A1,A14,Def5;
+  thus $z1 iff $MULT311(x2,x1,y1,x0,y0) by A2,A15,Def6;
+::
+:: z2
+::
+     set m312 = MULT312(x2,x1,y1,x0,y0);
+       m312 = ADD2(x2y0,x1y1,x1y0,x0y1,{}) by Def7
+         .= XOR3(x2y0,x1y1,MAJ3(x1y0,x0y1,{})) by GATE_1:def 37;
+     then $m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & not $MAJ3(x1y0,x0y1,{}) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & $MAJ3(x1y0,x0y1,{}) by GATE_1:18;
+     then $m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & not ($AND2(x1y0,x0y1)) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & $AND2(x1y0,x0y1) by Lm2;
+then A31:$m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                & not ($x1y0 & $x0y1) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                & ($x1y0 & $x0y1) by GATE_1:6;
+
+     set m321 = MULT321(x2,y2,x1,y1,x0,y0);
+       m321 = XOR3(m312,x0y2,{}) by Def10;
+     then $m321 iff $XOR2(m312,x0y2) by Lm1;
+
+  hence $z2 iff $MULT321(x2,y2,x1,y1,x0,y0)
+     by A16,A20,A21,A25,A31,GATE_1:8;
+::
+:: z3
+::
+           $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $MAJ3(x1y0,x0y1,{})
+               or $MAJ3(x1y0,x0y1,{}) & $x2y0 by GATE_1:19;
+         then $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $AND2(x1y0,x0y1)
+               or $AND2(x1y0,x0y1) & $x2y0 by Lm2;
+then A32: $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+               or $x1y0 & $x0y1 & $x2y0 by GATE_1:6;
+
+     set m313 = MULT313(x2,x1,y1,x0,y0);
+       m313 = ADD3({},x2y1,x2y0,x1y1,x1y0,x0y1,{}) by Def8
+         .= XOR3({},x2y1,CARR2(x2y0,x1y1,x1y0,x0y1,{})) by GATE_1:def 39
+         .= XOR3({},x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by GATE_1:def 38
+;
+     then $m313 iff $XOR2(x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by Lm1;
+then A33:$m313 iff ( $x2y1 & not ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                            or $x1y0 & $x0y1 & $x2y0) )
+         or (not $x2y1 & ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                            or $x1y0 & $x0y1 & $x2y0) )
+         by A32,GATE_1:8;
+
+     set m322 = MULT322(x2,y2,x1,y1,x0,y0);
+       m322 = ADD2(m313,x1y2,m312,x0y2,{}) by Def11
+         .= XOR3(m313,x1y2,MAJ3(m312,x0y2,{})) by GATE_1:def 37;
+     then $m322 iff (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & not $MAJ3(m312,x0y2,{}) or
+           not (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & $MAJ3(m312,x0y2,{}) by GATE_1:18;
+     then $m322 iff (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & not ($AND2(m312,x0y2)) or
+           not (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & $AND2(m312,x0y2) by Lm2;
+
+  hence $z3 iff $MULT322(x2,y2,x1,y1,x0,y0)
+    by A17,A20,A21,A22,A23,A26,A27,A31,A33,GATE_1:6;
+::
+:: z4
+::
+     set m314 = MULT314(x2,x1,y1,x0,y0);
+       m314 = CARR3({},x2y1,x2y0,x1y1,x1y0,x0y1,{}) by Def9
+         .= MAJ3({},x2y1,CARR2(x2y0,x1y1,x1y0,x0y1,{})) by GATE_1:def 40
+         .= MAJ3({},x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by GATE_1:def 38
+;
+     then $m314 iff $AND2(x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by Lm2;
+then A34:$m314 iff $x2y1 & ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                      or $x1y0 & $x0y1 & $x2y0)
+            by A32,GATE_1:6;
+
+     set m323 = MULT323(x2,y2,x1,y1,x0,y0);
+       m323 = ADD3(m314,x2y2,m313,x1y2,m312,x0y2,{}) by Def12
+         .= XOR3(m314,x2y2,CARR2(m313,x1y2,m312,x0y2,{})) by GATE_1:def 39
+         .= XOR3(m314,x2y2,MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) by GATE_1:def 38
+;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not ($MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & $MAJ3(m313,x1y2,MAJ3(m312,x0y2,{})) by GATE_1:18;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not (($m313 & $x1y2) or ($x1y2 & $MAJ3(m312,x0y2,{}))
+                  or ($MAJ3(m312,x0y2,{}) & $m313)) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & (($m313 & $x1y2) or ($x1y2 & $MAJ3(m312,x0y2,{}))
+                  or ($MAJ3(m312,x0y2,{}) & $m313)) by GATE_1:19;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not (($m313 & $x1y2) or ($x1y2 & $AND2(m312,x0y2))
+                  or ($AND2(m312,x0y2) & $m313)) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & (($m313 & $x1y2) or ($x1y2 & $AND2(m312,x0y2))
+                  or ($AND2(m312,x0y2) & $m313)) by Lm2;
+
+  hence $z4 iff $MULT323(x2,y2,x1,y1,x0,y0)
+     by A18,A20,A21,A22,A23,A24,A26,A28,A29,A31,A33,A34,GATE_1:6;
+::
+:: z5
+::
+     set m324 = MULT324(x2,y2,x1,y1,x0,y0);
+       m324 = CARR3(m314,x2y2,m313,x1y2,m312,x0y2,{}) by Def13
+         .= MAJ3(m314,x2y2,CARR2(m313,x1y2,m312,x0y2,{})) by GATE_1:def 40
+         .= MAJ3(m314,x2y2,MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) by GATE_1:def 38
+;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & $MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) or
+               ($MAJ3(m313,x1y2,MAJ3(m312,x0y2,{})) & $m314) by GATE_1:19;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & (($m313 & $x1y2) or
+                         ($x1y2 & $MAJ3(m312,x0y2,{})) or
+                         ($MAJ3(m312,x0y2,{}) & $m313)) ) or
+               ((($m313 & $x1y2) or
+                ($x1y2 & $MAJ3(m312,x0y2,{})) or
+                ($MAJ3(m312,x0y2,{}) & $m313) ) & $m314) by GATE_1:19;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & (($m313 & $x1y2) or
+                         ($x1y2 & $AND2(m312,x0y2)) or
+                         ($AND2(m312,x0y2) & $m313)) ) or
+               ((($m313 & $x1y2) or
+                ($x1y2 & $AND2(m312,x0y2)) or
+                ($AND2(m312,x0y2) & $m313) ) & $m314) by Lm2;
+
+  hence $z5 iff $MULT324(x2,y2,x1,y1,x0,y0)
+     by A19,A20,A21,A22,A23,A24,A26,A28,A30,A31,A33,A34,GATE_1:6;
+end;
+
+::
+:: Carry Look-up Ahead (CLA) Adder
+:: (This eqivalency has been checked out by the theorem GATE_1:44.)
+::
+
+::The following two definitions are for CLA 1 bit adder.
+definition let a1,b1,c be set;
+  redefine func XOR3(a1,b1,c);
+  synonym CLAADD1(a1,b1,c);
+
+  redefine func MAJ3(a1,b1,c);
+  synonym CLACARR1(a1,b1,c);
+end;
+
+::The following two definitions are for CLA 2 bit adder.
+definition let a1,b1,a2,b2,c be set;
+ canceled 2;
+
+  func CLAADD2(a2,b2,a1,b1,c) -> set equals
+  :Def16: XOR3(a2,b2,MAJ3(a1,b1,c));
+  correctness;
+
+  func CLACARR2(a2,b2,a1,b1,c) -> set equals
+  :Def17: OR2(AND2(a2,b2),AND2(OR2(a2,b2),MAJ3(a1,b1,c)));
+ correctness;
+end;
+
+::The following two definitions are for CLA 3 bit adder.
+definition let a1,b1,a2,b2,a3,b3,c be set;
+  func CLAADD3(a3,b3,a2,b2,a1,b1,c) -> set equals
+  :Def18: XOR3(a3,b3,CLACARR2(a2,b2,a1,b1,c));
+ correctness;
+
+  func CLACARR3(a3,b3,a2,b2,a1,b1,c) -> set equals
+  :Def19: OR3(AND2(a3,b3),AND2(OR2(a3,b3),AND2(a2,b2)),
+            AND3(OR2(a3,b3),OR2(a2,b2),MAJ3(a1,b1,c)));
+ correctness;
+end;
+
+::The following two definitions are for CLA 4 bit adder.
+definition let a1,b1,a2,b2,a3,b3,a4,b4,c be set;
+  func CLAADD4(a4,b4,a3,b3,a2,b2,a1,b1,c) -> set equals
+          XOR3(a4,b4,CLACARR3(a3,b3,a2,b2,a1,b1,c));
+ correctness;
+
+  func CLACARR4(a4,b4,a3,b3,a2,b2,a1,b1,c) -> set equals
+          OR4(AND2(a4,b4),AND2(OR2(a4,b4),AND2(a3,b3)),
+            AND3(OR2(a4,b4),OR2(a3,b3),AND2(a2,b2)),
+            AND4(OR2(a4,b4),OR2(a3,b3),OR2(a2,b2),MAJ3(a1,b1,c)));
+ correctness;
+end;
+
+::The following theorem shows that
+:: outputs of '3-by-3 bit Wallace tree Multiplier' by using Carry Look-up
+:: Ahead Adder are equivalent to outputs of '3-by-3 normal (sequencial)
+:: Multiplier'.
+:: We assume that there is no feedback loop in multiplier.
+
+theorem ::3WTMCLA:
+  for x0,x1,x2,y0,y1,y2,z0,z1,z2,z3,z4,z5,
+ q00,q01,q02,q03,c01,c02,c03 being set holds
+  ($q00 iff $AND2(x0,y0))&
+  ($q01 iff $XOR3(AND2(x1,y0),AND2(x0,y1),{}))&
+  ($c01 iff $MAJ3(AND2(x1,y0),AND2(x0,y1),{}))&
+  ($q02 iff $XOR3(AND2(x2,y0),AND2(x1,y1),AND2(x0,y2)))&
+  ($c02 iff $MAJ3(AND2(x2,y0),AND2(x1,y1),AND2(x0,y2)))&
+  ($q03 iff $XOR3(AND2(x2,y1),AND2(x1,y2),{}))&
+  ($c03 iff $MAJ3(AND2(x2,y1),AND2(x1,y2),{}))&
+  ($z0 iff $q00)&
+  ($z1 iff $q01)&
+  ($z2 iff $CLAADD1( q02,c01,{}))&
+  ($z3 iff $CLAADD2( q03,c02,q02,c01,{}))&
+  ($z4 iff $CLAADD3(AND2(x2,y2),c03,q03,c02,q02,c01,{}))&
+  ($z5 iff $CLACARR3(AND2(x2,y2),c03,q03,c02,q02,c01,{}))
+ implies
+  ($z0 iff $MULT310(x2, x1,y1,x0,y0))&
+  ($z1 iff $MULT311(x2, x1,y1,x0,y0))&
+  ($z2 iff $MULT321(x2,y2,x1,y1,x0,y0))&
+  ($z3 iff $MULT322(x2,y2,x1,y1,x0,y0))&
+  ($z4 iff $MULT323(x2,y2,x1,y1,x0,y0))&
+  ($z5 iff $MULT324(x2,y2,x1,y1,x0,y0))
+
+proof
+ let x0,x1,x2,y0,y1,y2,z0,z1,z2,z3,z4,z5,
+     q00,q01,q02,q03,c01,c02,c03 be set;
+ assume that A1: ($q00 iff $AND2(x0,y0)) and
+  A2: ($q01 iff $XOR3(AND2(x1,y0),AND2(x0,y1),{})) and
+  A3: ($c01 iff $MAJ3(AND2(x1,y0),AND2(x0,y1),{})) and
+  A4: ($q02 iff $XOR3(AND2(x2,y0),AND2(x1,y1),AND2(x0,y2))) and
+  A5: ($c02 iff $MAJ3(AND2(x2,y0),AND2(x1,y1),AND2(x0,y2))) and
+  A6: ($q03 iff $XOR3(AND2(x2,y1),AND2(x1,y2),{})) and
+  A7: ($c03 iff $MAJ3(AND2(x2,y1),AND2(x1,y2),{})) and
+  A8: ($z0 iff $q00) and
+  A9: ($z1 iff $q01) and
+  A10: ($z2 iff $CLAADD1( q02,c01,{})) and
+  A11: ($z3 iff $CLAADD2( q03,c02,q02,c01,{})) and
+  A12: ($z4 iff $CLAADD3(AND2(x2,y2),c03,q03,c02,q02,c01,{})) and
+  A13: ($z5 iff $CLACARR3(AND2(x2,y2),c03,q03,c02,q02,c01,{}));
+::
+:: set AND2
+::
+  set x1y0 = AND2(x1,y0); set x2y0 = AND2(x2,y0);
+  set x0y1 = AND2(x0,y1); set x1y1 = AND2(x1,y1);
+  set x2y1 = AND2(x2,y1); set x0y2 = AND2(x0,y2); set x1y2 = AND2(x1,y2);
+  set x2y2 = AND2(x2,y2);
+::
+:: extract operators
+::
+           $c01 iff $AND2(AND2(x1,y0),AND2(x0,y1)) by A3,Lm2;
+  then A14: $c01 iff $x1y0 & $x0y1 by GATE_1:6;
+
+  A15: $q02 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1)) & not $x0y2 or
+              not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1)) & $x0y2
+              by A4,GATE_1:18;
+
+  A16: $c02 iff ($x2y0 & $x1y1) or ($x1y1 & $x0y2) or ($x0y2 & $x2y0)
+               by A5,GATE_1:19;
+
+           $q03 iff $XOR2(AND2(x2,y1),AND2(x1,y2)) by A6,Lm1;
+  then A17: $q03 iff ($x2y1 & not $x1y2) or (not $x2y1 & $x1y2)
+               by GATE_1:8;
+
+           $c03 iff $AND2(AND2(x2,y1),AND2(x1,y2)) by A7,Lm2;
+  then A18: $c03 iff $x2y1 & $x1y2 by GATE_1:6;
+::
+:: z0
+::
+  thus $z0 iff $MULT310(x2,x1,y1,x0,y0) by A1,A8,Def5;
+  thus $z1 iff $MULT311(x2,x1,y1,x0,y0) by A2,A9,Def6;
+::
+:: z2
+::
+     set m312 = MULT312(x2,x1,y1,x0,y0);
+       m312 = ADD2(x2y0,x1y1,x1y0,x0y1,{}) by Def7
+         .= XOR3(x2y0,x1y1,MAJ3(x1y0,x0y1,{})) by GATE_1:def 37;
+     then $m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & not $MAJ3(x1y0,x0y1,{}) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & $MAJ3(x1y0,x0y1,{}) by GATE_1:18;
+     then $m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & not ($AND2(x1y0,x0y1)) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                 & $AND2(x1y0,x0y1) by Lm2;
+then A19:$m312 iff (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                & not ($x1y0 & $x0y1) or
+           not (($x2y0 & not $x1y1) or (not $x2y0 & $x1y1))
+                & ($x1y0 & $x0y1) by GATE_1:6;
+
+     set m321 = MULT321(x2,y2,x1,y1,x0,y0);
+       m321 = XOR3(m312,x0y2,{}) by Def10;
+     then $m321 iff $XOR2(m312,x0y2) by Lm1;
+then A20:$m321 iff ($m312 & not $x0y2) or (not $m312 & $x0y2) by GATE_1:8;
+
+         $z2 iff $XOR3(q02,c01,{}) by A10;
+       then $z2 iff $XOR2(q02,c01) by Lm1;
+
+  hence $z2 iff $MULT321(x2,y2,x1,y1,x0,y0)
+     by A14,A15,A19,A20,GATE_1:8;
+
+::
+:: z3
+::
+           $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $MAJ3(x1y0,x0y1,{})
+               or $MAJ3(x1y0,x0y1,{}) & $x2y0 by GATE_1:19;
+         then $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $AND2(x1y0,x0y1)
+               or $AND2(x1y0,x0y1) & $x2y0 by Lm2;
+then A21: $MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))
+           iff $x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+               or $x1y0 & $x0y1 & $x2y0 by GATE_1:6;
+
+     set m313 = MULT313(x2,x1,y1,x0,y0);
+       m313 = ADD3({},x2y1,x2y0,x1y1,x1y0,x0y1,{}) by Def8
+         .= XOR3({},x2y1,CARR2(x2y0,x1y1,x1y0,x0y1,{})) by GATE_1:def 39
+         .= XOR3({},x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by GATE_1:def 38
+;
+     then $m313 iff $XOR2(x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by Lm1;
+then A22:$m313 iff ( $x2y1 & not ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                            or $x1y0 & $x0y1 & $x2y0) )
+         or (not $x2y1 & ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                            or $x1y0 & $x0y1 & $x2y0) )
+         by A21,GATE_1:8;
+
+     set m322 = MULT322(x2,y2,x1,y1,x0,y0);
+       m322 = ADD2(m313,x1y2,m312,x0y2,{}) by Def11
+         .= XOR3(m313,x1y2,MAJ3(m312,x0y2,{})) by GATE_1:def 37;
+     then $m322 iff (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & not $MAJ3(m312,x0y2,{}) or
+           not (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & $MAJ3(m312,x0y2,{}) by GATE_1:18;
+     then $m322 iff (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & not ($AND2(m312,x0y2)) or
+           not (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & $AND2(m312,x0y2) by Lm2;
+then A23:$m322 iff (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & not ($m312 & $x0y2) or
+           not (($m313 & not $x1y2) or (not $m313 & $x1y2))
+                & ($m312 & $x0y2) by GATE_1:6;
+
+       $z3 iff $XOR3(q03,c02,MAJ3(q02,c01,{})) by A11,Def16;
+     then $z3 iff (($q03 & not $c02) or (not $q03 & $c02))
+              & not $MAJ3(q02,c01,{}) or
+         not (($q03 & not $c02) or (not $q03 & $c02))
+              & $MAJ3(q02,c01,{}) by GATE_1:18;
+     then $z3 iff (($q03 & not $c02) or (not $q03 & $c02))
+              & not $AND2(q02,c01) or
+         not (($q03 & not $c02) or (not $q03 & $c02))
+              & $AND2(q02,c01) by Lm2;
+
+  hence $z3 iff $MULT322(x2,y2,x1,y1,x0,y0)
+     by A14,A15,A16,A17,A19,A22,A23,GATE_1:6;
+::
+:: z4
+::
+     set m314 = MULT314(x2,x1,y1,x0,y0);
+       m314 = CARR3({},x2y1,x2y0,x1y1,x1y0,x0y1,{}) by Def9
+         .= MAJ3({},x2y1,CARR2(x2y0,x1y1,x1y0,x0y1,{})) by GATE_1:def 40
+         .= MAJ3({},x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by GATE_1:def 38
+;
+     then $m314 iff $AND2(x2y1,MAJ3(x2y0,x1y1,MAJ3(x1y0,x0y1,{}))) by Lm2;
+then A24:$m314 iff $x2y1 & ($x2y0 & $x1y1 or $x1y1 & $x1y0 & $x0y1
+                                      or $x1y0 & $x0y1 & $x2y0)
+            by A21,GATE_1:6;
+
+     set m323 = MULT323(x2,y2,x1,y1,x0,y0);
+       m323 = ADD3(m314,x2y2,m313,x1y2,m312,x0y2,{}) by Def12
+         .= XOR3(m314,x2y2,CARR2(m313,x1y2,m312,x0y2,{})) by GATE_1:def 39
+         .= XOR3(m314,x2y2,MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) by GATE_1:def 38
+;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not ($MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & $MAJ3(m313,x1y2,MAJ3(m312,x0y2,{})) by GATE_1:18;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not (($m313 & $x1y2) or ($x1y2 & $MAJ3(m312,x0y2,{}))
+                  or ($MAJ3(m312,x0y2,{}) & $m313)) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & (($m313 & $x1y2) or ($x1y2 & $MAJ3(m312,x0y2,{}))
+                  or ($MAJ3(m312,x0y2,{}) & $m313)) by GATE_1:19;
+     then $m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not (($m313 & $x1y2) or ($x1y2 & $AND2(m312,x0y2))
+                  or ($AND2(m312,x0y2) & $m313)) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & (($m313 & $x1y2) or ($x1y2 & $AND2(m312,x0y2))
+                  or ($AND2(m312,x0y2) & $m313)) by Lm2;
+then A25:$m323 iff (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & not (($m313 & $x1y2) or ($x1y2 & ($m312 & $x0y2))
+                  or (($m312 & $x0y2) & $m313)) or
+           not (($m314 & not $x2y2) or (not $m314 & $x2y2))
+              & (($m313 & $x1y2) or ($x1y2 & ($m312 & $x0y2))
+                  or (($m312 & $x0y2) & $m313)) by GATE_1:6;
+
+     set clacarr2 = OR2(AND2(q03,c02),AND2(OR2(q03,c02),MAJ3(q02,c01,{})));
+       $clacarr2 iff $AND2(q03,c02) or
+                   $AND2(OR2(q03,c02),MAJ3(q02,c01,{})) by GATE_1:7;
+     then $clacarr2 iff ($q03 & $c02) or
+                   ($OR2(q03,c02) & $MAJ3(q02,c01,{})) by GATE_1:6;
+     then $clacarr2 iff ($q03 & $c02) or
+                   ($OR2(q03,c02) & $AND2(q02,c01)) by Lm2;
+then A26:$clacarr2 iff ($q03 & $c02) or (($q03 or $c02) & ($q02 & $c01))
+                   by GATE_1:6,7;
+
+       $z4 iff $XOR3(AND2(x2,y2),c03,CLACARR2(q03,c02,q02,c01,{})) by A12,Def18
+;
+     then $z4 iff $XOR3(AND2(x2,y2),c03,clacarr2) by Def17;
+     then $z4 iff (($x2y2 & not $c03) or (not $x2y2 & $c03))
+              & not $clacarr2 or
+         not (($x2y2 & not $c03) or (not $x2y2 & $c03))
+              & $clacarr2 by GATE_1:18;
+
+  hence $z4 iff $MULT323(x2,y2,x1,y1,x0,y0)
+     by A14,A15,A16,A17,A18,A19,A22,A24,A25,A26;
+
+::
+:: z5
+::
+     set m324 = MULT324(x2,y2,x1,y1,x0,y0);
+       m324 = CARR3(m314,x2y2,m313,x1y2,m312,x0y2,{}) by Def13
+         .= MAJ3(m314,x2y2,CARR2(m313,x1y2,m312,x0y2,{})) by GATE_1:def 40
+         .= MAJ3(m314,x2y2,MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) by GATE_1:def 38
+;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & $MAJ3(m313,x1y2,MAJ3(m312,x0y2,{}))) or
+               ($MAJ3(m313,x1y2,MAJ3(m312,x0y2,{})) & $m314) by GATE_1:19;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & (($m313 & $x1y2) or
+                         ($x1y2 & $MAJ3(m312,x0y2,{})) or
+                         ($MAJ3(m312,x0y2,{}) & $m313)) ) or
+               ((($m313 & $x1y2) or
+                ($x1y2 & $MAJ3(m312,x0y2,{})) or
+                ($MAJ3(m312,x0y2,{}) & $m313) ) & $m314) by GATE_1:19;
+     then $m324 iff ($m314 & $x2y2) or
+               ($x2y2 & (($m313 & $x1y2) or
+                         ($x1y2 & $AND2(m312,x0y2)) or
+                         ($AND2(m312,x0y2) & $m313)) ) or
+               ((($m313 & $x1y2) or
+                ($x1y2 & $AND2(m312,x0y2)) or
+                ($AND2(m312,x0y2) & $m313) ) & $m314) by Lm2;
+then A27:$m324 iff ($m314 & $x2y2) or
+               ($x2y2 & (($m313 & $x1y2) or
+                         ($x1y2 & ($m312 & $x0y2)) or
+                         (($m312 & $x0y2) & $m313)) ) or
+               ((($m313 & $x1y2) or
+                ($x1y2 & ($m312 & $x0y2)) or
+                (($m312 & $x0y2) & $m313) ) & $m314) by GATE_1:6;
+
+       set cla3and3 = AND3(OR2(AND2(x2,y2),c03),OR2(q03,c02),MAJ3(q02,c01,{}));
+         $cla3and3 iff $OR2(AND2(x2,y2),c03) & $OR2(q03,c02) & $MAJ3(q02,c01,{}
+)
+                     by GATE_1:16;
+       then $cla3and3 iff ($AND2(x2,y2) or $c03) & ($q03 or $c02) & $AND2(q02,
+c01)
+                     by Lm2,GATE_1:7;
+then A28:  $cla3and3 iff ($x2y2 or $c03) & ($q03 or $c02) & ($q02 & $c01)
+                  by GATE_1:6;
+
+         $z5 iff $OR3(AND2(AND2(x2,y2),c03),
+                    AND2(OR2(AND2(x2,y2),c03),AND2(q03,c02)),cla3and3)
+               by A13,Def19;
+       then $z5 iff $AND2(AND2(x2,y2),c03) or
+               $AND2(OR2(AND2(x2,y2),c03),AND2(q03,c02)) or
+               $cla3and3 by GATE_1:17;
+       then $z5 iff ($AND2(x2,y2) & $c03) or
+               ($OR2(AND2(x2,y2),c03) & $AND2(q03,c02)) or
+               $cla3and3 by GATE_1:6;
+
+  hence $z5 iff $MULT324(x2,y2,x1,y1,x0,y0)
+     by A14,A15,A16,A17,A18,A19,A22,A24,A27,A28,GATE_1:6,7;
+end;

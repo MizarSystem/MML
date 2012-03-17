@@ -1,0 +1,235 @@
+:: On the compositions of macro instructions, Part III
+::  by Noriko Asamoto , Yatsuka Nakamura , Piotr Rudnicki and Andrzej Trybulec
+::
+:: Received July 22, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, SCMFSA_2, AMI_3, SCMFSA6B, SCMFSA6A, FUNCT_1, FUNCT_4,
+      CARD_1, RELAT_1, FUNCOP_1, BOOLE, AMI_2, SF_MASTR, CAT_1, FUNCT_7, AMI_5,
+      ARYTM_1, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2, SCMFSA6C, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, ENUMSET1, XCMPLX_0, XREAL_0, NAT_1, INT_1,
+      ABSVALUE, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1,
+      CQC_LANG, FUNCT_4, STRUCT_0, AMI_1, AMI_3, AMI_5, FUNCT_7, SCMFSA_2,
+      SCMFSA_4, SCMFSA6A, SF_MASTR, SCMFSA6B;
+ constructors SCMFSA6A, SF_MASTR, SCMFSA6B, NAT_1, AMI_5, SETWISEO, FINSEQ_4;
+ clusters AMI_1, SCMFSA_2, FUNCT_1, FINSET_1, RELSET_1, SCMFSA6A, SF_MASTR,
+      SCMFSA6B, INT_1, CQC_LANG, FRAENKEL, XBOOLE_0, ORDINAL2, NUMBERS;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Consequences of the main theorem from SCMFSA6B
+
+ reserve m, n for Nat,
+         x for set,
+         i for Instruction of SCM+FSA,
+
+         a,b for Int-Location, f for FinSeq-Location,
+         l, l1 for Instruction-Location of SCM+FSA,
+         s,s1,s2 for State of SCM+FSA;
+
+theorem :: SCMFSA6C:1
+   for I being keeping_0 parahalting Macro-Instruction,
+     J being parahalting Macro-Instruction
+  holds IExec(I ';' J, s).a = IExec(J,IExec(I,s)).a;
+
+theorem :: SCMFSA6C:2
+   for I being keeping_0 parahalting Macro-Instruction,
+     J being parahalting Macro-Instruction
+  holds IExec(I ';' J, s).f = IExec(J,IExec(I,s)).f;
+
+begin :: Properties of simple macro instructions
+
+definition
+ let i be Instruction of SCM+FSA;
+ attr i is parahalting means
+:: SCMFSA6C:def 1
+ Macro i is parahalting;
+ attr i is keeping_0 means
+:: SCMFSA6C:def 2
+ Macro i is keeping_0;
+end;
+
+definition
+ cluster halt SCM+FSA -> keeping_0 parahalting;
+end;
+
+definition
+ cluster keeping_0 parahalting Instruction of SCM+FSA;
+end;
+
+definition
+ let i be parahalting Instruction of SCM+FSA;
+ cluster Macro i -> parahalting;
+end;
+
+definition
+ let i be keeping_0 Instruction of SCM+FSA;
+ cluster Macro i -> keeping_0;
+end;
+
+definition
+ let a, b be Int-Location;
+ cluster a := b -> parahalting;
+
+ cluster AddTo(a,b) -> parahalting;
+
+ cluster SubFrom(a,b) -> parahalting;
+
+ cluster MultBy(a,b) -> parahalting;
+
+ cluster Divide(a,b) -> parahalting;
+
+ let f be FinSeq-Location;
+ cluster b := (f,a) -> parahalting;
+
+ cluster (f,a) := b -> parahalting keeping_0;
+end;
+
+definition
+ let a be Int-Location, f be FinSeq-Location;
+ cluster a :=len f -> parahalting;
+
+ cluster f :=<0,...,0> a -> parahalting keeping_0;
+end;
+
+definition
+ let a be read-write Int-Location, b be Int-Location;
+ cluster a := b -> keeping_0;
+
+ cluster AddTo(a, b) -> keeping_0;
+
+ cluster SubFrom(a, b) -> keeping_0;
+
+ cluster MultBy(a, b) -> keeping_0;
+end;
+
+definition
+ let a, b be read-write Int-Location;
+ cluster Divide(a, b) -> keeping_0;
+end;
+
+definition
+ let a be Int-Location, f be FinSeq-Location, b be read-write Int-Location;
+ cluster b := (f,a) -> keeping_0;
+end;
+
+definition
+ let f be FinSeq-Location, b be read-write Int-Location;
+ cluster b :=len f -> keeping_0;
+end;
+
+definition
+ let i be parahalting Instruction of SCM+FSA,
+     J be parahalting Macro-Instruction;
+ cluster i ';' J -> parahalting;
+end;
+
+definition
+ let I be parahalting Macro-Instruction,
+     j be parahalting Instruction of SCM+FSA;
+ cluster I ';' j -> parahalting;
+end;
+
+definition
+ let i be parahalting Instruction of SCM+FSA,
+     j be parahalting Instruction of SCM+FSA;
+ cluster i ';' j -> parahalting;
+end;
+
+definition
+ let i be keeping_0 Instruction of SCM+FSA,
+     J be keeping_0 Macro-Instruction;
+ cluster i ';' J -> keeping_0;
+end;
+
+definition
+ let I be keeping_0 Macro-Instruction,
+     j be keeping_0 Instruction of SCM+FSA;
+ cluster I ';' j -> keeping_0;
+end;
+
+definition
+ let i, j be keeping_0 Instruction of SCM+FSA;
+ cluster i ';' j -> keeping_0;
+end;
+
+begin :: Consequenses of the main theorem
+
+definition
+ let s be State of SCM+FSA;
+ func Initialize s -> State of SCM+FSA equals
+:: SCMFSA6C:def 3
+ s +* ((intloc 0) .--> 1) +* Start-At(insloc 0);
+end;
+
+theorem :: SCMFSA6C:3
+  IC Initialize s = insloc 0 & (Initialize s).intloc 0 = 1 &
+  (for a being read-write Int-Location holds (Initialize s).a = s.a) &
+  (for f holds (Initialize s).f = s.f) &
+  for l holds (Initialize s).l = s.l;
+
+theorem :: SCMFSA6C:4
+ s1, s2 equal_outside the Instruction-Locations of SCM+FSA
+iff
+   (s1 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}))
+ = (s2 | (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA}));
+
+theorem :: SCMFSA6C:5
+    s1 | (Int-Locations \/ FinSeq-Locations)
+  = s2 | (Int-Locations \/ FinSeq-Locations)
+implies
+    Exec (i, s1) | (Int-Locations \/ FinSeq-Locations)
+  = Exec (i, s2) | (Int-Locations \/ FinSeq-Locations);
+
+theorem :: SCMFSA6C:6
+ for i being parahalting Instruction of SCM+FSA
+  holds Exec(i, Initialize s) = IExec(Macro i, s);
+
+theorem :: SCMFSA6C:7
+ for I being keeping_0 parahalting Macro-Instruction,
+     j being parahalting Instruction of SCM+FSA
+  holds IExec(I ';' j, s).a = Exec(j, IExec(I, s)).a;
+
+theorem :: SCMFSA6C:8
+ for I being keeping_0 parahalting Macro-Instruction,
+     j being parahalting Instruction of SCM+FSA
+  holds IExec(I ';' j, s).f = Exec(j, IExec(I, s)).f;
+
+theorem :: SCMFSA6C:9
+ for i being keeping_0 parahalting Instruction of SCM+FSA,
+     j being parahalting Instruction of SCM+FSA
+  holds IExec(i ';' j, s).a = Exec(j, Exec(i, Initialize s)).a;
+
+theorem :: SCMFSA6C:10
+   for i being keeping_0 parahalting Instruction of SCM+FSA,
+     j being parahalting Instruction of SCM+FSA
+  holds IExec(i ';' j, s).f = Exec(j, Exec(i, Initialize s)).f;
+
+begin :: An example
+
+definition
+ let a, b be Int-Location;
+ func swap (a, b) -> Macro-Instruction equals
+:: SCMFSA6C:def 4
+ FirstNotUsed Macro (a := b) := a ';' (a := b) ';'
+                 (b := FirstNotUsed Macro (a := b));
+end;
+
+definition
+ let a, b be Int-Location;
+ cluster swap(a,b) -> parahalting;
+end;
+
+definition
+ let a, b be read-write Int-Location;
+ cluster swap(a,b) -> keeping_0;
+end;
+
+theorem :: SCMFSA6C:11 :: SwapC:
+   for a, b being read-write Int-Location
+  holds IExec (swap(a, b), s).a = s.b & IExec (swap(a, b), s).b = s.a;
+
+theorem :: SCMFSA6C:12 :: SwapNCF:
+     UsedInt*Loc swap(a, b) = {};

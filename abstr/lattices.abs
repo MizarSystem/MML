@@ -1,0 +1,393 @@
+:: Introduction to Lattice Theory
+::  by Stanis{\l}aw \.Zukowski
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, BOOLE, FINSUB_1, FUNCT_1, SUBSET_1, LATTICES;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, BINOP_1, FINSUB_1;
+ constructors STRUCT_0, BINOP_1, FINSUB_1, XBOOLE_0;
+ clusters FINSUB_1, STRUCT_0, SUBSET_1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+definition
+  struct(1-sorted) /\-SemiLattStr
+    (# carrier -> set, L_meet -> BinOp of the carrier #);
+end;
+
+definition
+  struct(1-sorted) \/-SemiLattStr
+    (# carrier -> set, L_join -> BinOp of the carrier #);
+end;
+
+definition
+  struct(/\-SemiLattStr,\/-SemiLattStr) LattStr
+    (# carrier -> set, L_join, L_meet -> BinOp of the carrier #);
+end;
+
+definition
+  cluster strict non empty \/-SemiLattStr;
+  cluster strict non empty /\-SemiLattStr;
+  cluster strict non empty LattStr;
+end;
+
+definition let G be non empty \/-SemiLattStr,
+               p, q be Element of G;
+ func p"\/"q -> Element of G equals
+:: LATTICES:def 1
+    (the L_join of G).(p,q);
+end;
+
+definition let G be non empty /\-SemiLattStr,
+               p, q be Element of G;
+ func p"/\"q -> Element of G equals
+:: LATTICES:def 2
+    (the L_meet of G).(p,q);
+end;
+
+definition let G be non empty \/-SemiLattStr,
+               p, q be Element of G;
+  pred p [= q means
+:: LATTICES:def 3
+   p"\/"q = q;
+end;
+
+definition let IT be non empty \/-SemiLattStr;
+  attr IT is join-commutative means
+:: LATTICES:def 4
+   for a,b being Element of IT holds a"\/"b = b"\/"a;
+  attr IT is join-associative means
+:: LATTICES:def 5
+   for a,b,c being Element of IT holds a"\/"(b"\/"c) = (a"\/"b)
+"\/"c;
+end;
+
+definition let IT be non empty /\-SemiLattStr;
+  attr IT is meet-commutative means
+:: LATTICES:def 6
+   for a,b being Element of IT holds a"/\"b = b"/\"a;
+  attr IT is meet-associative means
+:: LATTICES:def 7
+   for a,b,c being Element of IT holds a"/\"(b"/\"c) = (a"/\"b)
+"/\"c;
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is meet-absorbing means
+:: LATTICES:def 8
+   for a,b being Element of IT holds (a"/\"b)"\/"b = b;
+  attr IT is join-absorbing means
+:: LATTICES:def 9
+   for a,b being Element of IT holds a"/\"(a"\/"b)=a;
+ end;
+
+definition let IT be non empty LattStr;
+  attr IT is Lattice-like means
+:: LATTICES:def 10
+   IT is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing;
+end;
+
+definition
+  cluster Lattice-like ->
+          join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+          (non empty LattStr);
+  cluster join-commutative join-associative meet-absorbing
+          meet-commutative meet-associative join-absorbing
+          -> Lattice-like (non empty LattStr);
+end;
+
+definition
+  cluster strict join-commutative join-associative (non empty \/-SemiLattStr);
+  cluster strict meet-commutative meet-associative (non empty /\-SemiLattStr);
+  cluster strict Lattice-like (non empty LattStr);
+end;
+
+definition
+  mode Lattice is Lattice-like (non empty LattStr);
+end;
+
+definition let L be join-commutative (non empty \/-SemiLattStr),
+               a, b be Element of L;
+  redefine func a"\/"b;
+commutativity;
+end;
+
+definition let L be meet-commutative (non empty /\-SemiLattStr),
+               a, b be Element of L;
+  redefine func a"/\"b;
+commutativity;
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is distributive means
+:: LATTICES:def 11
+   for a,b,c being Element of IT
+    holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c);
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is modular means
+:: LATTICES:def 12
+   for a,b,c being Element of IT st a [= c
+    holds a"\/"(b"/\"c) = (a"\/"b)"/\"c;
+end;
+
+definition let IT be non empty /\-SemiLattStr;
+  attr IT is lower-bounded means
+:: LATTICES:def 13
+   ex c being Element of IT st
+    for a being Element of IT holds c"/\"a = c & a"/\"c = c;
+end;
+
+definition let IT be non empty \/-SemiLattStr;
+  attr IT is upper-bounded means
+:: LATTICES:def 14
+   ex c being Element of IT st
+    for a being Element of IT holds c"\/"a = c & a"\/"c = c;
+end;
+
+definition
+  cluster strict distributive lower-bounded upper-bounded modular Lattice;
+end;
+
+definition
+  mode D_Lattice is distributive Lattice;
+  mode M_Lattice is modular Lattice;
+  mode 0_Lattice is lower-bounded Lattice;
+  mode 1_Lattice is upper-bounded Lattice;
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is bounded means
+:: LATTICES:def 15
+   IT is lower-bounded upper-bounded;
+end;
+
+definition
+  cluster lower-bounded upper-bounded -> bounded (non empty LattStr);
+  cluster bounded -> lower-bounded upper-bounded (non empty LattStr);
+end;
+
+definition
+  cluster bounded strict Lattice;
+end;
+
+definition
+  mode 01_Lattice is bounded Lattice;
+end;
+
+definition let L be non empty /\-SemiLattStr;
+ assume  L is lower-bounded;
+  func Bottom L -> Element of L means
+:: LATTICES:def 16
+   for a being Element of L holds it "/\" a = it & a "/\"
+ it = it;
+end;
+
+definition let L be non empty \/-SemiLattStr;
+ assume  L is upper-bounded;
+  func Top L -> Element of L means
+:: LATTICES:def 17
+   for a being Element of L holds it "\/" a = it & a "\/"
+ it = it;
+end;
+
+definition let L be non empty LattStr,
+               a, b be Element of L;
+  pred a is_a_complement_of b means
+:: LATTICES:def 18
+   a"\/"b = Top L & b"\/"a = Top L & a"/\"b = Bottom L & b"/\"a = Bottom L;
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is complemented means
+:: LATTICES:def 19
+   for b being Element of IT
+    ex a being Element of IT st a is_a_complement_of b;
+end;
+
+definition
+  cluster bounded complemented strict Lattice;
+end;
+
+definition
+  mode C_Lattice is complemented 01_Lattice;
+end;
+
+definition let IT be non empty LattStr;
+  attr IT is Boolean means
+:: LATTICES:def 20
+   IT is bounded complemented distributive;
+end;
+
+definition
+  cluster Boolean -> bounded complemented distributive (non empty LattStr);
+  cluster bounded complemented distributive -> Boolean (non empty LattStr);
+end;
+
+definition
+  cluster Boolean strict Lattice;
+end;
+
+definition
+  mode B_Lattice is Boolean Lattice;
+end;
+
+reserve L for meet-absorbing join-absorbing meet-commutative
+        (non empty LattStr);
+reserve a for Element of L;
+
+canceled 16;
+
+theorem :: LATTICES:17
+  a"\/"a = a;
+
+theorem :: LATTICES:18
+    a"/\"a = a;
+
+reserve L for Lattice;
+reserve a, b, c for Element of L;
+
+theorem :: LATTICES:19
+  (for a,b,c holds a"/\"(b"\/"c) = (a"/\"b)"\/"(a"/\"c))
+                         iff
+  (for a,b,c holds a"\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c));
+
+canceled;
+
+theorem :: LATTICES:21
+for L being meet-absorbing join-absorbing (non empty LattStr),
+    a, b being Element of L holds
+  a [= b iff a"/\"b = a;
+
+theorem :: LATTICES:22
+for L being meet-absorbing join-absorbing join-associative meet-commutative
+            (non empty LattStr),
+    a, b being Element of L holds
+  a [= a"\/"b;
+
+theorem :: LATTICES:23
+for L being meet-absorbing meet-commutative (non empty LattStr),
+    a, b being Element of L holds
+  a"/\"b [= a;
+
+definition
+  let L be meet-absorbing join-absorbing meet-commutative (non empty LattStr),
+      a, b be Element of L;
+  redefine pred a [= b;
+  reflexivity;
+end;
+
+canceled;
+
+theorem :: LATTICES:25
+  for L being join-associative (non empty \/-SemiLattStr),
+    a, b, c being Element of L holds
+  a [= b & b [= c implies a [= c;
+
+theorem :: LATTICES:26
+for L being join-commutative (non empty \/-SemiLattStr),
+    a, b being Element of L holds
+  a [= b & b [= a implies a=b;
+
+theorem :: LATTICES:27
+for L being meet-absorbing join-absorbing meet-associative (non empty LattStr),
+    a, b, c being Element of L holds
+  a [= b implies a"/\"c [= b"/\"c;
+
+canceled;
+
+theorem :: LATTICES:29
+  for L being Lattice holds
+  (for a,b,c being Element of L holds
+       (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a) = (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a))
+   implies L is distributive;
+
+reserve L for D_Lattice;
+reserve a, b, c for Element of L;
+
+canceled;
+
+theorem :: LATTICES:31
+  a"\/"(b"/\"c) = (a"\/"b)"/\"(a"\/"c);
+
+theorem :: LATTICES:32
+  c"/\"a = c"/\"b & c"\/"a = c"\/"b implies a=b;
+
+canceled;
+
+theorem :: LATTICES:34
+    (a"\/"b)"/\"(b"\/"c)"/\"(c"\/"a) = (a"/\"b)"\/"(b"/\"c)"\/"(c"/\"a);
+
+definition
+  cluster distributive -> modular Lattice;
+end;
+
+reserve L for 0_Lattice;
+reserve a for Element of L;
+
+canceled 4;
+
+theorem :: LATTICES:39
+  Bottom L"\/"a = a;
+
+theorem :: LATTICES:40
+   Bottom L"/\"a = Bottom L;
+
+theorem :: LATTICES:41
+  Bottom L [= a;
+
+reserve L for 1_Lattice;
+reserve a for Element of L;
+
+canceled;
+
+theorem :: LATTICES:43
+  Top L"/\"a = a;
+
+theorem :: LATTICES:44
+   Top L"\/"a = Top L;
+
+theorem :: LATTICES:45
+    a [= Top L;
+
+definition let L be non empty LattStr,
+               x be Element of L;
+ assume  L is complemented D_Lattice;
+  func x` -> Element of L means
+:: LATTICES:def 21
+   it is_a_complement_of x;
+end;
+
+reserve L for B_Lattice;
+reserve a, b for Element of L;
+
+canceled;
+
+theorem :: LATTICES:47
+  a`"/\"a = Bottom L;
+
+theorem :: LATTICES:48
+  a`"\/"a = Top L;
+
+theorem :: LATTICES:49
+  a`` = a;
+
+theorem :: LATTICES:50
+  ( a"/\"b )` = a`"\/" b`;
+
+theorem :: LATTICES:51
+    ( a"\/"b )` = a`"/\" b`;
+
+theorem :: LATTICES:52
+  b"/\"a = Bottom L iff b [= a`;
+
+theorem :: LATTICES:53
+    a [= b implies b` [= a`;

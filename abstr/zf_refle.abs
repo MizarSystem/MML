@@ -1,0 +1,212 @@
+:: The Reflection Theorem
+::  by Grzegorz Bancerek
+::
+:: Received August 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary CLASSES2, ZF_LANG, FUNCT_1, ZF_MODEL, ORDINAL1, TARSKI, ORDINAL2,
+      BOOLE, ZFMODEL1, RELAT_1, CARD_1, ORDINAL4, PROB_1, CLASSES1, ZFMISC_1,
+      QC_LANG1, FUNCT_2, ARYTM_3, ZF_REFLE;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      RELAT_1, FUNCT_1, FUNCT_2, FRAENKEL, ZF_MODEL, ZFMODEL1, ORDINAL1,
+      ORDINAL2, CARD_1, PROB_1, CLASSES1, CLASSES2, ZF_LANG, ORDINAL4,
+      ZF_LANG1;
+ constructors ENUMSET1, NAT_1, FRAENKEL, ZF_MODEL, ZFMODEL1, WELLORD2, PROB_1,
+      CLASSES1, ORDINAL4, ZF_LANG1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, ZF_LANG, ORDINAL1, ORDINAL2, CLASSES2, ZF_LANG1,
+      RELSET_1, CARD_1, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin
+
+ reserve W for Universe,
+         H for ZF-formula,
+         x,y,z,X,Y for set,
+         k for Variable,
+         f for Function of VAR,W,
+         u,v for Element of W;
+
+canceled;
+
+theorem :: ZF_REFLE:2
+  W |= the_axiom_of_pairs;
+
+theorem :: ZF_REFLE:3
+  W |= the_axiom_of_unions;
+
+theorem :: ZF_REFLE:4
+  omega in W implies W |= the_axiom_of_infinity;
+
+theorem :: ZF_REFLE:5
+  W |= the_axiom_of_power_sets;
+
+theorem :: ZF_REFLE:6
+  for H st { x.0,x.1,x.2 } misses Free H holds
+   W |= the_axiom_of_substitution_for H;
+
+theorem :: ZF_REFLE:7
+   omega in W implies W is_a_model_of_ZF;
+
+ reserve
+         F for Function,
+
+         A,A1,A2,B,C for Ordinal,
+         a,b,b1,b2,c for Ordinal of W,
+         fi for Ordinal-Sequence,
+         phi for Ordinal-Sequence of W,
+         H for ZF-formula;
+
+ definition let A,B;
+  redefine pred A c= B means
+:: ZF_REFLE:def 1
+for C st C in A holds C in B;
+ end;
+
+scheme ALFA { D() -> non empty set, P[set,set] }:
+ ex F st dom F = D() &
+  for d being Element of D() ex A st A = F.d & P[d,A] &
+   for B st P[d,B] holds A c= B
+  provided
+ for d being Element of D() ex A st P[d,A];
+
+scheme ALFA'Universe { W()->Universe, D() -> non empty set, P[set,set] }:
+ ex F st dom F = D() &
+  for d being Element of D() ex a being Ordinal of W() st a = F.d & P[d,a] &
+   for b being Ordinal of W() st P[d,b] holds a c= b
+  provided
+ for d being Element of D() ex a being Ordinal of W() st P[d,a];
+
+theorem :: ZF_REFLE:8
+  x is Ordinal of W iff x in On W;
+
+ reserve psi for Ordinal-Sequence;
+
+scheme OrdSeqOfUnivEx { W()->Universe, P[set,set] }:
+ ex phi being Ordinal-Sequence of W() st
+   for a being Ordinal of W() holds P[a,phi.a]
+  provided
+ for a,b1,b2 being Ordinal of W() st P[a,b1] & P[a,b2] holds b1 = b2 and
+ for a being Ordinal of W() ex b being Ordinal of W() st P[a,b];
+
+scheme UOS_Exist { W()->Universe, a()->Ordinal of W(),
+                   C(Ordinal,Ordinal)->Ordinal of W(),
+                   D(Ordinal,T-Sequence)->Ordinal of W() } :
+  ex phi being Ordinal-Sequence of W() st
+   phi.0-element_of W() = a() &
+   (for a being Ordinal of W() holds phi.(succ a) = C(a,phi.a)) &
+   (for a being Ordinal of W() st a <> 0-element_of W() & a is_limit_ordinal
+     holds phi.a = D(a,phi|a));
+
+scheme Universe_Ind { W()->Universe, P[Ordinal] }:
+ for a being Ordinal of W() holds P[a]
+  provided
+  P[0-element_of W()] and
+  for a being Ordinal of W() st P[a] holds P[succ a] and
+  for a being Ordinal of W() st a <> 0-element_of W() & a is_limit_ordinal &
+     for b being Ordinal of W() st b in a holds P[b] holds P[a];
+
+ definition let f be Function, W be Universe, a be Ordinal of W;
+  func union(f,a) -> set equals
+:: ZF_REFLE:def 2
+    Union (W|(f|Rank a));
+ end;
+
+canceled;
+
+theorem :: ZF_REFLE:10
+  for L being T-Sequence,A holds L|Rank A is T-Sequence;
+
+theorem :: ZF_REFLE:11
+  for L being Ordinal-Sequence,A holds L|Rank A is Ordinal-Sequence;
+
+theorem :: ZF_REFLE:12
+    Union psi is Ordinal;
+
+theorem :: ZF_REFLE:13
+  Union (X|psi) is Ordinal;
+
+theorem :: ZF_REFLE:14
+  On Rank A = A;
+
+theorem :: ZF_REFLE:15
+  psi|Rank A = psi|A;
+
+ definition let phi be Ordinal-Sequence, W be Universe, a be Ordinal of W;
+  redefine func union(phi,a) -> Ordinal of W;
+ end;
+
+canceled;
+
+theorem :: ZF_REFLE:17
+  for phi being Ordinal-Sequence of W holds
+   union(phi,a) = Union (phi|a) & union(phi|a,a) = Union (phi|a);
+
+ definition let W be Universe, a,b be Ordinal of W;
+  redefine func a \/ b -> Ordinal of W;
+ end;
+
+ definition let W;
+  cluster non empty Element of W;
+ end;
+
+ definition let W;
+  mode Subclass of W is non empty Subset of W;
+ end;
+
+ definition let W;
+   let IT be T-Sequence of W;
+ canceled 2;
+
+  attr IT is DOMAIN-yielding means
+:: ZF_REFLE:def 5
+   dom IT = On W;
+ end;
+
+ definition let W;
+  cluster DOMAIN-yielding non-empty T-Sequence of W;
+ end;
+
+definition let W;
+  mode DOMAIN-Sequence of W is non-empty DOMAIN-yielding T-Sequence of W;
+end;
+
+ definition let W; let L be DOMAIN-Sequence of W;
+ redefine func Union L -> Subclass of W;
+  let a;
+  func L.a -> non empty Element of W;
+ end;
+
+ reserve L for DOMAIN-Sequence of W,
+         n,j for Nat,
+         f for Function of VAR,L.a;
+
+canceled 5;
+
+theorem :: ZF_REFLE:23
+  a in dom L;
+
+theorem :: ZF_REFLE:24
+  L.a c= Union L;
+
+theorem :: ZF_REFLE:25
+  NAT,VAR are_equipotent;
+
+canceled;
+
+theorem :: ZF_REFLE:27
+  sup X c= succ union On X;
+
+theorem :: ZF_REFLE:28
+  X in W implies sup X in W;
+
+ reserve x1 for Variable;
+
+theorem :: ZF_REFLE:29
+    omega in W & (for a,b st a in b holds L.a c= L.b) &
+    (for a st a <> {} & a is_limit_ordinal holds L.a = Union (L|a)) implies
+     for H ex phi st phi is increasing & phi is continuous &
+      for a st phi.a = a & {} <> a
+       for f holds Union L,(Union L)!f |= H iff L.a,f |= H;

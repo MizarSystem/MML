@@ -1,0 +1,1851 @@
+:: Basic facts about inaccessible and measurable cardinals
+::  by Josef Urban
+::
+:: Received April 14, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, ORDINAL2, BOOLE, FINSET_1, CARD_1, CARD_5, SETFAM_1,
+      FILTER_0, SUBSET_1, FILTER_2, TARSKI, WAYBEL_0, ZFMISC_1, CARD_2,
+      FUNCT_1, RELAT_1, WAYBEL11, FUNCT_2, CARD_3, PRALG_1, FUNCT_5, CARD_FIL,
+      HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PRALG_1,
+      BINOP_1, FUNCT_5, SETFAM_1, FINSET_1, ORDINAL1, FUNCT_2, ORDINAL2,
+      CARD_1, CARD_2, CARD_3, CARD_5;
+ constructors XREAL_0, WELLORD2, BINOP_1, PRALG_1, CARD_2, CARD_5, ZFREFLE1,
+      XCMPLX_0, MEMBERED;
+ clusters FUNCT_1, ORDINAL1, CARD_1, CARD_5, RELSET_1, FINSET_1, SUBSET_1,
+      PRALG_1, SETFAM_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions TARSKI, FUNCT_1, CARD_1, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, FUNCT_2, FINSET_1, ORDINAL1, ORDINAL2, WELLORD2,
+      CARD_1, CARD_2, CARD_4, CARD_5, SETFAM_1, ZFMISC_1, FUNCT_5, RELAT_1,
+      SUBSET_1, PRALG_1, BINOP_1, SETWISEO, YELLOW_8, YELLOW_6, RELSET_1,
+      FRAENKEL, ORDERS_2, XBOOLE_0, XBOOLE_1, ORDINAL3;
+ schemes DOMAIN_1, COMPTS_1, FUNCT_2, COMPLSP1, FRAENKEL, TREES_2;
+
+begin
+
+:: this should be in ordinal2
+definition
+  cluster being_limit_ordinal Ordinal;
+  existence
+proof
+   take omega;
+   thus omega is being_limit_ordinal by ORDINAL2:def 5;
+end;
+end;
+
+definition let X,Y be set;
+  redefine func X \ Y -> Subset of X;
+  coherence by XBOOLE_1:36;
+end;
+
+theorem Th1:
+  for x being set for X being infinite set holds Card {x} <` Card X
+proof
+   let x be set; let X be infinite set;
+     Card X is infinite by CARD_4:1;
+   hence Card { x } <` Card X by CARD_4:13;
+end;
+
+definition let X be infinite set;
+  cluster Card X -> infinite;
+  coherence by CARD_4:1;
+end;
+
+scheme ElemProp{D()-> non empty set,x()->set,P[set]}:
+  P[x()]
+provided A1: x() in {y where y is Element of D(): P[y]}
+proof
+   consider y being Element of D() such that
+   A2: x()=y and A3: P[y] by A1;
+   thus P[x()] by A2,A3;
+end;
+
+::::::::::::::::::::::   Initial reservations   :::::::::::::::::::::
+
+reserve N for Cardinal;
+reserve M for Aleph;
+reserve X for non empty set;
+reserve Y,Z,Z1,Z2,Y1,Y2,Y3,Y4 for Subset of X;
+reserve S for Subset-Family of X;
+reserve x for set;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                                 ::
+::         Necessary facts about filters and ideals on sets        ::
+::                                                                 ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem Th2:
+  { X } is non empty Subset-Family of X & not {} in { X } &
+  for Y1,Y2 holds (Y1 in { X } & Y2 in { X } implies Y1 /\ Y2 in { X }) &
+  ((Y1 in { X } & Y1 c= Y2) implies Y2 in { X })
+proof
+   A1: X c= X;
+     { X } c= bool X
+   proof let x;
+      assume x in { X };
+      then x=X by TARSKI:def 1;
+      hence x in bool X by A1;
+   end;
+   hence { X } is non empty Subset-Family of X by SETFAM_1:def 7;
+   thus not {} in { X } by TARSKI:def 1;
+   let Y1,Y2;
+   thus Y1 in { X } & Y2 in { X } implies Y1 /\ Y2 in { X }
+   proof
+      assume Y1 in { X } & Y2 in { X };
+      then Y1 =X & Y2 = X by TARSKI:def 1;
+      hence Y1 /\ Y2 in { X } by TARSKI:def 1;
+   end;
+   thus (Y1 in { X } & Y1 c= Y2) implies Y2 in { X }
+   proof
+      assume Y1 in { X } & Y1 c= Y2;
+      then X c= Y2 by TARSKI:def 1;
+      then Y2 = X by XBOOLE_0:def 10;
+      hence Y2 in { X } by TARSKI:def 1;
+   end;
+end;
+
+definition let X;
+  mode Filter of X -> non empty Subset-Family of X means
+:Def1:  (not {} in it) &
+  for Y1,Y2 holds (Y1 in it & Y2 in it implies Y1 /\ Y2 in it) &
+  ((Y1 in it & Y1 c= Y2) implies Y2 in it);
+  existence
+proof take { X };
+   thus thesis by Th2;
+end;
+end;
+
+theorem
+   for F being set holds F is Filter of X iff
+  (F is non empty Subset-Family of X &
+  not {} in F &
+  for Y1,Y2 holds (Y1 in F & Y2 in F implies Y1 /\ Y2 in F) &
+  ((Y1 in F & Y1 c= Y2) implies Y2 in F)) by Def1;
+
+theorem Th4:
+  { X } is Filter of X
+proof
+     { X } is non empty Subset-Family of X & not {} in { X } &
+   for Y1,Y2 holds (Y1 in { X } & Y2 in { X } implies Y1 /\ Y2 in { X }) &
+   ((Y1 in { X } & Y1 c= Y2) implies Y2 in { X }) by Th2;
+   hence { X } is Filter of X by Def1;
+end;
+
+reserve F,Uf for Filter of X;
+
+theorem Th5:
+  X in F
+proof
+   consider Y being Element of F;
+   A1: Y in F;
+     X c= X;
+   hence X in F by A1,Def1;
+end;
+
+theorem Th6:
+  Y in F implies not (X \ Y) in F
+proof
+   assume A1: Y in F;
+   assume X \ Y in F;
+   then A2:Y /\ (X \ Y) in F by A1,Def1;
+     Y misses (X \ Y) by XBOOLE_1:79;
+   then {} in F by A2,XBOOLE_0:def 7;
+   hence contradiction by Def1;
+end;
+
+theorem Th7:
+  for I being non empty Subset of bool X st (for Y holds Y in I iff Y` in F)
+  holds (not X in I) &
+  for Y1,Y2 holds (Y1 in I & Y2 in I implies Y1 \/ Y2 in I) &
+  ((Y1 in I & Y2 c= Y1) implies Y2 in I)
+proof
+   let I be non empty Subset of bool X such that
+   A1: for Y holds (Y in I iff Y` in F);
+     X c= X;
+   then reconsider X1=X as Subset of X;
+   A2: not ({}X)`` in F by Def1;
+     ({}X)` = X \ {} by SUBSET_1:def 5 .= X1;
+   hence not X in I by A1,A2;
+   let Y1,Y2;
+   thus Y1 in I & Y2 in I implies Y1 \/ Y2 in I
+   proof assume Y1 in I & Y2 in I;
+      then Y1` in F & Y2` in F by A1;
+      then Y1` /\ Y2` in F by Def1;
+      then (Y1 \/ Y2)` in F by SUBSET_1:29;
+      hence Y1 \/ Y2 in I by A1;
+   end;
+   assume A3: Y1 in I & Y2 c= Y1;
+   then A4: Y1` in F by A1;
+     Y1` c= Y2` by A3,SUBSET_1:31;
+   then Y2` in F by A4,Def1;
+   hence Y2 in I by A1;
+end;
+
+definition
+  let X,S;
+  redefine func COMPLEMENT S;
+  synonym dual S;
+end;
+
+reserve S for non empty Subset-Family of X;
+
+definition let X,S;
+  cluster COMPLEMENT S -> non empty;
+  coherence by SETFAM_1:46;
+end;
+
+theorem
+    dual S = {Y:Y` in S}
+proof thus dual S c= {Y:Y` in S}
+   proof let X1 be set such that A1: X1 in dual S;
+      reconsider Y1=X1 as Subset of X by A1;
+        Y1` in S by A1,SETFAM_1:def 8;
+      hence X1 in {Y:Y` in S};
+   end;
+   let X1 be set such that A2: X1 in {Y:Y` in S};
+   consider Y such that A3: Y=X1 and A4: Y` in S by A2;
+   thus X1 in dual S by A3,A4,SETFAM_1:def 8;
+end;
+
+theorem Th9:
+  dual S = {Y`:Y in S}
+proof thus dual S c= {Y`:Y in S}
+   proof let X1 be set such that A1: X1 in dual S;
+      reconsider Y1=X1 as Subset of X by A1;
+        Y1` in S by A1,SETFAM_1:def 8;
+      then Y1`` in {Y`:Y in S};
+      hence X1 in {Y`:Y in S};
+   end;
+   let X1 be set such that A2: X1 in {Y`:Y in S};
+   consider Y such that A3: Y`=X1 and A4: Y in S by A2;
+     Y`` in S by A4;
+   hence X1 in dual S by A3,SETFAM_1:def 8;
+end;
+
+definition let X;
+  mode Ideal of X -> non empty Subset-Family of X means
+:Def2:  (not X in it) &
+  for Y1,Y2 holds (Y1 in it & Y2 in it implies Y1 \/ Y2 in it) &
+  ((Y1 in it & Y2 c= Y1) implies Y2 in it);
+  existence
+proof
+   consider F;
+   take dual F;
+     for Y1 holds Y1 in dual F iff Y1` in F by SETFAM_1:def 8;
+   hence thesis by Th7;
+end;
+end;
+
+definition let X,F;
+  redefine func dual F -> Ideal of X;
+coherence
+proof
+     for Y1 holds Y1 in dual F iff Y1` in F by SETFAM_1:def 8;
+   then (not X in dual F) &
+   for Y1,Y2 holds (Y1 in dual F & Y2 in dual F implies Y1 \/ Y2 in dual F) &
+   ((Y1 in dual F & Y2 c= Y1) implies Y2 in dual F) by Th7;
+   hence thesis by Def2;
+end;
+end;
+
+reserve I for Ideal of X;
+
+theorem Th10:
+  (for Y holds not (Y in F & Y in dual F)) &
+  (for Y holds not (Y in I & Y in dual I))
+proof
+   thus for Y holds not (Y in F & Y in dual F)
+   proof let Y;
+      assume A1: Y in F & Y in dual F;
+      then Y` in F by SETFAM_1:def 8;
+      then A2: Y` /\ Y in F by A1,Def1;
+        Y` misses Y by SUBSET_1:26;
+      then {}X in F by A2,XBOOLE_0:def 7;
+      hence contradiction by Def1;
+   end;
+   let Y;
+   assume A3: Y in I & Y in dual I;
+   then Y` in I by SETFAM_1:def 8;
+   then Y` \/ Y in I by A3,Def2;
+   then [#]X in I by SUBSET_1:25;
+   then X in I by SUBSET_1:def 4;
+   hence contradiction by Def2;
+end;
+
+theorem Th11:
+  {} in I
+proof
+   consider Y being Element of I;
+     {} c= Y & {} c= X by XBOOLE_1:2;
+   hence {} in I by Def2;
+end;
+
+definition let X,N,S;
+  pred S is_multiplicative_with N means
+:Def3:  for S1 being non empty set st
+  (S1 c= S & Card S1 <` N) holds meet S1 in S;
+end;
+
+definition let X,N,S;
+  pred S is_additive_with N means
+:Def4:  for S1 being non empty set st
+  (S1 c= S & Card S1 <` N) holds union S1 in S;
+end;
+
+definition let X,N,F;
+  redefine pred F is_multiplicative_with N;
+  synonym F is_complete_with N;
+end;
+
+definition let X,N,I;
+  redefine pred I is_additive_with N;
+  synonym I is_complete_with N;
+end;
+
+theorem Th12:
+  S is_multiplicative_with N implies dual S is_additive_with N
+proof assume A1: S is_multiplicative_with N;
+   let S1 be non empty set such that A2: S1 c= dual S and A3: Card S1 <` N;
+     S1 c= bool X by A2,XBOOLE_1:1;
+   then reconsider S2=S1 as non empty Subset-Family of X by SETFAM_1:def 7;
+   set S3 = dual S2;
+   A4: S3 c= S by A2,YELLOW_8:9;
+   A5: {Y`: Y in S2} = S3 by Th9;
+   deffunc F(Subset of X) = $1`;
+   Card {F(Y): Y in S2} <=` Card S2 from FraenkelCard;
+   then Card S3 <` N by A3,A5,ORDINAL1:22;
+   then A6: (meet S3)`` in S by A1,A4,Def3;
+     (union S2)` = X \ union S2 by SUBSET_1:def 5 .= [#]X \ union S2
+   by SUBSET_1:def 4 .= meet S3 by SETFAM_1:47;
+   hence union S1 in dual S by A6,SETFAM_1:def 8;
+end;
+
+definition let X,F;
+  attr F is uniform means
+:Def5:  for Y holds Y in F implies Card Y = Card X;
+  attr F is principal means
+:Def6:  ex Y st Y in F & ( for Z holds Z in F implies Y c= Z);
+  attr F is being_ultrafilter means
+:Def7:  for Y holds Y in F or (X \ Y) in F;
+end;
+
+definition let X,F,Z;
+  func Extend_Filter(F,Z) -> non empty Subset-Family of X equals
+:Def8:  {Y: ex Y2 st (Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= Y)};
+  coherence
+proof
+   defpred P[set] means ex Y2 st (Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= $1);
+   set IT = {Y: P[Y]};
+   A1: IT is Subset of bool X from SubsetD;
+     X in F by Th5;
+   then X /\ Z in {Y1 /\ Z : Y1 in F};
+   then Z in {Y1 /\ Z : Y1 in F} by XBOOLE_1:28;
+   then Z in {Y: ex Y2 st (Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= Y)};
+   hence IT is non empty Subset-Family of X by A1,SETFAM_1:def 7;
+end;
+end;
+
+theorem Th13:
+  for Z1 holds ( Z1 in Extend_Filter(F,Z) iff ex Z2 st Z2 in F & Z2 /\ Z c= Z1)
+proof
+   let Z1;
+   thus Z1 in Extend_Filter(F,Z) implies ex Z2 st Z2 in F & Z2 /\ Z c= Z1
+   proof
+     defpred P[set] means ex Y2 st (Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= $1);
+      assume Z1 in Extend_Filter(F,Z);
+      then A1: Z1 in {Y: P[Y]} by Def8;
+        P[Z1] from ElemProp(A1);
+      then consider Y2 such that A2: Y2 in {Y1 /\
+ Z : Y1 in F} and A3: Y2 c= Z1;
+      consider Y3 such that A4: Y2 = Y3 /\ Z and A5: Y3 in F by A2;
+      take Y3;
+      thus Y3 in F by A5;
+      thus Y3 /\ Z c= Z1 by A3,A4;
+   end;
+   given Z2 such that A6: Z2 in F and A7: Z2 /\ Z c= Z1;
+     ex Y2 st Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= Z1
+   proof take Z2 /\ Z;
+      thus Z2 /\ Z in {Y1 /\ Z : Y1 in F} by A6;
+      thus Z2 /\ Z c= Z1 by A7;
+   end;
+   then Z1 in {Y: ex Y2 st (Y2 in {Y1 /\ Z : Y1 in F} & Y2 c= Y)};
+   hence Z1 in Extend_Filter(F,Z) by Def8;
+end;
+
+theorem Th14:
+  (for Y1 st Y1 in F holds Y1 meets Z) implies ( Z in Extend_Filter(F,Z) &
+  Extend_Filter(F,Z) is Filter of X & F c= Extend_Filter(F,Z) )
+proof
+   assume A1: for Y1 st Y1 in F holds Y1 meets Z;
+   thus Z in Extend_Filter(F,Z)
+   proof
+        ex Z2 st Z2 in F & Z2 /\ Z c= Z
+      proof
+           X in F & X /\ Z c= Z by Th5,XBOOLE_1:17;
+         hence thesis;
+      end;
+      hence Z in Extend_Filter(F,Z) by Th13;
+   end;
+   thus Extend_Filter(F,Z) is Filter of X
+   proof
+      thus not {} in Extend_Filter(F,Z)
+      proof assume {} in Extend_Filter(F,Z);
+         then consider Z2 such that A2: Z2 in F and A3: Z2 /\ Z c= {} by Th13;
+           Z2 meets Z by A1,A2;
+         then Z2 /\ Z <> {} by XBOOLE_0:def 7;
+         hence contradiction by A3,XBOOLE_1:3;
+      end;
+      let Y1,Y2;
+      thus Y1 in Extend_Filter(F,Z) & Y2 in Extend_Filter(F,Z) implies
+      (Y1 /\ Y2) in Extend_Filter(F,Z)
+      proof assume A4: Y1 in Extend_Filter(F,Z) & Y2 in Extend_Filter(F,Z);
+         then consider Y3 such that A5: Y3 in F and A6: Y3 /\ Z c= Y1 by Th13;
+         consider Y4 such that A7: Y4 in F and A8: Y4 /\ Z c= Y2 by A4,Th13;
+         A9: Y3 /\ Y4 in F by A5,A7,Def1;
+           (Y3 /\ Z) /\ (Y4 /\ Z) = Y3 /\ (Z /\ (Y4 /\ Z)) by XBOOLE_1:16
+         .= Y3 /\ (Y4 /\ (Z /\ Z)) by XBOOLE_1:16 .= (Y3 /\ Y4) /\ Z by
+XBOOLE_1:16;
+         then (Y3 /\ Y4) /\ Z c= Y1 /\ Y2 by A6,A8,XBOOLE_1:27;
+         hence (Y1 /\ Y2) in Extend_Filter(F,Z) by A9,Th13;
+      end;
+      thus Y1 in Extend_Filter(F,Z) & Y1 c= Y2 implies Y2 in Extend_Filter(F,Z
+)
+      proof assume A10: Y1 in Extend_Filter(F,Z) & Y1 c= Y2;
+         then consider Y3 such that A11: Y3 in F and A12: Y3 /\ Z c= Y1 by Th13
+;
+         A13: Y3 /\ Z c= Y2 by A10,A12,XBOOLE_1:1;
+           Y3 c= Y2 \/ (X \ Z)
+         proof
+            A14: Y3 = (Y3 /\ Z) \/ (Y3 \ Z) by XBOOLE_1:51;
+              Y3 \ Z c= X \ Z by XBOOLE_1:33;
+            then A15: Y3 c= (Y3 /\ Z) \/ (X \ Z) by A14,XBOOLE_1:9;
+              (Y3 /\ Z) \/ (X \ Z) c= Y2 \/ (X \ Z) by A13,XBOOLE_1:9;
+            hence Y3 c= Y2 \/ (X \ Z) by A15,XBOOLE_1:1;
+         end;
+         then A16: Y2 \/ (X \ Z) in F by A11,Def1;
+A17:       (X \ Z) misses Z by XBOOLE_1:79;
+           (Y2 \/ (X \ Z)) /\ Z = (Y2 /\ Z) \/ ((X \ Z) /\ Z) by XBOOLE_1:23
+            .= (Y2 /\ Z) \/ {} by A17,XBOOLE_0:def 7 .= Y2 /\ Z;
+         then (Y2 \/ (X \ Z)) /\ Z c= Y2 by XBOOLE_1:17;
+         hence Y2 in Extend_Filter(F,Z) by A16,Th13;
+      end;
+   end;
+   thus F c= Extend_Filter(F,Z)
+   proof
+      let Y be set;
+      assume A18: Y in F;
+      then reconsider Y as Subset of X;
+        Y in F & Y /\ Z c= Y by A18,XBOOLE_1:17;
+      hence thesis by Th13;
+   end;
+end;
+
+reserve S,S1 for Subset of bool X;
+
+definition let X;
+  func Filters(X) -> non empty Subset-Family of bool X equals
+:Def9:  {S where S is Subset of bool X : S is Filter of X};
+  coherence
+proof
+     { X } is Filter of X by Th4;
+     then A1: { X } in {S: S is Filter of X};
+     defpred P[set] means $1 is Filter of X;
+     {S: P[S]} is Subset of bool bool X from SubsetD;
+   hence thesis by A1,SETFAM_1:def 7;
+end;
+end;
+
+theorem Th15:
+  for S being set holds S in Filters(X) iff S is Filter of X
+proof
+   let S be set;
+   thus S in Filters(X) implies S is Filter of X
+   proof
+      defpred P[set] means $1 is Filter of X;
+      assume S in Filters(X);
+      then A1: S in {S1: P[S1]} by Def9;
+      thus P[S] from ElemProp(A1);
+   end;
+   assume S is Filter of X;
+   then S in {S1: S1 is Filter of X};
+   hence S in Filters(X) by Def9;
+end;
+
+reserve FS for non empty Subset of Filters(X);
+
+theorem Th16:
+  FS is c=-linear implies union FS is Filter of X
+proof
+   assume A1: FS is c=-linear;
+     for S being set st S in FS holds S c= bool X
+   proof let S be set such that A2: S in FS;
+        S is Element of Filters(X) by A2;
+      hence S c= bool X;
+   end;
+   then A3: union FS c= bool X by ZFMISC_1:94;
+   consider S being set such that A4: S in FS by XBOOLE_0:def 1;
+     S is Filter of X by A4,Th15;
+   then X in S by Th5;
+   then A5: union FS is non empty Subset-Family of X by A3,A4,SETFAM_1:def 7,
+TARSKI:def 4;
+   A6: not {} in union FS
+   proof
+      assume {} in union FS;
+      then consider S being set such that A7: {} in S and A8: S in FS by TARSKI
+:def 4;
+        S is Filter of X by A8,Th15;
+      hence contradiction by A7,Def1;
+   end;
+     for Y1,Y2 holds (Y1 in union FS & Y2 in union FS implies
+   Y1 /\ Y2 in union FS) & ((Y1 in union FS & Y1 c= Y2) implies Y2 in union FS)
+   proof
+      let Y1,Y2;
+      thus Y1 in union FS & Y2 in union FS implies Y1 /\ Y2 in union FS
+      proof
+         assume A9: Y1 in union FS & Y2 in union FS;
+         then consider S1 being set such that
+         A10: Y1 in S1 and A11: S1 in FS by TARSKI:def 4;
+         consider S2 being set such that
+         A12: Y2 in S2 and A13: S2 in FS by A9,TARSKI:def 4;
+         A14: S1 is Filter of X & S2 is Filter of X by A11,A13,Th15;
+         A15: S1,S2 are_c=-comparable by A1,A11,A13,ORDINAL1:def 9;
+         per cases by A15,XBOOLE_0:def 9;
+         suppose S1 c= S2;
+         then Y1 /\ Y2 in S2 by A10,A12,A14,Def1;
+         hence Y1 /\ Y2 in union FS by A13,TARSKI:def 4;
+         suppose S2 c= S1;
+         then Y1 /\ Y2 in S1 by A10,A12,A14,Def1;
+         hence Y1 /\ Y2 in union FS by A11,TARSKI:def 4;
+      end;
+      assume A16: Y1 in union FS & Y1 c= Y2;
+      then consider S1 being set such that
+      A17: Y1 in S1 and A18: S1 in FS by TARSKI:def 4;
+        S1 is Filter of X by A18,Th15;
+      then Y2 in S1 by A16,A17,Def1;
+      hence Y2 in union FS by A18,TARSKI:def 4;
+   end;
+   hence union FS is Filter of X by A5,A6,Def1;
+end;
+
+theorem Th17:
+  for F ex Uf st F c= Uf & Uf is being_ultrafilter
+proof
+   let F;
+   set Larger_F = {S: F c= S & S is Filter of X};
+   A1: F in Larger_F;
+     {S: F c= S & S is Filter of X} c= Filters(X)
+   proof
+     defpred P[set] means F c= $1 & $1 is Filter of X;
+     let F2 be set; assume F2 in {S: F c= S & S is Filter of X};
+      then A2: F2 in {S: P[S]};
+      P[F2] from ElemProp(A2);
+      hence F2 in Filters(X) by Th15;
+   end;
+   then reconsider Larger_F as non empty Subset of Filters(X) by A1;
+     for Z be set st Z c= Larger_F & Z is c=-linear
+     ex Y be set st Y in Larger_F & for X1 be set st X1 in Z holds X1 c= Y
+   proof let X1 be set;
+    assume that
+A3: X1 c= Larger_F and
+A4:  X1 is c=-linear;
+      per cases;
+      suppose A5: X1 = {};
+      take F;
+      thus thesis by A5;
+      suppose X1 is non empty;
+      then reconsider X2=X1 as non empty Subset of Filters(X) by A3,XBOOLE_1:1;
+      A6: union X2 is Filter of X by A4,Th16;
+        F c= union X2
+      proof
+         consider F1 being set such that A7: F1 in X2 by XBOOLE_0:def 1;
+         defpred P[set] means F c= $1 & $1 is Filter of X;
+         A8: F1 in {S: P[S]} by A3,A7;
+         A9: P[F1] from ElemProp(A8);
+           F1 c= union X2 by A7,ZFMISC_1:92;
+         hence F c= union X2 by A9,XBOOLE_1:1;
+      end;
+      then union X2 in {S: F c= S & S is Filter of X} by A6;
+      then reconsider MF = union X2 as Element of Larger_F;
+      take MF;
+      thus thesis by ZFMISC_1:92;
+    end;
+   then consider Uf1 be set such that
+A10: Uf1 in Larger_F &
+    for Z be set st Z in Larger_F & Z <> Uf1 holds not Uf1 c= Z
+     by ORDERS_2:77;
+   reconsider Uf1 as Element of Larger_F by A10;
+   reconsider Uf=Uf1 as Filter of X by Th15;
+   take Uf;
+   defpred P[set] means F c= $1 & $1 is Filter of X;
+   A11: Uf in {S: P[S]};
+   A12: P[Uf] from ElemProp(A11);
+   hence F c= Uf;
+   thus Uf is being_ultrafilter
+   proof
+      let Z;
+      per cases;
+      suppose Z in Uf;
+      hence thesis;
+      suppose A13: not Z in Uf;
+        X \ Z in Uf
+      proof
+         assume A14: not X \ Z in Uf;
+           for Y1 st Y1 in Uf holds Y1 meets Z
+         proof let Y1;
+            assume A15: Y1 in Uf;
+            assume Y1 misses Z;
+            then Y1 = Y1 \ Z by XBOOLE_1:83;
+            then Y1 c= X \ Z by XBOOLE_1:33;
+            hence contradiction by A14,A15,Def1;
+         end;
+         then A16: Extend_Filter(Uf,Z) is Filter of X &
+         Uf c= Extend_Filter(Uf,Z) & Z in Extend_Filter(Uf,Z) by Th14;
+         then F c= Extend_Filter(Uf,Z) by A12,XBOOLE_1:1;
+         then Extend_Filter(Uf,Z) in Larger_F by A16;
+         hence contradiction by A10,A13,A16;
+       end;
+       hence thesis;
+   end;
+end;
+
+reserve X for infinite set;
+reserve Y,Y1,Y2,Z for Subset of X;
+reserve F,Uf for Filter of X;
+
+definition let X;
+  func Frechet_Filter(X) -> Filter of X equals
+:Def10:  { Y :  Card (X \ Y) <` Card X};
+  coherence
+proof
+   defpred P[set] means Card (X \ $1) <` Card X;
+   set IT = { Y : P[Y] };
+   A1: IT is Subset of bool X from SubsetD;
+     Card (X \ X) = Card ({} qua set) by XBOOLE_1:37 .= 0 by CARD_4:17;
+   then A2: Card (X \ X) <` Card X by ORDINAL3:10;
+     X c= X;
+   then X in IT by A2;
+   then reconsider IT as non empty Subset-Family of X by A1,SETFAM_1:def 7;
+   A3: for Y1 st Y1 in IT holds Card (X \ Y1) <` Card X
+   proof
+      let Y1;
+      assume Y1 in IT;
+      then A4: Y1 in { Y : P[Y] };
+      thus P[Y1] from ElemProp(A4);
+   end;
+     IT is Filter of X
+   proof
+      thus not {} in IT
+      proof
+         assume {} in IT;
+         then Card (X \ {}) <` Card X by A3;
+         hence contradiction;
+      end;
+      let Y1,Y2;
+      thus Y1 in IT & Y2 in IT implies Y1 /\ Y2 in IT
+      proof
+         assume A5: Y1 in IT & Y2 in IT;
+         then A6: Card (X \ Y1) <` Card X by A3;
+           Card (X \ Y2) <` Card X by A3,A5;
+         then Card (X \ Y1) +` Card (X \ Y2) <` Card X +` Card X
+         by A6,CARD_4:74;
+         then A7:  Card (X \ Y1) +` Card (X \ Y2) <` Card X by CARD_4:33;
+           Card (X \ (Y1 /\ Y2)) = Card ( (X \ Y1) \/ (X \ Y2)) by XBOOLE_1:54;
+         then Card (X \ (Y1 /\ Y2)) <=` Card (X \ Y1) +` Card (X \ Y2)
+         by CARD_2:47;
+         then Card (X \ (Y1 /\ Y2)) <` Card X by A7,ORDINAL1:22;
+         hence (Y1 /\ Y2) in IT;
+      end;
+      thus (Y1 in IT & Y1 c= Y2) implies Y2 in IT
+      proof
+         assume A8: Y1 in IT & Y1 c= Y2;
+         then A9: Card (X \ Y1) <` Card X by A3;
+           X \ Y2 c= X \ Y1 by A8,XBOOLE_1:34;
+         then Card (X \ Y2) <=` Card (X \ Y1) by CARD_1:27;
+         then Card (X \ Y2) <` Card X by A9,ORDINAL1:22;
+         hence Y2 in IT;
+      end;
+   end;
+hence thesis;
+end;
+end;
+
+definition let X;
+  func Frechet_Ideal(X) -> Ideal of X equals
+:Def11:  dual Frechet_Filter(X);
+  coherence;
+end;
+
+theorem Th18:
+  Y in Frechet_Filter(X) iff Card (X \ Y) <` Card X
+proof
+   thus Y in Frechet_Filter(X) implies Card (X \ Y) <` Card X
+   proof
+      defpred P[set] means Card (X \ $1) <` Card X;
+      assume Y in Frechet_Filter(X);
+      then A1: Y in {Y1: P[Y1]} by Def10;
+      thus P[Y] from ElemProp(A1);
+   end;
+   thus Card (X \ Y) <` Card X implies Y in Frechet_Filter(X)
+    proof
+       assume Card (X \ Y) <` Card X;
+       then Y in {Y1: Card (X \ Y1) <` Card X};
+       hence Y in Frechet_Filter(X) by Def10;
+    end;
+end;
+
+theorem Th19:
+  Y in Frechet_Ideal(X) iff Card Y <` Card X
+proof
+     Y in Frechet_Ideal(X) iff Y in dual Frechet_Filter(X) by Def11;
+   then Y in Frechet_Ideal(X) iff Y` in Frechet_Filter(X) by SETFAM_1:def 8;
+   then Y in Frechet_Ideal(X) iff Card (X \ Y`) <` Card X by Th18;
+   then Y in Frechet_Ideal(X) iff Card Y`` <` Card X by SUBSET_1:def 5;
+   hence Y in Frechet_Ideal(X) iff Card Y <` Card X;
+end;
+
+theorem Th20:
+  Frechet_Filter(X) c= F implies F is uniform
+proof
+   assume A1: Frechet_Filter(X) c= F;
+   let Y;
+   assume Y in F;
+   then not X \ Y in Frechet_Filter(X) by A1,Th6;
+   then A2: not Card (X \ (X \ Y)) <` Card X by Th18;
+     X \ (X \ Y) = X /\ Y by XBOOLE_1:48 .= Y by XBOOLE_1:28;
+   then A3: Card X <=` Card Y by A2,CARD_1:14;
+     Card Y <=` Card X by CARD_1:27;
+   hence Card Y = Card X by A3,XBOOLE_0:def 10;
+end;
+
+theorem
+    Uf is uniform being_ultrafilter implies Frechet_Filter(X) c= Uf
+proof
+   assume A1: Uf is uniform being_ultrafilter;
+   thus Frechet_Filter(X) c= Uf
+   proof
+   let Y be set;
+   assume A2: Y in Frechet_Filter(X);
+   then Card (X \ Y) <` Card X by Th18;
+   then Card (X \ Y) <> Card X;
+   then not (X \ Y) in Uf by A1,Def5;
+   hence Y in Uf by A1,A2,Def7;
+   end;
+end;
+
+definition let X;
+  cluster non principal being_ultrafilter Filter of X;
+  existence
+proof
+   consider Uf being Filter of X such that
+   A1: Frechet_Filter(X) c= Uf and
+   A2: Uf is being_ultrafilter by Th17;
+   take Uf;
+   A3: Uf is uniform by A1,Th20;
+     Uf is non principal
+   proof assume Uf is principal;
+      then consider Y such that A4: Y in Uf and
+      A5:  for Z holds Z in Uf implies Y c= Z by Def6;
+      A6: for x being Element of X holds X \ { x } in Uf
+      proof let x be Element of X; assume A7: not X \ { x } in Uf;
+           { x } is finite Subset of X by SUBSET_1:55;
+         then A8: X \ { x } in Uf or { x } in Uf by A2,Def7;
+           Card X <> Card { x };
+         hence contradiction by A3,A7,A8,Def5;
+      end;
+      A9: for x  being Element of X holds not x in Y
+      proof let x be Element of X;
+           X \ { x } in Uf by A6;
+         then A10: Y c= X \ { x } by A5;
+         assume x in Y;
+         then not x in { x } by A10,XBOOLE_0:def 4;
+         hence contradiction by TARSKI:def 1;
+      end;
+        Y = {}
+      proof assume Y <> {};
+         then consider x such that A11: x in Y by XBOOLE_0:def 1;
+         thus contradiction by A9,A11;
+      end;
+      hence contradiction by A4,Def1;
+   end;
+   hence thesis by A2;
+end;
+end;
+
+definition let X;
+  cluster uniform being_ultrafilter -> non principal Filter of X;
+  coherence
+proof let F;
+   assume A1: F is uniform being_ultrafilter;
+   assume F is principal;
+   then consider Y such that A2:
+   Y in F & ( for Z holds Z in F implies Y c= Z) by Def6;
+     Y = {}
+   proof assume Y <> {};
+      then consider x being set such that A3: x in Y by XBOOLE_0:def 1;
+      A4: for Z holds Z in F implies x in Z
+      proof let Z; assume Z in F;
+         then Y c= Z by A2;
+         hence thesis by A3;
+      end;
+
+        Card { x } <` Card X by Th1;
+      then A5: not { x } in F by A1,Def5;
+         { x } is Subset of X by A3,SUBSET_1:55;
+      then X \ { x } in F by A1,A5,Def7;
+      then x in X \ { x } by A4;
+      then not x in { x } by XBOOLE_0:def 4;
+      hence contradiction by TARSKI:def 1;
+   end;
+   hence contradiction by A2,Def1;
+end;
+end;
+
+theorem Th22:
+  for F being being_ultrafilter Filter of X for Y holds
+  Y in F iff not Y in dual F
+proof let F be being_ultrafilter Filter of X;
+   let Y;
+   thus Y in F implies not Y in dual F
+   proof assume Y in F;
+      then not (X \ Y) in F by Th6;
+      then not Y` in F by SUBSET_1:def 5;
+      hence not Y in dual F by SETFAM_1:def 8;
+   end;
+   assume not Y in dual F;
+   then not Y` in F by SETFAM_1:def 8;
+   then not (X \ Y) in F by SUBSET_1:def 5;
+   hence Y in F by Def7;
+end;
+
+reserve x for Element of X;
+
+theorem Th23:
+  F is non principal being_ultrafilter & F is_complete_with Card X
+  implies F is uniform
+proof
+   assume A1: F is non principal being_ultrafilter;
+   assume A2: F is_complete_with Card X;
+   assume not F is uniform;
+   then consider Y such that
+   A3:  Y in F & not Card Y = Card X by Def5;
+   A4: Y is non empty by A3,Def1;
+   defpred P[set,set] means not $1 in $2 & $2 in F;
+   A5: for x being set st x in X holds ex Z being set st Z in F & P[x,Z]
+   proof let x be set such that A6: x in X;
+      A7: { x } is Subset of X by A6,SUBSET_1:55;
+      assume A8: for Z being set st Z in F holds x in Z or not Z in F;
+      A9: for Z st Z in F holds { x } c= Z
+      proof let Z such that A10: Z in F;
+           x in Z by A8,A10;
+         hence { x } c= Z by ZFMISC_1:37;
+      end;
+        not X \ { x } in F
+      proof assume X \ { x } in F;
+         then x in X \ { x } by A8;
+         then not x in { x } by XBOOLE_0:def 4;
+         hence contradiction by TARSKI:def 1;
+      end;
+      then {x} in F by A1,A7,Def7;
+      hence contradiction by A1,A9,Def6;
+   end;
+   consider h being Function such that A11: dom h = X and
+     rng h c= F and
+   A12: for x being set st x in X holds P[x,h.x] from NonUniqBoundFuncEx(A5);
+   A13: {h.x : x in Y} c= F
+   proof let y be set such that A14: y in {h.x : x in Y};
+      consider x such that A15: y = h.x and x in Y by A14;
+      thus thesis by A12,A15;
+   end;
+   A16: {h.x : x in Y} is non empty
+   proof consider y being Element of Y;
+        y in Y by A4;
+      then h.y in {h.x : x in Y};
+      hence thesis;
+   end;
+     {h.x : x in Y} c= h.:Y
+   proof let y be set such that A17: y in {h.x : x in Y};
+      consider x such that A18: y = h.x and A19: x in Y by A17;
+      thus thesis by A11,A18,A19,FUNCT_1:def 12;
+   end;
+   then A20: Card {h.x : x in Y} <=` Card Y by CARD_2:2;
+     Card Y <=` Card X by CARD_1:27;
+   then Card Y <` Card X by A3,CARD_1:13;
+   then Card {h.x : x in Y} <` Card X by A20,ORDINAL1:22;
+   then A21: meet {h.x : x in Y} in F by A2,A13,A16,Def3;
+     for y being set holds not y in (Y /\ meet {h.x : x in Y})
+   proof
+      let y be set such that A22: y in (Y /\ meet {h.x : x in Y});
+      A23: y in Y by A22,XBOOLE_0:def 3;
+      then A24: not y in h.y by A12;
+        h.y in {h.x : x in Y} by A23;
+      then not y in meet {h.x : x in Y} by A24,SETFAM_1:def 1;
+      hence contradiction by A22,XBOOLE_0:def 3;
+   end;
+   then Y /\ meet {h.x : x in Y} = {} by XBOOLE_0:def 1;
+   then {} in F by A3,A21,Def1;
+   hence contradiction by Def1;
+end;
+
+
+begin
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::                                                                       ::
+::            Inaccessible and measurable cardinals, Ulam matrix         ::
+::                                                                       ::
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem Th24:
+  nextcard N <=` exp(2,N)
+proof
+     Card N = N by CARD_1:def 5;
+   then Card N <` exp(2,N) by CARD_5:23;
+   hence thesis by CARD_1:def 6;
+end;
+
+definition
+  pred GCH means
+:Def12:  for N being Aleph holds nextcard N = exp(2,N);
+end;
+
+definition let IT be Aleph;
+  attr IT is inaccessible means
+:Def13:  IT is regular limit;
+  synonym IT is_inaccessible_cardinal;
+end;
+
+definition
+  cluster inaccessible -> regular limit Aleph;
+  coherence by Def13;
+end;
+
+theorem
+    alef 0 is inaccessible
+proof
+   thus alef 0 is regular by CARD_5:42;
+   thus alef 0 is limit by CARD_1:83,85,def 5;
+end;
+
+definition let IT be Aleph;
+  attr IT is strong_limit means
+:Def14:  for N st N <` IT holds exp(2,N) <` IT;
+  synonym IT is_strong_limit_cardinal;
+end;
+
+theorem Th26:
+  alef 0 is strong_limit
+proof
+   let N;
+   assume N <` alef 0;
+   then N is finite by CARD_4:9;
+   then A1:  bool N is finite by FINSET_1:24;
+     Card bool N,bool N are_equipotent by CARD_1:def 5;
+   then Card bool N is finite by A1,CARD_1:68;
+   then exp(2,Card N) is finite by CARD_2:44;
+   then exp(2,N) is finite by CARD_1:def 5;
+   hence exp(2,N) <` alef 0 by CARD_4:9;
+end;
+
+theorem Th27:
+  M is strong_limit implies M is limit
+proof
+   assume A1: M is strong_limit;
+   assume not M is limit;
+   then consider N such that
+   A2:  M = nextcard N by CARD_1:def 7;
+   A3: N <` M by A2,CARD_1:32;
+     M <=` exp(2,N) by A2,Th24;
+   then not exp(2,N) <` M by CARD_1:14;
+   hence contradiction by A1,A3,Def14;
+end;
+
+definition
+  cluster strong_limit -> limit Aleph;
+  coherence by Th27;
+end;
+
+theorem Th28:
+  GCH implies (M is limit implies M is strong_limit)
+proof
+   assume A1: GCH;
+   assume A2: M is limit;
+   assume not M is strong_limit;
+   then consider N being Cardinal such that
+   A3: N <` M & not exp(2,N) <` M by Def14;
+A4: N is infinite
+   proof
+     assume N is finite;
+     then Funcs(N,2) is finite by FRAENKEL:16;
+     then Card Funcs(N,2) is finite by CARD_4:1;
+     then exp(2,N) is finite by CARD_2:def 3;
+     hence thesis by A3,CARD_4:13;
+   end;
+     M <=` exp(2,N) by A3,CARD_1:14;
+then A5:M <=` nextcard N by A1,A4,Def12;
+     nextcard N <=` M by A3,CARD_4:22;
+   then nextcard N = M by A5,XBOOLE_0:def 10;
+   hence contradiction by A2,CARD_1:def 7;
+end;
+
+definition let IT be Aleph;
+  attr IT is strongly_inaccessible means
+:Def15:  IT is regular strong_limit;
+  synonym IT is_strongly_inaccessible_cardinal;
+end;
+
+definition
+  cluster strongly_inaccessible -> regular strong_limit Aleph;
+  coherence by Def15;
+end;
+
+theorem
+    alef 0 is strongly_inaccessible by Def15,Th26,CARD_5:42;
+
+theorem Th30:
+  M is strongly_inaccessible implies M is inaccessible
+proof
+   assume A1: M is strongly_inaccessible;
+   hence M is regular by Def15;
+     M is strong_limit by A1,Def15;
+   hence thesis by Th27;
+end;
+
+definition
+  cluster strongly_inaccessible -> inaccessible Aleph;
+  coherence by Th30;
+end;
+
+theorem
+    GCH implies ( M is inaccessible implies M is strongly_inaccessible)
+proof
+   assume A1: GCH;
+   assume A2: M is inaccessible;
+   hence M is regular by Def13;
+     M is limit by A2,Def13;
+   hence M is strong_limit by A1,Th28;
+end;
+
+definition let M;
+  attr M is measurable means
+:Def16:  ex Uf being Filter of M st Uf is_complete_with M
+  & Uf is non principal being_ultrafilter;
+  synonym M is_measurable_cardinal;
+end;
+
+theorem Th32:
+  for A being being_limit_ordinal Ordinal for X being set st
+  X c= A holds sup X = A implies union X = A
+proof let A be being_limit_ordinal Ordinal;
+   let X be set such that A1: X c= A;
+   assume A2: sup X = A;
+     union X c= union A by A1,ZFMISC_1:95;
+   hence union X c= A by ORDINAL1:def 6;
+   thus A c= union X
+   proof let X1 be set such that A3: X1 in A;
+      reconsider X2=X1 as Ordinal by A3,ORDINAL1:23;
+        succ X2 in A by A3,ORDINAL1:41;
+      then consider B being Ordinal such that A4: B in X and
+      A5: succ X2 c= B by A2,ORDINAL2:29;
+        X2 in succ X2 by ORDINAL1:10;
+      hence X1 in union X by A4,A5,TARSKI:def 4;
+   end;
+end;
+
+theorem Th33:
+  M is measurable implies M is regular
+proof
+   assume M is measurable;
+   then consider Uf being Filter of M such that
+   A1: Uf is_complete_with M and
+   A2: Uf is non principal being_ultrafilter by Def16;
+     Uf is_complete_with Card M by A1,CARD_1:def 5;
+   then A3: Uf is uniform by A2,Th23;
+   assume not M is regular;
+   then cf M <> M & cf M <=` M by CARD_5:def 2,def 4;
+   then A4: cf M <` M by CARD_1:13;
+   then consider xi being Ordinal-Sequence such that
+   A5: dom xi = cf M and A6:  rng xi c= M and xi is increasing and
+   A7:  M = sup xi and xi is Cardinal-Function and
+     not 0 in rng xi by CARD_5:41;
+   A8: M = sup rng xi by A7,ORDINAL2:def 9;
+     M is_limit_ordinal by CARD_4:32;
+   then A9: M = union rng xi by A6,A8,Th32;
+     Card rng xi <=` Card dom xi by YELLOW_6:3;
+   then Card rng xi <=` cf M by A5,CARD_1:def 5;
+   then A10: Card rng xi <` M by A4,ORDINAL1:22;
+   A11: rng xi c= dual Uf
+   proof let X be set such that A12: X in rng xi;
+      A13: Card X <` M by A6,A12,CARD_1:25;
+      reconsider X1=X as Subset of M by A6,A12,ORDINAL1:def 2;
+        not X1 in Uf
+      proof assume X1 in Uf;
+         then Card X1 = Card M by A3,Def5;
+         then Card X1 = M by CARD_1:def 5;
+         hence contradiction by A13;
+      end;
+      hence X in dual Uf by A2,Th22;
+   end;
+     dual Uf is_complete_with M by A1,Th12;
+   then union rng xi in dual Uf by A9,A10,A11,Def4,ZFMISC_1:2;
+   hence contradiction by A9,Def2;
+end;
+
+definition let M;
+  cluster nextcard M -> non limit;
+  coherence
+proof take M;
+   thus thesis;
+end;
+end;
+
+definition
+  cluster non limit infinite Cardinal;
+  existence
+proof
+   take alef succ 0;
+     alef succ 0 = nextcard alef 0 by CARD_1:39;
+   hence thesis;
+end;
+end;
+
+definition
+  cluster non limit -> regular Aleph;
+  coherence
+proof let M such that A1: M is non limit;
+   assume not M is regular;
+   then cf M <> M & cf M <=` M by CARD_5:def 2,def 4;
+   then cf M <` M by CARD_1:13;
+   hence contradiction by A1,CARD_5:40;
+end;
+end;
+
+definition
+  let M be non limit Cardinal;
+  func predecessor M -> Cardinal means
+:Def17:  M = nextcard it;
+existence by CARD_1:def 7;
+uniqueness by CARD_4:21;
+end;
+
+definition
+  let M be non limit Aleph;
+  cluster predecessor M -> infinite;
+  coherence
+proof assume A1: predecessor M is finite;
+     M = nextcard predecessor M by Def17;
+   hence contradiction by A1,CARD_1:82;
+end;
+end;
+
+definition  :: infinite matrix
+  let X be set;
+  let N,N1 be Cardinal;
+  mode Inf_Matrix of N,N1,X is Function of [:N,N1:],X;
+end;
+
+reserve X for set;
+reserve M for non limit Aleph;
+reserve F for Filter of M;
+reserve N1,N2,N3 for Element of predecessor M;
+reserve K1,K2 for Element of M;
+reserve T for Inf_Matrix of predecessor M , M, bool M;
+
+definition   :: Ulam matrix on nextcard N;
+  let M,T;
+  pred T is_Ulam_Matrix_of M means
+  :Def18:
+  (for N1,K1,K2 holds K1<>K2 implies T.(N1,K1) /\ T.(N1,K2) is empty ) &
+  (for K1,N1,N2 holds N1<>N2 implies T.(N1,K1) /\ T.(N2,K1) is empty ) &
+  (for N1 holds Card (M \ union {T.(N1,K1): K1 in M}) <=` predecessor M ) &
+  (for K1 holds Card (M \ union {T.(N1,K1): N1 in predecessor M}) <=`
+  predecessor M );
+end;
+
+:: this is pretty long
+theorem Th34:
+  ex T st T is_Ulam_Matrix_of M
+proof
+   set N = predecessor M;
+   set GT = nextcard N \ N;
+
+:: first we want to define T
+   defpred P[set,set] means
+    ex f being Function st $2 = f &
+    f is one-to-one & dom f = N & rng f = $1;
+   A1: for K1 being set st K1 in GT ex x being set st
+   x in Funcs(N, nextcard N) & P[K1,x]
+   proof let K1 be set such that A2: K1 in (nextcard N) \ N;
+      A3: K1 in nextcard N & not K1 in N by A2,XBOOLE_0:def 4;
+      reconsider K2=K1 as Element of nextcard N by A2;
+        N c= K2 by A3,ORDINAL1:26;
+      then Card N <=` Card K2 by CARD_1:27;
+      then A4: N <=` Card K2 by CARD_1:def 5;
+        Card K2 <` nextcard N by CARD_1:25;
+      then Card K2 <=` N by CARD_4:23;
+      then Card K2 = N by A4,XBOOLE_0:def 10 .= Card N by CARD_1:def 5;
+      then K2,N are_equipotent by CARD_1:21;
+      then consider f being Function such that A5: f is one-to-one &
+      dom f = N & rng f = K1 by WELLORD2:def 4;
+        rng f c= nextcard N by A2,A5,ORDINAL1:def 2;
+      then f in Funcs(N, nextcard N) by A5,FUNCT_2:def 2;
+      hence thesis by A5;
+   end;
+   consider h1 being Function such that A6:  dom h1 = GT and
+     rng h1 c= Funcs(N, nextcard N) and
+   A7: for K1 being set st K1 in GT holds P[K1,h1.K1]
+    from NonUniqBoundFuncEx(A1);
+     for K1 being set st K1 in dom h1 holds h1.K1 is Function
+   proof let K1 be set such that A8: K1 in dom h1;
+      consider f being Function such that A9: h1.K1 = f &
+      f is one-to-one & dom f = N & rng f = K1 by A6,A7,A8;
+      thus h1.K1 is Function by A9;
+   end;
+   then reconsider h = h1 as Function-yielding Function by PRALG_1:def 15;
+     N in nextcard N & not N in N by CARD_1:32;
+   then reconsider GT1 = nextcard N \ N as non empty set by XBOOLE_0:def 4;
+   A10: for N1 for K1 being Element of GT1 holds dom (h.K1)=N & rng (h.K1) = K1
+   proof let N1; let K1 be Element of GT1;
+      consider f being Function such that A11: h1.K1 = f &
+      f is one-to-one & dom f = N & rng f = K1 by A7;
+      thus dom (h.K1) = N & rng (h.K1) = K1 by A11;
+   end;
+   deffunc g(set,set) = (h.$2).$1;
+   defpred P[set,set,set] means
+    $3 = {K2 where K2 is Element of GT1 :  g($1,K2)=$2 };
+   A12: for N1,K1 ex S1 being Element of bool GT1 st P[N1,K1,S1]
+   proof let N1,K1;
+      defpred P[set] means g(N1,$1)=K1;
+      A13: {K2 where K2 is Element of GT1 :  P[K2] } is Subset of GT1
+      from SubsetD;
+      take {K2 where K2 is Element of GT1 :  g(N1,K2)=K1 };
+      thus thesis by A13;
+   end;
+   consider T1 being Function of [:predecessor M,M:],bool GT1 such that
+   A14: for N1,K1 holds P[N1,K1,T1.[N1,K1]] from FuncEx2D(A12);
+   A15: for N1,K1 holds T1.(N1,K1) =
+   {K2 where K2 is Element of GT1 :  g(N1,K2)=K1 }
+   proof let N1,K1;
+        T1.[N1,K1]=T1.(N1,K1) by BINOP_1:def 1;
+      hence thesis by A14;
+   end;
+     GT1 c= nextcard N;
+   then GT1 c= M by Def17;
+   then bool GT1 c= bool M by ZFMISC_1:79;
+   then reconsider T=T1 as Function of [:predecessor M,M:],bool M by FUNCT_2:9;
+   take T;
+
+:: we have T and start to prove its properties
+   A16: for N1,N2,K1,K2 for K3 being set holds K3 in T.(N1,K1) /\ T.(N2,K2)
+   implies ex K4 being Element of GT1 st K4=K3 & g(N1,K4)=K1 & g(N2,K4)=K2
+   proof let N1,N2,K1,K2;
+      let K3 be set;
+      assume K3 in T.(N1,K1) /\ T.(N2,K2);
+      then A17: K3 in T1.(N1,K1) & K3 in T1.(N2,K2) by XBOOLE_0:def 3;
+      then reconsider K4=K3 as Element of GT1;
+      take K4;
+      thus K4=K3;
+      defpred A[Element of GT1] means g(N1,$1)=K1;
+      defpred B[Element of GT1] means g(N2,$1)=K2;
+      A18: K4 in {K5 where K5 is Element of GT1 :  A[K5] } by A15,A17;
+      A19: K4 in {K5 where K5 is Element of GT1 :  B[K5] } by A15,A17;
+      thus A[K4] from ElemProp(A18);
+      thus B[K4] from ElemProp(A19);
+   end;
+
+:: first condition from def.
+   thus for N1,K1,K2 holds K1<>K2 implies T.(N1,K1) /\ T.(N1,K2) is empty
+   proof
+      let N1,K1,K2;
+      assume A20: K1<>K2;
+      assume not T.(N1,K1) /\ T.(N1,K2) is empty;
+      then consider K3 being set such that A21: K3 in T.(N1,K1) /\ T.(N1,K2)
+      by XBOOLE_0:def 1;
+      consider K4 being Element of GT1 such that A22:
+      K4=K3 & g(N1,K4)=K1 & g(N1,K4)=K2 by A16,A21;
+      thus contradiction by A20,A22;
+   end;
+
+:: second condition from def.
+   thus for K1,N1,N2 holds N1<>N2 implies T.(N1,K1) /\ T.(N2,K1) is empty
+   proof
+      let K1,N1,N2;
+      assume A23: N1<>N2;
+      assume not T.(N1,K1) /\ T.(N2,K1) is empty;
+      then consider K3 being set such that A24: K3 in T.(N1,K1) /\ T.(N2,K1)
+      by XBOOLE_0:def 1;
+      consider K4 being Element of GT1 such that A25:
+      K4=K3 & g(N1,K4)=K1 & g(N2,K4)=K1 by A16,A24;
+      consider f being Function such that A26: h1.K4 = f &
+      f is one-to-one & dom f = N & rng f = K4 by A7;
+      thus contradiction by A23,A25,A26,FUNCT_1:def 8;
+   end;
+
+:: third  condition from def.
+   thus for N1 holds Card (M \ union {T.(N1,K1): K1 in M}) <=` N
+   proof
+      let N1;
+        union {T.(N1,K1):K1 in M} = GT1
+      proof
+           for S1 being set st S1 in {T.(N1,K1):K1 in M} holds S1 c= GT1
+         proof let S1 be set such that A27: S1 in {T.(N1,K1):K1 in M};
+            consider K1 such that A28: S1 = T.(N1,K1) & K1 in M by A27;
+              T1.(N1,K1) c= GT1;
+            hence S1 c= GT1 by A28;
+         end;
+         hence union {T.(N1,K1):K1 in M} c= GT1 by ZFMISC_1:94;
+         let K2 be set such that A29: K2 in GT1;
+           K2 in nextcard N by A29;
+         then K2 in M by Def17;
+         then A30: K2 c= M by ORDINAL1:def 2;
+         reconsider K5=K2 as Element of GT1 by A29;
+           N1 in N;
+         then N1 in dom (h.K5) by A10;
+         then (h.K5).N1 in rng (h.K5) by FUNCT_1:def 5;
+         then A31: g(N1,K5) in K5 by A10; :: transitivity
+           K5 in {K3 where K3 is Element of GT1 :  g(N1,K3)=g(N1,K5)};
+         then A32: K5 in T.(N1,g(N1,K5)) by A15,A30,A31;
+           T.(N1,g(N1,K5)) in {T.(N1,K1):K1 in M} by A30,A31;
+         hence K2 in union {T.(N1,K1):K1 in M} by A32,TARSKI:def 4;
+      end;
+      then union {T.(N1,K1):K1 in M} = M \ N by Def17;
+      then M \ union {T.(N1,K1):K1 in M} = M /\ N by XBOOLE_1:48;
+      then M \ union {T.(N1,K1):K1 in M} c= N by XBOOLE_1:17;
+      hence Card (M \ union {T.(N1,K1): K1 in M}) <=` N by CARD_1:23;
+   end;
+
+:: fourth condition from def.
+   thus for K1 holds Card (M \ union {T.(N1,K1): N1 in N}) <=` N
+   proof
+      let K1;
+      A33: {K5 where K5 is Element of GT1 : K1 in K5} c=
+      union {T.(N1,K1): N1 in N}
+      proof let K4 be set such that
+         A34: K4 in {K5 where K5 is Element of GT1 : K1 in K5};
+         consider K5 being Element of GT1 such that A35: K4=K5 and
+         A36: K1 in K5 by A34;
+
+            rng (h.K5) = K5 by A10;
+         then consider N2 being set such that A37:  N2 in dom (h.K5) &
+         (h.K5).N2 = K1 by A36,FUNCT_1:def 5;
+         reconsider N3=N2 as Element of N by A10,A37;
+           K5 in {K3 where K3 is Element of GT1 :  g(N3,K3)=K1} by A37;
+         then A38: K5 in T.(N3,K1) by A15;
+           T.(N3,K1) in {T.(N1,K1): N1 in N};
+         hence K4 in union {T.(N1,K1): N1 in N} by A35,A38,TARSKI:def 4;
+      end;
+      A39: N c= K1 implies Card K1 = N
+      proof
+         assume N c= K1;
+         then Card N <=` Card K1 by CARD_1:27;
+          then A40: N <=` Card K1 by CARD_1:def 5;
+           Card K1 <` M by CARD_1:25;
+         then Card K1 <` nextcard N by Def17;
+         then Card K1 <=` N by CARD_4:23;
+         hence Card K1 = N by A40,XBOOLE_0:def 10;
+      end;
+      A41: Card (M \ {K5 where K5 is Element of GT1: K1 in K5}) <=` N
+      proof
+         per cases by ORDINAL1:26;
+         suppose A42: N c= K1;
+           M \ (K1 \/ {K1}) c= {K5 where K5 is Element of GT1: K1 in K5}
+         proof let K6 be set such that A43: K6 in M \ (K1 \/ {K1});
+              K6 in M & not K6 in (K1 \/ {K1}) by A43,XBOOLE_0:def 4;
+            then (not K6 in {K1}) & not K6 in K1 by XBOOLE_0:def 2;
+            then A44: not (K6 = K1 or K6 in K1) by TARSKI:def 1;
+            reconsider K7=K6 as Element of M by A43;
+              K7 in M;
+            then A45: K7 in nextcard N by Def17;
+            A46: K1 in K7 by A44,ORDINAL1:24;
+            then N in K7 by A42,ORDINAL1:22;
+            then reconsider K8=K7 as Element of GT1 by A45,XBOOLE_0:def 4;
+              K8 in {K5 where K5 is Element of GT1: K1 in K5} by A46;
+            hence K6 in {K5 where K5 is Element of GT1: K1 in K5};
+         end;
+         then M \ {K5 where K5 is Element of GT1: K1 in K5} c=
+         M \ (M \ (K1 \/ {K1})) by XBOOLE_1:34;
+         then A47: M \ {K5 where K5 is Element of GT1: K1 in K5} c=
+         M /\ (K1 \/ {K1}) by XBOOLE_1:48;
+           M /\ (K1 \/ {K1}) c= K1 \/ {K1} by XBOOLE_1:17;
+         then A48: M \ {K5 where K5 is Element of GT1: K1 in K5} c= K1 \/ {K1}
+         by A47,XBOOLE_1:1;
+           not (K1 is finite) by A39,A42,CARD_4:1;
+         then Card (K1 \/ {K1}) = Card K1 by CARD_4:36;
+         hence thesis by A39,A42,A48,CARD_1:27;
+         suppose A49: K1 in N;
+           {K5 where K5 is Element of GT1: K1 in K5} = GT1
+         proof
+           defpred P[set] means K1 in $1;
+           {K5 where K5 is Element of GT1: P[K5]} is Subset of GT1
+            from SubsetD;
+            hence {K5 where K5 is Element of GT1: K1 in K5} c= GT1;
+            let K6 be set such that A50: K6 in GT1;
+            A51: K6 in nextcard N & not K6 in N by A50,XBOOLE_0:def 4;
+            reconsider K7=K6 as Element of nextcard N by A50;
+            A52: N c= K7 by A51,ORDINAL1:26;
+            reconsider K8=K7 as Element of GT1 by A50;
+              K8 in {K5 where K5 is Element of GT1: K1 in K5} by A49,A52;
+            hence thesis;
+         end;
+         then A53: (M \ {K5 where K5 is Element of GT1: K1 in K5}) =
+ M \ ( M \ N) by Def17 .= M /\ N by XBOOLE_1:48;
+           M /\ N c= N by XBOOLE_1:17;
+         hence thesis by A53,CARD_1:23;
+      end;
+        M \ union {T.(N1,K1): N1 in N} c=
+      M \ {K5 where K5 is Element of GT1: K1 in K5} by A33,XBOOLE_1:34;
+      then Card (M \ union {T.(N1,K1): N1 in N}) <=`
+      Card (M \ {K5 where K5 is Element of GT1: K1 in K5}) by CARD_1:27;
+      hence Card (M \ union {T.(N1,K1): N1 in N}) <=` N by A41,XBOOLE_1:1;
+   end;
+end;
+
+:: also a little longer
+theorem Th35:
+  for M for I being Ideal of M st
+  (I is_complete_with M & Frechet_Ideal(M) c= I)
+  ex S being Subset-Family of M st
+  Card S = M &
+  ( for X1 being set st X1 in S holds not X1 in I ) &
+  for X1,X2 being set st (X1 in S & X2 in S & X1 <> X2) holds X1 misses X2
+proof
+:: first we define S using Ulam matrix
+   let M;
+   set N = predecessor M;
+   A1: M = nextcard N by Def17;
+   let I be Ideal of M such that A2: I is_complete_with M and
+   A3: Frechet_Ideal(M) c= I;
+   consider T such that A4: T is_Ulam_Matrix_of M by Th34;
+   A5: for K1 holds union {T.(N1,K1): N1 in N} in dual I
+   proof let K1;
+     defpred P[set,set] means $2=K1 & $1 in N;
+     defpred R[set,set] means $1 in N;
+     deffunc F(Element of predecessor M,Element of M) = T.($1,$2);
+      A6: {F(N1,K2): P[N1,K2]} is Subset of bool M from SubsetFD2;
+        {F(N1,K2): K2=K1 & R[N1,K2]} = {F(N2,K1): R[N2,K1] } from FrEqua2;
+      then reconsider C={T.(N1,K1): N1 in N} as Subset-Family of M
+        by A6,SETFAM_1:def 7;
+      A7: Card (M \ union {T.(N1,K1): N1 in N}) <=` N by A4,Def18;
+      assume not union {T.(N1,K1): N1 in N} in dual I;
+      then not (union C)` in Frechet_Ideal(M) by A3,SETFAM_1:def 8;
+      then not (M \ union {T.(N1,K1): N1 in N}) in Frechet_Ideal(M)
+      by SUBSET_1:def 5;
+      then not Card (M \ union {T.(N1,K1): N1 in N}) <` Card M by Th19;
+      then not Card (M \ union {T.(N1,K1): N1 in N}) <` nextcard N
+      by A1,CARD_1:def 5;
+      hence contradiction by A7,CARD_4:23;
+   end;
+   defpred P[set,set] means not T.($2,$1) in I;
+   A8: for K1 ex N2 st P[K1,N2]
+   proof let K1;
+      assume A9: for N2 holds T.(N2,K1) in I;
+      A10: {T.(N1,K1): N1 in N} c= I
+      proof let X be set such that A11: X in {T.(N1,K1): N1 in N};
+         consider N2 such that A12: X = T.(N2,K1) and N2 in N by A11;
+         thus X in I by A9,A12;
+      end;
+      A13: {T.(N1,K1): N1 in N} is non empty
+      proof consider N2;
+           T.(N2,K1) in {T.(N1,K1): N1 in N};
+         hence thesis;
+      end;
+      A14: N <` M by A1,CARD_1:32;
+      deffunc F(set) = T.$1;
+      A15: Card {F(X) where X is Element of [:N,M:]: X in [:N,{K1}:] } <=`
+      Card [:N,{K1}:] from FraenkelCard;
+        {T.(N1,K1) : N1 in N } c=
+      {T.X where X is Element of [:N,M:]: X in [:N,{K1}:] }
+      proof let Y be set such that A16: Y in {T.(N1,K1) : N1 in N };
+         consider N1 such that A17: Y=T.(N1,K1) & N1 in N by A16;
+         A18: T.(N1,K1)=T.[N1,K1] by BINOP_1:def 1;
+           [N1,K1] is Element of [:N,M:] & [N1,K1] in [:N,{K1}:]
+         by ZFMISC_1:106,129;
+         hence Y in {T.X where X is Element of [:N,M:]: X in [:N,{K1}:] }
+         by A17,A18;
+      end;
+      then A19: Card {T.(N1,K1) : N1 in N} <=`
+      Card {T.X where X is Element of [:N,M:]: X in [:N,{K1}:]} by CARD_1:27;
+        Card [:N,{K1}:] = Card N by CARD_2:13;
+      then Card [:N,{K1}:] = N by CARD_1:def 5;
+      then Card {T.(N1,K1) : N1 in N} c= N by A15,A19,XBOOLE_1:1;
+      then Card {T.(N1,K1): N1 in N} <` M by A14,ORDINAL1:22;
+      then A20: union {T.(N1,K1): N1 in N} in I by A2,A10,A13,Def4;
+        union {T.(N1,K1): N1 in N} in dual I by A5;
+      hence contradiction by A20,Th10;
+   end;
+   consider h being Function of M,N such that
+   A21: for K1 holds P[K1,h.K1] from FuncExD(A8);
+   A22: for K1 holds not T.(h.K1,K1) = {}
+   proof let K1;
+      assume T.(h.K1,K1) = {};
+      then T.(h.K1,K1) in I by Th11;
+      hence contradiction by A21;
+   end;
+     ex N2 st Card (h"{N2}) = M
+   proof assume A23: for N2 holds Card (h"{N2}) <> M;
+      A24: {sup (h"{N2}): N2 in N} c= M
+      proof let x be set such that A25: x in {sup (h"{N2}): N2 in N};
+         consider N2 such that A26: x=sup (h"{N2}) & N2 in N by A25;
+           Card (h"{N2}) <=` M & Card (h"{N2}) <> M by A23,CARD_1:23;
+         then Card (h"{N2}) <` M by CARD_1:13;
+         then Card (h"{N2}) <` cf M by CARD_5:def 4;
+         hence x in M by A26,CARD_5:38;
+      end;
+      deffunc F(set) = sup (h"{$1});
+      Card {F(N2): N2 in N} <=` Card N from FraenkelCard;
+      then Card {sup (h"{N2}): N2 in N} <=` N by CARD_1:def 5;
+      then Card {sup (h"{N2}): N2 in N} <` M by A1,CARD_4:23;
+      then A27: Card {sup (h"{N2}): N2 in N} <` cf M by CARD_5:def 4;
+      A28: for N2 holds sup (h"{N2}) in sup {sup (h"{N3}): N3 in N}
+      proof let N2;
+        sup (h"{N2}) in {sup (h"{N3}): N3 in N};
+         hence thesis by ORDINAL2:27;
+      end;
+      reconsider K1 = sup {sup (h"{N3}): N3 in N} as Element of M by A24,A27,
+CARD_5:38;
+      A29: sup (h"{h.K1}) in K1 by A28;
+        K1 in h"{h.K1} by SETWISEO:12;
+      hence contradiction by A29,ORDINAL2:27;
+   end;
+   then consider N2 such that A30: Card (h"{N2}) = M;
+     {T.(N2,K2) : h.K2=N2} c= bool M
+   proof let X be set such that A31: X in {T.(N2,K2) : h.K2=N2};
+      consider K2 such that A32: X=T.(N2,K2) & h.K2 = N2 by A31;
+      thus X in bool M by A32;
+   end;
+   then reconsider S={T.(N2,K2) : h.K2=N2} as Subset-Family of M
+     by SETFAM_1:def 7;
+   take S;
+   A33: for K1,K2 st h.K1=N2 & K1<> K2 holds T.(N2,K1) <> T.(N2,K2)
+   proof let K1,K2 such that A34: h.K1=N2 & K1<>K2;
+      assume T.(N2,K1) = T.(N2,K2);
+      then T.(N2,K1) /\ T.(N2,K2) <> {} by A22,A34;
+      hence contradiction by A4,A34,Def18;
+   end;
+     h"{N2},M are_equipotent by A30,CARD_1:def 5;
+   then consider f being Function such that A35: f is one-to-one &
+   dom f = M & rng f = h"{N2} by WELLORD2:def 4;
+   A36: for X being set st X in dom f holds h.(f.X) = N2
+   proof let X be set such that A37: X in dom f;
+        f.X in h"{N2} by A35,A37,FUNCT_1:def 5;
+      then h.(f.X) in {N2} by FUNCT_1:def 13;
+      hence thesis by TARSKI:def 1;
+   end;
+     dom T = [:N,M:] by FUNCT_2:def 1;
+   then consider G being Function such that (curry T).N2 = G and
+   A38: dom G = M & rng G c= rng T and
+   A39: for y being set st y in M holds G.y = T.[N2,y] by FUNCT_5:36;
+   A40: dom (G*f) = M by A35,A38,RELAT_1:46;
+   A41: dom (G*f) = dom f by A35,A38,RELAT_1:46;
+   A42: rng (G*f) = S
+   proof thus rng (G*f) c= S
+      proof let X be set such that A43: X in rng (G*f);
+         consider K1 being set such that A44: K1 in dom (G*f) & X = (G*f).K1
+         by A43,FUNCT_1:def 5;
+         A45: f.K1 in rng f by A41,A44,FUNCT_1:def 5;
+         then reconsider K3=f.K1 as Element of M by A35;
+         A46: h.K3=N2 by A36,A41,A44;
+           X = G.(f.K1) by A44,FUNCT_1:22;
+         then X = T.[N2,f.K1] by A35,A39,A45;
+         then X = T.(N2,K3) by BINOP_1:def 1;
+         hence X in S by A46;
+      end;
+      thus S c= rng (G*f)
+      proof let X be set such that A47: X in S;
+         consider K2 such that A48: X=T.(N2,K2) & h.K2=N2 by A47;
+         A49: h.K2 in {N2} by A48,TARSKI:def 1;
+           K2 in M;
+         then K2 in dom h by FUNCT_2:def 1;
+         then K2 in h"{N2} by A49,FUNCT_1:def 13;
+         then consider K3 being set such that A50: K3 in dom f & f.K3=K2
+         by A35,FUNCT_1:def 5;
+           X = T.[N2,f.K3] by A48,A50,BINOP_1:def 1;
+         then X = G.(f.K3) by A39,A50;
+         then X = (G*f).K3 by A41,A50,FUNCT_1:22;
+         hence X in rng (G*f) by A41,A50,FUNCT_1:def 5;
+      end;
+   end;
+     G*f is one-to-one
+   proof let K1,K2 be set such that A51: K1 in dom (G*f) & K2 in dom (G*f)
+      and A52: (G*f).K1 = (G*f).K2;
+      A53: f.K1 in rng f & f.K2 in rng f by A41,A51,FUNCT_1:def 5;
+      assume K1<>K2;
+      then A54: f.K1 <> f.K2 by A35,A41,A51,FUNCT_1:def 8;
+      reconsider K3=f.K1 as Element of M by A35,A53;
+      A55: h.K3 = N2 by A36,A41,A51;
+      reconsider K4=f.K2 as Element of M by A35,A53;
+      A56: T.(N2,K3) <> T.(N2,K4) by A33,A54,A55;
+      A57: (G*f).K1 = G.(f.K1) by A51,FUNCT_1:22 .= T.[N2,f.K1] by A35,A39,A53
+      .= T.(N2,f.K1) by BINOP_1:def 1;
+        (G*f).K2 = G.(f.K2) by A51,FUNCT_1:22 .= T.[N2,f.K2] by A35,A39,A53
+      .= T.(N2,f.K2) by BINOP_1:def 1;
+      hence contradiction by A52,A56,A57;
+   end;
+   then S,M are_equipotent by A40,A42,WELLORD2:def 4;
+   hence Card S = M by CARD_1:def 5;
+
+:: the next two properties are easy
+   thus for X1 being set st X1 in S holds not X1 in I
+   proof let X1 be set such that A58: X1 in S;
+      consider K1 such that A59: T.(N2,K1) = X1 and A60: h.K1=N2 by A58;
+      thus not X1 in I by A21,A59,A60;
+   end;
+   thus for X1,X2 being set st X1 in S & X2 in S & X1 <> X2
+      holds X1 misses X2
+   proof let X1,X2 be set such that A61: X1 in S & X2 in S & X1 <> X2;
+      consider K1 such that A62: T.(N2,K1) = X1 and h.K1=N2 by A61;
+      consider K2 such that A63: T.(N2,K2) = X2 and h.K2=N2 by A61;
+        T.(N2,K1) /\ T.(N2,K2) = {} by A4,A61,A62,A63,Def18;
+      hence thesis by A62,A63,XBOOLE_0:def 7;
+   end;
+end;
+
+theorem Th36:
+  for X for N being Cardinal st N <=` Card X
+  ex Y being set st Y c= X & Card Y = N
+proof let X;
+   let N be Cardinal such that A1: N <=` Card X;
+     X,Card X are_equipotent by CARD_1:def 5;
+   then consider f being Function such that A2: f is one-to-one and
+   A3: dom f = Card X & rng f = X by WELLORD2:def 4;
+   take f.:N;
+   thus f.:N c= X by A3,RELAT_1:144;
+   A4: f|N is one-to-one by A2,FUNCT_1:84;
+   A5: dom (f|N) = N by A1,A3,RELAT_1:91;
+     rng (f|N) =f.:N by RELAT_1:148;
+   then N,f.:N are_equipotent by A4,A5,WELLORD2:def 4;
+   hence Card (f.:N) = N by CARD_1:def 5;
+end;
+
+theorem Th37:
+  for M holds not ex F st
+  ( F is uniform being_ultrafilter & F is_complete_with M )
+proof
+   let M;
+   given F such that A1:
+   F is uniform being_ultrafilter & F is_complete_with M;
+   A2: dual F is_complete_with M by A1,Th12;
+     Frechet_Ideal(M) c= dual F
+   proof let X be set such that A3: X in Frechet_Ideal(M);
+      reconsider X1=X as Subset of M by A3;
+      A4: Card X1 <` Card M by A3,Th19;
+      assume not X in dual F;
+      then X1 in F by A1,Th22;
+      then Card X1 = Card M by A1,Def5;
+      hence contradiction by A4;
+   end;
+   then consider S being Subset-Family of M such that
+   A5: Card S = M and
+   A6: for X1 being set st X1 in S holds not X1 in dual F and
+   A7: for X1,X2 being set st (X1 in S & X2 in S & X1 <> X2)
+   holds X1 misses X2 by A2,Th35;
+   A8: for X1 being set st X1 in S holds X1 in F
+   proof let X1 be set such that A9: X1 in S;
+      reconsider X2=X1 as Subset of M by A9;
+        not X2 in dual F by A6,A9;
+      hence X1 in F by A1,Th22;
+   end;
+   A10: S is infinite by A5,CARD_4:1;
+   then consider X1 being set such that A11: X1 in S by XBOOLE_0:def 1;
+     S \ {X1} <> {}
+   proof assume S \ {X1} = {};
+      then S c= {X1} by XBOOLE_1:37;
+      hence contradiction by A10,FINSET_1:13;
+   end;
+   then consider X2 being set such that A12: X2 in S \ {X1} by XBOOLE_0:def 1;
+     not X2 in {X1} by A12,XBOOLE_0:def 4;
+   then A13: X2 in S & X2 <> X1 by A12,TARSKI:def 1;
+   then X1 misses X2 by A7,A11;
+   then A14: X1 /\ X2 = {} by XBOOLE_0:def 7;
+   reconsider X1,X2 as Subset of M by A11,A13;
+     X1 in F & X2 in F by A8,A11,A12;
+   then {} in F by A14,Def1;
+   hence contradiction by Def1;
+end;
+
+reserve M for Aleph;
+
+theorem Th38:
+  M is measurable implies M is limit
+proof
+   assume M is measurable;
+   then consider F being Filter of M such that
+   A1: F is_complete_with M and
+   A2: F is non principal being_ultrafilter by Def16;
+     F is_complete_with Card M by A1,CARD_1:def 5;
+   then A3: F is uniform by A2,Th23;
+   assume not M is limit;
+   hence contradiction by A1,A2,A3,Th37;
+end;
+
+theorem
+    M is measurable implies M is inaccessible
+proof assume M is measurable;
+   then M is limit & M is regular by Th33,Th38;
+   hence thesis by Def13;
+end;
+
+theorem Th40:
+  M is measurable implies M is strong_limit
+proof assume M is measurable;
+   then consider F being Filter of M such that
+   A1: F is_complete_with M and
+   A2: F is non principal being_ultrafilter by Def16;
+     F is_complete_with Card M by A1,CARD_1:def 5;
+   then A3: F is uniform by A2,Th23;
+
+:: by contradiction ...N breaks the strong-limit property
+:: then we take Funcs(N,2)
+   assume not M is strong_limit;
+   then consider N being Cardinal such that A4:  N <` M and
+   A5: not exp(2,N) <` M by Def14;
+   A6: M <=` exp(2,N) by A5,CARD_1:14;
+   then M <=` Card Funcs(N,2) by CARD_2:def 3;
+   then consider Y being set such that A7: Y c= Funcs(N,2) and
+   A8: Card Y = M by Th36;
+     N is infinite
+   proof assume N is finite;
+      then bool N is finite by FINSET_1:24;
+      then A9: Card bool N is finite by CARD_4:1;
+        M <=` exp(2,Card N) by A6,CARD_1:def 5;
+      then M <=` Card bool N by CARD_2:44;
+      hence contradiction by A9,FINSET_1:13;
+   end;
+   then reconsider N1 = N as Aleph;
+   A10: Y,M are_equipotent by A8,CARD_1:def 5;
+   then consider f being Function such that A11: f is one-to-one and
+   A12: dom f = M and A13:  rng f = Y by WELLORD2:def 4;
+   reconsider f1=f as Function of M,Y by A12,A13,FUNCT_2:3;
+
+:: for each A in N, F takes either {h: h.A =0} or {h: h.A =1}
+:: take them as system {T(A):A in N} of cardinality N
+   defpred P[set,set] means
+    f"{h where h is Function of N1,{{},one}: h in Y & h.$1 = $2} in F;
+   A14: for A being Element of N1 ex i being Element of {{},one} st P[A,i]
+   proof let A be Element of N1;
+      set Y_0 = {h where h is Function of N1,{{},one}: h in Y & h.A = {}};
+      set Y_1 = {h where h is Function of N1,{{},one}: h in Y & h.A = one};
+      reconsider Inv_0 = f"Y_0 as Subset of M by A12,RELAT_1:167;
+      reconsider Inv_1 = f"Y_1 as Subset of M by A12,RELAT_1:167;
+      A15: for g1 being Function of N1,{{},one} st g1 in Y
+      holds g1 in Y_1 or g1 in Y_0
+      proof let g1 be Function of N1,{{},one} such that A16:  g1 in Y;
+         per cases;
+         suppose g1 in Y_0;
+         hence thesis;
+         suppose not g1 in Y_0;
+         then not g1.A = {} by A16;
+         then g1.A = one by TARSKI:def 2;
+         hence thesis by A16;
+         end;
+        Y \ Y_0 = Y_1
+      proof thus Y \ Y_0 c= Y_1
+         proof let X be set such that A17: X in Y \ Y_0;
+            A18: X in Y & not X in Y_0 by A17,XBOOLE_0:def 4;
+            then consider g1 being Function such that A19: g1=X
+            and A20: dom g1=N1 and A21: rng g1 c= {{},one} by A7,CARD_2:22,
+FUNCT_2:def 2;
+            reconsider g2=g1 as Function of N1,{{},one}
+              by A20,A21,FUNCT_2:def 1,RELSET_1:11;
+              g2 in Y_1 by A15,A18,A19;
+            hence thesis by A19;
+         end;
+         let X be set such that A22: X in Y_1;
+         consider h being Function of N1,{{},one} such that A23: X=h and
+         A24: h in Y and A25: h.A = one by A22;
+           not h in Y_0
+         proof assume h in Y_0;
+            then consider h1 being Function of N1,{{},one} such that
+            A26: h1=h and h1 in Y and A27: h1.A = {};
+            thus contradiction by A25,A26,A27;
+         end;
+         hence thesis by A23,A24,XBOOLE_0:def 4;
+      end;
+      then A28: Inv_1 = (f"(rng f)) \ Inv_0 by A13,FUNCT_1:138 .= M \ Inv_0
+by A12,RELAT_1:169;
+      per cases by A2,Def7;
+      suppose A29: Inv_0 in F;
+      reconsider Z = {} as Element of { {},one} by TARSKI:def 2;
+      take Z;
+      thus thesis by A29;
+      suppose A30: M \ Inv_0 in F;
+      reconsider O=one as Element of {{},one} by TARSKI:def 2;
+      take O;
+      thus thesis by A28,A30;
+   end;
+   A31: Y is infinite by A10,CARD_1:68;
+
+:: now prove that the meet of {T(A):A in N} contains just one function
+:: contradicting uniformity
+   consider g being Function of N1,{{},one} such that
+   A32: for A being Element of N1 holds P[A,g.A] from FuncExD(A14);
+   deffunc T(Element of N1) =
+   f"{h where h is Function of N1,{{},one}: h in Y & h.$1 = g.$1};
+     Card {T(A) where A is Element of N1 : A in
+ N1} <=` Card N1 from FraenkelCard;
+   then Card {T(A) where A is Element of N1 : A in N1} <=` N1 by CARD_1:def 5;
+   then A33: Card {T(A) where A is Element of N1: A in
+ N1} <` M by A4,ORDINAL1:22;
+   A34: {T(A) where A is Element of N1: A in N1} c= F
+   proof let X be set such that
+      A35: X in {T(A) where A is Element of N1: A in N1};
+      consider A being Element of N1 such that A36: X=T(A) & A in N1 by A35;
+      thus X in F by A32,A36;
+   end;
+   consider B being Element of N1;
+     T(B) in {T(A) where A is Element of N1: A in N1};
+   then A37: meet {T(A) where A is Element of N1: A in N1} in F
+   by A1,A33,A34,Def3;
+   A38: for X being set holds X in meet {T(A) where A is Element of N1: A in
+ N1}
+   implies f.X = g
+   proof let X be set;
+      assume A39: X in meet {T(A) where A is Element of N1: A in N1};
+      then reconsider X1=X as Element of M by A37;
+        f1.X1 in Y by A31,FUNCT_2:7;
+      then consider h1 being Function such that A40: f1.X1=h1 and
+      A41: dom h1 = N and rng h1 c= 2 by A7,FUNCT_2:def 2;
+      A42: for Z being set st Z in N1 holds h1.Z = g.Z
+      proof let Z be set such that A43: Z in N1;
+         reconsider Z1=Z as Element of N1 by A43;
+           T(Z1) in {T(A) where A is Element of N1: A in N1};
+         then X1 in T(Z1) by A39,SETFAM_1:def 1;
+         then f1.X1 in
+         {h where h is Function of N1,{{},one}: h in Y & h.Z1 = g.Z1}
+         by FUNCT_1:def 13;
+         then consider h being Function of N1,{{}
+,one} such that A44: f.X1=h and
+           h in Y and A45: h.Z1 = g.Z1;
+         thus h1.Z=g.Z by A40,A44,A45;
+      end;
+        dom g = N1 by FUNCT_2:def 1;
+      hence thesis by A40,A41,A42,FUNCT_1:9;
+   end;
+   set MEET = meet {T(A) where A is Element of N1: A in N1};
+     MEET = dom f /\ MEET by A12,A37,XBOOLE_1:28;
+   then A46: dom (f|MEET) = MEET by RELAT_1:90;
+   A47: rng (f|MEET) = f.:MEET by RELAT_1:148;
+   A48: f.:MEET c= {g}
+   proof let X be set such that A49: X in f.:MEET;
+      consider x being set such that x in dom f and A50: x in MEET
+      and A51: X = f.x by A49,FUNCT_1:def 12;
+        X = g by A38,A50,A51;
+      hence X in {g} by TARSKI:def 1;
+   end;
+     f|MEET is one-to-one by A11,FUNCT_1:84;
+   then A52: Card MEET <=` Card {g} by A46,A47,A48,CARD_1:26;
+   reconsider MEET as Subset of M by A37;
+     Card MEET = Card M by A3,A37,Def5;
+   hence contradiction by A52,FINSET_1:13;
+end;
+
+theorem
+  M is measurable implies M is strongly_inaccessible
+proof assume M is measurable;
+   then M is strong_limit & M is regular by Th33,Th40;
+   hence thesis by Def15;
+end;
+

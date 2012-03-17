@@ -1,0 +1,868 @@
+:: Five Variable Predicate Calculus for Boolean Valued Functions, ( 1 )
+::  by Shunichi Kobayashi
+::
+:: Received December 27, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary PARTIT1, EQREL_1, BVFUNC_2, BOOLE, SETFAM_1, CAT_1, FUNCT_4,
+      RELAT_1, FUNCT_1, CANTOR_1, T_1TOPSP;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1,
+      FUNCT_1, CQC_LANG, FUNCT_4, EQREL_1, PARTIT1, CANTOR_1, BVFUNC_1,
+      BVFUNC_2;
+ constructors BVFUNC_2, SETWISEO, CANTOR_1, FUNCT_7, BVFUNC_1;
+ clusters SUBSET_1, PARTIT1, CQC_LANG, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI;
+ theorems EQREL_1, ZFMISC_1, T_1TOPSP, PARTIT1, BVFUNC_2, BVFUNC11, BVFUNC14,
+      FUNCT_4, CQC_LANG, TARSKI, ENUMSET1, FUNCT_1, CANTOR_1, SETFAM_1,
+      XBOOLE_0, XBOOLE_1;
+
+begin :: Chap. 1  Preliminaries
+
+reserve Y for non empty set,
+
+        G for Subset of PARTITIONS(Y),
+        A, B, C, D, E for a_partition of Y;
+
+theorem Th1:
+ G={A,B,C,D,E} & A<>B & A<>C & A<>D & A<>E
+ implies CompF(A,G) = B '/\' C '/\' D '/\' E
+proof
+  assume A1: G={A,B,C,D,E} & A<>B & A<>C & A<>D & A<>E;
+  per cases;
+  suppose
+A2: B = C;
+   then G = {A,B,B,D} \/ {E} by A1,ENUMSET1:50
+         .= {B,B,A,D} \/ {E} by ENUMSET1:110
+         .= {B,B,A,D,E} by ENUMSET1:50
+         .= {B,A,D,E} by ENUMSET1:72
+         .={A,B,D,E} by ENUMSET1:108;
+  hence CompF(A,G) = B '/\' D '/\' E by A1,BVFUNC14:7
+           .= B '/\' C '/\' D '/\' E by A2,PARTIT1:15;
+  suppose
+A3: B = D;
+   then G = {A,B,C,B} \/ {E} by A1,ENUMSET1:50
+         .= {B,B,A,C} \/ {E} by ENUMSET1:112
+         .= {B,B,A,C,E} by ENUMSET1:50
+         .= {B,A,C,E} by ENUMSET1:72
+         .={A,B,C,E} by ENUMSET1:108;
+  hence CompF(A,G) = B '/\' C '/\' E by A1,BVFUNC14:7
+           .= B '/\' D '/\' C '/\' E by A3,PARTIT1:15
+           .= B '/\' C '/\' D '/\' E by PARTIT1:16;
+  suppose
+A4: B = E;
+   then G = {A} \/ {B,C,D,B} by A1,ENUMSET1:47
+         .= {A} \/ {B,B,C,D} by ENUMSET1:105
+         .= {A} \/ {B,C,D} by ENUMSET1:71
+         .={A,B,C,D} by ENUMSET1:44;
+  hence CompF(A,G) = B '/\' C '/\' D by A1,BVFUNC14:7
+           .= B '/\' E '/\' C '/\' D by A4,PARTIT1:15
+           .= B '/\' E '/\' (C '/\' D) by PARTIT1:16
+           .= B '/\' (C '/\' D) '/\' E by PARTIT1:16
+           .= B '/\' C '/\' D '/\' E by PARTIT1:16;
+  suppose
+A5: C = D;
+   then G = {A,B,C,C} \/ {E} by A1,ENUMSET1:50
+         .= {C,C,A,B} \/ {E} by ENUMSET1:118
+         .= {C,A,B} \/ {E} by ENUMSET1:71
+         .= {C,A,B,E} by ENUMSET1:46
+         .={A,B,C,E} by ENUMSET1:110;
+  hence CompF(A,G) = B '/\' C '/\' E by A1,BVFUNC14:7
+           .= B '/\' (C '/\' D) '/\' E by A5,PARTIT1:15
+           .= B '/\' C '/\' D '/\' E by PARTIT1:16;
+  suppose
+A6: C = E;
+   then G = {A} \/ {B,C,D,C} by A1,ENUMSET1:47
+         .= {A} \/ {C,C,B,D} by ENUMSET1:117
+         .= {A} \/ {C,B,D} by ENUMSET1:71
+         .= {A,C,B,D} by ENUMSET1:44
+         .={A,B,C,D} by ENUMSET1:104;
+  hence CompF(A,G) = B '/\' C '/\' D by A1,BVFUNC14:7
+           .= B '/\' (C '/\' E) '/\' D by A6,PARTIT1:15
+           .= B '/\' (C '/\' E '/\' D) by PARTIT1:16
+           .= B '/\' (C '/\' D '/\' E) by PARTIT1:16
+           .= B '/\' (C '/\' D) '/\' E by PARTIT1:16
+           .= B '/\' C '/\' D '/\' E by PARTIT1:16;
+  suppose
+A7: D = E;
+   then G = {A} \/ {B,C,D,D} by A1,ENUMSET1:47
+         .= {A} \/ {D,D,B,C} by ENUMSET1:118
+         .= {A} \/ {D,B,C} by ENUMSET1:71
+         .= {A,D,B,C} by ENUMSET1:44
+         .={A,B,C,D} by ENUMSET1:105;
+  hence CompF(A,G) = B '/\' C '/\' D by A1,BVFUNC14:7
+           .= B '/\' C '/\' (D '/\' E) by A7,PARTIT1:15
+           .= B '/\' (C '/\' (D '/\' E)) by PARTIT1:16
+           .= B '/\' (C '/\' D '/\' E) by PARTIT1:16
+           .= B '/\' (C '/\' D) '/\' E by PARTIT1:16
+           .= B '/\' C '/\' D '/\' E by PARTIT1:16;
+  suppose
+A8: B<>C & B<>D & B<>E & C<>D & C<>E & D<>E;
+     G \ {A}={A} \/ {B,C,D,E} \ {A} by A1,ENUMSET1:47;
+  then A9:G \ {A} = ({A} \ {A}) \/ ({B,C,D,E} \ {A}) by XBOOLE_1:42;
+  A10:not B in {A} by A1,TARSKI:def 1;
+  A11:not C in {A} by A1,TARSKI:def 1;
+  A12:not D in {A} by A1,TARSKI:def 1;
+  A13:not E in {A} by A1,TARSKI:def 1;
+    {B,C,D,E} \ {A} = ({B} \/ {C,D,E}) \ {A} by ENUMSET1:44
+  .= ({B} \ {A}) \/ ({C,D,E} \ {A}) by XBOOLE_1:42
+  .= {B} \/ ({C,D,E} \ {A}) by A10,ZFMISC_1:67
+  .= {B} \/ (({C} \/ {D,E}) \ {A}) by ENUMSET1:42
+  .= {B} \/ (({C} \ {A}) \/ ({D,E} \ {A})) by XBOOLE_1:42
+  .= {B} \/ (({C} \ {A}) \/ {D,E}) by A12,A13,ZFMISC_1:72
+  .= {B} \/ ({C} \/ {D,E}) by A11,ZFMISC_1:67
+  .= {B} \/ {C,D,E} by ENUMSET1:42;
+  then A14:G \ {A} = ({A} \ {A}) \/ {B,C,D,E} by A9,ENUMSET1:44;
+    A in {A} by TARSKI:def 1;
+  then A15: {A} \ {A}={} by ZFMISC_1:68;
+  A16:B '/\' C '/\' D '/\' E c= '/\' (G \ {A})
+  proof
+    let x be set;
+    assume A17:x in B '/\' C '/\' D '/\' E;
+    then x in INTERSECTION(B '/\' C '/\' D,E) \ {{}} by PARTIT1:def 4;
+    then x in INTERSECTION(B '/\' C '/\' D,E) & not x in {{}} by XBOOLE_0:def 4
+;
+    then consider bcd,e being set such that
+A18:  bcd in B '/\' C '/\' D & e in E & x = bcd /\ e by SETFAM_1:def 5;
+      bcd in INTERSECTION(B '/\' C,D) \ {{}} by A18,PARTIT1:def 4;
+    then bcd in INTERSECTION(B '/\' C,D) & not bcd in {{}} by XBOOLE_0:def 4;
+    then consider bc,d being set such that
+A19:  bc in B '/\' C & d in D & bcd = bc /\ d by SETFAM_1:def 5;
+      bc in INTERSECTION(B,C) \ {{}} by A19,PARTIT1:def 4;
+    then bc in INTERSECTION(B,C) & not bc in {{}} by XBOOLE_0:def 4;
+    then consider b,c being set such that
+A20:  b in B & c in C & bc = b /\ c by SETFAM_1:def 5;
+    set h = (B .--> b) +* (C .--> c) +* (D .--> d) +* (E .--> e);
+      dom ((B .--> b) +* (C .--> c))
+      = dom (B .--> b) \/ dom (C .--> c) by FUNCT_4:def 1;
+then dom ((B .--> b) +* (C .--> c) +* (D .--> d))
+      = dom (B .--> b) \/ dom (C .--> c) \/ dom (D .--> d) by FUNCT_4:def 1;
+then A21:dom ((B .--> b) +* (C .--> c) +* (D .--> d) +* (E .--> e))
+      = dom (B .--> b) \/ dom (C .--> c) \/ dom (D .--> d) \/ dom (E .--> e)
+      by FUNCT_4:def 1;
+A22:  dom (B .--> b) = {B} by CQC_LANG:5;
+A23:  dom (C .--> c) = {C} by CQC_LANG:5;
+A24:  dom (D .--> d) = {D} by CQC_LANG:5;
+A25:  dom (E .--> e) = {E} by CQC_LANG:5;
+A26:      dom ((B .--> b) +* (C .--> c) +* (D .--> d) +* (E .--> e))
+      = {B} \/ {C} \/ {D} \/ {E} by A21,A22,A23,A24,CQC_LANG:5
+     .= {B,C} \/ {D} \/ {E} by ENUMSET1:41
+     .= {B,C,D} \/ {E} by ENUMSET1:43
+     .= {B,C,D,E} by ENUMSET1:46;
+A27:  h.D = d
+      proof
+          not D in dom (E .--> e) by A8,A25,TARSKI:def 1;
+        then A28:h.D=((B .--> b) +* (C .--> c) +* (D .--> d)).D
+         by FUNCT_4:12;
+          D in dom (D .--> d) by A24,TARSKI:def 1;
+        then h.D = (D .--> d).D by A28,FUNCT_4:14;
+        hence thesis by CQC_LANG:6;
+      end;
+A29:  h.B = b
+      proof
+        A30:not B in dom (D .--> d) by A8,A24,TARSKI:def 1;
+          not B in dom (E .--> e) by A8,A25,TARSKI:def 1;
+        then h.B=((B .--> b) +* (C .--> c) +* (D .--> d)).B
+         by FUNCT_4:12;
+        then A31:h.B=((B .--> b) +* (C .--> c)).B by A30,FUNCT_4:12;
+          not B in dom (C .--> c) by A8,A23,TARSKI:def 1;
+        then h.B=(B .--> b).B by A31,FUNCT_4:12;
+        hence thesis by CQC_LANG:6;
+      end;
+A32:  h.C = c
+      proof
+        A33:not C in dom (D .--> d) by A8,A24,TARSKI:def 1;
+          not C in dom (E .--> e) by A8,A25,TARSKI:def 1;
+        then h.C=((B .--> b) +* (C .--> c) +* (D .--> d)).C
+         by FUNCT_4:12;
+        then A34:h.C=((B .--> b) +* (C .--> c)).C by A33,FUNCT_4:12;
+          C in dom (C .--> c) by A23,TARSKI:def 1;
+        then h.C=(C .--> c).C by A34,FUNCT_4:14;
+        hence thesis by CQC_LANG:6;
+      end;
+A35:  h.E = e
+      proof
+          E in dom (E .--> e) by A25,TARSKI:def 1;
+        then h.E = (E .--> e).E by FUNCT_4:14;
+        hence thesis by CQC_LANG:6;
+      end;
+A36:  for p being set st p in (G \ {A}) holds h.p in p
+      proof
+        let p be set;
+        assume A37: p in (G \ {A});
+          now per cases by A14,A15,A37,ENUMSET1:18;
+        case p=D;
+        hence thesis by A19,A27;
+        case p=B;
+        hence thesis by A20,A29;
+        case p=C;
+        hence thesis by A20,A32;
+        case p=E;
+        hence thesis by A18,A35;
+        end;
+        hence thesis;
+      end;
+A38:      D in dom h by A26,ENUMSET1:19;
+A39:      B in dom h by A26,ENUMSET1:19;
+A40:      C in dom h by A26,ENUMSET1:19;
+A41:      E in dom h by A26,ENUMSET1:19;
+      A42:rng h c= {h.D,h.B,h.C,h.E}
+      proof
+        let t be set;
+        assume t in rng h;
+        then consider x1 being set such that
+A43:      x1 in dom h & t = h.x1 by FUNCT_1:def 5;
+          now per cases by A26,A43,ENUMSET1:18;
+        case x1=D;
+        hence thesis by A43,ENUMSET1:19;
+        case x1=B;
+        hence thesis by A43,ENUMSET1:19;
+        case x1=C;
+        hence thesis by A43,ENUMSET1:19;
+        case x1=E;
+        hence thesis by A43,ENUMSET1:19;
+        end;
+        hence thesis;
+      end;
+A44:    {h.D,h.B,h.C,h.E} c= rng h
+      proof
+        let t be set;
+        assume A45: t in {h.D,h.B,h.C,h.E};
+          now per cases by A45,ENUMSET1:18;
+        case t=h.D;
+        hence thesis by A38,FUNCT_1:def 5;
+        case t=h.B;
+        hence thesis by A39,FUNCT_1:def 5;
+        case t=h.C;
+        hence thesis by A40,FUNCT_1:def 5;
+        case t=h.E;
+        hence thesis by A41,FUNCT_1:def 5;
+        end;
+        hence thesis;
+      end;
+then A46:  {h.D,h.B,h.C,h.E} = rng h by A42,XBOOLE_0:def 10;
+        rng h c= bool Y
+      proof
+        let t be set;
+        assume A47: t in rng h;
+          now per cases by A42,A47,ENUMSET1:18;
+        case t=h.D;
+        hence thesis by A19,A27;
+        case t=h.B;
+        hence thesis by A20,A29;
+        case t=h.C;
+        hence thesis by A20,A32;
+        case t=h.E;
+        hence thesis by A18,A35;
+        end;
+        hence thesis;
+      end;
+      then reconsider F=rng h as Subset-Family of Y by SETFAM_1:def 7;
+      reconsider h as Function;
+A48:  rng h <> {} by A38,FUNCT_1:12;
+    A49:x c= Intersect F
+    proof
+      let u be set;
+      assume A50:u in x;
+A51:  h.D in {h.D,h.B,h.C,h.E} by ENUMSET1:19;
+        for y be set holds y in F implies u in y
+      proof
+        let y be set;
+        assume A52: y in F;
+          now per cases by A42,A52,ENUMSET1:18;
+        case A53: y=h.D;
+          u in d /\ ((b /\ c) /\ e) by A18,A19,A20,A50,XBOOLE_1:16;
+        hence thesis by A27,A53,XBOOLE_0:def 3;
+        case A54: y=h.B;
+          u in (c /\ (d /\ b)) /\ e by A18,A19,A20,A50,XBOOLE_1:16;
+        then u in c /\ ((d /\ b) /\ e) by XBOOLE_1:16;
+        then u in c /\ ((d /\ e) /\ b) by XBOOLE_1:16;
+        then u in (c /\ (d /\ e)) /\ b by XBOOLE_1:16;
+        hence thesis by A29,A54,XBOOLE_0:def 3;
+        case A55: y=h.C;
+          u in (c /\ (b /\ d)) /\ e by A18,A19,A20,A50,XBOOLE_1:16;
+        then u in c /\ (b /\ d /\ e) by XBOOLE_1:16;
+        hence thesis by A32,A55,XBOOLE_0:def 3;
+        case y=h.E;
+        hence thesis by A18,A35,A50,XBOOLE_0:def 3;
+        end;
+        hence thesis;
+      end;
+      then u in meet F by A44,A51,SETFAM_1:def 1;
+      hence thesis by A44,A51,CANTOR_1:def 3;
+    end;
+      Intersect F c= x
+    proof
+      let t be set;
+      assume t in Intersect F;
+then A56:  t in meet (rng h) by A48,CANTOR_1:def 3;
+        h.B in rng h & h.C in rng h & h.D in rng h & h.E in rng h
+          by A46,ENUMSET1:19;
+then A57:  t in h.B & t in h.C & t in h.D & t in h.E by A56,SETFAM_1:def 1;
+      then t in b /\ c by A29,A32,XBOOLE_0:def 3;
+      then t in (b /\ c) /\ d by A27,A57,XBOOLE_0:def 3;
+      hence thesis by A18,A19,A20,A35,A57,XBOOLE_0:def 3;
+    end;
+    then A58:x = Intersect F by A49,XBOOLE_0:def 10;
+      x<>{} by A17,EQREL_1:def 6;
+    hence thesis by A14,A15,A26,A36,A58,BVFUNC_2:def 1;
+  end;
+    '/\' (G \ {A}) c= B '/\' C '/\' D '/\' E
+  proof
+    let x be set;
+    assume x in '/\' (G \ {A});
+    then consider h being Function, F being Subset-Family of Y such that
+A59:  dom h=(G \ {A}) & rng h = F &
+      (for d being set st d in (G \ {A}) holds h.d in d) &
+      x=Intersect F & x<>{} by BVFUNC_2:def 1;
+      B in (G \ {A}) & C in (G \ {A}) & D in (G \ {A}) & E in (G \ {A})
+      by A14,A15,ENUMSET1:19;
+    then A60:h.B in B & h.C in C & h.D in D & h.E in E by A59;
+      B in dom h & C in dom h & D in dom h & E in dom h by A14,A15,A59,ENUMSET1
+:19;
+    then A61:h.B in rng h & h.C in rng h & h.D in rng h & h.E in rng h
+    by FUNCT_1:def 5;
+    A62:not (x in {{}}) by A59,TARSKI:def 1;
+    A63:h.B /\ h.C /\ h.D /\ h.E c= x
+    proof
+      let m be set;
+      assume A64: m in h.B /\ h.C /\ h.D /\ h.E;
+then A65:    m in h.B /\ h.C /\ h.D & m in h.E by XBOOLE_0:def 3;
+then A66:      m in h.B /\ h.C & m in h.D by XBOOLE_0:def 3;
+      A67:rng h c= {h.B,h.C,h.D,h.E}
+      proof
+        let u be set;
+        assume u in rng h;
+        then consider x1 being set such that
+A68:      x1 in dom h & u = h.x1 by FUNCT_1:def 5;
+          now per cases by A14,A15,A59,A68,ENUMSET1:18;
+        case x1=B;
+        hence thesis by A68,ENUMSET1:19;
+        case x1=C;
+        hence thesis by A68,ENUMSET1:19;
+        case x1=D;
+        hence thesis by A68,ENUMSET1:19;
+        case x1=E;
+        hence thesis by A68,ENUMSET1:19;
+        end;
+        hence thesis;
+      end;
+        for y being set holds y in rng h implies m in y
+      proof
+        let y be set;
+        assume A69: y in rng h;
+          now per cases by A67,A69,ENUMSET1:18;
+         case y=h.B;
+          hence thesis by A66,XBOOLE_0:def 3;
+         case y=h.C;
+          hence thesis by A66,XBOOLE_0:def 3;
+         case y=h.D;
+          hence thesis by A65,XBOOLE_0:def 3;
+         case y=h.E;
+          hence thesis by A64,XBOOLE_0:def 3;
+        end;
+        hence thesis;
+      end;
+      then m in meet (rng h) by A61,SETFAM_1:def 1;
+      hence thesis by A59,A61,CANTOR_1:def 3;
+    end;
+    A70: x c= h.B /\ h.C /\ h.D /\ h.E
+    proof
+      let m be set;
+      assume m in x;
+      then m in meet (rng h) by A59,A61,CANTOR_1:def 3;
+      then A71:m in h.B & m in h.C & m in h.D & m in h.E by A61,SETFAM_1:def 1;
+      then m in h.B /\ h.C by XBOOLE_0:def 3;
+      then m in h.B /\ h.C /\ h.D by A71,XBOOLE_0:def 3;
+      hence thesis by A71,XBOOLE_0:def 3;
+    end;
+    then A72:((h.B /\ h.C) /\ h.D) /\ h.E = x by A63,XBOOLE_0:def 10;
+    set mbc=h.B /\ h.C;
+    set mbcd=(h.B /\ h.C) /\ h.D;
+     mbcd<>{} by A59,A63,A70,XBOOLE_0:def 10;
+    then A73:not (mbcd in {{}}) by TARSKI:def 1;
+      mbc<>{} by A59,A63,A70,XBOOLE_0:def 10;
+    then A74:not (mbc in {{}}) by TARSKI:def 1;
+      mbc in INTERSECTION(B,C) by A60,SETFAM_1:def 5;
+    then mbc in INTERSECTION(B,C) \ {{}} by A74,XBOOLE_0:def 4;
+    then mbc in B '/\' C by PARTIT1:def 4;
+    then mbcd in INTERSECTION(B '/\' C,D) by A60,SETFAM_1:def 5;
+    then mbcd in INTERSECTION(B '/\' C,D) \ {{}} by A73,XBOOLE_0:def 4;
+    then mbcd in B '/\' C '/\' D by PARTIT1:def 4;
+    then x in INTERSECTION(B '/\' C '/\' D,E) by A60,A72,SETFAM_1:def 5;
+    then x in INTERSECTION(B '/\' C '/\' D,E) \ {{}} by A62,XBOOLE_0:def 4;
+    hence thesis by PARTIT1:def 4;
+  end;
+  then '/\' (G \ {A}) = B '/\' C '/\' D '/\' E by A16,XBOOLE_0:def 10;
+  hence thesis by BVFUNC_2:def 7;
+end;
+
+theorem Th2:
+G is independent & G={A,B,C,D,E} &
+A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E
+implies
+CompF(B,G) = A '/\' C '/\' D '/\' E
+proof
+  assume A1:G is independent & G={A,B,C,D,E} &
+  A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E;
+    {A,B,C,D,E}={A,B} \/ {C,D,E} by ENUMSET1:48;
+  then G={B,A,C,D,E} by A1,ENUMSET1:48;
+  hence thesis by A1,Th1;
+end;
+
+theorem Th3:
+G is independent & G={A,B,C,D,E} &
+A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E
+implies
+CompF(C,G) = A '/\' B '/\' D '/\' E
+proof
+  assume A1:G is independent & G={A,B,C,D,E} &
+  A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E;
+    {A,B,C,D,E}={A,B,C} \/ {D,E} by ENUMSET1:49;
+  then {A,B,C,D,E}={A} \/ {B,C} \/ {D,E} by ENUMSET1:42;
+  then {A,B,C,D,E}={A,C,B} \/ {D,E} by ENUMSET1:42;
+  then {A,B,C,D,E}={A,C} \/ {B} \/ {D,E} by ENUMSET1:43;
+  then {A,B,C,D,E}={C,A,B} \/ {D,E} by ENUMSET1:43;
+  then G={C,A,B,D,E} by A1,ENUMSET1:49;
+  hence thesis by A1,Th1;
+end;
+
+theorem Th4:
+G is independent & G={A,B,C,D,E} &
+A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E
+implies
+CompF(D,G) = A '/\' B '/\' C '/\' E
+proof
+  assume A1:G is independent & G={A,B,C,D,E} &
+  A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E;
+    {A,B,C,D,E}={A,B} \/ {C,D,E} by ENUMSET1:48;
+  then {A,B,C,D,E}={A,B} \/ ({C,D} \/ {E}) by ENUMSET1:43;
+  then {A,B,C,D,E}={A,B} \/ {D,C,E} by ENUMSET1:43;
+  then G={A,B,D,C,E} by A1,ENUMSET1:48;
+  hence thesis by A1,Th3;
+end;
+
+theorem
+  G is independent & G={A,B,C,D,E} &
+A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E
+implies
+CompF(E,G) = A '/\' B '/\' C '/\' D
+proof
+  assume A1:G is independent & G={A,B,C,D,E} &
+  A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E;
+    {A,B,C,D,E}={A,B,C} \/ {D,E} by ENUMSET1:49;
+  then G={A,B,C,E,D} by A1,ENUMSET1:49;
+  hence thesis by A1,Th4;
+end;
+
+theorem Th6:
+for A,B,C,D,E being set, h being Function,
+A',B',C',D',E' being set
+st A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E &
+h = (B .--> B') +* (C .--> C') +*
+    (D .--> D') +* (E .--> E') +* (A .--> A')
+holds h.A = A' & h.B = B' & h.C = C' & h.D = D' & h.E = E'
+proof
+  let A,B,C,D,E be set;
+  let h be Function;
+  let A',B',C',D',E' be set;
+  assume A1: A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D &
+   C<>E & D<>E &
+h = (B .--> B') +* (C .--> C') +*
+    (D .--> D') +* (E .--> E') +* (A .--> A');
+A2:  dom (C .--> C') = {C} by CQC_LANG:5;
+A3:  dom (D .--> D') = {D} by CQC_LANG:5;
+A4:  dom (E .--> E') = {E} by CQC_LANG:5;
+A5:  dom (A .--> A') = {A} by CQC_LANG:5;
+A6:  h.A = A'
+      proof
+          A in dom (A .--> A') by A5,TARSKI:def 1;
+        then h.A = (A .--> A').A by A1,FUNCT_4:14;
+        hence thesis by CQC_LANG:6;
+      end;
+          not E in dom (A .--> A') by A1,A5,TARSKI:def 1;
+        then A7:h.E=((B .--> B') +* (C .--> C') +*
+                 (D .--> D') +* (E .--> E')).E
+         by A1,FUNCT_4:12;
+A8:  h.B = B'
+      proof
+          not B in dom (A .--> A') by A1,A5,TARSKI:def 1;
+        then A9:h.B=((B .--> B') +* (C .--> C') +*
+                 (D .--> D') +* (E .--> E')).B by A1,FUNCT_4:12;
+          not B in dom (E .--> E') by A1,A4,TARSKI:def 1;
+        then A10:h.B=((B .--> B') +* (C .--> C') +*
+                 (D .--> D')).B by A9,FUNCT_4:12;
+          not B in dom (D .--> D') by A1,A3,TARSKI:def 1;
+then A11:        ((B .--> B') +* (C .--> C') +* (D .--> D')).B=
+            ((B .--> B') +* (C .--> C')).B by FUNCT_4:12;
+          not B in dom (C .--> C') by A1,A2,TARSKI:def 1;
+        then h.B=(B .--> B').B by A10,A11,FUNCT_4:12;
+        hence thesis by CQC_LANG:6;
+      end;
+A12:  h.C = C'
+      proof
+          not C in dom (A .--> A') by A1,A5,TARSKI:def 1;
+        then A13:h.C=((B .--> B') +* (C .--> C') +*
+                 (D .--> D') +* (E .--> E')).C by A1,FUNCT_4:12;
+          not C in dom (E .--> E') by A1,A4,TARSKI:def 1;
+        then A14:h.C=((B .--> B') +* (C .--> C') +* (D .--> D')).C
+         by A13,FUNCT_4:12;
+          not C in dom (D .--> D') by A1,A3,TARSKI:def 1;
+then A15:        ((B .--> B') +* (C .--> C') +* (D .--> D')).C=
+            ((B .--> B') +* (C .--> C')).C by FUNCT_4:12;
+          C in dom (C .--> C') by A2,TARSKI:def 1;
+        then h.C=(C .--> C').C by A14,A15,FUNCT_4:14;
+        hence thesis by CQC_LANG:6;
+      end;
+A16:  h.D = D'
+      proof
+          not D in dom (A .--> A') by A1,A5,TARSKI:def 1;
+        then A17:h.D=((B .--> B') +* (C .--> C') +*
+                 (D .--> D') +* (E .--> E')).D by A1,FUNCT_4:12;
+          not D in dom (E .--> E') by A1,A4,TARSKI:def 1;
+        then A18:h.D=((B .--> B') +* (C .--> C') +* (D .--> D')).D
+         by A17,FUNCT_4:12;
+          D in dom (D .--> D') by A3,TARSKI:def 1;
+        then h.D=(D .--> D').D by A18,FUNCT_4:14;
+        hence thesis by CQC_LANG:6;
+      end;
+        h.E = E'
+      proof
+          E in dom (E .--> E') by A4,TARSKI:def 1;
+        then h.E=(E .--> E').E by A7,FUNCT_4:14;
+        hence thesis by CQC_LANG:6;
+      end;
+  hence thesis by A6,A8,A12,A16;
+end;
+
+theorem Th7:
+for A,B,C,D,E being set, h being Function,
+A',B',C',D',E' being set
+st h = (B .--> B') +* (C .--> C') +*
+    (D .--> D') +* (E .--> E') +* (A .--> A')
+holds dom h = {A,B,C,D,E}
+proof
+  let A,B,C,D,E be set;
+  let h be Function;
+  let A',B',C',D',E' be set;
+assume
+  A1: h =
+  (B .--> B') +* (C .--> C') +* (D .--> D') +* (E .--> E') +* (A .--> A');
+    dom ((B .--> B') +* (C .--> C'))
+      = dom (B .--> B') \/ dom (C .--> C') by FUNCT_4:def 1;
+then dom ((B .--> B') +* (C .--> C') +* (D .--> D'))
+      = dom (B .--> B') \/ dom (C .--> C') \/
+        dom (D .--> D') by FUNCT_4:def 1;
+then dom ((B .--> B') +* (C .--> C') +* (D .--> D') +* (E .--> E'))
+      = dom (B .--> B') \/ dom (C .--> C') \/ dom (D .--> D') \/
+        dom (E .--> E') by FUNCT_4:def 1;
+then A2:  dom ((B .--> B') +* (C .--> C') +* (D .--> D') +* (E .--> E') +*
+           (A .--> A'))
+   = dom (B .--> B') \/ dom (C .--> C') \/ dom (D .--> D') \/ dom (E .--> E')
+\/
+     dom (A .--> A') by FUNCT_4:def 1;
+A3:  dom (B .--> B') = {B} by CQC_LANG:5;
+A4:  dom (C .--> C') = {C} by CQC_LANG:5;
+A5:  dom (D .--> D') = {D} by CQC_LANG:5;
+    dom (E .--> E') = {E} by CQC_LANG:5;
+      then dom ((B .--> B') +* (C .--> C') +* (D .--> D') +* (E .--> E') +*
+           (A .--> A'))
+      = {A} \/ (({B} \/ {C}) \/ {D} \/ {E}) by A2,A3,A4,A5,CQC_LANG:5
+     .= {A} \/ ({B,C} \/ {D} \/ {E}) by ENUMSET1:41
+     .= {A} \/ ({B,C,D} \/ {E}) by ENUMSET1:43
+     .= {A} \/ {B,C,D,E} by ENUMSET1:46
+    .= {A,B,C,D,E} by ENUMSET1:47;
+  hence thesis by A1;
+end;
+
+theorem Th8:
+for A,B,C,D,E being set, h being Function,
+A',B',C',D',E' being set
+st h = (B .--> B') +* (C .--> C') +*
+    (D .--> D') +* (E .--> E') +* (A .--> A')
+holds rng h = {h.A,h.B,h.C,h.D,h.E}
+proof
+  let A,B,C,D,E be set;
+  let h be Function;
+  let A',B',C',D',E' be set;
+assume
+  h = (B .--> B') +* (C .--> C') +* (D .--> D') +* (E .--> E') +* (A .--> A');
+then A1:  dom h = {A,B,C,D,E} by Th7;
+      then A2: A in dom h by ENUMSET1:24;
+A3:      B in dom h by A1,ENUMSET1:24;
+A4:      C in dom h by A1,ENUMSET1:24;
+A5:      D in dom h by A1,ENUMSET1:24;
+A6:      E in dom h by A1,ENUMSET1:24;
+      A7:rng h c= {h.A,h.B,h.C,h.D,h.E}
+      proof
+        let t be set;
+        assume t in rng h;
+        then consider x1 being set such that
+A8:      x1 in dom h & t = h.x1 by FUNCT_1:def 5;
+          now per cases by A1,A8,ENUMSET1:23;
+        case x1=A;
+        hence thesis by A8,ENUMSET1:24;
+        case x1=B;
+        hence thesis by A8,ENUMSET1:24;
+        case x1=C;
+        hence thesis by A8,ENUMSET1:24;
+        case x1=D;
+        hence thesis by A8,ENUMSET1:24;
+        case x1=E;
+        hence thesis by A8,ENUMSET1:24;
+        end;
+        hence thesis;
+      end;
+        {h.A,h.B,h.C,h.D,h.E} c= rng h
+      proof
+        let t be set;
+        assume A9: t in {h.A,h.B,h.C,h.D,h.E};
+          now per cases by A9,ENUMSET1:23;
+        case t=h.A;
+        hence thesis by A2,FUNCT_1:def 5;
+        case t=h.B;
+        hence thesis by A3,FUNCT_1:def 5;
+        case t=h.C;
+        hence thesis by A4,FUNCT_1:def 5;
+        case t=h.D;
+        hence thesis by A5,FUNCT_1:def 5;
+        case t=h.E;
+        hence thesis by A6,FUNCT_1:def 5;
+        end;
+        hence thesis;
+      end;
+  hence thesis by A7,XBOOLE_0:def 10;
+end;
+
+theorem
+  for G being Subset of PARTITIONS(Y),
+A,B,C,D,E being a_partition of Y, z,u being Element of Y, h being Function
+st G is independent & G={A,B,C,D,E} &
+A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E
+holds
+EqClass(u,B '/\' C '/\' D '/\' E) meets EqClass(z,A)
+proof
+  let G be Subset of PARTITIONS(Y);
+  let A,B,C,D,E be a_partition of Y;
+  let z,u be Element of Y;
+  let h be Function;
+  assume A1:G is independent & G={A,B,C,D,E} &
+  A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E;
+      set GG=EqClass(u,B '/\' C '/\' D '/\' E);
+      set h = (B .--> EqClass(u,B)) +* (C .--> EqClass(u,C)) +*
+              (D .--> EqClass(u,D)) +* (E .--> EqClass(u,E)) +*
+              (A .--> EqClass(z,A));
+A2:  dom h = G by A1,Th7;
+A3:  h.A = EqClass(z,A) by A1,Th6;
+A4:  h.B = EqClass(u,B) by A1,Th6;
+A5:  h.C = EqClass(u,C) by A1,Th6;
+A6:  h.D = EqClass(u,D) by A1,Th6;
+A7:  h.E = EqClass(u,E) by A1,Th6;
+A8:  for d being set st d in G holds h.d in d
+      proof
+        let d be set;
+        assume A9: d in G;
+          now per cases by A1,A9,ENUMSET1:23;
+        case A10:d=A;
+          h.A=EqClass(z,A) by A1,Th6;
+        hence thesis by A10;
+        case A11:d=B;
+          h.B=EqClass(u,B) by A1,Th6;
+        hence thesis by A11;
+        case A12:d=C;
+          h.C=EqClass(u,C) by A1,Th6;
+        hence thesis by A12;
+        case A13:d=D;
+          h.D=EqClass(u,D) by A1,Th6;
+        hence thesis by A13;
+        case A14:d=E;
+          h.E=EqClass(u,E) by A1,Th6;
+        hence thesis by A14;
+        end;
+        hence thesis;
+      end;
+        A in dom h by A1,A2,ENUMSET1:24;
+then A15:  h.A in rng h by FUNCT_1:def 5;
+        B in dom h by A1,A2,ENUMSET1:24;
+then A16:  h.B in rng h by FUNCT_1:def 5;
+        C in dom h by A1,A2,ENUMSET1:24;
+then A17:  h.C in rng h by FUNCT_1:def 5;
+        D in dom h by A1,A2,ENUMSET1:24;
+then A18:  h.D in rng h by FUNCT_1:def 5;
+        E in dom h by A1,A2,ENUMSET1:24;
+then A19:  h.E in rng h by FUNCT_1:def 5;
+      A20:rng h = {h.A,h.B,h.C,h.D,h.E} by Th8;
+        rng h c= bool Y
+      proof
+        let t be set;
+        assume A21: t in rng h;
+          now per cases by A20,A21,ENUMSET1:23;
+        case t=h.A;
+        then t=EqClass(z,A) by A1,Th6;
+        hence thesis;
+        case t=h.B;
+        hence thesis by A4;
+        case t=h.C;
+        hence thesis by A5;
+        case t=h.D;
+        hence thesis by A6;
+        case t=h.E;
+        hence thesis by A7;
+        end;
+        hence thesis;
+      end;
+      then reconsider FF=rng h as Subset-Family of Y by SETFAM_1:def 7;
+        (Intersect FF)<>{} by A1,A2,A8,BVFUNC_2:def 5;
+      then consider m being set such that
+A22:    m in Intersect FF by XBOOLE_0:def 1;
+        m in meet FF by A15,A22,CANTOR_1:def 3;
+      then A23:
+ m in h.A & m in h.B & m in h.C & m in h.D & m in h.E
+   by A15,A16,A17,A18,A19,SETFAM_1:def 1;
+        GG = EqClass(u,B '/\' C '/\' D) /\ EqClass(u,E) by BVFUNC14:1;
+then A24:      GG = EqClass(u,B '/\' C) /\ EqClass(u,D) /\ EqClass(u,E)
+        by BVFUNC14:1;
+        m in EqClass(u,B) /\ EqClass(u,C) by A4,A5,A23,XBOOLE_0:def 3;
+      then m in EqClass(u,B) /\ EqClass(u,C) /\ EqClass(u,D) by A6,A23,XBOOLE_0
+:def 3;
+      then m in EqClass(u,B) /\ EqClass(u,C) /\ EqClass(u,D) /\ EqClass(u,E)
+        by A7,A23,XBOOLE_0:def 3;
+      then m in EqClass(u,B) /\ EqClass(u,C) /\ EqClass(u,D) /\ EqClass(u,E)
+        /\ EqClass(z,A) by A3,A23,XBOOLE_0:def 3;
+      then EqClass(u,B) /\ EqClass(u,C) /\ EqClass(u,D) /\ EqClass(u,E) meets
+        EqClass(z,A) by XBOOLE_0:4;
+  hence thesis by A24,BVFUNC14:1;
+end;
+
+theorem
+  for G being Subset of PARTITIONS(Y),
+A,B,C,D,E being a_partition of Y, z,u being Element of Y
+st G is independent & G={A,B,C,D,E} &
+A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E &
+EqClass(z,C '/\' D '/\' E)=EqClass(u,C '/\' D '/\' E)
+holds EqClass(u,CompF(A,G)) meets EqClass(z,CompF(B,G))
+proof
+  let G be Subset of PARTITIONS(Y);
+  let A,B,C,D,E be a_partition of Y;
+  let z,u be Element of Y;
+  assume A1: G is independent & G={A,B,C,D,E} &
+  A<>B & A<>C & A<>D & A<>E & B<>C & B<>D & B<>E & C<>D & C<>E & D<>E &
+             EqClass(z,C '/\' D '/\' E)=EqClass(u,C '/\' D '/\' E);
+      then A2:CompF(B,G) = A '/\' C '/\' D '/\' E by Th2;
+      set H=EqClass(z,CompF(B,G));
+      set I=EqClass(z,A); set GG=EqClass(u,(((B '/\' C) '/\' D) '/\' E));
+      set h = (B .--> EqClass(u,B)) +* (C .--> EqClass(u,C)) +*
+              (D .--> EqClass(u,D)) +* (E .--> EqClass(u,E)) +*
+              (A .--> EqClass(z,A));
+A3:  dom h = G by A1,Th7;
+A4:  h.A = EqClass(z,A) by A1,Th6;
+A5:  h.B = EqClass(u,B) by A1,Th6;
+A6:  h.C = EqClass(u,C) by A1,Th6;
+A7:  h.D = EqClass(u,D) by A1,Th6;
+A8:  h.E = EqClass(u,E) by A1,Th6;
+A9:  for d being set st d in G holds h.d in d
+      proof
+        let d be set;
+        assume A10: d in G;
+          now per cases by A1,A10,ENUMSET1:23;
+        case A11:d=A;
+          h.A=EqClass(z,A) by A1,Th6;
+        hence thesis by A11;
+        case A12:d=B;
+          h.B=EqClass(u,B) by A1,Th6;
+        hence thesis by A12;
+        case A13:d=C;
+          h.C=EqClass(u,C) by A1,Th6;
+        hence thesis by A13;
+        case A14:d=D;
+          h.D=EqClass(u,D) by A1,Th6;
+        hence thesis by A14;
+        case A15:d=E;
+          h.E=EqClass(u,E) by A1,Th6;
+        hence thesis by A15;
+        end;
+        hence thesis;
+      end;
+        A in dom h by A1,A3,ENUMSET1:24;
+then A16:  h.A in rng h by FUNCT_1:def 5;
+        B in dom h by A1,A3,ENUMSET1:24;
+then A17:  h.B in rng h by FUNCT_1:def 5;
+        C in dom h by A1,A3,ENUMSET1:24;
+then A18:  h.C in rng h by FUNCT_1:def 5;
+        D in dom h by A1,A3,ENUMSET1:24;
+then A19:  h.D in rng h by FUNCT_1:def 5;
+        E in dom h by A1,A3,ENUMSET1:24;
+then A20:  h.E in rng h by FUNCT_1:def 5;
+      A21:rng h = {h.A,h.B,h.C,h.D,h.E} by Th8;
+        rng h c= bool Y
+      proof
+        let t be set;
+        assume A22: t in rng h;
+          now per cases by A21,A22,ENUMSET1:23;
+        case t=h.A;
+        then t=EqClass(z,A) by A1,Th6;
+        hence thesis;
+        case t=h.B;
+        hence thesis by A5;
+        case t=h.C;
+        hence thesis by A6;
+        case t=h.D;
+        hence thesis by A7;
+        case t=h.E;
+        hence thesis by A8;
+        end;
+        hence thesis;
+      end;
+      then reconsider FF=rng h as Subset-Family of Y by SETFAM_1:def 7;
+        (Intersect FF)<>{} by A1,A3,A9,BVFUNC_2:def 5;
+      then consider m being set such that
+A23:    m in Intersect FF by XBOOLE_0:def 1;
+        m in meet FF by A16,A23,CANTOR_1:def 3;
+      then A24:
+ m in h.A & m in h.B & m in h.C & m in h.D & m in h.E
+   by A16,A17,A18,A19,A20,SETFAM_1:def 1;
+        GG = EqClass(u,B '/\' C '/\' D) /\ EqClass(u,E) by BVFUNC14:1;
+then A25:      GG = EqClass(u,B '/\' C) /\ EqClass(u,D) /\ EqClass(u,E)
+        by BVFUNC14:1;
+        m in EqClass(u,B) /\ EqClass(u,C) by A5,A6,A24,XBOOLE_0:def 3;
+      then m in EqClass(u,B) /\ EqClass(u,C) /\ EqClass(u,D) by A7,A24,XBOOLE_0
+:def 3;
+      then m in EqClass(u,B) /\ EqClass(u,C) /\ EqClass(u,D) /\ EqClass(u,E)
+        by A8,A24,XBOOLE_0:def 3;
+      then m in EqClass(u,B) /\ EqClass(u,C) /\ EqClass(u,D) /\
+          EqClass(u,E) /\ EqClass(z,A)
+        by A4,A24,XBOOLE_0:def 3;
+      then GG /\ I <> {} by A25,BVFUNC14:1;
+      then consider p being set such that
+A26:   p in GG /\ I by XBOOLE_0:def 1;
+      reconsider p as Element of Y by A26;
+      set K=EqClass(p,C '/\' D '/\' E);
+      A27:p in K & K in C '/\' D '/\' E by T_1TOPSP:def 1;
+A28:      p in GG & p in I by A26,XBOOLE_0:def 3;
+      then p in I /\ K by A27,XBOOLE_0:def 3;
+      then I /\ K in INTERSECTION(A,C '/\' D '/\' E) & not (I /\ K in {{}})
+by SETFAM_1:def 5,TARSKI:def 1;
+then A29: I /\ K in INTERSECTION(A,C '/\' D '/\' E) \ {{}} by XBOOLE_0:def 4;
+      set L=EqClass(z,C '/\' D '/\' E);
+        GG = EqClass(u,((B '/\' (C '/\' D)) '/\' E)) by PARTIT1:16;
+      then GG = EqClass(u,B '/\' (C '/\' D '/\' E)) by PARTIT1:16;
+then A30: GG c= L by A1,BVFUNC11:3;
+A31: p in GG by A26,XBOOLE_0:def 3;
+        p in EqClass(p,C '/\' D '/\' E) by T_1TOPSP:def 1;
+      then K meets L by A30,A31,XBOOLE_0:3;
+      then K=L by T_1TOPSP:9;
+      then A32:z in K by T_1TOPSP:def 1;
+        z in I by T_1TOPSP:def 1;
+      then A33:z in I /\ K by A32,XBOOLE_0:def 3;
+A34:z in H by T_1TOPSP:def 1;
+        A '/\' (C '/\' D '/\' E) = A '/\' (C '/\' D) '/\' E by PARTIT1:16;
+      then A '/\' (C '/\' D '/\' E) = A '/\' C '/\' D '/\' E by PARTIT1:16;
+      then I /\ K in CompF(B,G) by A2,A29,PARTIT1:def 4;
+      then I /\ K = H or I /\ K misses H by EQREL_1:def 6;
+      then p in H by A27,A28,A33,A34,XBOOLE_0:3,def 3;
+      then p in GG /\ H by A31,XBOOLE_0:def 3;
+      then GG meets H by XBOOLE_0:4;
+  hence thesis by A1,Th1;
+end;

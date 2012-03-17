@@ -1,0 +1,1282 @@
+:: Fano-Desargues Parallelity Spaces
+::  by Eugeniusz Kusak and Wojciech Leo\'nczuk
+::
+:: Received March 23, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ARYTM_1, VECTSP_1, PARSP_1, MCART_1, RELAT_1, INCSP_1,
+      PARSP_2;
+ notation ZFMISC_1, SUBSET_1, MCART_1, DOMAIN_1, STRUCT_0, RLVECT_1, VECTSP_1,
+      PARSP_1;
+ constructors DOMAIN_1, PARSP_1, MEMBERED, XBOOLE_0;
+ clusters VECTSP_1, PARSP_1, STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ theorems MCART_1, VECTSP_1, PARSP_1, RLVECT_1;
+
+begin
+
+::
+::       1. A CONSTRUCTION OF A MODEL OF A FANO-DESARGUES SPACE
+::
+
+Lm1:
+ for F being add-associative right_zeroed
+                   right_complementable (non empty LoopStr),
+     a,b being Element of F holds
+ a - b = 0.F implies a = b
+proof
+ let F be add-associative right_zeroed
+                   right_complementable (non empty LoopStr),
+     a,b be Element of F;
+ assume a - b = 0.F;
+ then a + -b = 0.F by RLVECT_1:def 11;
+ then a = - -b by RLVECT_1:19;
+ hence thesis by RLVECT_1:30;
+end;
+
+Lm2:
+ for F being add-associative right_zeroed
+                   right_complementable (non empty LoopStr),
+     x,y being Element of F holds
+  (x+(-y)=0.F iff x=y) & (x-y=0.F iff x=y)
+ proof let F be add-associative right_zeroed
+                right_complementable (non empty LoopStr),
+    x,y be Element of F;
+    A1: x+(-y)=0.F iff x=y
+     proof
+         x+(-y)=0.F implies x=y
+       proof
+        assume x+(-y)=0.F;
+        then x+((-y)+y)=0.F+y by RLVECT_1:def 6;
+        then x+0.F=0.F+y by RLVECT_1:16;
+        then x=0.F+y by RLVECT_1:10;
+        hence thesis by RLVECT_1:10;
+       end;
+      hence thesis by RLVECT_1:16;
+     end;
+      x-y=0.F iff x=y
+     proof
+      A2: x-y=0.F implies x=y
+       proof
+        assume x-y=0.F;
+        then x+(-y)+y=0.F+y by RLVECT_1:def 11;
+        then x+((-y)+y)=0.F+y by RLVECT_1:def 6;
+        then x+0.F=0.F+y by RLVECT_1:16;
+        then x=0.F+y by RLVECT_1:10;
+        hence thesis by RLVECT_1:10;
+       end;
+        x=y implies x-y=0.F
+       proof
+        assume x=y;
+        then x-y=y+(-y) by RLVECT_1:def 11;
+        hence thesis by RLVECT_1:16;
+       end;
+      hence thesis by A2;
+     end;
+   hence thesis by A1;
+ end;
+
+reserve F for Field;
+
+theorem
+Th1: MPS(F) is ParSp
+ proof
+    (for a,b,c,d,p,q,r,s being Element of MPS(F)
+  holds a,b '||' b,a & a,b '||' c,c & (a,b '||' p,q & a,b '||' r,s
+  implies p,q '||' r,s or a=b) & (a,b '||' a,c implies b,a '||' b,c)
+  & (ex x being Element of MPS(F) st
+  a,b '||' c,x & a,c '||' b,x)) by PARSP_1:24,25,26,27,28;
+  hence thesis by PARSP_1:def 12;
+ end;
+
+reserve a,b,c,d,p,q,r for
+        Element of MPS(F);
+reserve e,f,g,h,i,j,k,l,m,n,o,w for
+           Element of [:the carrier of F,the carrier of F,the carrier of F:];
+reserve K,L,M,N,R,S for Element of F;
+
+Lm3: (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+      (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+      (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F iff
+      (ex K st
+       K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 & K*(e`3-f`3) = g`3-h`3)
+       or
+      (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F)
+proof
+ A1: (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+    (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+    (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F implies
+     (ex K st
+      K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 & K*(e`3-f`3) = g`3-h`3)
+      or
+     (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F)
+  proof
+   assume A2: (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+              (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+              (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F;
+      now
+   A3: now assume A4: e`1-f`1 <> 0.F;
+A5:    ((g`1-h`1)*(e`1-f`1)")*(e`1-f`1) = (g`1-h`1)*((e`1-f`1)"*(e`1-f`1))
+                                                   by VECTSP_1:def 16
+                                   .= (g`1-h`1)*1_ F by A4,VECTSP_1:def 22
+                                   .= g`1-h`1 by VECTSP_1:def 19;
+
+A6:    ((g`1-h`1)*(e`1-f`1)")*(e`2-f`2) =
+ (e`1-f`1)"*((g`1-h`1)*(e`2-f`2)) by VECTSP_1:def 16
+       .= (e`1-f`1)"*((e`1-f`1)*(g`2-h`2)) by A2,Lm1
+       .= ((e`1-f`1)"*(e`1-f`1))*(g`2-h`2) by VECTSP_1:def 16
+       .= (g`2-h`2)*1_ F by A4,VECTSP_1:def 22
+       .= g`2-h`2 by VECTSP_1:def 19;
+
+      ((g`1-h`1)*(e`1-f`1)")*(e`3-f`3) =
+ (e`1-f`1)"*((g`1-h`1)*(e`3-f`3)) by VECTSP_1:def 16
+       .= (e`1-f`1)"*((e`1-f`1)*(g`3-h`3)) by A2,Lm1
+       .= ((e`1-f`1)"*(e`1-f`1))*(g`3-h`3) by VECTSP_1:def 16
+       .= (g`3-h`3)*1_ F by A4,VECTSP_1:def 22
+       .= g`3-h`3 by VECTSP_1:def 19;
+    hence thesis by A5,A6; end;
+   A7: now assume A8: e`2-f`2 <> 0.F;
+A9:    ((g`2-h`2)*(e`2-f`2)")*(e`1-f`1) =
+ ((e`1-f`1)*(g`2-h`2))*(e`2-f`2)" by VECTSP_1:def 16
+       .= ((g`1-h`1)*(e`2-f`2))*(e`2-f`2)" by A2,Lm1
+       .= (g`1-h`1)*((e`2-f`2)*(e`2-f`2)") by VECTSP_1:def 16
+       .= (g`1-h`1)*1_ F by A8,VECTSP_1:def 22
+       .= g`1-h`1 by VECTSP_1:def 19;
+A10:    ((g`2-h`2)*(e`2-f`2)")*(e`2-f`2) = (g`2-h`2)*((e`2-f`2)"*(e`2-f`2))
+                                       by VECTSP_1:def 16
+       .= (g`2-h`2)*1_ F by A8,VECTSP_1:def 22
+       .= g`2-h`2 by VECTSP_1:def 19;
+      ((g`2-h`2)*(e`2-f`2)")*(e`3-f`3) =
+ (e`2-f`2)"*((g`2-h`2)*(e`3-f`3)) by VECTSP_1:def 16
+       .= (e`2-f`2)"*((e`2-f`2)*(g`3-h`3)) by A2,Lm1
+       .= ((e`2-f`2)"*(e`2-f`2))*(g`3-h`3) by VECTSP_1:def 16
+       .= (g`3-h`3)*1_ F by A8,VECTSP_1:def 22
+       .= g`3-h`3 by VECTSP_1:def 19;
+    hence thesis by A9,A10; end;
+      now assume A11: e`3-f`3 <> 0.F;
+A12:    ((g`3-h`3)*(e`3-f`3)")*(e`1-f`1) =
+ ((e`1-f`1)*(g`3-h`3))*(e`3-f`3)" by VECTSP_1:def 16
+       .= ((g`1-h`1)*(e`3-f`3))*(e`3-f`3)" by A2,Lm1
+       .= (g`1-h`1)*((e`3-f`3)*(e`3-f`3)") by VECTSP_1:def 16
+       .= (g`1-h`1)*1_ F by A11,VECTSP_1:def 22
+       .= g`1-h`1 by VECTSP_1:def 19;
+
+A13:    ((g`3-h`3)*(e`3-f`3)")*(e`2-f`2) =
+ ((e`2-f`2)*(g`3-h`3))*(e`3-f`3)" by VECTSP_1:def 16
+       .= ((g`2-h`2)*(e`3-f`3))*(e`3-f`3)" by A2,Lm1
+       .= (g`2-h`2)*((e`3-f`3)*(e`3-f`3)") by VECTSP_1:def 16
+       .= (g`2-h`2)*1_ F by A11,VECTSP_1:def 22
+       .= g`2-h`2 by VECTSP_1:def 19;
+
+      ((g`3-h`3)*(e`3-f`3)")*(e`3-f`3) = (g`3-h`3)*((e`3-f`3)"*(e`3-f`3))
+                                       by VECTSP_1:def 16
+       .= (g`3-h`3)*1_ F by A11,VECTSP_1:def 22
+       .= g`3-h`3 by VECTSP_1:def 19;
+    hence thesis by A12,A13; end;
+    hence thesis by A3,A7; end;
+   hence thesis;
+  end;
+
+   (ex K st
+ K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 & K*(e`3-f`3) = g`3-h`3) or
+ (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F) implies
+ (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+ (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+ (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F
+  proof
+   assume A14: (ex K st
+      K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 & K*(e`3-f`3) = g`3-h`3)
+      or
+     (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F);
+   A15: now assume A16: e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F;
+    then A17: (e`1-f`1)*(g`2-h`2) = 0.F by VECTSP_1:39;
+
+    A18: (e`1-f`1)*(g`3-h`3) = 0.F by A16,VECTSP_1:39;
+      (g`1-h`1)*(e`3-f`3) = 0.F by A16,VECTSP_1:39;
+   hence thesis by A16,A17,A18,RLVECT_1:28; end;
+      now given K such that A19: K*(e`1-f`1) = g`1-h`1 &
+                                   K*(e`2-f`2) = g`2-h`2 &
+                                   K*(e`3-f`3) = g`3-h`3;
+    A20: (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F
+      proof
+         (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) =
+ (K*(e`1-f`1))*(e`2-f`2) - (K*(e`1-f`1))*(e`2-f`2) by A19,VECTSP_1:def 16;
+         hence thesis by RLVECT_1:28;
+      end;
+    A21: (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F
+      proof
+         (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) =
+ (K*(e`1-f`1))*(e`3-f`3) - (K*(e`1-f`1))*(e`3-f`3) by A19,VECTSP_1:def 16;
+         hence thesis by RLVECT_1:28;
+      end;
+      (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F
+      proof
+         (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) =
+ (K*(e`2-f`2))*(e`3-f`3) - (K*(e`2-f`2))*(e`3-f`3) by A19,VECTSP_1:def 16;
+         hence thesis by RLVECT_1:28;
+      end;
+    hence thesis by A20,A21; end;
+    hence thesis by A14,A15;
+  end;
+ hence thesis by A1;
+end;
+
+theorem
+Th2: a,b '||' c,d iff ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+      ((ex K st
+      K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 &
+      K*(e`3-f`3) = g`3-h`3) or
+      (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F))
+ proof
+  A1: a,b '||' c,d implies ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+     ((ex K st
+      K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 &
+      K*(e`3-f`3) = g`3-h`3) or
+      (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F))
+  proof
+   assume a,b '||' c,d;
+   then consider e,f,g,h such that A2: [a,b,c,d] = [e,f,g,h] &
+       (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+       (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+       (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F by PARSP_1:23;
+        (ex K st
+      K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 &
+      K*(e`3-f`3) = g`3-h`3) or
+      (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F) by A2,Lm3;
+   hence thesis by A2;
+  end;
+     (ex e,f,g,h st [a,b,c,d] = [e,f,g,h] &
+       ((ex K st
+       K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 &
+       K*(e`3-f`3) = g`3-h`3) or
+       (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F))) implies a,b '||' c,d
+   proof
+    given e,f,g,h such that A3: [a,b,c,d] = [e,f,g,h] &
+               ((ex K st
+                 K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 &
+                 K*(e`3-f`3) = g`3-h`3) or
+                (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F));
+      (e`1-f`1)*(g`2-h`2) - (g`1-h`1)*(e`2-f`2) = 0.F &
+    (e`1-f`1)*(g`3-h`3) - (g`1-h`1)*(e`3-f`3) = 0.F &
+    (e`2-f`2)*(g`3-h`3) - (g`2-h`2)*(e`3-f`3) = 0.F by A3,Lm3;
+    hence thesis by A3,PARSP_1:23;
+   end;
+   hence thesis by A1;
+  end;
+
+theorem
+Th3: not a,b '||' a,c & [a,b,a,c]=[e,f,e,g] implies e<>f & e<>g & f<>g
+ proof assume that A1: not a,b '||' a,c and A2: [a,b,a,c]=[e,f,e,g];
+A3:   e`1-f`1 <> 0.F or e`2-f`2 <> 0.F or e`3-f`3 <> 0.F by A1,A2,Th2;
+    0.F*(e`1-f`1) <> e`1-g`1 or 0.F*(e`2-f`2) <> e`2-g`2 or
+  0.F*(e`3-f`3) <> e`3-g`3 by A1,A2,Th2;
+then A4:  0.F <> e`1-g`1 or 0.F <> e`2-g`2 or 0.F <> e`3-g`3 by VECTSP_1:44;
+    f<>g
+   proof assume A5: not thesis;
+  (e`1-f`1)*1_ F <> e`1-g`1 or (e`2-f`2)*1_ F <> e`2-g`2 or
+    (e`3-f`3)*1_ F <> e`3-g`3 by A1,A2,Th2;
+    hence contradiction by A5,VECTSP_1:def 19; end;
+  hence thesis by A3,A4,RLVECT_1:28;
+ end;
+
+theorem
+Th4: not a,b '||' a,c & [a,b,a,c] = [e,f,e,g] & K*(e`1-f`1)=L*(e`1-g`1) &
+      K*(e`2-f`2)=L*(e`2-g`2) & K*(e`3-f`3)=L*(e`3-g`3) implies K=0.F & L=0.F
+ proof assume that A1: not a,b '||' a,c and A2: [a,b,a,c] = [e,f,e,g] and
+                   A3: K*(e`1-f`1)=L*(e`1-g`1) & K*(e`2-f`2)=L*(e`2-g`2) &
+                       K*(e`3-f`3)=L*(e`3-g`3);
+    K*(e`1-f`1)*(e`2-g`2)=L*((e`1-g`1)*(e`2-g`2)) &
+  K*(e`2-f`2)*(e`1-g`1)=L*((e`2-g`2)*(e`1-g`1)) &
+  K*(e`2-f`2)*(e`3-g`3)=L*((e`2-g`2)*(e`3-g`3)) &
+  K*(e`3-f`3)*(e`2-g`2)=L*((e`3-g`3)*(e`2-g`2)) &
+  K*(e`1-f`1)*(e`3-g`3)=L*((e`1-g`1)*(e`3-g`3)) &
+  K*(e`3-f`3)*(e`1-g`1)=L*((e`3-g`3)*(e`1-g`1)) by A3,VECTSP_1:def 16;
+  then K*(e`1-f`1)*(e`2-g`2)-K*(e`2-f`2)*(e`1-g`1) = 0.F &
+  K*(e`2-f`2)*(e`3-g`3)-K*(e`3-f`3)*(e`2-g`2) = 0.F &
+  K*(e`1-f`1)*(e`3-g`3)-K*(e`3-f`3)*(e`1-g`1) = 0.F by RLVECT_1:28;
+  then K*((e`1-f`1)*(e`2-g`2))-K*(e`2-f`2)*(e`1-g`1) = 0.F &
+  K*((e`2-f`2)*(e`3-g`3))-K*(e`3-f`3)*(e`2-g`2) = 0.F &
+  K*((e`1-f`1)*(e`3-g`3))-K*(e`3-f`3)*(e`1-g`1) = 0.F by VECTSP_1:def 16;
+  then K*((e`1-f`1)*(e`2-g`2))-K*((e`2-f`2)*(e`1-g`1)) = 0.F &
+  K*((e`2-f`2)*(e`3-g`3))-K*((e`3-f`3)*(e`2-g`2)) = 0.F &
+  K*((e`1-f`1)*(e`3-g`3))-K*((e`3-f`3)*(e`1-g`1)) = 0.F by VECTSP_1:def 16;
+  then A4: K*((e`1-f`1)*(e`2-g`2)-(e`1-g`1)*(e`2-f`2)) = 0.F &
+      K*((e`2-f`2)*(e`3-g`3)-(e`2-g`2)*(e`3-f`3)) = 0.F &
+      K*((e`1-f`1)*(e`3-g`3)-(e`1-g`1)*(e`3-f`3)) = 0.F by VECTSP_1:43;
+A5:  (e`1-f`1)*(e`2-g`2)-(e`1-g`1)*(e`2-f`2) <> 0.F or
+  (e`2-f`2)*(e`3-g`3)-(e`2-g`2)*(e`3-f`3) <> 0.F or
+  (e`1-f`1)*(e`3-g`3)-(e`1-g`1)*(e`3-f`3) <> 0.F by A1,A2,PARSP_1:23;
+   then K=0.F by A4,VECTSP_1:44;
+  then A6: 0.F=L*(e`1-g`1) & 0.F=L*(e`2-g`2) & 0.F=L*(e`3-g`3) by A3,VECTSP_1:
+39;
+     e=[e`1,e`2,e`3] & g=[g`1,g`2,g`3] by MCART_1:48;
+  then e`1 <> g`1 or e`2 <> g`2 or e`3 <> g`3 by A1,A2,Th3;
+  then e`1-g`1 <> 0.F or e`2-g`2 <> 0.F or e`3-g`3 <> 0.F by Lm2;
+  hence thesis by A4,A5,A6,VECTSP_1:44;
+ end;
+
+ Lm4:
+ for F being add-associative right_zeroed
+                     right_complementable (non empty LoopStr),
+     a, b, c being Element of F holds
+  (b+a)-(c+a) = b-c
+ proof let F be add-associative right_zeroed
+                     right_complementable (non empty LoopStr),
+    a,b,c be Element of F;
+    thus (b+a)-(c+a) = (b+a)+-(c+a) by RLVECT_1:def 11
+                    .= (b+a)+(-a+-c) by RLVECT_1:45
+                    .= ((b+a)+-a)+-c by RLVECT_1:def 6
+                    .= (b+(a+-a))+-c by RLVECT_1:def 6
+                    .= (b+0.F)+-c by RLVECT_1:def 10
+                    .= b+-c by RLVECT_1:10
+                    .= b-c by RLVECT_1:def 11;
+ end;
+
+Lm5: (K-L)-(R-L)=K-R
+ proof thus (K-L)-(R-L)=(K+(-L))-(R-L) by RLVECT_1:def 11
+  .= ((-L)+K)-(R+(-L)) by RLVECT_1:def 11 .= K-R by Lm4;
+ end;
+
+Lm6: K*(N-M)-L*(N-S)=S-M implies (K+(-1_ F))*(N-M)=(L+(-1_ F))*(N-S)
+ proof assume K*(N-M)-L*(N-S) = S-M;
+  then K*(N-M)-L*(N-S) = S+(-M) by RLVECT_1:def 11
+  .= S+(-M)+0.F by RLVECT_1:10 .= (-M)+S+(-(N)+N) by RLVECT_1:16 .=
+ S+((-(N)+N)+(-M)) by RLVECT_1:def 6
+  .= S+(-(N)+(N+(-M))) by RLVECT_1:def 6 .= S+(-(N)+(N-M)) by RLVECT_1:def 11
+  .= (S+(-(N)))+(N-M) by RLVECT_1:def 6 .= (S-N)+(N-M) by RLVECT_1:def 11;
+  then K*(N-M)+(-L*(N-S))+L*(N-S) = (S-N)+(N-M)+L*(N-S) by RLVECT_1:def 11;
+  then K*(N-M)+((-L*(N-S))+L*(N-S)) = (S-N)+(N-M)+L*(N-S) by RLVECT_1:def 6;
+  then K*(N-M)+0.F = (S-N)+(N-M)+L*(N-S) by RLVECT_1:16;
+  then K*(N-M) = (S-N)+(N-M)+L*(N-S) by RLVECT_1:10
+  .= ((S-N)+L*(N-S))+(N-M) by RLVECT_1:def 6;
+  then K*(N-M)+(-(N-M)) = ((S-N)+L*(N-S))+((N-M)+(-(N-M))) by RLVECT_1:def 6
+  .= ((S-N)+L*(N-S))+0.F by RLVECT_1:16 .= (S-N)+L*(N-S) by RLVECT_1:10
+  .= (S+-N)+L*(N-S) by RLVECT_1:def 11
+  .= L*(N-S)+(-(N-S)) by RLVECT_1:47;
+  then K*(N-M)+(-(1_ F*(N-M))) = L*(N-S)+(-(N-S)) by VECTSP_1:def 19;
+  then K*(N-M)+((-1_ F)*(N-M)) = L*(N-S)+(-(N-S)) by VECTSP_1:41;
+  then (K+(-1_ F))*(N-M) = L*(N-S)+(-(N-S)) by VECTSP_1:def 18
+  .= L*(N-S)+(-(1_ F*(N-S))) by VECTSP_1:def 19
+  .= L*(N-S)+((-1_ F)*(N-S)) by VECTSP_1:41;
+  hence thesis by VECTSP_1:def 18;
+ end;
+
+Lm7: K-L=N-M implies M=L+N-K
+proof assume K-L=N-M; then M+(K+(-L))=M+(N-M) by RLVECT_1:def 11;
+ then M+(K+(-L))=M+(N+(-M)) by RLVECT_1:def 11;
+ then (M+K)+(-L)=M+(N+(-M)) by RLVECT_1:def 6;
+ then (M+K)+(-L)=(M+N)+(-M) by RLVECT_1:def 6;
+ then M+K-L=N+M+(-M) by RLVECT_1:def 11;
+ then M+K-L=N+(M+(-M)) by RLVECT_1:def 6;
+ then M+K-L=N+0.F by RLVECT_1:16;
+ then M+K-L+L=N+L by RLVECT_1:10; then M+K+(-L)+L=N+L by RLVECT_1:def 11;
+ then M+K+((-L)+L)=N+L by RLVECT_1:def 6;
+ then M+K+0.F=L+N by RLVECT_1:16;
+ then M+K+(-K)=L+N+(-K) by RLVECT_1:10; then M+K+(-K)=L+N-K by RLVECT_1:def 11;
+ then M+(K+(-K))=L+N-K by RLVECT_1:def 6; then M+0.F=L+N-K by RLVECT_1:16;
+ hence thesis by RLVECT_1:10;
+end;
+
+theorem
+Th5: not a,b '||' a,c & a,b '||' c,d & a,c '||' b,d & [a,b,c,d] = [e,f,g,h]
+        implies h`1=f`1+g`1-e`1 & h`2=f`2+g`2-e`2 & h`3=f`3+g`3-e`3
+ proof assume that A1: not a,b '||' a,c and A2: a,b '||' c,d and A3: a,c '||'
+ b,d and
+                   A4: [a,b,c,d]=[e,f,g,h];
+  A5: a=e & b=f & c =g & d=h by A4,MCART_1:33;
+  then A6: [a,b,a,c]=[e,f,e,g];
+  A7: e=[e`1,e`2,e`3] & f=[f`1,f`2,f`3] & g=[g`1,g`2,g`3] by MCART_1:48;
+then A8:  e`1<>f`1 or e`2<>f`2 or e`3<>f`3 by A1,A6,Th3;
+  consider i,j,k,l such that A9: [a,b,c,d]=[i,j,k,l] & (( ex K st
+              K*(i`1-j`1) = k`1-l`1 & K*(i`2-j`2) = k`2-l`2 &
+                                K*(i`3-j`3) = k`3-l`3) or
+             (i`1-j`1=0.F & i`2-j`2=0.F & i`3-j`3=0.F)) by A2,Th2;
+     e=i & f=j & g=k & h=l by A4,A9,MCART_1:33;
+  then consider K such that A10: K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2
+&
+                           K*(e`3-f`3) = g`3-h`3 by A8,A9,Lm2;
+A11:  e`1<>g`1 or e`2<>g`2 or e`3<>g`3 by A1,A6,A7,Th3;
+  consider m,n,o,w such that A12: [a,c,b,d]=[m,n,o,w] & (( ex L st
+              L*(m`1-n`1) = o`1-w`1 & L*(m`2-n`2) = o`2-w`2 &
+                                L*(m`3-n`3) = o`3-w`3) or
+             (m`1-n`1=0.F & m`2-n`2=0.F & m`3-n`3=0.F)) by A3,Th2;
+     e=m & n=g & o=f & w=h by A5,A12,MCART_1:33;
+  then consider L such that A13: L*(e`1-g`1) = f`1-h`1 & L*(e`2-g`2) = f`2-h`2
+&
+                           L*(e`3-g`3) = f`3-h`3 by A11,A12,Lm2;
+    K*(e`1-f`1)-L*(e`1-g`1) = g`1-f`1 &
+  K*(e`2-f`2)-L*(e`2-g`2) = g`2-f`2 &
+  K*(e`3-f`3)-L*(e`3-g`3) = g`3-f`3 by A10,A13,Lm5;
+  then (K+(-1_ F))*(e`1-f`1) = (L+(-1_ F))*(e`1-g`1) &
+  (K+(-1_ F))*(e`2-f`2) = (L+(-1_ F))*(e`2-g`2) &
+  (K+(-1_ F))*(e`3-f`3) = (L+(-1_ F))*(e`3-g`3) by Lm6;
+  then K+(-1_ F)=0.F & L+(-1_ F)=0.F by A1,A6,Th4; then (e`1-f`1)*1_ F = g`1-
+h`1 &
+  (e`2-f`2)*1_ F = g`2-h`2 & (e`3-f`3)*1_ F = g`3-h`3 by A10,Lm2;
+  then e`1-f`1 = g`1-h`1 & e`2-f`2 = g`2-h`2 & e`3-f`3 = g`3-h`3 by VECTSP_1:
+def 19;
+  hence thesis by Lm7;
+ end;
+
+Lm8: L*K-L*R=R+K implies (L-1_ F)*K=(L+1_ F)*R
+ proof assume L*K-L*R=R+K; then L*K+(-L*R)+(-K)=R+K+(-K) by RLVECT_1:def 11
+  .=R+(K+(-K)) by RLVECT_1:def 6 .=R+0.F by RLVECT_1:16 .=R by RLVECT_1:10;
+  then (L*K+(-K))+(-L*R)=R by RLVECT_1:def 6;
+  then (L*K+(-(1_ F*K)))+(-L*R)=R by VECTSP_1:def 19;
+  then (L*K+(-1_ F)*K)+(-L*R)=R by VECTSP_1:41;
+  then (L+(-1_ F))*K+(-L*R)=R by VECTSP_1:def 18;
+  then (L-1_ F)*K+(-L*R)+L*R=R+L*R by RLVECT_1:def 11;
+  then (L-1_ F)*K+((-L*R)+L*R)=R+L*R by RLVECT_1:def 6;
+  then (L-1_ F)*K+0.F=R+L*R by RLVECT_1:16;
+  then (L-1_ F)*K=L*R+R by RLVECT_1:10
+  .=L*R+1_ F*R by VECTSP_1:def 19;
+  hence thesis by VECTSP_1:def 18;
+ end;
+
+Lm9: L*(K-N)=R-S & S=K+N-R implies (L-1_ F)*(R-N)=(L+1_ F)*(R-K)
+ proof assume L*(K-N)=R-S & S=K+N-R;
+  then A1: L*(K-N)=R+(-(K+N-R)) by RLVECT_1:def 11
+       .=R+(R+(-(K+N))) by RLVECT_1:47
+       .=R+(R+(-K+(-N))) by RLVECT_1:45 .=R+(-N+(R+(-K))) by RLVECT_1:def 6
+ .=(R+(-N))+(R+(-K)) by RLVECT_1:def 6
+       .=(R-N)+(R+(-K)) by RLVECT_1:def 11 .=(R-K)+(R-N) by RLVECT_1:def 11;
+    L*(R-N)-L*(R-K)=L*(R+(-N))-L*(R-K) by RLVECT_1:def 11
+       .=L*(R+(-N))-L*(R+(-K)) by RLVECT_1:def 11
+       .=L*(R+(-N))+(-L*(R+(-K))) by RLVECT_1:def 11
+       .=L*R+L*(-N)+(-L*(R+(-K))) by VECTSP_1:def 18
+       .=L*R+L*(-N)+((-L)*(R+(-K))) by VECTSP_1:41
+       .=L*R+L*(-N)+((-L)*R+(-L)*(-K)) by VECTSP_1:def 18
+       .=L*R+L*(-N)+((-L)*R+L*K) by VECTSP_1:42
+       .=L*(-N)+L*R+(-L*R+L*K) by VECTSP_1:41
+       .=L*(-N)+L*R+(-L*R)+L*K by RLVECT_1:def 6
+       .=L*(-N)+(L*R+(-L*R))+L*K by RLVECT_1:def 6
+       .=L*(-N)+0.F+L*K by RLVECT_1:16 .=L*K+L*(-N) by RLVECT_1:10
+ .=L*(K+(-N)) by VECTSP_1:def 18
+       .=L*(K-N) by RLVECT_1:def 11;
+  hence thesis by A1,Lm8;
+ end;
+
+Lm10: K=L+M-N & R=L+S-N implies 1_ F*(M-S)=K-R
+ proof assume A1: K=L+M-N & R=L+S-N;
+  then -R=-(L+S+(-N)) by RLVECT_1:def 11 .=-(L+S)+(-(-N)) by RLVECT_1:45
+   .=-(L+S)+N by RLVECT_1:30 .=-L+(-S)+N by RLVECT_1:45;
+  then K-R=(L+M-N)+(-L+(-S)+N) by A1,RLVECT_1:def 11
+    .=(M+L+(-N))+(-L+(-S)+N) by RLVECT_1:def 11
+    .=(M+L+(-N))+(-S+(-L+N)) by RLVECT_1:def 6
+    .=(M+(L+(-N)))+(-S+(-L+N)) by RLVECT_1:def 6
+    .=(M+(L-N))+(-S+(-L+N)) by RLVECT_1:def 11
+    .=(M+(L-N))+(-S+(-L+(-(-N)))) by RLVECT_1:30
+    .=(M+(L-N))+(-S+(-(L+(-N)))) by RLVECT_1:45
+    .=(M+(L-N))+(-(L-N)+(-S)) by RLVECT_1:def 11
+    .=((M+(L-N))+(-(L-N)))+(-S) by RLVECT_1:def 6
+    .=(M+((L-N)+(-(L-N))))+(-S) by RLVECT_1:def 6
+    .=(M+0.F)+(-S) by RLVECT_1:16 .=M+(-S) by RLVECT_1:10
+    .=M*1_ F+(-S) by VECTSP_1:def 19 .=M*1_ F+(-S)*1_ F by VECTSP_1:def 19
+    .=(M+(-S))*1_ F by VECTSP_1:def 18 .=(M-S)*1_ F by RLVECT_1:def 11;
+  hence thesis;
+ end;
+
+theorem
+Th6: ex a,b,c st not a,b '||' a,c
+ proof A1: the carrier of MPS(F) =
+         [:the carrier of F,the carrier of F,the carrier of F:] by PARSP_1:21;
+   consider e,f,g being Element of
+   [:the carrier of F,the carrier of F,the carrier of F:] such that
+  A2: e=[1_ F,1_ F,0.F] & f=[-0.F,1_ F,0.F] & g=[1_ F,-0.F,0.F];
+  A3: e`1=1_ F & e`2=1_ F & e`3=0.F &
+       f`1=-0.F & f`2=1_ F & f`3=0.F &
+       g`1=1_ F & g`2=-0.F & g`3=0.F by A2,MCART_1:47;
+
+   A4: (e`1-f`1)*(e`2-g`2)-(e`1-g`1)*(e`2-f`2) <> 0.F
+    proof
+     A5: (e`1-f`1)*(e`2-g`2)-(e`1-g`1)*(e`2-f`2) =
+(1_ F+(-(-0.F)))*(1_ F-(-0.F))-(1_ F-1_ F)*(1_ F-1_ F) by A3,RLVECT_1:def 11
+     .= (1_ F+(-(-0.F)))*(1_ F+(-(-0.F)))-(1_ F-1_ F)*(1_ F-1_ F)
+       by RLVECT_1:def 11
+     .= (1_ F+0.F)*(1_ F+(-(-0.F)))-(1_ F-1_ F)*(1_ F-1_ F) by RLVECT_1:30
+     .= (1_ F+0.F)*(1_ F+0.F)-(1_ F-1_ F)*(1_ F-1_ F) by RLVECT_1:30
+     .= 1_ F*(1_ F+0.F)-(1_ F-1_ F)*(1_ F-1_ F) by RLVECT_1:10
+     .= 1_ F*1_ F-(1_ F-1_ F)*(1_ F-1_ F) by RLVECT_1:10
+     .= 1_ F*1_ F-0.F*(1_ F-1_ F) by RLVECT_1:28
+     .= 1_ F*1_ F-0.F by VECTSP_1:44 .= 1_ F-0.F by VECTSP_1:def 19;
+       1_ F<>0.F by VECTSP_1:def 21;
+     hence thesis by A5,Lm2;
+    end;
+  consider a,b,c being Element of MPS(F) such that
+  A6: [a,b,a,c]=[e,f,e,g] by A1; take a,b,c;
+     now let e',f',g',h' be Element of
+       [:the carrier of F,the carrier of F,the carrier of F:]; assume
+          [e',f',g',h']=[a,b,a,c];
+       then e'=e & f'=f & g'=e & h'=g by A6,MCART_1:33;
+       hence (e'`1-f'`1)*(g'`2-h'`2) - (g'`1-h'`1)*(e'`2-f'`2) <> 0.F or
+             (e'`1-f'`1)*(g'`3-h'`3) - (g'`1-h'`1)*(e'`3-f'`3) <> 0.F or
+             (e'`2-f'`2)*(g'`3-h'`3) - (g'`2-h'`2)*(e'`3-f'`3) <> 0.F by A4;
+      end;
+  hence thesis by PARSP_1:23;
+ end;
+
+theorem
+Th7: 1_ F+1_ F<>0.F & b,c '||' a,d & a,b '||' c,d & a,c '||' b,d implies a,b
+'||' a,c
+proof assume that A1: 1_ F+1_ F<>0.F and A2: b,c '||' a,d and A3: a,b '||'
+ c,d and
+                  A4: a,c '||' b,d;
+ assume A5: not thesis;
+ consider e,f,g,h such that A6: [a,b,c,d]=[e,f,g,h] & ((ex K st
+                  K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 &
+                  K*(e`3-f`3) = g`3-h`3) or
+                  (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F)) by A3,Th2;
+  A7: a=e & b=f & c =g & d=h by A6,MCART_1:33; then A8: [a,b,a,c]=[e,f,e,g];
+
+  A9: e=[e`1,e`2,e`3] & f=[f`1,f`2,f`3] & g=[g`1,g`2,g`3] by MCART_1:48;
+  A10: h`1=f`1+g`1-e`1 & h`2=f`2+g`2-e`2 & h`3=f`3+g`3-e`3
+                                                     by A3,A4,A5,A6,Th5;
+  consider i,j,k,l such that A11:  [b,c,a,d]=[i,j,k,l] & ((ex L st
+                  L*(i`1-j`1) = k`1-l`1 & L*(i`2-j`2) = k`2-l`2 &
+                  L*(i`3-j`3) = k`3-l`3) or
+                  (i`1-j`1 = 0.F & i`2-j`2 = 0.F & i`3-j`3 = 0.F)) by A2,Th2;
+  A12: b=i & c =j & a=k & d=l by A11,MCART_1:33;
+  then i`1<>j`1 or i`2<>j`2 or i`3<>j`3 by A5,A7,A8,A9,Th3;
+  then consider L such that A13: L*(f`1-g`1) = e`1-h`1 & L*(f`2-g`2) = e`2-h`2
+&
+                           L*(f`3-g`3) = e`3-h`3 by A7,A11,A12,Lm2;
+    (L-1_ F)*(e`1-g`1)=(L+1_ F)*(e`1-f`1) &
+  (L-1_ F)*(e`2-g`2)=(L+1_ F)*(e`2-f`2) &
+  (L-1_ F)*(e`3-g`3)=(L+1_ F)*(e`3-f`3) by A10,A13,Lm9;
+  then L+1_ F=0.F & L-1_ F=0.F by A5,A8,Th4;
+  then L+1_ F-(L-1_ F)=0.F+(-0.F) by RLVECT_1:def 11;
+  then L+1_ F-(L-1_ F)=0.F by RLVECT_1:16;
+  then L+1_ F+(-(L-1_ F))=0.F by RLVECT_1:def 11;
+  then L+1_ F+(1_ F+-L)=0.F by RLVECT_1:47;
+  then (L+1_ F+1_ F)+(-L)=0.F by RLVECT_1:def 6;
+  then (1_ F+1_ F+L)+(-L)=0.F by RLVECT_1:def 6;
+  then 1_ F+1_ F+(L+(-L))=0.F by RLVECT_1:def 6;
+  then 1_ F+1_ F+0.F=0.F by RLVECT_1:16;
+  hence contradiction by A1,RLVECT_1:10;
+end;
+
+theorem
+Th8: not a,p '||' a,b & not a,p '||' a,c & a,p '||' b,q & a,p '||' c,r & a,b
+'||' p,q &
+      a,c '||' p,r implies b,c '||' q,r
+ proof assume that A1: not a,p '||' a,b and A2: not a,p '||' a,c and
+       A3: a,p '||' b,q and A4: a,p '||' c,r and A5: a,b '||' p,q and A6: a,c
+'||' p,r;
+  consider e,f,g,h such that A7: [a,b,p,q]=[e,f,g,h] & ((ex K st
+                  K*(e`1-f`1) = g`1-h`1 & K*(e`2-f`2) = g`2-h`2 &
+                  K*(e`3-f`3) = g`3-h`3) or
+                  (e`1-f`1 = 0.F & e`2-f`2 = 0.F & e`3-f`3 = 0.F)) by A5,Th2;
+  A8: a=e & b=f & p=g & q=h by A7,MCART_1:33;
+  consider i,j,k,l such that A9: [a,p,c,r]=[i,j,k,l] & ((ex L st
+                  L*(i`1-j`1) = k`1-l`1 & L*(i`2-j`2) = k`2-l`2 &
+                  L*(i`3-j`3) = k`3-l`3) or
+                  (i`1-j`1 = 0.F & i`2-j`2 = 0.F & i`3-j`3 = 0.F)) by A4,Th2;
+  A10: a=i & p=j & c =k & r=l by A9,MCART_1:33;
+  A11: [a,p,b,q]=[e,g,f,h] by A8;
+  A12: [a,p,c,r]=[e,g,k,l] by A8,A10;
+  A13: h`1=g`1+f`1-e`1 & h`2=g`2+f`2-e`2 & h`3=g`3+f`3-e`3
+                                                      by A1,A3,A5,A11,Th5;
+  A14: l`1=g`1+k`1-e`1 & l`2=g`2+k`2-e`2 & l`3=g`3+k`3-e`3
+                                                      by A2,A4,A6,A12,Th5;
+  A15: [b,c,q,r]=[f,k,h,l] by A8,A10;
+    1_ F*(f`1-k`1)=h`1-l`1 & 1_ F*(f`2-k`2)=h`2-l`2 & 1_ F*(f`3-k`3)=h`3-l`3
+                                                      by A13,A14,Lm10;
+  hence thesis by A15,Th2;
+ end;
+
+::
+::              2. DEFINITION OF A FANO-DESARGUES SPACE
+::
+
+definition let IT be ParSp;
+ attr IT is FanodesSp-like means
+ :Def1: (ex a,b,c being Element of IT st not a,b '||' a,c)
+        & (for a,b,c,d being Element of IT holds
+           b,c '||' a,d & a,b '||' c,d & a,c '||' b,d implies a,b '||' a,c)
+        & (for a,b,c,p,q,r being Element of IT holds
+          not a,p '||' a,b & not a,p '||' a,c & a,p '||' b,q & a,p '||'
+ c,r & a,b '||' p,q &
+                                              a,c '||' p,r implies b,c '||'
+ q,r);
+end;
+
+definition
+ cluster strict FanodesSp-like ParSp;
+  existence
+  proof consider FF being Fanoian Field;
+    reconsider FdSp=MPS(FF) as ParSp by Th1;
+      1_ FF+1_ FF<>0.FF by VECTSP_1:def 29;
+    then (ex a,b,c being Element of FdSp st not a,b '||' a,c)
+    & (for a,b,c,d being Element of FdSp holds
+       b,c '||' a,d & a,b '||' c,d & a,c '||' b,d implies a,b '||' a,c)
+    & (for a,b,c,p,q,r being Element of FdSp holds
+      not a,p '||' a,b & not a,p '||' a,c & a,p '||' b,q & a,p '||' c,r & a,b
+'||' p,q &
+                                          a,c '||' p,r implies b,c '||' q,r)
+                                           by Th6,Th7,Th8;
+    then FdSp is FanodesSp-like by Def1;
+   hence thesis;
+  end;
+end;
+
+definition
+ mode FanodesSp is FanodesSp-like ParSp;
+end;
+
+reserve FdSp for FanodesSp;
+reserve a,b,c,d,p,q,r,s,o,x,y for Element of FdSp;
+
+::
+::           3. AXIOMS OF A FANO-DESARGUES PARALLELITY SPACE
+::
+
+canceled 4;
+
+theorem
+Th13: p<>q implies ex r st not p,q '||' p,r
+ proof
+  assume A1:p<>q;
+  consider a,b,c such that A2: not a,b '||' a,c by Def1;
+     not p,q '||' p,a or not p,q '||' p,b or not p,q '||' p,c
+     by A1,A2,PARSP_1:56;
+  hence thesis;
+ end;
+
+definition let FdSp,a,b,c;
+ pred a,b,c is_collinear means
+ :Def2: a,b '||' a,c;
+end;
+
+canceled;
+
+theorem
+Th15: a,b,c is_collinear implies a,c,b is_collinear & c,b,a is_collinear &
+  b,a,c is_collinear & b,c,a is_collinear & c,a,b is_collinear
+ proof assume a,b,c is_collinear;
+  then a,b '||' a,c by Def2;
+  then a,c '||' a,b & c,b '||' c,a & b,a '||' b,c & b,c '||' b,a & c,a '||'
+ c,b by PARSP_1:41;
+  hence thesis by Def2;
+ end;
+
+canceled;
+
+theorem
+Th17: not a,b,c is_collinear & a,b '||' p,q & a,c '||'
+ p,r & p<>q & p<>r implies
+      not p,q,r is_collinear
+proof assume A1: not a,b,c is_collinear & a,b '||' p,q & a,c '||'
+ p,r & p<>q & p<>r;
+  then not a,b '||' a,c by Def2; then not p,q '||' p,r by A1,PARSP_1:48;
+  hence thesis by Def2;
+ end;
+
+theorem
+Th18: a=b or b=c or c =a implies a,b,c is_collinear
+ proof assume a=b or b=c or c =a;
+  then a,b '||' a,c by PARSP_1:42;
+  hence thesis by Def2;
+ end;
+
+theorem
+Th19: a<>b & a,b,p is_collinear & a,b,q is_collinear & a,b,r is_collinear
+  implies p,q,r is_collinear
+ proof assume a<>b & a,b,p is_collinear & a,b,q is_collinear &
+   a,b,r is_collinear;
+  then a,b '||' a,p & a,b '||' a,q & a,b '||' a,r & a<>b by Def2;
+  then a<>b & a,b '||' p,q & a,b '||' p,r by PARSP_1:53;
+  then p,q '||' p,r by PARSP_1:def 12;
+  hence thesis by Def2;
+ end;
+
+theorem
+Th20: p<>q implies ex r st not p,q,r is_collinear
+ proof assume p<>q;
+  then consider r such that A1: not p,q '||' p,r by Th13;
+    not p,q,r is_collinear by A1,Def2;
+  hence thesis;
+ end;
+
+theorem
+Th21: a,b,c is_collinear & a,b,d is_collinear implies a,b '||' c,d
+ proof assume a,b,c is_collinear & a,b,d is_collinear;
+  then a,b '||' a,c & a,b '||' a,d by Def2;
+  hence thesis by PARSP_1:53;
+ end;
+
+theorem
+Th22: not a,b,c is_collinear & a,b '||' c,d implies not a,b,d is_collinear
+ proof assume A1: not a,b,c is_collinear & a,b '||' c,d;
+  A2: now assume a=d; then a,b '||' a,c by A1,PARSP_1:40;
+       hence contradiction by A1,Def2;
+      end;
+     now assume c <>d & a<>d;
+       then c <>d & a<>d & not a,b,c is_collinear & a,b '||' c,d &
+       a,c '||' c,a & c <>a & a<>b by A1,Th18,PARSP_1:42;
+       then not c,d,a is_collinear & d,c '||' a,b &
+                     d,a '||' a,d & a<>b & a<>d by Th17,PARSP_1:40,42;
+       then not d,c,a is_collinear & d,c '||' a,b & d,a '||' a,d & a<>b & a<>d
+         by Th15;
+       hence thesis by Th17;
+      end;
+  hence thesis by A1,A2;
+ end;
+
+theorem
+Th23: not a,b,c is_collinear & a,b '||' c,d & c <>d implies
+  not a,b,x is_collinear or not c,d,x is_collinear
+ proof assume A1: not a,b,c is_collinear & a,b '||' c,d & c <>d;
+    now assume c,d,x is_collinear;
+     then c,d '||' c,x by Def2;
+     then a,b '||' c,x by A1,PARSP_1:43;
+     hence thesis by A1,Th22;
+    end;
+  hence thesis;
+ end;
+
+theorem
+   not o,a,b is_collinear implies not o,a,x is_collinear or
+   not o,b,x is_collinear or o=x
+ proof assume A1: not o,a,b is_collinear;
+     now assume o,a,x is_collinear & o,b,x is_collinear;
+      then not a,b,o is_collinear & a,o,x is_collinear & o,b,x is_collinear &
+        b,o,x is_collinear by A1,Th15;
+      then not a,b '||' a,o & a,o '||' a,x & b,o '||' b,x by Def2;
+      hence thesis by PARSP_1:51;
+     end;
+  hence thesis;
+ end;
+
+theorem
+   o<>a & o<>b & o,a,b is_collinear & o,a,p is_collinear &
+   o,b,q is_collinear implies a,b '||' p,q
+ proof assume A1: o<>a & o<>b & o,a,b is_collinear & o,a,p is_collinear &
+   o,b,q is_collinear;
+  A2: now assume o=p;
+       then p<>b & p,a '||' p,b & p,b '||' p,q by A1,Def2;
+       then p<>b & a,b '||' p,b & p,b '||' p,q by PARSP_1:41;
+       hence thesis by PARSP_1:43;
+      end;
+     now assume o<>p;
+       then o<>p & o<>a & o<>b & o,a '||' o,b & o,a '||' o,p & o,b '||'
+ o,q by A1,Def2;
+       then o<>p & o<>b & o,b '||' a,b & o,b '||' o,p & o,b '||' o,q
+                                                    by PARSP_1:41,def 12;
+       then o<>p & o<>b & o,b '||' a,b & o,b '||' o,p & o,p '||'
+ o,q by PARSP_1:def 12;
+       then o<>p & a,b '||' o,p & o,p '||' p,q by PARSP_1:41,def 12;
+       hence thesis by PARSP_1:43;
+      end;
+  hence thesis by A2;
+ end;
+
+theorem
+   not a,b '||' c,d & a,b,p is_collinear & a,b,q is_collinear &
+   c,d,p is_collinear & c,d,q is_collinear implies p=q
+ proof assume not a,b '||' c,d & a,b,p is_collinear & a,b,q is_collinear &
+   c,d,p is_collinear & c,d,q is_collinear;
+  then not a,b '||' c,d & a,b '||' p,q & c,d '||' p,q by Th21;
+  then not a,b '||' c,d & p,q '||' a,b & p,q '||' c,d by PARSP_1:40;
+  hence thesis by PARSP_1:def 12;
+ end;
+
+theorem
+   a<>b & a,b,c is_collinear & a,b '||' c,d implies a,c '||' b,d
+ proof assume A1: a<>b & a,b,c is_collinear & a,b '||' c,d;
+     now assume b<>c; then b<>c & a,b '||' a,c by A1,Def2;
+       then b<>c & b,c '||' a,c & a,b '||' c,b by PARSP_1:41;
+       then b<>c & b,c '||' a,c & c,b '||' c,d by A1,PARSP_1:def 12;
+       then b<>c & b,c '||' a,c & b,c '||' b,d by PARSP_1:41;
+       hence thesis by PARSP_1:def 12;
+      end;
+  hence thesis by A1;
+ end;
+
+theorem
+   a<>b & a,b,c is_collinear & a,b '||' c,d implies c,b '||' c,d
+ proof assume A1: a<>b & a,b,c is_collinear & a,b '||' c,d;
+     now assume a<>c; then a<>c & a,b '||' a,c by A1,Def2;
+       then a<>c & a,c '||' c,b & a,c '||' c,d by A1,PARSP_1:41,def 12;
+       hence thesis by PARSP_1:def 12;
+      end;
+  hence thesis by A1;
+ end;
+
+theorem
+   not o,a,c is_collinear & o,a,b is_collinear & o,c,p is_collinear &
+       o,c,q is_collinear & a,c '||' b,p & a,c '||' b,q implies p=q
+ proof
+  assume not o,a,c is_collinear & o,a,b is_collinear & o,c,p is_collinear &
+    o,c,q is_collinear & a,c '||' b,p & a,c '||' b,q;
+  then not o,a '||' o,c & o,a '||' o,b & o,c '||' o,p & o,c '||' o,q &
+                                              a,c '||' b,p & a,c '||'
+ b,q by Def2;
+  hence thesis by PARSP_1:52;
+ end;
+
+theorem
+   a<>b & a,b,c is_collinear & a,b,d is_collinear implies a,c,d is_collinear
+ proof assume a<>b & a,b,c is_collinear & a,b,d is_collinear;
+  then a<>b & a,b '||' a,c & a,b '||' a,d by Def2;
+  then a,c '||' a,d by PARSP_1:def 12;
+  hence thesis by Def2;
+ end;
+
+theorem
+   a,b,c is_collinear & a,c,d is_collinear & a<>c implies b,c,d is_collinear
+ proof assume a,b,c is_collinear & a,c,d is_collinear & a<>c;
+  then a<>c & a,c,b is_collinear & a,c,c is_collinear & a,c,d is_collinear
+    by Th15,Th18;
+  hence thesis by Th19;
+ end;
+
+definition let FdSp,a,b,c,d;
+ pred parallelogram a,b,c,d means
+ :Def3: not a,b,c is_collinear & a,b '||' c,d & a,c '||' b,d;
+end;
+
+canceled 2;
+
+theorem
+Th34: parallelogram a,b,c,d implies a<>b & b<>c & c <>a & a<>d & b<>d & c <>d
+ proof assume A1: parallelogram a,b,c,d; then A2: not a,b,c is_collinear
+   by Def3;
+  A3: now assume a=d; then a,b '||' c,a by A1,Def3;
+       then a,b '||' a,c & not a,b,c is_collinear by A1,Def3,PARSP_1:40;
+       hence contradiction by Def2;
+      end;
+  A4: now assume b=d; then a,b '||' c,b by A1,Def3;
+       then b,a '||' b,c by PARSP_1:40;
+       then a,b '||' a,c & not a,b,c is_collinear by A1,Def3,PARSP_1:41;
+       hence contradiction by Def2;
+      end;
+     now assume c =d;
+       then a,c '||' b,c by A1,Def3; then c,a '||' c,b by PARSP_1:40;
+       then a,b '||' a,c & not a,b,c is_collinear by A1,Def3,PARSP_1:41;
+       hence contradiction by Def2;
+      end;
+  hence thesis by A2,A3,A4,Th18;
+ end;
+
+theorem
+Th35: parallelogram a,b,c,d implies
+  not a,b,c is_collinear & not b,a,d is_collinear & not c,d,a is_collinear &
+    not d,c,b is_collinear
+ proof assume A1: parallelogram a,b,c,d;
+  then A2: not a,b,c is_collinear & a,b '||' b,a & a,c '||' b,d & b<>a & b<>d
+    by Def3,Th34,PARSP_1:42;
+
+A3:  not a,b,c is_collinear & a,b '||' c,d & a,c '||' c,a & c <>d & c <>a
+                                             by A1,Def3,Th34,PARSP_1:42;
+
+    a,b '||' c,d & a,c '||' b,d by A1,Def3;
+  then not a,b,c is_collinear & a,b '||' d,c & a,c '||' d,b & d<>c & d<>b
+                                             by A1,Def3,Th34,PARSP_1:40;
+  hence thesis by A2,A3,Th17;
+ end;
+
+theorem
+Th36: parallelogram a,b,c,d implies
+  not a,b,c is_collinear & not b,a,d is_collinear & not c,d,a is_collinear &
+  not d,c,b is_collinear & not a,c,b is_collinear & not b,a,c is_collinear &
+  not b,c,a is_collinear & not c,a,b is_collinear & not c,b,a is_collinear &
+  not b,d,a is_collinear & not a,b,d is_collinear & not a,d,b is_collinear &
+  not d,a,b is_collinear & not d,b,a is_collinear & not c,a,d is_collinear &
+  not a,c,d is_collinear & not a,d,c is_collinear & not d,a,c is_collinear &
+  not d,c,a is_collinear & not d,b,c is_collinear & not b,c,d is_collinear &
+  not b,d,c is_collinear & not c,b,d is_collinear & not c,d,b is_collinear
+ proof
+  assume A1: parallelogram a,b,c,d; then A2: not a,b,c is_collinear by Th35;
+A3:  not b,a,d is_collinear by A1,Th35;
+A4:  not c,d,a is_collinear by A1,Th35;
+    not d,c,b is_collinear by A1,Th35;
+  hence thesis by A2,A3,A4,Th15;
+ end;
+
+theorem
+Th37: parallelogram a,b,c,d implies not a,b,x is_collinear or
+  not c,d,x is_collinear
+ proof assume parallelogram a,b,c,d;
+   then not a,b,c is_collinear & a,b '||' c,d & c <>d
+   by Def3,Th34;
+  hence thesis by Th23;
+ end;
+
+theorem
+Th38: parallelogram a,b,c,d implies parallelogram a,c,b,d
+ proof assume parallelogram a,b,c,d;
+  then not a,c,b is_collinear & a,b '||' c,d & a,c '||' b,d by Def3,Th36;
+  hence thesis by Def3;
+ end;
+
+theorem
+Th39: parallelogram a,b,c,d implies parallelogram c,d,a,b
+ proof assume parallelogram a,b,c,d;
+  then not c,d,a is_collinear & a,b '||' c,d & a,c '||' b,d by Def3,Th36;
+  then not c,d,a is_collinear & c,d '||' a,b & c,a '||' d,b by PARSP_1:40;
+  hence thesis by Def3;
+ end;
+
+theorem
+Th40: parallelogram a,b,c,d implies parallelogram b,a,d,c
+ proof assume A1: parallelogram a,b,c,d; then a,b '||' c,d & a,c '||' b,d
+ by Def3;
+  then b,a '||' d,c & b,d '||' a,c & not b,a,d is_collinear by A1,Th36,PARSP_1:
+40;
+  hence thesis by Def3;
+ end;
+
+theorem
+Th41: parallelogram a,b,c,d implies parallelogram a,c,b,d &
+  parallelogram c,d,a,b & parallelogram b,a,d,c & parallelogram c,a,d,b &
+  parallelogram d,b,c,a & parallelogram b,d,a,c & parallelogram d,c,b,a
+ proof assume A1: parallelogram a,b,c,d;
+  then parallelogram a,c,b,d & parallelogram c,d,a,b &
+  parallelogram b,a,d,c by Th38,Th39,Th40;
+  then parallelogram c,a,d,b & parallelogram b,d,a,c & parallelogram d,c,b,a
+  by Th38,Th39;
+  hence thesis by A1,Th38;
+ end;
+
+theorem
+Th42: not a,b,c is_collinear implies ex d st parallelogram a,b,c,d
+ proof assume A1: not a,b,c is_collinear;
+  consider d such that A2:(a,b '||' c,d & a,c '||' b,d) by PARSP_1:def 12;
+    parallelogram a,b,c,d by A1,A2,Def3;
+  hence thesis;
+ end;
+
+theorem
+Th43: parallelogram a,b,c,p & parallelogram a,b,c,q implies p=q
+ proof assume parallelogram a,b,c,p & parallelogram a,b,c,q;
+  then not b,c,a is_collinear & a,b '||'c,p & a,c '||' b,p &
+       a,b '||' c,q & a,c '||' b,q by Def3,Th36;
+       then not b,c '||' b,a & b,c '||' c,b & b,a '||' c,p & b,a '||' c,q &
+            c,a '||' b,p & c,a '||' b,q by Def2,PARSP_1:40,42;
+  hence thesis by PARSP_1:52;
+ end;
+
+theorem
+Th44: parallelogram a,b,c,d implies not a,d '||' b,c
+ proof assume A1: parallelogram a,b,c,d; then not a,b,c is_collinear by Def3;
+  then not a,b '||' a,c & a,b '||' c,d & a,c '||' b,d by A1,Def2,Def3;
+  then not b,c '||' a,d by Def1; hence thesis by PARSP_1:36;
+ end;
+
+theorem
+Th45: parallelogram a,b,c,d implies not parallelogram a,b,d,c
+ proof assume parallelogram a,b,c,d; then not a,d '||' b,c by Th44;
+  hence thesis by Def3;
+ end;
+
+theorem
+Th46: a<>b implies ex c st a,b,c is_collinear & c <>a & c <>b
+ proof assume a<>b; then consider p such that A1: not a,b,p is_collinear
+   by Th20;
+  consider q such that A2: parallelogram a,b,p,q by A1,Th42;
+     not p,q,b is_collinear by A2,Th36;
+  then consider c such that A3: parallelogram p,q,b,c by Th42;
+    p<>q & b<>c & a,b '||' p,q & p,q '||' b,c & p,b '||'
+ q,c by A2,A3,Def3,Th34;
+  then a,b '||' b,c & b<>c & not a,q '||' b,p & p,b '||' q,c by A2,Th44,PARSP_1
+:43;
+  then b,a '||' b,c & b<>c & not a,q '||' b,p & c,q '||' b,p by PARSP_1:40;
+  then b,a,c is_collinear & b<>c & a<>c by Def2;
+  then a,b,c is_collinear & c <>b & c <>a by Th15;
+  hence thesis;
+ end;
+
+theorem
+Th47: parallelogram a,p,b,q & parallelogram a,p,c,r implies b,c '||' q,r
+ proof assume parallelogram a,p,b,q & parallelogram a,p,c,r;
+  then not a,p,b is_collinear & not a,p,c is_collinear & a,p '||' b,q &
+    a,b '||' p,q & a,p '||' c,r &
+       a,c '||' p,r by Def3;
+  then not a,p '||' a,b & not a,p '||' a,c & a,p '||' b,q & a,b '||' p,q & a,p
+'||' c,r &
+       a,c '||' p,r by Def2;
+  hence thesis by Def1;
+ end;
+
+theorem
+Th48: not b,q,c is_collinear & parallelogram a,p,b,q & parallelogram a,p,c,r
+  implies parallelogram b,q,c,r
+ proof assume not b,q,c is_collinear & parallelogram a,p,b,q &
+   parallelogram a,p,c,r;
+  then not b,q,c is_collinear & a<>p & a,p '||' b,q & a,p '||' c,r & b,c '||'
+ q,r
+                                                  by Def3,Th34,Th47;
+  then not b,q,c is_collinear & b,q '||' c,r & b,c '||' q,r by PARSP_1:def 12;
+  hence thesis by Def3;
+ end;
+
+theorem
+Th49: a,b,c is_collinear & b<>c & parallelogram a,p,b,q &
+  parallelogram a,p,c,r implies parallelogram b,q,c,r
+ proof assume a,b,c is_collinear & b<>c & parallelogram a,p,b,q &
+   parallelogram a,p,c,r;
+  then a,b '||'a,c & not a,p,b is_collinear & a,p '||' b,q & b<>q & b<>c &
+       parallelogram a,p,b,q & parallelogram a,p,c,r by Def2,Def3,Th34;
+  then not a,p,b is_collinear & a,p '||' b,q & b<>q & b<>c & a,b '||' b,c &
+       parallelogram a,p,b,q & parallelogram a,p,c,r by PARSP_1:41;
+  then not b,q,c is_collinear & parallelogram a,p,b,q & parallelogram a,p,c,r
+   by Th17;
+  hence thesis by Th48;
+ end;
+
+theorem
+Th50: parallelogram a,p,b,q & parallelogram a,p,c,r & parallelogram b,q,d,s
+  implies c,d '||' r,s
+ proof assume A1: parallelogram a,p,b,q & parallelogram a,p,c,r &
+ parallelogram b,q,d,s;
+  A2: now assume not b,q,c is_collinear;
+       then parallelogram b,q,c,r & parallelogram b,q,d,s by A1,Th48;
+       hence thesis by Th47;
+      end;
+  A3: now assume not a,p,d is_collinear;
+       then not a,p,d is_collinear & parallelogram b,q,a,p &
+        parallelogram b,q,d,s &
+       parallelogram a,p,c,r by A1,Th41;
+       then parallelogram a,p,d,s & parallelogram a,p,c,r by Th48;
+       hence thesis by Th47;
+      end;
+      now assume A4: b,q,c is_collinear & a,p,d is_collinear;
+           a<>b by A1,Th34;
+        then consider x such that A5: a,b,x is_collinear & x<>a & x<>b
+          by Th46;
+        A6: a,b '||' a,x by A5,Def2;
+        A7: not a,p,b is_collinear by A1,Th36;
+        A8: a,p '||' a,p by PARSP_1:42;
+           a<>p by A1,Th34;
+        then not a,p,x is_collinear by A5,A6,A7,A8,Th17;
+        then consider y such that A9: parallelogram a,p,x,y by Th42;
+        A10: parallelogram b,q,x,y by A1,A5,A9,Th49;
+        then not x,y,c is_collinear & not x,y,d is_collinear by A4,A9,Th37;
+        then parallelogram x,y,c,r & parallelogram x,y,d,s by A1,A9,A10,Th48;
+        hence thesis by Th47;
+       end;
+   hence thesis by A2,A3;
+ end;
+
+theorem
+Th51: a<>b implies ex c,d st parallelogram a,b,c,d
+ proof assume a<>b; then consider c such that
+ A1: not a,b,c is_collinear by Th20;
+     ex d st parallelogram a,b,c,d by A1,Th42;
+  hence thesis;
+ end;
+
+theorem
+   a<>d implies ex b,c st parallelogram a,b,c,d
+ proof assume a<>d; then consider b such that A1:
+ not a,d,b is_collinear by Th20;
+     not b,a,d is_collinear by A1,Th15;
+  then consider c such that A2: parallelogram b,a,d,c by Th42;
+    parallelogram a,b,c,d by A2,Th41;
+  hence thesis;
+ end;
+
+definition let FdSp,a,b,r,s;
+ pred a,b congr r,s means
+ :Def4: (a=b & r=s) or (ex p,q st parallelogram p,q,a,b &
+   parallelogram p,q,r,s);
+end;
+
+canceled 2;
+
+theorem
+Th55: a,a congr b,c implies b=c
+ proof assume a,a congr b,c;
+  then (a=a & b=c) or (ex p,q st parallelogram p,q,a,a &
+  parallelogram p,q,b,c) by Def4;
+  hence thesis by Th34;
+ end;
+
+theorem
+   a,b congr c,c implies a=b
+ proof assume a,b congr c,c;
+  then (a=b & c =c) or (ex p,q st parallelogram p,q,a,b &
+  parallelogram p,q,c,c) by Def4;
+  hence thesis by Th34;
+ end;
+
+theorem
+   a,b congr b,a implies a=b
+ proof assume A1:a,b congr b,a;
+    now assume a<>b;
+   then ex p,q st parallelogram p,q,a,b & parallelogram p,q,b,a by A1,Def4;
+   hence contradiction by Th45;
+  end;
+  hence thesis;
+ end;
+
+theorem
+Th58: a,b congr c,d implies a,b '||' c,d
+ proof assume A1:a,b congr c,d;
+     now assume a<>b;
+       then consider p,q such that A2: parallelogram p,q,a,b &
+       parallelogram p,q,c,d by A1,Def4;
+         p<>q & p,q '||' a,b & p,q '||' c,d by A2,Def3,Th34;
+       hence thesis by PARSP_1:def 12;
+      end;
+  hence thesis by PARSP_1:37;
+ end;
+
+theorem
+Th59: a,b congr c,d implies a,c '||' b,d
+ proof assume A1: a,b congr c,d;
+  A2: now assume a=b;
+       then a=b & c =d by A1,Th55;
+       hence thesis by PARSP_1:42;
+      end;
+     now assume a<>b;
+       then ex p,q st parallelogram p,q,a,b & parallelogram p,q,c,d
+       by A1,Def4;
+       hence thesis by Th47;
+      end;
+  hence thesis by A2;
+ end;
+
+theorem
+Th60: a,b congr c,d & not a,b,c is_collinear implies parallelogram a,b,c,d
+ proof assume a,b congr c,d & not a,b,c is_collinear;
+  then not a,b,c is_collinear & a,b '||' c,d & a,c '||' b,d by Th58,Th59;
+  hence thesis by Def3;
+ end;
+
+theorem
+Th61: parallelogram a,b,c,d implies a,b congr c,d
+ proof assume A1: parallelogram a,b,c,d;
+  then a<>c by Th34;
+  then consider p such that A2: a,c,p is_collinear & a<>p & c <>p by Th46;
+    not a,c,b is_collinear & a,c '||' a,p & a,b '||' a,b & a<>p & a<>b
+                                     by A1,A2,Def2,Th34,Th36,PARSP_1:42;
+  then not a,p,b is_collinear by Th17;
+  then consider q such that A3: parallelogram a,p,b,q by Th42;
+     parallelogram a,b,p,q by A3,Th41;
+  then parallelogram c,d,p,q by A1,A2,Th49;
+  then parallelogram p,q,a,b & parallelogram p,q,c,d by A3,Th41;
+  hence thesis by Def4;
+ end;
+
+theorem
+Th62: a,b congr c,d & a,b,c is_collinear & parallelogram r,s,a,b implies
+parallelogram r,s,c,d
+ proof assume A1: a,b congr c,d & a,b,c is_collinear & parallelogram r,s,a,b;
+     now assume A2: a<>b;
+       then consider p,q such that A3: parallelogram p,q,a,b &
+       parallelogram p,q,c,d by A1,Def4;
+       A4: not r,s,c is_collinear by A1,Th37;
+         a<>b & r,s '||' a,b & a,b '||' c,d by A1,A2,Def3,Th58;
+       then A5: r,s '||' c,d by PARSP_1:43;
+         parallelogram a,b,r,s & parallelogram a,b,p,q &
+       parallelogram p,q,c,d by A1,A3,Th41;
+       then r,c '||' s,d by Th50;
+       hence thesis by A4,A5,Def3;
+      end;
+  hence thesis by A1,Th34;
+ end;
+
+theorem
+   a,b congr c,x & a,b congr c,y implies x=y
+ proof assume A1: a,b congr c,x & a,b congr c,y;
+  A2: now assume a=b;
+       then c =x & c =y by A1,Th55;
+       hence thesis;
+      end;
+  A3: now assume A4: a<>b & a,b,c is_collinear;
+       then consider p,q such that A5: parallelogram a,b,p,q by Th51;
+         parallelogram p,q,a,b by A5,Th41; then parallelogram p,q,c,x &
+       parallelogram p,q,c,y by A1,A4,Th62;
+       hence thesis by Th43;
+      end;
+     now assume a<>b & not a,b,c is_collinear;
+       then parallelogram a,b,c,x & parallelogram a,b,c,y by A1,Th60;
+       hence thesis by Th43;
+      end;
+  hence thesis by A2,A3;
+ end;
+
+theorem
+   ex d st a,b congr c,d
+ proof
+  A1:now assume a=b; then a,b congr c,c by Def4;
+      hence thesis;
+     end;
+  A2: now assume A3: a<>b & a,b,c is_collinear;
+       then consider p,q such that A4: parallelogram a,b,p,q by Th51;
+       A5: parallelogram p,q,a,b & not p,q,c is_collinear by A3,A4,Th37,Th41;
+       then consider d such that A6: parallelogram p,q,c,d by Th42;
+         a,b congr c,d by A5,A6,Def4;
+       hence thesis;
+      end;
+     now assume a<>b & not a,b,c is_collinear;
+       then consider d such that A7: parallelogram a,b,c,d by Th42;
+         a,b congr c,d by A7,Th61;
+       hence thesis;
+      end;
+  hence thesis by A1,A2;
+ end;
+
+canceled;
+
+theorem
+Th66: a,b congr a,b
+ proof
+    now assume a<>b;
+   then consider p,q such that A1: parallelogram a,b,p,q by Th51;
+     parallelogram p,q,a,b & parallelogram p,q,a,b by A1,Th41;
+   hence thesis by Def4;
+  end;
+  hence thesis by Def4;
+ end;
+
+theorem
+Th67: r,s congr a,b & r,s congr c,d implies a,b congr c,d
+ proof assume A1: r,s congr a,b & r,s congr c,d;
+  A2: now assume r=s;
+       then a=b & c =d by A1,Th55;
+       hence thesis by Def4;
+      end;
+  A3: now assume A4: r<>s & r,s,a is_collinear;
+       then consider p,q such that
+       A5: parallelogram p,q,r,s & parallelogram p,q,c,d by A1,Def4;
+         parallelogram p,q,a,b by A1,A4,A5,Th62;
+       hence thesis by A5,Def4;
+      end;
+  A6: now assume A7: r<>s & r,s,c is_collinear;
+       then consider p,q such that
+       A8: parallelogram p,q,r,s & parallelogram p,q,a,b by A1,Def4;
+         parallelogram p,q,c,d by A1,A7,A8,Th62;
+       hence thesis by A8,Def4;
+      end;
+     now assume r<>s & not r,s,a is_collinear & not r,s,c is_collinear;
+       then parallelogram r,s,a,b & parallelogram r,s,c,d by A1,Th60;
+       hence thesis by Def4;
+      end;
+  hence thesis by A2,A3,A6;
+ end;
+
+theorem
+   a,b congr c,d implies c,d congr a,b
+ proof assume a,b congr c,d;
+  then a,b congr c,d & a,b congr a,b by Th66;
+  hence thesis by Th67;
+ end;
+
+theorem
+   a,b congr c,d implies b,a congr d,c
+ proof assume A1: a,b congr c,d;
+  A2: now assume a=b;
+       then a=b & c =d by A1,Th55;
+       hence thesis by Def4;
+      end;
+     now assume a<>b;
+       then consider p,q such that
+       A3: parallelogram p,q,a,b & parallelogram p,q,c,d by A1,Def4;
+         parallelogram q,p,b,a & parallelogram q,p,d,c by A3,Th41;
+       hence thesis by Def4;
+      end;
+  hence thesis by A2;
+ end;

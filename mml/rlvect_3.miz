@@ -1,0 +1,1721 @@
+:: Basis of Real Linear Space
+::  by Wojciech A. Trybulec
+::
+:: Received July 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, RLSUB_1, FINSET_1, RLVECT_2, FINSEQ_1, FUNCT_1, ORDERS_1,
+      SEQ_1, RELAT_1, FINSEQ_4, BOOLE, FUNCT_2, ARYTM_1, TARSKI, CARD_1,
+      ZFMISC_1, RLVECT_3, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FINSEQ_1, RELAT_1,
+      ORDINAL1, FUNCT_1, FUNCT_2, STRUCT_0, RLVECT_1, FINSEQ_4, FRAENKEL,
+      FINSET_1, REAL_1, RLSUB_1, ORDERS_1, RLSUB_2, RLVECT_2, CARD_1, NAT_1;
+ constructors NAT_1, REAL_1, ORDERS_1, RLSUB_2, RLVECT_2, FINSEQ_4, MEMBERED,
+      PARTFUN1, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, RLVECT_1, RLSUB_1, FINSET_1, RLVECT_2, RELSET_1,
+      STRUCT_0, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions XBOOLE_0, RLSUB_1, RLVECT_2, TARSKI;
+ theorems CARD_1, CARD_2, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      FINSEQ_4, FINSET_1, ORDERS_1, ORDERS_2, RLSUB_1, RLSUB_2, RLVECT_1,
+      RLVECT_2, TARSKI, ZFMISC_1, RELAT_1, RELSET_1, ORDINAL1, XBOOLE_0,
+      XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes FINSEQ_1, FUNCT_1, FUNCT_2, NAT_1, RLVECT_2, XBOOLE_0;
+
+begin
+
+reserve x,y,X,Y,Z for set;
+reserve a,b for Real;
+reserve k,n for Nat;
+reserve V for RealLinearSpace;
+reserve W1,W2,W3 for Subspace of V;
+reserve v,v1,v2,u for VECTOR of V;
+reserve A,B,C for Subset of V;
+reserve T for finite Subset of V;
+reserve L,L1,L2 for Linear_Combination of V;
+reserve l for Linear_Combination of A;
+reserve F,G,H for FinSequence of the carrier of V;
+reserve f,g for Function of the carrier of V, REAL;
+reserve p,q,r for FinSequence;
+reserve M for non empty set;
+reserve CF for Choice_Function of M;
+
+Lm1: f (#) (F ^ G) = (f (#) F) ^ (f (#) G)
+ proof set H = (f (#) F) ^ (f (#) G); set I = F ^ G;
+   A1: len H = len(f (#) F) + len(f (#) G) by FINSEQ_1:35
+            .= len F + len(f (#) G) by RLVECT_2:def 9
+            .= len F + len G by RLVECT_2:def 9
+            .= len I by FINSEQ_1:35;
+   A2: len F = len(f (#) F) & len G = len(f (#) G) by RLVECT_2:def 9;
+     now let k;
+     assume A3: k in dom H;
+        now per cases by A3,FINSEQ_1:38;
+       suppose A4: k in dom(f (#) F);
+         then A5: k in dom F by A2,FINSEQ_3:31;
+         then A6: k in dom(F ^ G) by FINSEQ_3:24;
+         A7: F/.k = F.k by A5,FINSEQ_4:def 4
+                   .= (F ^ G).k by A5,FINSEQ_1:def 7
+                   .= (F ^ G)/.k by A6,FINSEQ_4:def 4;
+        thus H.k = (f (#) F).k by A4,FINSEQ_1:def 7
+                .= f.(I/.k) * I/.k by A4,A7,RLVECT_2:def 9;
+       suppose ex n st n in dom(f (#) G) & k = len(f (#) F) + n;
+         then consider n such that A8: n in dom(f (#) G) and
+                                   A9: k = len(f (#) F) + n;
+          A10: n in dom G by A2,A8,FINSEQ_3:31;
+          A11: k in dom I by A1,A3,FINSEQ_3:31;
+          A12: G/.n = G.n by A10,FINSEQ_4:def 4
+                    .= (F ^ G).k by A2,A9,A10,FINSEQ_1:def 7
+                    .= (F ^ G)/.k by A11,FINSEQ_4:def 4;
+        thus H.k = (f (#) G).n by A8,A9,FINSEQ_1:def 7
+                .= f.(I/.k) * I/.k by A8,A12,RLVECT_2:def 9;
+      end;
+    hence H.k = f.(I/.k) * I/.k;
+   end;
+  hence thesis by A1,RLVECT_2:def 9;
+ end;
+
+theorem Th1:
+ Sum(L1 + L2) = Sum(L1) + Sum(L2)
+  proof
+    consider F such that A1: F is one-to-one and A2: rng F = Carrier(L1 + L2)
+    and A3: Sum((L1 + L2) (#) F) = Sum(L1 + L2) by RLVECT_2:def 10;
+    consider G such that A4: G is one-to-one and A5: rng G = Carrier(L1) and
+                         A6: Sum(L1 (#) G) = Sum(L1) by RLVECT_2:def 10;
+    consider H such that A7: H is one-to-one and A8: rng H = Carrier(L2) and
+                         A9: Sum(L2 (#) H) = Sum(L2) by RLVECT_2:def 10;
+    set A = Carrier(L1 + L2) \/ Carrier(L1) \/ Carrier(L2);
+    set C1 = A \ Carrier(L1);
+    consider p such that A10: rng p = C1 and A11: p is one-to-one
+                                                               by FINSEQ_4:73;
+    reconsider p as FinSequence of the carrier of V by A10,FINSEQ_1:def 4;
+     A12: len p = len(L1 (#) p) by RLVECT_2:def 9;
+       now let k;
+       assume A13: k in dom p;
+        then k in dom(L1 (#) p) by A12,FINSEQ_3:31;
+        then A14: (L1 (#) p).k = L1.(p/.k) * p/.k by RLVECT_2:def 9;
+          p/.k = p.k by A13,FINSEQ_4:def 4;
+        then p/.k in C1 by A10,A13,FUNCT_1:def 5;
+        then not p/.k in Carrier(L1) by XBOOLE_0:def 4;
+      hence (L1 (#) p).k = 0 * p/.k by A14,RLVECT_2:28;
+     end;
+     then A15: Sum(L1 (#) p) = 0 * Sum(p) by A12,RLVECT_2:5
+                      .= 0.V by RLVECT_1:23;
+    set GG = G ^ p; set g = L1 (#) GG;
+     A16: Sum(g) = Sum((L1 (#) G) ^ (L1 (#) p)) by Lm1
+               .= Sum(L1 (#) G) + 0.V by A15,RLVECT_1:58
+               .= Sum(L1 (#) G) by RLVECT_1:10;
+    set C2 = A \ Carrier(L2);
+    consider q such that A17: rng q = C2 and A18: q is one-to-one
+                                                               by FINSEQ_4:73;
+    reconsider q as FinSequence of the carrier of V by A17,FINSEQ_1:def 4;
+     A19: len q = len(L2 (#) q) by RLVECT_2:def 9;
+       now let k;
+       assume A20: k in dom q;
+        then k in dom(L2 (#) q) by A19,FINSEQ_3:31;
+        then A21: (L2 (#) q).k = L2.(q/.k) * q/.k by RLVECT_2:def 9;
+          q/.k = q.k by A20,FINSEQ_4:def 4;
+        then q/.k in C2 by A17,A20,FUNCT_1:def 5;
+        then not q/.k in Carrier(L2) by XBOOLE_0:def 4;
+      hence (L2 (#) q).k = 0 * q/.k by A21,RLVECT_2:28;
+     end;
+     then A22: Sum(L2 (#) q) = 0 * Sum(q) by A19,RLVECT_2:5
+                      .= 0.V by RLVECT_1:23;
+    set HH = H ^ q; set h = L2 (#) HH;
+     A23: Sum(h) = Sum((L2 (#) H) ^ (L2 (#) q)) by Lm1
+               .= Sum(L2 (#) H) + 0.V by A22,RLVECT_1:58
+               .= Sum(L2 (#) H) by RLVECT_1:10;
+    set C3 = A \ Carrier(L1 + L2);
+    consider r such that A24: rng r = C3 and A25: r is one-to-one
+                                                               by FINSEQ_4:73;
+    reconsider r as FinSequence of the carrier of V by A24,FINSEQ_1:def 4;
+     A26: len r = len((L1 + L2) (#) r) by RLVECT_2:def 9;
+       now let k;
+       assume A27: k in dom r;
+        then k in dom((L1 + L2) (#) r) by A26,FINSEQ_3:31;
+        then A28: ((L1 + L2) (#) r).k = (L1 + L2).(r/.k) * r/.k
+                                                           by RLVECT_2:def 9;
+          r/.k = r.k by A27,FINSEQ_4:def 4;
+        then r/.k in C3 by A24,A27,FUNCT_1:def 5;
+        then not r/.k in Carrier((L1 + L2)) by XBOOLE_0:def 4;
+      hence ((L1 + L2) (#) r).k = 0 * r/.k by A28,RLVECT_2:28;
+     end;
+     then A29: Sum((L1 + L2) (#) r) = 0 * Sum(r) by A26,RLVECT_2:5
+                      .= 0.V by RLVECT_1:23;
+    set FF = F ^ r; set f = (L1 + L2) (#) FF;
+     A30: Sum(f) = Sum(((L1 + L2) (#) F) ^ ((L1 + L2) (#) r)) by Lm1
+               .= Sum((L1 + L2) (#) F) + 0.V by A29,RLVECT_1:58
+               .= Sum((L1 + L2) (#) F) by RLVECT_1:10;
+     A31: rng G misses rng p
+      proof assume not thesis;
+         then A32:        rng G /\ rng p <> {} by XBOOLE_0:def 7;
+        consider x being Element of rng G /\ rng p;
+           x in Carrier(L1) & x in C1 by A5,A10,A32,XBOOLE_0:def 3;
+       hence thesis by XBOOLE_0:def 4;
+      end;
+     A33: rng H misses rng q
+      proof assume not thesis;
+         then A34:        rng H /\ rng q <> {} by XBOOLE_0:def 7;
+        consider x being Element of rng H /\ rng q;
+           x in Carrier(L2) & x in C2 by A8,A17,A34,XBOOLE_0:def 3;
+       hence thesis by XBOOLE_0:def 4;
+      end;
+       rng F misses rng r
+      proof assume not thesis;
+         then A35:        rng F /\ rng r <> {} by XBOOLE_0:def 7;
+        consider x being Element of rng F /\ rng r;
+           x in Carrier(L1 + L2) & x in C3 by A2,A24,A35,XBOOLE_0:def 3;
+       hence thesis by XBOOLE_0:def 4;
+      end;
+     then A36: FF is one-to-one & HH is one-to-one & GG is one-to-one
+          by A1,A4,A7,A11,A18,A25,A31,A33,FINSEQ_3:98;
+       rng GG = rng G \/ rng p & rng HH = rng H \/ rng q & rng FF = rng F \/
+ rng r
+                                                                by FINSEQ_1:44;
+     then A37: rng GG = Carrier(L1) \/ A &
+              rng HH = Carrier(L2) \/ A &
+              rng FF = Carrier(L1 + L2) \/ A by A2,A5,A8,A10,A17,A24,XBOOLE_1:
+39;
+       A = Carrier(L1) \/ (Carrier(L1 + L2) \/ Carrier(L2)) &
+          A = Carrier(L1 + L2) \/ (Carrier(L1) \/ Carrier(L2)) by XBOOLE_1:4;
+     then Carrier(L1) c= A & Carrier(L2) c= A & Carrier(L1 + L2) c= A
+                                                                  by XBOOLE_1:7
+;
+     then A38: rng GG = A & rng HH = A & rng FF = A by A37,XBOOLE_1:12;
+     then A39: len GG = len FF & len GG = len HH by A36,RLVECT_1:106;
+    deffunc Q(Nat)=FF <- (GG.$1);
+    consider P being FinSequence such that A40: len P = len FF and
+     A41: for k st k in Seg(len FF) holds P.k = Q(k) from SeqLambda;
+     A42: rng P c= Seg(len FF)
+      proof let x;
+        assume x in rng P;
+         then consider y such that A43: y in dom P and A44: P.y = x
+                                                           by FUNCT_1:def 5;
+         reconsider y as Nat by A43,FINSEQ_3:25;
+          A45: y in Seg(len FF) by A40,A43,FINSEQ_1:def 3;
+          then y in dom GG by A39,FINSEQ_1:def 3;
+          then GG.y in rng FF by A38,FUNCT_1:def 5;
+          then P.y = FF <- (GG.y) & FF just_once_values GG.y
+                                                by A36,A41,A45,FINSEQ_4:10;
+          then P.y in dom FF by FINSEQ_4:def 3;
+       hence thesis by A44,FINSEQ_1:def 3;
+      end;
+     A46: now let x;
+      thus x in dom GG implies x in dom P & P.x in dom FF
+       proof assume x in dom GG;
+         then x in Seg(len P) by A39,A40,FINSEQ_1:def 3;
+        hence x in dom P by FINSEQ_1:def 3;
+         then rng P c= Seg(len FF) & P.x in rng P by A42,FUNCT_1:def 5;
+         then P.x in Seg(len FF);
+        hence thesis by FINSEQ_1:def 3;
+       end;
+       assume x in dom P & P.x in dom FF;
+        then x in Seg(len P) by FINSEQ_1:def 3;
+      hence x in dom GG by A39,A40,FINSEQ_1:def 3;
+     end;
+     A47: now let x;
+       assume A48: x in dom GG;
+        then reconsider n = x as Nat by FINSEQ_3:25;
+           GG.n in rng FF by A38,A48,FUNCT_1:def 5;
+         then A49: FF just_once_values GG.n by A36,FINSEQ_4:10;
+           n in Seg(len FF) by A39,A48,FINSEQ_1:def 3;
+         then FF.(P.n) = FF.(FF <- (GG.n)) by A41
+                     .= GG.n by A49,FINSEQ_4:def 3;
+      hence GG.x = FF.(P.x);
+     end;
+     then A50: GG = FF * P by A46,FUNCT_1:20;
+        Seg(len FF) c= rng P
+      proof let x;
+        assume A51: x in Seg(len FF);
+         set f = FF" * GG;
+            dom(FF") = rng GG by A36,A38,FUNCT_1:55;
+          then A52: rng f = rng(FF") by RELAT_1:47
+                       .= dom FF by A36,FUNCT_1:55;
+          A53: rng P c= dom FF by A42,FINSEQ_1:def 3;
+            f = FF " * FF * P by A50,RELAT_1:55
+           .= id(dom FF) * P by A36,FUNCT_1:61
+           .= P by A53,RELAT_1:79;
+       hence thesis by A51,A52,FINSEQ_1:def 3;
+      end;
+     then A54: Seg(len FF) = rng P by A42,XBOOLE_0:def 10;
+     A55: dom P = Seg(len FF) by A40,FINSEQ_1:def 3;
+     then A56: P is one-to-one by A54,FINSEQ_4:75;
+       Seg(len FF) = {} implies Seg(len FF) = {};
+    then reconsider P as Function of Seg(len FF), Seg(len FF)
+     by A42,A55,FUNCT_2:def 1,RELSET_1:11;
+    reconsider P as Permutation of Seg(len FF) by A54,A56,FUNCT_2:83;
+     A57: len f = len FF by RLVECT_2:def 9;
+then A58:    Seg len FF = dom f by FINSEQ_1:def 3;
+    then reconsider Fp = f * P
+ as FinSequence of the carrier of V by FINSEQ_2:51;
+       dom f = Seg(len f) by FINSEQ_1:def 3;
+     then A59: Sum(Fp) = Sum(f) by A57,RLVECT_2:9;
+    deffunc Q(Nat)=HH <- (GG.$1);
+    consider R being FinSequence such that A60: len R = len HH and
+     A61: for k st k in Seg(len HH) holds R.k =Q(k) from SeqLambda;
+     A62: rng R c= Seg(len HH)
+      proof let x;
+        assume x in rng R;
+         then consider y such that A63: y in dom R and A64: R.y = x
+                                                           by FUNCT_1:def 5;
+         reconsider y as Nat by A63,FINSEQ_3:25;
+          A65: y in Seg(len HH) by A60,A63,FINSEQ_1:def 3;
+          then y in dom GG by A39,FINSEQ_1:def 3;
+          then GG.y in rng HH by A38,FUNCT_1:def 5;
+          then R.y = HH <- (GG.y) & HH just_once_values GG.y
+                                                by A36,A61,A65,FINSEQ_4:10;
+          then R.y in dom HH by FINSEQ_4:def 3;
+       hence thesis by A64,FINSEQ_1:def 3;
+      end;
+     A66: now let x;
+      thus x in dom GG implies x in dom R & R.x in dom HH
+       proof assume x in dom GG;
+         then x in Seg(len R) by A39,A60,FINSEQ_1:def 3;
+        hence x in dom R by FINSEQ_1:def 3;
+         then rng R c= Seg(len HH) & R.x in rng R by A62,FUNCT_1:def 5;
+         then R.x in Seg(len HH);
+        hence thesis by FINSEQ_1:def 3;
+       end;
+       assume x in dom R & R.x in dom HH;
+        then x in Seg(len R) by FINSEQ_1:def 3;
+      hence x in dom GG by A39,A60,FINSEQ_1:def 3;
+     end;
+     A67: now let x;
+       assume A68: x in dom GG;
+        then reconsider n = x as Nat by FINSEQ_3:25;
+           GG.n in rng HH by A38,A68,FUNCT_1:def 5;
+         then A69: HH just_once_values GG.n by A36,FINSEQ_4:10;
+           n in Seg(len HH) by A39,A68,FINSEQ_1:def 3;
+         then HH.(R.n) = HH.(HH <- (GG.n)) by A61
+                     .= GG.n by A69,FINSEQ_4:def 3;
+      hence GG.x = HH.(R.x);
+     end;
+     then A70: GG = HH * R by A66,FUNCT_1:20;
+        Seg(len HH) c= rng R
+      proof let x;
+        assume A71: x in Seg(len HH);
+         set f = HH" * GG;
+            dom(HH") = rng GG by A36,A38,FUNCT_1:55;
+          then A72: rng f = rng(HH") by RELAT_1:47
+                       .= dom HH by A36,FUNCT_1:55;
+          A73: rng R c= dom HH by A62,FINSEQ_1:def 3;
+            f = HH " * HH * R by A70,RELAT_1:55
+           .= id(dom HH) * R by A36,FUNCT_1:61
+           .= R by A73,RELAT_1:79;
+       hence thesis by A71,A72,FINSEQ_1:def 3;
+      end;
+     then A74: Seg(len HH) = rng R by A62,XBOOLE_0:def 10;
+     A75: dom R = Seg(len HH) by A60,FINSEQ_1:def 3;
+     then A76: R is one-to-one by A74,FINSEQ_4:75;
+       Seg(len HH) = {} implies Seg(len HH) = {};
+    then reconsider R as Function of Seg(len HH), Seg(len HH)
+    by A62,A75,FUNCT_2:def 1,RELSET_1:11;
+    reconsider R as Permutation of Seg(len HH) by A74,A76,FUNCT_2:83;
+     A77: len h = len HH by RLVECT_2:def 9;
+then A78:    Seg len HH = dom h by FINSEQ_1:def 3;
+    then reconsider Hp = h * R
+ as FinSequence of the carrier of V by FINSEQ_2:51;
+       dom h = Seg(len h) by FINSEQ_1:def 3;
+     then A79: Sum(Hp) = Sum(h) by A77,RLVECT_2:9;
+    deffunc Q(Nat)=g/.$1 + Hp/.$1;
+    consider I being FinSequence such that A80: len I = len GG and
+     A81: for k st k in
+ Seg(len GG) holds I.k = Q(k) from SeqLambda;
+       rng I c= the carrier of V
+      proof let x;
+        assume x in rng I;
+         then consider y such that A82: y in dom I and A83: I.y = x by FUNCT_1:
+def 5;
+         reconsider y as Nat by A82,FINSEQ_3:25;
+            dom I = Seg(len I) by FINSEQ_1:def 3;
+          then I.y = g/.y + Hp/.y by A80,A81,A82;
+       hence thesis by A83;
+      end;
+    then reconsider I as FinSequence of the carrier of V by FINSEQ_1:def 4;
+    A84: len Fp = len I by A39,A57,A58,A80,FINSEQ_2:48;
+    then A85: dom I = Seg(len I) & dom Fp = Seg(len I) by FINSEQ_1:def 3;
+    A86: len Hp = len GG & len g = len GG by A39,A77,A78,FINSEQ_2:48,RLVECT_2:
+def 9;
+      now let x;
+      assume A87: x in dom I;
+        then A88: x in dom g & x in dom Hp & x in dom HH & x in dom GG &
+                 x in dom Fp by A39,A80,A84,A86,FINSEQ_3:31;
+       reconsider k = x as Nat by A87,FINSEQ_3:25;
+       set v = GG/.k;
+          k in dom g by A80,A86,A87,FINSEQ_3:31;
+        then A89: g/.k = g.k by FINSEQ_4:def 4
+                  .= L1.v * v by A88,RLVECT_2:def 9;
+          k in dom Hp by A80,A86,A87,FINSEQ_3:31;
+        then A90: Hp/.k = (h * R).k by FINSEQ_4:def 4
+                   .= h.(R.k) by A88,FUNCT_1:22;
+          k in dom R by A39,A75,A80,A87,FINSEQ_1:def 3;
+        then A91: R.k in dom R by A74,A75,FUNCT_1:def 5;
+        then A92: R.k in dom HH by A60,FINSEQ_3:31;
+       reconsider j = R.k as Nat by A91,FINSEQ_3:25;
+          HH.j = GG.k by A67,A88
+            .= GG/.k by A88,FINSEQ_4:def 4;
+        then A93: h.j = L2.v * v by A92,RLVECT_2:40;
+        A94: Fp.k = f.(P.k) by A88,FUNCT_1:22;
+          k in dom P by A39,A55,A80,A87,FINSEQ_1:def 3;
+        then A95: P.k in dom P by A54,A55,FUNCT_1:def 5;
+        then A96: P.k in dom FF by A40,FINSEQ_3:31;
+       reconsider l = P.k as Nat by A95,FINSEQ_3:25;
+A97:      x in Seg len GG by A80,A87,FINSEQ_1:def 3;
+          FF.l = GG.k by A47,A88
+            .= GG/.k by A88,FINSEQ_4:def 4;
+        then f.l = (L1 + L2).v * v by A96,RLVECT_2:40
+                .= (L1.v + L2.v) * v by RLVECT_2:def 12
+                .= L1.v * v + L2.v * v by RLVECT_1:def 9;
+     hence I.x = Fp.x by A81,A89,A90,A93,A94,A97;
+    end;
+then A98:   I = Fp by A85,FUNCT_1:9;
+      Seg len GG = dom g by A86,FINSEQ_1:def 3;
+   hence thesis by A3,A6,A9,A16,A23,A30,A59,A79,A80,A81,A86,A98,RLVECT_2:4;
+  end;
+
+theorem Th2:
+ Sum(a * L) = a * Sum(L)
+  proof
+     per cases;
+     suppose A1: a <> 0;
+      consider F such that A2: F is one-to-one and A3: rng F = Carrier(a * L)
+and
+                           A4: Sum(a * L) = Sum
+((a * L) (#) F) by RLVECT_2:def 10;
+      consider G such that A5: G is one-to-one and A6: rng G = Carrier(L) and
+                           A7: Sum(L) = Sum(L (#) G) by RLVECT_2:def 10;
+      set g = L (#) G; set f = (a * L) (#) F; set l = a * L;
+      deffunc Q(Nat) = F <- (G.$1);
+       consider P being FinSequence such that A8: len P = len F and
+        A9: for k st k in Seg(len F) holds P.k = Q(k) from SeqLambda;
+        A10: Carrier(l) = Carrier(L) by A1,RLVECT_2:65;
+        then A11: len G = len F by A2,A3,A5,A6,RLVECT_1:106;
+        A12: rng P c= Seg(len F)
+         proof let x;
+           assume x in rng P;
+            then consider y such that A13: y in dom P and A14: P.y = x
+                                                              by FUNCT_1:def 5;
+            reconsider y as Nat by A13,FINSEQ_3:25;
+             A15: y in Seg(len F) by A8,A13,FINSEQ_1:def 3;
+             then y in dom G by A11,FINSEQ_1:def 3;
+             then G.y in rng F by A3,A6,A10,FUNCT_1:def 5;
+             then P.y = F <- (G.y) & F just_once_values G.y
+                                                   by A2,A9,A15,FINSEQ_4:10;
+             then P.y in dom F by FINSEQ_4:def 3;
+          hence thesis by A14,FINSEQ_1:def 3;
+         end;
+        A16: now let x;
+         thus x in dom G implies x in dom P & P.x in dom F
+          proof assume x in dom G;
+            then x in Seg(len P) by A8,A11,FINSEQ_1:def 3;
+           hence x in dom P by FINSEQ_1:def 3;
+            then rng P c= Seg(len F) & P.x in rng P by A12,FUNCT_1:def 5;
+            then P.x in Seg(len F);
+           hence thesis by FINSEQ_1:def 3;
+          end;
+          assume x in dom P & P.x in dom F;
+           then x in Seg(len P) by FINSEQ_1:def 3;
+         hence x in dom G by A8,A11,FINSEQ_1:def 3;
+        end;
+          now let x;
+          assume A17: x in dom G;
+           then reconsider n = x as Nat by FINSEQ_3:25;
+              G.n in rng F by A3,A6,A10,A17,FUNCT_1:def 5;
+            then A18: F just_once_values G.n by A2,FINSEQ_4:10;
+              n in Seg(len F) by A11,A17,FINSEQ_1:def 3;
+            then F.(P.n) = F.(F <- (G.n)) by A9
+                        .= G.n by A18,FINSEQ_4:def 3;
+         hence G.x = F.(P.x);
+        end;
+        then A19: G = F * P by A16,FUNCT_1:20;
+           Seg(len F) c= rng P
+         proof let x;
+           assume A20: x in Seg(len F);
+            set f = F" * G;
+               dom(F") = rng G by A2,A3,A6,A10,FUNCT_1:55;
+             then A21: rng f = rng(F") by RELAT_1:47
+                          .= dom F by A2,FUNCT_1:55;
+             A22: rng P c= dom F by A12,FINSEQ_1:def 3;
+               f = F " * F * P by A19,RELAT_1:55
+              .= id(dom F) * P by A2,FUNCT_1:61
+              .= P by A22,RELAT_1:79;
+          hence thesis by A20,A21,FINSEQ_1:def 3;
+         end;
+        then A23: Seg(len F) = rng P by A12,XBOOLE_0:def 10;
+        A24: dom P = Seg(len F) by A8,FINSEQ_1:def 3;
+        then A25: P is one-to-one by A23,FINSEQ_4:75;
+          Seg(len F) = {} implies Seg(len F) = {};
+       then reconsider P as Function of Seg(len F), Seg(len F)
+      by A12,A24,FUNCT_2:def 1,RELSET_1:11;
+       reconsider P as Permutation of Seg(len F) by A23,A25,FUNCT_2:83;
+        A26: len f = len F by RLVECT_2:def 9;
+then A27:       dom f = Seg(len F) by FINSEQ_1:def 3;
+       then reconsider Fp = f * P as FinSequence of the carrier of V
+        by FINSEQ_2:51;
+          dom f = Seg(len f) by FINSEQ_1:def 3;
+        then A28: Sum(Fp) = Sum(f) by A26,RLVECT_2:9;
+        A29: len Fp = len f by A27,FINSEQ_2:48;
+        then A30: len Fp = len g by A11,A26,RLVECT_2:def 9;
+then A31:       dom Fp = dom g by FINSEQ_3:31;
+          now let k,v;
+          assume that A32: k in dom g and A33: v = g.k;
+            A34: k in dom G by A11,A26,A29,A30,A32,FINSEQ_3:31;
+            then G.k in rng G by FUNCT_1:def 5;
+            then F just_once_values G.k by A2,A3,A6,A10,FINSEQ_4:10;
+            then A35: F <- (G.k) in dom F by FINSEQ_4:def 3;
+           then reconsider i = F <- (G.k) as Nat by FINSEQ_3:25;
+:::A36:          k in dom g by A32;
+A36:          k in Seg len F by A26,A29,A30,A32,FINSEQ_1:def 3;
+            A37: k in dom P by A8,A26,A29,A30,A32,FINSEQ_3:31;
+            A38: G/.k = G.k by A34,FINSEQ_4:def 4
+                       .= F.(P.k) by A19,A37,FUNCT_1:23
+                       .= F.i by A9,A36
+                       .= F/.i by A35,FINSEQ_4:def 4;
+              i in Seg(len f) by A26,A35,FINSEQ_1:def 3;
+            then A39: i in dom f by FINSEQ_1:def 3;
+         thus Fp.k = f.(P.k) by A37,FUNCT_1:23
+                  .= f.(F <- (G.k)) by A9,A36
+                  .= l.(F/.i) * F/.i by A39,RLVECT_2:def 9
+                  .= a * L.(F/.i) * F/.i by RLVECT_2:def 13
+                  .= a * (L.(F/.i) * F/.i) by RLVECT_1:def 9
+                  .= a * v by A32,A33,A38,RLVECT_2:def 9;
+        end;
+      hence thesis by A4,A7,A28,A30,A31,RLVECT_1:56;
+     suppose A40: a = 0;
+       hence Sum(a * L) = Sum(ZeroLC(V)) by RLVECT_2:66
+                     .= 0.V by RLVECT_2:48
+                     .= a * Sum(L) by A40,RLVECT_1:23;
+  end;
+
+theorem Th3:
+ Sum(- L) = - Sum(L)
+  proof
+   thus Sum(- L) = Sum((- 1) * L) by RLVECT_2:def 14
+              .= (- 1) * Sum(L) by Th2
+              .= - Sum(L) by RLVECT_1:29;
+  end;
+
+theorem Th4:
+ Sum(L1 - L2) = Sum(L1) - Sum(L2)
+  proof
+   thus Sum(L1 - L2) = Sum(L1 + (- L2)) by RLVECT_2:def 15
+                  .= Sum(L1) + Sum(- L2) by Th1
+                  .= Sum(L1) + (- Sum(L2)) by Th3
+                  .= Sum(L1) - Sum(L2) by RLVECT_1:def 11;
+  end;
+
+definition let V; let A;
+ attr A is linearly-independent means
+  :Def1: for l st Sum(l) = 0.V holds Carrier(l) = {};
+ antonym A is linearly-dependent;
+end;
+
+canceled;
+
+theorem
+   A c= B & B is linearly-independent implies A is linearly-independent
+  proof assume that A1: A c= B and A2: B is linearly-independent;
+   let l be Linear_Combination of A;
+    assume A3: Sum(l) = 0.V;
+     reconsider L = l as Linear_Combination of B by A1,RLVECT_2:33;
+        Carrier(L) = {} by A2,A3,Def1;
+   hence thesis;
+  end;
+
+theorem Th7:
+ A is linearly-independent implies not 0.V in A
+  proof assume that A1: A is linearly-independent and A2: 0.V in A;
+    deffunc F(Element of V) = 0;
+    consider f such that A3: f.(0.V) = 1 and
+     A4: for v being Element of V st v <> 0.V holds f.v = F(v)
+                                                              from LambdaSep1;
+    reconsider f as Element of Funcs(the carrier of V, REAL) by FUNCT_2:11;
+       ex T st for v st not v in T holds f.v = 0
+      proof take T = {0.V};
+       let v;
+        assume not v in T;
+         then v <> 0.V by TARSKI:def 1;
+       hence thesis by A4;
+      end;
+    then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+     A5: Carrier(f) = {0.V}
+      proof
+       thus Carrier(f) c= {0.V}
+        proof let x;
+         assume x in Carrier(f);
+           then x in {v : f.v <> 0} by RLVECT_2:def 6;
+          then consider v such that A6: v = x and A7: f.v <> 0;
+             v = 0.V by A4,A7;
+         hence thesis by A6,TARSKI:def 1;
+        end;
+       let x;
+        assume x in {0.V};
+         then x = 0.V & 0 <> 1 by TARSKI:def 1;
+         then x in {v : f.v <> 0} by A3;
+       hence thesis by RLVECT_2:def 6;
+      end;
+     then Carrier(f) c= A by A2,ZFMISC_1:37;
+    then reconsider f as Linear_Combination of A by RLVECT_2:def 8;
+       Sum(f) = f.(0.V) * 0.V by A5,RLVECT_2:53
+         .= 0.V by RLVECT_1:23;
+   hence contradiction by A1,A5,Def1;
+  end;
+
+theorem Th8:
+ {}(the carrier of V) is linearly-independent
+  proof let l be Linear_Combination of {}(the carrier of V);
+      Carrier(l) c= {} by RLVECT_2:def 8;
+   hence thesis by XBOOLE_1:3;
+  end;
+
+theorem Th9:
+ {v} is linearly-independent iff v <> 0.V
+  proof
+   thus {v} is linearly-independent implies v <> 0.V
+    proof assume {v} is linearly-independent;
+      then not 0.V in {v} by Th7;
+     hence thesis by TARSKI:def 1;
+    end;
+    assume A1: v <> 0.V;
+   let l be Linear_Combination of {v};
+    assume A2: Sum(l) = 0.V;
+     A3: Carrier(l) c= {v} by RLVECT_2:def 8;
+       now per cases by A3,ZFMISC_1:39;
+      suppose Carrier(l) = {};
+       hence thesis;
+      suppose A4: Carrier(l) = {v};
+A5:        0.V = l.v * v by A2,RLVECT_2:50;
+
+          now assume v in Carrier(l);
+           then v in {u : l.u <> 0} by RLVECT_2:def 6;
+          then ex u st v = u & l.u <> 0;
+         hence contradiction by A1,A5,RLVECT_1:24;
+        end;
+       hence thesis by A4,TARSKI:def 1;
+     end;
+   hence thesis;
+  end;
+
+theorem
+   {0.V} is linearly-dependent by Th9;
+
+theorem Th11:
+ {v1,v2} is linearly-independent implies v1 <> 0.V & v2 <> 0.V
+  proof assume A1: {v1,v2} is linearly-independent;
+      v1 in {v1,v2} & v2 in {v1,v2} by TARSKI:def 2;
+   hence thesis by A1,Th7;
+  end;
+
+theorem
+   {v,0.V} is linearly-dependent & {0.V,v} is linearly-dependent by Th11;
+
+theorem Th13:
+ v1 <> v2 & {v1,v2} is linearly-independent iff
+  v2 <> 0.V & for a holds v1 <> a * v2
+   proof
+    thus v1 <> v2 & {v1,v2} is linearly-independent implies
+          v2 <> 0.V & for a holds v1 <> a * v2
+     proof assume that A1: v1 <> v2 and A2: {v1,v2} is linearly-independent;
+      thus v2 <> 0.V by A2,Th11;
+      let a;
+       assume A3: v1 = a * v2;
+       deffunc F(Element of V)=0;
+        consider f such that A4: f.v1 = - 1 & f.v2 = a and
+         A5: for v being Element of V st v <> v1 & v <> v2 holds
+             f.v = F(v) from LambdaSep2(A1);
+        reconsider f as Element of Funcs(the carrier of V, REAL)
+                                                        by FUNCT_2:11;
+
+           now let v;
+           assume not v in {v1,v2};
+            then v <> v1 & v <> v2 by TARSKI:def 2;
+          hence f.v = 0 by A5;
+         end;
+        then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+           Carrier(f) c= {v1,v2}
+          proof let x;
+            assume x in Carrier(f);
+              then x in {u : f.u <> 0} by RLVECT_2:def 6;
+             then A6: ex u st x = u & f.u <> 0;
+            assume not x in {v1,v2};
+              then x <> v1 & x <> v2 by TARSKI:def 2;
+           hence thesis by A5,A6;
+          end;
+        then reconsider f as Linear_Combination of {v1,v2} by RLVECT_2:def 8;
+        A7: now assume not v1 in Carrier(f);
+          then not v1 in {u : f.u <> 0} by RLVECT_2:def 6;
+         hence contradiction by A4;
+        end;
+        set w = a * v2;
+           Sum(f) = (- 1) * w + w by A1,A3,A4,RLVECT_2:51
+             .= (- w) + w by RLVECT_1:29
+             .= - (w - w) by RLVECT_1:47
+             .= - 0.V by RLVECT_1:28
+             .= 0.V by RLVECT_1:25;
+      hence thesis by A2,A7,Def1;
+     end;
+     assume A8: v2 <> 0.V;
+     assume A9: for a holds v1 <> a * v2;
+      then A10: v1 <> 1 * v2 & 1 * v2 = v2 by RLVECT_1:def 9;
+    hence v1 <> v2;
+    let l be Linear_Combination of {v1,v2};
+     assume that A11: Sum(l) = 0.V and A12: Carrier(l) <> {};
+      consider x being Element of Carrier(l);
+         x in Carrier(l) by A12;
+       then x in {u : l.u <> 0} by RLVECT_2:def 6;
+      then A13: ex u st x = u & l.u <> 0;
+         Carrier(l) c= {v1,v2} by RLVECT_2:def 8;
+       then A14: x in {v1,v2} by A12,TARSKI:def 3;
+
+       A15: 0.V = l.v1 * v1 + l.v2 * v2 by A10,A11,RLVECT_2:51;
+         now per cases by A13,A14,TARSKI:def 2;
+        suppose A16: l.v1 <> 0;
+            0.V = (l.v1)" * (l.v1 * v1 + l.v2 * v2) by A15,RLVECT_1:23
+             .= (l.v1)" * (l.v1 * v1) + (l.v1)" * (l.v2 * v2) by RLVECT_1:def 9
+             .= (l.v1)" * l.v1 * v1 + (l.v1)" * (l.v2 * v2) by RLVECT_1:def 9
+             .= (l.v1)" * l.v1 * v1 + (l.v1)" * l.v2 * v2 by RLVECT_1:def 9
+             .= 1 * v1 + (l.v1)" * l.v2 * v2 by A16,XCMPLX_0:def 7
+             .= v1 + (l.v1)" * l.v2 * v2 by RLVECT_1:def 9;
+          then v1 = - ((l.v1)" * l.v2 * v2) by RLVECT_1:19
+                 .= (- 1) * ((l.v1)" * l.v2 * v2) by RLVECT_1:29
+                 .= ((- 1) * ((l.v1)" * l.v2)) * v2 by RLVECT_1:def 9;
+         hence thesis by A9;
+        suppose A17: l.v2 <> 0 & l.v1 = 0;
+            0.V = (l.v2)" * (l.v1 * v1 + l.v2 * v2) by A15,RLVECT_1:23
+             .= (l.v2)" * (l.v1 * v1) + (l.v2)" * (l.v2 * v2) by RLVECT_1:def 9
+             .= (l.v2)" * l.v1 * v1 + (l.v2)" * (l.v2 * v2) by RLVECT_1:def 9
+             .= (l.v2)" * l.v1 * v1 + (l.v2)" * l.v2 * v2 by RLVECT_1:def 9
+             .= (l.v2)" * l.v1 * v1 + 1 * v2 by A17,XCMPLX_0:def 7
+             .= 0 * v1 + v2 by A17,RLVECT_1:def 9
+             .= 0.V + v2 by RLVECT_1:23
+             .= v2 by RLVECT_1:10;
+        hence thesis by A8;
+       end;
+    hence thesis;
+   end;
+
+theorem
+   v1 <> v2 & {v1,v2} is linearly-independent iff
+  for a,b st a * v1 + b * v2 = 0.V holds a = 0 & b = 0
+   proof
+    thus v1 <> v2 & {v1,v2} is linearly-independent implies
+          for a,b st a * v1 + b * v2 = 0.V holds a = 0 & b = 0
+     proof assume that A1: v1 <> v2 and A2: {v1,v2} is linearly-independent;
+      let a,b;
+       assume that A3: a * v1 + b * v2 = 0.V and A4: a <> 0 or b <> 0;
+          now per cases by A4;
+         suppose A5: a <> 0;
+             0.V = a" * (a * v1 + b * v2) by A3,RLVECT_1:23
+              .= a" * (a * v1) + a" * (b * v2) by RLVECT_1:def 9
+              .= (a" * a) * v1 + a" * (b * v2) by RLVECT_1:def 9
+              .= (a" * a) * v1 + (a" * b) * v2 by RLVECT_1:def 9
+              .= 1 * v1 + (a" * b) * v2 by A5,XCMPLX_0:def 7
+              .= v1 + (a" * b) * v2 by RLVECT_1:def 9;
+           then v1 = - ((a" * b) * v2) by RLVECT_1:19
+                  .= (- 1) * ((a" * b) * v2) by RLVECT_1:29
+                  .= (- 1) * (a" * b) * v2 by RLVECT_1:def 9;
+          hence thesis by A1,A2,Th13;
+         suppose A6: b <> 0;
+             0.V = b" * (a * v1 + b * v2) by A3,RLVECT_1:23
+              .= b" * (a * v1) + b" * (b * v2) by RLVECT_1:def 9
+              .= (b" * a) * v1 + b" * (b * v2) by RLVECT_1:def 9
+              .= (b" * a) * v1 + (b" * b) * v2 by RLVECT_1:def 9
+              .= (b" * a) * v1 + 1* v2 by A6,XCMPLX_0:def 7
+              .= (b" * a) * v1 + v2 by RLVECT_1:def 9;
+           then v2 = - ((b" * a) * v1) by RLVECT_1:def 10
+                  .= (- 1) * ((b" * a) * v1) by RLVECT_1:29
+                  .= (- 1) * (b" * a) * v1 by RLVECT_1:def 9;
+          hence thesis by A1,A2,Th13;
+         end;
+      hence thesis;
+     end;
+     assume A7: for a,b st a * v1 + b * v2 = 0.V holds a = 0 & b = 0;
+      A8: now assume A9: v2 = 0.V;
+          0.V = 0.V + 0.V by RLVECT_1:10
+           .= 0 * v1 + 0.V by RLVECT_1:23
+           .= 0 * v1 + 1 * v2 by A9,RLVECT_1:23;
+        hence contradiction by A7;
+      end;
+        now let a;
+        assume v1 = a * v2;
+         then v1 = 0.V + a * v2 by RLVECT_1:10;
+         then 0.V = v1 - a * v2 by RLSUB_2:78
+                 .= v1 + (- a * v2) by RLVECT_1:def 11
+                 .= v1 + a * (- v2) by RLVECT_1:39
+                 .= v1 + ((- a) * v2) by RLVECT_1:38
+                 .= 1 * v1 + (- a) * v2 by RLVECT_1:def 9;
+         hence contradiction by A7;
+      end;
+    hence thesis by A8,Th13;
+   end;
+
+definition let V; let A;
+ func Lin(A) -> strict Subspace of V means
+  :Def2: the carrier of it = {Sum(l) : not contradiction};
+ existence
+  proof set A1 = {Sum(l) : not contradiction};
+       A1 c= the carrier of V
+      proof let x;
+        assume x in A1;
+         then ex l st x = Sum(l);
+       hence thesis;
+      end;
+    then reconsider A1 as Subset of V;
+    reconsider l = ZeroLC(V) as Linear_Combination of A by RLVECT_2:34;
+       Sum(l) = 0.V by RLVECT_2:48;
+     then A1: 0.V in A1;
+       A1 is lineary-closed
+      proof
+       thus for v,u st v in A1 & u in A1 holds v + u in A1
+        proof let v,u;
+          assume that A2: v in A1 and A3: u in A1;
+           consider l1 being Linear_Combination of A such that
+            A4: v = Sum(l1) by A2;
+           consider l2 being Linear_Combination of A such that
+            A5: u = Sum(l2) by A3;
+           reconsider f = l1 + l2 as Linear_Combination of A by RLVECT_2:59;
+              v + u = Sum(f) by A4,A5,Th1;
+         hence thesis;
+        end;
+       let a,v;
+        assume v in A1;
+         then consider l such that A6: v = Sum(l);
+         reconsider f = a * l as Linear_Combination of A by RLVECT_2:67;
+            a * v = Sum(f) by A6,Th2;
+       hence thesis;
+      end;
+   hence thesis by A1,RLSUB_1:43;
+  end;
+ uniqueness by RLSUB_1:38;
+end;
+
+canceled 2;
+
+theorem Th17:
+ x in Lin(A) iff ex l st x = Sum(l)
+  proof
+   thus x in Lin(A) implies ex l st x = Sum(l)
+    proof assume x in Lin(A);
+       then x in the carrier of Lin(A) by RLVECT_1:def 1;
+       then x in {Sum(l) : not contradiction} by Def2;
+     hence thesis;
+    end;
+    given k being Linear_Combination of A such that A1: x = Sum(k);
+       x in {Sum(l): not contradiction} by A1;
+     then x in the carrier of Lin(A) by Def2;
+   hence thesis by RLVECT_1:def 1;
+  end;
+
+theorem Th18:
+ x in A implies x in Lin(A)
+  proof assume A1: x in A;
+    then reconsider v = x as VECTOR of V;
+    deffunc F(Element of V)=0;
+    consider f being Function of the carrier of V, REAL such that
+     A2: f.v = 1 and
+     A3: for u st u <> v holds f.u = F(u) from LambdaSep1;
+    reconsider f as Element of Funcs(the carrier of V, REAL) by FUNCT_2:11;
+       ex T st for u st not u in T holds f.u = 0
+      proof take T = {v};
+       let u;
+        assume not u in T;
+         then u <> v by TARSKI:def 1;
+       hence thesis by A3;
+      end;
+    then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+     A4: Carrier(f) c= {v}
+      proof let x;
+        assume x in Carrier(f);
+          then x in {u : f.u <> 0} by RLVECT_2:def 6;
+         then consider u such that A5: x = u and A6: f.u <> 0;
+            u = v by A3,A6;
+       hence thesis by A5,TARSKI:def 1;
+      end;
+    then reconsider f as Linear_Combination of {v} by RLVECT_2:def 8;
+     A7: Sum(f) = 1 * v by A2,RLVECT_2:50
+            .= v by RLVECT_1:def 9;
+       {v} c= A by A1,ZFMISC_1:37;
+     then Carrier(f) c= A by A4,XBOOLE_1:1;
+    then reconsider f as Linear_Combination of A by RLVECT_2:def 8;
+       Sum(f) = v by A7;
+   hence thesis by Th17;
+  end;
+
+Lm2: x in (0).V iff x = 0.V
+ proof
+  thus x in (0).V implies x = 0.V
+   proof assume x in (0).V;
+     then x in the carrier of (0).V by RLVECT_1:def 1;
+     then x in {0.V} by RLSUB_1:def 3;
+    hence thesis by TARSKI:def 1;
+   end;
+  thus thesis by RLSUB_1:25;
+ end;
+
+reserve l0 for Linear_Combination of {}(the carrier of V);
+
+theorem
+   Lin({}(the carrier of V)) = (0).V
+  proof set A = Lin({}(the carrier of V));
+      now let v;
+     thus v in A implies v in (0).V
+      proof assume v in A;
+         then v in the carrier of A &
+              the carrier of A = {Sum
+(l0) : not contradiction} by Def2,RLVECT_1:def 1;
+        then ex l0 st v = Sum(l0);
+         then v = 0.V by RLVECT_2:49;
+       hence thesis by Lm2;
+      end;
+      assume v in (0).V;
+       then v = 0.V by Lm2;
+     hence v in A by RLSUB_1:25;
+    end;
+   hence thesis by RLSUB_1:39;
+  end;
+
+theorem
+   Lin(A) = (0).V implies A = {} or A = {0.V}
+  proof assume that A1: Lin(A) = (0).V and A2: A <> {};
+   thus A c= {0.V}
+    proof let x;
+      assume x in A;
+       then x in Lin(A) by Th18;
+       then x = 0.V by A1,Lm2;
+     hence thesis by TARSKI:def 1;
+    end;
+   let x;
+    assume x in {0.V};
+      then A3: x = 0.V by TARSKI:def 1;
+     consider y being Element of A;
+A4:    y in A by A2;
+        y in Lin(A) by A2,Th18;
+   hence thesis by A1,A3,A4,Lm2;
+  end;
+
+theorem Th21:
+ for W being strict Subspace of V holds
+ A = the carrier of W implies Lin(A) = W
+  proof let W be strict Subspace of V;
+    assume A1: A = the carrier of W;
+      now let v;
+     thus v in Lin(A) implies v in W
+      proof assume v in Lin(A);
+        then A2: ex l st v = Sum(l) by Th17;
+           A is lineary-closed & A <> {} by A1,RLSUB_1:42;
+         then v in the carrier of W by A1,A2,RLVECT_2:47;
+       hence thesis by RLVECT_1:def 1;
+      end;
+         v in W iff v in the carrier of W by RLVECT_1:def 1;
+     hence v in W implies v in Lin(A) by A1,Th18;
+    end;
+   hence thesis by RLSUB_1:39;
+  end;
+
+theorem
+   for V being strict RealLinearSpace,A being Subset of V holds
+  A = the carrier of V implies Lin(A) = V
+  proof let V be strict RealLinearSpace,A be Subset of V;
+   assume A = the carrier of V;
+    then A = the carrier of (Omega).V by RLSUB_1:def 4;
+   hence Lin(A) = (Omega).V by Th21
+               .= V by RLSUB_1:def 4;
+  end;
+
+Lm3: W1 is Subspace of W3 implies W1 /\ W2 is Subspace of W3
+ proof assume A1: W1 is Subspace of W3;
+     W1 /\ W2 is Subspace of W1 by RLSUB_2:20;
+  hence thesis by A1,RLSUB_1:35;
+ end;
+
+Lm4: W1 is Subspace of W2 & W1 is Subspace of W3 implies
+       W1 is Subspace of W2 /\ W3
+ proof assume A1: W1 is Subspace of W2 & W1 is Subspace of W3;
+     now let v;
+     assume v in W1;
+      then v in W2 & v in W3 by A1,RLSUB_1:16;
+    hence v in W2 /\ W3 by RLSUB_2:7;
+   end;
+  hence thesis by RLSUB_1:37;
+ end;
+
+Lm5: W1 is Subspace of W2 implies W1 is Subspace of W2 + W3
+ proof assume A1: W1 is Subspace of W2;
+     W2 is Subspace of W2 + W3 by RLSUB_2:11;
+  hence thesis by A1,RLSUB_1:35;
+ end;
+
+Lm6: W1 is Subspace of W3 & W2 is Subspace of W3 implies
+       W1 + W2 is Subspace of W3
+ proof assume A1: W1 is Subspace of W3 & W2 is Subspace of W3;
+     now let v;
+     assume v in W1 + W2;
+      then consider v1,v2 such that A2: v1 in W1 & v2 in W2 and A3: v = v1 + v2
+                                                                by RLSUB_2:5;
+         v1 in W3 & v2 in W3 by A1,A2,RLSUB_1:16;
+    hence v in W3 by A3,RLSUB_1:28;
+   end;
+  hence thesis by RLSUB_1:37;
+ end;
+
+theorem Th23:
+ A c= B implies Lin(A) is Subspace of Lin(B)
+  proof assume A1: A c= B;
+      now let v;
+      assume v in Lin(A);
+       then consider l such that A2: v = Sum(l) by Th17;
+       reconsider l as Linear_Combination of B by A1,RLVECT_2:33;
+          Sum(l) = v by A2;
+     hence v in Lin(B) by Th17;
+    end;
+   hence thesis by RLSUB_1:37;
+  end;
+
+theorem
+  for V being strict RealLinearSpace,A,B being Subset of V holds
+ Lin(A) = V & A c= B implies Lin(B) = V
+  proof let V be strict RealLinearSpace,A,B be Subset of V;
+   assume Lin(A) = V & A c= B;
+    then V is Subspace of Lin(B) by Th23;
+   hence thesis by RLSUB_1:34;
+  end;
+
+theorem
+   Lin(A \/ B) = Lin(A) + Lin(B)
+  proof A c= A \/ B & B c= A \/ B by XBOOLE_1:7;
+    then Lin(A) is Subspace of Lin(A \/ B) & Lin(B) is Subspace of Lin(A \/ B)
+                                                                     by Th23;
+    then A1: Lin(A) + Lin(B) is Subspace of Lin(A \/ B) by Lm6;
+      now let v;
+      assume v in Lin(A \/ B);
+       then consider l being Linear_Combination of A \/ B such that
+        A2: v = Sum(l) by Th17;
+       set C = Carrier(l) /\ A; set D = Carrier(l) \ A;
+       defpred P[set] means $1 in C;
+       deffunc F(set)=l.$1;
+       deffunc G(set)= 0;
+      A3:  for x st x in the carrier of V holds
+       (P[x] implies F(x) in REAL) & (not P[x] implies G(x) in REAL)
+       proof
+        now let x;
+          assume x in the carrier of V;
+           then reconsider v = x as VECTOR of V;
+              f.v in REAL;
+         hence x in C implies l.x in REAL;
+          assume not x in C;
+         thus 0 in REAL;
+        end;
+       hence thesis;
+      end;
+       consider f being Function of the carrier of V, REAL such that
+        A4: for x st x in the carrier of V holds
+            (P[x] implies f.x = F(x)) & (not P[x] implies f.x = G(x))
+                                                          from Lambda1C(A3);
+       reconsider f as Element of Funcs(the carrier of V, REAL) by FUNCT_2:11;
+       defpred D[set] means $1 in D;
+     A5:  for x st x in the carrier of V holds
+       (D[x] implies F(x) in REAL) & (not D[x] implies G(x) in REAL)
+       proof
+       now let x;
+          assume x in the carrier of V;
+           then reconsider v = x as VECTOR of V;
+              g.v in REAL;
+         hence x in D implies l.x in REAL;
+          assume not x in D;
+         thus 0 in REAL;
+        end;
+        hence thesis;
+       end;
+       consider g being Function of the carrier of V, REAL such that
+        A6: for x st x in the carrier of V holds
+            (D[x] implies g.x = F(x)) & (not D[x] implies g.x = G(x))
+                                                        from Lambda1C(A5);
+       reconsider g as Element of Funcs(the carrier of V, REAL) by FUNCT_2:11;
+       reconsider C as finite Subset of V;
+          for u holds not u in C implies f.u = 0 by A4;
+       then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+        A7: Carrier(f) c= C
+         proof let x;
+           assume x in Carrier(f);
+             then x in {u : f.u <> 0} by RLVECT_2:def 6;
+            then A8: ex u st x = u & f.u <> 0;
+           assume not x in C;
+          hence thesis by A4,A8;
+         end;
+          C c= A by XBOOLE_1:17;
+        then Carrier(f) c= A by A7,XBOOLE_1:1;
+       then reconsider f as Linear_Combination of A by RLVECT_2:def 8;
+       reconsider D as finite Subset of V;
+          for u holds not u in D implies g.u = 0 by A6;
+       then reconsider g as Linear_Combination of V by RLVECT_2:def 5;
+        A9: Carrier(g) c= D
+         proof let x;
+           assume x in Carrier(g);
+             then x in {u : g.u <> 0} by RLVECT_2:def 6;
+            then A10: ex u st x = u & g.u <> 0;
+           assume not x in D;
+          hence thesis by A6,A10;
+         end;
+          D c= B
+         proof let x;
+           assume x in D;
+            then x in Carrier(l) & not x in A & Carrier(l) c= A \/ B
+                                     by RLVECT_2:def 8,XBOOLE_0:def 4;
+            hence thesis by XBOOLE_0:def 2;
+         end;
+        then Carrier(g) c= B by A9,XBOOLE_1:1;
+       then reconsider g as Linear_Combination of B by RLVECT_2:def 8;
+          l = f + g
+         proof let v;
+             now per cases;
+            suppose A11: v in C;
+              A12: now assume v in D;
+                then not v in A by XBOOLE_0:def 4;
+               hence contradiction by A11,XBOOLE_0:def 3;
+              end;
+             thus (f + g).v = f.v + g.v by RLVECT_2:def 12
+                           .= l.v + g.v by A4,A11
+                           .= l.v + 0 by A6,A12
+                           .= l.v;
+            suppose A13: not v in C;
+                now per cases;
+               suppose A14: v in Carrier(l);
+                A15: now assume not v in D;
+                   then not v in Carrier(l) or v in A by XBOOLE_0:def 4;
+                  hence contradiction by A13,A14,XBOOLE_0:def 3;
+                 end;
+                thus (f + g). v = f.v + g.v by RLVECT_2:def 12
+                               .= 0 + g.v by A4,A13
+                               .= l.v by A6,A15;
+               suppose A16: not v in Carrier(l);
+                 then A17: not v in C & not v in D by XBOOLE_0:def 3,def 4;
+                thus (f + g).v = f.v + g.v by RLVECT_2:def 12
+                              .= 0 + g.v by A4,A17
+                              .= 0 + 0 by A6,A17
+                              .= l.v by A16,RLVECT_2:28;
+              end;
+             hence (f + g).v = l.v;
+           end;
+          hence thesis;
+         end;
+        then A18: v = Sum(f) + Sum(g) by A2,Th1;
+          Sum(f) in Lin(A) & Sum(g) in Lin(B) by Th17;
+     hence v in Lin(A) + Lin(B) by A18,RLSUB_2:5;
+    end;
+    then Lin(A \/ B) is Subspace of Lin(A) + Lin(B) by RLSUB_1:37;
+   hence thesis by A1,RLSUB_1:34;
+  end;
+
+theorem
+   Lin(A /\ B) is Subspace of Lin(A) /\ Lin(B)
+  proof A /\ B c= A & A /\ B c= B by XBOOLE_1:17;
+    then Lin(A /\ B) is Subspace of Lin(A) & Lin(A /\ B) is Subspace of Lin(B)
+                                                                     by Th23;
+   hence thesis by Lm4;
+  end;
+
+Lm7: not {} in M implies dom CF = M & rng CF c= union M
+ proof consider x being Element of M;
+  assume A1: not {} in M;
+      x in M;
+    then union M <> {} by A1,ORDERS_1:91;
+  hence dom CF = M & rng CF c= union M by FUNCT_2:def 1,RELSET_1:12;
+ end;
+
+Lm8:
+ for Z being finite set holds
+ card Z = 0 & Z <> {} &
+     (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) implies union Z in Z
+ by CARD_2:59;
+
+Lm9: now let n;
+  assume A1:
+   for Z being finite set holds
+   card Z = n & Z <> {} &
+             (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) implies
+              union Z in Z;
+ let Z be finite set;
+  assume that A2: card Z = n + 1 and A3: Z <> {} and
+              A4: for X,Y st X in Z & Y in Z holds X c= Y or Y c= X;
+   consider y being Element of Z;
+
+      now per cases;
+     suppose n = 0;
+       then consider x such that A5: Z = {x} by A2,CARD_2:60;
+          y = x & union Z = x by A5,TARSKI:def 1,ZFMISC_1:31;
+      hence union Z in Z by A3;
+     suppose A6: n <> 0;
+       set Y = Z \ {y};
+        A7: Y c= Z by XBOOLE_1:36;
+        reconsider Y as finite set;
+          {y} c= Z by A3,ZFMISC_1:37;
+        then A8: card Y = (n + 1) - card{y} by A2,CARD_2:63
+                       .= n + 1 - 1 by CARD_1:79
+                       .= n by XCMPLX_1:26;
+          for a,b being set st a in Y & b in Y holds a c= b or b c= a by A4,A7;
+        then A9: union Y in Y by A1,A6,A8,CARD_1:47;
+        then A10: union Y in Z by A7;
+        A11: y c= union Y or union Y c= y by A4,A7,A9;
+A12:     y in Z by A3;
+          Z = (Z \ {y}) \/ {y}
+         proof
+          thus Z c= (Z \ {y}) \/ {y}
+           proof let x;
+             assume x in Z;
+              then x in Z \ {y} or x in {y} by XBOOLE_0:def 4;
+            hence thesis by XBOOLE_0:def 2;
+           end;
+          let x;
+           assume x in (Z \ {y}) \/ {y};
+            then x in (Z \ {y}) or x in {y} by XBOOLE_0:def 2;
+            then (x in Z & not x in {y}) or x in {y} by XBOOLE_0:def 4;
+            then x in Z \/ {y} & {y} c= Z by A3,XBOOLE_0:def 2,ZFMISC_1:37;
+          hence thesis by XBOOLE_1:12;
+         end;
+        then union Z = union Y \/ union {y} by ZFMISC_1:96
+                    .= union Y \/ y by ZFMISC_1:31;
+      hence union Z in Z by A10,A11,A12,XBOOLE_1:12;
+    end;
+ hence union Z in Z;
+end;
+
+Lm10:
+ for Z being finite set holds
+ Z <> {} &
+       (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) implies union Z in Z
+ proof let Z be finite set;
+   A1: card Z = card Z;
+   defpred P[Nat] means for Z being finite set st card Z = $1 & Z <> {} &
+       (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) holds union Z in Z;
+   A2: P[0] by Lm8;
+   A3: for k be Nat st P[k] holds P[k+1] by Lm9;
+      for n holds P[n] from Ind(A2,A3);
+  hence thesis by A1;
+ end;
+
+theorem Th27:
+ A is linearly-independent implies
+  ex B st A c= B & B is linearly-independent & Lin(B) = the RLSStruct of V
+   proof assume A1: A is linearly-independent;
+     defpred P[set] means
+      (ex B  being Subset of V
+            st B = $1 & A c= B & B is linearly-independent);
+     consider Q being set such that
+      A2: for Z holds Z in Q iff Z in bool(the carrier of V) & P[Z]
+              from Separation;
+      A3: Q <> {} by A1,A2;
+        now let Z;
+        assume that A4: Z <> {} and A5: Z c= Q and
+         A6: Z is c=-linear;
+         set W = union Z;
+             W c= the carrier of V
+           proof let x;
+             assume x in W;
+              then consider X such that A7: x in X and A8: X in Z by TARSKI:def
+4;
+                 X in bool(the carrier of V) by A2,A5,A8;
+               hence thesis by A7;
+           end;
+         then reconsider W as Subset of V;
+         consider x being Element of Z;
+            x in Q by A4,A5,TARSKI:def 3;
+         then A9: ex B  being Subset of V st B = x & A c= B &
+ B is linearly-independent by A2;
+            x c= W by A4,ZFMISC_1:92;
+          then A10: A c= W by A9,XBOOLE_1:1;
+            W is linearly-independent
+           proof let l be Linear_Combination of W;
+             assume that A11: Sum(l) = 0.V and A12: Carrier(l) <> {};
+             deffunc Q(set)={C where C is Subset of V: $1 in C
+             & C in Z};
+              consider f being Function such that
+               A13: dom f = Carrier(l) and
+               A14: for x st x in Carrier(l) holds
+                f.x = Q(x) from Lambda;
+              reconsider M = rng f as non empty set by A12,A13,RELAT_1:65;
+              consider F being Choice_Function of M;
+               A15: now assume {} in M;
+                 then consider x such that A16: x in dom f and A17: f.x = {}
+                                     by FUNCT_1:def 5;
+                    Carrier(l) c= W by RLVECT_2:def 8;
+                  then consider X such that A18: x in X and A19: X in Z by A13,
+A16,TARSKI:def 4;
+                  reconsider X as Subset of V by A2,A5,A19;
+               X in {C where C is Subset of V: x in C & C in Z}
+                                   by A18,A19;
+                hence contradiction by A13,A14,A16,A17;
+               end;
+              set S = rng F;
+               A20: dom F = M & M <> {} by A15,Lm7;
+               then A21: S <> {} by RELAT_1:65;
+               A22: now let X;
+                 assume X in S;
+                  then consider x such that A23: x in dom F and A24: F.x = X
+                                           by FUNCT_1:def 5;
+                  consider y such that A25: y in dom f and A26: f.y = x
+                                           by A20,A23,FUNCT_1:def 5;
+                   A27: X in x by A15,A20,A23,A24,ORDERS_1:def 1;
+                     x = Q(y) by A13,A14,A25,A26;
+                  then ex C being Subset of V st
+ C = X & y in C & C in Z by A27;
+                hence X in Z;
+               end;
+               A28: now let X,Y;
+                 assume X in S & Y in S;
+                  then X in Z & Y in Z by A22;
+                then X,Y are_c=-comparable by A6,ORDINAL1:def 9;
+                hence X c= Y or Y c= X by XBOOLE_0:def 9;
+               end;
+                 dom F is finite by A13,A20,FINSET_1:26;
+               then S is finite by FINSET_1:26;
+               then union S in S by A21,A28,Lm10;
+               then union S in Z by A22;
+               then consider B being Subset of V such that
+               A29: B = union S and A c= B and
+                                 A30: B is linearly-independent by A2,A5;
+                 Carrier(l) c= union S
+                proof let x;
+                  assume A31: x in Carrier(l);
+                    then A32: f.x in M by A13,FUNCT_1:def 5;
+                   set X = f.x;
+                    A33: F.X in X by A15,A32,ORDERS_1:def 1;
+                      f.x = {C where C is Subset of V:
+                              x in C & C in Z} by A14,A31;
+                   then A34: ex C being Subset of V st
+ F.X = C & x in C & C in Z by A33;
+                      F.X in S by A20,A32,FUNCT_1:def 5;
+                 hence x in union S by A34,TARSKI:def 4;
+                end;
+               then l is Linear_Combination of B by A29,RLVECT_2:def 8;
+            hence thesis by A11,A12,A30,Def1;
+           end;
+       hence union Z in Q by A2,A10;
+      end;
+     then consider X such that A35: X in Q and
+      A36: for Z st Z in Q & Z <> X holds not X c= Z by A3,ORDERS_2:79;
+     consider B being Subset of V such that
+      A37: B = X and A38: A c= B and
+                          A39: B is linearly-independent by A2,A35;
+    take B;
+    thus A c= B & B is linearly-independent by A38,A39;
+A40:  (Omega).V = the RLSStruct of V by RLSUB_1:def 4;
+     assume Lin(B) <> the RLSStruct of V;
+      then consider v being VECTOR of V such that
+       A41: not(v in Lin(B) iff v in the RLSStruct of V) by A40,RLSUB_1:39;
+       A42: B \/ {v} is linearly-independent
+        proof let l be Linear_Combination of B \/ {v};
+          assume A43: Sum(l) = 0.V;
+             now per cases;
+            suppose A44: v in Carrier(l);
+            deffunc L(VECTOR of V)=l.$1;
+              consider f being Function of the carrier of V, REAL such that
+               A45: f.v = 0 and
+               A46: for u being VECTOR of V st u <> v holds f.u = L(u)
+                from LambdaSep1;
+              reconsider f as Element of Funcs(the carrier of V, REAL)
+                                                              by FUNCT_2:11;
+                 now let u be VECTOR of V;
+                 assume not u in Carrier(l) \ {v};
+                  then not u in Carrier(l) or u in {v} by XBOOLE_0:def 4;
+                  then (l.u = 0 & u <> v) or u = v by RLVECT_2:28,TARSKI:def 1
+;
+                hence f.u = 0 by A45,A46;
+               end;
+              then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+                 Carrier(f) c= B
+                proof let x;
+                  assume x in Carrier(f);
+                    then x in {u where u is VECTOR of V: f.u <> 0}
+                     by RLVECT_2:def 6;
+                   then consider u being VECTOR of V such that
+                    A47: u = x and A48: f.u <> 0;
+                      f.u = l.u by A45,A46,A48;
+                    then u in {v1 where v1 is VECTOR of V: l.v1 <> 0} by A48;
+                    then u in Carrier(l) & Carrier(l) c= B \/ {v}
+                                              by RLVECT_2:def 6,def 8
+;
+                    then u in B or u in {v} by XBOOLE_0:def 2;
+                 hence thesis by A45,A47,A48,TARSKI:def 1;
+                end;
+              then reconsider f as Linear_Combination of B by RLVECT_2:def 8;
+              deffunc G(VECTOR of V)=0;
+              consider g being Function of the carrier of V, REAL such that
+               A49: g.v = - l.v and
+               A50: for u being VECTOR of V st u <> v holds g.u = G(u)
+                from LambdaSep1;
+              reconsider g as Element of Funcs(the carrier of V, REAL)
+                                                              by FUNCT_2:11;
+                 now let u be VECTOR of V;
+                 assume not u in {v};
+                  then u <> v by TARSKI:def 1;
+                hence g.u = 0 by A50;
+               end;
+              then reconsider g as Linear_Combination of V by RLVECT_2:def 5;
+                 Carrier(g) c= {v}
+                proof let x;
+                  assume x in Carrier(g);
+                    then x in {u where u is VECTOR of V: g.u <> 0}
+                     by RLVECT_2:def 6;
+                   then ex u being VECTOR of V st x = u & g.u <> 0;
+                    then x = v by A50;
+                 hence thesis by TARSKI:def 1;
+                end;
+              then reconsider g as Linear_Combination of {v} by RLVECT_2:def 8;
+               A51: f - g = l
+                proof let u be VECTOR of V;
+                    now per cases;
+                   suppose A52: v = u;
+                    thus (f - g).u = f.u - g.u by RLVECT_2:79
+                          .= 0 + (- (- l.v)) by A45,A49,A52,XCMPLX_0:def 8
+                                  .= l.u by A52;
+                   suppose A53: v <> u;
+                    thus (f - g).u = f.u - g.u by RLVECT_2:79
+                                  .= l.u - g.u by A46,A53
+                                  .= l.u - 0 by A50,A53
+                                  .= l.u;
+                  end;
+                 hence thesis;
+                end;
+               A54: Sum(g) = (- l.v) * v by A49,RLVECT_2:50;
+                 0.V = Sum(f) - Sum(g) by A43,A51,Th4;
+               then Sum(f) = 0.V + Sum(g) by RLSUB_2:78
+                        .= (- l.v) * v by A54,RLVECT_1:10;
+               then A55: (- l.v) * v in Lin(B) by Th17;
+                 l.v <> 0 by A44,RLVECT_2:28;
+               then A56: - l.v <> 0 by XCMPLX_1:135;
+                 (- l.v)" * ((- l.v) * v) = (- l.v)" * (- l.v) * v by RLVECT_1:
+def 9
+                                       .= 1 * v by A56,XCMPLX_0:def 7
+                                       .= v by RLVECT_1:def 9;
+             hence thesis by A41,A55,RLSUB_1:29,RLVECT_1:3;
+            suppose A57: not v in Carrier(l);
+                Carrier(l) c= B
+               proof let x;
+                 assume A58: x in Carrier(l);
+                    Carrier(l) c= B \/ {v} by RLVECT_2:def 8;
+                  then x in B or x in {v} by A58,XBOOLE_0:def 2;
+                hence thesis by A57,A58,TARSKI:def 1;
+               end;
+              then l is Linear_Combination of B by RLVECT_2:def 8;
+             hence thesis by A39,A43,Def1;
+           end;
+         hence thesis;
+        end;
+         v in {v} by TARSKI:def 1;
+       then A59: v in B \/ {v} & not v in B by A41,Th18,RLVECT_1:3,XBOOLE_0:def
+2;
+       A60: B c= B \/ {v} by XBOOLE_1:7;
+       then A c= B \/ {v} by A38,XBOOLE_1:1;
+       then B \/ {v} in Q by A2,A42;
+    hence contradiction by A36,A37,A59,A60;
+   end;
+
+theorem Th28:
+ Lin(A) = V implies
+  ex B st B c= A & B is linearly-independent & Lin(B) = V
+   proof assume A1: Lin(A) = V;
+     defpred P[set] means
+          (ex B st B = $1 & B c= A & B is linearly-independent);
+     consider Q being set such that
+      A2: for Z holds Z in Q iff Z in bool(the carrier of V) &
+            P[Z] from Separation;
+        {}(the carrier of V) in bool(the carrier of V) &
+           {}(the carrier of V) c= A &
+           {}(the carrier of V) is linearly-independent
+                                             by Th8,XBOOLE_1:2;
+      then A3: Q <> {} by A2;
+        now let Z;
+        assume that Z <> {} and A4: Z c= Q and
+           A5: Z is c=-linear;
+         set W = union Z;
+             W c= the carrier of V
+           proof let x;
+             assume x in W;
+              then consider X such that A6: x in X and A7: X in Z by TARSKI:def
+4;
+                 X in bool(the carrier of V) by A2,A4,A7;
+               hence thesis by A6;
+           end;
+         then reconsider W as Subset of V;
+          A8: W c= A
+           proof let x;
+             assume x in W;
+              then consider X such that A9: x in X and A10: X in Z by TARSKI:
+def 4;
+                 ex B st B = X & B c= A & B is linearly-independent by A2,A4,
+A10
+;
+            hence thesis by A9;
+           end;
+            W is linearly-independent
+           proof let l be Linear_Combination of W;
+             assume that A11: Sum(l) = 0.V and A12: Carrier(l) <> {};
+             deffunc F(set)= {C : $1 in C & C in Z};
+              consider f being Function such that
+               A13: dom f = Carrier(l) and
+               A14: for x st x in Carrier(l) holds f.x = F(x) from Lambda;
+              reconsider M = rng f as non empty set by A12,A13,RELAT_1:65;
+              consider F being Choice_Function of M;
+               A15: now assume {} in M;
+                 then consider x such that A16: x in dom f and A17: f.x = {}
+                                                               by FUNCT_1:def 5
+;
+                    Carrier(l) c= W by RLVECT_2:def 8;
+                  then consider X such that A18: x in X and A19: X in Z by A13,
+A16,TARSKI:def 4;
+                  reconsider X as Subset of V by A2,A4,A19;
+                    X in {C : x in C & C in Z} by A18,A19;
+                hence contradiction by A13,A14,A16,A17;
+               end;
+              set S = rng F;
+               A20: dom F = M & M <> {} by A15,Lm7;
+               then A21: S <> {} by RELAT_1:65;
+               A22: now let X;
+                 assume X in S;
+                  then consider x such that A23: x in dom F and A24: F.x = X
+                                                                by FUNCT_1:def
+5;
+
+                  consider y such that A25: y in dom f and A26: f.y = x
+                                                          by A20,A23,FUNCT_1:
+def 5
+;
+                   A27: X in x by A15,A20,A23,A24,ORDERS_1:def 1;
+                     x = {C : y in C & C in Z} by A13,A14,A25,A26;
+                  then ex C st C = X & y in C & C in Z by A27;
+                hence X in Z;
+               end;
+               A28: now let X,Y;
+                 assume X in S & Y in S;
+                  then X in Z & Y in Z by A22;
+                then X,Y are_c=-comparable by A5,ORDINAL1:def 9;
+                hence X c= Y or Y c= X by XBOOLE_0:def 9;
+               end;
+                 dom F is finite by A13,A20,FINSET_1:26;
+               then S is finite by FINSET_1:26;
+               then union S in S by A21,A28,Lm10;
+               then union S in Z by A22;
+               then consider B such that A29: B = union S and B c= A and
+                                        A30: B is linearly-independent by A2,A4
+;
+                 Carrier(l) c= union S
+                proof let x;
+                  assume A31: x in Carrier(l);
+                    then A32: f.x in M by A13,FUNCT_1:def 5;
+                   set X = f.x;
+                    A33: F.X in X by A15,A32,ORDERS_1:def 1;
+                      f.x = {C : x in C & C in Z} by A14,A31;
+                   then A34: ex C st F.X = C & x in C & C in Z
+                                                                         by A33
+;
+                      F.X in S by A20,A32,FUNCT_1:def 5;
+                 hence x in union S by A34,TARSKI:def 4;
+                end;
+               then l is Linear_Combination of B by A29,RLVECT_2:def 8;
+            hence thesis by A11,A12,A30,Def1;
+           end;
+       hence union Z in Q by A2,A8;
+      end;
+     then consider X such that A35: X in Q and
+      A36: for Z st Z in Q & Z <> X holds not X c= Z by A3,ORDERS_2:79;
+     consider B such that A37: B = X and A38: B c= A and
+                          A39: B is linearly-independent by A2,A35;
+    take B;
+    thus B c= A & B is linearly-independent by A38,A39;
+     assume A40: Lin(B) <> V;
+         now assume A41: for v st v in A holds v in Lin(B);
+           now let v;
+           assume v in Lin(A);
+            then consider l such that A42: v = Sum(l) by Th17;
+             A43: Carrier(l) c= the carrier of Lin(B)
+              proof let x;
+                assume A44: x in Carrier(l);
+                 then reconsider a = x as VECTOR of V;
+                    Carrier(l) c= A by RLVECT_2:def 8;
+                  then a in Lin(B) by A41,A44;
+               hence thesis by RLVECT_1:def 1;
+              end;
+              reconsider F = the carrier of Lin(B) as
+                                    Subset of V by RLSUB_1:def 2
+;
+             reconsider l as Linear_Combination of F by A43,RLVECT_2:def 8;
+                Sum(l) = v by A42;
+              then v in Lin(F) by Th17;
+          hence v in Lin(B) by Th21;
+         end;
+         then Lin(A) is Subspace of Lin(B) by RLSUB_1:37;
+        hence contradiction by A1,A40,RLSUB_1:34;
+       end;
+      then consider v such that A45: v in A and A46: not v in Lin(B);
+       A47: B \/ {v} is linearly-independent
+        proof let l be Linear_Combination of B \/ {v};
+          assume A48: Sum(l) = 0.V;
+             now per cases;
+            suppose A49: v in Carrier(l);
+            deffunc F(VECTOR of V)=l.$1;
+              consider f such that A50: f.v = 0 and
+               A51: for u st u <> v holds f.u = F(u) from LambdaSep1;
+              reconsider f as Element of Funcs(the carrier of V, REAL)
+                                                              by FUNCT_2:11;
+                 now let u;
+                 assume not u in Carrier(l) \ {v};
+                  then not u in Carrier(l) or u in {v} by XBOOLE_0:def 4;
+                  then (l.u = 0 & u <> v) or u = v by RLVECT_2:28,TARSKI:def 1
+;
+                hence f.u = 0 by A50,A51;
+               end;
+              then reconsider f as Linear_Combination of V by RLVECT_2:def 5;
+                 Carrier(f) c= B
+                proof let x;
+                  assume x in Carrier(f);
+                    then x in {u : f.u <> 0} by RLVECT_2:def 6;
+                   then consider u such that A52: u = x and A53: f.u <> 0;
+                      f.u = l.u by A50,A51,A53;
+                    then u in {v1 : l.v1 <> 0} by A53;
+                    then u in Carrier(l) & Carrier(l) c= B \/ {v}
+                                              by RLVECT_2:def 6,def 8
+;
+                    then u in B or u in {v} by XBOOLE_0:def 2;
+                 hence thesis by A50,A52,A53,TARSKI:def 1;
+                end;
+              then reconsider f as Linear_Combination of B by RLVECT_2:def 8;
+              deffunc G(VECTOR of V)= 0;
+              consider g such that A54: g.v = - l.v and
+               A55: for u st u <> v holds g.u = G(u)  from LambdaSep1;
+              reconsider g as Element of Funcs(the carrier of V, REAL)
+                                                              by FUNCT_2:11;
+                 now let u;
+                 assume not u in {v};
+                  then u <> v by TARSKI:def 1;
+                hence g.u = 0 by A55;
+               end;
+              then reconsider g as Linear_Combination of V by RLVECT_2:def 5;
+                 Carrier(g) c= {v}
+                proof let x;
+                  assume x in Carrier(g);
+                    then x in {u : g.u <> 0} by RLVECT_2:def 6;
+                   then ex u st x = u & g.u <> 0;
+                    then x = v by A55;
+                 hence thesis by TARSKI:def 1;
+                end;
+              then reconsider g as Linear_Combination of {v} by RLVECT_2:def 8;
+               A56: f - g = l
+                proof let u;
+                    now per cases;
+                   suppose A57: v = u;
+                    thus (f - g).u = f.u - g.u by RLVECT_2:79
+                            .= 0 + (- (- l.v)) by A50,A54,A57,XCMPLX_0:def 8
+                                  .= l.u by A57;
+                   suppose A58: v <> u;
+                    thus (f - g).u = f.u - g.u by RLVECT_2:79
+                                  .= l.u - g.u by A51,A58
+                                  .= l.u - 0 by A55,A58
+                                  .= l.u;
+                  end;
+                 hence thesis;
+                end;
+               A59: Sum(g) = (- l.v) * v by A54,RLVECT_2:50;
+                 0.V = Sum(f) - Sum(g) by A48,A56,Th4;
+               then Sum(f) = 0.V + Sum(g) by RLSUB_2:78
+                        .= (- l.v) * v by A59,RLVECT_1:10;
+               then A60: (- l.v) * v in Lin(B) by Th17;
+                 l.v <> 0 by A49,RLVECT_2:28;
+               then A61: - l.v <> 0 by XCMPLX_1:135;
+                 (- l.v)" * ((- l.v) * v) = (- l.v)" * (- l.v) * v by RLVECT_1:
+def 9
+                                       .= 1 * v by A61,XCMPLX_0:def 7
+                                       .= v by RLVECT_1:def 9;
+             hence thesis by A46,A60,RLSUB_1:29;
+            suppose A62: not v in Carrier(l);
+                Carrier(l) c= B
+               proof let x;
+                 assume A63: x in Carrier(l);
+                    Carrier(l) c= B \/ {v} by RLVECT_2:def 8;
+                  then x in B or x in {v} by A63,XBOOLE_0:def 2;
+                hence thesis by A62,A63,TARSKI:def 1;
+               end;
+              then l is Linear_Combination of B by RLVECT_2:def 8;
+             hence thesis by A39,A48,Def1;
+           end;
+         hence thesis;
+        end;
+         v in {v} by TARSKI:def 1;
+       then A64: v in B \/ {v} & not v in B by A46,Th18,XBOOLE_0:def 2;
+
+       A65: B c= B \/ {v} by XBOOLE_1:7;
+         {v} c= A by A45,ZFMISC_1:37;
+       then B \/ {v} c= A by A38,XBOOLE_1:8;
+       then B \/ {v} in Q by A2,A47;
+    hence contradiction by A36,A37,A64,A65;
+   end;
+
+definition let V be RealLinearSpace;
+ mode Basis of V -> Subset of V means
+  :Def3: it is linearly-independent & Lin(it) = the RLSStruct of V;
+ existence
+  proof {}(the carrier of V) is linearly-independent by Th8;
+    then ex B being Subset of V st
+     {}(the carrier of V) c= B &
+ B is linearly-independent & Lin(B) = the RLSStruct of V by Th27;
+   hence thesis;
+  end;
+end;
+
+reserve I for Basis of V;
+
+canceled 3;
+
+theorem
+  for V being strict RealLinearSpace,A being Subset of V holds
+ A is linearly-independent implies ex I being Basis of V st A c= I
+  proof let V be strict RealLinearSpace,A be Subset of V;
+    assume A is linearly-independent;
+    then consider B being Subset of V such that A1: A c= B and
+     A2: B is linearly-independent & Lin(B) = V by Th27;
+    reconsider B as Basis of V by A2,Def3;
+   take B;
+   thus thesis by A1;
+  end;
+
+theorem
+   Lin(A) = V implies ex I st I c= A
+  proof assume Lin(A) = V;
+    then consider B such that A1: B c= A and
+     A2: B is linearly-independent & Lin(B) = V by Th28;
+    reconsider B as Basis of V by A2,Def3;
+   take B;
+   thus thesis by A1;
+  end;
+
+::
+::  Auxiliary theorems.
+::
+
+theorem
+   Z <> {} & Z is finite &
+  (for X,Y st X in Z & Y in Z holds X c= Y or Y c= X) implies union Z in Z
+    by Lm10;
+
+theorem
+   not {} in M implies dom CF = M & rng CF c= union M by Lm7;
+
+theorem
+   x in (0).V iff x = 0.V by Lm2;
+
+theorem
+   W1 is Subspace of W3 implies W1 /\ W2 is Subspace of W3 by Lm3;
+
+theorem
+   W1 is Subspace of W2 & W1 is Subspace of W3 implies
+  W1 is Subspace of W2 /\ W3 by Lm4;
+
+theorem
+   W1 is Subspace of W3 & W2 is Subspace of W3 implies
+  W1 + W2 is Subspace of W3 by Lm6;
+
+theorem
+   W1 is Subspace of W2 implies W1 is Subspace of W2 + W3 by Lm5;
+
+theorem
+   f (#) (F ^ G) = (f (#) F) ^ (f (#) G) by Lm1;

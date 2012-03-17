@@ -1,0 +1,2387 @@
+:: The SCMPDS Computer and the Basic Semantics of Its Instructions
+::  by JingChao Chen
+::
+:: Received June 15, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, INT_1, AMI_2, GR_CY_1, SCMPDS_1, RELAT_1, FUNCT_1, BOOLE,
+      CAT_1, FINSET_1, AMI_3, AMI_5, ORDINAL2, FINSEQ_1, MCART_1, ABSVALUE,
+      FUNCT_2, CARD_3, ARYTM_1, NAT_1, CQC_LANG, FUNCT_4, SCMPDS_2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL2, NUMBERS, XCMPLX_0,
+      XREAL_0, FUNCT_1, FUNCT_2, INT_1, NAT_1, MCART_1, CQC_LANG, CARD_3,
+      STRUCT_0, GR_CY_1, RELAT_1, FUNCT_4, FINSET_1, FINSEQ_1, AMI_1, AMI_2,
+      SCMPDS_1, AMI_3, GROUP_1, AMI_5;
+ constructors DOMAIN_1, NAT_1, CAT_2, SCMPDS_1, AMI_5, MEMBERED;
+ clusters INT_1, AMI_1, RELSET_1, AMI_2, CQC_LANG, SCMPDS_1, XBOOLE_0,
+      FRAENKEL, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions AMI_1, TARSKI;
+ theorems REAL_1, NAT_1, FUNCT_1, TARSKI, ZFMISC_1, ENUMSET1, AMI_2, CQC_LANG,
+      FUNCT_4, AMI_1, CARD_3, FUNCT_2, MCART_1, INT_1, GR_CY_1, SCMPDS_1,
+      AMI_3, AMI_5, ABSVALUE, NAT_2, ORDINAL2, STRUCT_0, XBOOLE_0, XBOOLE_1,
+      RELAT_1, XCMPLX_1;
+ schemes FUNCT_2;
+
+begin :: The SCMPDS Computer
+
+reserve x for set,
+        i,j,k for Nat;
+definition
+ func SCMPDS -> strict AMI-Struct over { INT } equals
+:Def1:  AMI-Struct(#NAT,0,SCM-Instr-Loc,Segm 14,
+             SCMPDS-Instr,SCMPDS-OK,SCMPDS-Exec#);
+ correctness;
+end;
+
+definition
+ cluster SCMPDS -> non empty non void;
+ coherence by Def1,AMI_1:def 3,STRUCT_0:def 1;
+end;
+
+theorem Th1:
+  (ex k st x = 2*k+2) iff x in SCM-Instr-Loc
+proof
+  thus (ex k st x = 2*k+2) implies x in SCM-Instr-Loc
+  proof given k such that
+    A1: x=2*k+2;
+      x=2*k+2*1 by A1;
+    then x = 2*(k + 1) & k + 1 > 0 by NAT_1:19,XCMPLX_1:8;
+    hence thesis by AMI_2:def 3;
+  end;
+  assume x in SCM-Instr-Loc;
+    then consider k such that
+    A2:x = 2*k & k > 0 by AMI_2:def 3;
+    consider j such that
+ A3:k=j+1 by A2,NAT_1:22;
+ A4:x=2*j+2*1 by A2,A3,XCMPLX_1:8;
+    take j;
+    thus thesis by A4;
+end;
+
+theorem Th2:
+ SCMPDS is data-oriented
+proof
+  set A = SCMPDS;
+  let x be set;
+  assume A1: x in (the Object-Kind of A)"{ the Instructions of A };
+  then reconsider x as Nat by Def1,FUNCT_2:46;
+    SCMPDS-OK.x in { SCMPDS-Instr } by A1,Def1,FUNCT_2:46;
+  then SCMPDS-OK.x = SCMPDS-Instr by TARSKI:def 1;
+  then consider k such that
+A2: x = 2*k+2 by SCMPDS_1:20;
+   thus thesis by A2,Def1,Th1;
+end;
+
+theorem Th3:
+ SCMPDS is definite
+proof let l be Instruction-Location of SCMPDS;
+  reconsider L = l as Element of SCM-Instr-Loc by Def1;
+ thus ObjectKind l = SCMPDS-OK.L by Def1,AMI_1:def 6
+  .= the Instructions of SCMPDS by Def1,SCMPDS_1:22;
+end;
+
+definition
+ cluster SCMPDS -> IC-Ins-separated data-oriented definite;
+ coherence
+  proof
+    SCMPDS is IC-Ins-separated
+ proof
+A1: IC SCMPDS = 0 by Def1,AMI_1:def 5;
+      ObjectKind IC SCMPDS
+     = SCMPDS-OK.IC SCMPDS by Def1,AMI_1:def 6
+    .= the Instruction-Locations of SCMPDS by A1,Def1,SCMPDS_1:def 4;
+  hence thesis by AMI_1:def 11;
+ end;
+   hence thesis by Th2,Th3;
+  end;
+end;
+
+theorem
+    the Instruction-Locations of SCMPDS <> INT &
+   the Instructions of SCMPDS <> INT &
+   the Instruction-Locations of SCMPDS <> the Instructions of SCMPDS
+   by Def1,AMI_2:6,SCMPDS_1:17;
+
+theorem Th5:
+  NAT = { 0 } \/ SCM-Data-Loc \/ SCM-Instr-Loc
+proof
+  set D1=SCM-Data-Loc,
+      D2=SCM-Instr-Loc;
+A1: now let x;
+    assume x in NAT;
+    then x= 0 or (ex j st x = 2*j+1) or (ex j st x = 2*j+2) by SCMPDS_1:14;
+    then x in{0} or x in D1 or x in D2 by Th1,AMI_2:def 2,TARSKI:def 1;
+    then x in {0} \/ D1 or x in D2 by XBOOLE_0:def 2;
+    hence x in {0} \/ D1 \/ D2 by XBOOLE_0:def 2;
+  end;
+    now
+    let x;
+    assume x in {0} \/ D1 \/ D2;
+    then A2: x in {0} \/ D1 or x in D2 by XBOOLE_0:def 2;
+    per cases by A2,XBOOLE_0:def 2;
+    suppose x in {0};
+      then x=0 by TARSKI:def 1;
+      hence x in NAT;
+    suppose x in D1;
+      hence x in NAT;
+    suppose x in D2;
+      hence x in NAT;
+   end;
+   hence thesis by A1,TARSKI:2;
+end;
+
+reserve s for State of SCMPDS;
+
+theorem Th6:
+ IC SCMPDS = 0 by Def1,AMI_1:def 5;
+
+theorem Th7:
+ for S being SCMPDS-State st S = s holds IC s = IC S
+ proof let S be SCMPDS-State;
+  assume S = s;
+  hence IC s = S.0 by Th6,AMI_1:def 15
+       .= IC S by SCMPDS_1:def 5;
+ end;
+
+begin :: The Memory Structure
+
+definition
+ mode Int_position -> Object of SCMPDS means
+:Def2: it in SCM-Data-Loc;
+ existence
+  proof consider x being Element of SCM-Data-Loc;
+    reconsider x as Object of SCMPDS by Def1;
+   take x;
+   thus thesis;
+  end;
+end;
+
+
+canceled;
+
+theorem
+  x in SCM-Data-Loc implies x is Int_position by Def1,Def2;
+
+theorem
+   SCM-Data-Loc misses the Instruction-Locations of SCMPDS by Def1,AMI_5:33;
+
+theorem
+   the Instruction-Locations of SCMPDS is infinite by Def1,AMI_3:def 1,AMI_5:32
+;
+
+theorem
+   for I being Int_position holds I is Data-Location
+proof let I be Int_position;
+   I in SCM-Data-Loc by Def2; hence I is Data-Location by AMI_3:def 1,def 2;
+end;
+
+theorem Th13:
+ for l being Int_position holds ObjectKind l = INT
+proof let l be Int_position;
+A1:  l in SCM-Data-Loc by Def2;
+     thus ObjectKind l = (the Object-Kind of SCMPDS).l by AMI_1:def 6
+     .= INT by A1,Def1,SCMPDS_1:21;
+end;
+
+theorem
+   for x being set st x in SCM-Instr-Loc
+  holds x is Instruction-Location of SCMPDS by Def1;
+
+begin :: The Instruction Structure
+reserve
+        d1,d2,d3,d4,d5 for Element of SCM-Data-Loc,
+        k1,k2,k3,k4,k5,k6 for Integer;
+
+definition let I be Instruction of SCMPDS;
+ cluster InsCode I -> natural;
+ coherence
+  proof
+     InsCode I in Segm 14 by Def1;
+   hence thesis by ORDINAL2:def 21;
+  end;
+end;
+
+reserve I for Instruction of SCMPDS;
+
+  set S1={ [0,<*k1*>] where k1 is Element of INT: not contradiction},
+      S2={ [1,<*d1*>] : not contradiction},
+      S3={ [I1,<*d2,k2*>] where I1 is Element of Segm 14,
+                    d2 is Element of SCM-Data-Loc,
+                    k2 is Element of INT : I1 in {2,3}},
+      S4={ [I2,<*d3,k3,k4*>] where I2 is Element of Segm 14,
+                    d3 is Element of SCM-Data-Loc,
+                    k3,k4 is Element of INT: I2 in {4,5,6,7,8} },
+      S5={ [I3,<*d4,d5,k5,k6*>] where I3 is Element of Segm 14,
+                    d4,d5 is Element of SCM-Data-Loc,
+                    k5,k6 is Element of INT: I3 in {9,10,11,12,13} };
+Lm1: I in SCMPDS-Instr implies I in S1 or I in S2 or I in S3 or
+      I in S4 or I in S5
+proof
+    assume I in SCMPDS-Instr;
+    then I in S1 \/ S2 \/ S3 \/ S4 or I in S5 by SCMPDS_1:def 3,XBOOLE_0:def 2
+;
+    then I in S1 \/ S2 \/ S3 or I in S4 or I in S5 by XBOOLE_0:def 2;
+    then I in S1 \/ S2 or I in S3 or I in S4 or I in S5 by XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 2;
+end;
+
+theorem
+   for I being Instruction of SCMPDS holds InsCode I <= 13
+proof let I be Instruction of SCMPDS;
+A1:  InsCode I = I`1 by AMI_5:def 1;
+    per cases by Def1,Lm1;
+    suppose I in S1;
+      then consider k1 being Element of INT such that
+A2:   I=[0,<*k1*>];
+        I`1=0 by A2,MCART_1:7;
+      hence InsCode I <= 13 by A1;
+    suppose I in S2;
+      then consider d1 such that
+A3:   I=[1,<*d1*>];
+        I`1=1 by A3,MCART_1:7;
+      hence InsCode I <= 13 by A1;
+    suppose I in S3;
+      then consider I1 being Element of Segm 14,
+               d1 being Element of SCM-Data-Loc,
+               k1 being Element of INT such that
+A4:   I = [I1,<*d1,k1*>] and
+A5:   I1 in {2,3};
+A6:   I1 = 2 or I1 = 3 by A5,TARSKI:def 2;
+        I`1 = I1 by A4,MCART_1:7;
+      hence InsCode I <= 13 by A1,A6;
+    suppose I in S4;
+      then consider I1 being Element of Segm 14,
+               d1 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A7:   I = [I1,<*d1,k1,k2*>] and
+A8:   I1 in {4,5,6,7,8};
+A9:   I1 = 4 or I1 = 5 or I1=6 or I1=7 or I1=8 by A8,ENUMSET1:23;
+        I`1 = I1 by A7,MCART_1:7;
+      hence InsCode I <= 13 by A1,A9;
+    suppose I in S5;
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A10:   I = [I1,<*d1,d2,k1,k2*>] and
+A11:   I1 in {9,10,11,12,13};
+A12:   I1 = 9 or I1 = 10 or I1=11 or I1=12 or I1=13 by A11,ENUMSET1:23;
+        I`1 = I1 by A10,MCART_1:7;
+      hence InsCode I <= 13 by A1,A12;
+end;
+
+definition let s be State of SCMPDS, d be Int_position;
+ redefine func s.d -> Integer;
+ coherence
+  proof
+    reconsider S = s as SCMPDS-State by Def1;
+    reconsider D = d as Element of SCM-Data-Loc by Def2;
+      S.D = s.d;
+   hence thesis;
+  end;
+end;
+
+definition let m,n be Integer;
+ canceled;
+
+ func DataLoc(m,n) -> Int_position equals
+:Def4:   2*abs(m+n)+1;
+coherence
+proof
+  reconsider mn=abs(m+n) as Nat;
+    2*mn+1 in SCM-Data-Loc by AMI_2:def 2; hence thesis by Def1,Def2;
+  end;
+end;
+
+theorem Th16:
+ [0,<*k1*>] in SCMPDS-Instr
+proof
+     k1 is Element of INT by INT_1:def 2;
+   then [0,<*k1*>] in S1;
+   then [0,<*k1*>] in S1 \/ S2 by XBOOLE_0:def 2;
+   then [0,<*k1*>] in S1 \/ S2 \/ S3 by XBOOLE_0:def 2;
+   then [0,<*k1*>] in S1 \/ S2 \/ S3 \/ S4 by XBOOLE_0:def 2;
+  hence thesis by SCMPDS_1:def 3,XBOOLE_0:def 2;
+end;
+
+theorem Th17:
+ [1,<*d1*>] in SCMPDS-Instr
+proof
+     [1,<*d1*>] in S2;
+   then [1,<*d1*>] in S1 \/ S2 by XBOOLE_0:def 2;
+   then [1,<*d1*>] in S1 \/ S2 \/ S3 by XBOOLE_0:def 2;
+   then [1,<*d1*>] in S1 \/ S2 \/ S3 \/ S4 by XBOOLE_0:def 2;
+  hence thesis by SCMPDS_1:def 3,XBOOLE_0:def 2;
+end;
+
+theorem Th18:
+ x in { 2,3 } implies [x,<*d2,k2*>] in SCMPDS-Instr
+proof assume
+A1: x in { 2,3 };
+    then x = 2 or x = 3 by TARSKI:def 2;
+   then reconsider x as Element of Segm 14 by GR_CY_1:10;
+     k2 is Element of INT by INT_1:def 2;
+   then [x,<*d2,k2*>] in S3 by A1;
+   then [x,<*d2,k2*>] in S1 \/ S2 \/ S3 by XBOOLE_0:def 2;
+   then [x,<*d2,k2*>] in S1 \/ S2 \/ S3 \/ S4 by XBOOLE_0:def 2;
+  hence thesis by SCMPDS_1:def 3,XBOOLE_0:def 2;
+end;
+
+theorem Th19:
+ x in { 4,5,6,7,8 } implies [x,<*d3,k3,k4*>] in SCMPDS-Instr
+ proof assume
+A1: x in { 4,5,6,7,8 };
+    then x = 4 or x = 5 or x=6 or x=7 or x=8 by ENUMSET1:23;
+    then reconsider x as Element of Segm 14 by GR_CY_1:10;
+     k3 is Element of INT & k4 is Element of INT by INT_1:def 2;
+   then [x,<*d3,k3,k4*>] in S4 by A1;
+   then [x,<*d3,k3,k4*>] in S1 \/ S2 \/ S3 \/ S4 by XBOOLE_0:def 2;
+   hence thesis by SCMPDS_1:def 3,XBOOLE_0:def 2;
+end;
+
+theorem Th20:
+ x in { 9,10,11,12,13 } implies [x,<*d4,d5,k5,k6*>] in SCMPDS-Instr
+ proof assume
+A1: x in { 9,10,11,12,13 };
+    then x = 9 or x=10 or x=11 or x=12 or x=13 by ENUMSET1:23;
+    then reconsider x as Element of Segm 14 by GR_CY_1:10;
+     k5 is Element of INT & k6 is Element of INT by INT_1:def 2;
+   then [x,<*d4,d5,k5,k6*>] in S5 by A1; hence thesis by SCMPDS_1:def 3,
+XBOOLE_0:def 2;
+end;
+
+reserve a,b,c for Int_position;
+
+definition let k1;
+ func goto k1 -> Instruction of SCMPDS equals
+:Def5: [ 0, <*k1*>];
+ correctness
+  proof
+       [ 0, <*k1*>] in SCMPDS-Instr by Th16;
+   hence thesis by Def1;
+  end;
+end;
+
+definition let a;
+ func return a -> Instruction of SCMPDS equals
+:Def6: [ 1, <*a*>];
+ correctness
+  proof
+    reconsider v = a as Element of SCM-Data-Loc by Def2;
+       [ 1, <*v*>] in SCMPDS-Instr by Th17;
+   hence thesis by Def1;
+  end;
+end;
+
+definition let a,k1;
+ func a := k1 -> Instruction of SCMPDS equals
+:Def7: [ 2, <*a,k1*>];
+ correctness
+  proof
+    reconsider v = a as Element of SCM-Data-Loc by Def2;
+       2 in {2,3} by TARSKI:def 2;
+     then [ 2, <*v,k1*>] in SCMPDS-Instr by Th18;
+   hence thesis by Def1;
+  end;
+
+ func saveIC(a,k1) -> Instruction of SCMPDS equals
+:Def8: [ 3, <*a,k1*>];
+ correctness
+  proof
+    reconsider v = a as Element of SCM-Data-Loc by Def2;
+       3 in {2,3} by TARSKI:def 2;
+     then [ 3, <*v,k1*>] in SCMPDS-Instr by Th18;
+   hence thesis by Def1;
+  end;
+end;
+
+definition let a,k1,k2;
+ func (a,k1)<>0_goto k2 -> Instruction of SCMPDS equals
+:Def9: [ 4, <*a,k1,k2*>];
+ correctness
+  proof
+    reconsider v = a as Element of SCM-Data-Loc by Def2;
+       4 in { 4,5,6,7,8 } by ENUMSET1:24;
+     then [ 4, <*v,k1,k2*>] in SCMPDS-Instr by Th19;
+   hence thesis by Def1;
+  end;
+
+ func (a,k1)<=0_goto k2 -> Instruction of SCMPDS equals
+:Def10: [ 5, <*a,k1,k2*>];
+ correctness
+  proof
+    reconsider v = a as Element of SCM-Data-Loc by Def2;
+       5 in { 4,5,6,7,8 } by ENUMSET1:24;
+     then [ 5, <*v,k1,k2*>] in SCMPDS-Instr by Th19;
+   hence thesis by Def1;
+  end;
+
+  func (a,k1)>=0_goto k2 -> Instruction of SCMPDS equals
+:Def11: [ 6, <*a,k1,k2*>];
+ correctness
+  proof
+    reconsider v = a as Element of SCM-Data-Loc by Def2;
+       6 in { 4,5,6,7,8 } by ENUMSET1:24;
+     then [ 6, <*v,k1,k2*>] in SCMPDS-Instr by Th19;
+   hence thesis by Def1;
+  end;
+
+ func (a,k1) := k2 -> Instruction of SCMPDS equals
+:Def12: [ 7, <*a,k1,k2*>];
+ correctness
+  proof
+    reconsider v = a as Element of SCM-Data-Loc by Def2;
+       7 in { 4,5,6,7,8 } by ENUMSET1:24;
+     then [ 7, <*v,k1,k2*>] in SCMPDS-Instr by Th19;
+   hence thesis by Def1;
+  end;
+
+ func AddTo(a,k1,k2) -> Instruction of SCMPDS equals
+:Def13: [ 8, <*a,k1,k2*>];
+ correctness
+  proof
+    reconsider v = a as Element of SCM-Data-Loc by Def2;
+       8 in { 4,5,6,7,8 } by ENUMSET1:24;
+     then [ 8, <*v,k1,k2*>] in SCMPDS-Instr by Th19;
+   hence thesis by Def1;
+  end;
+end;
+
+definition let a,b,k1,k2;
+ func AddTo(a,k1,b,k2) -> Instruction of SCMPDS equals
+:Def14: [ 9, <*a,b,k1,k2*>];
+ correctness
+  proof
+    reconsider v1 = a, v2 = b as Element of SCM-Data-Loc by Def2;
+       9 in { 9,10,11,12,13 } by ENUMSET1:24;
+     then [ 9, <*v1,v2,k1,k2*>] in SCMPDS-Instr by Th20;
+   hence thesis by Def1;
+  end;
+
+ func SubFrom(a,k1,b,k2) -> Instruction of SCMPDS equals
+:Def15: [ 10, <*a,b,k1,k2*>];
+ correctness
+  proof
+    reconsider v1 = a, v2 = b as Element of SCM-Data-Loc by Def2;
+       10 in { 9,10,11,12,13 } by ENUMSET1:24;
+     then [ 10, <*v1,v2,k1,k2*>] in SCMPDS-Instr by Th20;
+   hence thesis by Def1;
+  end;
+
+ func MultBy(a,k1,b,k2) -> Instruction of SCMPDS equals
+:Def16: [ 11, <*a,b,k1,k2*>];
+ correctness
+  proof
+    reconsider v1 = a, v2 = b as Element of SCM-Data-Loc by Def2;
+       11 in { 9,10,11,12,13 } by ENUMSET1:24;
+     then [ 11, <*v1,v2,k1,k2*>] in SCMPDS-Instr by Th20;
+   hence thesis by Def1;
+  end;
+
+ func Divide(a,k1,b,k2) -> Instruction of SCMPDS equals
+:Def17: [ 12, <*a,b,k1,k2*>];
+ correctness
+  proof
+    reconsider v1 = a, v2 = b as Element of SCM-Data-Loc by Def2;
+       12 in { 9,10,11,12,13 } by ENUMSET1:24;
+     then [ 12, <*v1,v2,k1,k2*>] in SCMPDS-Instr by Th20;
+   hence thesis by Def1;
+  end;
+
+  func (a,k1) := (b,k2) -> Instruction of SCMPDS equals
+:Def18: [ 13, <*a,b,k1,k2*>];
+ correctness
+  proof
+    reconsider v1 = a, v2 = b as Element of SCM-Data-Loc by Def2;
+       13 in { 9,10,11,12,13 } by ENUMSET1:24;
+     then [ 13, <*v1,v2,k1,k2*>] in SCMPDS-Instr by Th20;
+   hence thesis by Def1;
+  end;
+end;
+
+theorem
+    InsCode (goto k1) = 0
+proof
+A1: goto k1 = [0,<*k1*>] by Def5;
+ thus InsCode(goto k1) = (goto k1)`1 by AMI_5:def 1
+      .= 0 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode (return a) = 1
+proof
+A1: return a = [ 1, <*a*>] by Def6;
+ thus InsCode(return a) = (return a)`1 by AMI_5:def 1
+      .= 1 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode (a := k1) = 2
+proof
+A1: a := k1 = [ 2, <*a,k1*>] by Def7;
+ thus InsCode(a := k1) = (a := k1)`1 by AMI_5:def 1
+      .= 2 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode (saveIC(a,k1)) = 3
+proof
+A1: saveIC(a,k1) = [ 3, <*a,k1*>] by Def8;
+ thus InsCode(saveIC(a,k1)) = (saveIC(a,k1))`1 by AMI_5:def 1
+      .= 3 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode ((a,k1)<>0_goto k2) = 4
+proof
+A1: (a,k1)<>0_goto k2 = [ 4, <*a,k1,k2*>] by Def9;
+ thus InsCode((a,k1)<>0_goto k2) = ((a,k1)<>0_goto k2)`1 by AMI_5:def 1
+      .= 4 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode ((a,k1)<=0_goto k2) = 5
+proof
+A1: (a,k1)<=0_goto k2 = [ 5, <*a,k1,k2*>] by Def10;
+ thus InsCode((a,k1)<=0_goto k2) = ((a,k1)<=0_goto k2)`1 by AMI_5:def 1
+      .= 5 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode ((a,k1)>=0_goto k2) = 6
+proof
+A1: (a,k1)>=0_goto k2 = [ 6, <*a,k1,k2*>] by Def11;
+ thus InsCode((a,k1)>=0_goto k2) = ((a,k1)>=0_goto k2)`1 by AMI_5:def 1
+      .= 6 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode ((a,k1) := k2) = 7
+proof
+A1: (a,k1) := k2 = [ 7, <*a,k1,k2*>] by Def12;
+ thus InsCode((a,k1) := k2) = ((a,k1) := k2)`1 by AMI_5:def 1
+      .= 7 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode (AddTo(a,k1,k2)) = 8
+proof
+A1: AddTo(a,k1,k2) = [ 8, <*a,k1,k2*>] by Def13;
+ thus InsCode(AddTo(a,k1,k2)) = (AddTo(a,k1,k2))`1 by AMI_5:def 1
+      .= 8 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode (AddTo(a,k1,b,k2)) = 9
+proof
+A1: AddTo(a,k1,b,k2) = [ 9, <*a,b,k1,k2*>] by Def14;
+ thus InsCode(AddTo(a,k1,b,k2)) = (AddTo(a,k1,b,k2))`1 by AMI_5:def 1
+      .= 9 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode (SubFrom(a,k1,b,k2)) = 10
+proof
+A1: SubFrom(a,k1,b,k2) = [ 10, <*a,b,k1,k2*>] by Def15;
+ thus InsCode(SubFrom(a,k1,b,k2)) = (SubFrom(a,k1,b,k2))`1 by AMI_5:def 1
+      .= 10 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode (MultBy(a,k1,b,k2)) = 11
+proof
+A1: MultBy(a,k1,b,k2) = [ 11, <*a,b,k1,k2*>] by Def16;
+ thus InsCode(MultBy(a,k1,b,k2)) = (MultBy(a,k1,b,k2))`1 by AMI_5:def 1
+      .= 11 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode (Divide(a,k1,b,k2)) = 12
+proof
+A1: Divide(a,k1,b,k2) = [ 12, <*a,b,k1,k2*>] by Def17;
+ thus InsCode(Divide(a,k1,b,k2)) = (Divide(a,k1,b,k2))`1 by AMI_5:def 1
+      .= 12 by A1,MCART_1:7;
+end;
+
+theorem
+    InsCode ((a,k1) := (b,k2)) = 13
+proof
+A1: (a,k1) := (b,k2) = [ 13, <*a,b,k1,k2*>] by Def18;
+ thus InsCode((a,k1) := (b,k2)) = ((a,k1) := (b,k2))`1 by AMI_5:def 1
+      .= 13 by A1,MCART_1:7;
+end;
+
+Lm2:
+   I in { [0,<*k1*>] where k1 is Element of INT: not contradiction } implies
+    InsCode I =0
+proof
+    assume I in { [0,<*k1*>]where k1 is Element of INT:not contradiction };
+    then consider k1 being Element of INT such that
+A1: I=[0,<*k1*>];
+      I`1 = 0 by A1,MCART_1:7;
+    hence thesis by AMI_5:def 1;
+end;
+
+Lm3:
+   I in { [1,<*d1*>] : not contradiction } implies InsCode I =1
+proof
+    assume I in { [1,<*d1*>]:not contradiction };
+    then consider d1 such that
+A1: I=[1,<*d1*>];
+      I`1 = 1 by A1,MCART_1:7;
+    hence thesis by AMI_5:def 1;
+end;
+
+Lm4:
+ I in { [I1,<*d1,k1*>] where I1 is Element of Segm 14,
+                    d1 is Element of SCM-Data-Loc,
+                    k1 is Element of INT : I1 in { 2, 3} } implies
+                    InsCode I =2 or InsCode I=3
+proof
+    assume I in { [I1,<*d1,k1*>] where I1 is Element of Segm 14,
+                    d1 is Element of SCM-Data-Loc,
+                    k1 is Element of INT :I1 in { 2, 3}};
+      then consider I1 being Element of Segm 14,
+               d1 being Element of SCM-Data-Loc,
+               k1 being Element of INT such that
+A1: I=[I1,<*d1,k1*>] & I1 in { 2, 3};
+       I1 = 2 or I1 = 3 by A1,TARSKI:def 2;
+    then I`1 = 2 or I`1=3 by A1,MCART_1:7;
+    hence thesis by AMI_5:def 1;
+end;
+
+Lm5:
+ I in { [I1,<*d1,k1,k2*>] where I1 is Element of Segm 14,
+                    d1 is Element of SCM-Data-Loc,
+                    k1,k2 is Element of INT: I1 in { 4,5,6,7,8} } implies
+ InsCode I =4 or InsCode I=5 or InsCode I =6 or InsCode I=7 or InsCode I =8
+proof
+    assume I in { [I1,<*d1,k1,k2*>] where I1 is Element of Segm 14,
+                    d1 is Element of SCM-Data-Loc,
+                    k1,k2 is Element of INT:I1 in { 4,5,6,7,8}};
+    then consider I1 being Element of Segm 14,
+             d1 being Element of SCM-Data-Loc,
+             k1,k2 being Element of INT such that
+A1: I=[I1,<*d1,k1,k2*>] & I1 in { 4,5,6,7,8};
+      I1 = 4 or I1 = 5 or I1=6 or I1=7 or I1=8 by A1,ENUMSET1:23;
+    then I`1 = 4 or I`1 = 5 or I`1=6 or I`1=7 or I`1=8 by A1,MCART_1:7;
+    hence thesis by AMI_5:def 1;
+end;
+
+Lm6:
+ I in { [I1,<*d1,d2,k1,k2*>] where I1 is Element of Segm 14,
+                    d1,d2 is Element of SCM-Data-Loc,
+                    k1,k2 is Element of INT: I1 in {9,10,11,12,13} } implies
+ InsCode I =9 or InsCode I=10 or InsCode I =11 or InsCode I=12
+ or InsCode I =13
+proof
+    assume I in { [I1,<*d1,d2,k1,k2*>]where I1 is Element of Segm 14,
+                    d1,d2 is Element of SCM-Data-Loc,
+                    k1,k2 is Element of INT:I1 in {9,10,11,12,13}};
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A1: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13};
+      I1 = 9 or I1 = 10 or I1=11 or I1=12 or I1=13 by A1,ENUMSET1:23;
+    then I`1= 9 or I`1= 10 or I`1=11 or I`1=12 or I`1=13 by A1,MCART_1:7;
+    hence thesis by AMI_5:def 1;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 0
+  holds ex k1 st ins = goto k1
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 0;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+    A3: now assume I in S5; hence contradiction by A1,Lm6;
+   end;
+    A4: now assume I in S4; hence contradiction by A1,Lm5;
+   end;
+    A5: now assume I in S3; hence contradiction by A1,Lm4;
+   end;
+      now assume I in S2; hence contradiction by A1,Lm3;
+   end;
+    then consider k1 being Element of INT such that
+A6: I=[0,<*k1*>] by A2,A3,A4,A5;
+    take k1;
+    thus I= goto k1 by A6,Def5;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 1
+  holds ex a st ins = return a
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 1;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+    A3: now assume I in S5; hence contradiction by A1,Lm6;
+   end;
+    A4: now assume I in S4; hence contradiction by A1,Lm5;
+   end;
+    A5: now assume I in S3; hence contradiction by A1,Lm4;
+   end;
+      now assume I in S1; hence contradiction by A1,Lm2;
+   end;
+    then consider d1 such that
+A6: I=[1,<*d1*>] by A2,A3,A4,A5;
+    reconsider a=d1 as Int_position by Def1,Def2;
+    take a;
+    thus I= return a by A6,Def6;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 2
+  holds ex a,k1 st ins = a := k1
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 2;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+    A3: now assume I in S5; hence contradiction by A1,Lm6;
+   end;
+    A4: now assume I in S4; hence contradiction by A1,Lm5;
+   end;
+    A5: now assume I in S1; hence contradiction by A1,Lm2;
+   end;
+      now assume I in S2; hence contradiction by A1,Lm3;
+   end;
+      then consider I1 being Element of Segm 14,
+               d1 being Element of SCM-Data-Loc,
+               k1 being Element of INT such that
+A6: I=[I1,<*d1,k1*>] & I1 in {2,3} by A2,A3,A4,A5;
+A7: I1=2 or I1=3 by A6,TARSKI:def 2;
+      now assume I1=3;
+        then I`1=3 by A6,MCART_1:7; hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,k1 such that
+A8: I=[ 2, <*d1,k1*>] by A6,A7;
+    reconsider a=d1 as Int_position by Def1,Def2;
+    take a,k1;
+    thus I= a:=k1 by A8,Def7;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 3
+  holds ex a,k1 st ins = saveIC(a,k1)
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 3;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+    A3: now assume I in S5; hence contradiction by A1,Lm6;
+   end;
+    A4: now assume I in S4; hence contradiction by A1,Lm5;
+   end;
+    A5: now assume I in S1; hence contradiction by A1,Lm2;
+   end;
+      now assume I in S2; hence contradiction by A1,Lm3;
+   end;
+      then consider I1 being Element of Segm 14,
+               d1 being Element of SCM-Data-Loc,
+               k1 being Element of INT such that
+A6: I=[I1,<*d1,k1*>] & I1 in {2,3} by A2,A3,A4,A5;
+A7: I1=2 or I1=3 by A6,TARSKI:def 2;
+      now assume I1=2;
+        then I`1=2 by A6,MCART_1:7; hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,k1 such that
+A8: I=[ 3, <*d1,k1*>] by A6,A7;
+    reconsider a=d1 as Int_position by Def1,Def2;
+    take a,k1;
+    thus I= saveIC(a,k1) by A8,Def8;
+end;
+
+Lm7: I in S1 or I in S2 or I in S3 or I in S5 implies
+     InsCode I=0 or InsCode I=1 or InsCode I=2 or InsCode I=3 or
+     InsCode I=9 or InsCode I=10 or InsCode I=11 or InsCode I=12
+     or InsCode I=13
+proof
+   assume A1:I in S1 or I in S2 or I in S3 or I in S5;
+   per cases by A1;
+   suppose I in S1; hence thesis by Lm2;
+   suppose I in S2; hence thesis by Lm3;
+   suppose I in S3; hence thesis by Lm4;
+   suppose I in S5; hence thesis by Lm6;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 4
+  holds ex a,k1,k2 st ins = (a,k1)<>0_goto k2
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 4;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S5; hence contradiction by A1,Lm7;
+    end;
+    then consider I1 being Element of Segm 14,
+             d1 being Element of SCM-Data-Loc,
+             k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A2;
+A4: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A3,ENUMSET1:23;
+      now assume I1=5 or I1=6 or I1=7 or I1=8;
+        then I`1=5 or I`1=6 or I`1=7 or I`1=8 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,k1,k2 such that
+A5: I=[ 4, <*d1,k1,k2*>] by A3,A4;
+    reconsider a=d1 as Int_position by Def1,Def2;
+    take a,k1,k2;
+    thus I= (a,k1)<>0_goto k2 by A5,Def9;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 5
+  holds ex a,k1,k2 st ins = (a,k1)<=0_goto k2
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 5;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S5; hence contradiction by A1,Lm7;
+    end;
+    then consider I1 being Element of Segm 14,
+             d1 being Element of SCM-Data-Loc,
+             k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A2;
+A4: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A3,ENUMSET1:23;
+      now assume I1=4 or I1=6 or I1=7 or I1=8;
+        then I`1=4 or I`1=6 or I`1=7 or I`1=8 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,k1,k2 such that
+A5: I=[ 5, <*d1,k1,k2*>] by A3,A4;
+    reconsider a=d1 as Int_position by Def1,Def2;
+    take a,k1,k2;
+    thus I= (a,k1)<=0_goto k2 by A5,Def10;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 6
+  holds ex a,k1,k2 st ins = (a,k1)>=0_goto k2
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 6;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S5; hence contradiction by A1,Lm7;
+    end;
+    then consider I1 being Element of Segm 14,
+             d1 being Element of SCM-Data-Loc,
+             k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A2;
+A4: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A3,ENUMSET1:23;
+      now assume I1=4 or I1=5 or I1=7 or I1=8;
+        then I`1=4 or I`1=5 or I`1=7 or I`1=8 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,k1,k2 such that
+A5: I=[ 6, <*d1,k1,k2*>] by A3,A4;
+    reconsider a=d1 as Int_position by Def1,Def2;
+    take a,k1,k2;
+    thus I= (a,k1)>=0_goto k2 by A5,Def11;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 7
+  holds ex a,k1,k2 st ins = (a,k1) := k2
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 7;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S5; hence contradiction by A1,Lm7;
+    end;
+    then consider I1 being Element of Segm 14,
+             d1 being Element of SCM-Data-Loc,
+             k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A2;
+A4: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A3,ENUMSET1:23;
+      now assume I1=4 or I1=5 or I1=6 or I1=8;
+        then I`1=4 or I`1=5 or I`1=6 or I`1=8 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,k1,k2 such that
+A5: I=[ 7, <*d1,k1,k2*>] by A3,A4;
+    reconsider a=d1 as Int_position by Def1,Def2;
+    take a,k1,k2;
+    thus I= (a,k1) := k2 by A5,Def12;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 8
+  holds ex a,k1,k2 st ins = AddTo(a,k1,k2)
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 8;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S5; hence contradiction by A1,Lm7;
+    end;
+    then consider I1 being Element of Segm 14,
+             d1 being Element of SCM-Data-Loc,
+             k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A2;
+A4: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A3,ENUMSET1:23;
+      now assume I1=4 or I1=5 or I1=6 or I1=7;
+        then I`1=4 or I`1=5 or I`1=6 or I`1=7 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,k1,k2 such that
+A5: I=[ 8, <*d1,k1,k2*>] by A3,A4;
+    reconsider a=d1 as Int_position by Def1,Def2;
+    take a,k1,k2;
+    thus I= AddTo(a,k1,k2) by A5,Def13;
+end;
+
+Lm8: I in S1 or I in S2 or I in S3 or I in S4 implies
+     InsCode I=0 or InsCode I=1 or InsCode I=2 or InsCode I=3 or
+     InsCode I=4 or InsCode I=5 or InsCode I=6 or InsCode I=7
+     or InsCode I=8
+proof
+   assume A1:I in S1 or I in S2 or I in S3 or I in S4;
+   per cases by A1;
+   suppose I in S1; hence thesis by Lm2;
+   suppose I in S2; hence thesis by Lm3;
+   suppose I in S3; hence thesis by Lm4;
+   suppose I in S4; hence thesis by Lm5;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 9
+  holds ex a,b,k1,k2 st ins = AddTo(a,k1,b,k2)
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 9;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S4; hence contradiction by A1,Lm8;
+   end;
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A2;
+A4: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A3,ENUMSET1:23;
+      now assume I1=10 or I1=11 or I1=12 or I1=13;
+        then I`1=10 or I`1=11 or I`1=12 or I`1=13 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,d2,k1,k2 such that
+A5: I=[ 9, <*d1,d2,k1,k2*>] by A3,A4;
+    reconsider a=d1,b=d2 as Int_position by Def1,Def2;
+    take a,b,k1,k2;
+    thus I= AddTo(a,k1,b,k2) by A5,Def14;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 10
+  holds ex a,b,k1,k2 st ins = SubFrom(a,k1,b,k2)
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 10;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S4; hence contradiction by A1,Lm8;
+   end;
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A2;
+A4: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A3,ENUMSET1:23;
+      now assume I1=9 or I1=11 or I1=12 or I1=13;
+        then I`1=9 or I`1=11 or I`1=12 or I`1=13 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,d2,k1,k2 such that
+A5: I=[ 10, <*d1,d2,k1,k2*>] by A3,A4;
+    reconsider a=d1,b=d2 as Int_position by Def1,Def2;
+    take a,b,k1,k2;
+    thus I= SubFrom(a,k1,b,k2) by A5,Def15;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 11
+  holds ex a,b,k1,k2 st ins = MultBy(a,k1,b,k2)
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 11;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S4; hence contradiction by A1,Lm8;
+   end;
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A2;
+A4: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A3,ENUMSET1:23;
+      now assume I1=9 or I1=10 or I1=12 or I1=13;
+        then I`1=9 or I`1=10 or I`1=12 or I`1=13 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,d2,k1,k2 such that
+A5: I=[ 11, <*d1,d2,k1,k2*>] by A3,A4;
+    reconsider a=d1,b=d2 as Int_position by Def1,Def2;
+    take a,b,k1,k2;
+    thus I= MultBy(a,k1,b,k2) by A5,Def16;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 12
+  holds ex a,b,k1,k2 st ins = Divide(a,k1,b,k2)
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 12;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S4; hence contradiction by A1,Lm8;
+   end;
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A2;
+A4: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A3,ENUMSET1:23;
+      now assume I1=9 or I1=10 or I1=11 or I1=13;
+        then I`1=9 or I`1=10 or I`1=11 or I`1=13 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,d2,k1,k2 such that
+A5: I=[ 12, <*d1,d2,k1,k2*>] by A3,A4;
+    reconsider a=d1,b=d2 as Int_position by Def1,Def2;
+    take a,b,k1,k2;
+    thus I= Divide(a,k1,b,k2) by A5,Def17;
+end;
+
+theorem
+   for ins being Instruction of SCMPDS st InsCode ins = 13
+  holds ex a,b,k1,k2 st ins = (a,k1) := (b,k2)
+proof let I be Instruction of SCMPDS such that
+A1: InsCode I = 13;
+    A2: I in S1 or I in S2 or I in S3 or I in S4 or I in S5 by Def1,Lm1;
+      now assume I in S1 or I in S2 or I in S3 or I in
+ S4; hence contradiction by A1,Lm8;
+   end;
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A3: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A2;
+A4: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A3,ENUMSET1:23;
+      now assume I1=9 or I1=10 or I1=11 or I1=12;
+        then I`1=9 or I`1=10 or I`1=11 or I`1=12 by A3,MCART_1:7;
+hence contradiction by A1,AMI_5:def 1;
+    end;
+    then consider d1,d2,k1,k2 such that
+A5: I=[ 13, <*d1,d2,k1,k2*>] by A3,A4;
+    reconsider a=d1,b=d2 as Int_position by Def1,Def2;
+    take a,b,k1,k2;
+    thus I= (a,k1) := (b,k2) by A5,Def18;
+end;
+
+theorem
+   for s being State of SCMPDS, d being Int_position
+  holds d in dom s
+proof
+    let s be State of SCMPDS, d be Int_position;
+      dom s = the carrier of SCMPDS by AMI_3:36;
+    hence thesis;
+end;
+
+theorem Th50:
+ for s being State of SCMPDS holds SCM-Data-Loc c= dom s
+proof let s be State of SCMPDS;
+    dom s = the carrier of SCMPDS by AMI_3:36;
+ hence thesis by Def1;
+end;
+
+theorem
+   for s being State of SCMPDS
+  holds dom (s|SCM-Data-Loc) = SCM-Data-Loc
+proof
+ let s be State of SCMPDS;
+    SCM-Data-Loc c= dom s by Th50;
+ hence thesis by RELAT_1:91;
+end;
+
+theorem
+   for dl being Int_position holds
+  dl <> IC SCMPDS
+proof
+   let dl be Int_position;
+      ObjectKind dl = INT &
+    ObjectKind IC SCMPDS = the Instruction-Locations of SCMPDS
+         by Th13,AMI_1:def 11;
+   hence thesis by Def1,AMI_2:6;
+end;
+
+theorem
+   for il being Instruction-Location of SCMPDS,dl being Int_position holds
+  il <> dl
+proof
+   let il be Instruction-Location of SCMPDS,
+       dl be Int_position;
+      ObjectKind dl = INT &
+    ObjectKind il = the Instructions of SCMPDS
+         by Th13,AMI_1:def 14;
+   hence thesis by Def1,SCMPDS_1:17;
+end;
+
+theorem
+   for s1,s2 being State of SCMPDS
+       st IC s1 = IC s2 &
+       (for a being Int_position holds s1.a = s2.a) &
+        for i being Instruction-Location of SCMPDS holds s1.i = s2.i
+  holds s1 = s2
+   proof
+    let s1,s2 be State of SCMPDS such that
+A1:  IC(s1) = IC(s2) and
+A2:  (for a being Int_position holds s1.a = s2.a) and
+A3:  (for i being Instruction-Location of SCMPDS holds s1.i = s2.i);
+     consider g1 being Function such that
+A4:  s1 = g1 & dom g1 = dom SCMPDS-OK &
+     for x being set st x in dom SCMPDS-OK holds g1.x in SCMPDS-OK.x
+          by Def1,CARD_3:def 5;
+     consider g2 being Function such that
+A5:   s2 = g2 & dom g2 = dom SCMPDS-OK &
+      for x being set st x in dom SCMPDS-OK holds g2.x in SCMPDS-OK.x
+            by Def1,CARD_3:def 5;
+A6:   NAT = dom g1 & NAT = dom g2 by A4,A5,FUNCT_2:def 1;
+      now let x be set such that
+A7:  x in NAT;
+     A8:   x in {IC SCMPDS} \/ SCM-Data-Loc or x in SCM-Instr-Loc
+          by A7,Th5,Th6,XBOOLE_0:def 2;
+     per cases by A8,XBOOLE_0:def 2;
+     suppose x in {IC SCMPDS};
+then A9:   x = IC SCMPDS by TARSKI:def 1;
+         s1.IC SCMPDS = IC s2 by A1,AMI_1:def 15
+      .= s2.IC SCMPDS by AMI_1:def 15;
+       hence g1.x = g2.x by A4,A5,A9;
+     suppose x in SCM-Data-Loc;
+        then x is Int_position by Def1,Def2;
+        hence g1.x = g2.x by A2,A4,A5;
+     suppose x in SCM-Instr-Loc; hence g1.x = g2.x by A3,A4,A5,Def1;
+    end;
+    hence s1 = s2 by A4,A5,A6,FUNCT_1:9;
+end;
+
+definition let loc be Instruction-Location of SCMPDS;
+ func Next loc -> Instruction-Location of SCMPDS means
+:Def19: ex mj being Element of SCM-Instr-Loc st mj = loc & it = Next mj;
+ existence
+  proof reconsider loc as Element of SCM-Instr-Loc by Def1;
+      Next loc is Instruction-Location of SCMPDS by Def1;
+   hence thesis;
+  end;
+ correctness;
+end;
+
+theorem Th55:
+ for loc being Instruction-Location of SCMPDS,
+     mj being Element of SCM-Instr-Loc st mj = loc
+ holds Next mj = Next loc
+ proof let loc be Instruction-Location of SCMPDS,
+   mj be Element of SCM-Instr-Loc;
+     ex mj being Element of SCM-Instr-Loc st mj = loc & Next loc= Next mj
+    by Def19;
+  hence thesis;
+ end;
+
+theorem Th56:
+for i being Element of SCMPDS-Instr st i = I
+  for S being SCMPDS-State st S = s holds Exec(I,s) = SCM-Exec-Res(i,S)
+ proof let i be Element of SCMPDS-Instr such that
+A1: i = I;
+  let S be SCMPDS-State;
+  assume S = s;
+  hence Exec(I,s) =
+(SCMPDS-Exec.i qua Element of Funcs(product SCMPDS-OK, product SCMPDS-OK)).S
+           by A1,Def1,AMI_1:def 7
+   .= SCM-Exec-Res(i,S) by SCMPDS_1:def 25;
+end;
+
+begin :: Execution semantics of the SCMPDS instructions
+
+theorem Th57:
+ Exec( a:=k1, s).IC SCMPDS = Next IC s &
+ Exec( a:=k1, s).a = k1 &
+ for b st b <> a holds Exec( a:=k1, s).b = s.b
+ proof
+  reconsider mk = a as Element of SCM-Data-Loc by Def2;
+  reconsider I = a:=k1 as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set S1 = SCM-Chg(S, I P21address, I P22const);
+  reconsider i = 2 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*mk,k1*>] by Def7;
+A2:  IC s = IC S by Th7;
+A3: Exec(a:=k1, s) = SCM-Exec-Res(I,S) by Th56
+   .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
+A4: I P21address = mk & I P22const = k1 by A1,SCMPDS_1:35;
+  thus Exec(a:=k1, s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+  thus Exec(a:=k1, s).a = S1.mk by A3,SCMPDS_1:27
+       .= k1 by A4,SCMPDS_1:30;
+  let b;
+  reconsider mn = b as Element of SCM-Data-Loc by Def2;
+  assume
+A5: b <> a;
+  thus Exec(a:=k1, s).b = S1.mn by A3,SCMPDS_1:27
+    .= s.b by A4,A5,SCMPDS_1:31;
+end;
+
+theorem Th58:
+ Exec((a,k1):=k2, s).IC SCMPDS = Next IC s &
+ Exec((a,k1):=k2, s).DataLoc(s.a,k1) = k2 &
+ for b st b <> DataLoc(s.a,k1) holds Exec((a,k1):=k2, s).b = s.b
+ proof
+  reconsider mk = a as Element of SCM-Data-Loc by Def2;
+  reconsider I = (a,k1):=k2 as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set A2=Address_Add(S,I P31address,I P32const),
+      S1 = SCM-Chg(S, A2, I P33const);
+  reconsider i = 7 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*mk,k1,k2*>] by Def12;
+A2:  IC s = IC S by Th7;
+A3: Exec((a,k1):=k2, s) = SCM-Exec-Res(I,S) by Th56
+   .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
+A4: I P31address = mk & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
+  thus Exec((a,k1):=k2, s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+A5: A2=2*abs(s.a+k1)+1 by A4,SCMPDS_1:def 8
+     .=DataLoc(s.a,k1) by Def4;
+  hence Exec((a,k1):=k2, s).DataLoc(s.a,k1)
+       = S1.A2 by A3,SCMPDS_1:27
+       .= k2 by A4,SCMPDS_1:30;
+  let b;
+  reconsider mn = b as Element of SCM-Data-Loc by Def2;
+  assume A6: b <> DataLoc(s.a,k1);
+  thus Exec((a,k1):=k2, s).b = S1.mn by A3,SCMPDS_1:27
+    .= s.b by A5,A6,SCMPDS_1:31;
+end;
+
+theorem Th59:
+ Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC s &
+ Exec((a,k1):=(b,k2), s).DataLoc(s.a,k1) = s.DataLoc(s.b,k2) &
+ for c st c <> DataLoc(s.a,k1) holds Exec((a,k1):=(b,k2),s).c = s.c
+ proof
+  reconsider da = a,db=b as Element of SCM-Data-Loc by Def2;
+  reconsider I = (a,k1):=(b,k2) as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set A2=Address_Add(S,I P41address,I P43const),
+      A4=Address_Add(S,I P42address,I P44const),
+      S1 = SCM-Chg(S, A2, S.A4);
+  reconsider i = 13 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*da,db,k1,k2*>] by Def18;
+A2:  IC s = IC S by Th7;
+A3: Exec((a,k1):=(b,k2), s) = SCM-Exec-Res(I,S) by Th56
+   .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
+A4: I P41address = da & I P42address = db & I P43const = k1
+    & I P44const = k2 by A1,SCMPDS_1:37;
+  thus Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+A5: A2=2*abs(s.a+k1)+1 by A4,SCMPDS_1:def 8
+     .=DataLoc(s.a,k1) by Def4;
+A6: A4=2*abs(s.b+k2)+1 by A4,SCMPDS_1:def 8
+     .=DataLoc(s.b,k2) by Def4;
+  thus Exec((a,k1):=(b,k2), s).DataLoc(s.a,k1)
+       = S1.A2 by A3,A5,SCMPDS_1:27
+       .= s.DataLoc(s.b,k2) by A6,SCMPDS_1:30;
+  let c;
+  reconsider mn = c as Element of SCM-Data-Loc by Def2;
+  assume A7: c <> DataLoc(s.a,k1);
+  thus Exec((a,k1):=(b,k2), s).c = S1.mn by A3,SCMPDS_1:27
+    .= s.c by A5,A7,SCMPDS_1:31;
+end;
+
+theorem Th60:
+ Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC s &
+ Exec(AddTo(a,k1,k2), s).DataLoc(s.a,k1)=s.DataLoc(s.a,k1)+k2 &
+ for b st b <>DataLoc(s.a,k1) holds Exec(AddTo(a,k1,k2), s).b = s.b
+ proof
+  reconsider mk = a as Element of SCM-Data-Loc by Def2;
+  reconsider I = AddTo(a,k1,k2) as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set A1=2*abs(s.a+k1)+1,
+      A2=Address_Add(S,I P31address,I P32const),
+      S1 = SCM-Chg(S, A2, S.A2+I P33const);
+  reconsider i = 8 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*mk,k1,k2*>] by Def13;
+A2:  IC s = IC S by Th7;
+A3: Exec(AddTo(a,k1,k2), s) = SCM-Exec-Res(I,S) by Th56
+   .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
+A4: I P31address = mk & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
+  thus Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+A5: A2=A1 by A4,SCMPDS_1:def 8;
+A6: A1=DataLoc(s.a,k1) by Def4;
+  hence Exec(AddTo(a,k1,k2), s).DataLoc(s.a,k1)
+       = S1.A2 by A3,A5,SCMPDS_1:27
+       .= s.DataLoc(s.a,k1)+k2 by A4,A5,A6,SCMPDS_1:30;
+  let c;
+  reconsider mn = c as Element of SCM-Data-Loc by Def2;
+  assume A7: c <> DataLoc(s.a,k1);
+  thus Exec(AddTo(a,k1,k2), s).c = S1.mn by A3,SCMPDS_1:27
+    .= s.c by A5,A6,A7,SCMPDS_1:31;
+end;
+
+theorem Th61:
+ Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC s &
+ Exec(AddTo(a,k1,b,k2), s).DataLoc(s.a,k1)
+    = s.DataLoc(s.a,k1) + s.DataLoc(s.b,k2) &
+ for c st c <> DataLoc(s.a,k1) holds Exec(AddTo(a,k1,b,k2),s).c = s.c
+proof
+  reconsider da = a,db=b as Element of SCM-Data-Loc by Def2;
+  reconsider I = AddTo(a,k1,b,k2) as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set A1=2*abs((s.a+k1))+1,
+      A2=Address_Add(S,I P41address,I P43const),
+      A3=2*abs((s.b+k2))+1,
+      A4=Address_Add(S,I P42address,I P44const),
+      S1 = SCM-Chg(S, A2, S.A2+S.A4);
+  reconsider i = 9 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*da,db,k1,k2*>] by Def14;
+A2:  IC s = IC S by Th7;
+A3: Exec(AddTo(a,k1,b,k2), s) = SCM-Exec-Res(I,S) by Th56
+   .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
+A4: I P41address = da & I P42address = db & I P43const = k1
+    & I P44const = k2 by A1,SCMPDS_1:37;
+  thus Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+A5: A2=A1 by A4,SCMPDS_1:def 8;
+A6: A4=A3 by A4,SCMPDS_1:def 8;
+A7: A1=DataLoc(s.a,k1) by Def4;
+A8: A3=DataLoc(s.b,k2) by Def4;
+  thus Exec(AddTo(a,k1,b,k2), s).DataLoc(s.a,k1)
+       = S1.A2 by A3,A5,A7,SCMPDS_1:27
+       .= s.DataLoc(s.a,k1) + s.DataLoc(s.b,k2) by A5,A6,A7,A8,SCMPDS_1:30;
+  let c;
+  reconsider mn = c as Element of SCM-Data-Loc by Def2;
+  assume A9: c <> DataLoc(s.a,k1);
+  thus Exec(AddTo(a,k1,b,k2), s).c = S1.mn by A3,SCMPDS_1:27
+    .= s.c by A5,A7,A9,SCMPDS_1:31;
+end;
+
+theorem Th62:
+ Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC s &
+ Exec(SubFrom(a,k1,b,k2), s).DataLoc(s.a,k1)
+    = s.DataLoc(s.a,k1) - s.DataLoc(s.b,k2) &
+ for c st c <> DataLoc(s.a,k1) holds Exec(SubFrom(a,k1,b,k2),s).c = s.c
+proof
+  reconsider da = a,db=b as Element of SCM-Data-Loc by Def2;
+  reconsider I = SubFrom(a,k1,b,k2) as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set A1=2*abs((s.a+k1))+1,
+      A2=Address_Add(S,I P41address,I P43const),
+      A3=2*abs((s.b+k2))+1,
+      A4=Address_Add(S,I P42address,I P44const),
+      S1 = SCM-Chg(S, A2, S.A2-S.A4);
+  reconsider i = 10 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*da,db,k1,k2*>] by Def15;
+A2:  IC s = IC S by Th7;
+A3: Exec(SubFrom(a,k1,b,k2), s) = SCM-Exec-Res(I,S) by Th56
+   .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
+A4: I P41address = da & I P42address = db & I P43const = k1
+    & I P44const = k2 by A1,SCMPDS_1:37;
+  thus Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+A5: A2=A1 by A4,SCMPDS_1:def 8;
+A6: A4=A3 by A4,SCMPDS_1:def 8;
+A7: A1=DataLoc(s.a,k1) by Def4;
+A8: A3=DataLoc(s.b,k2) by Def4;
+  thus Exec(SubFrom(a,k1,b,k2), s).DataLoc(s.a,k1)
+       = S1.A2 by A3,A5,A7,SCMPDS_1:27
+       .= s.DataLoc(s.a,k1) - s.DataLoc(s.b,k2) by A5,A6,A7,A8,SCMPDS_1:30;
+  let c;
+  reconsider mn = c as Element of SCM-Data-Loc by Def2;
+  assume A9: c <> DataLoc(s.a,k1);
+  thus Exec(SubFrom(a,k1,b,k2), s).c = S1.mn by A3,SCMPDS_1:27
+    .= s.c by A5,A7,A9,SCMPDS_1:31;
+end;
+
+theorem Th63:
+ Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC s &
+ Exec(MultBy(a,k1,b,k2), s).DataLoc(s.a,k1)
+    = s.DataLoc(s.a,k1) * s.DataLoc(s.b,k2) &
+ for c st c <> DataLoc(s.a,k1) holds Exec(MultBy(a,k1,b,k2),s).c = s.c
+proof
+  reconsider da = a,db=b as Element of SCM-Data-Loc by Def2;
+  reconsider I = MultBy(a,k1,b,k2) as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set A1=2*abs((s.a+k1))+1,
+      A2=Address_Add(S,I P41address,I P43const),
+      A3=2*abs((s.b+k2))+1,
+      A4=Address_Add(S,I P42address,I P44const),
+      S1 = SCM-Chg(S, A2, S.A2*S.A4);
+  reconsider i = 11 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*da,db,k1,k2*>] by Def16;
+A2:  IC s = IC S by Th7;
+A3: Exec(MultBy(a,k1,b,k2), s) = SCM-Exec-Res(I,S) by Th56
+   .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
+A4: I P41address = da & I P42address = db & I P43const = k1
+    & I P44const = k2 by A1,SCMPDS_1:37;
+  thus Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+A5: A2=A1 by A4,SCMPDS_1:def 8;
+A6: A4=A3 by A4,SCMPDS_1:def 8;
+A7: A1=DataLoc(s.a,k1) by Def4;
+A8: A3=DataLoc(s.b,k2) by Def4;
+  thus Exec(MultBy(a,k1,b,k2), s).DataLoc(s.a,k1)
+       = S1.A2 by A3,A5,A7,SCMPDS_1:27
+       .= s.DataLoc(s.a,k1) * s.DataLoc(s.b,k2) by A5,A6,A7,A8,SCMPDS_1:30;
+  let c;
+  reconsider mn = c as Element of SCM-Data-Loc by Def2;
+  assume A9: c <> DataLoc(s.a,k1);
+  thus Exec(MultBy(a,k1,b,k2), s).c = S1.mn by A3,SCMPDS_1:27
+    .= s.c by A5,A7,A9,SCMPDS_1:31;
+end;
+
+theorem Th64:
+ Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC s &
+ (DataLoc(s.a,k1) <> DataLoc(s.b,k2) implies
+    Exec(Divide(a,k1,b,k2), s).DataLoc(s.a,k1)
+     = s.DataLoc(s.a,k1) div s.DataLoc(s.b,k2)) &
+ Exec(Divide(a,k1,b,k2), s).DataLoc(s.b,k2)
+     = s.DataLoc(s.a,k1) mod s.DataLoc(s.b,k2) &
+ for c st c <> DataLoc(s.a,k1) & c <> DataLoc(s.b,k2)
+      holds Exec(Divide(a,k1,b,k2),s).c = s.c
+proof
+  reconsider da = a,db=b as Element of SCM-Data-Loc by Def2;
+  reconsider I = Divide(a,k1,b,k2) as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set A1=2*abs((s.a+k1))+1,
+      A2=Address_Add(S,I P41address,I P43const),
+      A3=2*abs((s.b+k2))+1,
+      A4=Address_Add(S,I P42address,I P44const),
+      S1 = SCM-Chg(S, A2,S.A2 div S.A4),
+      S2 = SCM-Chg(S1,A4,S.A2 mod S.A4);
+  reconsider i = 12 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*da,db,k1,k2*>] by Def17;
+A2:  IC s = IC S by Th7;
+A3: Exec(Divide(a,k1,b,k2), s) = SCM-Exec-Res(I,S) by Th56
+   .= SCM-Chg(S2, Next IC S) by A1,SCMPDS_1:def 24;
+A4: I P41address = da & I P42address = db & I P43const = k1
+    & I P44const = k2 by A1,SCMPDS_1:37;
+  thus Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+A5: A2=A1 by A4,SCMPDS_1:def 8;
+A6: A4=A3 by A4,SCMPDS_1:def 8;
+    set Da=DataLoc(s.a,k1),
+        Db=DataLoc(s.b,k2);
+A7: A1=Da by Def4;
+A8: A3=Db by Def4;
+    hereby
+      assume A9: Da <> DataLoc(s.b,k2);
+     reconsider mn = Da as Element of SCM-Data-Loc by Def2;
+     thus Exec(Divide(a,k1,b,k2), s).Da = S2.mn by A3,SCMPDS_1:27
+    .= S1.A2 by A5,A6,A7,A8,A9,SCMPDS_1:31
+    .= s.Da div s.Db by A5,A6,A7,A8,SCMPDS_1:30;
+  end;
+  thus Exec(Divide(a,k1,b,k2), s).DataLoc(s.b,k2)
+       = S2.A4 by A3,A6,A8,SCMPDS_1:27
+       .= s.Da mod s.Db by A5,A6,A7,A8,SCMPDS_1:30;
+  let c;
+  reconsider mn = c as Element of SCM-Data-Loc by Def2;
+  assume A10:c <> Da & c <> Db;
+  thus Exec(Divide(a,k1,b,k2), s).c = S2.mn by A3,SCMPDS_1:27
+    .= S1.mn by A6,A8,A10,SCMPDS_1:31
+    .= s.c by A5,A7,A10,SCMPDS_1:31;
+end;
+
+theorem
+   Exec(Divide(a,k1,a,k1), s).IC SCMPDS = Next IC s &
+ Exec(Divide(a,k1,a,k1), s).DataLoc(s.a,k1)
+     = s.DataLoc(s.a,k1) mod s.DataLoc(s.a,k1) &
+ for c st c <> DataLoc(s.a,k1) holds
+ Exec(Divide(a,k1,a,k1),s).c = s.c by Th64;
+
+definition let s be State of SCMPDS,c be Integer;
+ func ICplusConst(s,c) -> Instruction-Location of SCMPDS means
+:Def20: ex m be Nat st m = IC s & it = abs(m-2+2*c)+2;
+ existence
+  proof reconsider m1=IC s as Element of SCM-Instr-Loc by Def1;
+        reconsider n=m1 as Nat;
+        m1 in { 2*k: k>0} by AMI_2:def 3;
+    then consider k such that
+A1: m1 = 2*k & k > 0;
+    consider j such that
+A2: k = j+1 by A1,NAT_1:22;
+   IC s = 2*j + 2*1 by A1,A2,XCMPLX_1:8;
+then A3: abs(n-2+2*c)+2 =abs(2*j+2*c)+2 by XCMPLX_1:26
+    .=abs(2*(j+c))+2 by XCMPLX_1:8
+    .=abs(2)*abs((j+c))+2 by ABSVALUE:10
+    .=2*abs((j+c))+2*1 by ABSVALUE:def 1
+    .=2*(abs((j+c))+1) by XCMPLX_1:8;
+   reconsider m=abs((j+c))+1 as Nat;
+     m > 0 by NAT_1:19;
+   then 2*m in SCM-Instr-Loc by AMI_2:def 3; hence thesis by A3,Def1;
+  end;
+ correctness;
+end;
+
+theorem Th66:
+ Exec(goto k1, s).IC SCMPDS = ICplusConst(s,k1) &
+ for a holds Exec(goto k1, s).a = s.a
+ proof
+  reconsider I = goto k1 as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  reconsider i = 0 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*k1*>] by Def5;
+A2: Exec(goto k1, s) = SCM-Exec-Res(I,S) by Th56
+   .=SCM-Chg(S,jump_address(S,I const_INT)) by A1,SCMPDS_1:def 24;
+A3: I const_INT = k1 by A1,SCMPDS_1:34;
+   reconsider m=IC S as Nat;
+A4: m=IC s by Th7;
+   consider n be Nat such that
+A5: n=IC s & ICplusConst(s,k1)=abs(n-2+2*k1)+2 by Def20;
+   thus Exec(goto k1, s).IC SCMPDS = jump_address(S,k1)
+         by A2,A3,Th6,SCMPDS_1:26
+   .=ICplusConst(s,k1) by A4,A5,SCMPDS_1:def 9;
+  let a;
+  reconsider mn = a as Element of SCM-Data-Loc by Def2;
+  thus Exec(goto k1, s).a = S.mn by A2,SCMPDS_1:27
+  .= s.a;
+end;
+
+theorem Th67:
+  ( s.DataLoc(s.a,k1) <> 0 implies
+   Exec((a,k1)<>0_goto k2, s).IC SCMPDS = ICplusConst(s,k2)) &
+  ( s.DataLoc(s.a,k1) = 0 implies
+   Exec((a,k1)<>0_goto k2, s).IC SCMPDS = Next IC s ) &
+ Exec((a,k1)<>0_goto k2, s).b = s.b
+ proof
+  reconsider da = a as Element of SCM-Data-Loc by Def2;
+  reconsider I = (a,k1)<>0_goto k2 as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  reconsider i = 4 as Element of Segm 14 by GR_CY_1:10;
+  set A2=Address_Add(S,I P31address,I P32const),
+      JP=jump_address(S,I P33const),
+      IF=IFEQ(S.A2, 0, Next IC S,JP),
+      Da=DataLoc(s.a,k1);
+A1:  I = [ i, <*da,k1,k2*>] by Def9;
+A2: Exec((a,k1)<>0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
+   .=SCM-Chg(S,IF) by A1,SCMPDS_1:def 24;
+A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
+   consider n be Nat such that
+A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
+A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
+     .=Da by Def4;
+  thus s.Da <> 0 implies
+         Exec((a,k1)<>0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
+  proof assume A6: s.Da <> 0;
+   reconsider m=IC S as Nat;
+A7: m=IC s by Th7;
+    thus Exec((a,k1)<>0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .= jump_address(S,k2) by A3,A5,A6,CQC_LANG:def 1
+      .=ICplusConst(s,k2) by A4,A7,SCMPDS_1:def 9;
+   end;
+A8: IC S=IC s by Th7;
+  thus s.Da = 0 implies
+         Exec((a,k1)<>0_goto k2,s).IC SCMPDS = Next IC s
+  proof assume A9: s.Da = 0;
+    thus Exec((a,k1)<>0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .= Next IC S by A5,A9,CQC_LANG:def 1
+      .= Next IC s by A8,Th55;
+   end;
+  reconsider mn = b as Element of SCM-Data-Loc by Def2;
+  thus Exec((a,k1)<>0_goto k2, s).b = S.mn by A2,SCMPDS_1:27
+  .= s.b;
+end;
+
+theorem Th68:
+  ( s.DataLoc(s.a,k1) <= 0 implies
+   Exec((a,k1)<=0_goto k2, s).IC SCMPDS = ICplusConst(s,k2)) &
+  ( s.DataLoc(s.a,k1) > 0 implies
+   Exec((a,k1)<=0_goto k2, s).IC SCMPDS = Next IC s ) &
+ Exec((a,k1)<=0_goto k2, s).b = s.b
+ proof
+  reconsider da = a as Element of SCM-Data-Loc by Def2;
+  reconsider I = (a,k1)<=0_goto k2 as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  reconsider i = 5 as Element of Segm 14 by GR_CY_1:10;
+  set A2=Address_Add(S,I P31address,I P32const),
+      JP=jump_address(S,I P33const),
+      IF=IFGT(S.A2, 0, Next IC S,JP),
+      Da=DataLoc(s.a,k1);
+A1:  I = [ i, <*da,k1,k2*>] by Def10;
+A2: Exec((a,k1)<=0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
+   .=SCM-Chg(S,IF) by A1,SCMPDS_1:def 24;
+A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
+   consider n be Nat such that
+A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
+A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
+     .=Da by Def4;
+  thus s.Da <= 0 implies
+         Exec((a,k1)<=0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
+  proof assume A6: s.Da <= 0;
+   reconsider m=IC S as Nat;
+A7: m=IC s by Th7;
+    thus Exec((a,k1)<=0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .= jump_address(S,k2) by A3,A5,A6,AMI_2:def 14
+      .=ICplusConst(s,k2) by A4,A7,SCMPDS_1:def 9;
+   end;
+A8: IC S=IC s by Th7;
+  thus s.Da > 0 implies
+         Exec((a,k1)<=0_goto k2,s).IC SCMPDS = Next IC s
+  proof assume A9: s.Da > 0;
+    thus Exec((a,k1)<=0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .= Next IC S by A5,A9,AMI_2:def 14
+      .= Next IC s by A8,Th55;
+   end;
+  reconsider mn = b as Element of SCM-Data-Loc by Def2;
+  thus Exec((a,k1)<=0_goto k2, s).b = S.mn by A2,SCMPDS_1:27
+  .= s.b;
+end;
+
+theorem Th69:
+  ( s.DataLoc(s.a,k1) >= 0 implies
+   Exec((a,k1)>=0_goto k2, s).IC SCMPDS = ICplusConst(s,k2)) &
+  ( s.DataLoc(s.a,k1) < 0 implies
+   Exec((a,k1)>=0_goto k2, s).IC SCMPDS = Next IC s ) &
+ Exec((a,k1)>=0_goto k2, s).b = s.b
+ proof
+  reconsider da = a as Element of SCM-Data-Loc by Def2;
+  reconsider I = (a,k1)>=0_goto k2 as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  reconsider i = 6 as Element of Segm 14 by GR_CY_1:10;
+  set A2=Address_Add(S,I P31address,I P32const),
+      JP=jump_address(S,I P33const),
+      IF=IFGT(0, S.A2, Next IC S,JP),
+      Da=DataLoc(s.a,k1);
+A1:  I = [ i, <*da,k1,k2*>] by Def11;
+A2: Exec((a,k1)>=0_goto k2, s) = SCM-Exec-Res(I,S) by Th56
+   .=SCM-Chg(S,IF) by A1,SCMPDS_1:def 24;
+A3: I P31address = da & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
+   consider n be Nat such that
+A4: n=IC s & ICplusConst(s,k2)=abs(n-2+2*k2)+2 by Def20;
+A5: A2=2*abs((s.a+k1))+1 by A3,SCMPDS_1:def 8
+     .=Da by Def4;
+  thus s.Da >= 0 implies
+         Exec((a,k1)>=0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
+  proof assume A6: s.Da >= 0;
+   reconsider m=IC S as Nat;
+A7: m=IC s by Th7;
+    thus Exec((a,k1)>=0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .= jump_address(S,k2) by A3,A5,A6,AMI_2:def 14
+      .=ICplusConst(s,k2) by A4,A7,SCMPDS_1:def 9;
+   end;
+A8: IC S=IC s by Th7;
+  thus s.Da < 0 implies
+         Exec((a,k1)>=0_goto k2,s).IC SCMPDS = Next IC s
+  proof assume A9: s.Da < 0;
+    thus Exec((a,k1)>=0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .= Next IC S by A5,A9,AMI_2:def 14
+      .= Next IC s by A8,Th55;
+   end;
+  reconsider mn = b as Element of SCM-Data-Loc by Def2;
+  thus Exec((a,k1)>=0_goto k2, s).b = S.mn by A2,SCMPDS_1:27
+  .= s.b;
+end;
+
+theorem Th70:
+   Exec(return a, s).IC SCMPDS = 2*(abs(s.DataLoc(s.a,RetIC)) div 2)+4 &
+   Exec(return a, s).a = s.DataLoc(s.a,RetSP) &
+   for b st a <> b holds Exec(return a, s).b = s.b
+proof
+  reconsider da = a as Element of SCM-Data-Loc by Def2;
+  reconsider I = return a as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  set A1 =Address_Add(S,I address_1,RetSP),
+      S1 =SCM-Chg(S,I address_1,S.A1),
+      A2=Address_Add(S,I address_1,RetIC),
+      lc=PopInstrLoc(S,A2);
+  reconsider i = 1 as Element of Segm 14 by GR_CY_1:10;
+A1:  I = [ i, <*da*>] by Def6;
+A2: Exec(return a, s) = SCM-Exec-Res(I,S) by Th56
+   .= SCM-Chg(S1,lc) by A1,SCMPDS_1:def 24;
+A3: I address_1 = da by A1,SCMPDS_1:33;
+then A4: A2=2*abs((s.a+RetIC))+1 by SCMPDS_1:def 8
+     .=DataLoc(s.a,RetIC) by Def4;
+A5: A1=2*abs((s.a+RetSP))+1 by A3,SCMPDS_1:def 8
+     .=DataLoc(s.a,RetSP) by Def4;
+    thus Exec(return a, s).IC SCMPDS = lc by A2,Th6,SCMPDS_1:26
+    .=2*(abs(s.DataLoc(s.a,RetIC)) div 2)+4 by A4,SCMPDS_1:def 21;
+   thus Exec(return a, s).a = S1.da by A2,SCMPDS_1:27
+       .= s.DataLoc(s.a,RetSP) by A3,A5,SCMPDS_1:30;
+  let b;
+  reconsider mn = b as Element of SCM-Data-Loc by Def2;
+  assume
+A6: b <> a;
+  thus Exec(return a, s).b = S1.mn by A2,SCMPDS_1:27
+    .= s.b by A3,A6,SCMPDS_1:31;
+end;
+
+theorem Th71:
+   Exec(saveIC(a,k1),s).IC SCMPDS = Next IC s &
+   Exec(saveIC(a,k1), s).DataLoc(s.a,k1) = IC s &
+   for b st DataLoc(s.a,k1) <> b holds Exec(saveIC(a,k1), s).b = s.b
+proof
+  reconsider da = a as Element of SCM-Data-Loc by Def2;
+  reconsider I = saveIC(a,k1) as Element of SCMPDS-Instr by Def1;
+  reconsider S = s as SCMPDS-State by Def1;
+  reconsider m = IC S as Nat;
+  set A1=Address_Add(S,I P21address,I P22const),
+      S1=SCM-Chg(S, A1,m);
+  reconsider i = 3 as Element of Segm 14 by GR_CY_1:10;
+A1: I = [ i, <*da,k1*>] by Def8;
+A2: IC s = IC S by Th7;
+A3: Exec(saveIC(a,k1), s) = SCM-Exec-Res(I,S) by Th56
+   .= SCM-Chg(S1,Next IC S) by A1,SCMPDS_1:def 24;
+A4: I P21address = da & I P22const = k1 by A1,SCMPDS_1:35;
+    set DL=DataLoc(s.a,k1);
+A5: A1=2*abs((s.a+k1))+1 by A4,SCMPDS_1:def 8
+     .=DL by Def4;
+  thus Exec(saveIC(a,k1), s).IC SCMPDS = Next IC S by A3,Th6,SCMPDS_1:26
+    .= Next IC s by A2,Th55;
+  thus Exec(saveIC(a,k1), s).DL =S1.A1 by A3,A5,SCMPDS_1:27
+       .=IC s by A2,SCMPDS_1:30;
+  let b;
+  reconsider mn = b as Element of SCM-Data-Loc by Def2;
+  assume
+   A6: DL <> b;
+  thus Exec(saveIC(a,k1),s).b = S1.mn by A3,SCMPDS_1:27
+    .= s.b by A5,A6,SCMPDS_1:31;
+end;
+
+theorem Th72:
+ for k be Integer holds
+ (ex f being Function of SCM-Data-Loc,INT st
+     for x being Element of SCM-Data-Loc holds f.x = k )
+proof let k be Integer;
+ defpred X[set,set] means $2 = k;
+A1: now let x be Element of SCM-Data-Loc;
+       reconsider y=k as Element of INT by INT_1:12;
+       take y;
+       thus X[x,y];
+   end;
+ thus ex f being Function of SCM-Data-Loc,INT st
+     for x being Element of SCM-Data-Loc holds X[x,f.x] from FuncExD(A1);
+end;
+
+theorem Th73:
+for k be Integer holds
+ (ex s be State of SCMPDS st for d being Int_position holds s.d = k )
+proof let k be Integer;
+    consider g be Function of SCM-Data-Loc,INT such that
+A1:  for x be Element of SCM-Data-Loc holds g.x = k by Th72;
+    consider S being SCMPDS-State;
+    set t = S +* g;
+    set f = the Object-Kind of SCMPDS;
+A2: dom S = dom SCMPDS-OK by CARD_3:18;
+A3: dom t = dom S \/ dom g by FUNCT_4:def 1
+         .= NAT \/ dom g by A2,FUNCT_2:def 1    :: FUNCT_2:def 4
+         .= NAT \/ SCM-Data-Loc by FUNCT_2:def 1
+         .= NAT by XBOOLE_1:12;
+A4: dom f = NAT by Def1,FUNCT_2:def 1;
+      for x being set st x in dom f holds t.x in f.x
+    proof
+      let x be set such that
+A5:   x in dom f;
+      per cases;
+      suppose A6: x in dom g;
+then A7:     x in SCM-Data-Loc by FUNCT_2:def 1;
+A8:   t.x = g.x by A6,FUNCT_4:14
+          .= k by A1,A7;
+        f.x = INT by A7,Def1,SCMPDS_1:21;
+      hence t.x in f.x by A8,INT_1:12;
+      suppose not x in dom g;
+then t.x = S.x by FUNCT_4:12;
+      hence t.x in f.x by A5,Def1,CARD_3:18;
+    end;
+    then reconsider s=t as State of SCMPDS by A3,A4,CARD_3:18;
+    take s;
+    let d be Int_position;
+    reconsider D = d as Element of SCM-Data-Loc by Def2;
+      D in SCM-Data-Loc;
+then D in dom g by FUNCT_2:def 1;
+    hence s.d =g.D by FUNCT_4:14
+    .=k by A1;
+end;
+
+theorem Th74:
+for k be Integer,loc be Instruction-Location of SCMPDS holds
+    (ex s be State of SCMPDS st s.0=loc &
+     for d being Int_position holds s.d = k )
+proof let k be Integer,loc be Instruction-Location of SCMPDS;
+     consider s1 be State of SCMPDS such that
+A1:  for d being Int_position holds s1.d = k by Th73;
+     reconsider S = s1 as SCMPDS-State by Def1;
+    set t = S +* (0.--> loc);
+    set f = the Object-Kind of SCMPDS;
+A2: dom(0 .--> loc) = {0} by CQC_LANG:5;
+    then 0 in dom (0.--> loc) by TARSKI:def 1;
+then A3: t.0 = (0.--> loc).0 by FUNCT_4:14
+       .= loc by CQC_LANG:6;
+A4: {0} c= NAT by ZFMISC_1:37;
+A5: dom S = dom SCMPDS-OK by CARD_3:18;
+A6: dom t = dom S \/ dom (0.--> loc) by FUNCT_4:def 1
+         .= NAT \/ dom (0.--> loc) by A5,FUNCT_2:def 1
+         .= NAT \/ {0} by CQC_LANG:5
+         .= NAT by A4,XBOOLE_1:12;
+A7: dom f = NAT by Def1,FUNCT_2:def 1;
+      for x being set st x in dom f holds t.x in f.x
+    proof
+      let x be set such that
+A8:     x in dom f;
+      per cases;
+      suppose
+A9:     x = 0;
+      reconsider loc as Element of SCM-Instr-Loc by Def1;
+A10:   t.x =loc by A3,A9;
+        f.x = SCM-Instr-Loc by A9,Def1,SCMPDS_1:18;
+      hence t.x in f.x by A10;
+      suppose x <> 0;
+      then not x in dom (0.--> loc) by A2,TARSKI:def 1;
+   then t.x = S.x by FUNCT_4:12;
+      hence t.x in f.x by A8,CARD_3:18;
+    end;
+    then reconsider s=t as State of SCMPDS by A6,A7,CARD_3:18;
+    take s;
+    thus s.0=loc by A3;
+    hereby let d be Int_position;
+        d in SCM-Data-Loc by Def2;
+       then consider j be Nat such that
+A11:   d=2*j+1 & (not contradiction) by AMI_2:def 2;
+        not d in dom (0.--> loc) by A2,A11,TARSKI:def 1;
+      hence s.d=s1.d by FUNCT_4:12
+      .=k by A1;
+    end;
+end;
+
+theorem Th75:
+  goto 0 is halting
+proof
+    let s be State of SCMPDS;
+    reconsider S = s as SCMPDS-State by Def1;
+    set I=goto 0;
+A1: dom S = dom SCMPDS-OK by CARD_3:18
+   .= NAT by FUNCT_2:def 1;
+    reconsider Es = Exec(I, s) as SCMPDS-State by Def1;
+A2: now let x be set;
+     assume A3: x in dom s;
+     per cases by A1,A3,SCMPDS_1:14;
+     suppose A4:x=0;
+       consider m be Nat such that
+     A5: m=IC s & ICplusConst(s,0)=abs(m-2+2*0)+2 by Def20;
+       reconsider n=IC s as Element of SCM-Instr-Loc by Def1;
+          n in { 2*k : k > 0 } by AMI_2:def 3;
+        then consider k such that
+     A6: n=2*k & k>0;
+       consider n0 be Nat such that
+     A7: k=n0+1 by A6,NAT_1:22;
+     A8: n=2*n0+2*1 by A6,A7,XCMPLX_1:8;
+     A9: 2*n0 >= 0 by NAT_1:18;
+       thus Es.x=abs(m-2+0)+2 by A4,A5,Th6,Th66
+        .=abs(2*n0)+2 by A5,A8,XCMPLX_1:26
+        .=n by A8,A9,ABSVALUE:def 1
+        .=S.x by A4,Th6,AMI_1:def 15;
+     suppose ex j st x = 2*j+1;
+         then x in SCM-Data-Loc by AMI_2:def 2;
+         then reconsider d=x as Int_position by Def1,Def2;
+         thus Es.x=s.d by Th66
+         .=S.x;
+     suppose ex j st x = 2*j+2;
+         then consider j such that
+      A10: x=2*j+2;
+      A11: x=2*j+2*1 by A10
+          .=2*(j+1) by XCMPLX_1:8;
+            j+1>0 by NAT_1:19;
+         then x in SCM-Instr-Loc by A11,AMI_2:def 3;
+         then reconsider v=x as Element of SCM-Instr-Loc;
+         reconsider I0=I as Element of SCMPDS-Instr by Def1;
+         reconsider i = 0 as Element of Segm 14 by GR_CY_1:10;
+         A12: I0 = [ i, <*0*>] by Def5;
+           Exec(I, s) = SCM-Exec-Res(I0,S) by Th56
+           .=SCM-Chg(S,jump_address(S,I0 const_INT)) by A12,SCMPDS_1:def 24;
+         hence Es.x= S.v by SCMPDS_1:28
+              .=S.x;
+    end;
+   dom Es = dom SCMPDS-OK by CARD_3:18
+   .= NAT by FUNCT_2:def 1;
+    hence Exec(I, s)=s by A1,A2,FUNCT_1:9;
+end;
+
+theorem Th76:
+ for I being Instruction of SCMPDS st
+  ex s st Exec(I,s).IC SCMPDS = Next IC s
+ holds I is non halting
+proof
+    let I be Instruction of SCMPDS;
+    given s such that
+A1:   Exec(I, s).IC SCMPDS = Next IC s;
+    assume
+A2:   I is halting;
+    reconsider t = s as SCMPDS-State by Def1;
+A3: IC t = IC s by Th7;
+A4: IC t = t.0 by SCMPDS_1:def 5;
+A5: Exec(I,s).IC SCMPDS = s.IC SCMPDS by A2,AMI_1:def 8
+       .= t.0 by A3,A4,AMI_1:def 15;
+    reconsider w = t.0 as Instruction-Location of SCMPDS by A4,Def1;
+    consider mj being Element of SCM-Instr-Loc such that
+A6:   mj = w & Next w = Next mj by Def19;
+      Next w = mj + 2 by A6,AMI_2:def 15; hence contradiction by A1,A3,A4,A5,A6
+,XCMPLX_1:3;
+  end;
+
+theorem Th77:
+ a:=k1 is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec(a:=k1, s).IC SCMPDS = Next IC s by Th57;
+    hence thesis by Th76;
+end;
+
+theorem Th78:
+ (a,k1):=k2 is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec((a,k1):=k2, s).IC SCMPDS = Next IC s by Th58;
+    hence thesis by Th76;
+end;
+
+theorem Th79:
+ (a,k1):=(b,k2) is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC s by Th59;
+    hence thesis by Th76;
+end;
+
+theorem Th80:
+ AddTo(a,k1,k2) is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC s by Th60;
+    hence thesis by Th76;
+end;
+
+theorem Th81:
+ AddTo(a,k1,b,k2) is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th61;
+    hence thesis by Th76;
+end;
+
+theorem Th82:
+ SubFrom(a,k1,b,k2) is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th62;
+    hence thesis by Th76;
+end;
+
+theorem Th83:
+ MultBy(a,k1,b,k2) is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th63;
+    hence thesis by Th76;
+end;
+
+theorem Th84:
+ Divide(a,k1,b,k2) is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC s by Th64;
+    hence thesis by Th76;
+end;
+
+theorem Th85:
+  k1 <> 0 implies goto k1 is non halting
+proof
+   assume A1: k1<>0;
+   set n=abs(k1);
+     n+1>0 by NAT_1:19;
+   then 2*(n+1) in SCM-Instr-Loc by AMI_2:def 3;
+   then reconsider loc=2*(n+1) as Instruction-Location of SCMPDS by Def1;
+   consider s be State of SCMPDS such that
+A2: s.0=loc & for d being Int_position holds s.d = 0 by Th74;
+A3: loc=IC s by A2,Th6,AMI_1:def 15;
+       -n<=k1 by ABSVALUE:11;
+     then 0-n<=k1 by XCMPLX_1:150;
+then A4:  n+k1>=0 by REAL_1:86;
+A5:  loc=2*n+2*1 by XCMPLX_1:8;
+     consider m be Nat such that
+A6:  m=IC s & ICplusConst(s,k1)=abs(m-2+2*k1)+2 by Def20;
+A7: Exec(goto k1, s).IC SCMPDS =abs(2*(n+1)-2+2*k1)+2 by A3,A6,Th66
+    .=abs(2*n+2*k1)+2 by A5,XCMPLX_1:26
+    .=abs(2*(n+k1))+2 by XCMPLX_1:8
+    .=abs(2)*abs((n+k1))+2 by ABSVALUE:10
+    .=2*abs((n+k1))+2 by ABSVALUE:def 1
+    .=2*(n+k1)+2 by A4,ABSVALUE:def 1
+    .=2*n+2*k1+2 by XCMPLX_1:8
+    .=2*n+2+2*k1 by XCMPLX_1:1;
+     assume
+     goto k1 is halting;
+then Exec(goto k1,s).IC SCMPDS = 2*n+2*1 by A2,A5,Th6,AMI_1:def 8;
+    then 2*k1=(2*n+2)-(2*n+2) by A7,XCMPLX_1:26;
+    then 2*k1=0 by XCMPLX_1:14; hence contradiction by A1,XCMPLX_1:6;
+end;
+
+theorem Th86:
+ (a,k1)<>0_goto k2 is non halting
+proof
+    consider s being State of SCMPDS such that
+A1: for d being Int_position holds s.d = 0 by Th73;
+      s.DataLoc(s.a,k1) = 0 by A1;
+    then Exec((a,k1)<>0_goto k2, s).IC SCMPDS = Next IC s by Th67;
+    hence thesis by Th76;
+end;
+
+theorem Th87:
+ (a,k1)<=0_goto k2 is non halting
+proof
+    consider s being State of SCMPDS such that
+A1: for d being Int_position holds s.d = 1 by Th73;
+      s.DataLoc(s.a,k1) = 1 by A1;
+    then Exec((a,k1)<=0_goto k2, s).IC SCMPDS = Next IC s by Th68;
+    hence thesis by Th76;
+end;
+
+theorem Th88:
+ (a,k1)>=0_goto k2 is non halting
+proof
+    consider s being State of SCMPDS such that
+A1: for d being Int_position holds s.d = -1 by Th73;
+      s.DataLoc(s.a,k1) = -1 by A1;
+    then Exec((a,k1)>=0_goto k2, s).IC SCMPDS = Next IC s by Th69;
+    hence thesis by Th76;
+end;
+
+theorem Th89:
+ return a is non halting
+proof
+     2*1 in SCM-Instr-Loc by AMI_2:def 3;
+   then reconsider loc=2 as Instruction-Location of SCMPDS by Def1;
+   consider s be State of SCMPDS such that
+A1: s.0=loc & for d being Int_position holds s.d = 0 by Th74;
+    consider mj being Element of SCM-Instr-Loc such that
+A2:   mj = loc & Next loc = Next mj by Def19;
+A3: loc=IC s by A1,Th6,AMI_1:def 15;
+   Exec(return a, s).IC SCMPDS
+    = 2*(abs(s.DataLoc(s.a,RetIC)) div 2)+4 by Th70
+   .=2*(abs(0) div 2)+4 by A1
+   .=2*(0 div 2)+4 by ABSVALUE:def 1
+   .=2*0+4 by NAT_2:4
+::   .=4
+   .=mj+2 by A2
+   .=Next IC s by A2,A3,AMI_2:def 15;
+    hence thesis by Th76;
+end;
+
+theorem Th90:
+ saveIC(a,k1) is non halting
+proof
+    consider s being State of SCMPDS;
+      Exec(saveIC(a,k1), s).IC SCMPDS = Next IC s by Th71;
+    hence thesis by Th76;
+end;
+
+theorem Th91:
+ for I being set holds I is Instruction of SCMPDS iff
+  (ex k1 st I = goto k1) or
+  (ex a st I = return a) or
+  (ex a,k1 st I = saveIC(a,k1)) or
+  (ex a,k1 st I = a:=k1) or
+  (ex a,k1,k2 st I = (a,k1):=k2) or
+  (ex a,k1,k2 st I = (a,k1)<>0_goto k2) or
+  (ex a,k1,k2 st I = (a,k1)<=0_goto k2) or
+  (ex a,k1,k2 st I = (a,k1)>=0_goto k2) or
+  (ex a,b,k1,k2 st I = AddTo(a,k1,k2)) or
+  (ex a,b,k1,k2 st I = AddTo(a,k1,b,k2)) or
+  (ex a,b,k1,k2 st I = SubFrom(a,k1,b,k2)) or
+  (ex a,b,k1,k2 st I = MultBy(a,k1,b,k2)) or
+  (ex a,b,k1,k2 st I = Divide(a,k1,b,k2)) or
+  (ex a,b,k1,k2 st I = (a,k1):=(b,k2))
+  proof
+    let I be set;
+    thus I is Instruction of SCMPDS implies
+      (ex k1 st I = goto k1) or
+      (ex a st I = return a) or
+      (ex a,k1 st I = saveIC(a,k1)) or
+      (ex a,k1 st I = a:=k1) or
+      (ex a,k1,k2 st I = (a,k1):=k2) or
+      (ex a,k1,k2 st I = (a,k1)<>0_goto k2) or
+      (ex a,k1,k2 st I = (a,k1)<=0_goto k2) or
+      (ex a,k1,k2 st I = (a,k1)>=0_goto k2) or
+      (ex a,b,k1,k2 st I = AddTo(a,k1,k2)) or
+      (ex a,b,k1,k2 st I = AddTo(a,k1,b,k2)) or
+      (ex a,b,k1,k2 st I = SubFrom(a,k1,b,k2)) or
+      (ex a,b,k1,k2 st I = MultBy(a,k1,b,k2)) or
+      (ex a,b,k1,k2 st I = Divide(a,k1,b,k2)) or
+      (ex a,b,k1,k2 st I = (a,k1):=(b,k2))
+    proof
+      assume I is Instruction of SCMPDS;
+      then reconsider I as Instruction of SCMPDS;
+      per cases by Def1,Lm1;
+      suppose I in S1;
+         then consider k1 being Element of INT such that
+A1:      I = [0,<*k1*>];
+           I = goto k1 by A1,Def5;
+         hence thesis;
+      suppose I in S2;
+         then consider d1 such that
+A2:      I = [1,<*d1*>];
+        reconsider a=d1 as Int_position by Def1,Def2;
+           I = return a by A2,Def6;
+         hence thesis;
+      suppose I in S3;
+      then consider I2 being Element of Segm 14,
+               d2 being Element of SCM-Data-Loc,
+               k2 being Element of INT such that
+A3:     I = [I2,<*d2,k2*>] & I2 in {2,3};
+        reconsider a=d2 as Int_position by Def1,Def2;
+          I2 = 2 or I2 = 3 by A3,TARSKI:def 2;
+        then I = saveIC(a,k2) or I = a:=k2 by A3,Def7,Def8;
+      hence thesis;
+      suppose I in S4;
+    then consider I3 being Element of Segm 14,
+             d3 being Element of SCM-Data-Loc,
+             k1,k2 being Element of INT such that
+A4:     I=[I3,<*d3,k1,k2*>] & I3 in {4,5,6,7,8};
+        reconsider a=d3 as Int_position by Def1,Def2;
+          I3 = 4 or I3 = 5 or I3 = 6 or I3 = 7 or I3 = 8 by A4,ENUMSET1:23;
+         then I = (a,k1)<>0_goto k2 or I=(a,k1)<=0_goto k2 or I= (a,k1)
+>=0_goto k2
+         or I= (a,k1) := k2 or I=AddTo(a,k1,k2)
+         by A4,Def9,Def10,Def11,Def12,Def13;
+         hence thesis;
+      suppose I in S5;
+      then consider I3 being Element of Segm 14,
+               d4,d5 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A5:     I=[I3,<*d4,d5,k1,k2*>] & I3 in {9,10,11,12,13};
+        reconsider a=d4,b=d5 as Int_position by Def1,Def2;
+          I3=9 or I3=10 or I3=11 or I3=12 or I3=13 by A5,ENUMSET1:23;
+        then I=AddTo(a,k1,b,k2) or I=SubFrom(a,k1,b,k2) or I=MultBy(a,k1,b,k2)
+        or I=Divide(a,k1,b,k2) or I=(a,k1) := (b,k2)
+        by A5,Def14,Def15,Def16,Def17,Def18;
+        hence thesis;
+    end;
+    thus thesis;
+end;
+
+definition
+ cluster SCMPDS -> halting;
+coherence
+  proof
+    take H=goto 0;
+    thus H is halting by Th75;
+    let W be Instruction of SCMPDS such that
+A1: W is halting;
+    assume
+A2:   H <> W;
+    per cases by Th91;
+    suppose ex k1 st W=goto k1;
+      then consider k1 such that
+A3:   W=goto k1;
+        now assume k1<>0;
+        hence contradiction by A1,A3,Th85;
+      end; hence thesis by A2,A3;
+    suppose ex a st W = return a;
+      hence thesis by A1,Th89;
+    suppose ex a,k1 st W = saveIC(a,k1);
+      hence thesis by A1,Th90;
+    suppose ex a,k1 st W = a:=k1;
+      hence thesis by A1,Th77;
+    suppose ex a,k1,k2 st W=(a,k1):=k2;
+      hence thesis by A1,Th78;
+    suppose ex a,k1,k2 st W = (a,k1)<>0_goto k2;
+      hence thesis by A1,Th86;
+    suppose ex a,k1,k2 st W = (a,k1)<=0_goto k2;
+      hence thesis by A1,Th87;
+    suppose ex a,k1,k2 st W = (a,k1)>=0_goto k2;
+      hence thesis by A1,Th88;
+    suppose ex a,b,k1,k2 st W = AddTo(a,k1,k2);
+      hence thesis by A1,Th80;
+    suppose ex a,b,k1,k2 st W = AddTo(a,k1,b,k2);
+      hence thesis by A1,Th81;
+    suppose ex a,b,k1,k2 st W = SubFrom(a,k1,b,k2);
+      hence thesis by A1,Th82;
+   suppose ex a,b,k1,k2 st W = MultBy(a,k1,b,k2);
+      hence thesis by A1,Th83;
+   suppose ex a,b,k1,k2 st W = Divide(a,k1,b,k2);
+      hence thesis by A1,Th84;
+   suppose ex a,b,k1,k2 st W = (a,k1):=(b,k2);
+      hence thesis by A1,Th79;
+  end;
+end;
+
+theorem Th92:
+ for I being Instruction of SCMPDS st I is halting holds I = halt SCMPDS
+proof
+    let I be Instruction of SCMPDS such that
+A1:   I is halting;
+    consider K being Instruction of SCMPDS such that
+        K is halting and
+A2:   for J being Instruction of SCMPDS st J is halting holds K = J
+       by AMI_1:def 9;
+    thus I = K by A1,A2
+          .= halt SCMPDS by A2;
+  end;
+
+theorem
+   halt SCMPDS = goto 0 by Th75,Th92;
+
+canceled 2;
+
+theorem Th96:
+for s being State of SCMPDS, i being Instruction of SCMPDS,
+      l being Instruction-Location of SCMPDS
+   holds Exec(i,s).l = s.l
+proof let s be State of SCMPDS, i be Instruction of SCMPDS,
+    l be Instruction-Location of SCMPDS;
+    reconsider c = i as Element of SCMPDS-Instr by Def1;
+    reconsider S = s as Element of product SCMPDS-OK by Def1;
+    reconsider l' = l as Element of SCM-Instr-Loc by Def1;
+      now per cases by Lm1;
+    case c in S1;
+     then consider k1 being Element of INT such that
+A1:    c = [0,<*k1*>];
+     thus SCM-Exec-Res(c,S).l' = SCM-Chg(S,jump_address(S,c const_INT )).l'
+         by A1,SCMPDS_1:def 24
+      .= S.l' by SCMPDS_1:28;
+    case c in S2;
+     then consider d1 such that
+A2:    c = [1,<*d1*>];
+      set SS=SCM-Chg(S,c address_1, S.Address_Add(S,c address_1,RetSP));
+     thus SCM-Exec-Res(c,S).l' =
+       SCM-Chg(SS,PopInstrLoc(S,Address_Add(S,c address_1,RetIC))).l'
+         by A2,SCMPDS_1:def 24
+      .= SS.l' by SCMPDS_1:28
+      .= S.l' by SCMPDS_1:32;
+    case c in S3;
+      then consider I1 being Element of Segm 14,
+               d1 being Element of SCM-Data-Loc,
+               k1 being Element of INT such that
+A3:    c = [I1,<*d1,k1*>] & I1 in { 2,3 };
+       set SS=SCM-Chg(S, c P21address, c P22const);
+       now per cases by A3,TARSKI:def 2;
+       case I1=2;
+        hence SCM-Exec-Res(c,S).l'
+           = SCM-Chg(SS,Next IC S).l'
+             by A3,SCMPDS_1:def 24
+           .= SS.l' by SCMPDS_1:28
+           .= S.l' by SCMPDS_1:32;
+       case A4:I1=3;
+       consider m be Nat such that
+       A5: m=IC S;
+    set SS = SCM-Chg(S,Address_Add(S,c P21address,c P22const),m);
+        thus SCM-Exec-Res(c,S).l'
+           = SCM-Chg(SS,Next IC S).l'
+             by A3,A4,A5,SCMPDS_1:def 24
+           .= SS.l' by SCMPDS_1:28
+           .= S.l' by SCMPDS_1:32;
+      end;
+     hence SCM-Exec-Res(c,S).l' = S.l';
+    case c in S4;
+    then consider I1 being Element of Segm 14,
+             d1 being Element of SCM-Data-Loc,
+             k1,k2 being Element of INT such that
+A6:     c = [I1,<*d1,k1,k2*>] & I1 in { 4,5,6,7,8};
+        now per cases by A6,ENUMSET1:23;
+       case I1 = 4;
+        hence SCM-Exec-Res(c,S).l'
+          = SCM-Chg(S, IFEQ(S.Address_Add(S,c P31address,c P32const), 0,
+           Next IC S,jump_address(S,c P33const ))).l'
+             by A6,SCMPDS_1:def 24
+          .= S.l' by SCMPDS_1:28;
+       case I1 = 5;
+        hence SCM-Exec-Res(c,S).l'
+         = SCM-Chg(S, IFGT(S.Address_Add(S,c P31address,c P32const), 0,
+           Next IC S,jump_address(S,c P33const ))).l'
+             by A6,SCMPDS_1:def 24
+          .= S.l' by SCMPDS_1:28;
+       case I1 = 6;
+        hence SCM-Exec-Res(c,S).l'
+         = SCM-Chg(S,IFGT(0, S.Address_Add(S,c P31address,c P32const),
+           Next IC S,jump_address(S,c P33const ))).l'
+             by A6,SCMPDS_1:def 24
+          .= S.l' by SCMPDS_1:28;
+       case A7:I1 = 7;
+        set SS=SCM-Chg(S,Address_Add(S,c P31address,c P32const),c P33const);
+        thus SCM-Exec-Res(c,S).l'
+          =SCM-Chg(SS,Next IC S).l' by A6,A7,SCMPDS_1:def 24
+         .= SS.l' by SCMPDS_1:28
+         .= S.l' by SCMPDS_1:32;
+       case A8:I1 = 8;
+           set SS=SCM-Chg(S,Address_Add(S,c P31address,c P32const),
+         S.Address_Add(S,c P31address,c P32const)+ (c P33const));
+        thus SCM-Exec-Res(c,S).l'
+           = SCM-Chg(SS,Next IC S).l' by A6,A8,SCMPDS_1:def 24
+         .= SS.l' by SCMPDS_1:28
+         .= S.l' by SCMPDS_1:32;
+      end;
+     hence SCM-Exec-Res(c,S).l' = S.l';
+    case c in S5;
+      then consider I1 being Element of Segm 14,
+               d1,d2 being Element of SCM-Data-Loc,
+               k1,k2 being Element of INT such that
+A9:     c = [I1,<*d1,d2,k1,k2*>] & I1 in { 9,10,11,12,13 };
+        now per cases by A9,ENUMSET1:23;
+       case A10: I1 = 9;
+        set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const),
+          S.Address_Add(S,c P41address,c P43const)+
+          S.Address_Add(S,c P42address,c P44const));
+        thus SCM-Exec-Res(c,S).l'
+         = SCM-Chg(SS,Next IC S).l' by A9,A10,SCMPDS_1:def 24
+        .= SS.l' by SCMPDS_1:28
+        .= S.l' by SCMPDS_1:32;
+       case A11: I1 = 10;
+        set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const),
+          S.Address_Add(S,c P41address,c P43const)-
+          S.Address_Add(S,c P42address,c P44const));
+        thus SCM-Exec-Res(c,S).l'
+         = SCM-Chg(SS,Next IC S).l' by A9,A11,SCMPDS_1:def 24
+        .= SS.l' by SCMPDS_1:28
+        .= S.l' by SCMPDS_1:32;
+       case A12: I1 = 11;
+        set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const),
+          S.Address_Add(S,c P41address,c P43const)*
+          S.Address_Add(S,c P42address,c P44const));
+        thus SCM-Exec-Res(c,S).l'
+         = SCM-Chg(SS,Next IC S).l' by A9,A12,SCMPDS_1:def 24
+        .= SS.l' by SCMPDS_1:28
+        .= S.l' by SCMPDS_1:32;
+       case A13: I1 = 12;
+           set SA= SCM-Chg(S,Address_Add(S,c P41address,c P43const),
+             S.Address_Add(S,c P41address,c P43const) div
+             S.Address_Add(S,c P42address,c P44const)),
+             SB=SCM-Chg(SA, Address_Add(S,c P42address,c P44const),
+             S.Address_Add(S,c P41address,c P43const) mod
+             S.Address_Add(S,c P42address,c P44const));
+        thus SCM-Exec-Res(c,S).l'
+           = SCM-Chg(SB,Next IC S).l' by A9,A13,SCMPDS_1:def 24
+        .= SB.l' by SCMPDS_1:28
+        .= SA.l' by SCMPDS_1:32
+        .= S.l' by SCMPDS_1:32;
+       case A14:I1 = 13;
+         set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const),
+           S.Address_Add(S,c P42address,c P44const));
+        thus SCM-Exec-Res(c,S).l'
+         = SCM-Chg(SS,Next IC S).l' by A9,A14,SCMPDS_1:def 24
+        .= SS.l' by SCMPDS_1:28
+        .= S.l' by SCMPDS_1:32;
+      end;
+     hence SCM-Exec-Res(c,S).l' = S.l';
+   end;
+  hence s.l = Exec(i,s).l by Th56;
+ end;
+
+theorem
+  SCMPDS is realistic by Def1,AMI_1:def 21,SCMPDS_1:17;
+
+definition
+ cluster SCMPDS -> steady-programmed realistic;
+ coherence
+  proof
+       SCMPDS is steady-programmed
+     proof let s be State of SCMPDS, i be Instruction of SCMPDS,
+      l be Instruction-Location of SCMPDS;
+      thus Exec(i,s).l = s.l by Th96;
+     end;
+   hence thesis by Def1,AMI_1:def 21,SCMPDS_1:17;
+  end;
+end;
+
+theorem
+   IC SCMPDS <> dl.i & IC SCMPDS <> il.i
+ proof
+  hereby assume IC SCMPDS = dl.i;
+    then 0 = 2*i + 1 by Th6,AMI_3:def 19;
+   hence contradiction;
+  end;
+  assume IC SCMPDS = il.i;
+    then 0 = 2*i + (1 + 1) by Th6,AMI_3:def 20
+      .= 2*i + 1 + 1 by XCMPLX_1:1;
+  hence contradiction;
+ end;
+
+theorem
+   for I being Instruction of SCMPDS st I = goto 0 holds
+ I is halting by Th75;
+

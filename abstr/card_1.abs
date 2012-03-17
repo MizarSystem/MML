@@ -1,0 +1,338 @@
+:: Cardinal Numbers
+::  by Grzegorz Bancerek
+::
+:: Received September 19, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
+      ORDINAL2, FINSET_1, CARD_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, NAT_1,
+      RELAT_1, FUNCT_1, WELLORD1, ORDINAL1, ORDINAL2, WELLORD2, FINSET_1;
+ constructors NAT_1, WELLORD1, WELLORD2, FINSET_1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, ORDINAL1, FINSET_1, NAT_1, SUBSET_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve A,B,C for Ordinal,
+         X,X1,Y,Y1,Z,a,b,b1,b2,x,y,z for set,
+         R for Relation,
+         f,g,h for Function,
+         k,m,n for Nat;
+
+definition let IT be set;
+ attr IT is cardinal means
+:: CARD_1:def 1
+  ex B st IT = B & for A st A,B are_equipotent holds B c= A;
+end;
+
+definition
+ cluster cardinal set;
+end;
+
+definition
+ mode Cardinal is cardinal set;
+end;
+
+definition
+ cluster cardinal -> ordinal set;
+end;
+
+reserve M,N for Cardinal;
+
+canceled 3;
+
+theorem :: CARD_1:4
+  for X ex A st X,A are_equipotent;
+
+definition let M,N;
+ redefine pred M c= N;
+ synonym M <=` N;
+ pred M in N;
+ synonym M <` N;
+end;
+
+canceled 3;
+
+theorem :: CARD_1:8
+  M = N iff M,N are_equipotent;
+
+canceled 4;
+
+theorem :: CARD_1:13
+   M <` N iff M <=` N & M <> N;
+
+theorem :: CARD_1:14
+    M <` N iff not N <=` M;
+
+definition let X;
+ canceled 3;
+
+ func Card X -> Cardinal means
+:: CARD_1:def 5
+  X,it are_equipotent;
+end;
+
+canceled 6;
+
+theorem :: CARD_1:21
+  X,Y are_equipotent iff Card X = Card Y;
+
+theorem :: CARD_1:22
+  R is well-ordering implies field R,order_type_of R are_equipotent;
+
+theorem :: CARD_1:23
+  X c= M implies Card X <=` M;
+
+theorem :: CARD_1:24
+  Card A c= A;
+
+theorem :: CARD_1:25
+    X in M implies Card X <` M;
+
+theorem :: CARD_1:26
+  Card X <=` Card Y iff ex f st f is one-to-one & dom f = X & rng f c= Y;
+
+theorem :: CARD_1:27
+  X c= Y implies Card X <=` Card Y;
+
+theorem :: CARD_1:28
+    Card X <=` Card Y iff ex f st dom f = Y & X c= rng f;
+
+theorem :: CARD_1:29
+  not X,bool X are_equipotent;
+
+theorem :: CARD_1:30
+  Card X <` Card bool X;
+
+definition let X;
+ func nextcard X -> Cardinal means
+:: CARD_1:def 6
+  Card X <` it & for M st Card X <` M holds it <=` M;
+end;
+
+canceled;
+
+theorem :: CARD_1:32
+  M <` nextcard M;
+
+theorem :: CARD_1:33
+    Card {} <` nextcard X;
+
+theorem :: CARD_1:34
+  Card X = Card Y implies nextcard X = nextcard Y;
+
+theorem :: CARD_1:35
+  X,Y are_equipotent implies nextcard X = nextcard Y;
+
+theorem :: CARD_1:36
+    A in nextcard A;
+
+ reserve L,L1 for T-Sequence;
+
+definition let M;
+ attr M is limit means
+:: CARD_1:def 7
+  not ex N st M = nextcard N;
+  synonym M is_limit_cardinal;
+end;
+
+definition let A;
+ func alef A -> set means
+:: CARD_1:def 8
+   ex L st it = last L & dom L = succ A & L.{} = Card NAT &
+        (for B st succ B in succ A holds L.succ B = nextcard union { L.B }) &
+         for B st B in succ A & B <> {} & B is_limit_ordinal
+                holds L.B = Card sup(L|B);
+end;
+
+definition let A;
+ cluster alef A -> cardinal;
+end;
+
+canceled;
+
+theorem :: CARD_1:38
+    alef 0 = Card NAT;
+
+theorem :: CARD_1:39
+  alef succ A = nextcard alef A;
+
+theorem :: CARD_1:40
+   A <> {} & A is_limit_ordinal implies
+   for L st dom L = A & for B st B in A holds L.B = alef B holds
+            alef A = Card sup L;
+
+theorem :: CARD_1:41
+  A in B iff alef A <` alef B;
+
+theorem :: CARD_1:42
+  alef A = alef B implies A = B;
+
+theorem :: CARD_1:43
+    A c= B iff alef A <=` alef B;
+
+theorem :: CARD_1:44
+    X c= Y & Y c= Z & X,Z are_equipotent implies
+  X,Y are_equipotent & Y,Z are_equipotent;
+
+theorem :: CARD_1:45
+    bool Y c= X implies Card Y <` Card X & not Y,X are_equipotent;
+
+theorem :: CARD_1:46
+    X,{} are_equipotent iff X = {};
+
+theorem :: CARD_1:47
+    Card {} = {};
+
+theorem :: CARD_1:48
+  X,{x} are_equipotent iff ex x st X = { x };
+
+theorem :: CARD_1:49
+  Card X = Card { x } iff ex x st X = { x };
+
+theorem :: CARD_1:50
+    Card { x } = one;
+
+theorem :: CARD_1:51
+   0 = {};
+
+theorem :: CARD_1:52
+  succ n = n + 1;
+
+canceled;
+
+theorem :: CARD_1:54
+   A is natural implies ex n st n = A;
+
+canceled;
+
+theorem :: CARD_1:56
+  n <= m iff n c= m;
+
+canceled;
+
+theorem :: CARD_1:58
+  X misses X1 & Y misses Y1 & X,Y are_equipotent &
+       X1,Y1 are_equipotent implies X \/ X1,Y \/ Y1 are_equipotent;
+
+theorem :: CARD_1:59
+  x in X & y in X implies X \ { x },X \ { y } are_equipotent;
+
+theorem :: CARD_1:60
+  X c= dom f & f is one-to-one implies X,f.:X are_equipotent;
+
+theorem :: CARD_1:61
+  X,Y are_equipotent & x in X & y in Y implies
+       X \ { x },Y \ { y } are_equipotent;
+
+canceled 2;
+
+theorem :: CARD_1:64
+   n,m are_equipotent implies n = m;
+
+theorem :: CARD_1:65
+  x in omega implies x is cardinal;
+
+definition cluster -> cardinal Nat;
+end;
+
+theorem :: CARD_1:66
+  for n being Nat holds n = Card n;
+
+canceled;
+
+theorem :: CARD_1:68
+    X,Y are_equipotent & X is finite implies Y is finite;
+
+theorem :: CARD_1:69
+   n is finite & Card n is finite;
+
+canceled;
+
+theorem :: CARD_1:71
+  Card n = Card m implies n = m;
+
+theorem :: CARD_1:72
+  Card n <=` Card m iff n <= m;
+
+theorem :: CARD_1:73
+  Card n <` Card m iff n < m;
+
+theorem :: CARD_1:74
+  X is finite implies ex n st X,n are_equipotent;
+
+canceled;
+
+theorem :: CARD_1:76
+  nextcard Card n = Card(n+1);
+
+definition let X be finite set;
+ redefine canceled 2;
+
+func Card X -> Nat means
+:: CARD_1:def 11
+           Card it = Card X;
+  synonym card X;
+end;
+
+canceled;
+
+theorem :: CARD_1:78
+    card {} = 0;
+
+theorem :: CARD_1:79
+    card { x } = 1;
+
+theorem :: CARD_1:80
+   for X,Y being finite set holds
+   X c= Y implies card X <= card Y;
+
+theorem :: CARD_1:81
+         for X,Y being finite set holds
+    X,Y are_equipotent implies card X = card Y;
+
+theorem :: CARD_1:82
+    X is finite implies nextcard X is finite;
+
+ scheme Cardinal_Ind { Sigma[set] }:
+  for M holds Sigma[M]
+   provided
+  Sigma[{}] and
+  for M st Sigma[M] holds Sigma[nextcard M] and
+  for M st M <> {} & M is_limit_cardinal & for N st N <` M holds Sigma[N]
+       holds Sigma[M];
+
+ scheme Cardinal_CompInd { Sigma[set] }:
+  for M holds Sigma[M]
+   provided
+  for M st for N st N <` M holds Sigma[N] holds Sigma[M];
+
+theorem :: CARD_1:83
+  alef 0 = omega;
+
+theorem :: CARD_1:84
+   Card omega = omega;
+
+theorem :: CARD_1:85
+    Card omega is_limit_cardinal;
+
+definition
+ cluster -> finite Nat;
+end;
+
+definition
+ cluster finite Cardinal;
+end;
+
+theorem :: CARD_1:86
+   for M being finite Cardinal ex n st M = Card n;
+
+definition let X be finite set;
+ cluster Card X -> finite;
+end;
+

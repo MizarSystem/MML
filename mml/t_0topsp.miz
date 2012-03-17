@@ -1,0 +1,841 @@
+:: $T_0$ Topological Spaces
+::  by Mariusz \.Zynel and Adam Guzowski
+::
+:: Received May 6, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_1, PRE_TOPC, TOPS_2, EQREL_1, RELAT_2, BORSUK_1,
+      SUBSET_1, TARSKI, BOOLE, METRIC_1, RFINSEQ, ORDINAL2, T_0TOPSP, PARTFUN1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RFINSEQ, RELAT_2, RELSET_1, RELAT_1,
+      FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, PRE_TOPC, TOPS_2, BORSUK_1,
+      EQREL_1;
+ constructors RFINSEQ, RELAT_2, TOPS_2, BORSUK_1, MEMBERED, PARTFUN1, XBOOLE_0;
+ clusters BORSUK_1, RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, MEMBERED, ZFMISC_1,
+      PARTFUN1, FUNCT_2, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions TOPS_2, RELAT_2;
+ theorems RFINSEQ, FUNCT_1, FUNCT_2, EQREL_1, RELAT_1, TOPS_2, PRE_TOPC,
+      BORSUK_1, TARSKI, ZFMISC_1, RELSET_1, XBOOLE_0, ORDERS_1, RELAT_2,
+      PARTFUN1;
+ schemes FUNCT_2, RELSET_1;
+
+begin
+::
+::    Preliminaries
+::
+
+theorem Th1:
+for A,B being non empty set,
+    R1,R2 being Relation of A,B st
+  for x being Element of A, y being Element of B holds
+   [x,y] in R1 iff [x,y] in R2
+    holds R1 = R2
+proof
+  let A,B be non empty set;
+  let R1,R2 be Relation of A,B;
+  assume A1: for x being Element of A, y being Element of B holds
+     [x,y] in R1 iff [x,y] in R2;
+
+  for a,b being set holds [a,b] in R1 iff [a,b] in R2
+  proof
+    let a,b be set;
+    hereby assume A2: [a,b] in R1;
+      then reconsider a'=a as Element of A by ZFMISC_1:106;
+      reconsider b'=b as Element of B by A2,ZFMISC_1:106;
+        [a',b'] in R2 by A1,A2;
+      hence [a,b] in R2;
+    end;
+
+    assume A3: [a,b] in R2;
+    then reconsider a'=a as Element of A by ZFMISC_1:106;
+    reconsider b'=b as Element of B by A3,ZFMISC_1:106;
+      [a',b'] in R1 by A1,A3;
+    hence [a,b] in R1;
+  end;
+
+  hence R1=R2 by RELAT_1:def 2;
+end;
+
+theorem Th2:
+for X,Y being non empty set,
+    f being Function of X,Y holds
+  for A being Subset of X st
+    for x1,x2 being Element of X holds (x1 in A & f.x1=f.x2) implies x2 in A
+      holds f"(f.:A) = A
+proof
+  let X,Y be non empty set;
+  let f be Function of X,Y;
+  let A be Subset of X;
+  assume A1: for x1,x2 being Element of X holds
+                 (x1 in A & f.x1=f.x2) implies x2 in A;
+A2:  A c= f"(f.:A) by FUNCT_2:50;
+
+    for x being set st x in f"(f.:A) holds x in A
+  proof
+    let x be set;
+    assume A3: x in f"(f.:A);
+  then x in dom f & f.x in f.:A by FUNCT_1:def 13;
+    then consider x0 being set such that
+  A4:  x0 in X & x0 in A & f.x = f.x0 by FUNCT_2:115;
+    thus thesis by A1,A3,A4;
+  end;
+  then f"(f.:A) c= A by TARSKI:def 3;
+  hence f"(f.:A)=A by A2,XBOOLE_0:def 10;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::
+::    Homeomorphic TopSpaces             ::
+:::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let T,S be TopStruct;
+  pred T,S are_homeomorphic means
+    ex f being map of T,S st f is_homeomorphism;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::
+::    Open Function                      ::
+:::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let T,S be TopStruct;
+  let f be map of T,S;
+  attr f is open means :Def2:
+  for A being Subset of T st A is open holds f.:A is open;
+  correctness;
+end;
+
+::
+::    Indiscernibility Relation
+::
+
+definition
+  let T be non empty TopStruct;
+  func Indiscernibility(T) -> Equivalence_Relation of the carrier of T means
+:Def3:
+  for p,q being Point of T holds
+    [p,q] in it iff
+       for A being Subset of T st A is open
+       holds p in A iff q in A;
+  existence
+  proof
+   defpred X[set,set] means for A being Subset of T st A is open holds
+           $1 in A iff $2 in A;
+    consider R being Relation of the carrier of T,the carrier of T such that
+A1: for p,q being Element of T holds
+        [p,q] in R iff X[p,q] from Rel_On_Dom_Ex;
+   R is_reflexive_in the carrier of T
+    proof
+      let x be set;
+      assume A2: x in the carrier of T;
+        for A being Subset of T st A is open holds x in A iff x in A;
+      hence [x,x] in R by A1,A2;
+    end;
+    then
+A3: dom R = the carrier of T & field R = the carrier of T by ORDERS_1:98;
+    then
+A4: R is total by PARTFUN1:def 4;
+
+A5: R is_symmetric_in the carrier of T
+    proof
+      let x,y be set;
+      assume A6: x in the carrier of T & y in the carrier of T & [x,y] in R;
+      then for A being Subset of T st A is open
+      holds y in A iff x in A by A1;
+      hence [y,x] in R by A1,A6;
+    end;
+
+      R is_transitive_in the carrier of T
+    proof
+      let x,y,z be set;
+      assume A7: x in the carrier of T & y in the carrier of T &
+      z in the carrier of T & [x,y] in R & [y,z] in R;
+      then reconsider x' = x, y' = y, z' = z as Element of T;
+
+        for A being Subset of T st A is open holds x' in A iff z' in A
+      proof
+        let A be Subset of T; assume A is open;
+         then (x' in A iff y' in A) &
+          (y' in A iff z' in A) by A1,A7;
+        hence thesis;
+      end;
+      hence thesis by A1;
+    end;
+    then reconsider R as Equivalence_Relation of the carrier of T
+                        by A3,A4,A5,RELAT_2:def 11,def 16;
+    take R;
+    let p,q be Point of T;
+    thus [p,q] in R implies
+      for A be Subset of T st A is open holds p in A iff q in A by A1;
+    assume for A being Subset of T st A is open holds p in A iff q in A;
+    hence [p,q] in R by A1;
+  end;
+
+  uniqueness
+  proof
+    let R1,R2 be Equivalence_Relation of the carrier of T;
+    assume that
+A8: for p,q being Point of T holds
+        [p,q] in R1 iff for A being Subset of T st
+        A is open holds p in A iff q in A
+    and
+A9: for p,q being Point of T holds
+        [p,q] in R2 iff for A being Subset of T st
+        A is open holds p in A iff q in A;
+
+      for x,y being Point of T holds [x,y] in R1 iff [x,y] in R2
+    proof
+      let x,y be Point of T;
+        [x,y] in R1 iff for A being Subset of T st
+      A is open holds x in A iff y in A by A8;
+      hence thesis by A9;
+    end;
+
+    hence R1=R2 by Th1;
+  end;
+end;
+
+
+::
+::    Indiscernibility Partition
+::
+
+definition
+  let T be non empty TopStruct;
+  func Indiscernible(T) -> non empty a_partition of the carrier of T equals
+:Def4:
+   Class Indiscernibility(T);
+  coherence
+  proof
+    set R = Indiscernibility(T);
+    consider p being Point of T;
+      Class(R,p) in Class R by EQREL_1:def 5; hence thesis by EQREL_1:42;
+  end;
+  correctness;
+end;
+
+::
+::    T_0 Reflex of TopSpace
+::
+
+definition
+  let T be non empty TopSpace;
+  func T_0-reflex(T) -> TopSpace equals :Def5:
+   space Indiscernible(T);
+  correctness;
+end;
+
+definition
+  let T be non empty TopSpace;
+  cluster T_0-reflex(T) -> non empty;
+  coherence
+   proof T_0-reflex(T) = space Indiscernible(T) by Def5;
+    hence thesis;
+   end;
+end;
+
+::
+::    Function from TopSpace to its T_0 Reflex
+::
+
+definition
+  let T be non empty TopSpace;
+  func T_0-canonical_map T -> continuous map of T,T_0-reflex T equals:Def6:
+   Proj Indiscernible T;
+  coherence
+  proof
+      space Indiscernible T = T_0-reflex T by Def5;
+    hence thesis;
+  end;
+end;
+
+::
+::    Properties of Canonical Map and T_0 Reflex
+::
+
+theorem Th3:
+for T being non empty TopSpace,
+    p being Point of T holds p in (T_0-canonical_map(T)).p
+proof
+  let T be non empty TopSpace;
+    T_0-canonical_map(T) = Proj Indiscernible(T) by Def6;
+  hence thesis by BORSUK_1:70;
+end;
+
+theorem Th4:
+for T being non empty TopSpace holds
+  dom T_0-canonical_map(T) = the carrier of T &
+  rng T_0-canonical_map(T) c= the carrier of T_0-reflex(T)
+proof
+  let T be non empty TopSpace;
+  set F=T_0-canonical_map(T);
+
+    dom F = [#] T by TOPS_2:51;
+  hence dom F = the carrier of T by PRE_TOPC:12;
+
+    rng F c= [#] T_0-reflex(T) by TOPS_2:51;
+  hence rng F c= the carrier of T_0-reflex(T) by PRE_TOPC:12;
+end;
+
+theorem Th5:
+for T being non empty TopSpace holds
+  the carrier of T_0-reflex(T) = Indiscernible(T) &
+  the topology of T_0-reflex(T) =
+    { A where A is Subset of Indiscernible(T) : union A in the topology of T}
+proof
+  let T be non empty TopSpace;
+A1:  T_0-reflex(T) = space Indiscernible(T) by Def5;
+  hence the carrier of T_0-reflex(T) = Indiscernible(T) by BORSUK_1:def 10;
+
+  thus the topology of T_0-reflex(T) =
+    { A where A is Subset of Indiscernible(T) : union A in the topology of T}
+      by A1,BORSUK_1:def 10;
+end;
+
+theorem Th6:
+for T being non empty TopSpace,
+    V being Subset of T_0-reflex(T) holds
+  V is open iff union V in the topology of T
+proof
+  let T be non empty TopSpace;
+  let V be Subset of T_0-reflex(T);
+A1: V is Subset of Indiscernible(T) by Th5;
+
+  hereby assume V is open;
+    then V in the topology of T_0-reflex(T) by PRE_TOPC:def 5;
+    then V in the topology of space Indiscernible(T) by Def5;
+    hence union V in the topology of T by A1,BORSUK_1:69;
+  end;
+
+  assume union V in the topology of T;
+  then V in the topology of space Indiscernible(T) by A1,BORSUK_1:69;
+  then V in the topology of T_0-reflex(T) by Def5;
+  hence V is open by PRE_TOPC:def 5;
+end;
+
+theorem Th7:
+for T being non empty TopSpace,
+   C being set holds
+  C is Point of T_0-reflex(T) iff
+    ex p being Point of T st C = Class(Indiscernibility(T),p)
+proof
+  let T be non empty TopSpace;
+  set TR = T_0-reflex(T);
+  set R = Indiscernibility(T);
+  let C be set;
+  hereby assume C is Point of TR;
+    then C in the carrier of TR;
+    then C in Indiscernible(T) by Th5;
+    then C in Class R by Def4;
+    hence ex p being Point of T st C = Class(R,p) by EQREL_1:45;
+  end;
+  assume ex p being Point of T st C = Class(R,p);
+  then C in Class R by EQREL_1:def 5;
+  then C in Indiscernible(T) by Def4;
+  hence C is Point of TR by Th5;
+end;
+
+theorem Th8:
+for T being non empty TopSpace,
+    p being Point of T holds
+  (T_0-canonical_map(T)).p = Class(Indiscernibility(T),p)
+proof
+  let T be non empty TopSpace;
+  let p be Point of T;
+  set F = T_0-canonical_map(T);
+  set R = Indiscernibility(T);
+
+    F.p in the carrier of T_0-reflex(T);
+  then F.p in Indiscernible(T) by Th5;
+  then F.p in Class R by Def4;
+  then consider y being Element of T such that
+A1:  F.p = Class(R,y) by EQREL_1:45;
+
+    p in Class(R,y) by A1,Th3;
+  hence F.p = Class(R,p) by A1,EQREL_1:31;
+end;
+
+theorem Th9:
+for T being non empty TopSpace,
+    p,q being Point of T holds
+  (T_0-canonical_map(T)).q = (T_0-canonical_map(T)).p iff
+       [q,p] in Indiscernibility(T)
+proof
+  let T be non empty TopSpace;
+  let p,q be Point of T;
+  set F = T_0-canonical_map(T);
+  set R = Indiscernibility(T);
+  hereby assume F.q = F.p;
+    then q in F.p by Th3;
+    then q in Class(R,p) by Th8;
+    hence [q,p] in R by EQREL_1:27;
+  end;
+  assume [q,p] in R;
+  then Class(R,q) = Class(R,p) by EQREL_1:44;
+  then F.q = Class(R,p) by Th8;
+  hence F.q = F.p by Th8;
+end;
+
+theorem Th10:
+for T being non empty TopSpace,
+    A being Subset of T st A is open holds
+     for p,q being Point of T holds
+       p in A & (T_0-canonical_map(T)).p = (T_0-canonical_map(T)).q
+         implies q in A
+proof
+  let T be non empty TopSpace;
+  let A be Subset of T such that A1: A is open;
+  let p,q be Point of T;
+  set F=T_0-canonical_map(T);
+  assume that A2: p in A and
+              A3: F.p = F.q;
+
+    q in F.p & F.p = Class(Indiscernibility(T),p) by A3,Th3,Th8;
+  then [q,p] in Indiscernibility(T) by EQREL_1:27;
+  hence q in A by A1,A2,Def3;
+end;
+
+theorem Th11:
+for T being non empty TopSpace, A being Subset of T st A is open
+  for C being Subset of T st C in Indiscernible(T) & C meets A
+  holds C c= A
+proof
+  let T be non empty TopSpace;
+  let A be Subset of T such that A1: A is open;
+  let C be Subset of T;
+  set R = Indiscernibility(T);
+
+  assume that A2: C in Indiscernible(T) and
+              A3: C meets A;
+
+    Indiscernible(T) = Class R by Def4;
+  then consider x being set such that
+A4: x in the carrier of T & C = Class(R,x) by A2,EQREL_1:def 5;
+
+  consider y being set such that
+A5:  y in C & y in A by A3,XBOOLE_0:3;
+
+    for p being set st p in C holds p in A
+  proof
+    let p be set;
+    assume A6: p in C;
+then A7: [p,x] in R by A4,EQREL_1:27;
+
+      [y,x] in R by A4,A5,EQREL_1:27;
+    then [x,y] in R by EQREL_1:12;
+ then [p,y] in R by A7,EQREL_1:13;
+     hence p in A by A1,A5,A6,Def3;
+  end;
+  hence C c= A by TARSKI:def 3;
+end;
+
+theorem Th12:
+for T being non empty TopSpace holds T_0-canonical_map(T) is open
+proof
+  let T be non empty TopSpace;
+  set F = T_0-canonical_map(T);
+    for A being Subset of T st A is open holds F.:A is open
+  proof
+    let A be Subset of T such that
+  A1: A is open;
+    set A' = F.:A;
+    set D = Indiscernible(T);
+
+      F = Proj D by Def6;
+then A2: F = proj D by BORSUK_1:def 11;
+
+      A' is Subset of D by Th5;
+then A3: F"A' = union A' by A2,BORSUK_1:31;
+
+      for C being Subset of T st
+      C in D & C meets A holds C c= A by A1,Th11;
+ then A = union A' by A2,A3,BORSUK_1:33;
+    then union A' in the topology of T by A1,PRE_TOPC:def 5;
+    hence F.:A is open by Th6;
+  end;
+  hence F is open by Def2;
+end;
+
+Lm1:
+for T being non empty TopSpace,
+    x,y being Point of T_0-reflex(T) st x <> y
+  ex V being Subset of T_0-reflex(T) st V is open &
+              ((x in V & not y in V) or (y in V & not x in V))
+proof
+  let T be non empty TopSpace;
+  set S = T_0-reflex(T);
+  assume not (for x,y being Point of S st not x = y
+    ex V being Subset of S st V is open &
+       ((x in V & not y in V) or (y in V & not x in V)));
+
+  then consider x,y being Point of S such that
+    A1: x <> y and
+    A2: for V being Subset of S st V is open
+    holds x in V iff y in V;
+
+  reconsider x,y as Point of space Indiscernible(T) by Def5;
+  set F = T_0-canonical_map(T);
+A3:  F = Proj(Indiscernible(T)) by Def6;
+
+    ex p being Point of T st Proj(Indiscernible(T)).p = x by BORSUK_1:71;
+  then consider p being Point of T such that A4: F.p = x by A3;
+
+    ex q being Point of T st Proj(Indiscernible(T)).q = y by BORSUK_1:71;
+  then consider q being Point of T such that A5: F.q = y by A3;
+    for A being Subset of T st A is open holds p in A iff q in A
+  proof
+    let A be Subset of T such that A6: A is open;
+      F is open by Th12;
+then A7: F.:A is open by A6,Def2;
+    reconsider F as Function of the carrier of T, the carrier of S;
+    hereby assume p in A;
+      then x in F.:A by A4,FUNCT_2:43;
+      then F.q in F.:A by A2,A5,A7;
+      then ex x being set st
+       x in the carrier of T & x in A & F.q = F.x by FUNCT_2:115;
+      hence q in A by A6,Th10;
+    end;
+    assume q in A;
+    then y in F.:A by A5,FUNCT_2:43;
+    then F.p in F.:A by A2,A4,A7;
+    then ex x being set st x in the carrier of T & x in A & F.p = F.x
+      by FUNCT_2:115;
+    hence p in A by A6,Th10;
+  end;
+  then [p,q] in Indiscernibility(T) by Def3;
+  hence contradiction by A1,A4,A5,Th9;
+end;
+
+::
+::    Discernible TopStruct
+::
+
+definition let IT be TopStruct;
+  attr IT is discerning means
+:Def7: IT is empty or
+  for x,y being Point of IT st x <> y holds
+    ex V being Subset of IT st V is open &
+      ((x in V & not y in V) or (y in V & not x in V));
+end;
+
+definition
+  cluster discerning non empty TopSpace;
+  existence
+  proof
+    consider T being non empty TopSpace;
+    take T_0-reflex(T);
+      for x,y being Point of T_0-reflex(T) st x <> y holds
+      ex V being Subset of T_0-reflex(T) st V is open &
+        ((x in V & not y in V) or (y in V & not x in V)) by Lm1;
+    hence T_0-reflex(T) is discerning non empty by Def7;
+  end;
+end;
+
+::
+::    T_0 TopSpace
+::
+
+definition
+  mode T_0-TopSpace is discerning non empty TopSpace;
+end;
+
+theorem
+  for T being non empty TopSpace holds T_0-reflex(T) is T_0-TopSpace
+proof
+  let T be non empty TopSpace;
+    for x,y being Point of T_0-reflex(T) st not x = y
+    ex A being Subset of T_0-reflex(T) st A is open &
+       ((x in A & not y in A) or (y in A & not x in A)) by Lm1;
+
+  hence T_0-reflex(T) is T_0-TopSpace by Def7;
+end;
+
+::
+::    Homeomorphism of T_0 Reflexes
+::
+
+theorem
+  for T,S being non empty TopSpace st
+   ex h being map of T_0-reflex(S),T_0-reflex(T)
+     st h is_homeomorphism & T_0-canonical_map(T),h*T_0-canonical_map(S)
+       are_fiberwise_equipotent holds T,S are_homeomorphic
+proof
+  let T,S be non empty TopSpace;
+  set F = T_0-canonical_map(T), G = T_0-canonical_map(S);
+  set TR = T_0-reflex(T), SR = T_0-reflex(S);
+  given h being map of SR,TR such that
+A1:   h is_homeomorphism and
+A2:  F,h*G are_fiberwise_equipotent;
+  consider f being Function such that
+A3:  dom f = dom F & rng f = dom (h*G) & f is one-to-one & F = h*G*f
+      by A2,RFINSEQ:3;
+A4:
+  dom f = the carrier of T & rng f = the carrier of S by A3,FUNCT_2:def 1;
+ then f is Function of the carrier of T, the carrier of S
+   by FUNCT_2:def 1,RELSET_1:11;
+ then reconsider f as map of T,S;
+  take f;
+
+  thus A5: dom f = [#] T & rng f = [#] S by A4,PRE_TOPC:12;
+  thus f is one-to-one by A3;
+
+A6:  dom h = [#] SR & rng h = [#] TR & h is one-to-one &
+        h is continuous & h" is continuous by A1,TOPS_2:def 5;
+
+    for A being Subset of S st A is open holds f"A is open
+  proof
+    let A be Subset of S;
+    assume A7: A is open;
+
+      G is open by Th12;
+then A8: G.:A is open by A7,Def2;
+
+      h" is continuous by A1,TOPS_2:def 5;
+then A9: (h")"(G.:A) is open by A8,TOPS_2:55;
+
+      h.:(G.:A) = (h qua Function")"(G.:A) by A6,FUNCT_1:154;
+    then h.:(G.:A) is open by A6,A9,TOPS_2:def 4;
+then A10: (h*G).:A is open by RELAT_1:159;
+    set g=(h*G);
+    set B=g.:A;
+
+    A11:  F"B is open by A10,TOPS_2:55;
+A12:
+    for x1,x2 being Element of S
+       holds (x1 in A & g.x1=g.x2) implies x2 in A
+    proof
+      let x1,x2 be Element of S;
+      assume that A13: x1 in A and
+                  A14: g.x1=g.x2;
+        h.(G.x1) = g.x2 by A14,FUNCT_2:21;
+      then h.(G.x1) = h.(G.x2) by FUNCT_2:21;
+      then G.x1 = G.x2 by A6,FUNCT_2:25;
+      hence x2 in A by A7,A13,Th10;
+    end;
+
+      F"B = f"(g"(g.:A)) by A3,RELAT_1:181;
+    hence f"A is open by A11,A12,Th2;
+  end;
+  hence f is continuous by TOPS_2:55;
+
+    for A being Subset of T st A is open
+  holds (f" qua map of S,T)"A is open
+  proof
+    let A be Subset of T;
+    assume A15: A is open;
+    set g = h"*F;
+A16: for x1,x2 being Element of T
+       holds (x1 in A & g.x1=g.x2) implies x2 in A
+    proof
+      let x1,x2 be Element of T;
+      assume that A17: x1 in A and
+                  A18: g.x1=g.x2;
+
+    A19:  h" is one-to-one by A6,TOPS_2:63;
+
+        h".(F.x1) = g.x2 by A18,FUNCT_2:21;
+      then h".(F.x1) = h".(F.x2) by FUNCT_2:21;
+      then F.x1 = F.x2 by A19,FUNCT_2:25;
+      hence x2 in A by A15,A17,Th10;
+    end;
+
+    set B = g.:A;
+
+A20:
+    G"B is open
+    proof
+        F is open by Th12;
+      then F.:A is open by A15,Def2;
+then A21:   h"(F.:A) is open by A6,TOPS_2:55;
+        B = (h").:(F.:A) by RELAT_1:159;
+      then G"B = G"(h"(F.:A)) by A6,TOPS_2:68;
+      hence thesis by A21,TOPS_2:55;
+    end;
+
+      F = h*(G*f) by A3,RELAT_1:55;
+    then g = (h"*h)*(G*f) by RELAT_1:55;
+    then g = (id dom h)*(G*f) by A6,TOPS_2:65;
+    then g = (id the carrier of SR)*(G*f) by FUNCT_2:def 1;
+    then g*f" = G*f*f" by FUNCT_2:23;
+    then g*f" = G*(f*f") by RELAT_1:55;
+    then g*f" = G*(id the carrier of S) by A3,A4,A5,TOPS_2:65;
+    then G = g*f" by FUNCT_2:23;
+    then G"B = (f")"(g"B) by RELAT_1:181;
+    hence (f" qua map of S,T)"A is open by A16,A20,Th2;
+  end;
+  hence f" qua map of S,T is continuous by TOPS_2:55;
+end;
+
+::
+::    Properties of Continuous Mapping from TopSpace to its T_0 Reflex
+::
+
+theorem Th15:
+for T being non empty TopSpace,
+    T0 being T_0-TopSpace,
+    f being continuous map of T,T0 holds
+  for p,q being Point of T holds
+         [p,q] in Indiscernibility(T) implies f.p = f.q
+proof
+  let T be non empty TopSpace;
+  let T0 be T_0-TopSpace;
+  let f be continuous map of T,T0;
+  let p,q be Point of T;
+  set p' = f.p, q' = f.q;
+  assume that
+A1:  [p,q] in Indiscernibility(T) and
+A2:  not f.p = f.q;
+  consider V being Subset of T0 such that
+A3:  V is open and
+A4:   (p' in V & not q' in V) or (q' in V & not p' in V) by A2,Def7;
+
+  set A = f"V;
+A5:  A is open by A3,TOPS_2:55;
+
+  reconsider f as Function of the carrier of T, the carrier of T0;
+
+    p in the carrier of T;
+then A6:  p in dom f by FUNCT_2:def 1;
+    q in the carrier of T;
+  then q in dom f by FUNCT_2:def 1;
+  then not (p in A iff q in A) by A4,A6,FUNCT_1:def 13;
+  hence contradiction by A1,A5,Def3;
+end;
+
+theorem Th16:
+for T being non empty TopSpace,
+    T0 being T_0-TopSpace,
+    f being continuous map of T,T0 holds
+  for p being Point of T holds f.:Class(Indiscernibility(T),p) = {f.p}
+proof
+  let T be non empty TopSpace;
+  let T0 be T_0-TopSpace;
+  let f be continuous map of T,T0;
+  let p be Point of T;
+  set R = Indiscernibility(T);
+    for y being set holds y in f.:Class(R,p) iff y in {f.p}
+  proof
+    let y be set;
+    hereby assume y in f.:Class(R,p);
+      then consider x being set such that
+  A1:    x in the carrier of T & x in Class(R,p) & y = f.x by FUNCT_2:115;
+        [x,p] in R by A1,EQREL_1:27;
+   then f.x = f.p by A1,Th15;
+      hence y in {f.p} by A1,TARSKI:def 1;
+    end;
+
+    assume y in {f.p};
+  then A2:  y = f.p by TARSKI:def 1;
+      p in Class(R,p) by EQREL_1:28;
+    hence y in f.:Class(R,p) by A2,FUNCT_2:43;
+  end;
+  hence thesis by TARSKI:2;
+end;
+
+::
+::    Factorization
+::
+
+theorem
+  for T being non empty TopSpace,
+    T0 being T_0-TopSpace,
+    f being continuous map of T,T0
+  ex h being continuous map of T_0-reflex(T),T0 st
+     f = h*T_0-canonical_map(T)
+proof
+  let T be non empty TopSpace;
+  let T0 be T_0-TopSpace;
+  let f be continuous map of T,T0;
+
+  set F = T_0-canonical_map(T);
+  set R = Indiscernibility(T);
+  set TR = T_0-reflex(T);
+
+   defpred X[set,set] means $2 in f.:$1;
+A1:
+for C being set st C in the carrier of TR
+  ex y being set st y in the carrier of T0 & X[C,y]
+proof
+  let C be set;
+  assume C in the carrier of TR;
+  then consider p being Point of T such that
+A2: C = Class(R,p) by Th7;
+  A3:  f.:C = {f.p} by A2,Th16;
+    f.p in {f.p} by TARSKI:def 1;
+  hence thesis by A3;
+end;
+
+    ex h being Function of the carrier of TR,the carrier of T0 st
+    for C being set st C in the carrier of TR holds X[C,h.C]
+       from FuncEx1(A1);
+  then consider h being Function of the carrier of TR,the carrier of T0 such
+that
+A4: for C being set st C in the carrier of TR holds
+        h.C in f.:C;
+
+A5:
+for p being Point of T holds h.Class(R,p) = f.p
+proof
+  let p be Point of T;
+    Class(R,p) is Point of TR by Th7;
+  then h.Class(R,p) in f.:Class(R,p) by A4;
+  then h.Class(R,p) in {f.p} by Th16;
+  hence h.Class(R,p) = f.p by TARSKI:def 1;
+end;
+  reconsider h as map of TR,T0;
+
+    for W being Subset of T0 st W is open holds h"W is open
+  proof
+    let W be Subset of T0 such that
+  A6:  W is open;
+    set V = h"W;
+
+      for x being set holds x in union V iff x in f"W
+    proof
+      let x be set;
+      hereby assume x in union V;
+        then consider C being set such that
+    A7: x in C & C in V by TARSKI:def 4;
+        A8: C in dom h & h.C in W by A7,FUNCT_1:def 13;
+        consider p being Point of T such that
+    A9: C = Class(R,p) by A7,Th7;
+        A10: [x,p] in R & x in the carrier of T by A7,A9,EQREL_1:27;
+        then C = Class(R,x) by A9,EQREL_1:44;
+        then f.x in W & x in dom f by A5,A8,A10,FUNCT_2:def 1;
+        hence x in f"W by FUNCT_1:def 13;
+      end;
+
+      assume x in f"W;
+      then f.x in W & x is Point of T by FUNCT_1:def 13;
+      then h.Class(R,x) in W & x is Point of T
+        & Class(R,x) is Point of TR by A5,Th7;
+      then Class(R,x) in V & x in Class(R,x) by EQREL_1:28,FUNCT_2:46;
+      hence x in union V by TARSKI:def 4;
+    end;
+  then A11:  union V = f"W by TARSKI:2;
+      f"W is open by A6,TOPS_2:55;
+    then union V in the topology of T by A11,PRE_TOPC:def 5;
+    hence V is open by Th6;
+  end;
+  then reconsider h as continuous map of TR,T0 by TOPS_2:55;
+  set H = h*F;
+
+    for x being set st x in the carrier of T holds f.x = H.x
+  proof
+    let x be set;
+    assume A12: x in the carrier of T;
+  then A13:  x in dom F by Th4;
+      Class(R,x) in Class R by A12,EQREL_1:def 5;
+    then Class(R,x) in Indiscernible T by Def4;
+  then A14:  Class(R,x) in the carrier of TR by Th5;
+      F.x = Class(R,x) by A12,Th8;
+    then (h*F).x = h.Class(R,x) by A13,FUNCT_1:23;
+    then H.x in f.:Class(R,x) by A4,A14;
+    then H.x in {f.x} by A12,Th16;
+    hence f.x = H.x by TARSKI:def 1;
+  end;
+  then f = H by FUNCT_2:18;
+  hence thesis;
+end;

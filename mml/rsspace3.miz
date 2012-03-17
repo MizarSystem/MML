@@ -1,0 +1,1383 @@
+:: Banach Space of Absolute Summable Real Sequences
+::  by Yasumasa Suzuki , Noboru Endou and Yasunari Shidama
+::
+:: Received August 8, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
+      RELAT_1, ABSVALUE, ORDINAL2, PROB_1, RLSUB_1, SEQ_1, SEQ_2, SEQM_3,
+      SERIES_1, SUPINF_2, RSSPACE, RSSPACE3, METRIC_1, BINOP_1;
+ notation TARSKI, SUBSET_1, XBOOLE_0, ZFMISC_1, ORDINAL1, NUMBERS, XREAL_0,
+      STRUCT_0, REAL_1, NAT_1, FUNCT_1, FUNCT_2, RELAT_1, BINOP_1, PRE_TOPC,
+      RLVECT_1, ABSVALUE, RLSUB_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      PARTFUN1, RSSPACE;
+ constructors REAL_1, NAT_1, DOMAIN_1, SEQ_2, SERIES_1, PREPOWER, PARTFUN1,
+      RLSUB_1, RSSPACE, MEMBERED;
+ clusters RELSET_1, STRUCT_0, RLVECT_1, NORMSP_1, SEQ_1, XREAL_0, MEMBERED,
+      ORDINAL2;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ theorems XBOOLE_0, STRUCT_0, RELAT_1, AXIOMS, TARSKI, ABSVALUE, ZFMISC_1,
+      REAL_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, COMSEQ_3, INT_1, FUNCT_1, NAT_1,
+      FUNCT_2, RLVECT_1, RLSUB_1, NORMSP_1, XREAL_0, XCMPLX_0, XCMPLX_1, SEQ_4,
+      RSSPACE;
+ schemes NAT_1, SEQ_1, FUNCT_2, XBOOLE_0;
+
+begin :: l1_Space:The Space of Absolute Summable Real Sequences
+
+definition
+  func the_set_of_l1RealSequences -> Subset of
+     Linear_Space_of_RealSequences means :Def1:
+   for x being set holds x in it
+     iff
+   (x in the_set_of_RealSequences & seq_id(x) is absolutely_summable);
+existence
+proof
+  defpred P[set] means seq_id($1) is absolutely_summable;
+   consider IT being set such that
+A1:for x being set holds x in IT
+    iff x in the_set_of_RealSequences & P[x] from Separation;
+  IT is Subset of the_set_of_RealSequences
+   proof
+     for x be set st x in IT holds x in the_set_of_RealSequences by A1;
+     hence thesis by TARSKI:def 3;
+   end; then
+   IT is Subset of Linear_Space_of_RealSequences
+     by RSSPACE:def 7;
+   hence thesis by A1;
+end;
+uniqueness
+proof
+   let X1,X2 be Subset of Linear_Space_of_RealSequences;
+   assume that
+A2: for x being set holds x in X1 iff
+     (x in the_set_of_RealSequences & seq_id(x) is absolutely_summable)
+   and
+A3: for x being set holds x in X2 iff
+  (x in the_set_of_RealSequences & seq_id(x) is absolutely_summable);
+    for x being set st x in X1 holds x in X2
+    proof
+      let x be set;
+      assume x in X1; then
+      x in the_set_of_RealSequences
+        & seq_id(x) is absolutely_summable by A2;
+      hence thesis by A3;
+    end; then
+A4: X1 c= X2 by TARSKI:def 3;
+    for x being set st x in X2 holds x in X1
+    proof
+      let x be set;
+      assume x in X2; then
+      x in the_set_of_RealSequences
+        & seq_id(x) is absolutely_summable by A3;
+      hence thesis by A2;
+    end; then
+    X2 c= X1 by TARSKI:def 3;
+    hence thesis by A4,XBOOLE_0:def 10;
+  end;
+end;
+
+definition
+  cluster the_set_of_l1RealSequences -> non empty;
+  coherence
+   proof
+     seq_id(Zeroseq) is absolutely_summable
+     proof
+       reconsider rseq=seq_id Zeroseq as Real_Sequence;
+       for n being Nat holds rseq.n = 0 by RSSPACE:def 6;
+       hence thesis by COMSEQ_3:3;
+     end;
+     hence thesis by Def1;
+  end;
+end;
+
+theorem Th1:
+the_set_of_l1RealSequences is lineary-closed
+proof
+set W = the_set_of_l1RealSequences;
+A1:for v,u be VECTOR of Linear_Space_of_RealSequences st
+    v in the_set_of_l1RealSequences &
+    u in the_set_of_l1RealSequences
+        holds v + u in the_set_of_l1RealSequences
+   proof
+     let v,u be VECTOR of Linear_Space_of_RealSequences such that
+A2: v in W & u in W;
+A3: (seq_id(v+u)) is absolutely_summable
+     proof
+A4:  (seq_id(v)) is absolutely_summable by A2,Def1;
+A5:  (seq_id(u)) is absolutely_summable by A2,Def1;
+       set p = abs(seq_id(v));
+       set q = abs(seq_id(u));
+       set r = abs(seq_id(v+u));
+A6:  p is summable by A4,SERIES_1:def 5;
+A7:  q is summable by A5,SERIES_1:def 5;
+A8:  p+q is summable by A6,A7,SERIES_1:10;
+A9:  for n be Nat holds 0<=r.n
+       proof
+        let n be Nat;
+        r.n=abs((seq_id(v+u)).n) by SEQ_1:16;
+        hence thesis by ABSVALUE:5;
+      end;
+      for n be Nat holds r.n <=(p+q).n
+      proof
+        let n be Nat;
+A10:      r.n=abs((seq_id(v+u)).n) by SEQ_1:16
+          .=abs((seq_id(seq_id(v) + seq_id(u))).n) by RSSPACE:4,def 7
+          .=abs((seq_id(v) + seq_id(u)).n) by RSSPACE:3
+          .=abs((seq_id(v)).n + (seq_id(u)).n) by SEQ_1:11;
+A11:     abs((seq_id(v)).n)+abs((seq_id(u)).n)
+        = abs(seq_id(v)).n + abs((seq_id(u)).n) by SEQ_1:16
+       .= abs(seq_id(v)).n+ abs(seq_id(u)).n by SEQ_1:16
+       .= (p +q).n by SEQ_1:11;
+       thus r.n <=(p+q).n by A10,A11,ABSVALUE:13;
+      thus thesis;
+      end;
+
+     then r is summable by A8,A9,SERIES_1:24;
+     hence thesis by SERIES_1:def 5;
+    end;
+    thus v+u in W by A3,Def1,RSSPACE:def 7;
+end;
+
+for a be Real for v be VECTOR of Linear_Space_of_RealSequences
+    st v in W holds a * v in W
+    proof
+let a be Real;
+let v be VECTOR of Linear_Space_of_RealSequences
+        such that
+    A12: v in W;
+    (seq_id(a*v)) is absolutely_summable
+    proof
+     A13: (seq_id(v)) is absolutely_summable by A12,Def1;
+     A14: abs(seq_id(v)) is summable by A13,SERIES_1:def 5;
+     set q1 = (abs(seq_id(a*v)));
+     set r1 = ((abs(a))(#)abs(seq_id(v)));
+    A15: r1 is summable by A14,SERIES_1:13;
+    A16:  for n be Nat holds 0<=q1.n
+            proof
+              let n be Nat;
+              q1.n=abs((seq_id(a*v)).n) by SEQ_1:16;
+           hence thesis by ABSVALUE:5;
+          end;
+         for n be Nat holds q1.n <=r1.n
+             proof
+              let n be Nat;
+              q1.n=abs((seq_id(a*v)).n) by SEQ_1:16
+                 .=abs((seq_id(a(#)seq_id(v))).n) by RSSPACE:5,def 7
+                 .=abs((a(#)seq_id(v)).n) by RSSPACE:3
+                 .=abs(a(#)seq_id(v)).n by SEQ_1:16;
+               hence thesis by SEQ_1:64;
+              end;
+      then q1 is summable by A15,A16,SERIES_1:24;
+      hence thesis by SERIES_1:def 5;
+    end;
+    hence a*v in W by Def1,RSSPACE:def 7;
+  end;
+  hence thesis by A1,RLSUB_1:def 1;
+end;
+
+theorem Th2:
+RLSStruct (# the_set_of_l1RealSequences,
+        Zero_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        Add_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences) #)
+is Subspace of Linear_Space_of_RealSequences by Th1,RSSPACE:13;
+
+definition
+  cluster RLSStruct (# the_set_of_l1RealSequences,
+        Zero_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        Add_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences) #)
+   -> Abelian add-associative right_zeroed right_complementable
+        RealLinearSpace-like;
+  coherence by Th1,RSSPACE:13;
+end;
+
+theorem Th3:
+RLSStruct (# the_set_of_l1RealSequences,
+        Zero_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        Add_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences) #)
+is RealLinearSpace;
+
+Lm1:
+  ex NORM be Function of the_set_of_l1RealSequences,REAL st
+   for x be set st x in the_set_of_l1RealSequences holds
+    NORM.x = Sum(abs(seq_id(x)))
+proof
+  deffunc F(set) = Sum(abs(seq_id($1)));
+A1:for z be set st z in the_set_of_l1RealSequences holds F(z) in REAL;
+   ex f being Function of the_set_of_l1RealSequences,REAL st
+     for x being set st x in the_set_of_l1RealSequences holds
+       f.x = F(x) from Lambda1(A1);
+   hence thesis;
+end;
+
+definition
+  func l_norm -> Function of the_set_of_l1RealSequences, REAL means :Def2:
+  for x be set st x in the_set_of_l1RealSequences holds
+    it.x = Sum(abs(seq_id(x)));
+existence by Lm1;
+uniqueness
+proof
+   let NORM1,NORM2 be Function of the_set_of_l1RealSequences, REAL such that
+A1:(for x be set st x in the_set_of_l1RealSequences holds
+     NORM1.x = Sum(abs(seq_id(x)))) and
+A2:(for x be set st x in the_set_of_l1RealSequences holds
+     NORM2.x = Sum(abs(seq_id(x))));
+A3:dom NORM1 = the_set_of_l1RealSequences &
+     dom NORM2 = the_set_of_l1RealSequences by FUNCT_2:def 1;
+   for z be set st z in the_set_of_l1RealSequences holds NORM1.z = NORM2.z
+   proof
+     let z be set such that
+A4:  z in the_set_of_l1RealSequences;
+     NORM1.z = Sum(abs(seq_id(z))) by A1,A4;
+     hence thesis by A2,A4;
+  end;
+  hence thesis by A3,FUNCT_1:9;
+end;
+end;
+
+definition let X be non empty set,
+               Z be Element of X, A be BinOp of X,
+               M be Function of [:REAL, X:], X,
+               N be Function of X, REAL;
+  cluster NORMSTR (# X, Z, A, M, N #) -> non empty;
+  coherence by STRUCT_0:def 1;
+end;
+
+theorem Th4:
+for l be NORMSTR st RLSStruct (# the carrier of l, the Zero of l,
+        the add of l, the Mult of l #)
+  is RealLinearSpace holds l is RealLinearSpace
+proof
+   let l be NORMSTR such that
+A1:RLSStruct(# the carrier of l, the Zero of l, the add  of l, the Mult of l#)
+    is RealLinearSpace;
+   the carrier of l is non empty by A1,STRUCT_0:def 1; then
+   reconsider l as non empty RLSStruct by STRUCT_0:def 1;
+   reconsider l0=RLSStruct (# the carrier of l, the Zero of l, the add  of l,
+        the Mult of l#) as RealLinearSpace by A1;
+A2:for v,w being VECTOR of l holds v + w = w + v
+   proof
+     let v,w be VECTOR of l;
+     reconsider v1=v, w1=w as VECTOR of l0;
+    thus
+    v+w = (the add of l).[v1,w1] by RLVECT_1:def 3
+       .=v1+w1 by RLVECT_1:def 3
+       .= (the add of l).[w1,v1] by RLVECT_1:def 3
+       .= w +v by RLVECT_1:def 3;
+   end;
+A3:for u,v,w being VECTOR of l holds (u + v) + w = u + (v + w)
+   proof
+     let u,v,w be VECTOR of l;
+     reconsider u1=u, v1=v, w1=w as VECTOR of l0;
+     thus (u + v) + w = (the add of l).[(u+v),w] by RLVECT_1:def 3
+       .= (the add of l).[(the add of l).[u,v],w] by RLVECT_1:def 3
+       .= (the add of l).[(u1+v1),w] by RLVECT_1:def 3
+       .=(u1+v1)+w1 by RLVECT_1:def 3
+       .=u1+(v1+w1) by RLVECT_1:def 6
+       .= (the add of l).[u1,(v1+w1)] by RLVECT_1:def 3
+       .= (the add of l).[u1,(the add of l).[v1,w1]] by RLVECT_1:def 3
+       .= (the add of l).[u,(v+w)] by RLVECT_1:def 3
+       .= u+(v+w) by RLVECT_1:def 3;
+   end;
+A4:for v being VECTOR of l holds v + 0.l = v
+   proof
+     let v be VECTOR of l;
+     reconsider v1=v as VECTOR of l0;
+A5:  0.l=the Zero of l by RLVECT_1:def 2
+       .=0.l0 by RLVECT_1:def 2;
+     v+0.l= (the add of l).[v,0.l] by RLVECT_1:def 3
+         .= v1 + 0.l0 by A5,RLVECT_1:def 3
+         .= v1 by RLVECT_1:def 7;
+     hence thesis;
+   end;
+
+A6:for v being VECTOR of l ex w being VECTOR of l st v + w = 0.l
+   proof
+     let v be VECTOR of l;
+     reconsider v1=v as VECTOR of l0;
+A7:  0.l=the Zero of l by RLVECT_1:def 2
+       .=0.l0 by RLVECT_1:def 2;
+     consider w1 being VECTOR of l0 such that
+A8:  v1 + w1 = 0.l0 by RLVECT_1:def 8;
+     reconsider w = w1 as VECTOR of l;
+A9:  v+w = (the add of l).[v,w] by RLVECT_1:def 3
+        .=0.l by A7,A8,RLVECT_1:def 3;
+     take w;
+     thus thesis by A9;
+   end;
+
+A10:for a be Real for v,w being VECTOR of l holds
+         a * (v + w) = a * v + a * w
+   proof
+     let a be Real;
+     let v,w be VECTOR of l;
+     reconsider v1=v, w1=w as VECTOR of l0;
+     thus a*(v+w)
+        = (the Mult of l).[a,(v+w)] by RLVECT_1:def 4
+       .= (the Mult of l).[a,(the add of l).[v1,w1]] by RLVECT_1:def 3
+       .= (the Mult of l).[a,(v1+w1)] by RLVECT_1:def 3
+       .=a*(v1+w1) by RLVECT_1:def 4
+       .=a*v1+a*w1 by RLVECT_1:def 9
+       .=(the add of l).[a*v1,a*w1] by RLVECT_1:def 3
+       .=(the add of l).[(the Mult of l).[a,v1],a*w1] by RLVECT_1:def 4
+       .=(the add of l).[(the Mult of l).[a,v1],
+                (the Mult of l).[a,w1]] by RLVECT_1:def 4
+       .=(the add of l).[a*v, (the Mult of l).[a,w]] by RLVECT_1:def 4
+       .=(the add of l).[a*v, a*w] by RLVECT_1:def 4
+       .= a*v +a*w by RLVECT_1:def 3;
+   end;
+
+A11:for a,b be Real for v being VECTOR of l
+     holds (a + b) * v = a * v + b * v
+   proof
+     let a,b be Real;
+     let v be VECTOR of l;
+     reconsider v1=v as VECTOR of l0;
+     thus (a+b)*v = (the Mult of l).[(a+b),v] by RLVECT_1:def 4
+       .=(a+b)*v1 by RLVECT_1:def 4
+       .=a*v1+b*v1 by RLVECT_1:def 9
+       .=(the add of l).[a*v1,b*v1] by RLVECT_1:def 3
+       .=(the add of l).[(the Mult of l).[a,v1],b*v1] by RLVECT_1:def 4
+       .=(the add of l).[(the Mult of l).[a,v1],
+                (the Mult of l).[b,v1]] by RLVECT_1:def 4
+       .=(the add of l).[a*v, (the Mult of l).[b,v]] by RLVECT_1:def 4
+       .=(the add of l).[a*v, b*v] by RLVECT_1:def 4
+       .= a*v +b*v by RLVECT_1:def 3;
+   end;
+
+A12:for a,b be Real for v being VECTOR of l holds (a * b) * v = a * (b * v)
+   proof
+     let a,b be Real;
+     let v be VECTOR of l;
+     reconsider v1=v as VECTOR of l0;
+     thus (a*b)*v = (the Mult of l).[a*b,v] by RLVECT_1:def 4
+       .=(a*b)*v1 by RLVECT_1:def 4
+       .=a*(b*v1) by RLVECT_1:def 9
+       .=(the Mult of l).[a,b*v1] by RLVECT_1:def 4
+       .=(the Mult of l).[a,(the Mult of l).[b,v1]] by RLVECT_1:def 4
+       .=(the Mult of l).[a,b*v] by RLVECT_1:def 4
+       .= a*(b*v) by RLVECT_1:def 4;
+   end;
+   for v being VECTOR of l holds 1 * v = v
+   proof
+     let v be VECTOR of l;
+     reconsider v1=v as VECTOR of l0;
+     thus 1*v= (the Mult of l).[1,v] by RLVECT_1:def 4
+            .= 1*v1 by RLVECT_1:def 4
+            .= v by RLVECT_1:def 9;
+   end;
+   hence thesis by A2,A3,A4,A6,A10,A11,A12,RLVECT_1:7;
+end;
+
+theorem Th5:
+for rseq be Real_Sequence
+   st (for n be Nat holds rseq.n=0) holds
+   rseq is absolutely_summable & Sum(abs(rseq))=0
+   proof
+     let rseq be Real_Sequence such that
+A1: for n be Nat holds rseq.n=0;
+A2: for n be Nat holds (abs(rseq)).n=0
+     proof
+       let n be Nat;
+A3:    rseq.n=0 by A1;
+       (abs(rseq)).n = (abs((rseq).n)) by SEQ_1:16;
+       hence thesis by A3,ABSVALUE:7;
+     end;
+A4:  for m be Nat holds Partial_Sums (abs(rseq)).m = 0
+     proof
+       let m be Nat;
+       defpred P[Nat] means (abs(rseq)).$1 = (Partial_Sums (abs(rseq))).$1;
+A5:    P[0] by SERIES_1:def 1;
+A6:    for k be Nat st P[k] holds P[k+1]
+       proof
+         let k be Nat such that
+A7:      (abs(rseq)).k = (Partial_Sums (abs(rseq))).k;
+         thus
+         (abs(rseq)).(k+1) = 0 + (abs(rseq)).(k+1)
+             .= (abs(rseq)).k + (abs(rseq)).(k+1) by A2
+             .= (Partial_Sums (abs(rseq))).(k+1) by A7,SERIES_1:def 1;
+       end;
+       for n be Nat holds P[n] from Ind(A5,A6);
+       hence (Partial_Sums (abs(rseq))).m = (abs(rseq)).m .= 0 by A2;
+     end;
+
+A8:  Sum(abs(rseq)) =0 & rseq is absolutely_summable
+     proof
+A9:    for p be real number st 0<p
+        ex n be Nat st for m be Nat st n<=m holds
+         abs((Partial_Sums (abs(rseq))).m-0)<p
+       proof
+         let p be real number such that
+A10:      0<p;
+         take 0;
+         let m be Nat such that 0<=m;
+         abs((Partial_Sums (abs(rseq))).m-0)
+            = abs(0-0) by A4
+           .= 0 by ABSVALUE:def 1;
+         hence abs((Partial_Sums (abs(rseq))).m-0)<p by A10;
+       end; then
+A11:    Partial_Sums (abs(rseq)) is convergent by SEQ_2:def 6; then
+A12:    (abs(rseq)) is summable by SERIES_1:def 2;
+       lim (Partial_Sums (abs(rseq))) =0 by A9,A11,SEQ_2:def 7;
+       hence thesis by A12,SERIES_1:def 3,def 5;
+     end;
+     thus thesis by A8;
+end;
+
+theorem Th6:
+for rseq be Real_Sequence st
+ ( rseq is absolutely_summable & Sum(abs(rseq))=0 ) holds
+  for n be Nat holds rseq.n =0
+proof
+   let rseq being Real_Sequence  such that
+A1:rseq is absolutely_summable and
+A2:Sum(abs(rseq))=0;
+   reconsider arseq = abs(rseq) as Real_Sequence;
+A3:arseq is summable by A1,SERIES_1:def 5;
+A4:for n be Nat holds 0 <= (abs(rseq)).n
+   proof
+     let n be Nat;
+     0 <= abs(rseq.n) by ABSVALUE:5;
+     hence thesis by SEQ_1:16;
+   end;
+   for n be Nat holds rseq.n = 0
+   proof
+     let n be Nat;
+     (abs(rseq)).n =0 by A2,A3,A4,RSSPACE:21; then
+     abs(rseq.n)=0 by SEQ_1:16;
+     hence thesis by ABSVALUE:7;
+   end;
+   hence thesis;
+end;
+
+theorem Th7:
+NORMSTR (# the_set_of_l1RealSequences,
+        Zero_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+         Add_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        l_norm #) is RealLinearSpace by Th3,Th4;
+
+definition
+  func l1_Space -> non empty NORMSTR equals :Def3:
+   NORMSTR (# the_set_of_l1RealSequences,
+        Zero_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+         Add_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        Mult_(the_set_of_l1RealSequences,Linear_Space_of_RealSequences),
+        l_norm #);
+  coherence;
+end;
+
+begin :: l1_Space is Banach
+
+theorem Th8:
+  the carrier of l1_Space = the_set_of_l1RealSequences &
+( for x be set holds
+   x is Element of l1_Space
+  iff x is Real_Sequence & seq_id(x) is absolutely_summable ) &
+( for x be set holds
+   x is VECTOR of l1_Space
+   iff x is Real_Sequence & seq_id(x) is absolutely_summable ) &
+0.l1_Space = Zeroseq &
+( for u be VECTOR of l1_Space holds u =seq_id(u) ) &
+( for u,v be VECTOR of l1_Space holds u+v =seq_id(u)+seq_id(v) ) &
+( for r be Real for u be VECTOR of l1_Space holds r*u =r(#)seq_id(u) ) &
+( for u be VECTOR of l1_Space holds
+   -u = -seq_id(u) & seq_id(-u) = -seq_id(u) ) &
+( for u,v be VECTOR of l1_Space holds u-v =seq_id(u)-seq_id(v) ) &
+( for v be VECTOR of l1_Space holds seq_id(v) is absolutely_summable ) &
+( for v be VECTOR of l1_Space holds ||.v.|| = Sum(abs(seq_id(v))) )
+proof
+   set l1 =l1_Space;
+A1:for x be set holds x is Element of l1
+     iff x is Real_Sequence & seq_id(x) is absolutely_summable
+   proof
+     let x be set;
+     x in  the_set_of_RealSequences iff x is Real_Sequence by RSSPACE:def 1;
+     hence thesis by Def1,Def3;
+   end;
+
+A2:for u be VECTOR of l1 holds u =seq_id(u)
+   proof
+     let u be VECTOR of l1;
+     u is VECTOR of Linear_Space_of_RealSequences by Def3,Th2,RLSUB_1:18;
+     hence thesis by RSSPACE:def 2,def 7;
+   end;
+
+A3:for u,v be VECTOR of l1 holds u+v =seq_id(u)+seq_id(v)
+   proof
+     let u,v be VECTOR of l1;
+     reconsider u1=u as VECTOR of Linear_Space_of_RealSequences
+       by Def3,Th2,RLSUB_1:18;
+     reconsider v1=v as VECTOR of Linear_Space_of_RealSequences
+       by Def3,Th2,RLSUB_1:18;
+     set L1=Linear_Space_of_RealSequences;
+     set W = the_set_of_l1RealSequences;
+A4: [:W,W:] c= [:the carrier of L1,the carrier of L1:] by ZFMISC_1:119;
+     dom (the add of L1)
+       = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1; then
+     dom ((the add of Linear_Space_of_RealSequences) | [:W,W:])
+       =[:W,W:] by A4,RELAT_1:91; then
+A5:  [u,v] in dom ((the add of Linear_Space_of_RealSequences)|[:W,W:])
+       by Def3,ZFMISC_1:106;
+    u+v =(the add of l1).[u,v] by RLVECT_1:def 3
+        .=((the add of Linear_Space_of_RealSequences)|[:W,W:]).[u,v]
+          by Def3,Th1,RSSPACE:def 8
+        .=(the add of Linear_Space_of_RealSequences).[u,v]
+          by A5,FUNCT_1:70
+        .=u1+v1 by RLVECT_1:def 3;
+     hence thesis by RSSPACE:4,def 7;
+   end;
+
+A6:for r be Real for u be VECTOR of l1 holds r*u =r(#)seq_id(u)
+   proof
+     let r be Real;
+     let u be VECTOR of l1;
+     reconsider u1=u as VECTOR of Linear_Space_of_RealSequences
+       by Def3,Th2,RLSUB_1:18;
+     set L1=Linear_Space_of_RealSequences;
+     set W = the_set_of_l1RealSequences;
+A7: [:REAL,W:] c= [:REAL,the carrier of L1:] by ZFMISC_1:119;
+     dom (the Mult of L1) = [:REAL,the carrier of L1:] by FUNCT_2:def 1; then
+     dom ((the Mult of Linear_Space_of_RealSequences) | [:REAL,W:])
+       =[:REAL,W:] by A7,RELAT_1:91; then
+A8:  [r,u] in dom ((the Mult of Linear_Space_of_RealSequences)|[:REAL,W:])
+       by Def3,ZFMISC_1:106;
+     r*u =(the Mult of l1).[r,u] by RLVECT_1:def 4
+        .=((the Mult of Linear_Space_of_RealSequences)|[:REAL,W:]).[r,u]
+          by Def3,Th1,RSSPACE:def 9
+        .=(the Mult of Linear_Space_of_RealSequences).[r,u]
+          by A8,FUNCT_1:70
+        .=r*u1 by RLVECT_1:def 4;
+     hence thesis by RSSPACE:5,def 7;
+   end;
+
+A9:for u be VECTOR of l1 holds (-u =-seq_id(u) & seq_id(-u)=-seq_id(u))
+   proof
+     let u be VECTOR of l1;
+      -u = (-1)*u by Def3,Th7,RLVECT_1:29
+        .= (-1)(#)seq_id(u) by A6
+        .= -seq_id(u) by SEQ_1:25;
+     hence thesis by A2;
+   end;
+A10:for u,v be VECTOR of l1 holds u-v =seq_id(u)-seq_id(v)
+   proof
+     let u,v be VECTOR of l1;
+     thus u-v =  u+(-v) by RLVECT_1:def 11
+             .=  seq_id(u)+seq_id(-v) by A3
+             .=  seq_id(u)+(-seq_id(v)) by A9
+             .=  seq_id(u)-seq_id(v) by SEQ_1:15;
+   end;
+
+A11:0.l1 = Zeroseq
+   proof
+     set W = the_set_of_l1RealSequences;
+     thus 0.l1 = Zero_(W,Linear_Space_of_RealSequences)
+                   by Def3,RLVECT_1:def 2
+              .= 0.Linear_Space_of_RealSequences by Th1,RSSPACE:def 10
+              .= Zeroseq by RLVECT_1:def 2,RSSPACE:def 7;
+   end;
+   for v be VECTOR of l1 holds ||.v.|| = Sum(abs(seq_id(v)))
+   proof
+     let v be VECTOR of l1;
+     thus ||.v.|| = (the norm of l1).v by NORMSP_1:def 1
+                 .= Sum(abs(seq_id(v))) by Def2,Def3;
+   end;
+   hence thesis by A1,A2,A3,A6,A9,A10,A11,Def3;
+end;
+
+theorem Th9:
+for x, y being Point of l1_Space, a be Real holds
+  ( ||.x.|| = 0 iff x = 0.l1_Space ) &
+  0 <= ||.x.|| &
+  ||.x+y.|| <= ||.x.|| +  ||.y.|| &
+  ||.(a*x).|| = abs(a) * ||.x.||
+proof
+   let x, y be Point of l1_Space;
+   let a be Real;
+A1:now assume
+A2: ||.x.|| = 0;
+A3: ||.x.|| = (the norm of l1_Space). x by NORMSP_1:def 1
+            .= Sum(abs(seq_id(x))) by Def2,Def3;
+A4: seq_id(x) is absolutely_summable by Th8;
+A5: for n be Nat holds 0 = (seq_id(x)).n by A2,A3,A4,Th6;
+     x in the_set_of_RealSequences by Def1,Def3;
+     hence x=0.l1_Space by A5,Th8,RSSPACE:def 6;
+   end;
+
+A6:now assume
+A7:x=0.l1_Space;
+A8: for n be Nat holds (seq_id(x)).n=0 by A7,Th8,RSSPACE:def 6;
+     thus
+     ||.x.|| = (the norm of l1_Space). x by NORMSP_1:def 1
+            .= Sum(abs(seq_id(x))) by Def2,Def3
+            .= 0 by A8,Th5;
+   end;
+A9:for n be Nat holds  0 <= abs(seq_id(x)).n
+   proof
+     let n be Nat;
+     0 <= abs((seq_id(x)).n) by ABSVALUE:5;
+     hence thesis by SEQ_1:16;
+   end;
+   (seq_id(x)) is absolutely_summable by Def1,Def3; then
+A10:abs(seq_id(x)) is summable by SERIES_1:def 5;
+
+A11:||.x.|| = (the norm of l1_Space). x by NORMSP_1:def 1
+          .= Sum(abs(seq_id(x))) by Def2,Def3;
+
+A12:||.y.|| = (the norm of l1_Space). y by NORMSP_1:def 1
+           .= Sum(abs(seq_id(y))) by Def2,Def3;
+
+A13:Sum(abs(seq_id(x+y)))
+      = (the norm of l1_Space).(x+y) by Def2,Def3
+     .= ||.x + y.|| by NORMSP_1:def 1;
+
+A14:for n be Nat holds (abs(seq_id(x+y))).n
+       = (abs(((seq_id(x)).n) + ((seq_id(y)).n)))
+   proof
+     let n be Nat;
+     (abs(seq_id(x+y))).n
+         = (abs(seq_id(seq_id(x)+seq_id(y)))).n by Th8
+        .= (abs(seq_id(x)+seq_id(y))).n by RSSPACE:3
+        .= abs((seq_id(x)+seq_id(y)).n) by SEQ_1:16
+        .= abs(((seq_id(x)).n)+((seq_id(y)).n)) by SEQ_1:11;
+     hence thesis;
+   end;
+
+A15:for n be Nat holds (abs(seq_id(x+y))).n
+        <= (abs(seq_id(x))).n + (abs(seq_id(y))).n
+   proof
+     let n be Nat;
+     (abs(((seq_id(x)).n)+ ((seq_id(y)).n)))
+       <= abs((seq_id(x)).n) + abs((seq_id(y)).n) by ABSVALUE:13; then
+     (abs(seq_id(x+y))) .n
+       <= abs((seq_id(x)).n) + abs((seq_id(y)).n) by A14; then
+     (abs(seq_id(x+y))) .n
+        <= (abs(seq_id(x))).n + abs((seq_id(y)).n) by SEQ_1:16;
+     hence thesis by SEQ_1:16;
+   end;
+
+A16:for n being Nat holds
+     (abs(seq_id(x+y))).n <= ((abs(seq_id(x))) + (abs(seq_id(y)))).n
+   proof
+     let n be Nat;
+     (abs(seq_id(x))).n + (abs(seq_id(y))).n
+        =((abs(seq_id(x))) + (abs(seq_id(y)))).n by SEQ_1:11;
+
+     hence (abs(seq_id(x+y))).n
+          <= ((abs(seq_id(x))) + (abs(seq_id(y)))).n by A15;
+    end;
+
+    (seq_id(x)) is absolutely_summable by Def1,Def3; then
+A17:(abs(seq_id(x))) is summable by SERIES_1:def 5;
+    (seq_id(y)) is absolutely_summable by Def1,Def3; then
+A18:(abs(seq_id(y))) is summable by SERIES_1:def 5;
+
+A19:((abs(seq_id(x))) + (abs(seq_id(y)))) is summable
+         by A17,A18,SERIES_1:10;
+
+A20:now
+      let n be Nat;
+      (abs(seq_id(x+y))).n = abs((seq_id(x+y)).n) by SEQ_1:16;
+      hence 0 <= (abs(seq_id(x+y))).n by ABSVALUE:5;
+    end;
+
+A21:Sum(abs(seq_id(x+y))) <= Sum((abs(seq_id(x))) + (abs(seq_id(y))))
+        by A16,A19,A20,SERIES_1:24;
+
+A22:for n be Nat holds
+     (abs(a(#)seq_id(x))).n =(abs(a))*(abs(seq_id(x)).n)
+   proof
+     let n be Nat;
+     (abs(a(#)seq_id(x))).n
+               =abs((a(#)seq_id(x)).n) by SEQ_1:16
+              .=abs(a*((seq_id(x)).n)) by SEQ_1:13
+              .=(abs(a))*(abs((seq_id(x)).n)) by ABSVALUE:10
+              .=(abs(a))*(abs(seq_id(x)).n) by SEQ_1:16;
+     hence thesis;
+   end;
+   (seq_id(x)) is absolutely_summable by Def1,Def3; then
+A23:(abs(seq_id(x))) is summable by SERIES_1:def 5;
+   ||.(a*x).|| = (the norm of l1_Space). (a*x) by NORMSP_1:def 1
+            .=Sum(abs(seq_id(a*x))) by Def2,Def3
+            .=Sum(abs(seq_id(a(#)seq_id(x)))) by Th8
+            .=Sum(abs(a(#)seq_id(x))) by RSSPACE:3
+            .=Sum((abs(a)) (#) (abs(seq_id(x)))) by A22,SEQ_1:13
+            .=abs(a)*Sum((abs(seq_id(x)))) by A23,SERIES_1:13
+            .=abs(a)*((the norm of l1_Space).(x)) by Def2,Def3
+            .=abs(a)*||.x.|| by NORMSP_1:def 1;
+   hence thesis by A1,A6,A9,A10,A11,A12,A13,A18,A21,SERIES_1:10,21;
+end;
+
+definition
+  cluster l1_Space -> RealNormSpace-like RealLinearSpace-like
+       Abelian add-associative right_zeroed right_complementable;
+  coherence by Def3,Th3,Th4,Th9,NORMSP_1:def 2;
+end;
+
+Lm2:
+for rseq be Real_Sequence st
+( (for n be Nat holds 0 <= rseq.n) & rseq is summable ) holds
+  ( for n be Nat holds rseq.n <= (Partial_Sums(rseq)).n ) &
+  ( for n be Nat holds 0      <= (Partial_Sums(rseq)).n ) &
+  ( for n be Nat holds (Partial_Sums(rseq)).n <= Sum(rseq) ) &
+  ( for n be Nat holds rseq.n <= Sum(rseq) ) &
+    0 <= Sum(rseq)
+proof
+   let rseq be Real_Sequence such that
+A1:for n be Nat holds 0 <= rseq.n and
+A2:rseq is summable;
+A3:Partial_Sums(rseq) is non-decreasing by A1,SERIES_1:19;
+A4:Partial_Sums(rseq) is bounded_above by A1,A2,SERIES_1:20;
+A5:for n be Nat holds (Partial_Sums(rseq)).n <= Sum(rseq)
+   proof
+     let n be Nat;
+     (Partial_Sums(rseq)).n <= lim Partial_Sums(rseq) by A3,A4,SEQ_4:54;
+     hence (Partial_Sums(rseq)).n <=Sum(rseq) by SERIES_1:def 3;
+   end;
+A6:for n be Nat holds 0 <= Partial_Sums(rseq).n
+   proof
+     let n be Nat;
+A7:  n=n+0;
+A8:  Partial_Sums(rseq).0  = rseq.0 by SERIES_1:def 1;
+     0 <=rseq.0 by A1;
+     hence 0 <=Partial_Sums(rseq).n by A3,A7,A8,SEQM_3:11;
+   end;
+A9:for n be Nat holds rseq.n <= Partial_Sums(rseq).(n)
+   proof
+     let n be Nat;
+     now per cases;
+       case n=0;
+       hence rseq.n <= Partial_Sums(rseq).(n) by SERIES_1:def 1;
+       case
+A10:   n<>0;
+       0 <= n by NAT_1:18; then
+A11:   0 + 1 <= n by A10,INT_1:20;
+       set nn=n-1;
+A12:    nn is Nat by A11,INT_1:18;
+A13:    nn+1 = n-(1-1) by XCMPLX_1:37
+           .=n;
+A14:    0 <= Partial_Sums(rseq).nn by A6,A12;
+       rseq.(n)+0 <= rseq.n+Partial_Sums(rseq).(nn) by A14,REAL_1:55;
+       hence rseq.n<=Partial_Sums(rseq).(n) by A12,A13,SERIES_1:def 1;
+     end;
+     hence thesis;
+   end;
+A15:for n be Nat holds rseq.n <= Sum(rseq)
+   proof
+     let n be Nat;
+A16:  (Partial_Sums(rseq)).n <= Sum(rseq) by A5;
+A17:  rseq.n <= Partial_Sums(rseq).(n) by A9;
+     thus rseq.n <= Sum(rseq) by A16,A17,AXIOMS:22;
+   end;
+   0 <= rseq.0 by A1;
+   hence thesis by A5,A6,A9,A15;
+end;
+
+Lm3:
+for e be Real, seq be Real_Sequence st ( seq is convergent &
+ ex k be Nat st (for i be Nat st k <= i holds seq.i <=e ) ) holds
+  lim seq <=e
+proof
+   let e be Real;
+   let seq be Real_Sequence such that
+A1:seq is convergent and
+A2:ex k be Nat st (for i be Nat st k <= i holds seq.i <=e );
+   deffunc F(set) = e;
+   consider cseq be Real_Sequence such that
+A3:for n be Nat holds cseq.n=F(n) from ExRealSeq;
+A4:cseq is constant by A3,SEQM_3:def 6; then
+A5:cseq is convergent by SEQ_4:39;
+   consider k be Nat such that
+A6:for i be Nat st k <= i holds seq.i <=e by A2;
+A7:(seq ^\k) is convergent by A1,SEQ_4:33;
+A8:lim (seq ^\k)=lim seq by A1,SEQ_4:33;
+
+A9:now let i be Nat;
+A10: (seq ^\k).i = seq.(k+i) by SEQM_3:def 9;
+     k <= k+i by NAT_1:29; then
+     seq.(k+i) <=e by A6;
+     hence (seq ^\k) .i <= cseq.i by A3,A10;
+  end;
+  (lim cseq) = cseq.0 by A4,SEQ_4:41 .= e by A3;
+  hence thesis by A5,A7,A8,A9,SEQ_2:32;
+end;
+
+Lm4:
+for c be Real, seq be Real_Sequence st seq is convergent
+for rseq be Real_Sequence st
+ ( for i be Nat holds rseq .i = abs(seq.i-c) ) holds
+ ( rseq is convergent & lim rseq = abs(lim seq-c) )
+proof
+   let c be Real;
+   let seq be Real_Sequence such that
+A1:seq is convergent;
+   let rseq be Real_Sequence such that
+A2:for i be Nat holds rseq .i = abs(seq.i-c);
+   deffunc F(set) = c;
+   consider cseq be Real_Sequence such that
+A3:for n be Nat holds cseq.n=F(n) from ExRealSeq;
+A4:now let i be Nat;
+     thus rseq.i=abs(seq.i-c) by A2
+        .=abs(seq.i-(cseq.i))by A3
+        .=abs(seq.i+-(cseq.i)) by XCMPLX_0:def 8
+        .=abs(seq.i+(-cseq).i) by SEQ_1:14
+        .=abs((seq+(-cseq)).i) by SEQ_1:11
+        .=abs((seq -cseq ).i) by SEQ_1:15
+        .=abs(seq -cseq).i by SEQ_1:16;
+   end;
+
+A5:for x be set st x in NAT holds
+     rseq.x =abs(seq -cseq).x by A4;
+A6:cseq is constant by A3,SEQM_3:def 6; then
+A7:cseq is convergent by SEQ_4:39; then
+A8:seq -cseq is convergent by A1,SEQ_2:25; then
+A9:abs(seq -cseq) is convergent by SEQ_4:26;
+   lim abs(seq -cseq)
+     = abs(lim(seq-cseq)) by A8,SEQ_4:27
+    .=abs(lim(seq)-lim(cseq)) by A1,A7,SEQ_2:26
+    .=abs(lim(seq)-(cseq.0)) by A6,SEQ_4:41
+    .=abs(lim(seq)-c) by A3;
+   hence thesis by A5,A9,SEQ_1:8;
+end;
+
+Lm5:
+for c be Real, seq,seq1 be Real_Sequence st
+ seq is convergent & seq1 is convergent
+  for rseq be Real_Sequence st
+  (for i be Nat holds rseq .i = abs(seq.i-c)+seq1.i) holds
+   (rseq is convergent & lim rseq =abs(lim seq-c)+lim seq1)
+proof
+   let c be Real;
+   let seq,seq1 be Real_Sequence such that
+A1:seq is convergent and
+A2:seq1 is convergent;
+   let rseq be Real_Sequence such that
+A3:for i be Nat holds rseq .i = abs(seq.i-c)+seq1.i;
+   deffunc F(set) = c;
+   consider cseq be Real_Sequence such that
+A4:for n be Nat holds cseq.n=F(n) from ExRealSeq;
+
+A5:now
+     let i be Nat;
+     thus rseq.i=abs(seq.i-c)+seq1.i by A3
+            .=abs(seq.i-cseq.i)+seq1.i by A4
+            .=abs(seq.i+(-cseq.i))+seq1.i by XCMPLX_0:def 8
+            .=abs(seq.i+(-cseq).i)+seq1.i by SEQ_1:14
+            .=abs((seq+(-cseq)).i) + seq1.i by SEQ_1:11
+            .=abs((seq-(cseq)).i) + seq1.i by SEQ_1:15
+            .=abs(seq-(cseq)).i + seq1.i by SEQ_1:16
+            .=(abs(seq-(cseq)) + seq1).i by SEQ_1:11;
+   end;
+
+   for x be set st x in NAT holds
+   rseq.x =(abs(seq-(cseq)) + seq1).x by A5; then
+A6:rseq = (abs(seq-(cseq)) + seq1) by SEQ_1:8;
+
+A7:cseq is constant by A4,SEQM_3:def 6;then
+A8:cseq is convergent by SEQ_4:39; then
+A9:seq -cseq is convergent by A1,SEQ_2:25; then
+A10:abs(seq-(cseq)) is convergent by SEQ_4:26;
+   lim (abs(seq-(cseq)))
+     = abs(lim(seq-(cseq))) by A9,SEQ_4:27
+    .= abs(lim(seq) - lim (cseq)) by A1,A8,SEQ_2:26
+    .= abs(lim (seq) - (cseq.0)) by A7,SEQ_4:41
+    .= abs(lim (seq) - c) by A4;
+   hence thesis by A2,A6,A10,SEQ_2:19,20;
+end;
+
+definition let X be non empty NORMSTR, x, y be Point of X;
+  func dist(x,y) -> Real equals :Def4:
+  ||.x - y.||;
+  coherence;
+end;
+
+definition
+ let NRM be non empty NORMSTR;
+ let seqt be sequence of NRM;
+ attr seqt is CCauchy means :Def5:
+ for r1 be Real st r1 > 0 ex k1 be Nat st
+  for n1, m1 be Nat st n1 >= k1 & m1 >= k1 holds
+   dist(seqt.n1, seqt.m1) < r1;
+  synonym seqt is Cauchy_sequence_by_Norm;
+end;
+
+reserve NRM for non empty RealNormSpace;
+reserve seq for sequence of NRM;
+
+theorem Th10:
+seq is Cauchy_sequence_by_Norm iff for r be Real st r > 0
+ ex k be Nat st for n, m be Nat st
+  n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r
+proof
+   thus
+   seq is Cauchy_sequence_by_Norm implies for r be Real
+   st r > 0 ex k be Nat st for n, m be Nat st
+   n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r
+   proof
+     assume
+A1:  seq is Cauchy_sequence_by_Norm;
+     let r be Real such that
+A2:  r > 0;
+     consider k be Nat such that
+A3:  for n, m be Nat st n >= k & m >= k holds
+     dist(seq.n, seq.m) < r by A1,A2,Def5;
+     for n, m be Nat st n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r
+     proof
+       let n,m be Nat such that
+A4:    n >= k & m >= k;
+       dist(seq.n, seq.m) < r by A3,A4;
+       hence thesis by Def4;
+     end;
+     hence thesis;
+   end;
+
+   thus (for r be Real st r > 0 ex k be Nat st for n, m be Nat st
+     n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r) implies
+     seq is Cauchy_sequence_by_Norm
+   proof
+     assume
+A5:  for r be Real
+     st r > 0 ex k be Nat st for n, m be Nat st
+     n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r;
+     now
+       let r be Real;
+       assume
+A6:   r > 0;
+       now
+         consider k be Nat such that
+A7:    for n, m be Nat st
+         n >= k & m >= k holds ||.(seq.n) - (seq.m).|| < r by A5,A6;
+         now
+           let n,m be Nat;
+           assume n >= k & m >= k; then
+           ||.(seq.n) - (seq.m).|| < r by A7;
+           hence dist((seq.n), (seq.m)) < r by Def4;
+         end;
+         hence
+         ex k be Nat st for n, m be Nat st
+          n >= k & m >= k holds dist((seq.n), (seq.m)) < r;
+       end;
+       hence
+       ex k be Nat st for n, m be Nat st
+         n >= k & m >= k holds dist((seq.n), (seq.m)) < r;
+     end;
+     hence seq is Cauchy_sequence_by_Norm by Def5;
+   end;
+   thus thesis;
+end;
+
+theorem
+for vseq be sequence of l1_Space st vseq is Cauchy_sequence_by_Norm
+ holds vseq is convergent
+proof
+   let vseq be sequence of l1_Space such that
+A1:vseq is Cauchy_sequence_by_Norm;
+   defpred P[set,set] means
+        ex i be Nat st $1=i &
+     ex rseqi be Real_Sequence st
+      (for n be Nat holds rseqi.n=(seq_id(vseq.n)).i) &
+     rseqi is convergent &
+     $2 = lim rseqi;
+
+A2:for x be set st x in NAT
+    ex y be set st
+     y in REAL & P[x,y]
+   proof
+     let x be set such that
+A3: x in NAT;
+     reconsider i=x as Nat by A3;
+     deffunc F(Nat) = (seq_id(vseq.$1)).i;
+     consider rseqi be Real_Sequence such that
+A4:  for n be Nat holds rseqi.n= F(n) from  ExRealSeq;
+
+A5:  rseqi is convergent
+     proof
+       now
+         let e be real number such that
+A6:     e > 0;
+         thus ex k be Nat st
+          for m be Nat st k <= m holds abs(rseqi.m -rseqi.k) < e
+         proof
+A7:       e is Real by XREAL_0:def 1;
+           consider k be Nat such that
+A8:       for n, m be Nat st ( n >= k & m >= k ) holds
+           ||.(vseq.n) - (vseq.m).|| < e by A1,A6,A7,Th10;
+           for m being Nat st k <= m holds abs(rseqi.m-rseqi.k) < e
+           proof
+             let m be Nat such that
+A9:         k<=m;
+             ||.(vseq.m) - (vseq.k).||
+                = (the norm of l1_Space).((vseq.m)-(vseq.k)) by NORMSP_1:def 1
+               .=Sum(abs(seq_id((vseq.m) - (vseq.k)))) by Def2,Def3; then
+A10:         Sum(abs(seq_id((vseq.m) - (vseq.k)))) < e by A8,A9;
+A11:         seq_id((vseq.m)-(vseq.k)) is absolutely_summable by Def1,Def3;
+A12:        abs(seq_id((vseq.m)-(vseq.k))) is summable by A11,SERIES_1:def 5;
+A13:        for i be Nat holds 0 <=  abs(seq_id((vseq.m) - (vseq.k))).i
+             proof
+               let i be Nat;
+               0 <=  abs((seq_id((vseq.m) - (vseq.k))).i) by ABSVALUE:5;
+               hence thesis by SEQ_1:16;
+             end;
+A14:         abs(seq_id((vseq.m) - (vseq.k))).i
+              <= Sum(abs(seq_id((vseq.m) - (vseq.k)))) by A12,A13,Lm2;
+A15:         seq_id((vseq.m) - (vseq.k))
+               =seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by Th8
+              .= seq_id((vseq.m))-seq_id((vseq.k)) by RSSPACE:3
+              .= seq_id((vseq.m))+-seq_id((vseq.k)) by SEQ_1:15;
+             (seq_id((vseq.m) - (vseq.k))).i
+               =(seq_id((vseq.m))).i+(-seq_id((vseq.k))).i by A15,SEQ_1:11
+              .=(seq_id((vseq.m))).i+(-(seq_id((vseq.k))).i) by SEQ_1:14
+              .=(seq_id((vseq.m))).i-(seq_id((vseq.k))).i by XCMPLX_0:def 8
+              .=rseqi.m -(seq_id((vseq.k))).i by A4
+              .=rseqi.m - rseqi.k by A4; then
+             abs(rseqi.m-rseqi.k) = abs(seq_id((vseq.m) - (vseq.k))).i
+              by SEQ_1:16;
+             hence thesis by A10,A14,AXIOMS:22;
+           end;
+           hence thesis;
+         end;
+       end;
+       hence thesis by SEQ_4:58;
+     end;
+     take y = lim rseqi;
+     thus thesis by A4,A5;
+   end;
+
+   consider f be Function of NAT,REAL such that
+A16:for x be set st x in NAT holds P[x,f.x] from FuncEx1(A2);
+   reconsider tseq=f as Real_Sequence;
+A17:now
+     let i be Nat;
+     reconsider x=i as set;
+     ex i0 be Nat st
+      x=i0 &
+      ex rseqi be Real_Sequence st
+       ( for n be Nat holds rseqi.n=(seq_id(vseq.n)).i0 ) &
+      rseqi is convergent &
+      f.x=lim rseqi by A16;
+      hence ex rseqi be Real_Sequence st
+       ( for n be Nat holds rseqi.n=(seq_id(vseq.n)).i ) &
+       rseqi is convergent &
+       tseq.i=lim rseqi;
+   end;
+
+A18:for e be Real st e >0
+   ex k be Nat st
+    for n be Nat st n >= k
+     holds
+     ( abs(seq_id(tseq)-seq_id(vseq.n)) is summable &
+       Sum(abs(seq_id(tseq)-seq_id(vseq.n))) < e )
+   proof
+     let e1 be Real such that
+A19: e1 >0;
+     set e=e1/2;
+A20:e > 0 by A19,SEQ_2:3;
+A21:e < e1 by A19,SEQ_2:4;
+     consider k be Nat such that
+A22: for n, m be Nat st ( n >= k & m >= k ) holds
+      ||.(vseq.n) - (vseq.m).|| < e by A1,A20,Th10;
+A23: for m,n be Nat st ( n >= k & m >= k ) holds
+      ( abs(seq_id((vseq.n) - (vseq.m))) is summable &
+        Sum(abs(seq_id((vseq.n) - (vseq.m)))) < e &
+        for i be Nat holds 0 <=  abs(seq_id((vseq.n) - (vseq.m))).i )
+     proof
+       let m,n be Nat such that
+A24:  n >= k & m >= k;
+       ||.(vseq.n) - (vseq.m).|| < e by A22,A24; then
+A25:   (the norm of l1_Space).((vseq.n) - (vseq.m)) < e by NORMSP_1:def 1;
+A26:  seq_id(((vseq.n) - (vseq.m))) is absolutely_summable by Def1,Def3;
+       for i be Nat holds 0 <= abs(seq_id((vseq.n) - (vseq.m))).i
+       proof
+         let i be Nat;
+         0 <= abs((seq_id((vseq.n) - (vseq.m))).i) by ABSVALUE:5;
+         hence thesis by SEQ_1:16;
+       end;
+       hence thesis by A25,A26,Def2,Def3,SERIES_1:def 5;
+     end;
+A27:  for n be Nat for i be Nat holds
+      for rseq be Real_Sequence st
+       ( for m be Nat holds
+         rseq.m=Partial_Sums(abs(seq_id((vseq.m)-(vseq.n)))).i )
+      holds
+       ( rseq is convergent &
+         lim rseq = Partial_Sums(abs(seq_id(tseq)-seq_id(vseq.n))).i )
+     proof
+       let n be Nat;
+A28:    for m,k be Nat holds
+        seq_id((vseq.m) - (vseq.k)) = seq_id((vseq.m))-seq_id((vseq.k))
+       proof
+         let m,k be Nat;
+         seq_id((vseq.m) - (vseq.k))
+          = seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by Th8;
+         hence thesis by RSSPACE:3;
+       end;
+       defpred P[Nat] means
+        for rseq be Real_Sequence st
+        for m be Nat holds
+          rseq.m=Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).$1 holds
+          rseq is convergent &
+          lim rseq = Partial_Sums(abs(seq_id(tseq)-seq_id(vseq.n))).$1;
+A29:  P[0]
+  proof
+    now
+         let rseq be Real_Sequence such that
+A30:     for m be Nat holds
+          rseq.m=Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).0;
+         thus
+          rseq is convergent &
+          lim rseq = Partial_Sums(abs(seq_id(tseq)-seq_id(vseq.n))).0
+         proof
+           consider rseq0 be Real_Sequence such that
+A31:        ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).0 ) &
+            rseq0 is convergent &
+            tseq.0=lim rseq0 by A17;
+A32:       for m being Nat holds rseq.m = abs(rseq0.m-(seq_id((vseq.n))).0)
+           proof
+             let m be Nat;
+             rseq.m=Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).0 by A30
+                .=(abs(seq_id((vseq.m) - (vseq.n)))).0 by SERIES_1:def 1
+                .=(abs(seq_id(vseq.m)-seq_id(vseq.n))).0 by A28
+                .=(abs(seq_id(vseq.m)+-seq_id(vseq.n))).0 by SEQ_1:15
+                .=abs((seq_id(vseq.m)+-seq_id(vseq.n)).0) by SEQ_1:16
+                .=abs((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0) by SEQ_1:11
+                .=abs((seq_id(vseq.m)).0+-(seq_id(vseq.n)).0) by SEQ_1:14
+                .=abs((seq_id(vseq.m)).0-(seq_id(vseq.n)).0) by XCMPLX_0:def 8;
+             hence thesis by A31;
+           end;
+           lim rseq = abs(lim(rseq0) -((seq_id(vseq.n)).0 )) by A31,A32,Lm4
+                 .= abs(tseq.0+-((seq_id(vseq.n)).0)) by A31,XCMPLX_0:def 8
+                 .= abs(tseq.0+(-(seq_id(vseq.n))).0) by SEQ_1:14
+                 .= abs((tseq+(-seq_id((vseq.n)))).0) by SEQ_1:11
+                 .= abs((tseq-(seq_id((vseq.n)))).0) by SEQ_1:15
+                 .= abs((seq_id(tseq)-(seq_id((vseq.n)))).0) by RSSPACE:3
+                 .= abs(seq_id(tseq)-(seq_id(vseq.n))).0 by SEQ_1:16
+                 .=Partial_Sums(abs(seq_id(tseq)-(seq_id(vseq.n)))).0
+                        by SERIES_1:def 1;
+           hence thesis by A31,A32,Lm4;
+         end;
+       end;
+      hence thesis;
+    end;
+A33:  for i be Nat st P[i] holds P[i+1]
+   proof
+    now
+         let i be Nat such that
+A34:    for rseq be Real_Sequence st
+          ( for m be Nat holds
+            rseq.m= Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).i )
+         holds
+          ( rseq is convergent &
+            lim rseq  =Partial_Sums(abs((seq_id(tseq) - seq_id(vseq.n)))).i );
+         thus
+         for rseq be Real_Sequence st
+          ( for m be Nat holds
+            rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).(i+1) )
+         holds
+          ( rseq is convergent &
+            lim rseq =Partial_Sums(abs((seq_id(tseq) - seq_id(vseq.n)))).(i+1))
+         proof
+           let rseq be Real_Sequence such that
+A35:     ( for m be Nat holds
+             rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).(i+1) );
+           deffunc F(Nat) = Partial_Sums(abs(seq_id((vseq.$1) - (vseq.n)))).i;
+           consider rseqb be Real_Sequence such that
+A36:       for m be Nat holds
+             rseqb.m = F(m) from ExRealSeq;
+A37:       rseqb is convergent &
+           lim rseqb = Partial_Sums(abs((seq_id(tseq) - seq_id(vseq.n)))).i
+             by A34,A36;
+           consider rseq0 be Real_Sequence such that
+A38:       ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).(i+1) ) &
+           rseq0 is convergent & tseq.(i+1)=lim rseq0 by A17;
+A39:       now
+             let m be Nat;
+             thus
+             rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).(i+1)
+                  by A35
+                .=abs(seq_id((vseq.m) - (vseq.n))).(i+1)
+                 +Partial_Sums(abs(seq_id((vseq.m) -
+                                   (vseq.n)))).i by SERIES_1:def 1
+                .=abs(seq_id(vseq.m)-seq_id(vseq.n)).(i+1)
+                 +Partial_Sums(abs(seq_id((vseq.m) -
+                                   (vseq.n)))).i by A28
+                .=abs(seq_id(vseq.m)-seq_id(vseq.n)).(i+1) + rseqb.m by A36
+                .=abs((seq_id(vseq.m)-seq_id(vseq.n)).(i+1))
+                 + rseqb.m by SEQ_1:16
+                .=abs((seq_id(vseq.m)+-seq_id(vseq.n)).(i+1))
+                 + rseqb.m by SEQ_1:15
+                .=abs((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1))
+                 + rseqb.m by SEQ_1:11
+                .=abs((seq_id(vseq.m)).(i+1)+-(seq_id(vseq.n)).(i+1))
+                 + rseqb.m by SEQ_1:14
+                .= abs((seq_id(vseq.m)).(i+1)-(seq_id(vseq.n)).(i+1))
+                 + rseqb.m by XCMPLX_0:def 8
+                .= abs(rseq0.m-(seq_id(vseq.n)).(i+1)) + rseqb.m by A38;
+           end;
+           lim rseq = abs(lim(rseq0)-(seq_id(vseq.n)).(i+1) )
+                      + lim rseqb by A37,A38,A39,Lm5
+                   .= abs(tseq.(i+1)+-(seq_id(vseq.n)).(i+1) )
+                      + lim rseqb by A38,XCMPLX_0:def 8
+                   .= abs(tseq.(i+1)+(-seq_id(vseq.n)).(i+1) )
+                      + lim rseqb by SEQ_1:14
+                   .= abs((tseq+(-seq_id(vseq.n))).(i+1) )
+                      + lim rseqb by SEQ_1:11
+                   .= abs((tseq-(seq_id(vseq.n))).(i+1) )
+                      + lim rseqb by SEQ_1:15
+                   .= abs(tseq-(seq_id(vseq.n))).(i+1)
+                      + lim rseqb by SEQ_1:16
+                   .= abs(tseq-(seq_id(vseq.n))).(i+1)
+                      + Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))).i
+                         by A34,A36
+                   .= abs(seq_id(tseq)-(seq_id(vseq.n))).(i+1)
+                      + Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))).i
+                         by RSSPACE:3
+                   .= Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))).(i+1)
+                         by SERIES_1:def 1;
+           hence thesis by A37,A38,A39,Lm5;
+         end;
+       end;
+       hence thesis;
+     end;
+       for i be Nat holds P[i] from Ind(A29,A33);
+       hence thesis;
+     end;
+
+     for n be Nat st n >= k holds
+      ( abs(seq_id(tseq)-seq_id(vseq.n)) is summable &
+        Sum(abs(seq_id(tseq)-seq_id(vseq.n))) < e1 )
+     proof
+       let n be Nat such that
+A40:   n >= k;
+A41:   for i be Nat st 0 <= i holds
+         Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))).i <=e
+       proof
+         let i be Nat such that 0 <=i;
+         deffunc F(Nat)= Partial_Sums(abs(seq_id((vseq.$1) - (vseq.n)))).i;
+         consider rseq be Real_Sequence such that
+A42:      for m be Nat holds rseq.m = F(m) from ExRealSeq;
+A43:     rseq is convergent by A27,A42;
+A44:     lim rseq = Partial_Sums(abs(seq_id(tseq)-seq_id(vseq.n))).i by A27,A42
+;
+         for m be Nat st m >= k holds rseq.m <= e
+         proof
+           let m be Nat;
+           assume m >= k; then
+A45:       abs(seq_id((vseq.m) - (vseq.n))) is summable &
+           Sum(abs(seq_id((vseq.m) - (vseq.n)))) < e &
+           for i be Nat holds 0 <= abs(seq_id((vseq.m) - (vseq.n))).i
+                  by A23,A40; then
+A46:       Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).i
+               <=Sum(abs(seq_id((vseq.m) - (vseq.n)))) by Lm2;
+           rseq.m = Partial_Sums(abs(seq_id((vseq.m) - (vseq.n)))).i by A42;
+           hence thesis by A45,A46,AXIOMS:22;
+         end;
+         hence thesis by A43,A44,Lm3;
+       end;
+
+A47:   for i be Nat holds 0 <= abs(seq_id(tseq)-seq_id(vseq.n)).i
+       proof
+         let i be Nat;
+         abs(seq_id(tseq)-seq_id(vseq.n)).i
+            =abs((seq_id(tseq)-seq_id(vseq.n)).i) by SEQ_1:16;
+         hence thesis by ABSVALUE:5;
+       end;
+
+A48:   Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))) is bounded_above
+       proof
+         now
+           take e1;
+           let i be Nat;
+           0 <= i by NAT_1:18; then
+           Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))).i <=e by A41;
+           hence Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))).i < e1
+             by A21,AXIOMS:22;
+         end;
+         hence thesis by SEQ_2:def 3;
+       end;
+
+A49:   Sum(abs((seq_id(tseq) -seq_id(vseq.n))))
+       = lim Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n))))
+          by SERIES_1:def 3;
+       abs((seq_id(tseq)-seq_id(vseq.n))) is summable
+         by A47,A48,SERIES_1:20; then
+       Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))) is convergent
+         by SERIES_1:def 2; then
+       lim Partial_Sums(abs((seq_id(tseq) -seq_id(vseq.n)))) <= e
+         by A41,Lm3;
+       hence thesis by A21,A47,A48,A49,AXIOMS:22,SERIES_1:20;
+     end;
+     hence thesis;
+   end;
+
+   abs(seq_id(tseq)) is summable
+   proof
+A50: for i be Nat holds 0 <=  abs(seq_id(tseq)).i
+     proof
+       let i be Nat;
+       abs(seq_id(tseq)).i = abs((seq_id(tseq)).i) by SEQ_1:16;
+       hence thesis by ABSVALUE:5;
+     end;
+     consider m be Nat such that
+A51: for n be Nat st n >= m holds
+     abs((seq_id(tseq) -seq_id(vseq.n))) is summable &
+     Sum(abs((seq_id(tseq) -seq_id(vseq.n)))) < 1 by A18;
+A52: abs((seq_id(tseq) -seq_id(vseq.m))) is summable by A51;
+     seq_id( (vseq.m) ) is absolutely_summable by Def1,Def3; then
+A53: abs(seq_id( (vseq.m) )) is summable by SERIES_1:def 5;
+     set a=abs(seq_id(tseq) -seq_id(vseq.m));
+     set b=abs(seq_id( (vseq.m) ));
+     set d=abs(seq_id( (tseq) ));
+
+A54: a + b is summable by A52,A53,SERIES_1:10;
+     for i be Nat holds d.i <= (a+b).i
+     proof
+       let i be Nat;
+A55:   a.i = abs((seq_id(tseq) -seq_id(vseq.m)).i) by SEQ_1:16
+          .= abs((seq_id(tseq)+-seq_id(vseq.m)).i) by SEQ_1:15
+          .= abs((seq_id(tseq)).i+(-seq_id(vseq.m)).i) by SEQ_1:11
+          .= abs((seq_id(tseq)).i+(-(seq_id(vseq.m)).i)) by SEQ_1:14
+          .=abs((seq_id(tseq)).i-(seq_id(vseq.m)).i) by XCMPLX_0:def 8;
+A56:   b.i=abs((seq_id(vseq.m)).i) by SEQ_1:16;
+       d.i=abs((seq_id(tseq)).i) by SEQ_1:16; then
+       d.i-b.i <= a.i by A55,A56,ABSVALUE:18; then
+       d.i-b.i+b.i<= a.i + b.i by AXIOMS:24; then
+       d.i <= a.i + b.i by XCMPLX_1:27;
+       hence thesis by SEQ_1:11;
+     end;
+     hence d is summable by A50,A54,SERIES_1:24;
+   end; then
+A57:seq_id(tseq) is absolutely_summable by SERIES_1:def 5;
+A58:tseq in the_set_of_RealSequences by RSSPACE:def 1;
+   reconsider tv=tseq as Point of l1_Space by A57,A58,Def1,Def3;
+   for e be Real st
+    e > 0 ex m be Nat  st for n be Nat st
+     n >= m holds ||.(vseq.n) - tv.|| < e
+   proof
+     let e be Real such that
+A59: e > 0;
+     consider m be Nat such that
+A60: for n be Nat st n >= m holds
+        (( abs(seq_id(tseq)-seq_id(vseq.n)) is summable &
+     Sum(abs(seq_id(tseq)-seq_id(vseq.n))) < e ) ) by A18,A59;
+     now let n be Nat such that
+A61:   n >= m;
+       reconsider u=tseq as VECTOR of l1_Space by A57,A58,Def1,Def3;
+A62:   Sum(abs(seq_id(tseq)-seq_id(vseq.n))) < e by A60,A61;
+       reconsider v=vseq.n as VECTOR of l1_Space;
+       seq_id(u-v) = u-v by Th8; then
+       Sum(abs(seq_id(u-v))) = Sum(abs(seq_id(tseq)-seq_id(vseq.n)))
+         by Th8;then
+A63:   (the norm of l1_Space).(u-v) < e by A62,Def2,Def3;
+       ||.(vseq.n) - tv.|| =||.(vseq.n) +(-tv).|| by RLVECT_1:def 11
+          .=||.-(tv-(vseq.n)).|| by RLVECT_1:47
+          .=||.tv-(vseq.n).|| by NORMSP_1:6;
+       hence ||.(vseq.n) - tv.|| < e by A63,NORMSP_1:def 1;
+     end;
+     hence thesis;
+   end;
+   hence thesis by NORMSP_1:def 9;
+end;

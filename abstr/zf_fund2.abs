@@ -1,0 +1,90 @@
+:: Mostowski's Fundamental Operations - Part II
+::  by Grzegorz Bancerek and Andrzej Kondracki
+::
+:: Received February 15, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary ZF_LANG, FUNCT_1, ARYTM_3, ZF_MODEL, BOOLE, ORDINAL1, CLASSES2,
+      ZF_REFLE, PROB_1, RELAT_1, TARSKI, ORDINAL2, CARD_1, CLASSES1, QC_LANG3,
+      ZFMODEL1, QC_LANG1, ZF_FUND1, FUNCT_2, ORDINAL4, ZF_FUND2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
+      NAT_1, RELAT_1, FUNCT_1, FUNCT_2, ORDINAL1, ZF_LANG, ZF_MODEL, ZFMODEL1,
+      ORDINAL2, CARD_1, PROB_1, ZF_LANG1, CLASSES1, CLASSES2, ORDINAL4,
+      ZF_REFLE, ZF_FUND1, FINSUB_1;
+ constructors ENUMSET1, NAT_1, ZFMODEL1, ZF_LANG1, CLASSES1, ZF_REFLE,
+      ZF_FUND1, WELLORD2, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, ZF_LANG, ORDINAL1, CLASSES2, RELSET_1, CARD_1,
+      FINSUB_1, MEMBERED, ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+ reserve H for ZF-formula,
+         M,E for non empty set,
+         e for Element of E,
+         m,m0,m3,m4 for Element of M,
+         v,v1,v2 for Function of VAR,M,
+         f,f1 for Function of VAR,E,
+         g for Function,
+         u,u1,u2 for set,
+         x,y for Variable,
+         i,n for Nat,
+         X for set;
+
+ definition let H,M,v;
+  func Section(H,v) -> Subset of M equals
+:: ZF_FUND2:def 1
+    { m : M,v/(x.0,m) |= H } if x.0 in Free H
+       otherwise {};
+ end;
+
+ definition let M;
+  attr M is predicatively_closed means
+:: ZF_FUND2:def 2
+   for H, E, f st E in M holds Section(H,f) in M;
+ end;
+
+theorem :: ZF_FUND2:1
+  E is epsilon-transitive implies
+   Section(All(x.2,x.2 'in' x.0 => x.2 'in' x.1),f/(x.1,e)) = E /\ bool e;
+
+ reserve W for Universe, w for Element of W,
+         Y for Subclass of W,
+         a,a1,b,c for Ordinal of W,
+         L for DOMAIN-Sequence of W;
+
+theorem :: ZF_FUND2:2
+ (for a,b st a in b holds L.a c= L.b) &
+   (for a holds L.a in Union L & L.a is epsilon-transitive) &
+     Union L is predicatively_closed
+   implies
+    Union L |= the_axiom_of_power_sets;
+
+theorem :: ZF_FUND2:3
+ omega in W & (for a,b st a in b holds L.a c= L.b) &
+  (for a st a <> {} & a is_limit_ordinal holds L.a = Union (L|a)) &
+   (for a holds L.a in Union L & L.a is epsilon-transitive) &
+    Union L is predicatively_closed
+   implies
+    for H st {x.0,x.1,x.2} misses Free H holds
+     Union L |= the_axiom_of_substitution_for H;
+
+theorem :: ZF_FUND2:4
+ Section(H,v)=
+   {m : {[{},m]} \/ (v*decode)|((code Free H)\{{}}) in Diagram(H,M)};
+
+theorem :: ZF_FUND2:5
+ Y is closed_wrt_A1-A7 & Y is epsilon-transitive implies
+  Y is predicatively_closed;
+
+theorem :: ZF_FUND2:6
+  (omega in W) &
+ (for a,b st a in b holds L.a c= L.b) &
+  (for a st a <> {} & a is_limit_ordinal holds L.a = Union (L|a)) &
+   (for a holds L.a in Union L & L.a is epsilon-transitive) &
+    (Union L is closed_wrt_A1-A7)
+ implies
+    Union L is_a_model_of_ZF;

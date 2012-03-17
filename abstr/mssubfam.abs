@@ -1,0 +1,407 @@
+:: Certain Facts about Families of Subsets of Many Sorted Sets
+::  by Artur Korni{\l}owicz
+::
+:: Received October 27, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, SETFAM_1, PRALG_1, FUNCT_1, BOOLE, CANTOR_1, TARSKI,
+      ZF_REFLE, FUNCT_6, RELAT_1, MSUALG_3, CAT_4, NATTRA_1, MATRIX_1,
+      PRE_CIRC, FINSET_1, MSUALG_2, PRALG_2, CAT_1, FUNCT_4, AUTALG_1, FUNCT_2,
+      GRCAT_1, COHSP_1, MSSUBFAM, HAHNBAN;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
+      ORDINAL1, FUNCT_2, CQC_LANG, FINSET_1, FUNCT_4, PBOOLE, MSUALG_1,
+      MSUALG_2, MSUALG_3, PRALG_1, PRALG_2, AUTALG_1, PRE_CIRC, EXTENS_1,
+      CANTOR_1, MBOOLEAN, PZFMISC1;
+ constructors CQC_LANG, MSUALG_3, PRALG_2, AUTALG_1, PRE_CIRC, EXTENS_1,
+      CANTOR_1, MBOOLEAN, PZFMISC1;
+ clusters FINSET_1, MBOOLEAN, PBOOLE, PRALG_1, PRE_CIRC, PZFMISC1, CQC_LANG,
+      RELSET_1, RELAT_1, FUNCT_1;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+reserve I, G, H, i, x for set,
+        A, B, M for ManySortedSet of I,
+        sf, sg, sh for Subset-Family of I,
+        v, w for Subset of I,
+        F for ManySortedFunction of I;
+
+scheme MSFExFunc { I() -> set,
+                   A, B() -> ManySortedSet of I(),
+                   P[set,set,set] } :
+ ex F be ManySortedFunction of A(), B() st
+  for i be set st i in I() holds
+   ex f be Function of A().i, B().i st f = F.i &
+    for x be set st x in A().i holds P[f.x,x,i]
+provided
+  for i be set st i in I() holds
+   for x be set st x in A().i ex y be set st y in B().i & P[y,x,i];
+
+theorem :: MSSUBFAM:1     :: SETFAM_1:3
+  sf <> {} implies Intersect sf c= union sf;
+
+theorem :: MSSUBFAM:2     :: SETFAM_1:4
+  G in sf implies Intersect sf c= G;
+
+theorem :: MSSUBFAM:3     :: SETFAM_1:5
+  {} in sf implies Intersect sf = {};
+
+theorem :: MSSUBFAM:4     :: SETFAM_1:6
+  for Z be Subset of I holds
+  (for Z1 be set st Z1 in sf holds Z c= Z1) implies Z c= Intersect sf;
+
+theorem :: MSSUBFAM:5     :: SETFAM_1:6
+  sf <> {} & (for Z1 be set st Z1 in sf holds G c= Z1) implies G c= Intersect
+sf;
+
+theorem :: MSSUBFAM:6     :: SETFAM_1:8
+  G in sf & G c= H implies Intersect sf c= H;
+
+theorem :: MSSUBFAM:7     :: SETFAM_1:9
+  G in sf & G misses H implies Intersect sf misses H;
+
+theorem :: MSSUBFAM:8     :: SETFAM_1:10
+  sh = sf \/ sg implies Intersect sh = Intersect sf /\ Intersect sg;
+
+theorem :: MSSUBFAM:9     :: SETFAM_1:11
+  sf = {v} implies Intersect sf = v;
+
+theorem :: MSSUBFAM:10     :: SETFAM_1:12
+  sf = { v,w } implies Intersect sf = v /\ w;
+
+theorem :: MSSUBFAM:11
+  A in B implies A is Element of B;
+
+theorem :: MSSUBFAM:12
+  for B be non-empty ManySortedSet of I holds
+ A is Element of B implies A in B;
+
+theorem :: MSSUBFAM:13
+for f be Function st i in I & f = F.i holds (rngs F).i = rng f;
+
+theorem :: MSSUBFAM:14
+for f be Function st i in I & f = F.i holds (doms F).i = dom f;
+
+theorem :: MSSUBFAM:15
+  for F, G be ManySortedFunction of I
+ holds G ** F is ManySortedFunction of I;
+
+theorem :: MSSUBFAM:16
+  for A be non-empty ManySortedSet of I
+ for F be ManySortedFunction of A, [0]I holds F = [0]I;
+
+theorem :: MSSUBFAM:17
+  A is_transformable_to B & F is ManySortedFunction of A, B implies
+ doms F = A & rngs F c= B;
+
+begin :: Finite Many Sorted Sets
+
+definition let I;
+ cluster empty-yielding -> locally-finite ManySortedSet of I;
+end;
+
+definition let I;
+ cluster [0]I -> empty-yielding locally-finite;
+end;
+
+definition let I, A;
+ cluster empty-yielding locally-finite ManySortedSubset of A;
+end;
+
+theorem :: MSSUBFAM:18      :: FINSET_1:13
+A c= B & B is locally-finite implies A is locally-finite;
+
+definition let I;
+           let A be locally-finite ManySortedSet of I;
+ cluster -> locally-finite ManySortedSubset of A;
+end;
+
+definition let I;
+           let A, B be locally-finite ManySortedSet of I;
+ cluster A \/ B -> locally-finite;
+end;
+
+definition let I, A;
+           let B be locally-finite ManySortedSet of I;
+ cluster A /\ B -> locally-finite;
+end;
+
+definition let I, B;
+           let A be locally-finite ManySortedSet of I;
+ cluster A /\ B -> locally-finite;
+end;
+
+definition let I, B;
+           let A be locally-finite ManySortedSet of I;
+ cluster A \ B -> locally-finite;
+end;
+
+definition let I, F;
+           let A be locally-finite ManySortedSet of I;
+ cluster F.:.:A -> locally-finite;
+end;
+
+definition let I;
+           let A, B be locally-finite ManySortedSet of I;
+ cluster [|A,B|] -> locally-finite;
+end;
+
+theorem :: MSSUBFAM:19     :: FINSET_1:22
+  B is non-empty & [|A,B|] is locally-finite implies A is locally-finite;
+
+theorem :: MSSUBFAM:20     :: FINSET_1:23
+  A is non-empty & [|A,B|] is locally-finite implies B is locally-finite;
+
+theorem :: MSSUBFAM:21      :: FINSET_1:24
+A is locally-finite iff bool A is locally-finite;
+
+definition let I;
+           let M be locally-finite ManySortedSet of I;
+ cluster bool M -> locally-finite;
+end;
+
+theorem :: MSSUBFAM:22     :: FINSET_1:25 a
+  for A be non-empty ManySortedSet of I holds
+ A is locally-finite &
+  (for M be ManySortedSet of I st M in A holds M is locally-finite)
+ implies union A is locally-finite;
+
+theorem :: MSSUBFAM:23     :: FINSET_1:25 b
+  union A is locally-finite implies
+ A is locally-finite & for M st M in A holds M is locally-finite;
+
+theorem :: MSSUBFAM:24     :: FINSET_1:26
+  doms F is locally-finite implies rngs F is locally-finite;
+
+theorem :: MSSUBFAM:25     :: FINSET_1:27
+  (A c= rngs F & for i be set for f be Function st i in I & f = F.i
+ holds f"(A.i) is finite)
+  implies A is locally-finite;
+
+definition let I;
+           let A, B be locally-finite ManySortedSet of I;
+ cluster MSFuncs(A,B) -> locally-finite;
+end;
+
+definition let I;
+           let A, B be locally-finite ManySortedSet of I;
+ cluster A \+\ B -> locally-finite;
+end;
+
+reserve X, Y, Z for ManySortedSet of I;
+
+theorem :: MSSUBFAM:26     :: CQC_THE1:13
+  X is locally-finite & X c= [|Y,Z|] implies
+ ex A, B st A is locally-finite & A c= Y & B is locally-finite & B c= Z &
+  X c= [|A,B|];
+
+theorem :: MSSUBFAM:27     :: CQC_THE1:14
+  X is locally-finite & Z is locally-finite & X c= [|Y,Z|] implies
+ ex A st A is locally-finite & A c= Y & X c= [|A,Z|];
+
+theorem :: MSSUBFAM:28     :: ALI2:1
+  for M be non-empty locally-finite ManySortedSet of I st
+  for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A
+ ex m be ManySortedSet of I st m in M & for K be ManySortedSet of I st K in M
+  holds m c= K;
+
+theorem :: MSSUBFAM:29     :: FIN_TOPO:3
+  for M be non-empty locally-finite ManySortedSet of I st
+  for A, B be ManySortedSet of I st A in M & B in M holds A c= B or B c= A
+ ex m be ManySortedSet of I st m in M & for K be ManySortedSet of I st K in M
+  holds K c= m;
+
+theorem :: MSSUBFAM:30     :: COMPTS_1:1
+  Z is locally-finite & Z c= rngs F implies
+ ex Y st Y c= doms F & Y is locally-finite & F.:.:Y = Z;
+
+begin :: A Family of Subsets of Many Sorted Sets
+
+definition let I, M;
+ mode MSSubsetFamily of M is ManySortedSubset of bool M;
+ canceled;
+end;
+
+definition let I, M;
+ cluster non-empty MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ redefine func bool M -> MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ cluster empty-yielding locally-finite MSSubsetFamily of M;
+end;
+
+theorem :: MSSUBFAM:31
+  [0]I is empty-yielding locally-finite MSSubsetFamily of M;
+
+definition let I;
+           let M be locally-finite ManySortedSet of I;
+ cluster non-empty locally-finite MSSubsetFamily of M;
+end;
+
+reserve SF, SG, SH for MSSubsetFamily of M,
+        SFe for non-empty MSSubsetFamily of M,
+        V, W for ManySortedSubset of M;
+
+definition let I be non empty set,
+               M be ManySortedSet of I,
+               SF be MSSubsetFamily of M,
+               i be Element of I;
+ redefine func SF.i -> Subset-Family of (M.i);
+end;
+
+theorem :: MSSUBFAM:32
+i in I implies SF.i is Subset-Family of (M.i);
+
+theorem :: MSSUBFAM:33
+A in SF implies A is ManySortedSubset of M;
+
+theorem :: MSSUBFAM:34
+SF \/ SG is MSSubsetFamily of M;
+
+theorem :: MSSUBFAM:35
+  SF /\ SG is MSSubsetFamily of M;
+
+theorem :: MSSUBFAM:36
+SF \ A is MSSubsetFamily of M;
+
+theorem :: MSSUBFAM:37
+  SF \+\ SG is MSSubsetFamily of M;
+
+theorem :: MSSUBFAM:38
+A c= M implies {A} is MSSubsetFamily of M;
+
+theorem :: MSSUBFAM:39
+A c= M & B c= M implies {A,B} is MSSubsetFamily of M;
+
+theorem :: MSSUBFAM:40
+union SF c= M;
+
+begin :: Intersection of a Family of Many Sorted Sets
+
+definition let I, M, SF;
+ func meet SF -> ManySortedSet of I means
+:: MSSUBFAM:def 2
+  for i be set st i in I holds ex Q be Subset-Family of (M.i) st Q = SF.i &
+   it.i = Intersect Q;
+end;
+
+definition let I, M, SF;
+ redefine func meet SF -> ManySortedSubset of M;
+end;
+
+theorem :: MSSUBFAM:41     :: SETFAM_1:2
+SF = [0]I implies meet SF = M;
+
+theorem :: MSSUBFAM:42     :: SETFAM_1:3
+  meet SFe c= union SFe;
+
+theorem :: MSSUBFAM:43     :: SETFAM_1:4
+  A in SF implies meet SF c= A;
+
+theorem :: MSSUBFAM:44     :: SETFAM_1:5
+  [0]I in SF implies meet SF = [0]I;
+
+theorem :: MSSUBFAM:45     :: SETFAM_1:6
+  for Z, M be ManySortedSet of I
+ for SF be non-empty MSSubsetFamily of M st
+  (for Z1 be ManySortedSet of I st Z1 in SF holds Z c= Z1) holds Z c= meet SF;
+
+theorem :: MSSUBFAM:46     :: SETFAM_1:7 :: CANTOR_1:11
+  SF c= SG implies meet SG c= meet SF;
+
+theorem :: MSSUBFAM:47     :: SETFAM_1:8
+  A in SF & A c= B implies meet SF c= B;
+
+theorem :: MSSUBFAM:48     :: SETFAM_1:9
+  A in SF & A /\ B = [0]I implies meet SF /\ B = [0]I;
+
+theorem :: MSSUBFAM:49     :: SETFAM_1:10
+  SH = SF \/ SG implies meet SH = meet SF /\ meet SG;
+
+theorem :: MSSUBFAM:50     :: SETFAM_1:11
+  SF = {V} implies meet SF = V;
+
+theorem :: MSSUBFAM:51     :: SETFAM_1:12
+SF = { V,W } implies meet SF = V /\ W;
+
+theorem :: MSSUBFAM:52     :: CANTOR_1:10 a
+  A in meet SF implies for B st B in SF holds A in B;
+
+theorem :: MSSUBFAM:53     :: CANTOR_1:10 b
+  for A, M be ManySortedSet of I
+ for SF be non-empty MSSubsetFamily of M st
+  (A in M & for B be ManySortedSet of I st B in SF holds A in B)
+ holds A in meet SF;
+
+definition let I, M;
+ let IT be MSSubsetFamily of M;
+ attr IT is additive means
+:: MSSUBFAM:def 3
+    for A, B st A in IT & B in IT holds A \/ B in IT;
+
+ attr IT is absolutely-additive means
+:: MSSUBFAM:def 4
+  for F be MSSubsetFamily of M st F c= IT holds union F in IT;
+
+ attr IT is multiplicative means
+:: MSSUBFAM:def 5
+    for A, B st A in IT & B in IT holds A /\ B in IT;
+
+ attr IT is absolutely-multiplicative means
+:: MSSUBFAM:def 6
+  for F be MSSubsetFamily of M st F c= IT holds meet F in IT;
+
+ attr IT is properly-upper-bound means
+:: MSSUBFAM:def 7
+  M in IT;
+
+ attr IT is properly-lower-bound means
+:: MSSUBFAM:def 8
+  [0]I in IT;
+end;
+
+definition let I, M;
+ cluster non-empty additive absolutely-additive
+          multiplicative absolutely-multiplicative
+           properly-upper-bound properly-lower-bound MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ redefine func bool M -> additive absolutely-additive multiplicative
+       absolutely-multiplicative properly-upper-bound
+       properly-lower-bound MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ cluster absolutely-additive -> additive MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ cluster absolutely-multiplicative -> multiplicative MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ cluster absolutely-multiplicative ->
+                 properly-upper-bound MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ cluster properly-upper-bound -> non-empty MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ cluster absolutely-additive ->
+                 properly-lower-bound MSSubsetFamily of M;
+end;
+
+definition let I, M;
+ cluster properly-lower-bound -> non-empty MSSubsetFamily of M;
+end;
+

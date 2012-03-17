@@ -1,0 +1,1372 @@
+:: Cardinal Arithmetics
+::  by Grzegorz Bancerek
+::
+:: Received March 6, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL1, CARD_1, FUNCT_1, RELAT_1, BOOLE, TARSKI, FUNCT_2,
+      MCART_1, ORDINAL2, ORDINAL3, FUNCOP_1, FINSET_1, FINSEQ_1, ARYTM_1,
+      CARD_2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, XREAL_0, RELAT_1, FUNCT_1,
+      FUNCT_2, ORDINAL1, MCART_1, ORDINAL2, ORDINAL3, WELLORD2, REAL_1, NAT_1,
+      FINSEQ_1, CARD_1, FINSET_1, FUNCOP_1;
+ constructors DOMAIN_1, ORDINAL3, WELLORD2, REAL_1, NAT_1, FINSEQ_1, FUNCOP_1,
+      XREAL_0, XBOOLE_0;
+ clusters SUBSET_1, ORDINAL1, CARD_1, FINSEQ_1, FINSET_1, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, FUNCT_1, WELLORD2, XBOOLE_0;
+ theorems TARSKI, ENUMSET1, FUNCT_1, FUNCT_2, MCART_1, ORDINAL1, ORDINAL2,
+      WELLORD2, ORDINAL3, CARD_1, REAL_1, NAT_1, FINSEQ_1, FINSET_1, ZFMISC_1,
+      RLVECT_1, FUNCT_5, AXIOMS, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, FUNCT_1, FINSET_1, PARTFUN1;
+
+begin
+
+ reserve A,B for Ordinal,
+         K,M,N for Cardinal,
+         x,x1,x2,y,y1,y2,z,u,X,Y,Z,X1,X2,Y1,Y2 for set,
+         f,g for Function;
+
+canceled;
+
+theorem
+ Th2: Card X <=` Card Y iff ex f st X c= f.:Y
+  proof
+   thus Card X <=` Card Y implies ex f st X c= f.:Y
+     proof assume Card X <=` Card Y;
+      then consider f such that
+A1:     dom f = Y & X c= rng f by CARD_1:28;
+      take f;
+      thus X c= f.:Y by A1,RELAT_1:146;
+     end;
+   given f such that
+A2:  X c= f.:Y;
+   deffunc F(set) = f.$1;
+   deffunc G(set) = $1;
+   defpred C[set] means $1 in dom f;
+   consider g such that
+A3:  dom g = Y & for x st x in Y holds
+     (C[x] implies g.x = F(x)) & (not C[x] implies g.x = G(x))
+       from LambdaC;
+      X c= rng g
+     proof let x; assume x in X;
+      then consider y such that
+A4:     y in dom f & y in Y & x = f.y by A2,FUNCT_1:def 12;
+         y in dom g & x = g.y by A3,A4;
+      hence thesis by FUNCT_1:def 5;
+     end;
+   hence thesis by A3,CARD_1:28;
+  end;
+
+theorem
+    Card (f.:X) <=` Card X by Th2;
+
+theorem
+    Card X <` Card Y implies Y \ X <> {}
+  proof assume
+A1:  Card X <` Card Y & Y \ X = {};
+    then Y c= X by XBOOLE_1:37;
+    then Card Y <=` Card X by CARD_1:27;
+   hence contradiction by A1,CARD_1:14;
+  end;
+
+theorem
+ Th5: x in X & X,Y are_equipotent implies Y <> {} & ex x st x in Y
+  proof assume
+A1:  x in X;
+   given f such that
+A2:  f is one-to-one & dom f = X & rng f = Y;
+    f.x in Y by A1,A2,FUNCT_1:def 5;
+   hence Y <> {};
+   take f.x; thus thesis by A1,A2,FUNCT_1:def 5;
+  end;
+
+theorem
+    bool X,bool Card X are_equipotent & Card bool X = Card bool Card X
+  proof X,Card X are_equipotent by CARD_1:def 5;
+   then consider f such that
+A1:  f is one-to-one & dom f = X & rng f = Card X by WELLORD2:def 4;
+  deffunc g(set) = f.:$1;
+   consider g such that
+A2:  dom g = bool X & for x st x in bool X holds g.x = g(x) from Lambda;
+   thus bool X,bool Card X are_equipotent
+     proof take g;
+      thus g is one-to-one
+        proof let x,y; assume
+A3:        x in dom g & y in dom g & g.x = g.y;
+then A4:        x = x & y = y & g.x = f.:x & g.y = f.:y by A2;
+A5:        x c= y
+           proof let z; assume
+A6:          z in x;
+             then f.z in f.:x by A1,A2,A3,FUNCT_1:def 12;
+             then ex u st
+          u in dom f & u in y & f.z = f.u by A3,A4,FUNCT_1:def 12;
+            hence thesis by A1,A2,A3,A6,FUNCT_1:def 8;
+           end;
+            y c= x
+           proof let z; assume
+A7:          z in y;
+             then f.z in f.:y by A1,A2,A3,FUNCT_1:def 12;
+             then ex u st
+          u in dom f & u in x & f.z = f.u by A3,A4,FUNCT_1:def 12;
+            hence thesis by A1,A2,A3,A7,FUNCT_1:def 8;
+           end;
+         hence thesis by A5,XBOOLE_0:def 10;
+        end;
+      thus dom g = bool X by A2;
+      thus rng g c= bool Card X
+        proof let x; assume x in rng g;
+         then consider y such that
+A8:        y in dom g & x = g.y by FUNCT_1:def 5;
+            g.y = f.:y & f.:y c= rng f by A2,A8,RELAT_1:144;
+         hence thesis by A1,A8;
+        end;
+      let x; assume x in bool Card X;
+       then A9: x c= Card X & f"x c= dom f by RELAT_1:167;
+then f.:(f"x) = x & f"x in bool X & f"x = f"x
+        by A1,FUNCT_1:147;
+       then g.(f"x) = x & x = x by A2;
+      hence x in rng g by A1,A2,A9,FUNCT_1:def 5;
+     end;
+   hence thesis by CARD_1:21;
+  end;
+
+deffunc g(set) = $1`1;
+
+theorem
+   Z in Funcs(X,Y) implies Z,X are_equipotent & Card Z = Card X
+  proof assume
+    Z in Funcs(X,Y);
+   then consider f such that
+A1:  Z = f & dom f = X & rng f c= Y by FUNCT_2:def 2;
+   thus Z,X are_equipotent
+     proof
+       consider g such that
+A2:     dom g = Z & for x st x in Z holds g.x = g(x) from Lambda;
+      take g;
+      thus g is one-to-one
+        proof let x,y; assume
+A3:        x in dom g & y in dom g;
+          then (ex x1,x2 being set st [x1,x2] = x) &
+           (ex x1,x2 being set st [x1,x2] = y) by A1,A2,RELAT_1:def 1;
+then A4:        x = [x`1,x`2] & y = [y`1,y`2] by MCART_1:8;
+          then x`1 in dom f & y`1 in dom f & x`2 = f.(x`1) & y`2 = f.(y`1) &
+           g.x = x`1 & g.y = y`1 by A1,A2,A3,FUNCT_1:8;
+         hence thesis by A4;
+        end;
+      thus dom g = Z by A2;
+      thus rng g c= X
+        proof let x; assume x in rng g;
+         then consider y such that
+A5:        y in dom g & x = g.y by FUNCT_1:def 5;
+            ex x1,x2 being set st [x1,x2] = y by A1,A2,A5,RELAT_1:def 1;
+          then x = y`1 & y = [y`1,y`2] by A2,A5,MCART_1:8;
+         hence x in X by A1,A2,A5,FUNCT_1:8;
+        end;
+      let x; assume x in X;
+then A6:     [x,f.x] in Z by A1,FUNCT_1:def 4;
+       then g.[x,f.x] = [x,f.x]`1 by A2 .= x by MCART_1:7;
+      hence x in rng g by A2,A6,FUNCT_1:def 5;
+     end;
+   hence Card Z = Card X by CARD_1:21;
+  end;
+
+OLambdaC{A()->set,C[set],F,G(set)->set}:
+ ex f being Function st dom f = A() &
+  for x being Ordinal st x in A() holds
+   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
+ proof
+    defpred P[set,set] means
+      (C[$1] implies $2 = F($1)) & (not C[$1] implies $2 = G($1));
+A1:  for x,y1,y2 being set st x in A() & P[x,y1] & P[x,y2] holds y1 = y2;
+A2: for x being set st x in A() ex y st P[x,y]
+     proof let x be set;
+        not C[x] implies
+        ex y st (C[x] implies y = F(x)) & (not C[x] implies y = G(x));
+      hence thesis;
+     end;
+    consider f being Function such that
+A3:  dom f = A() &
+     for x being set st x in A() holds P[x,f.x] from FuncEx(A1,A2);
+    take f;
+    thus thesis by A3;
+ end;
+
+ Lm1: x1 <> x2 implies
+   A+^B,[:A,{x1}:] \/ [:B,{x2}:] are_equipotent &
+   Card(A+^B) = Card([:A,{x1}:] \/ [:B,{x2}:])
+  proof assume
+A1:  x1 <> x2;
+   defpred C[set] means $1 in A;
+   deffunc F(set) = [$1,x1];
+   deffunc G(Ordinal) = [$1-^A,x2];
+   consider f such that
+A2:  dom f = A+^B and
+A3:  for x being Ordinal holds
+      x in A+^B implies (C[x] implies f.x = F(x)) &
+                    (not C[x] implies f.x = G(x)) from OLambdaC;
+   thus A+^B,[:A,{x1}:] \/ [:B,{x2}:] are_equipotent
+     proof
+      take f;
+      thus f is one-to-one
+        proof let x,y; assume
+A4:       x in dom f & y in dom f & f.x = f.y;
+         then reconsider C1 = x, C2 = y as Ordinal by A2,ORDINAL1:23;
+A5:       x = C1 & y = C2;
+            now per cases;
+           suppose x in A & y in A;
+            then f.C1 = [x,x1] & f.C2 = [y,x1] & [x,x1]`1 = C1
+              by A2,A3,A4,MCART_1:7;
+            hence thesis by A4,MCART_1:7;
+           suppose not x in A & not y in A;
+             then f.x = [C1-^A,x2] & f.y = [C2-^A,x2] & [C1-^A,x2]`1 = C1-^A &
+              [C2-^A,x2]`1 = C2-^A & A c= C1 & A c= C2
+               by A2,A3,A4,MCART_1:7,ORDINAL1:26;
+             then C1-^A = C2-^A & C1 = A+^(C1-^A) & C2 = A+^(C2-^A)
+               by A4,ORDINAL3:def 6;
+            hence thesis;
+           suppose x in A & not y in A;
+             then f.x = [x,x1] & f.y = [C2-^A,x2] & [x,x1]`2 = x1 & x1 <> x2
+              by A1,A2,A3,A4,A5,MCART_1:7;
+            hence thesis by A4,MCART_1:7;
+           suppose not x in A & y in A;
+             then f.y = [y,x1] & f.x = [C1-^A,x2] & [y,x1]`2 = x1 & x1 <> x2
+              by A1,A2,A3,A4,A5,MCART_1:7;
+            hence thesis by A4,MCART_1:7;
+          end;
+         hence thesis;
+        end;
+      thus dom f = A+^B by A2;
+      thus rng f c= [:A,{x1}:] \/ [:B,{x2}:]
+        proof let x; assume x in rng f;
+         then consider y such that
+A6:       y in dom f & x = f.y by FUNCT_1:def 5;
+A7:       x1 in {x1} & x2 in {x2} by TARSKI:def 1;
+         reconsider C = y as Ordinal by A2,A6,ORDINAL1:23;
+            now per cases;
+           suppose y in A;
+             then x = [C,x1] & [C,x1] in [:A,{x1}:] by A2,A3,A6,A7,ZFMISC_1:106
+;
+            hence thesis by XBOOLE_0:def 2;
+           suppose not y in A;
+then A8:          x = [C-^A,x2] & A c= C by A2,A3,A6,ORDINAL1:26;
+             then A+^(C-^A) = C by ORDINAL3:def 6;
+             then C-^A in B by A2,A6,ORDINAL3:25;
+             then [C-^A,x2] in [:B,{x2}:] by A7,ZFMISC_1:106;
+            hence thesis by A8,XBOOLE_0:def 2;
+          end;
+         hence thesis;
+        end;
+      let x such that A9: x in [:A,{x1}:] \/ [:B,{x2}:];
+A10:     now assume x in [:A,{x1}:];
+        then consider y,z such that
+A11:      y in A & z in {x1} & x = [y,z] by ZFMISC_1:103;
+A12:       y is Ordinal by A11,ORDINAL1:23;
+         A13: A c= A+^B by ORDINAL3:27;
+then y in A+^B & z = x1 by A11,TARSKI:def 1;
+         then x = f.y by A3,A11,A12;
+        hence thesis by A2,A11,A13,FUNCT_1:def 5;
+       end;
+         now assume x in [:B,{x2}:];
+        then consider y,z such that
+A14:      y in B & z in {x2} & x = [y,z] by ZFMISC_1:103;
+        reconsider y as Ordinal by A14,ORDINAL1:23;
+           A c= A+^y by ORDINAL3:27;
+then A15:      (A+^y) = A+^y & A+^y in A+^B & not A+^y in A &
+         A+^y-^A = y & z = x2
+           by A14,ORDINAL1:7,ORDINAL2:49,ORDINAL3:65,TARSKI:def 1;
+         then x = f.(A+^y) by A3,A14;
+        hence thesis by A2,A15,FUNCT_1:def 5;
+       end;
+      hence thesis by A9,A10,XBOOLE_0:def 2;
+     end;
+   hence thesis by CARD_1:21;
+  end;
+
+ deffunc plus(set,set) = [:$1,{0}:] \/ [:$2,{1}:];
+
+ Lm2: [:X,Y:],[:Y,X:] are_equipotent & Card [:X,Y:] = Card [:Y,X:]
+  proof
+    deffunc f(set) = [$1`2,$1`1];
+    consider f such that
+A1:  dom f = [:X,Y:] & for x st x in [:X,Y:] holds f.x = f(x) from Lambda;
+   thus [:X,Y:],[:Y,X:] are_equipotent
+     proof take f;
+      thus f is one-to-one
+        proof let x,y; assume x in dom f & y in dom f;
+then A2:   x = [x`1,x`2] & y = [y`1,y`2] & f.x = [x`2,x`1] & f.y = [y`2,y`1]
+           by A1,MCART_1:23;
+         assume f.x = f.y;
+          then x`1 = y`1 & x`2 = y`2 by A2,ZFMISC_1:33;
+         hence x = y by A2;
+        end;
+      thus dom f = [:X,Y:] by A1;
+      thus rng f c= [:Y,X:]
+        proof let x; assume x in rng f;
+         then consider y such that
+A3:        y in dom f & x = f.y by FUNCT_1:def 5;
+            x = [y`2,y`1] & y`1 in X & y`2 in Y by A1,A3,MCART_1:10;
+         hence thesis by ZFMISC_1:106;
+        end;
+      let x; assume x in [:Y,X:];
+then A4:     x = [x`1,x`2] & x`1 in Y & x`2 in X by MCART_1:10,23;
+       then [x`2,x`1] in [:X,Y:] & [x`2,x`1]`1 = x`2 & [x`2,x`1]`2 = x`1
+        by MCART_1:7,ZFMISC_1:106;
+       then f.[x`2,x`1] in rng f & f.[x`2,x`1] = x by A1,A4,FUNCT_1:def 5;
+      hence thesis;
+     end;
+   hence thesis by CARD_1:21;
+  end;
+
+ definition let M,N;
+  func M +` N -> Cardinal equals
+:Def1:
+     Card( M +^ N);
+   correctness;
+   commutativity
+    proof let C be Cardinal; let M,N;
+     assume C = Card( M +^ N);
+     hence C = Card plus( N, M) by Lm1
+         .= Card( N +^ M) by Lm1;
+    end;
+  func M *` N -> Cardinal equals
+:Def2:
+     Card [:M,N:];
+   correctness;
+   commutativity by Lm2;
+  func exp(M,N) -> Cardinal equals
+:Def3:
+     Card Funcs(N,M);
+   correctness;
+ end;
+
+canceled 3;
+
+theorem
+    [:X,Y:],[:Y,X:] are_equipotent & Card [:X,Y:] = Card [:Y,X:] by Lm2;
+
+theorem
+ Th12: [:[:X,Y:],Z:],[:X,[:Y,Z:]:] are_equipotent &
+       Card [:[:X,Y:],Z:] = Card [:X,[:Y,Z:]:]
+  proof
+    deffunc f(set) = [$1`1`1,[$1`1`2,$1`2]];
+    consider f such that
+A1:  dom f = [:[:X,Y:],Z:] &
+     for x st x in [:[:X,Y:],Z:] holds f.x = f(x) from Lambda;
+   thus [:[:X,Y:],Z:],[:X,[:Y,Z:]:] are_equipotent
+     proof take f;
+      thus f is one-to-one
+        proof let x,y; assume x in dom f & y in dom f;
+then A2:  x = [x`1,x`2] & y = [y`1,y`2] & x`1 in [:X,Y:] & y`1 in [:X,Y:] &
+           f.x = [x`1`1,[x`1`2,x`2]] & f.y = [y`1`1,[y`1`2,y`2]]
+            by A1,MCART_1:10,23;
+         assume f.x = f.y;
+then A3:        x`1`1 = y`1`1 & [x`1`2,x`2] = [y`1`2,y`2] & x`1 = [x`1`1,x`1`2]
+&
+           y`1 = [y`1`1,y`1`2] by A2,MCART_1:23,ZFMISC_1:33;
+          then x`1`2 = y`1`2 & x`2 = y`2 by ZFMISC_1:33;
+         hence thesis by A2,A3;
+        end;
+      thus dom f = [:[:X,Y:],Z:] by A1;
+      thus rng f c= [:X,[:Y,Z:]:]
+        proof let x; assume x in rng f;
+         then consider y such that
+A4:        y in dom f & x = f.y by FUNCT_1:def 5;
+A5:        y = [y`1,y`2] & y`1 in [:X,Y:] & y`2 in Z
+           by A1,A4,MCART_1:10,23;
+then A6:        y`1 = [y`1`1,y`1`2] & y`1`1 in X & y`1`2 in Y &
+           x = [y`1`1,[y`1`2,y`2]] by A1,A4,MCART_1:10,23;
+          then [y`1`2,y`2] in [:Y,Z:] by A5,ZFMISC_1:106;
+         hence thesis by A6,ZFMISC_1:106;
+        end;
+      let x; assume x in [:X,[:Y,Z:]:];
+then A7:     x = [x`1,x`2] & x`1 in X & x`2 in
+ [:Y,Z:] by MCART_1:10,23;
+then A8:     x`2 = [x`2`1,x`2`2] & x`2`1 in Y & x`2`2 in Z
+        by MCART_1:10,23;
+then A9:     [x`1,x`2`1] in [:X,Y:] & [x`1,x`2`1]`1 = x`1 & [x`1,x`2`1]`2 = x`2
+`1
+        by A7,MCART_1:7,ZFMISC_1:106;
+then A10:     [[x`1,x`2`1],x`2`2] in [:[:X,Y:],Z:] &
+        [[x`1,x`2`1],x`2`2]`1 = [x`1,x`2`1] & [[x`1,x`2`1],x`2`2]`2 = x`2`2
+         by A8,MCART_1:7,ZFMISC_1:106;
+       then x = f.[[x`1,x`2`1],x`2`2] by A1,A7,A8,A9;
+      hence thesis by A1,A10,FUNCT_1:def 5;
+     end;
+   hence thesis by CARD_1:21;
+  end;
+
+theorem
+ Th13: X,[:X,{x}:] are_equipotent & Card X = Card [:X,{x}:]
+  proof
+    deffunc f(set) = [$1,x];
+    consider f such that
+A1:  dom f = X & for y st y in X holds f.y = f(y) from Lambda;
+   thus X,[:X,{x}:] are_equipotent
+     proof
+      take f;
+      thus f is one-to-one
+        proof let y,z; assume
+A2:        y in dom f & z in dom f & f.y = f.z;
+          then f.y = [y,x] & f.z = [z,x] & [y,x]`1 = y by A1,MCART_1:7;
+         hence thesis by A2,MCART_1:7;
+        end;
+      thus dom f = X by A1;
+      thus rng f c= [:X,{x}:]
+        proof let y; assume y in rng f;
+         then consider z such that
+A3:        z in dom f & y = f.z by FUNCT_1:def 5;
+            y = [z,x] & x in {x} by A1,A3,TARSKI:def 1;
+         hence thesis by A1,A3,ZFMISC_1:106;
+        end;
+      let y; assume y in [:X,{x}:];
+      then consider y1,y2 being set such that
+A4:     y1 in X & y2 in {x} & y = [y1,y2] by ZFMISC_1:103;
+         y2 = x by A4,TARSKI:def 1;
+       then y = f.y1 by A1,A4;
+      hence thesis by A1,A4,FUNCT_1:def 5;
+     end;
+   hence thesis by CARD_1:21;
+  end;
+
+ Lm3: [:X,Y:],[:Card X,Y:] are_equipotent
+  proof X,Card X are_equipotent by CARD_1:def 5;
+   then consider f such that
+A1:  f is one-to-one & dom f = X & rng f = Card X by WELLORD2:def 4;
+   deffunc g(set) = [f.$1`1,$1`2];
+   consider g such that
+A2:  dom g = [:X,Y:] & for x st x in [:X,Y:] holds g.x = g(x) from Lambda;
+   take g;
+   thus g is one-to-one
+     proof let x,y; assume x in dom g & y in dom g;
+then
+A3: x = [x`1,x`2] & y = [y`1,y`2] & g.x = [f.x`1,x`2] & g.y = [f.y`1,y`2] &
+        x`1 in X & y`1 in X by A2,MCART_1:10,23;
+      assume g.x = g.y;
+     then f.x`1 = f.y`1 & x`2 = y`2 by A3,ZFMISC_1:33;
+      hence thesis by A1,A3,FUNCT_1:def 8;
+     end;
+   thus dom g = [:X,Y:] by A2;
+   thus rng g c= [:Card X,Y:]
+     proof let y; assume y in rng g;
+      then consider x such that
+A4:     x in dom g & y = g.x by FUNCT_1:def 5;
+         x`1 in X by A2,A4,MCART_1:10;
+       then y = [f.x`1,x`2] & f.x`1 in Card X & x`2 in Y
+        by A1,A2,A4,FUNCT_1:def 5,MCART_1:10;
+      hence thesis by ZFMISC_1:106;
+     end;
+   let y; assume y in [:Card X,Y:];
+then A5:  y`1 in Card X & y`2 in Y & y = [y`1,y`2] by MCART_1:10,23;
+   then consider x such that
+A6:  x in X & y`1 = f.x by A1,FUNCT_1:def 5;
+A7:  [x,y`2] in [:X,Y:] & [x,y`2]`1 = x & [x,y`2]`2 = y`2
+      by A5,A6,MCART_1:7,ZFMISC_1:106;
+    then g.[x,y`2] = y by A2,A5,A6;
+   hence y in rng g by A2,A7,FUNCT_1:def 5;
+  end;
+
+theorem
+ Th14: [:X,Y:],[:Card X,Y:] are_equipotent &
+       [:X,Y:],[:X,Card Y:] are_equipotent &
+   [:X,Y:],[:Card X,Card Y:] are_equipotent &
+   Card [:X,Y:] = Card [:Card X,Y:] &
+    Card [:X,Y:] = Card [:X,Card Y:] & Card [:X,Y:] = Card [:Card X,Card Y:]
+  proof
+      [:Y,X:],[:Card Y,X:] are_equipotent & [:X,Y:],[:Y,X:] are_equipotent
+    by Lm2,Lm3;
+    then [:X,Y:],[:Card Y,X:] are_equipotent &
+    [:Card Y,X:],[:X,Card Y:] are_equipotent by Lm2,WELLORD2:22;
+   hence
+A1:  [:X,Y:],[:Card X,Y:] are_equipotent &
+     [:X,Y:],[:X,Card Y:] are_equipotent by Lm3,WELLORD2:22;
+      [:X,Card Y:],[:Card X,Card Y:] are_equipotent by Lm3;
+   hence [:X,Y:],[:Card X,Card Y:] are_equipotent by A1,WELLORD2:22;
+   hence thesis by A1,CARD_1:21;
+  end;
+
+theorem
+ Th15: X1,Y1 are_equipotent & X2,Y2 are_equipotent implies
+   [:X1,X2:],[:Y1,Y2:] are_equipotent & Card [:X1,X2:] = Card [:Y1,Y2:]
+  proof assume X1,Y1 are_equipotent & X2,Y2 are_equipotent;
+    then [:X1,X2:],[:Card X1,Card X2:] are_equipotent &
+    [:Y1,Y2:],[:Card Y1,Card Y2:] are_equipotent &
+     Card X1 = Card Y1 & Card X2 = Card Y2 by Th14,CARD_1:21;
+   hence [:X1,X2:],[:Y1,Y2:] are_equipotent by WELLORD2:22;
+   hence thesis by CARD_1:21;
+  end;
+
+theorem
+    x1 <> x2 implies
+   A+^B,[:A,{x1}:] \/ [:B,{x2}:] are_equipotent &
+   Card(A+^B) = Card([:A,{x1}:] \/ [:B,{x2}:]) by Lm1;
+
+theorem
+ Th17: x1 <> x2 implies
+   K+`M,[:K,{x1}:] \/ [:M,{x2}:] are_equipotent &
+   K+`M = Card([:K,{x1}:] \/ [:M,{x2}:])
+  proof assume x1 <> x2;
+then Card([:K,{x1}:] \/ [:M,{x2}:]) = Card( K +^ M) by Lm1
+       .= K+`M by Def1;
+   hence thesis by CARD_1:def 5;
+  end;
+
+theorem
+ Th18: A*^B,[:A,B:] are_equipotent & Card(A*^B) = Card [:A,B:]
+  proof
+    defpred P[set,set] means
+    ex O1, O2 being Ordinal st O1 = $1`1 & O2 = $1`2
+      & $2 = O1*^B+^O2;
+A1: for x,y1,y2 st x in [:A,B:] & P[x,y1] & P[x,y2] holds y1 = y2;
+A2: for x st x in [:A,B:] ex y st P[x,y]
+    proof
+      let x; assume x in [:A,B:];
+      then x = [x`1,x`2] & x`1 in A & x`2 in B by MCART_1:10,23;
+      then reconsider x1 = x`1, x2 = x`2 as Ordinal by ORDINAL1:23;
+      take x1*^B+^x2;
+      take x1, x2;
+      thus thesis;
+    end;
+   consider f such that
+A3: dom f = [:A,B:] &
+    for x st x in [:A,B:] holds P[x,f.x] from FuncEx(A1, A2);
+A4:    [:A,B:],A*^B are_equipotent
+     proof take f;
+      thus f is one-to-one
+        proof let x,y; assume A5: x in dom f & y in dom f;
+then A6:      x = [x`1,x`2] & y = [y`1,y`2] & x`1 in A & x`2 in B &
+         y`1 in A & y`2 in B by A3,MCART_1:10,23;
+         then reconsider x1 = x`1, x2 = x`2, y1 = y`1, y2 = y`2 as Ordinal
+           by ORDINAL1:23;
+         consider O1, O2 being Ordinal such that
+A7:       O1 = x`1 & O2 = x`2 & f.x = O1*^B+^O2 by A3,A5;
+         consider O3, O4 being Ordinal such that
+A8:       O3 = y`1 & O4 = y`2 & f.y = O3*^B+^O4 by A3,A5;
+         assume f.x = f.y;
+          then x1 = y1 & x2 = y2 by A6,A7,A8,ORDINAL3:56;
+         hence x = y by A6;
+        end;
+      thus dom f = [:A,B:] by A3;
+      thus rng f c= A*^B
+        proof let y; assume y in rng f;
+         then consider x such that
+A9:        x in dom f & y = f.x by FUNCT_1:def 5;
+A10:        x`1 in A & x`2 in B by A3,A9,MCART_1:10;
+         consider x1, x2 being Ordinal such that
+A11:         x1 = x`1 & x2 = x`2 & f.x = x1*^B+^x2 by A3,A9;
+            y = x1*^B+^x2 & one*^B = B & x1+^one = succ x1
+           by A9,A11,ORDINAL2:48,56;
+then A12:        y in x1*^B+^one*^B & x1*^B+^one*^B = (succ x1)*^B & succ x1 c=
+A
+           by A10,A11,ORDINAL1:33,ORDINAL2:49,ORDINAL3:54;
+          then x1*^B+^one*^B c= A*^B by ORDINAL2:58;
+         hence thesis by A12;
+        end;
+      let y; assume
+A13:     y in A*^B;
+      then reconsider C = y as Ordinal by ORDINAL1:23;
+A14:     C = (C div^ B)*^B+^(C mod^ B) & C div^ B in A & C mod^ B in B
+         by A13,ORDINAL3:78,80;
+then A15:     [C div^ B,C mod^ B] in [:A,B:] & [C div^ B,C mod^ B]`1 = C div^ B
+&
+        [C div^ B,C mod^ B]`2 = C mod^ B & (C div^ B) = C div^ B &
+        C mod^ B = C mod^ B by MCART_1:7,ZFMISC_1:106;
+      then consider O1, O2 being Ordinal such that
+A16:     O1 = [C div^ B,C mod^ B]`1 &
+        O2 = [C div^ B,C mod^ B]`2 & f.[C div^ B,C mod^ B] = O1*^B+^O2
+          by A3;
+       thus thesis by A3,A14,A15,A16,FUNCT_1:def 5;
+     end;
+   hence A*^B,[:A,B:] are_equipotent;
+   thus thesis by A4,CARD_1:21;
+  end;
+
+ deffunc plus(set,set) = [:$1,{0}:] \/ [:$2,{1}:];
+ deffunc plus(set,set,set,set) = [:$1,{$3}:] \/ [:$2,{$4}:];
+
+ Lm4: 2 = {{},one}
+  proof
+      2 = succ (0+1)
+      .= succ one by ORDINAL2:def 4;
+   hence 2 = {{}} \/ {one} by ORDINAL1:def 1,ORDINAL3:18
+           .= {{},one} by ENUMSET1:41;
+  end;
+
+theorem
+   0 = Card {} & 1 = Card one & 2 = Card succ one
+ proof
+  thus 0 = Card {} by CARD_1:47;
+  thus 1 = Card one by CARD_1:79,ORDINAL3:18;
+  thus 2 = Card {{},one} by Lm4,CARD_1:def 5
+      .= Card(one \/ {one}) by ENUMSET1:41,ORDINAL3:18
+      .= Card succ one by ORDINAL1:def 1;
+ end;
+
+theorem
+ Th20: 1 = one
+  proof
+    thus 1 = Card {{}} by CARD_1:79
+       .= one by CARD_1:50;
+  end;
+
+canceled;
+
+theorem
+ Th22: 2 = {{},one} & 2 = succ one
+  proof
+A1:  2 = succ (0+1)
+      .= succ one by ORDINAL2:def 4;
+   thus 2 = {{},one} by Lm4;
+   thus thesis by A1;
+  end;
+
+theorem
+ Th23: X1,Y1 are_equipotent & X2,Y2 are_equipotent & x1 <> x2 & y1 <> y2
+ implies
+   [:X1,{x1}:] \/ [:X2,{x2}:],[:Y1,{y1}:] \/ [:Y2,{y2}:] are_equipotent &
+    Card ([:X1,{x1}:] \/ [:X2,{x2}:]) = Card ([:Y1,{y1}:] \/ [:Y2,{y2}:])
+  proof assume
+A1:  X1,Y1 are_equipotent & X2,Y2 are_equipotent & x1 <> x2 & y1 <> y2;
+      {x1},{y1} are_equipotent & {x2},{y2} are_equipotent by CARD_1:48;
+then A2:  [:X1,{x1}:],[:Y1,{y1}:] are_equipotent
+     & [:X2,{x2}:],[:Y2,{y2}:] are_equipotent by A1,Th15;
+A3:    now assume [:X1,{x1}:] meets [:X2,{x2}:];
+      then consider x being set such that
+A4:    x in [:X1,{x1}:] & x in [:X2,{x2}:] by XBOOLE_0:3;
+        x`2 in {x1} & x`2 in {x2} by A4,MCART_1:10;
+      then x`2 = x1 & x`2 = x2 by TARSKI:def 1;
+     hence contradiction by A1;
+    end;
+      now assume [:Y1,{y1}:] meets [:Y2,{y2}:];
+      then consider y being set such that
+A5:    y in [:Y1,{y1}:] & y in [:Y2,{y2}:] by XBOOLE_0:3;
+        y`2 in {y1} & y`2 in {y2} by A5,MCART_1:10;
+      then y`2 = y1 & y`2 = y2 by TARSKI:def 1;
+     hence contradiction by A1;
+    end;
+   hence [:X1,{x1}:] \/ [:X2,{x2}:],[:Y1,{y1}:] \/ [:Y2,{y2}:] are_equipotent
+     by A2,A3,CARD_1:58;
+   hence thesis by CARD_1:21;
+  end;
+
+theorem
+ Th24: Card(A+^B) = Card A +` Card B
+  proof
+A1:   Card A +^ Card B,plus( Card A, Card B) are_equipotent &
+     A+^B,plus(A,B) are_equipotent by Lm1;
+      A,Card A are_equipotent & B,Card B are_equipotent &
+    Card A = Card A & Card B = Card B &
+     0 <> 1 by CARD_1:def 5;
+    then plus( Card A, Card B),Card A +^ Card B are_equipotent &
+     plus(A,B),plus( Card A, Card B) are_equipotent by Lm1,Th23;
+    then plus(A,B),Card A +^ Card B are_equipotent by WELLORD2:22;
+    then Card A +` Card B = Card( Card A +^ Card B) &
+     A+^B,Card A +^ Card B are_equipotent by A1,Def1,WELLORD2:22;
+   hence thesis by CARD_1:21;
+  end;
+
+theorem
+ Th25: Card(A*^B) = Card A *` Card B
+  proof
+   thus Card (A*^B) = Card [:A,B:] by Th18 .= Card [:Card A,Card B:] by Th14
+          .= Card A *` Card B by Def2;
+  end;
+
+theorem
+    [:X,{0}:] \/ [:Y,{1}:],[:Y,{0}:] \/ [:X,{1}:] are_equipotent &
+   Card([:X,{0}:] \/ [:Y,{1}:]) = Card([:Y,{0}:] \/ [:X,{1}:]) by Th23;
+
+theorem
+ Th27: [:X1,X2:] \/ [:Y1,Y2:],[:X2,X1:] \/ [:Y2,Y1:] are_equipotent &
+   Card ([:X1,X2:] \/ [:Y1,Y2:]) = Card ([:X2,X1:] \/ [:Y2,Y1:])
+  proof
+    deffunc f(set) = [$1`2,$1`1];
+    consider f such that
+A1:  dom f = [:X1,X2:] \/ [:Y1,Y2:] &
+     for x st x in [:X1,X2:] \/ [:Y1,Y2:] holds f.x = f(x) from Lambda;
+   thus [:X1,X2:] \/ [:Y1,Y2:],[:X2,X1:] \/ [:Y2,Y1:] are_equipotent
+     proof take f;
+      thus f is one-to-one
+        proof let x1,x2; assume
+A2:        x1 in dom f & x2 in dom f & f.x1 = f.x2;
+          then (x1 in [:X1,X2:] or x1 in [:Y1,Y2:]) & f.x1 = [x1`2,x1`1] &
+           (x2 in [:X1,X2:] or x2 in [:Y1,Y2:]) & f.x2 = [x2`2,x2`1]
+            by A1,XBOOLE_0:def 2;
+          then x1 = [x1`1,x1`2] & x2 = [x2`1,x2`2] & x1`1 = x2`1 & x1`2 = x2`2
+           by A2,MCART_1:23,ZFMISC_1:33;
+         hence x1 = x2;
+        end;
+      thus dom f = [:X1,X2:] \/ [:Y1,Y2:] by A1;
+      thus rng f c= [:X2,X1:] \/ [:Y2,Y1:]
+        proof let x; assume x in rng f;
+         then consider y such that
+A3:        y in dom f & x = f.y by FUNCT_1:def 5;
+            y in [:X1,X2:] or y in [:Y1,Y2:] by A1,A3,XBOOLE_0:def 2;
+          then (y`1 in X1 & y`2 in X2 or y`1 in Y1 & y`2 in Y2)& x = [y`2,y`1]
+           by A1,A3,MCART_1:10;
+          then x in [:X2,X1:] or x in [:Y2,Y1:] by ZFMISC_1:106;
+         hence thesis by XBOOLE_0:def 2;
+        end;
+      let x; assume x in [:X2,X1:] \/ [:Y2,Y1:];
+       then x in [:X2,X1:] or x in [:Y2,Y1:] by XBOOLE_0:def 2;
+then A4:     (x`1 in X2 & x`2 in X1 or x`1 in Y2 & x`2 in Y1) & x = [x`1,x`2]
+         by MCART_1:10,23;
+       then [x`2,x`1] in [:X1,X2:] or [x`2,x`1] in [:Y1,Y2:] by ZFMISC_1:106;
+then A5:     [x`2,x`1] in [:X1,X2:] \/ [:Y1,Y2:] & [x`2,x`1]`1 = x`2 &
+        [x`2,x`1]`2 = x`1 by MCART_1:7,XBOOLE_0:def 2;
+       then f.[x`2,x`1] = x by A1,A4;
+      hence thesis by A1,A5,FUNCT_1:def 5;
+     end;
+   hence thesis by CARD_1:21;
+  end;
+
+theorem
+ Th28: x <> y implies Card X +` Card Y = Card([:X,{x}:] \/ [:Y,{y}:])
+  proof assume
+A1:  x <> y;
+      X,Card X are_equipotent & Y,Card Y are_equipotent & 0 <> 1
+     by CARD_1:def 5;
+then A2:  Card plus(X,Y,x,y) = Card plus(Card X,Card Y,x,y) by A1,Th23;
+   thus Card X +` Card Y = Card( Card X +^ Card Y) by Def1
+           .= Card([:X,{x}:] \/ [:Y,{y}:]) by A1,A2,Lm1;
+  end;
+
+theorem
+   M+`0 = M
+  proof
+A1:  [:{},{1}:] = {} & [:{},{0}:] = {} by ZFMISC_1:113;
+   thus M+`0 = Card( M +^ {}) by Def1
+           .= Card plus(M,{}) by Lm1
+           .= Card M by A1,Th13
+           .= M by CARD_1:def 5;
+  end;
+
+ Lm5: x <> y implies [:X,{x}:] misses [:Y,{y}:]
+  proof assume
+A1:  x <> y;
+   assume
+    not thesis;
+   then consider z being set such that
+A2:  z in [:X,{x}:] & z in [:Y,{y}:] by XBOOLE_0:3;
+      z`2 = x & z`2 = y by A2,MCART_1:13;
+   hence contradiction by A1;
+  end;
+
+canceled;
+
+theorem
+ Th31: (K+`M)+`N = K+`(M+`N)
+  proof
+A1:  K+`M+`N,[:K+`M,{0}:] \/ [:N,{2}:] are_equipotent &
+     K+`M,[:K,{0}:] \/ [:M,{1}:] are_equipotent &
+     K+`(M+`N),[:K,{0}:] \/ [:M+`N,{2}:] are_equipotent
+     & M+`N,[:M,{1}:] \/ [:N,{2}:] are_equipotent &
+     K+`M,[:K+`M,{0}:] are_equipotent & M+`N,[:M+`N,{2}:] are_equipotent
+     by Th13,Th17;
+     A2: [:K+`M,{0}:] misses [:N,{2}:] by Lm5;
+      [:K,{0}:] misses [:N,{2}:] & [:M,{1}:] misses [:N,{2}:] by Lm5;
+    then [:K,{0}:] /\ [:N,{2}:] = {} & [:M,{1}:] /\ [:N,{2}:] = {}
+      by XBOOLE_0:def 7;
+    then ([:K,{0}:] \/ [:M,{1}:]) /\ [:N,{2}:] = {} \/ {} by XBOOLE_1:23 .= {}
+;
+then A3:  ([:K,{0}:] \/ [:M,{1}:]) misses [:N,{2}:] by XBOOLE_0:def 7;
+      [:K+`M,{0}:],[:K,{0}:] \/ [:M,{1}:] are_equipotent &
+    [:N,{2}:],[:N,{2}:] are_equipotent
+     by A1,WELLORD2:22;
+then A4:  [:K+`M,{0}:] \/ [:N,{2}:],
+     [:K,{0}:] \/ [:M,{1}:] \/ [:N,{2}:] are_equipotent
+     by A2,A3,CARD_1:58;
+A5:  [:K,{0}:] misses [:M+`N,{2}:] by Lm5;
+      [:K,{0}:] misses [:M,{1}:] & [:K,{0}:] misses [:N,{2}:] by Lm5;
+    then [:K,{0}:] /\ [:M,{1}:] = {} & [:K,{0}:] /\ [:N,{2}:] = {}
+      by XBOOLE_0:def 7;
+    then [:K,{0}:] /\ ([:M,{1}:] \/ [:N,{2}:]) = {} \/ {} by XBOOLE_1:23 .= {}
+;
+then A6: [:K,{0}:] misses ([:M,{1}:] \/ [:N,{2}:]) by XBOOLE_0:def 7;
+      [:M+`N,{2}:],[:M,{1}:] \/ [:N,{2}:] are_equipotent
+    & [:K,{0}:],[:K,{0}:] are_equipotent
+     by A1,WELLORD2:22;
+    then [:K,{0}:] \/ ([:M,{1}:] \/ [:N,{2}:]),[:K,{0}:] \/ [:M+`N,{2}:]
+    are_equipotent &
+     [:K,{0}:] \/ ([:M,{1}:] \/ [:N,{2}:]) = [:K,{0}:] \/ [:M,{1}:] \/
+       [:N,{2}:] by A5,A6,CARD_1:58,XBOOLE_1:4;
+    then [:K+`M,{0}:] \/ [:N,{2}:],[:K,{0}:] \/ [:M+`N,{2}:] are_equipotent
+    by A4,WELLORD2:22;
+    then K+`M+`N,[:K,{0}:] \/ [:M+`N,{2}:] are_equipotent
+    & [:K,{0}:] \/ [:M+`N,{2}:],K+`(M+`N) are_equipotent
+     by A1,WELLORD2:22;
+    then K+`M+`N,K+`(M+`N) are_equipotent & Card(K+`M+`N) = K+`M+`N
+                      by CARD_1:def 5,WELLORD2:22;
+   hence thesis by CARD_1:def 5;
+  end;
+
+theorem
+   K*`0 = 0
+  proof
+      K*`0 = Card [:K,0:] & [:K,{}:] = {} & [:{},K:] = {}
+     by Def2,ZFMISC_1:113;
+   hence thesis by CARD_1:47;
+  end;
+
+theorem
+   K*`1 = K
+  proof K = Card K by CARD_1:def 5;
+    then K*`1 = Card [:K,1:] & K = Card [:K,{{}}:] &
+     Card [:K,{{}}:] = Card [:{{}},K:] by Def2,Lm2,Th13;
+   hence thesis by Th20,ORDINAL3:18;
+  end;
+
+canceled;
+
+theorem
+ Th35: (K*`M)*`N = K*`(M*`N)
+  proof
+   thus (K*`M)*`N = Card [:K*`M,N:] by Def2
+          .= Card [:Card [:K,M:],N:] by Def2
+          .= Card [:[:K,M:],N:] by Th14
+          .= Card [:K,[:M,N:]:] by Th12
+          .= Card [:K,Card [:M,N:]:] by Th14
+          .= Card [:K,M*`N:] by Def2
+          .= K*`(M*`N) by Def2;
+  end;
+
+theorem
+ Th36: 2*`K = K+`K
+  proof
+   thus 2*`K = Card [:2,K:] by Def2
+         .= Card([:{{}},K:] \/ [:{one},K:]) by Th22,ZFMISC_1:132
+         .= Card([:K,{{}}:] \/ [:K,{one}:]) by Th27
+         .= Card K +` Card K by Th28
+         .= K +` Card K by CARD_1:def 5
+         .= K +` K by CARD_1:def 5;
+  end;
+
+theorem
+ Th37: K*`(M+`N) = K*`M +` K*`N
+  proof
+A1:  K*`(M+`N) = K*`Card plus(M,N) by Th17
+           .= Card [:K,Card plus(M,N):] by Def2
+           .= Card [:K,plus(M,N):] by Th14
+           .= Card ([:K,[:M,{0}:]:] \/ [:K,[:N,{1}:]:]) by ZFMISC_1:120;
+      M,[:M,{0}:] are_equipotent & N,[:N,{1}:] are_equipotent &
+    K,K are_equipotent & [:K,M:],[:[:K,M:],{0}:] are_equipotent &
+     [:K,N:],[:[:K,N:],{1}:] are_equipotent by Th13;
+    then [:K,M:],[:K,[:M,{0}:]:] are_equipotent &
+    [:K,N:],[:K,[:N,{1}:]:] are_equipotent &
+     [:[:K,M:],{0}:],[:K,M:] are_equipotent &
+     [:[:K,N:],{1}:],[:K,N:] are_equipotent & 0 <> 1 &
+      [:[:K,M:],{0}:],[:Card [:K,M:],{0}:] are_equipotent &
+       [:[:K,N:],{1}:],[:Card [:K,N:],{1}:] are_equipotent
+        by Th14,Th15;
+    then [:[:K,M:],{0}:],[:K,[:M,{0}:]:] are_equipotent
+    & [:[:K,N:],{1}:],[:K,[:N,{1}:]:] are_equipotent &
+     [:Card [:K,M:],{0}:],[:[:K,M:],{0}:] are_equipotent &
+     [:M,{0}:] misses [:N,{1}:] &
+      [:Card [:K,N:],{1}:],[:[:K,N:],{1}:] are_equipotent
+       by Lm5,WELLORD2:22;
+    then [:Card [:K,M:],{0}:],[:K,[:M,{0}:]:] are_equipotent &
+     [:Card [:K,N:],{1}:],[:K,[:N,{1}:]:] are_equipotent &
+      [:Card [:K,M:],{0}:] misses [:Card [:K,N:],{1}:] &
+       [:K,[:M,{0}:]:] misses [:K,[:N,{1}:]:]
+        by Lm5,WELLORD2:22,ZFMISC_1:127;
+    then [:Card [:K,M:],{0}:] \/ [:Card [:K,N:],{1}:],
+     [:K,[:M,{0}:]:] \/ [:K,[:N,{1}:]:] are_equipotent by CARD_1:58;
+   hence K*`(M+`N)
+           = Card([:Card [:K,M:],{0}:] \/ [:Card [:K,N:],{1}:]) by A1,CARD_1:21
+          .= Card [:K,M:] +` Card [:K,N:] by Th17
+          .= K*`M +` Card [:K,N:] by Def2
+          .= K*`M +` K*`N by Def2;
+  end;
+
+theorem
+   exp(K,0) = 1
+  proof
+   thus exp(K,0) = Card Funcs({},K) by Def3
+                .= Card {{}} by FUNCT_5:64
+                 .= 1 by Th20,CARD_1:50;
+  end;
+
+theorem
+   K <> 0 implies exp(0,K) = 0
+  proof assume K <> 0;
+    then Funcs(K,0) = {} by FUNCT_2:14;
+   hence exp(0,K) = 0 by Def3,CARD_1:47;
+  end;
+
+theorem
+   exp(K,1) = K & exp(1,K) = 1
+  proof
+   thus exp(K,1) = Card Funcs(one,K) by Def3,Th20
+                 .= Card K by FUNCT_5:65,ORDINAL3:18
+                 .= K by CARD_1:def 5;
+   thus exp(1,K) = Card Funcs(K,one) by Def3,Th20
+                 .= Card {K --> {}} by FUNCT_5:66,ORDINAL3:18
+                 .= 1 by Th20,CARD_1:50;
+  end;
+
+theorem
+   exp(K,M+`N) = exp(K,M)*`exp(K,N)
+  proof
+A1:  M+`N,[:M,{0}:] \/ [:N,{1}:] are_equipotent
+     & [:M,{0}:] misses [:N,{1}:] & K,K are_equipotent
+     by Th17,ZFMISC_1:131;
+      [:M,{0}:],M are_equipotent & [:N,{1}:],N are_equipotent by Th13;
+then A2:  Funcs([:M,{0}:],K),Funcs(M,K) are_equipotent &
+     Funcs([:N,{1}:],K),Funcs(N,K) are_equipotent
+     by FUNCT_5:67;
+   thus exp(K,M+`N) = Card Funcs(M+`N,K) by Def3
+             .= Card Funcs([:M,{0}:] \/ [:N,{1}:],K) by A1,FUNCT_5:67
+             .= Card [:Funcs([:M,{0}:],K),Funcs([:N,{1}:],K):] by A1,FUNCT_5:69
+             .= Card [:Funcs(M,K),Funcs(N,K):] by A2,Th15
+             .= Card [:Card Funcs(M,K),Card Funcs(N,K):] by Th14
+             .= (Card Funcs(M,K))*`Card Funcs(N,K) by Def2
+             .= exp(K,M)*`Card Funcs(N,K) by Def3
+             .= exp(K,M)*`exp(K,N) by Def3;
+  end;
+
+theorem
+   exp(K*`M,N) = exp(K,N)*`exp(M,N)
+  proof
+A1:  Card(K*`M) = K*`M & K*`M = Card [:K,M:] & Card N = Card N
+     by Def2,CARD_1:def 5;
+   thus exp(K*`M,N) = Card Funcs(N,K*`M) by Def3
+           .= Card Funcs(N,[:K,M:]) by A1,FUNCT_5:68
+           .= Card [:Funcs(N,K),Funcs(N,M):] by FUNCT_5:71
+           .= Card [:Card Funcs(N,K),Card Funcs(N,M):] by Th14
+           .= (Card Funcs(N,K))*`Card Funcs(N,M) by Def2
+           .= (Card Funcs(N,K))*`exp(M,N) by Def3
+           .= exp(K,N)*`exp(M,N) by Def3;
+  end;
+
+theorem
+   exp(K,M*`N) = exp(exp(K,M),N)
+  proof
+      M*`N = Card [:M,N:] by Def2;
+    then [:M,N:],M*`N are_equipotent & [:N,M:],[:M,N:] are_equipotent
+                 by Lm2,CARD_1:def 5;
+then A1:  [:N,M:],M*`N are_equipotent & K,K are_equipotent by WELLORD2:22;
+A2:  Funcs(M,K),Card Funcs(M,K) are_equipotent & N,N are_equipotent
+     by CARD_1:def 5;
+   thus exp(K,M*`N) = Card Funcs(M*`N,K) by Def3
+             .= Card Funcs([:N,M:],K) by A1,FUNCT_5:67
+             .= Card Funcs(N,Funcs(M,K)) by FUNCT_5:70
+             .= Card Funcs(N,Card Funcs(M,K)) by A2,FUNCT_5:67
+             .= Card Funcs(N,exp(K,M)) by Def3
+             .= exp(exp(K,M),N) by Def3;
+  end;
+
+theorem
+   exp(2,Card X) = Card bool X
+  proof
+A1:  Card Card X = Card X & Card 2 = Card {{},one} by Th22,CARD_1:def 5;
+   thus exp(2,Card X) = Card Funcs(Card X,2) by Def3
+           .= Card Funcs(X,{{},one}) by A1,FUNCT_5:68
+           .= Card bool X by FUNCT_5:72;
+  end;
+
+theorem
+ Th45: exp(K,2) = K*`K
+  proof
+   thus exp(K,2) = Card Funcs(2,K) by Def3
+           .= Card [:K,K:] by Th22,FUNCT_5:73
+           .= K*`K by Def2;
+  end;
+
+theorem
+   exp(K+`M,2) = K*`K +` 2*`K*`M +` M*`M
+  proof
+   thus exp(K+`M,2) = (K+`M)*`(K+`M) by Th45
+          .= K*`(K+`M) +` M*`(K+`M) by Th37
+          .= K*`K +` K*`M +` M*`(K+`M) by Th37
+          .= K*`K +` K*`M +` (M*`K +` M*`M) by Th37
+          .= K*`K +` K*`M +` K*`M +` M*`M by Th31
+          .= K*`K +` (K*`M +` K*`M) +` M*`M by Th31
+          .= K*`K +` 2*`(K*`M) +` M*`M by Th36
+          .= K*`K +` 2*`K*`M +` M*`M by Th35;
+  end;
+
+theorem
+ Th47: Card(X \/ Y) <=` Card X +` Card Y
+  proof
+    consider f such that
+A1:  dom f = plus(X,Y) & for x st x in plus(X,Y) holds f.x = g(x) from Lambda;
+      X \/ Y c= rng f
+     proof let x; assume x in X \/ Y;
+then A2:     x in X or x in Y by XBOOLE_0:def 2;
+         now per cases;
+        suppose x in X;
+          then [x,0] in [:X,{0}:] by ZFMISC_1:129;
+then A3:        [x,0] in plus(X,Y) & [x,0]`1 = x by MCART_1:7,XBOOLE_0:def 2;
+          then x = f.[x,0] by A1;
+         hence thesis by A1,A3,FUNCT_1:def 5;
+        suppose not x in X;
+          then [x,1] in [:Y,{1}:] by A2,ZFMISC_1:129;
+then A4:        [x,1] in plus(X,Y) & [x,1]`1 = x by MCART_1:7,XBOOLE_0:def 2;
+          then x = f.[x,1] by A1;
+         hence thesis by A1,A4,FUNCT_1:def 5;
+       end;
+      hence thesis;
+     end;
+    then Card(X \/ Y) <=` Card plus(X,Y) & 0 <> 1 by A1,CARD_1:28;
+   hence thesis by Th28;
+  end;
+
+theorem
+ Th48: X misses Y implies Card (X \/ Y) = Card X +` Card Y
+  proof assume
+A1:  X misses Y;
+      X,[:X,{0}:] are_equipotent & [:X,{0}:],[:Card X,{0}:] are_equipotent &
+                Y,[:Y,{1}:] are_equipotent &
+     [:Y,{1}:],[:Card Y,{1}:] are_equipotent by Th13,Th14;
+    then [:Card X,{0}:] misses [:Card Y,{1}:] & X,[:Card X,{0}:]
+are_equipotent &
+     Y,[:Card Y,{1}:] are_equipotent by Lm5,WELLORD2:22;
+    then X \/ Y,[:Card X,{0}:] \/ [:Card Y,{1}:] are_equipotent by A1,CARD_1:58
+;
+   hence Card (X \/ Y) = Card ([:Card X,{0}:] \/ [:Card Y,{1}:]) by CARD_1:21
+                .= Card X +` Card Y by Th17;
+  end;
+
+ reserve m,n for Nat;
+
+theorem
+ Th49: n+m = n +^ m
+  proof
+    defpred P[Nat] means n+$1 = n +^ $1;
+A1:  P[0] by ORDINAL2:44;
+A2:  for m st P[m] holds P[m+1]
+     proof let m such that
+A3:    P[m];
+      thus n+(m+1) = n+m+1 by XCMPLX_1:1
+        .= succ( n +^ m) by A3,CARD_1:52
+        .= n +^ succ m by ORDINAL2:45
+        .= n +^ (m+1) by CARD_1:52;
+     end;
+    for m holds P[m] from Ind(A1,A2);
+   hence thesis;
+  end;
+
+theorem
+ Th50: n*m = n *^ m
+  proof
+    defpred P[Nat] means $1*m = $1 *^ m;
+    A1: P[0] by ORDINAL2:52;
+A2:  for n st P[n] holds P[n+1]
+     proof let n such that
+A3:    P[n];
+      thus (n+1)*m = n*m+1*m by XCMPLX_1:8
+        .= n *^ m +^ m by A3,Th49
+        .= n *^ m +^ one *^ m by ORDINAL2:56
+        .= ( n +^ one) *^ m by ORDINAL3:54
+        .= (succ n) *^ m by ORDINAL2:48
+        .= (n+1) *^ m by CARD_1:52;
+     end;
+    for n holds P[n] from Ind(A1,A2);
+   hence thesis;
+  end;
+
+theorem
+ Th51: Card(n+m) = Card n +` Card m
+  proof
+   thus Card(n+m) = Card( n +^ m) by Th49
+      .= Card n +` Card m by Th24;
+  end;
+
+theorem
+ Th52: Card(n*m) = Card n *` Card m
+  proof
+   thus Card(n*m) = Card( n *^ m) by Th50
+      .= Card n *` Card m by Th25;
+  end;
+
+theorem Th53:
+  for X,Y being finite set st X misses Y holds
+   card (X \/ Y) = card X + card Y
+  proof let X,Y be finite set;
+   assume
+A1:  X misses Y;
+      Card card (X \/ Y) = Card (X \/ Y) by CARD_1:def 11
+ .= Card X +` Card Y by A1,Th48
+       .= Card card X +` Card Y by CARD_1:def 11
+       .= Card card X +` Card card Y by CARD_1:def 11
+       .= Card (card X + card Y) by Th51;
+   hence thesis by CARD_1:71;
+  end;
+
+theorem Th54:
+  for X being finite set st not x in X
+   holds card (X \/ {x}) = card X + 1
+  proof let X be finite set;
+   assume not x in X;
+    then X misses {x} & card {x} = 1 & {x} is finite
+     by CARD_1:79,ZFMISC_1:56;
+   hence card (X \/ {x}) = card X + 1 by Th53;
+  end;
+
+canceled 2;
+
+theorem
+    for X,Y being finite set holds (Card X <=` Card Y iff card X <= card Y)
+  proof let X,Y be finite set;
+      Card card X = Card X & Card card Y = Card Y by CARD_1:def 11;
+   hence thesis by CARD_1:72;
+  end;
+
+theorem Th58:
+   for X,Y being finite set holds Card X <` Card Y iff card X < card Y
+  proof let X,Y be finite set;
+      Card card X = Card X & Card card Y = Card Y by CARD_1:def 11;
+   hence thesis by CARD_1:73;
+  end;
+
+theorem
+ Th59: for X being set st Card X = 0 holds X = {}
+  proof let X be set;
+   assume Card X = 0;
+    then X,{} are_equipotent by CARD_1:21,78;
+   hence thesis by CARD_1:46;
+  end;
+
+theorem
+    for X being set holds Card X = 1 iff ex x st X = {x}
+  proof let X be set;
+    Card {0} = 1 & {0} is finite by CARD_1:79;
+   hence Card X = 1 implies ex x st X = {x} by CARD_1:49;
+   given x such that
+A1:  X = {x};
+   thus thesis by A1,CARD_1:79;
+  end;
+
+theorem
+ Th61: for X being finite set
+   holds X,card X are_equipotent & X,Card card X are_equipotent &
+   X,Seg card X are_equipotent
+  proof let X be finite set;
+      Card card X = Card X by CARD_1:def 11;
+    then X,Card card X are_equipotent &
+    Card Seg card X = Card X by CARD_1:def 5,FINSEQ_1:76;
+   hence thesis by CARD_1:21,def 5;
+  end;
+
+theorem Th62:
+ for X,Y being finite set holds card(X \/ Y) <= card X + card Y
+  proof let X,Y be finite set;
+A1:  Card card(X \/ Y) = Card(X \/ Y) by CARD_1:def 11;
+      Card X = Card card X & Card Y = Card card Y by CARD_1:def 11;
+    then Card X +` Card Y = Card(card X + card Y) by Th51;
+    then Card (X \/ Y) <=` Card(card X + card Y) by Th47;
+   hence card(X \/ Y) <= card X + card Y by A1,CARD_1:72;
+  end;
+
+theorem
+ Th63: for X,Y being finite set st Y c= X holds card (X \ Y) = card X - card Y
+  proof let X,Y be finite set;
+   assume
+A1:  Y c= X;
+A2:  Y is finite;
+   defpred P[set] means
+    ex S being finite set st S = $1 & card (X \ S) = card X - card S;
+      card X - 0 = card X & X \ {} = X;
+then A3:  P[{}] by CARD_1:78;
+A4:  for X1,Z being set st X1 in Y & Z c= Y & P[Z] holds P[Z \/ {X1}]
+     proof let X1,Z be set such that
+A5:     X1 in Y & Z c= Y & P[Z] & not P[Z \/ {X1}];
+         now assume X1 in Z; then {X1} c= Z by ZFMISC_1:37;
+         then Z = Z \/ {X1} by XBOOLE_1:12;
+        hence P[Z \/ {X1}] by A5;
+       end;
+then A6:    X \ Z is finite & not X1 in Z & X1 in X & Z is finite & card {X1} =
+1
+        by A1,A5,CARD_1:79;
+       reconsider Z1 = Z as finite set by A5;
+A7:     X1 in X \ Z & X \ Z,Seg card (X \ Z) are_equipotent &
+        card Z1 + card {X1} = card (Z1 \/ {X1}) by A6,Th54,Th61,XBOOLE_0:def 4
+;
+       then Seg card (X \ Z) <> {} by Th5;
+      then consider m such that
+A8:     card (X \ Z) = m+1 by FINSEQ_1:4,NAT_1:22;
+         m+1 in Seg(m+1) & Seg m = Seg (m+1) \ {m+1} & m+1-1 = m+(1-1) &
+        X \ (Z \/ {X1}) = X \ Z \ {X1} & m+0 = m
+         by FINSEQ_1:6,RLVECT_1:104,XBOOLE_1:41,XCMPLX_1:29;
+       then X \ (Z \/ {X1}),Seg m are_equipotent &
+       X \ (Z \/ {X1}) is finite & (m+1)-1 = m &
+        card {X1} = 1 & card Seg m = m
+         by A7,A8,CARD_1:61,79,FINSEQ_1:78;
+       then card (X \ (Z \/ {X1})) = card(X \ Z)-card{X1} by A8,CARD_1:81
+          .= card X - card (Z1 \/ {X1}) by A5,A7,XCMPLX_1:36;
+      hence contradiction by A5;
+     end;
+      P[Y] from Finite(A2,A3,A4);
+   hence thesis;
+  end;
+
+theorem
+   for X,Y being finite set holds
+   card (X \/ Y) = card X + card Y - card (X /\ Y)
+  proof let X,Y be finite set;
+      Y \ X is finite & X misses (Y \ X) by XBOOLE_1:79;
+then A1:  card (X \/ (Y \ X)) = card X + card (Y \ X) by Th53;
+      Y \ X = Y \ X /\ Y & X /\ Y c= Y by XBOOLE_1:17,47;
+    then card (Y \ X) = card Y - card (X /\ Y) & X \/ (Y \ X) = X \/ Y
+     by Th63,XBOOLE_1:39;
+   hence thesis by A1,XCMPLX_1:29;
+  end;
+
+theorem
+   for X,Y being finite set holds card [:X,Y:] = card X * card Y
+  proof let X,Y be finite set;
+      Card card [:X,Y:] = Card [:X,Y:] by CARD_1:def 11
+        .= Card [:Card X,Card Y:] by Th14
+        .= Card X *` Card Y by Def2
+        .= Card card X *` Card Y by CARD_1:def 11
+        .= Card card X *` Card card Y by CARD_1:def 11
+        .= Card (card X * card Y) by Th52;
+   hence thesis by CARD_1:71;
+  end;
+
+canceled;
+
+theorem
+   for X,Y being finite set st X c< Y
+  holds card X < card Y & Card X <` Card Y
+  proof let X,Y be finite set;
+   assume
+A1:  X c< Y;
+    then X c= Y & X <> Y by XBOOLE_0:def 8;
+then A2:  Y = X \/ (Y\X) & X misses (Y\X) & X is finite & Y\X is finite
+     by XBOOLE_1:45,79;
+then A3:  card Y = card X + card (Y\X) by Th53;
+A4:  now assume card (Y\X) = 0;
+      then Y \ X = {} by Th59;
+     hence contradiction by A1,A2;
+    end;
+A5:  card X <= card Y by A3,NAT_1:29;
+      now assume card X = card Y;
+      then card X + 0 = card Y;
+     hence contradiction by A3,A4,XCMPLX_1:2;
+    end;
+   hence card X < card Y by A5,REAL_1:def 5;
+   hence thesis by Th58;
+  end;
+
+theorem
+   (Card X <=` Card Y or Card X <` Card Y) & Y is finite implies X is finite
+  proof assume
+A1:  (Card X <=` Card Y or Card X <` Card Y) & Y is finite;
+    then (Card X c= Card Y or Card X in Card Y) & Card X = Card X &
+      Card Y = Card Y & Y,Card Y are_equipotent by CARD_1:def 5;
+    then Card X c= Card Y & Card Y is finite by A1,CARD_1:68,ORDINAL1:def 2;
+    then Card X is finite & X,Card X are_equipotent by CARD_1:def 5,FINSET_1:13
+;
+   hence X is finite by CARD_1:68;
+  end;
+
+ reserve x1,x2,x3,x4,x5,x6,x7,x8 for set;
+
+theorem
+ Th69: card {x1,x2} <= 2
+  proof
+      card {x1} = 1 & card {x2} = 1 & {x1,x2} = {x1} \/ {x2} & {x1} is finite &
+     {x2} is finite & 1+1 = 2 by CARD_1:79,ENUMSET1:41;
+   hence thesis by Th62;
+  end;
+
+theorem
+ Th70: card {x1,x2,x3} <= 3
+  proof
+      card {x1} = 1 & {x1,x2,x3} = {x1} \/ {x2,x3} & {x1} is finite &
+     {x2,x3} is finite & card {x2,x3} <= 2
+      by Th69,CARD_1:79,ENUMSET1:42;
+    then 1 + card {x2,x3} <= 1+2 & card {x1,x2,x3} <= 1 + card {x2,x3}
+     by Th62,REAL_1:55;
+   hence thesis by AXIOMS:22;
+  end;
+
+theorem
+ Th71: card {x1,x2,x3,x4} <= 4
+  proof
+      card {x1} = 1 & {x1,x2,x3,x4} = {x1} \/ {x2,x3,x4} & {x1} is finite &
+     {x2,x3,x4} is finite & card {x2,x3,x4} <= 3
+      by Th70,CARD_1:79,ENUMSET1:44;
+    then 1 + card {x2,x3,x4} <= 1+3 & card {x1,x2,x3,x4} <= 1 + card {x2,x3,x4
+}
+     by Th62,REAL_1:55;
+   hence thesis by AXIOMS:22;
+  end;
+
+theorem
+ Th72: card {x1,x2,x3,x4,x5} <= 5
+  proof
+      card {x1} = 1 & {x1,x2,x3,x4,x5} = {x1} \/ {x2,x3,x4,x5} & {x1} is finite
+&
+     {x2,x3,x4,x5} is finite & card {x2,x3,x4,x5} <= 4
+      by Th71,CARD_1:79,ENUMSET1:47;
+    then 1 + card {x2,x3,x4,x5} <= 1+4 &
+     card {x1,x2,x3,x4,x5} <= 1 + card {x2,x3,x4,x5} by Th62,REAL_1:55;
+   hence thesis by AXIOMS:22;
+  end;
+
+theorem
+ Th73: card {x1,x2,x3,x4,x5,x6} <= 6
+  proof
+      card {x1} = 1 & {x1,x2,x3,x4,x5,x6} = {x1} \/ {x2,x3,x4,x5,x6} &
+     {x1} is finite & {x2,x3,x4,x5,x6} is finite & card {x2,x3,x4,x5,x6} <= 5
+      by Th72,CARD_1:79,ENUMSET1:51;
+    then 1 + card {x2,x3,x4,x5,x6} <= 1+5 &
+     card {x1,x2,x3,x4,x5,x6} <= 1 + card {x2,x3,x4,x5,x6} by Th62,REAL_1:55;
+   hence thesis by AXIOMS:22;
+  end;
+
+theorem
+ Th74: card {x1,x2,x3,x4,x5,x6,x7} <= 7
+  proof
+      card {x1} = 1 & {x1,x2,x3,x4,x5,x6,x7} = {x1} \/ {x2,x3,x4,x5,x6,x7} &
+     {x1} is finite & {x2,x3,x4,x5,x6,x7} is finite &
+      card {x2,x3,x4,x5,x6,x7} <= 6
+       by Th73,CARD_1:79,ENUMSET1:56;
+    then 1 + card {x2,x3,x4,x5,x6,x7} <= 1+6 &
+     card {x1,x2,x3,x4,x5,x6,x7} <= 1 + card {x2,x3,x4,x5,x6,x7}
+      by Th62,REAL_1:55;
+   hence thesis by AXIOMS:22;
+  end;
+
+theorem
+    card {x1,x2,x3,x4,x5,x6,x7,x8} <= 8
+  proof
+      {x1,x2,x3,x4,x5,x6,x7,x8} = {x1} \/ {x2,x3,x4,x5,x6,x7,x8} &
+     card {x1} = 1 & {x1} is finite & {x2,x3,x4,x5,x6,x7,x8} is finite &
+      card {x2,x3,x4,x5,x6,x7,x8} <= 7
+       by Th74,CARD_1:79,ENUMSET1:62;
+    then 1 + card {x2,x3,x4,x5,x6,x7,x8} <= 1+7 &
+     card {x1,x2,x3,x4,x5,x6,x7,x8} <= 1 + card {x2,x3,x4,x5,x6,x7,x8}
+      by Th62,REAL_1:55;
+   hence thesis by AXIOMS:22;
+  end;
+
+theorem
+ Th76: x1 <> x2 implies card {x1,x2} = 2
+  proof assume x1 <> x2;
+    then {x1} misses {x2} & {x1} is finite & {x2} is finite & card {x1} = 1 &
+     card {x2} = 1 & {x1,x2} = {x1} \/ {x2} & 1+1 = 2
+      by CARD_1:79,ENUMSET1:41,ZFMISC_1:17;
+   hence thesis by Th53;
+  end;
+
+theorem
+ Th77: x1 <> x2 & x1 <> x3 & x2 <> x3 implies card {x1,x2,x3} = 3
+  proof assume x1 <> x2 & x1 <> x3 & x2 <> x3;
+    then card {x1,x2} = 2 & not x3 in {x1,x2} & {x1,x2} is finite &
+     {x1,x2,x3} = {x1,x2} \/ {x3} by Th76,ENUMSET1:43,TARSKI:def 2;
+   hence card {x1,x2,x3} = 2+1 by Th54 .= 3;
+  end;
+
+theorem
+    x1 <> x2 & x1 <> x3 & x1 <> x4 & x2 <> x3 & x2 <> x4 & x3 <> x4
+  implies card {x1,x2,x3,x4} = 4
+  proof assume x1 <> x2 & x1 <> x3 & x1 <> x4 & x2 <> x3 & x2 <> x4 & x3 <> x4;
+   then card {x1,x2,x3} = 3 & not x4 in {x1,x2,x3} & {x1,x2,x3} is finite
+     & {x1,x2,x3,x4} = {x1,x2,x3} \/ {x4} by Th77,ENUMSET1:13,46;
+   hence card {x1,x2,x3,x4} = 3+1 by Th54 .= 4;
+  end;

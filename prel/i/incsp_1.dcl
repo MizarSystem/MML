@@ -1,0 +1,12 @@
+HIDDEN
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+RELAT_1
+RELSET_1
+INCSP_1
+#
+«V4 ;;;G1 ;
+«V5 ;;;G2 ;
+«V5 ;V8 ;;;G2 ;
+!

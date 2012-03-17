@@ -1,0 +1,307 @@
+:: Introduction to Circuits, II
+::  by Yatsuka Nakamura, Piotr Rudnicki, Andrzej Trybulec and Pauline N. Kawamoto
+::
+:: Received April 10, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary MSAFREE2, AMI_1, MSUALG_1, ZF_REFLE, PBOOLE, PRALG_1, MSAFREE,
+      FUNCT_1, TREES_3, FINSEQ_1, TREES_4, ALG_1, QC_LANG1, FINSEQ_4, RELAT_1,
+      TREES_2, TDGROUP, CARD_3, DTCONSTR, BOOLE, FREEALG, CIRCUIT1, FUNCT_4,
+      FUNCOP_1, UNIALG_2, MSATERM, PRELAMB, REALSET1, FUNCT_6, CARD_1,
+      FINSET_1, SQUARE_1, PRALG_2, SEQM_3, CIRCUIT2, MEMBERED;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, RELAT_1,
+      MEMBERED, FUNCT_1, FUNCT_2, SEQM_3, FUNCT_4, NAT_1, FINSEQ_1, FINSET_1,
+      TREES_2, TREES_3, TREES_4, GROUP_1, CARD_1, CARD_3, FINSEQ_4, FUNCT_6,
+      LANG1, DTCONSTR, PBOOLE, STRUCT_0, PRALG_1, MSUALG_1, MSUALG_2, PRALG_2,
+      MSUALG_3, MSAFREE, PRE_CIRC, MSAFREE2, CIRCUIT1, MSATERM;
+ constructors MSATERM, CIRCUIT1, MSUALG_3, PRALG_2, NAT_1, SEQM_3, FINSEQ_4,
+      FINSUB_1, MEMBERED, XBOOLE_0;
+ clusters MSUALG_1, DTCONSTR, PRE_CIRC, MSAFREE, MSAFREE2, CIRCUIT1, TREES_3,
+      PRALG_1, FUNCT_1, PRELAMB, MSUALG_3, RELSET_1, STRUCT_0, FINSEQ_1,
+      GROUP_2, ARYTM_3, MEMBERED, XREAL_0, XBOOLE_0, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin
+
+reserve IIG for monotonic Circuit-like non void (non empty ManySortedSign);
+
+theorem :: CIRCUIT2:1
+  for X being non-empty ManySortedSet of the carrier of IIG,
+    H being ManySortedFunction of FreeMSA X, FreeMSA X,
+    HH being Function-yielding Function,
+    v being SortSymbol of IIG,
+    p being DTree-yielding FinSequence,
+    t being Element of (the Sorts of FreeMSA X).v
+      st v in InnerVertices IIG
+        & t = [action_at v,the carrier of IIG]-tree p
+        & H is_homomorphism FreeMSA X, FreeMSA X
+        & HH = H * the_arity_of action_at v
+    ex HHp being DTree-yielding FinSequence
+      st HHp = HH..p & H.v.t = [action_at v,the carrier of IIG]-tree HHp;
+
+definition
+  let IIG;
+  let SCS be non-empty Circuit of IIG,
+    s be State of SCS,
+    iv be InputValues of SCS;
+  redefine func s +* iv -> State of SCS;
+end;
+
+definition
+  let IIG;
+  let A be non-empty Circuit of IIG, iv be InputValues of A;
+  func Fix_inp iv -> ManySortedFunction of FreeGen the Sorts of A,
+    the Sorts of FreeEnv A means
+:: CIRCUIT2:def 1
+
+    for v being Vertex of IIG
+      holds (v in InputVertices IIG implies it.v
+        = FreeGen(v, the Sorts of A) --> root-tree[iv.v, v])
+        & (v in SortsWithConstants IIG implies
+            it.v = FreeGen(v, the Sorts of A)
+                        --> root-tree [action_at v,the carrier of IIG])
+        & (v in (InnerVertices IIG \ SortsWithConstants IIG) implies
+            it.v = id FreeGen(v, the Sorts of A));
+end;
+
+definition
+  let IIG;
+  let A be non-empty Circuit of IIG, iv be InputValues of A;
+  func Fix_inp_ext iv -> ManySortedFunction of FreeEnv A, FreeEnv A means
+:: CIRCUIT2:def 2
+
+    it is_homomorphism FreeEnv A, FreeEnv A
+      & Fix_inp iv c= it;
+end;
+
+theorem :: CIRCUIT2:2
+  for A being non-empty Circuit of IIG, iv being InputValues of A,
+    v being Vertex of IIG,
+    e being Element of (the Sorts of FreeEnv A).v,
+    x being set st
+     v in InnerVertices IIG \ SortsWithConstants IIG & e = root-tree[x,v]
+    holds (Fix_inp_ext iv).v.e = e;
+
+theorem :: CIRCUIT2:3
+  for A being non-empty Circuit of IIG, iv being InputValues of A,
+    v being Vertex of IIG,
+    x being Element of (the Sorts of A).v
+      st v in InputVertices IIG
+    holds (Fix_inp_ext iv).v.(root-tree[x,v]) = root-tree[iv.v,v];
+
+theorem :: CIRCUIT2:4
+  for A being non-empty Circuit of IIG, iv being InputValues of A,
+    v being Vertex of IIG,
+    e being Element of (the Sorts of FreeEnv A).v,
+    p, q being DTree-yielding FinSequence
+      st v in InnerVertices IIG & e = [action_at v,the carrier of IIG]-tree p
+       & dom p = dom q
+       & for k being Nat st k in dom p
+          holds q.k = (Fix_inp_ext iv).((the_arity_of action_at v)/.k).(p.k)
+    holds (Fix_inp_ext iv).v.e = [action_at v,the carrier of IIG]-tree q;
+
+theorem :: CIRCUIT2:5
+  for A being non-empty Circuit of IIG, iv being InputValues of A,
+    v being Vertex of IIG,
+    e being Element of (the Sorts of FreeEnv A).v
+      st v in SortsWithConstants IIG
+    holds (Fix_inp_ext iv).v.e = root-tree[action_at v,the carrier of IIG];
+
+theorem :: CIRCUIT2:6
+  for A being non-empty Circuit of IIG, iv being InputValues of A,
+    v being Vertex of IIG,
+    e, e1 being Element of (the Sorts of FreeEnv A).v,
+    t, t1 being DecoratedTree
+      st t = e & t1 = e1 & e1 = (Fix_inp_ext iv).v.e
+    holds dom t = dom t1;
+
+theorem :: CIRCUIT2:7
+  for A being non-empty Circuit of IIG, iv being InputValues of A,
+    v being Vertex of IIG,
+    e, e1 being Element of (the Sorts of FreeEnv A).v
+      st e1 = (Fix_inp_ext iv).v.e
+    holds card e = card e1;
+
+definition
+  let IIG;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG,
+    iv be InputValues of SCS;
+  func IGTree(v,iv) -> Element of (the Sorts of FreeEnv SCS).v means
+:: CIRCUIT2:def 3
+
+    ex e being Element of (the Sorts of FreeEnv SCS).v
+      st card e = size(v,SCS) & it = (Fix_inp_ext iv).v.e;
+end;
+
+theorem :: CIRCUIT2:8
+  for SCS being non-empty Circuit of IIG, v being Vertex of IIG,
+    iv being InputValues of SCS
+    holds IGTree(v,iv) = (Fix_inp_ext iv).v.IGTree(v,iv);
+
+theorem :: CIRCUIT2:9
+  for SCS being non-empty Circuit of IIG,
+    v being Vertex of IIG,
+    iv being InputValues of SCS,
+    p being DTree-yielding FinSequence st v in InnerVertices IIG
+      & dom p = dom the_arity_of action_at v
+      & for k being Nat st k in dom p
+          holds p.k = IGTree((the_arity_of action_at v)/.k, iv)
+    holds IGTree(v,iv) = [action_at v,the carrier of IIG]-tree p;
+
+definition
+  let IIG;
+  let SCS be non-empty Circuit of IIG, v be Vertex of IIG,
+    iv be InputValues of SCS;
+  func IGValue(v,iv) -> Element of (the Sorts of SCS).v equals
+:: CIRCUIT2:def 4
+
+     (Eval SCS).v.(IGTree(v,iv));
+end;
+
+theorem :: CIRCUIT2:10
+  for SCS being non-empty Circuit of IIG,
+    v being Vertex of IIG, iv being InputValues of SCS
+      st v in InputVertices IIG
+    holds IGValue(v,iv) = iv.v;
+
+theorem :: CIRCUIT2:11
+  for SCS being non-empty Circuit of IIG,
+    v being Vertex of IIG, iv being InputValues of SCS
+      st v in SortsWithConstants IIG
+    holds IGValue(v,iv) = (Set-Constants SCS).v;
+
+begin
+
+::---------------------------------------------------------------------------
+:: Computations
+::---------------------------------------------------------------------------
+
+definition
+  let IIG be Circuit-like non void (non empty ManySortedSign);
+  let SCS be non-empty Circuit of IIG,
+    s be State of SCS;
+  func Following s -> State of SCS means
+:: CIRCUIT2:def 5
+
+    for v being Vertex of IIG
+      holds (v in InputVertices IIG implies it.v = s.v)
+        & (v in InnerVertices IIG implies
+            it.v = (Den(action_at v,SCS)).(action_at v depends_on_in s));
+end;
+
+theorem :: CIRCUIT2:12
+  for SCS being non-empty Circuit of IIG,
+    s being State of SCS,
+    iv being InputValues of SCS
+      st iv c= s
+    holds iv c= Following s;
+
+definition
+  let IIG be Circuit-like non void (non empty ManySortedSign);
+  let SCS be non-empty Circuit of IIG;
+  let IT be State of SCS;
+  attr IT is stable means
+:: CIRCUIT2:def 6
+
+    IT = Following IT;
+end;
+
+definition
+  let IIG;
+  let SCS be non-empty Circuit of IIG,
+    s be State of SCS,
+    iv be InputValues of SCS;
+  func Following(s,iv) -> State of SCS equals
+:: CIRCUIT2:def 7
+
+     Following(s+*iv);
+end;
+
+definition
+  let IIG;
+  let SCS be non-empty Circuit of IIG, InpFs be InputFuncs of SCS,
+    s be State of SCS;
+  func InitialComp(s,InpFs) -> State of SCS equals
+:: CIRCUIT2:def 8
+
+     s +* (0-th_InputValues InpFs) +* Set-Constants SCS;
+end;
+
+definition
+  let IIG;
+  let SCS be non-empty Circuit of IIG,
+    InpFs be InputFuncs of SCS,
+    s be State of SCS;
+  func Computation(s,InpFs) -> Function of NAT, (product the Sorts of SCS)
+    means
+:: CIRCUIT2:def 9
+
+    it.0 = InitialComp(s,InpFs)
+      & for i being Nat
+        holds it.(i+1) = Following(it.i,(i+1)-th_InputValues InpFs);
+end;
+
+reserve SCS for non-empty Circuit of IIG;
+reserve s for State of SCS;
+reserve iv for InputValues of SCS;
+
+theorem :: CIRCUIT2:13
+  for k being Nat
+    st for v being Vertex of IIG st depth(v,SCS) <= k
+         holds s.v = IGValue(v,iv)
+    holds
+      for v1 being Vertex of IIG st depth(v1,SCS) <= k+1
+        holds (Following s).v1 = IGValue(v1,iv);
+
+reserve IIG for finite monotonic Circuit-like non void
+  (non empty ManySortedSign);
+reserve SCS for non-empty Circuit of IIG;
+reserve InpFs for InputFuncs of SCS;
+reserve s for State of SCS;
+reserve iv for InputValues of SCS;
+
+theorem :: CIRCUIT2:14
+  commute InpFs is constant & InputVertices IIG is non empty
+    implies
+      for s, iv st iv = (commute InpFs).0
+      for k being Nat
+        holds iv c= (Computation(s,InpFs)).k;
+
+theorem :: CIRCUIT2:15
+    for n being Nat st commute InpFs is constant
+    & InputVertices IIG is non empty
+    & (Computation(s,InpFs)).n is stable
+  for m being Nat st n <= m
+    holds (Computation(s,InpFs)).n = (Computation(s,InpFs)).m;
+
+theorem :: CIRCUIT2:16
+  commute InpFs is constant & InputVertices IIG is non empty
+    implies for s, iv st iv = (commute InpFs).0
+      for k being Nat, v being Vertex of IIG
+        st depth(v,SCS) <= k
+        holds ((Computation(s,InpFs)).k
+          qua Element of product the Sorts of SCS).v = IGValue(v,iv);
+
+theorem :: CIRCUIT2:17
+  commute InpFs is constant & InputVertices IIG is non empty
+    & iv = (commute InpFs).0 implies
+      for s being State of SCS, v being Vertex of IIG,
+          n being Element of NAT st n = depth SCS
+        holds ((Computation(s,InpFs)).n qua State of SCS).v
+          = IGValue(v,iv);
+
+theorem :: CIRCUIT2:18
+    commute InpFs is constant & InputVertices IIG is non empty implies
+    for s being State of SCS, n be Element of NAT st n = depth SCS
+      holds (Computation(s,InpFs)).n is stable;
+
+theorem :: CIRCUIT2:19
+    commute InpFs is constant & InputVertices IIG is non empty implies
+    for s1, s2 being State of SCS
+      holds (Computation(s1,InpFs)).(depth SCS)
+        = (Computation(s2,InpFs)).(depth SCS);
+
+

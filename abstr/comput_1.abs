@@ -1,0 +1,984 @@
+:: The set of primitive recursive functions
+::  by Grzegorz Bancerek and Piotr Rudnicki
+::
+:: Received July 27, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FUNCT_4, MATRIX_2, BOOLE,
+      PARTFUN1, SETFAM_1, FUNCT_6, MSUALG_6, FRAENKEL, TARSKI, RFUNCT_3,
+      SEQM_3, UNIALG_1, FUNCOP_1, FUNCT_2, PRALG_3, ORDINAL1, FINSEQ_4,
+      BORSUK_1, PROB_1, FUNCT_5, FINSET_1, SQUARE_1, BINTREE1, CARD_3,
+      MONOID_0, QC_LANG1, GROUP_1, ARYTM_1, COMPUT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, RELAT_1, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_2, SETFAM_1,
+      MATRIX_2, FRAENKEL, FUNCT_2, FUNCT_4, FUNCT_5, PROB_1, CARD_3, PRE_CIRC,
+      FINSEQ_4, PARTFUN1, RFUNCT_3, PRALG_3, UNIALG_1, FUNCT_6, FUNCT_7,
+      FINSET_1, SQUARE_1, NEWTON, SEQM_3, BINARITH, CARD_4;
+ constructors DOMAIN_1, MATRIX_2, FINSEQ_4, PRALG_3, RFUNCT_3, FUNCT_7,
+      PRE_CIRC, BINARITH, SEQM_3, CARD_4, PROB_1;
+ clusters XREAL_0, PARTFUN1, RELAT_1, RELSET_1, FUNCT_1, FUNCOP_1, ALTCAT_1,
+      FINSEQ_1, FINSEQ_2, FUNCT_7, FINSET_1, SUBSET_1, NAT_1, FRAENKEL,
+      MEMBERED, PRE_CIRC, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve i, j, k, c, m, n for Nat,
+        a, x, y, z, X, Y for set,
+        D, E for non empty set,
+        R for Relation,
+        f, g for Function,
+        p, q for FinSequence;
+
+definition
+ let X be non empty set, n be Nat, p be Element of n-tuples_on X,
+     i be Nat, x be Element of X;
+ redefine func p+*(i,x) -> Element of n-tuples_on X;
+end;
+
+definition
+ let n be Nat, t be Element of n-tuples_on NAT, i be Nat;
+ redefine func t.i -> Element of NAT;
+end;
+
+canceled 2;
+
+theorem :: COMPUT_1:3
+<*x,y*>+*(1,z) = <*z,y*> & <*x,y*>+*(2,z) = <*x,z*>;
+
+canceled;
+
+theorem :: COMPUT_1:5
+f+*(a,x) = g+*(a,y) implies f+*(a,z) = g+*(a,z);
+
+theorem :: COMPUT_1:6
+Del(p+*(i,x),i) = Del(p,i);
+
+theorem :: COMPUT_1:7
+p+*(i,a) = q+*(i,a) implies Del(p,i) = Del(q,i);
+
+theorem :: COMPUT_1:8
+0-tuples_on X = {{}};
+
+theorem :: COMPUT_1:9
+  n <> 0 implies n-tuples_on {} = {};
+
+theorem :: COMPUT_1:10
+{} in rng f implies <:f:> = {};
+
+theorem :: COMPUT_1:11
+rng f = D implies rng <:<*f*>:> = 1-tuples_on D;
+
+theorem :: COMPUT_1:12
+1 <= i & i <= n+1 implies
+  for p being Element of (n+1)-tuples_on D holds Del(p,i) in n-tuples_on D;
+
+theorem :: COMPUT_1:13
+for X being set, Y being FinSequenceSet of X holds Y c= X*;
+
+begin :: Sets of compatible functions
+
+definition
+ let X be set;
+ attr X is compatible means
+:: COMPUT_1:def 1
+ for f,g being Function st f in X & g in X holds f tolerates g;
+end;
+
+definition
+ cluster non empty functional compatible set;
+end;
+
+definition
+ let X be functional compatible set;
+ cluster union X -> Function-like Relation-like;
+end;
+
+theorem :: COMPUT_1:14
+X is functional compatible iff union X is Function;
+
+definition
+ let X,Y be set;
+ cluster non empty compatible PFUNC_DOMAIN of X,Y;
+end;
+
+theorem :: COMPUT_1:15
+for X being non empty functional compatible set
+ holds dom union X = union {dom f where f is Element of X: not contradiction};
+
+theorem :: COMPUT_1:16
+for X being functional compatible set, f being Function st f in X holds
+ dom f c= dom union X & for x being set st x in dom f holds (union X).x = f.x;
+
+theorem :: COMPUT_1:17
+for X being non empty functional compatible set
+ holds rng union X = union {rng f where f is Element of X: not contradiction};
+
+definition let X,Y;
+  cluster -> functional PFUNC_DOMAIN of X,Y;
+end;
+
+theorem :: COMPUT_1:18
+for P being compatible PFUNC_DOMAIN of X,Y holds union P is PartFunc of X,Y;
+
+begin :: Homogeneous relations
+
+definition
+ let f be Relation;
+ redefine attr f is natural-yielding;
+ synonym f is to-naturals;
+end;
+
+definition
+ let f be Relation;
+ attr f is from-natural-fseqs means
+:: COMPUT_1:def 2
+ dom f c= NAT*;
+end;
+
+definition
+ cluster from-natural-fseqs to-naturals Function;
+end;
+
+definition
+ let f be from-natural-fseqs Relation;
+ attr f is len-total means
+:: COMPUT_1:def 3
+ for x,y being FinSequence of NAT
+  st len x = len y & x in dom f holds y in dom f;
+end;
+
+definition
+ let f be Relation;
+ attr f is homogeneous means
+:: COMPUT_1:def 4
+ for x,y being FinSequence st x in dom f & y in dom f holds len x = len y;
+end;
+
+theorem :: COMPUT_1:19
+dom R c= n-tuples_on D implies R is homogeneous;
+
+definition
+ cluster {} -> homogeneous;
+end;
+
+definition
+ let p be FinSequence, x be set;
+ cluster {p} --> x -> non empty homogeneous;
+end;
+
+definition
+ cluster non empty homogeneous Function;
+end;
+
+definition
+ let f be homogeneous Function, g be Function;
+ cluster g*f -> homogeneous;
+end;
+
+definition
+ let X,Y be set;
+ cluster homogeneous PartFunc of X*, Y;
+end;
+
+definition
+ let X,Y be non empty set;
+ cluster non empty homogeneous PartFunc of X*, Y;
+end;
+
+definition
+ let X be non empty set;
+ cluster non empty homogeneous quasi_total PartFunc of X*, X;
+end;
+
+definition
+ cluster non empty homogeneous to-naturals len-total
+         (from-natural-fseqs Function);
+end;
+
+definition
+cluster -> to-naturals from-natural-fseqs PartFunc of NAT*, NAT;
+end;
+
+definition
+cluster quasi_total -> len-total PartFunc of NAT*,NAT;
+end;
+
+theorem :: COMPUT_1:20
+for g being len-total to-naturals (from-natural-fseqs Function)
+ holds g is quasi_total PartFunc of NAT*, NAT;
+
+definition
+ let f be homogeneous Relation;
+ func arity f -> Nat means
+:: COMPUT_1:def 5
+  for x being FinSequence st x in dom f holds it = len x
+   if ex x being FinSequence st x in dom f
+   otherwise it = 0;
+end;
+
+theorem :: COMPUT_1:21
+arity {} = 0;
+
+theorem :: COMPUT_1:22
+for f being homogeneous Relation st dom f = {{}} holds arity f = 0;
+
+theorem :: COMPUT_1:23
+for f being homogeneous PartFunc of X*, Y holds dom f c= (arity f)-tuples_on X;
+
+theorem :: COMPUT_1:24
+for f being homogeneous from-natural-fseqs Function
+ holds dom f c= (arity f)-tuples_on NAT;
+
+theorem :: COMPUT_1:25
+for f being homogeneous PartFunc of X*, X
+ holds f is quasi_total non empty iff dom f = (arity f)-tuples_on X;
+
+theorem :: COMPUT_1:26
+for f being homogeneous to-naturals from-natural-fseqs Function
+ holds f is len-total non empty iff dom f = (arity f)-tuples_on NAT;
+
+theorem :: COMPUT_1:27
+  for f being non empty homogeneous PartFunc of D*, D, n
+ st dom f c= n-tuples_on D holds arity f = n;
+
+theorem :: COMPUT_1:28
+for f being homogeneous PartFunc of D*, D, n
+ st dom f = n-tuples_on D holds arity f = n;
+
+definition
+ let R be Relation;
+ attr R is with_the_same_arity means
+:: COMPUT_1:def 6
+  for f,g being Function st f in rng R & g in rng R holds
+   (f is empty implies g is empty or dom g = {{}}) &
+   (f is non empty & g is non empty implies
+     ex n being Nat, X being non empty set
+      st dom f c= n-tuples_on X & dom g c= n-tuples_on X);
+end;
+
+definition
+ cluster {} -> with_the_same_arity;
+end;
+
+definition
+ cluster with_the_same_arity FinSequence;
+
+ let X be set;
+ cluster with_the_same_arity FinSequence of X;
+ cluster with_the_same_arity Element of X*;
+end;
+
+definition
+ let F be with_the_same_arity Relation;
+ func arity F -> Nat means
+:: COMPUT_1:def 7
+  for f being homogeneous Function st f in rng F holds it = arity f
+   if ex f being homogeneous Function st f in rng F
+   otherwise it = 0;
+end;
+
+theorem :: COMPUT_1:29
+  for F be with_the_same_arity FinSequence st len F = 0 holds arity F = 0;
+
+definition
+ let X be set;
+ func HFuncs X -> PFUNC_DOMAIN of X*, X equals
+:: COMPUT_1:def 8
+  {f where f is Element of PFuncs(X*, X): f is homogeneous};
+end;
+
+theorem :: COMPUT_1:30
+{} in HFuncs X;
+
+definition
+ let X be non empty set;
+ cluster non empty homogeneous quasi_total Element of HFuncs X;
+end;
+
+definition
+ let X be set;
+ cluster -> homogeneous Element of HFuncs X;
+end;
+
+definition
+ let X be non empty set, S be non empty Subset of HFuncs X;
+ cluster -> homogeneous Element of S;
+end;
+
+theorem :: COMPUT_1:31
+for f being to-naturals homogeneous from-natural-fseqs Function
+ holds f is Element of HFuncs NAT;
+
+theorem :: COMPUT_1:32
+for f being len-total to-naturals (homogeneous from-natural-fseqs Function)
+ holds f is quasi_total Element of HFuncs NAT;
+
+theorem :: COMPUT_1:33
+for X being non empty set, F being Relation
+ st rng F c= HFuncs X &
+    for f,g being homogeneous Function st f in rng F & g in rng F
+     holds arity f = arity g
+  holds F is with_the_same_arity;
+
+definition
+ let n, m be Nat;
+ func n const m -> homogeneous to-naturals from-natural-fseqs Function equals
+:: COMPUT_1:def 9
+ (n-tuples_on NAT) --> m;
+end;
+
+theorem :: COMPUT_1:34
+n const m in HFuncs NAT;
+
+definition
+ let n,m be Nat;
+ cluster n const m -> len-total non empty;
+end;
+
+theorem :: COMPUT_1:35
+arity (n const m) = n;
+
+theorem :: COMPUT_1:36
+for t being Element of n-tuples_on NAT holds (n const m).t = m;
+
+definition
+ let n,i be Nat;
+ func n succ i -> homogeneous to-naturals from-natural-fseqs Function means
+:: COMPUT_1:def 10
+  dom it = n-tuples_on NAT &
+  for p being Element of n-tuples_on NAT holds it.p = (p/.i)+1;
+end;
+
+theorem :: COMPUT_1:37
+n succ i in HFuncs NAT;
+
+definition
+ let n,i be Nat;
+ cluster n succ i -> len-total non empty;
+end;
+
+theorem :: COMPUT_1:38
+arity (n succ i) = n;
+
+definition
+ let n,i be Nat;
+ func n proj i -> homogeneous to-naturals from-natural-fseqs Function equals
+:: COMPUT_1:def 11
+  proj(n|->NAT, i);
+end;
+
+theorem :: COMPUT_1:39
+n proj i in HFuncs NAT;
+
+theorem :: COMPUT_1:40
+dom (n proj i) = n-tuples_on NAT &
+(1 <= i & i <= n implies rng (n proj i) = NAT);
+
+definition
+ let n,i be Nat;
+ cluster n proj i -> len-total non empty;
+end;
+
+theorem :: COMPUT_1:41
+arity (n proj i) = n;
+
+theorem :: COMPUT_1:42
+for t being Element of n-tuples_on NAT holds (n proj i).t = t.i;
+
+definition let X be set;
+  cluster HFuncs X -> functional;
+end;
+
+theorem :: COMPUT_1:43
+for F being Function of D, HFuncs E
+ st rng F is compatible &
+    for x being Element of D holds dom (F.x) c= n-tuples_on E
+  ex f being Element of HFuncs E st f = Union F & dom f c= n-tuples_on E;
+
+theorem :: COMPUT_1:44
+  for F being Function of NAT, HFuncs D
+ st for i holds F.i c= F.(i+1) holds Union F in HFuncs D;
+
+theorem :: COMPUT_1:45
+for F being with_the_same_arity FinSequence of HFuncs D
+ holds dom <:F:> c= (arity F)-tuples_on D;
+
+definition
+ let X be non empty set;
+ let F be with_the_same_arity FinSequence of HFuncs X;
+ cluster <:F:> -> homogeneous;
+end;
+
+theorem :: COMPUT_1:46
+for f being Element of HFuncs D,
+    F being with_the_same_arity FinSequence of HFuncs D
+  holds dom (f*<:F:>) c= (arity F)-tuples_on D & rng (f*<:F:>) c= D &
+             f*<:F:> in HFuncs D;
+
+definition
+ let X,Y be non empty set, P be PFUNC_DOMAIN of X,Y;
+ let S be non empty Subset of P;
+ redefine mode Element of S -> Element of P;
+end;
+
+definition
+ let f be homogeneous from-natural-fseqs Function;
+ cluster <*f*> -> with_the_same_arity;
+end;
+
+theorem :: COMPUT_1:47
+  for f being homogeneous to-naturals from-natural-fseqs Function
+ holds arity <*f*> = arity f;
+
+theorem :: COMPUT_1:48
+for f,g being non empty Element of HFuncs NAT,
+    F being with_the_same_arity FinSequence of HFuncs NAT
+ st g = f*<:F:> holds arity g = arity F;
+
+theorem :: COMPUT_1:49
+for f being non empty quasi_total Element of HFuncs D,
+    F being with_the_same_arity FinSequence of HFuncs D
+ st arity f = len F & F is non empty &
+    (for h being Element of HFuncs D st h in rng F
+      holds h is quasi_total non empty)
+  holds f*<:F:> is non empty quasi_total Element of HFuncs D &
+        dom (f*<:F:>) = (arity F)-tuples_on D;
+
+theorem :: COMPUT_1:50
+for f being quasi_total Element of HFuncs D,
+    F being with_the_same_arity FinSequence of HFuncs D
+ st arity f = len F &
+    for h being Element of HFuncs D st h in rng F holds h is quasi_total
+  holds f*<:F:> is quasi_total Element of HFuncs D;
+
+theorem :: COMPUT_1:51
+for f,g being non empty quasi_total Element of HFuncs D
+ st arity f = 0 & arity g = 0 & f.{} = g.{} holds f = g;
+
+theorem :: COMPUT_1:52
+for f,g being non empty len-total homogeneous to-naturals
+              (from-natural-fseqs Function)
+ st arity f = 0 & arity g = 0 & f.{} = g.{} holds f = g;
+
+begin :: Primitive recursiveness
+
+reserve f1, f2 for non empty homogeneous to-naturals from-natural-fseqs
+                   Function,
+        e1, e2 for homogeneous to-naturals from-natural-fseqs Function,
+        p for Element of (arity f1+1)-tuples_on NAT;
+
+definition
+ let g, f1, f2 be homogeneous to-naturals from-natural-fseqs Function,
+     i be Nat;
+ pred g is_primitive-recursively_expressed_by f1,f2,i means
+:: COMPUT_1:def 12
+  ex n being Nat st dom g c= n-tuples_on NAT & i >= 1 & i <= n &
+  (arity f1)+1 = n & n+1 = arity f2 &
+  for p being FinSequence of NAT st len p = n
+   holds
+   (p+*(i,0) in dom g iff Del(p,i) in dom f1) &
+   (p+*(i,0) in dom g implies g.(p+*(i,0)) = f1.Del(p,i)) &
+   for n being Nat holds
+    (p+*(i,n+1) in dom g iff
+       p+*(i,n) in dom g & (p+*(i,n))^<*g.(p+*(i,n))*> in dom f2) &
+    (p+*(i,n+1) in dom g implies
+       g.(p+*(i,n+1)) = f2.((p+*(i,n))^<*g.(p+*(i,n))*>));
+end;
+
+definition
+ let f1,f2 be homogeneous to-naturals from-natural-fseqs Function;
+ let i be Nat;
+ let p be FinSequence of NAT;
+ func primrec(f1,f2,i,p) -> Element of HFuncs NAT means
+:: COMPUT_1:def 13
+  ex F being Function of NAT, HFuncs NAT st it = F.(p/.i) &
+   (i in dom p & Del(p,i) in dom f1 implies
+      F.0 = {p+*(i,0)} --> (f1.Del(p,i))) &
+   (not i in dom p or not Del(p,i) in dom f1 implies F.0 = {}) &
+  for m being Nat holds
+   (i in dom p & p+*(i,m) in dom (F.m) &
+    (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2
+      implies F.(m+1) =
+       (F.m)+*({p+*(i,m+1)}--> f2.((p+*(i,m))^<*(F.m).(p+*(i,m))*>))) &
+   (not i in dom p or not p+*(i,m) in dom (F.m) or
+      not (p+*(i,m))^<*(F.m).(p+*(i,m))*> in dom f2 implies F.(m+1) = F.m);
+end;
+
+theorem :: COMPUT_1:53
+for p, q being FinSequence of NAT
+ st q in dom primrec(e1,e2,i,p) ex k st q = p+*(i,k);
+
+theorem :: COMPUT_1:54
+for p being FinSequence of NAT st not i in dom p holds primrec(e1,e2,i,p) = {};
+
+theorem :: COMPUT_1:55
+for p, q being FinSequence of NAT holds
+  primrec(e1,e2,i,p) tolerates primrec(e1,e2,i,q);
+
+theorem :: COMPUT_1:56
+for p being FinSequence of NAT
+ holds dom primrec(e1,e2,i,p) c= (1+arity e1)-tuples_on NAT;
+
+theorem :: COMPUT_1:57
+for p being FinSequence of NAT st e1 is empty holds primrec(e1,e2,i,p) is empty
+;
+
+theorem :: COMPUT_1:58
+f1 is len-total & f2 is len-total & arity f1 +2 = arity f2 &
+ 1 <= i & i <= 1+arity f1 implies p in dom primrec(f1,f2,i,p);
+
+definition
+ let f1,f2 be homogeneous to-naturals from-natural-fseqs Function;
+ let i be Nat;
+ func primrec(f1,f2,i) -> Element of HFuncs NAT means
+:: COMPUT_1:def 14
+  ex G being Function of (arity f1+1)-tuples_on NAT, HFuncs NAT st
+   it = Union G &
+   for p being Element of (arity f1+1)-tuples_on NAT
+    holds G.p = primrec(f1,f2,i,p);
+end;
+
+theorem :: COMPUT_1:59
+e1 is empty implies primrec(e1,e2,i) is empty;
+
+theorem :: COMPUT_1:60
+dom primrec(f1,f2,i) c= (arity f1+1)-tuples_on NAT;
+
+theorem :: COMPUT_1:61
+f1 is len-total & f2 is len-total & arity f1 +2 = arity f2 &
+1 <= i & i <= 1+arity f1
+ implies dom primrec(f1,f2,i) = (arity f1+1)-tuples_on NAT &
+         arity primrec(f1,f2,i) = arity f1+1;
+
+theorem :: COMPUT_1:62
+ i in dom p implies (p+*(i,0) in dom primrec(f1,f2,i) iff Del(p,i) in dom f1);
+
+theorem :: COMPUT_1:63
+ i in dom p & p+*(i,0) in dom primrec(f1,f2,i) implies
+   primrec(f1,f2,i).(p+*(i,0)) = f1.Del(p,i);
+
+theorem :: COMPUT_1:64
+i in dom p & f1 is len-total implies primrec(f1,f2,i).(p+*(i,0)) = f1.Del(p,i);
+
+theorem :: COMPUT_1:65
+ i in dom p implies
+ (p+*(i,m+1) in dom primrec(f1,f2,i) iff
+      p+*(i,m) in dom primrec(f1,f2,i) &
+      (p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*> in dom f2);
+
+theorem :: COMPUT_1:66
+ i in dom p & p+*(i,m+1) in dom primrec(f1,f2,i) implies
+ primrec(f1,f2,i).(p+*(i,m+1)) =
+                   f2.((p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*>);
+
+theorem :: COMPUT_1:67
+ f1 is len-total & f2 is len-total & arity f1 +2 = arity f2 &
+ 1 <= i & i <= 1+arity f1 implies
+primrec(f1,f2,i).(p+*(i,m+1)) = f2.((p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*>)
+;
+
+theorem :: COMPUT_1:68
+arity f1+2 = arity f2 & 1 <= i & i <= arity f1+1 implies
+ primrec(f1,f2,i) is_primitive-recursively_expressed_by f1,f2,i;
+
+theorem :: COMPUT_1:69
+  1 <= i & i <= arity f1+1 implies
+ for g being Element of HFuncs NAT
+  st g is_primitive-recursively_expressed_by f1,f2,i holds g = primrec(f1,f2,i)
+;
+
+begin :: The set of primitive recursive functions
+
+definition
+ let X be set;
+ attr X is composition_closed means
+:: COMPUT_1:def 15
+for f being Element of HFuncs NAT,
+     F being with_the_same_arity FinSequence of HFuncs NAT
+ st f in X & arity f = len F & rng F c= X holds f*<:F:> in X;
+ attr X is primitive-recursion_closed means
+:: COMPUT_1:def 16
+for g,f1,f2 being Element of HFuncs NAT, i being Nat
+ st g is_primitive-recursively_expressed_by f1,f2,i & f1 in X & f2 in X
+  holds g in X;
+end;
+
+definition
+ let X be set;
+ attr X is primitive-recursively_closed means
+:: COMPUT_1:def 17
+  0 const 0 in X & 1 succ 1 in X &
+  (for n,i being Nat st 1 <= i & i <= n holds n proj i in X) &
+  X is composition_closed & X is primitive-recursion_closed;
+end;
+
+theorem :: COMPUT_1:70
+HFuncs NAT is primitive-recursively_closed;
+
+definition
+cluster primitive-recursively_closed non empty Subset of HFuncs NAT;
+end;
+
+reserve P for primitive-recursively_closed non empty Subset of HFuncs NAT;
+
+theorem :: COMPUT_1:71
+for g being Element of HFuncs NAT
+ st e1 = {} & g is_primitive-recursively_expressed_by e1, e2, i holds g = {};
+
+theorem :: COMPUT_1:72
+for g being Element of HFuncs(NAT),
+    f1, f2 being quasi_total Element of HFuncs(NAT), i being Nat
+ st g is_primitive-recursively_expressed_by f1, f2, i
+  holds g is quasi_total & (f1 is non empty implies g is non empty);
+
+theorem :: COMPUT_1:73
+n const c in P;
+
+theorem :: COMPUT_1:74
+1 <= i & i <= n implies n succ i in P;
+
+theorem :: COMPUT_1:75
+{} in P;
+
+theorem :: COMPUT_1:76
+for f being Element of P, F being with_the_same_arity FinSequence of P
+ st arity f = len F holds f*<:F:> in P;
+
+theorem :: COMPUT_1:77
+ for f1,f2 being Element of P st arity f1+2 = arity f2
+ for i being Nat st 1 <= i & i <= arity f1+1 holds primrec(f1,f2,i) in P;
+
+definition
+ func PrimRec -> Subset of HFuncs(NAT) equals
+:: COMPUT_1:def 18
+ meet { R where R is Element of bool HFuncs(NAT) :
+                R is primitive-recursively_closed };
+end;
+
+theorem :: COMPUT_1:78
+for X being Subset of HFuncs(NAT) st X is primitive-recursively_closed
+ holds PrimRec c= X;
+
+definition
+ cluster PrimRec -> non empty primitive-recursively_closed;
+end;
+
+definition
+ cluster -> homogeneous Element of PrimRec;
+
+end;
+
+definition
+ let x be set;
+ attr x is primitive-recursive means
+:: COMPUT_1:def 19
+x in PrimRec;
+end;
+
+definition
+ cluster primitive-recursive -> Relation-like Function-like set;
+end;
+
+definition
+ cluster primitive-recursive -> homogeneous to-naturals from-natural-fseqs
+                                Relation;
+end;
+
+definition
+ cluster -> primitive-recursive Element of PrimRec;
+end;
+
+definition
+ cluster primitive-recursive Function;
+ cluster primitive-recursive Element of HFuncs NAT;
+end;
+
+definition
+ func initial-funcs -> Subset of HFuncs NAT equals
+:: COMPUT_1:def 20
+  {0 const 0, 1 succ 1} \/ {n proj i where n,i is Nat: 1 <= i & i <= n};
+ let Q be Subset of HFuncs NAT;
+ func PR-closure Q -> Subset of HFuncs NAT equals
+:: COMPUT_1:def 21
+  Q \/ {g where g is Element of HFuncs NAT:
+         ex f1,f2 being Element of HFuncs NAT, i being Nat
+          st f1 in Q & f2 in Q &
+             g is_primitive-recursively_expressed_by f1,f2,i};
+ func composition-closure Q -> Subset of HFuncs NAT equals
+:: COMPUT_1:def 22
+  Q \/ {f*<:F:> where f is Element of HFuncs NAT,
+           F is with_the_same_arity Element of (HFuncs NAT)*:
+       f in Q & arity f = len F & rng F c= Q};
+end;
+ func PrimRec-Approximation -> Function of NAT, bool HFuncs NAT means
+:: COMPUT_1:def 23
+  it.0 = initial-funcs &
+  for m being Nat
+   holds it.(m+1) = (PR-closure (it.m)) \/ (composition-closure (it.m));
+end;
+
+theorem :: COMPUT_1:79
+m <= n implies PrimRec-Approximation.m c= PrimRec-Approximation.n;
+
+theorem :: COMPUT_1:80
+Union PrimRec-Approximation is primitive-recursively_closed;
+
+theorem :: COMPUT_1:81
+PrimRec = Union PrimRec-Approximation;
+
+theorem :: COMPUT_1:82
+for f being Element of HFuncs(NAT)
+ st f in PrimRec-Approximation.m holds f is quasi_total;
+
+definition
+ cluster -> quasi_total homogeneous Element of PrimRec;
+end;
+
+definition
+ cluster primitive-recursive -> quasi_total Element of HFuncs NAT;
+end;
+
+definition
+ cluster primitive-recursive -> len-total (from-natural-fseqs Function);
+ cluster non empty Element of PrimRec;
+end;
+
+begin :: Examples
+
+definition
+ let f be homogeneous Relation;
+ attr f is nullary means
+:: COMPUT_1:def 24
+arity f = 0;
+ attr f is unary means
+:: COMPUT_1:def 25
+arity f = 1;
+ attr f is binary means
+:: COMPUT_1:def 26
+arity f = 2;
+ attr f is 3-ary means
+:: COMPUT_1:def 27
+arity f = 3;
+end;
+
+definition
+ cluster unary -> non empty (homogeneous Function);
+ cluster binary -> non empty (homogeneous Function);
+ cluster 3-ary -> non empty (homogeneous Function);
+end;
+
+definition
+ cluster 1 proj 1 -> primitive-recursive;
+ cluster 2 proj 1 -> primitive-recursive;
+ cluster 2 proj 2 -> primitive-recursive;
+ cluster 1 succ 1 -> primitive-recursive;
+ cluster 3 succ 3 -> primitive-recursive;
+
+ let i be Nat;
+ cluster 0 const i -> nullary;
+ cluster 1 const i -> unary;
+ cluster 2 const i -> binary;
+ cluster 3 const i -> 3-ary;
+ cluster 1 proj i -> unary;
+ cluster 2 proj i -> binary;
+ cluster 3 proj i -> 3-ary;
+ cluster 1 succ i -> unary;
+ cluster 2 succ i -> binary;
+ cluster 3 succ i -> 3-ary;
+
+ let j be Nat;
+ cluster i const j -> primitive-recursive;
+end;
+
+definition
+ cluster nullary primitive-recursive non empty (homogeneous Function);
+ cluster unary primitive-recursive (homogeneous Function);
+ cluster binary primitive-recursive (homogeneous Function);
+ cluster 3-ary primitive-recursive (homogeneous Function);
+end;
+
+definition
+  cluster non empty nullary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+  cluster non empty unary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+  cluster non empty binary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+  cluster non empty 3-ary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+end;
+
+definition
+ let f be nullary non empty (primitive-recursive Function);
+ let g be binary (primitive-recursive Function);
+ cluster primrec(f,g,1) -> primitive-recursive unary;
+end;
+
+definition
+ let f be unary (primitive-recursive Function);
+ let g be 3-ary (primitive-recursive Function);
+ cluster primrec(f,g,1) -> primitive-recursive binary;
+ cluster primrec(f,g,2) -> primitive-recursive binary;
+end;
+
+theorem :: COMPUT_1:83
+for f1 be unary len-total to-naturals
+          (homogeneous from-natural-fseqs Function),
+    f2 be non empty to-naturals homogeneous from-natural-fseqs Function
+ holds primrec(f1,f2,2).<*i,0*> = f1.<*i*>;
+
+theorem :: COMPUT_1:84
+f1 is len-total & arity f1 = 0 implies primrec(f1,f2,1).<*0*> = f1.{};
+
+theorem :: COMPUT_1:85
+for f1 being unary len-total to-naturals
+              (homogeneous from-natural-fseqs Function),
+    f2 being 3-ary len-total to-naturals
+              (homogeneous from-natural-fseqs Function)
+ holds primrec(f1,f2,2).<*i,j+1*> = f2.<*i,j,primrec(f1,f2,2).<*i,j*>*>;
+
+theorem :: COMPUT_1:86
+f1 is len-total & f2 is len-total & arity f1 = 0 & arity f2 = 2
+ implies primrec(f1,f2,1).<*i+1*> = f2.<*i,primrec(f1,f2,1).<*i*>*>;
+
+definition
+ let g be Function;
+ func (1,2)->(1,?,2) g -> Function equals
+:: COMPUT_1:def 28
+ g * <:<*3 proj 1, 3 proj 3*>:>;
+end;
+
+definition
+ let g be to-naturals from-natural-fseqs Function;
+ cluster (1,2)->(1,?,2) g -> to-naturals from-natural-fseqs;
+end;
+
+definition
+ let g be homogeneous Function;
+ cluster (1,2)->(1,?,2) g -> homogeneous;
+end;
+
+definition
+ let g be binary len-total to-naturals
+          (homogeneous from-natural-fseqs Function);
+ cluster (1,2)->(1,?,2) g -> non empty 3-ary len-total;
+end;
+
+theorem :: COMPUT_1:87
+for f being binary len-total to-naturals
+            (homogeneous from-natural-fseqs Function)
+ holds ((1,2)->(1,?,2) f).<*i,j,k*> = f.<*i,k*>;
+
+theorem :: COMPUT_1:88
+for g being binary (primitive-recursive Function)
+ holds (1,2)->(1,?,2) g in PrimRec;
+
+definition
+ let f be binary primitive-recursive (homogeneous Function);
+ cluster (1,2)->(1,?,2) f -> primitive-recursive 3-ary;
+end;
+
+definition
+ func [+] -> binary (primitive-recursive Function) equals
+:: COMPUT_1:def 29
+  primrec(1 proj 1, 3 succ 3, 2);
+end;
+
+theorem :: COMPUT_1:89
+[+].<*i,j*> = i+j;
+
+definition
+ func [*] -> binary (primitive-recursive Function) equals
+:: COMPUT_1:def 30
+  primrec(1 const 0, (1,2)->(1,?,2) [+], 2);
+end;
+
+theorem :: COMPUT_1:90
+for i, j being Nat holds [*].<*i,j*> = i*j;
+
+definition
+ let g,h be binary primitive-recursive (homogeneous Function);
+ cluster <*g,h*> -> with_the_same_arity;
+end;
+
+definition
+ let f,g,h be binary (primitive-recursive Function);
+ cluster f*<:<*g,h*>:> -> primitive-recursive;
+end;
+
+definition
+ let f,g,h be binary (primitive-recursive Function);
+ cluster f*<:<*g,h*>:> -> binary;
+end;
+
+definition
+ let f be unary (primitive-recursive Function);
+ let g be primitive-recursive Function;
+ cluster f*<:<*g*>:> -> primitive-recursive;
+end;
+
+definition
+ let f be unary (primitive-recursive Function);
+ let g be binary (primitive-recursive Function);
+ cluster f*<:<*g*>:> -> binary;
+end;
+
+definition
+ func [!] -> unary (primitive-recursive Function) equals
+:: COMPUT_1:def 31
+ primrec(0 const 1, [*]*<:<*(1 succ 1)*<:<*2 proj 1*>:>, 2 proj 2*>:>, 1);
+end;
+
+scheme Primrec1{F() -> unary len-total to-naturals
+                       (homogeneous from-natural-fseqs Function),
+                G() -> binary len-total to-naturals
+                       (homogeneous from-natural-fseqs Function),
+                f(set) -> Nat, g(set,set) -> Nat}:
+for i, j being Nat holds (F()*<:<*G()*>:>).<*i,j*> = f(g(i,j))
+provided
+ for i being Nat holds F().<*i*> = f(i) and
+ for i,j being Nat holds G().<*i,j*> = g(i,j);
+
+scheme Primrec2{F,G,H() -> binary len-total to-naturals
+                           (homogeneous from-natural-fseqs Function),
+                f,g,h(set,set) -> Nat}:
+for i, j being Nat holds (F()*<:<*G(),H()*>:>).<*i,j*> = f(g(i,j),h(i,j))
+provided
+ for i,j being Nat holds F().<*i,j*> = f(i,j) and
+ for i,j being Nat holds G().<*i,j*> = g(i,j) and
+ for i,j being Nat holds H().<*i,j*> = h(i,j);
+
+theorem :: COMPUT_1:91
+  [!].<*i*> = i!;
+
+definition
+ func [^] -> binary (primitive-recursive Function) equals
+:: COMPUT_1:def 32
+  primrec(1 const 1, (1,2)->(1,?,2) [*], 2);
+end;
+
+theorem :: COMPUT_1:92
+  [^].<*i,j*> = i |^ j;
+
+definition
+ func [pred] -> unary (primitive-recursive Function) equals
+:: COMPUT_1:def 33
+   primrec(0 const 0, 2 proj 1, 1);
+end;
+
+theorem :: COMPUT_1:93
+[pred].<*0*> = 0 & [pred].<*i+1*> = i;
+
+definition
+ func [-] -> binary (primitive-recursive Function) equals
+:: COMPUT_1:def 34
+primrec(1 proj 1, (1,2)->(1,?,2) ([pred]*<:<*2 proj 2*>:>), 2);
+end;
+
+theorem :: COMPUT_1:94
+  [-].<*i,j*> = i -' j;
+

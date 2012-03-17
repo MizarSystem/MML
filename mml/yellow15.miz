@@ -1,0 +1,1580 @@
+:: Components and Basis of Topological Spaces
+::  by Robert Milewski
+::
+:: Received June 22, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, RELAT_1, SETFAM_1, MARGREL1, FINSET_1, FINSEQ_2,
+      CARD_3, REALSET1, CQC_LANG, BOOLE, CANTOR_1, VALUAT_1, CARD_1, TARSKI,
+      EQREL_1, ORDERS_1, SUBSET_1, WAYBEL23, YELLOW_0, LATTICES, ORDINAL2,
+      WAYBEL_0, WAYBEL_3, WAYBEL_8, COMPTS_1, TSP_1, PRE_TOPC, YELLOW15,
+      RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, SETFAM_1, STRUCT_0,
+      FINSET_1, MARGREL1, VALUAT_1, GROUP_1, RELAT_1, FUNCT_1, FUNCT_2,
+      REALSET1, FINSEQ_1, FINSEQ_2, FINSEQ_4, EQREL_1, CQC_LANG, CARD_1,
+      CARD_3, PRE_TOPC, TSP_1, TOPS_2, CANTOR_1, ORDERS_1, YELLOW_0, WAYBEL_0,
+      WAYBEL_3, WAYBEL_8, WAYBEL23;
+ constructors GROUP_1, FINSEQ_4, TSP_1, TOPS_2, CANTOR_1, WAYBEL_8, WAYBEL23,
+      DOMAIN_1, REALSET1, VALUAT_1, MEMBERED;
+ clusters STRUCT_0, RELSET_1, FUNCT_1, FINSET_1, MARGREL1, FINSEQ_1, FINSEQ_2,
+      CARD_5, TSP_1, TOPS_1, CANTOR_1, LATTICE3, WAYBEL_0, WAYBEL_3, WAYBEL_7,
+      WAYBEL11, WAYBEL23, SUBSET_1, ARYTM_3, SETFAM_1, VALUAT_1, REALSET1,
+      TEX_2, SCMRING1, ZFMISC_1;
+ requirements NUMERALS, REAL, SUBSET, BOOLE;
+ definitions TARSKI, FUNCT_1, VALUAT_1, XBOOLE_0;
+ theorems TARSKI, STRUCT_0, SETFAM_1, ZFMISC_1, FINSET_1, MARGREL1, RELAT_1,
+      FUNCT_1, FUNCT_2, FUNCT_6, MSSUBFAM, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      FINSEQ_4, EQREL_1, CATALG_1, CQC_LANG, CARD_1, CARD_4, T_0TOPSP, GROUP_1,
+      PRE_TOPC, TOPS_2, CANTOR_1, MSSCYC_1, YELLOW_0, YELLOW_8, YELLOW_9,
+      WAYBEL_0, WAYBEL_3, WAYBEL_8, WAYBEL23, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, PRE_CIRC, FINSEQ_1, FRAENKEL;
+
+begin  :: Preliminaries
+
+  scheme SeqLambda1C{ i() -> Nat, D() -> non empty set, C[set], F(set)->set,
+                      G(set)->set } :
+   ex p be FinSequence of D() st
+    len p = i() &
+    for i be Nat st i in Seg i() holds
+     (C[i] implies p.i = F(i)) & (not C[i] implies p.i = G(i))
+   provided
+    A1: for i be Nat st i in Seg i() holds
+     (C[i] implies F(i) in D()) & (not C[i] implies G(i) in D())
+   proof
+     defpred c[set] means C[$1];
+     deffunc f(set) = F($1);
+     deffunc g(set) = G($1);
+    A2: for x be set st x in Seg i() holds
+     (c[x] implies f(x) in D()) & (not c[x] implies g(x) in D()) by A1;
+    consider p be Function of Seg i(),D() such that
+     A3: for x be set st x in Seg i() holds
+     (c[x] implies p.x = f(x)) & (not c[x] implies p.x = g(x))
+                                                           from Lambda1C(A2);
+    A4: dom p = Seg i() by FUNCT_2:def 1;
+    then reconsider p as FinSequence by FINSEQ_1:def 2;
+      rng p c= D() by RELSET_1:12;
+    then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
+    take p;
+    thus thesis by A3,A4,FINSEQ_1:def 3;
+   end;
+
+  definition
+   let X be set;
+   let p be FinSequence of bool X;
+   redefine func rng p -> Subset-Family of X;
+   coherence
+   proof
+      rng p c= bool X by FINSEQ_1:def 4;
+    hence rng p is Subset-Family of X by SETFAM_1:def 7;
+   end;
+  end;
+
+  definition
+   cluster BOOLEAN -> finite;
+   coherence by MARGREL1:def 12;
+  end;
+
+canceled;
+
+  theorem Th2:
+   for i be Nat
+   for D be finite set holds
+    i-tuples_on D is finite
+   proof
+    let i be Nat;
+    let D be finite set;
+    per cases;
+     suppose D is non empty;
+      then A1: product (i |-> D) = i-tuples_on D by FUNCT_6:9;
+        now let x be set;
+       assume x in dom (i |-> D);
+       then x in Seg i by FINSEQ_2:68;
+       hence (i |-> D).x is finite by FINSEQ_2:70;
+      end;
+      hence i-tuples_on D is finite by A1,MSSCYC_1:1;
+     suppose A2: D is empty;
+        now per cases;
+       suppose i <> 0;
+        hence i-tuples_on D is finite by A2,CATALG_1:7;
+       suppose i = 0;
+        then i-tuples_on D = { <*>D } by FINSEQ_2:112;
+        hence i-tuples_on D is finite;
+      end;
+      hence i-tuples_on D is finite;
+   end;
+
+  theorem Th3:
+   for T be finite set
+   for S be Subset-Family of T holds
+    S is finite
+   proof
+    let T be finite set;
+    let S be Subset-Family of T;
+      bool T is finite by FINSET_1:24;
+    hence S is finite by FINSET_1:13;
+   end;
+
+  definition
+   let T be finite set;
+   cluster -> finite Subset-Family of T;
+   coherence by Th3;
+  end;
+
+  definition
+   let T be finite 1-sorted;
+   cluster -> finite Subset-Family of T;
+   coherence
+   proof
+      the carrier of T is finite by GROUP_1:def 13;
+    hence thesis by Th3;
+   end;
+  end;
+
+  theorem Th4:
+   for X be non trivial set
+   for x being Element of X
+   ex y be set st y in X & x <> y
+   proof
+    let X be non trivial set;
+    let x be Element of X;
+      ex y be set st y in X & y <> x
+    proof
+     assume A1: for y be set holds not y in X or y = x;
+     A2: X c= {x}
+     proof
+      let z be set;
+      assume z in X;
+      then z = x by A1;
+      hence z in {x} by TARSKI:def 1;
+     end;
+       {x} c= X by ZFMISC_1:37;
+     hence contradiction by A2,XBOOLE_0:def 10;
+    end;
+    then consider y be set such that
+     A3: y in X and
+     A4: y <> x;
+    take y;
+    thus thesis by A3,A4;
+   end;
+
+begin  :: Components
+
+  definition
+   let X be set;
+   let p be FinSequence of bool X;
+   let q be FinSequence of BOOLEAN;
+   func MergeSequence(p,q) -> FinSequence of bool X means :Def1:
+    len it = len p &
+    for i be Nat st i in dom p holds it.i = IFEQ(q.i,TRUE,p.i,X\p.i);
+   existence
+   proof deffunc F(Nat) = IFEQ(q.$1,TRUE,p.$1,X\p.$1);
+    consider r be FinSequence such that
+     A1: len r = len p and
+     A2: for i be Nat st i in Seg len p holds r.i = F(i) from SeqLambda;
+      rng r c= bool X
+    proof
+     let z be set;
+     assume z in rng r;
+     then consider i be Nat such that
+      A3: i in dom r and
+      A4: r.i = z by FINSEQ_2:11;
+     A5: i in Seg len p by A1,A3,FINSEQ_1:def 3;
+     then A6: z = IFEQ(q.i,TRUE,p.i,X\p.i) by A2,A4;
+     A7: i in dom p by A5,FINSEQ_1:def 3;
+       now per cases;
+      suppose q.i = TRUE;
+       then z = p.i by A6,CQC_LANG:def 1;
+       hence z in bool X by A7,FINSEQ_2:13;
+      suppose q.i <> TRUE;
+       then z = X\p.i by A6,CQC_LANG:def 1;
+       then z c= X by XBOOLE_1:36;
+       hence z in bool X;
+     end;
+     hence z in bool X;
+    end;
+    then reconsider r as FinSequence of bool X by FINSEQ_1:def 4;
+    take r;
+      dom p = Seg len p by FINSEQ_1:def 3;
+    hence thesis by A1,A2;
+   end;
+   uniqueness
+   proof
+    let r1,r2 be FinSequence of bool X such that
+     A8: len r1 = len p and
+     A9: for i be Nat st i in dom p holds r1.i = IFEQ(q.i,TRUE,p.i,X\p.i) and
+     A10: len r2 = len p and
+     A11: for i be Nat st i in dom p holds r2.i = IFEQ(q.i,TRUE,p.i,X\p.i);
+      now let i be Nat;
+     assume i in Seg len p;
+     then A12: i in dom p by FINSEQ_1:def 3;
+     hence r1.i = IFEQ(q.i,TRUE,p.i,X\p.i) by A9
+        .= r2.i by A11,A12;
+    end;
+    hence r1 = r2 by A8,A10,FINSEQ_2:10;
+   end;
+  end;
+
+  theorem Th5:
+   for X be set
+   for p be FinSequence of bool X
+   for q be FinSequence of BOOLEAN holds
+    dom MergeSequence(p,q) = dom p
+   proof
+    let X be set;
+    let p be FinSequence of bool X;
+    let q be FinSequence of BOOLEAN;
+    thus dom MergeSequence(p,q) =
+          Seg len MergeSequence(p,q) by FINSEQ_1:def 3
+       .= Seg len p by Def1
+       .= dom p by FINSEQ_1:def 3;
+   end;
+
+  theorem Th6:
+   for X be set
+   for p be FinSequence of bool X
+   for q be FinSequence of BOOLEAN
+   for i be Nat st q.i = TRUE holds
+    MergeSequence(p,q).i = p.i
+   proof
+    let X be set;
+    let p be FinSequence of bool X;
+    let q be FinSequence of BOOLEAN;
+    let i be Nat;
+    assume A1: q.i = TRUE;
+      now per cases;
+     suppose i in dom p;
+      hence MergeSequence(p,q).i = IFEQ(q.i,TRUE,p.i,X\p.i) by Def1
+         .= p.i by A1,CQC_LANG:def 1;
+     suppose A2: not i in dom p;
+        dom p = Seg len p by FINSEQ_1:def 3
+           .= Seg len MergeSequence(p,q) by Def1
+           .= dom MergeSequence(p,q) by FINSEQ_1:def 3;
+      hence MergeSequence(p,q).i = {} by A2,FUNCT_1:def 4
+         .= p.i by A2,FUNCT_1:def 4;
+    end;
+    hence thesis;
+   end;
+
+  theorem Th7:
+   for X be set
+   for p be FinSequence of bool X
+   for q be FinSequence of BOOLEAN
+   for i be Nat st i in dom p & q.i = FALSE holds
+    MergeSequence(p,q).i = X\p.i
+   proof
+    let X be set;
+    let p be FinSequence of bool X;
+    let q be FinSequence of BOOLEAN;
+    let i be Nat;
+    assume that
+     A1: i in dom p and
+     A2: q.i = FALSE;
+    thus MergeSequence(p,q).i = IFEQ(q.i,TRUE,p.i,X\p.i) by A1,Def1
+       .= X\p.i by A2,CQC_LANG:def 1,MARGREL1:38;
+   end;
+
+  theorem
+     for X be set
+   for q be FinSequence of BOOLEAN holds
+    len MergeSequence(<*>(bool X),q) = 0
+   proof
+    let X be set;
+    let q be FinSequence of BOOLEAN;
+    thus len MergeSequence(<*>(bool X),q) = len <*>(bool X) by Def1
+       .= 0 by FINSEQ_1:32;
+   end;
+
+  theorem Th9:
+   for X be set
+   for q be FinSequence of BOOLEAN holds
+    MergeSequence(<*>(bool X),q) = <*>(bool X)
+   proof
+    let X be set;
+    let q be FinSequence of BOOLEAN;
+      len MergeSequence(<*>(bool X),q) = len <*>(bool X) by Def1
+       .= 0 by FINSEQ_1:32;
+    hence MergeSequence(<*>(bool X),q) = <*>(bool X) by FINSEQ_1:32;
+   end;
+
+  theorem
+     for X be set
+   for x be Element of bool X
+   for q be FinSequence of BOOLEAN holds
+    len MergeSequence(<*x*>,q) = 1
+   proof
+    let X be set;
+    let x be Element of bool X;
+    let q be FinSequence of BOOLEAN;
+    thus len MergeSequence(<*x*>,q) = len <*x*> by Def1
+       .= 1 by FINSEQ_1:56;
+   end;
+
+  theorem
+     for X be set
+   for x be Element of bool X
+   for q be FinSequence of BOOLEAN holds
+    (q.1 = TRUE implies MergeSequence(<*x*>,q).1 = x) &
+    (q.1 = FALSE implies MergeSequence(<*x*>,q).1 = X\x)
+   proof
+    let X be set;
+    let x be Element of bool X;
+    let q be FinSequence of BOOLEAN;
+    thus q.1 = TRUE implies MergeSequence(<*x*>,q).1 = x
+    proof
+     assume q.1 = TRUE;
+     hence MergeSequence(<*x*>,q).1 = <*x*>.1 by Th6
+        .= x by FINSEQ_1:57;
+    end;
+      1 in Seg 1 by FINSEQ_1:3;
+    then A1: 1 in dom <*x*> by FINSEQ_1:55;
+    assume q.1 = FALSE;
+    hence MergeSequence(<*x*>,q).1 = X\<*x*>.1 by A1,Th7
+       .= X\x by FINSEQ_1:57;
+   end;
+
+  theorem
+     for X be set
+   for x,y be Element of bool X
+   for q be FinSequence of BOOLEAN holds
+    len MergeSequence(<*x,y*>,q) = 2
+   proof
+    let X be set;
+    let x,y be Element of bool X;
+    let q be FinSequence of BOOLEAN;
+    thus len MergeSequence(<*x,y*>,q) = len <*x,y*> by Def1
+       .= 2 by FINSEQ_1:61;
+   end;
+
+  theorem
+     for X be set
+   for x,y be Element of bool X
+   for q be FinSequence of BOOLEAN holds
+    (q.1 = TRUE implies MergeSequence(<*x,y*>,q).1 = x) &
+    (q.1 = FALSE implies MergeSequence(<*x,y*>,q).1 = X\x) &
+    (q.2 = TRUE implies MergeSequence(<*x,y*>,q).2 = y) &
+    (q.2 = FALSE implies MergeSequence(<*x,y*>,q).2 = X\y)
+   proof
+    let X be set;
+    let x,y be Element of bool X;
+    let q be FinSequence of BOOLEAN;
+    thus q.1 = TRUE implies MergeSequence(<*x,y*>,q).1 = x
+    proof
+     assume q.1 = TRUE;
+     hence MergeSequence(<*x,y*>,q).1 = <*x,y*>.1 by Th6
+        .= x by FINSEQ_1:61;
+    end;
+      1 in Seg 2 by FINSEQ_1:3;
+    then A1: 1 in dom <*x,y*> by FINSEQ_3:29;
+    thus q.1 = FALSE implies MergeSequence(<*x,y*>,q).1 = X\x
+    proof
+     assume q.1 = FALSE;
+     hence MergeSequence(<*x,y*>,q).1 = X\<*x,y*>.1 by A1,Th7
+        .= X\x by FINSEQ_1:61;
+    end;
+    thus q.2 = TRUE implies MergeSequence(<*x,y*>,q).2 = y
+    proof
+     assume q.2 = TRUE;
+     hence MergeSequence(<*x,y*>,q).2 = <*x,y*>.2 by Th6
+        .= y by FINSEQ_1:61;
+    end;
+      2 in Seg 2 by FINSEQ_1:3;
+    then A2: 2 in dom <*x,y*> by FINSEQ_3:29;
+    assume q.2 = FALSE;
+    hence MergeSequence(<*x,y*>,q).2 = X\<*x,y*>.2 by A2,Th7
+       .= X\y by FINSEQ_1:61;
+   end;
+
+  theorem
+     for X be set
+   for x,y,z be Element of bool X
+   for q be FinSequence of BOOLEAN holds
+    len MergeSequence(<*x,y,z*>,q) = 3
+   proof
+    let X be set;
+    let x,y,z be Element of bool X;
+    let q be FinSequence of BOOLEAN;
+    thus len MergeSequence(<*x,y,z*>,q) = len <*x,y,z*> by Def1
+       .= 3 by FINSEQ_1:62;
+   end;
+
+  theorem
+     for X be set
+   for x,y,z be Element of bool X
+   for q be FinSequence of BOOLEAN holds
+    (q.1 = TRUE implies MergeSequence(<*x,y,z*>,q).1 = x) &
+    (q.1 = FALSE implies MergeSequence(<*x,y,z*>,q).1 = X\x) &
+    (q.2 = TRUE implies MergeSequence(<*x,y,z*>,q).2 = y) &
+    (q.2 = FALSE implies MergeSequence(<*x,y,z*>,q).2 = X\y) &
+    (q.3 = TRUE implies MergeSequence(<*x,y,z*>,q).3 = z) &
+    (q.3 = FALSE implies MergeSequence(<*x,y,z*>,q).3 = X\z)
+   proof
+    let X be set;
+    let x,y,z be Element of bool X;
+    let q be FinSequence of BOOLEAN;
+    thus q.1 = TRUE implies MergeSequence(<*x,y,z*>,q).1 = x
+    proof
+     assume q.1 = TRUE;
+     hence MergeSequence(<*x,y,z*>,q).1 = <*x,y,z*>.1 by Th6
+        .= x by FINSEQ_1:62;
+    end;
+      1 in Seg 3 by FINSEQ_1:3;
+    then A1: 1 in dom <*x,y,z*> by FINSEQ_3:30;
+    thus q.1 = FALSE implies MergeSequence(<*x,y,z*>,q).1 = X\x
+    proof
+     assume q.1 = FALSE;
+     hence MergeSequence(<*x,y,z*>,q).1 = X\<*x,y,z*>.1 by A1,Th7
+        .= X\x by FINSEQ_1:62;
+    end;
+    thus q.2 = TRUE implies MergeSequence(<*x,y,z*>,q).2 = y
+    proof
+     assume q.2 = TRUE;
+     hence MergeSequence(<*x,y,z*>,q).2 = <*x,y,z*>.2 by Th6
+        .= y by FINSEQ_1:62;
+    end;
+      2 in Seg 3 by FINSEQ_1:3;
+    then A2: 2 in dom <*x,y,z*> by FINSEQ_3:30;
+    thus q.2 = FALSE implies MergeSequence(<*x,y,z*>,q).2 = X\y
+    proof
+     assume q.2 = FALSE;
+     hence MergeSequence(<*x,y,z*>,q).2 = X\<*x,y,z*>.2 by A2,Th7
+        .= X\y by FINSEQ_1:62;
+    end;
+    thus q.3 = TRUE implies MergeSequence(<*x,y,z*>,q).3 = z
+    proof
+     assume q.3 = TRUE;
+     hence MergeSequence(<*x,y,z*>,q).3 = <*x,y,z*>.3 by Th6
+        .= z by FINSEQ_1:62;
+    end;
+      3 in Seg 3 by FINSEQ_1:3;
+    then A3: 3 in dom <*x,y,z*> by FINSEQ_3:30;
+    assume q.3 = FALSE;
+    hence MergeSequence(<*x,y,z*>,q).3 = X\<*x,y,z*>.3 by A3,Th7
+       .= X\z by FINSEQ_1:62;
+   end;
+
+  theorem Th16:
+   for X be set
+   for p be FinSequence of bool X holds
+    { Intersect (rng MergeSequence(p,q)) where
+     q is FinSequence of BOOLEAN : len q = len p } is Subset-Family of X
+   proof
+    let X be set;
+    let p be FinSequence of bool X;
+      { Intersect (rng MergeSequence(p,q)) where
+     q is FinSequence of BOOLEAN : len q = len p } c= bool X
+    proof
+     let z be set;
+     assume z in { Intersect (rng MergeSequence(p,q)) where
+      q is FinSequence of BOOLEAN : len q = len p };
+     then consider q be FinSequence of BOOLEAN such that
+      A1: z = Intersect (rng MergeSequence(p,q)) and
+        len q = len p;
+     thus z in bool X by A1;
+    end;
+    hence thesis by SETFAM_1:def 7;
+   end;
+
+definition
+ cluster -> boolean-valued FinSequence of BOOLEAN;
+ coherence
+  proof let f be FinSequence of BOOLEAN;
+   thus rng f c= BOOLEAN by FINSEQ_1:def 4;
+  end;
+end;
+
+  definition
+   let X be set;
+   let Y be finite Subset-Family of X;
+   func Components(Y) -> Subset-Family of X means :Def2:
+    ex p be FinSequence of bool X st
+     len p = card Y & rng p = Y &
+     it = { Intersect (rng MergeSequence(p,q)) where
+      q is FinSequence of BOOLEAN : len q = len p };
+   existence
+   proof
+    consider p be FinSequence such that
+     A1: rng p = Y and
+     A2: p is one-to-one by FINSEQ_4:73;
+    reconsider p as FinSequence of bool X by A1,FINSEQ_1:def 4;
+    reconsider C = { Intersect (rng MergeSequence(p,q)) where
+     q is FinSequence of BOOLEAN : len q = len p } as Subset-Family of X
+                                                                     by Th16;
+    take C,p;
+    thus thesis by A1,A2,FINSEQ_4:77;
+   end;
+   uniqueness
+   proof
+    let C1,C2 be Subset-Family of X such that
+     A3: ex p be FinSequence of bool X st
+      len p = card Y & rng p = Y &
+      C1 = { Intersect (rng MergeSequence(p,q)) where
+       q is FinSequence of BOOLEAN : len q = len p } and
+     A4: ex p be FinSequence of bool X st
+      len p = card Y & rng p = Y &
+      C2 = { Intersect (rng MergeSequence(p,q)) where
+       q is FinSequence of BOOLEAN : len q = len p };
+    consider p1 be FinSequence of bool X such that
+     A5: len p1 = card Y and
+     A6: rng p1 = Y and
+     A7: C1 = { Intersect (rng MergeSequence(p1,q)) where
+      q is FinSequence of BOOLEAN : len q = len p1 } by A3;
+    consider p2 be FinSequence of bool X such that
+     A8: len p2 = card Y and
+     A9: rng p2 = Y and
+     A10: C2 = { Intersect (rng MergeSequence(p2,q)) where
+      q is FinSequence of BOOLEAN : len q = len p2 } by A4;
+      now 
+      A12: p1 is one-to-one by A5,A6,FINSEQ_4:77;
+      A13: p2 is one-to-one by A8,A9,FINSEQ_4:77;
+        now let P be Subset of X;
+       thus P in C1 implies P in C2
+       proof
+        assume P in C1;
+        then consider q be FinSequence of BOOLEAN such that
+         A14: P = Intersect (rng MergeSequence(p1,q)) and
+         A15: len q = len p1 by A7;
+        A16: dom p1 = Seg len q by A15,FINSEQ_1:def 3
+           .= dom q by FINSEQ_1:def 3;
+        A18: p2 is FinSequence of rng p1 by A6,A9,FINSEQ_1:def 4;
+        A19: q is Function of dom p1,BOOLEAN by A16,FINSEQ_2:30;
+          p1 is Function of dom p1,rng p1 by FUNCT_2:3;
+        then p1" is Function of rng p1,dom p1 by A12,FUNCT_2:31;
+        then p1"*p2 is FinSequence of dom p1 by A18,FINSEQ_2:36;
+        then q*(p1"*p2) is FinSequence of BOOLEAN by A19,FINSEQ_2:36;
+        then reconsider q1 = q*p1"*p2 as FinSequence of BOOLEAN by RELAT_1:55;
+        A20: q1*p2"*p1 = q*p1"*p2*(p2"*p1) by RELAT_1:55
+           .= q*p1"*(p2*(p2"*p1)) by RELAT_1:55
+           .= q*p1"*(p2*p2"*p1) by RELAT_1:55
+           .= q*p1"*((id rng p2)*p1) by A13,FUNCT_1:61
+           .= q*p1"*p1 by A6,A9,FUNCT_1:42
+           .= q*(p1"*p1) by RELAT_1:55
+           .= q*(id dom p1) by A12,FUNCT_1:61
+           .= q by A16,FUNCT_1:42;
+        A21: rng p2 = dom (p1") by A6,A9,A12,FUNCT_1:55;
+        then A22: rng (p1"*p2) = rng (p1") by RELAT_1:47
+           .= dom q by A12,A16,FUNCT_1:55;
+          dom (p1"*p2) = dom p2 by A21,RELAT_1:46;
+        then A23: dom (q*(p1"*p2)) = dom p2 by A22,RELAT_1:46;
+        A24: Seg len q1 = dom q1 by FINSEQ_1:def 3
+           .= dom p2 by A23,RELAT_1:55
+           .= Seg len p2 by FINSEQ_1:def 3;
+        then A25: len q1 = len p2 by FINSEQ_1:8;
+        A26: dom p2 = Seg len q1 by A24,FINSEQ_1:def 3
+           .= dom q1 by FINSEQ_1:def 3;
+        A27: rng p1 = dom (p2") by A6,A9,A13,FUNCT_1:55;
+        then A28: rng (p2"*p1) = rng (p2") by RELAT_1:47
+           .= dom q1 by A13,A26,FUNCT_1:55;
+          dom (p2"*p1) = dom p1 by A27,RELAT_1:46;
+        then A29: dom (q1*(p2"*p1)) = dom p1 by A28,RELAT_1:46;
+        A30: rng MergeSequence(p1,q) c= rng MergeSequence(p2,q1)
+        proof
+         let z be set;
+         assume z in rng MergeSequence(p1,q);
+         then consider j be Nat such that
+          A31: j in dom MergeSequence(p1,q) and
+          A32: MergeSequence(p1,q).j = z by FINSEQ_2:11;
+           j in Seg len MergeSequence(p1,q) by A31,FINSEQ_1:def 3;
+         then A33: j in Seg len p1 by Def1;
+         then A34: j in dom p1 by FINSEQ_1:def 3;
+         then A35: j in dom (p2"*p1) by A27,RELAT_1:46;
+         then (p2"*p1).j in rng (p2"*p1) by FUNCT_1:def 5;
+         then (p2"*p1).j in rng (p2") by FUNCT_1:25;
+         then A36: (p2"*p1).j in dom p2 by A13,FUNCT_1:55;
+         then (p2"*p1).j in Seg len p2 by FINSEQ_1:def 3;
+         then (p2"*p1).j in Seg len MergeSequence(p2,q1) by Def1;
+         then A37: (p2"*p1).j in dom MergeSequence(p2,q1) by FINSEQ_1:def 3;
+         A38: j in dom (q1*(p2"*p1)) by A29,A33,FINSEQ_1:def 3;
+         A39: q.j = (q1*(p2"*p1)).j by A20,RELAT_1:55
+            .= q1.((p2"*p1).j) by A38,FUNCT_1:22;
+         reconsider pj = (p2"*p1).j as Nat by A36;
+           now per cases;
+          suppose A40: q.j = TRUE;
+           hence MergeSequence(p2,q1).((p2"*p1).j) = p2.pj by A39,Th6
+              .= (p2*(p2"*p1)).j by A35,FUNCT_1:23
+              .= (p2*p2"*p1).j by RELAT_1:55
+              .= (id(rng p1)*p1).j by A6,A9,A13,FUNCT_1:61
+              .= p1.j by FUNCT_1:42
+              .= z by A32,A40,Th6;
+          suppose not q.j = TRUE;
+           then A41: q.j = FALSE by MARGREL1:39;
+           hence MergeSequence(p2,q1).((p2"*p1).j) =
+                 X\p2.pj by A36,A39,Th7
+              .= X\(p2*(p2"*p1)).j by A35,FUNCT_1:23
+              .= X\(p2*p2"*p1).j by RELAT_1:55
+              .= X\(id(rng p1)*p1).j by A6,A9,A13,FUNCT_1:61
+              .= X\p1.j by FUNCT_1:42
+              .= z by A32,A34,A41,Th7;
+         end;
+         hence z in rng MergeSequence(p2,q1) by A37,FUNCT_1:def 5;
+        end;
+          rng MergeSequence(p2,q1) c= rng MergeSequence(p1,q)
+        proof
+         let z be set;
+         assume z in rng MergeSequence(p2,q1);
+         then consider j be Nat such that
+          A42: j in dom MergeSequence(p2,q1) and
+          A43: MergeSequence(p2,q1).j = z by FINSEQ_2:11;
+           j in Seg len MergeSequence(p2,q1) by A42,FINSEQ_1:def 3;
+         then A44: j in Seg len p2 by Def1;
+         then A45: j in dom p2 by FINSEQ_1:def 3;
+         then A46: j in dom (p1"*p2) by A21,RELAT_1:46;
+         then (p1"*p2).j in rng (p1"*p2) by FUNCT_1:def 5;
+         then (p1"*p2).j in rng (p1") by FUNCT_1:25;
+         then A47: (p1"*p2).j in dom p1 by A12,FUNCT_1:55;
+         then (p1"*p2).j in Seg len p1 by FINSEQ_1:def 3;
+         then (p1"*p2).j in Seg len MergeSequence(p1,q) by Def1;
+         then A48: (p1"*p2).j in dom MergeSequence(p1,q) by FINSEQ_1:def 3;
+         A49: j in dom (q*(p1"*p2)) by A23,A44,FINSEQ_1:def 3;
+         A50: q1.j = (q*(p1"*p2)).j by RELAT_1:55
+            .= q.((p1"*p2).j) by A49,FUNCT_1:22;
+         reconsider pj = (p1"*p2).j as Nat by A47;
+           now per cases;
+          suppose A51: q1.j = TRUE;
+           hence MergeSequence(p1,q).((p1"*p2).j) = p1.pj by A50,Th6
+              .= (p1*(p1"*p2)).j by A46,FUNCT_1:23
+              .= (p1*p1"*p2).j by RELAT_1:55
+              .= (id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:61
+              .= p2.j by FUNCT_1:42
+              .= z by A43,A51,Th6;
+          suppose not q1.j = TRUE;
+           then A52: q1.j = FALSE by MARGREL1:39;
+           hence MergeSequence(p1,q).((p1"*p2).j) = X\p1.pj by A47,A50,Th7
+              .= X\(p1*(p1"*p2)).j by A46,FUNCT_1:23
+              .= X\(p1*p1"*p2).j by RELAT_1:55
+              .= X\(id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:61
+              .= X\p2.j by FUNCT_1:42
+              .= z by A43,A45,A52,Th7;
+         end;
+         hence z in rng MergeSequence(p1,q) by A48,FUNCT_1:def 5;
+        end;
+        then P = Intersect (rng MergeSequence(p2,q1)) by A14,A30,XBOOLE_0:def
+10;
+        hence P in C2 by A10,A25;
+       end;
+       thus P in C2 implies P in C1
+       proof
+        assume P in C2;
+        then consider q be FinSequence of BOOLEAN such that
+         A53: P = Intersect (rng MergeSequence(p2,q)) and
+         A54: len q = len p2 by A10;
+        A55: dom p2 = Seg len q by A54,FINSEQ_1:def 3
+           .= dom q by FINSEQ_1:def 3;
+        A57: p1 is FinSequence of rng p2 by A6,A9,FINSEQ_1:def 4;
+        A58: q is Function of dom p2,BOOLEAN by A55,FINSEQ_2:30;
+          p2 is Function of dom p2,rng p2 by FUNCT_2:3;
+        then p2" is Function of rng p2,dom p2 by A13,FUNCT_2:31;
+        then p2"*p1 is FinSequence of dom p2 by A57,FINSEQ_2:36;
+        then q*(p2"*p1) is FinSequence of BOOLEAN by A58,FINSEQ_2:36;
+        then reconsider q1 = q*p2"*p1 as FinSequence of BOOLEAN by RELAT_1:55;
+        A59: q1*p1"*p2 = q*p2"*p1*(p1"*p2) by RELAT_1:55
+           .= q*p2"*(p1*(p1"*p2)) by RELAT_1:55
+           .= q*p2"*(p1*p1"*p2) by RELAT_1:55
+           .= q*p2"*((id rng p1)*p2) by A12,FUNCT_1:61
+           .= q*p2"*p2 by A6,A9,FUNCT_1:42
+           .= q*(p2"*p2) by RELAT_1:55
+           .= q*(id dom p2) by A13,FUNCT_1:61
+           .= q by A55,FUNCT_1:42;
+        A60: rng p1 = dom (p2") by A6,A9,A13,FUNCT_1:55;
+        then A61: rng (p2"*p1) = rng (p2") by RELAT_1:47
+           .= dom q by A13,A55,FUNCT_1:55;
+          dom (p2"*p1) = dom p1 by A60,RELAT_1:46;
+        then A62: dom (q*(p2"*p1)) = dom p1 by A61,RELAT_1:46;
+        A63: Seg len q1 = dom q1 by FINSEQ_1:def 3
+           .= dom p1 by A62,RELAT_1:55
+           .= Seg len p1 by FINSEQ_1:def 3;
+        then A64: len q1 = len p1 by FINSEQ_1:8;
+        A65: dom p1 = Seg len q1 by A63,FINSEQ_1:def 3
+           .= dom q1 by FINSEQ_1:def 3;
+        A66: rng p2 = dom (p1") by A6,A9,A12,FUNCT_1:55;
+        then A67: rng (p1"*p2) = rng (p1") by RELAT_1:47
+           .= dom q1 by A12,A65,FUNCT_1:55;
+          dom (p1"*p2) = dom p2 by A66,RELAT_1:46;
+        then A68: dom (q1*(p1"*p2)) = dom p2 by A67,RELAT_1:46;
+        A69: rng MergeSequence(p2,q) c= rng MergeSequence(p1,q1)
+        proof
+         let z be set;
+         assume z in rng MergeSequence(p2,q);
+         then consider j be Nat such that
+          A70: j in dom MergeSequence(p2,q) and
+          A71: MergeSequence(p2,q).j = z by FINSEQ_2:11;
+           j in Seg len MergeSequence(p2,q) by A70,FINSEQ_1:def 3;
+         then A72: j in Seg len p2 by Def1;
+         then A73: j in dom p2 by FINSEQ_1:def 3;
+         then A74: j in dom (p1"*p2) by A66,RELAT_1:46;
+         then (p1"*p2).j in rng (p1"*p2) by FUNCT_1:def 5;
+         then (p1"*p2).j in rng (p1") by FUNCT_1:25;
+         then A75: (p1"*p2).j in dom p1 by A12,FUNCT_1:55;
+         then (p1"*p2).j in Seg len p1 by FINSEQ_1:def 3;
+         then (p1"*p2).j in Seg len MergeSequence(p1,q1) by Def1;
+         then A76: (p1"*p2).j in dom MergeSequence(p1,q1) by FINSEQ_1:def 3;
+         A77: j in dom (q1*(p1"*p2)) by A68,A72,FINSEQ_1:def 3;
+         A78: q.j = (q1*(p1"*p2)).j by A59,RELAT_1:55
+            .= q1.((p1"*p2).j) by A77,FUNCT_1:22;
+         reconsider pj = (p1"*p2).j as Nat by A75;
+           now per cases;
+          suppose A79: q.j = TRUE;
+           hence MergeSequence(p1,q1).((p1"*p2).j) = p1.pj by A78,Th6
+              .= (p1*(p1"*p2)).j by A74,FUNCT_1:23
+              .= (p1*p1"*p2).j by RELAT_1:55
+              .= (id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:61
+              .= p2.j by FUNCT_1:42
+              .= z by A71,A79,Th6;
+          suppose not q.j = TRUE;
+           then A80: q.j = FALSE by MARGREL1:39;
+           hence MergeSequence(p1,q1).((p1"*p2).j) =
+                 X\p1.pj by A75,A78,Th7
+              .= X\(p1*(p1"*p2)).j by A74,FUNCT_1:23
+              .= X\(p1*p1"*p2).j by RELAT_1:55
+              .= X\(id(rng p2)*p2).j by A6,A9,A12,FUNCT_1:61
+              .= X\p2.j by FUNCT_1:42
+              .= z by A71,A73,A80,Th7;
+         end;
+         hence z in rng MergeSequence(p1,q1) by A76,FUNCT_1:def 5;
+        end;
+          rng MergeSequence(p1,q1) c= rng MergeSequence(p2,q)
+        proof
+         let z be set;
+         assume z in rng MergeSequence(p1,q1);
+         then consider j be Nat such that
+          A81: j in dom MergeSequence(p1,q1) and
+          A82: MergeSequence(p1,q1).j = z by FINSEQ_2:11;
+           j in Seg len MergeSequence(p1,q1) by A81,FINSEQ_1:def 3;
+         then A83: j in Seg len p1 by Def1;
+         then A84: j in dom p1 by FINSEQ_1:def 3;
+         then A85: j in dom (p2"*p1) by A60,RELAT_1:46;
+         then (p2"*p1).j in rng (p2"*p1) by FUNCT_1:def 5;
+         then (p2"*p1).j in rng (p2") by FUNCT_1:25;
+         then A86: (p2"*p1).j in dom p2 by A13,FUNCT_1:55;
+         then (p2"*p1).j in Seg len p2 by FINSEQ_1:def 3;
+         then (p2"*p1).j in Seg len MergeSequence(p2,q) by Def1;
+         then A87: (p2"*p1).j in dom MergeSequence(p2,q) by FINSEQ_1:def 3;
+         A88: j in dom (q*(p2"*p1)) by A62,A83,FINSEQ_1:def 3;
+         A89: q1.j = (q*(p2"*p1)).j by RELAT_1:55
+            .= q.((p2"*p1).j) by A88,FUNCT_1:22;
+         reconsider pj = (p2"*p1).j as Nat by A86;
+           now per cases;
+          suppose A90: q1.j = TRUE;
+           hence MergeSequence(p2,q).((p2"*p1).j) = p2.pj by A89,Th6
+              .= (p2*(p2"*p1)).j by A85,FUNCT_1:23
+              .= (p2*p2"*p1).j by RELAT_1:55
+              .= (id(rng p1)*p1).j by A6,A9,A13,FUNCT_1:61
+              .= p1.j by FUNCT_1:42
+              .= z by A82,A90,Th6;
+          suppose not q1.j = TRUE;
+           then A91: q1.j = FALSE by MARGREL1:39;
+           hence MergeSequence(p2,q).((p2"*p1).j) = X\p2.pj by A86,A89,Th7
+              .= X\(p2*(p2"*p1)).j by A85,FUNCT_1:23
+              .= X\(p2*p2"*p1).j by RELAT_1:55
+              .= X\(id(rng p1)*p1).j by A6,A9,A13,FUNCT_1:61
+              .= X\p1.j by FUNCT_1:42
+              .= z by A82,A84,A91,Th7;
+         end;
+         hence z in rng MergeSequence(p2,q) by A87,FUNCT_1:def 5;
+        end;
+        then P = Intersect (rng MergeSequence(p1,q1)) by A53,A69,XBOOLE_0:def
+10;
+        hence P in C1 by A7,A64;
+       end;
+      end;
+      hence C1 = C2 by SETFAM_1:44;
+    end;
+    hence thesis;
+   end;
+  end;
+
+  definition
+   let X be set;
+   let Y be finite Subset-Family of X;
+   cluster Components(Y) -> finite;
+   coherence
+   proof
+    consider p be FinSequence of bool X such that
+       len p = card Y and
+       rng p = Y and
+     A1: Components(Y) = { Intersect (rng MergeSequence(p,q)) where
+      q is FinSequence of BOOLEAN : len q = len p } by Def2;
+    A2: len p-tuples_on BOOLEAN is finite by Th2;
+     deffunc F(Element of BOOLEAN*) = Intersect (rng MergeSequence(p,$1));
+    A3: { F(q) where q is Element of BOOLEAN* :
+     q in len p-tuples_on BOOLEAN } is finite from FraenkelFin(A2);
+      Components(Y) c= { Intersect (rng MergeSequence(p,q))
+     where q is Element of BOOLEAN* : q in len p-tuples_on BOOLEAN }
+    proof
+     let z be set;
+     assume z in Components(Y);
+     then consider q be FinSequence of BOOLEAN such that
+      A4: z = Intersect (rng MergeSequence(p,q)) and
+      A5: len q = len p by A1;
+     A6: q is Element of BOOLEAN* by FINSEQ_1:def 11;
+       q is Element of len q-tuples_on BOOLEAN by FINSEQ_2:110;
+     hence z in { Intersect (rng MergeSequence(p,q1)) where q1 is
+      Element of BOOLEAN* : q1 in len p-tuples_on BOOLEAN } by A4,A5,A6;
+    end;
+    hence thesis by A3,FINSET_1:13;
+   end;
+  end;
+
+  theorem Th17:
+   for X be set
+   for Y be empty Subset-Family of X holds
+    Components(Y) = {X}
+   proof
+    let X be set;
+    let Y be empty Subset-Family of X;
+    consider p be FinSequence of bool X such that
+     A1: len p = card Y and
+     A2: rng p = Y and
+     A3: Components(Y) = { Intersect (rng MergeSequence(p,q)) where
+      q is FinSequence of BOOLEAN : len q = len p } by Def2;
+    thus Components(Y) = {X}
+    proof
+     thus Components(Y) c= {X}
+     proof
+      let z be set;
+      assume z in Components(Y);
+      then consider q be FinSequence of BOOLEAN such that
+       A4: z = Intersect (rng MergeSequence(p,q)) and
+         len q = len p by A3;
+        p = <*>(bool X) by A2,FINSEQ_1:27;
+      then MergeSequence(p,q) = <*>(bool X) by Th9;
+      then rng MergeSequence(p,q) = {} by FINSEQ_1:27;
+      then Intersect (rng MergeSequence(p,q)) = X by CANTOR_1:def 3;
+      hence z in {X} by A4,TARSKI:def 1;
+     end;
+     let z be set;
+     assume z in {X};
+     then A5: z = X by TARSKI:def 1;
+       p = <*>(bool X) by A2,FINSEQ_1:27;
+     then MergeSequence(p,<*>(BOOLEAN)) = <*>(bool X) by Th9;
+     then rng MergeSequence(p,<*>(BOOLEAN)) = {} by FINSEQ_1:27;
+     then Intersect (rng MergeSequence(p,<*>(BOOLEAN))) = X
+                                                          by CANTOR_1:def 3;
+     hence z in Components(Y) by A1,A3,A5;
+    end;
+   end;
+
+  theorem
+     for X be set
+   for Y,Z be finite Subset-Family of X st Z c= Y holds
+    Components(Y) is_finer_than Components(Z)
+   proof
+    let X be set;
+    let Y,Z be finite Subset-Family of X;
+    assume A1: Z c= Y;
+      now let V be set;
+     consider p be FinSequence of bool X such that
+      A2: len p = card Y and
+      A3: rng p = Y and
+      A4: Components(Y) = { Intersect (rng MergeSequence(p,q)) where
+       q is FinSequence of BOOLEAN : len q = len p } by Def2;
+     consider p1 be FinSequence of bool X such that
+        len p1 = card Z and
+      A5: rng p1 = Z and
+      A6: Components(Z) = { Intersect (rng MergeSequence(p1,q)) where
+       q is FinSequence of BOOLEAN : len q = len p1 } by Def2;
+     assume V in Components(Y);
+     then consider q be FinSequence of BOOLEAN such that
+      A7: V = Intersect (rng MergeSequence(p,q)) and
+      A8: len q = len p by A4;
+     A9: p is one-to-one by A2,A3,FINSEQ_4:77;
+       now 
+       A11: p1 is FinSequence of rng p by A1,A3,A5,FINSEQ_1:def 4;
+         dom p = dom q by A8,FINSEQ_3:31;
+       then A12: q is Function of dom p,BOOLEAN by FINSEQ_2:30;
+         p is Function of dom p,rng p by FUNCT_2:3;
+       then p" is Function of rng p,dom p by A9,FUNCT_2:31;
+       then p"*p1 is FinSequence of dom p by A11,FINSEQ_2:36;
+       hence q*(p"*p1) is FinSequence of BOOLEAN by A12,FINSEQ_2:36;
+     end;
+     then reconsider q1 = q*p"*p1 as FinSequence of BOOLEAN by RELAT_1:55;
+     reconsider W = Intersect (rng MergeSequence(p1,q1)) as set;
+     take W;
+     A13: rng p1 c= dom (p") by A1,A3,A5,A9,FUNCT_1:55;
+       rng (p") = dom p by A9,FUNCT_1:55
+        .= dom q by A8,FINSEQ_3:31;
+     then A14: rng (p"*p1) c= dom q by RELAT_1:45;
+       dom q1 = dom (q*(p"*p1)) by RELAT_1:55
+        .= dom (p"*p1) by A14,RELAT_1:46
+        .= dom p1 by A13,RELAT_1:46;
+     then len q1 = len p1 by FINSEQ_3:31;
+     hence W in Components(Z) by A6;
+       rng MergeSequence(p1,q1) c= rng MergeSequence(p,q)
+     proof
+      let z be set;
+      assume z in rng MergeSequence(p1,q1);
+      then consider i be Nat such that
+       A15: i in dom MergeSequence(p1,q1) and
+       A16: MergeSequence(p1,q1).i = z by FINSEQ_2:11;
+      A17: i in dom p1 by A15,Th5;
+      then A18: i in dom (p"*p1) by A13,RELAT_1:46;
+      then (p"*p1).i in rng (p"*p1) by FUNCT_1:def 5;
+      then A19: (p"*p1).i in rng (p") by FUNCT_1:25;
+      then A20: (p"*p1).i in dom p by A9,FUNCT_1:55;
+      then reconsider j = (p"*p1).i as Nat;
+      A21: q.j = (q*(p"*p1)).i by A18,FUNCT_1:23
+         .= q1.i by RELAT_1:55;
+      A22: p1 is Function of dom p1,rng p by A1,A3,A5,FUNCT_2:4;
+      A23: rng p = {} implies dom p1 = {}
+      proof
+       assume rng p = {};
+       then rng p1 = {} by A1,A3,A5,XBOOLE_1:3;
+       hence dom p1 = {} by RELAT_1:65;
+      end;
+      A24: j in dom p by A9,A19,FUNCT_1:55;
+      A25: now per cases;
+       suppose A26: q.j = TRUE;
+        hence MergeSequence(p,q).j = p.j by Th6
+           .= (p*(p"*p1)).i by A18,FUNCT_1:23
+           .= (p*p"*p1).i by RELAT_1:55
+           .= ((id rng p)*p1).i by A9,FUNCT_1:61
+           .= p1.i by A22,A23,FUNCT_2:23
+           .= z by A16,A21,A26,Th6;
+       suppose q.j <> TRUE;
+        then A27: q.j = FALSE by MARGREL1:39;
+        hence MergeSequence(p,q).j = X\p.j by A24,Th7
+           .= X\(p*(p"*p1)).i by A18,FUNCT_1:23
+           .= X\(p*p"*p1).i by RELAT_1:55
+           .= X\((id rng p)*p1).i by A9,FUNCT_1:61
+           .= X\p1.i by A22,A23,FUNCT_2:23
+           .= z by A16,A17,A21,A27,Th7;
+      end;
+        j in dom MergeSequence(p,q) by A20,Th5;
+      hence z in rng MergeSequence(p,q) by A25,FUNCT_1:def 5;
+     end;
+     hence V c= W by A7,CANTOR_1:11;
+    end;
+    hence Components(Y) is_finer_than Components(Z) by SETFAM_1:def 2;
+   end;
+
+  theorem Th19:
+   for X be set
+   for Y be finite Subset-Family of X holds
+    union Components(Y) = X
+   proof
+    let X be set;
+    let Y be finite Subset-Family of X;
+      X c= union Components(Y)
+    proof
+     let z be set;
+     assume A1: z in X;
+     consider p be FinSequence of bool X such that
+        len p = card Y and
+        rng p = Y and
+      A2: Components(Y) = { Intersect (rng MergeSequence(p,q)) where
+       q is FinSequence of BOOLEAN : len q = len p } by Def2;
+     defpred C[set] means z in p.$1;
+     deffunc T(set) = TRUE;
+     deffunc F(set) = FALSE;
+     A3: for i be Nat st i in Seg len p holds
+      (C[i] implies T(i) in BOOLEAN) &
+      (not C[i] implies F(i) in BOOLEAN);
+     consider q be FinSequence of BOOLEAN such that
+      A4: len q = len p and
+      A5: for i be Nat st i in Seg len p holds
+       (C[i] implies q.i = T(i)) &
+       (not C[i] implies q.i = F(i)) from SeqLambda1C(A3);
+       now let Z be set;
+      assume Z in rng MergeSequence(p,q);
+      then consider i be Nat such that
+       A6: i in dom MergeSequence(p,q) and
+       A7: MergeSequence(p,q).i = Z by FINSEQ_2:11;
+      A8: dom MergeSequence(p,q) = dom p by Th5;
+      then A9: dom MergeSequence(p,q) = Seg len p by FINSEQ_1:def 3;
+        now per cases;
+       suppose A10: z in p.i;
+        then q.i = TRUE by A5,A6,A9;
+        hence z in Z by A7,A10,Th6;
+       suppose A11: not z in p.i;
+        then q.i = FALSE by A5,A6,A9;
+        then MergeSequence(p,q).i = X\p.i by A6,A8,Th7;
+        hence z in Z by A1,A7,A11,XBOOLE_0:def 4;
+      end;
+      hence z in Z;
+     end;
+     then A12: z in Intersect (rng MergeSequence(p,q)) by A1,CANTOR_1:10;
+       Intersect (rng MergeSequence(p,q)) in Components(Y) by A2,A4;
+     hence z in union Components(Y) by A12,TARSKI:def 4;
+    end;
+    hence union Components(Y) = X by XBOOLE_0:def 10;
+   end;
+
+  theorem Th20:
+   for X be set
+   for Y be finite Subset-Family of X
+   for A,B be set st A in Components(Y) & B in Components(Y) & A <> B holds
+    A misses B
+   proof
+    let X be set;
+    let Y be finite Subset-Family of X;
+    let A,B be set;
+    assume that
+     A1: A in Components(Y) and
+     A2: B in Components(Y) and
+     A3: A <> B;
+    consider p be FinSequence of bool X such that
+       len p = card Y and
+       rng p = Y and
+     A4: Components(Y) = { Intersect (rng MergeSequence(p,q)) where
+      q is FinSequence of BOOLEAN : len q = len p } by Def2;
+    consider q1 be FinSequence of BOOLEAN such that
+     A5: A = Intersect (rng MergeSequence(p,q1)) and
+        len q1 = len p by A1,A4;
+    consider q2 be FinSequence of BOOLEAN such that
+     A6: B = Intersect (rng MergeSequence(p,q2)) and
+        len q2 = len p by A2,A4;
+    assume A /\ B <> {};
+    then consider z be set such that
+     A7: z in A /\ B by XBOOLE_0:def 1;
+    A8: z in A & z in B by A7,XBOOLE_0:def 3;
+    A9: len MergeSequence(p,q1) = len p & len MergeSequence(p,q2) = len p
+                                                                     by Def1;
+      now let i be Nat;
+     assume i in Seg len p;
+     then A10: i in dom p by FINSEQ_1:def 3;
+     then i in dom MergeSequence(p,q1) & i in dom MergeSequence(p,q2) by Th5;
+     then MergeSequence(p,q1).i in rng MergeSequence(p,q1) &
+          MergeSequence(p,q2).i in rng MergeSequence(p,q2) by FUNCT_1:def 5;
+     then A11: z in MergeSequence(p,q1).i & z in MergeSequence(p,q2).i
+          by A5,A6,A8,CANTOR_1:10;
+       now per cases;
+      suppose q1.i = TRUE;
+       then A12: MergeSequence(p,q1).i = p.i by Th6;
+         q2.i = TRUE
+       proof
+        assume not q2.i = TRUE;
+        then q2.i = FALSE by MARGREL1:39;
+        then MergeSequence(p,q2).i = X\p.i by A10,Th7;
+        hence contradiction by A11,A12,XBOOLE_0:def 4;
+       end;
+       hence MergeSequence(p,q1).i = MergeSequence(p,q2).i by A12,Th6;
+      suppose not q1.i = TRUE;
+       then q1.i = FALSE by MARGREL1:39;
+       then A13: MergeSequence(p,q1).i = X\p.i by A10,Th7;
+         q2.i = FALSE
+       proof
+        assume not q2.i = FALSE;
+        then q2.i = TRUE by MARGREL1:39;
+        then MergeSequence(p,q2).i = p.i by Th6;
+        hence contradiction by A11,A13,XBOOLE_0:def 4;
+       end;
+       hence MergeSequence(p,q1).i = MergeSequence(p,q2).i by A10,A13,Th7;
+     end;
+     hence MergeSequence(p,q1).i = MergeSequence(p,q2).i;
+    end;
+    hence contradiction by A3,A5,A6,A9,FINSEQ_2:10;
+   end;
+
+  definition
+   let X be set;
+   let Y be finite Subset-Family of X;
+   attr Y is in_general_position means :Def3:
+    not {} in Components(Y);
+  end;
+
+  theorem
+     for X be set
+   for Y,Z be finite Subset-Family of X st
+    Z is in_general_position & Y c= Z holds
+     Y is in_general_position
+   proof
+    let X be set;
+    let Y,Z be finite Subset-Family of X such that
+     A1: Z is in_general_position and
+     A2: Y c= Z;
+    A3: not {} in Components(Z) by A1,Def3;
+      not {} in Components(Y)
+    proof
+     consider p be FinSequence of bool X such that
+      A4: len p = card Y and
+      A5: rng p = Y and
+      A6: Components(Y) = { Intersect (rng MergeSequence(p,q)) where
+       q is FinSequence of BOOLEAN : len q = len p } by Def2;
+     consider p1 be FinSequence of bool X such that
+      A7: len p1 = card Z and
+      A8: rng p1 = Z and
+      A9: Components(Z) = { Intersect (rng MergeSequence(p1,q)) where
+       q is FinSequence of BOOLEAN : len q = len p1 } by Def2;
+     A10: p is one-to-one by A4,A5,FINSEQ_4:77;
+     A11: p1 is one-to-one by A7,A8,FINSEQ_4:77;
+     assume {} in Components(Y);
+     then consider q be FinSequence of BOOLEAN such that
+      A12: {} = Intersect (rng MergeSequence(p,q)) and
+      A13: len q = len p by A6;
+     A14: rng p1 = dom (p1") by A11,FUNCT_1:55;
+     A15: rng p = dom (p") & dom p = rng (p") by A10,FUNCT_1:55;
+     defpred C[set] means p1.$1 in rng p;
+     deffunc F(set) = (q*p"*p1).$1;
+     deffunc T(set) = TRUE;
+     A16: for i be Nat st i in Seg len p1 holds
+      (C[i] implies F(i) in BOOLEAN) &
+      (not C[i] implies T(i) in BOOLEAN)
+     proof
+      let i be Nat;
+      assume i in Seg len p1;
+      then A17: i in dom p1 by FINSEQ_1:def 3;
+      thus p1.i in rng p implies (q*p"*p1).i in BOOLEAN
+      proof
+       assume A18: p1.i in rng p;
+       A19: rng q c= BOOLEAN by FINSEQ_1:def 4;
+         rng (q*p"*p1) = rng (q*(p"*p1)) by RELAT_1:55;
+       then rng (q*p"*p1) c= rng q by RELAT_1:45;
+       then A20: rng (q*p"*p1) c= BOOLEAN by A19,XBOOLE_1:1;
+         dom (q*p") c= rng p by A15,RELAT_1:44;
+       then dom (q*p") c= rng p1 by A2,A5,A8,XBOOLE_1:1;
+       then A21: rng (q*p") = rng (q*p"*p1) by RELAT_1:47;
+         rng (p") = dom q by A13,A15,FINSEQ_3:31;
+       then p1.i in dom (q*p") by A15,A18,RELAT_1:46;
+       then (q*p").(p1.i) in rng (q*p") by FUNCT_1:def 5;
+       then (q*p"*p1).i in rng (q*p"*p1) by A17,A21,FUNCT_1:23;
+       hence (q*p"*p1).i in BOOLEAN by A20;
+      end;
+      thus thesis;
+     end;
+     consider q1 be FinSequence of BOOLEAN such that
+      A22: len q1 = len p1 and
+      A23: for i be Nat st i in Seg len p1 holds
+       (C[i] implies q1.i = F(i)) &
+       (not C[i] implies q1.i = T(i)) from SeqLambda1C(A16);
+       rng MergeSequence(p,q) c= rng MergeSequence(p1,q1)
+     proof
+      let z be set;
+      assume z in rng MergeSequence(p,q);
+      then consider i be Nat such that
+       A24: i in dom MergeSequence(p,q) and
+       A25: MergeSequence(p,q).i = z by FINSEQ_2:11;
+        i in Seg len MergeSequence(p,q) by A24,FINSEQ_1:def 3;
+      then i in Seg len p by Def1;
+      then A26: i in dom p by FINSEQ_1:def 3;
+      then A27: i in dom (p1"*p) by A2,A5,A8,A14,RELAT_1:46;
+      then (p1"*p).i in rng (p1"*p) by FUNCT_1:def 5;
+      then A28: (p1"*p).i in rng (p1") by FUNCT_1:25;
+      then A29: (p1"*p).i in dom p1 by A11,FUNCT_1:55;
+      then reconsider j = (p1"*p).i as Nat;
+      A30: j in dom MergeSequence(p1,q1) by A29,Th5;
+      A31: j in Seg len p1 by A29,FINSEQ_1:def 3;
+      A32: j in dom p1 by A11,A28,FUNCT_1:55;
+        p1.j = (p1*(p1"*p)).i by A27,FUNCT_1:23
+         .= (p1*p1"*p).i by RELAT_1:55
+         .= ((id rng p1)*p).i by A11,FUNCT_1:61
+         .= p.i by A2,A5,A8,RELAT_1:79;
+      then p1.j in rng p by A26,FUNCT_1:def 5;
+      then A33: q1.j = (q*p"*p1).((p1"*p).i) by A23,A31
+         .= (q*p"*p1*(p1"*p)).i by A27,FUNCT_1:23
+         .= (q*p"*(p1*(p1"*p))).i by RELAT_1:55
+         .= (q*p"*(p1*p1"*p)).i by RELAT_1:55
+         .= (q*p"*((id rng p1)*p)).i by A11,FUNCT_1:61
+         .= (q*p"*p).i by A2,A5,A8,RELAT_1:79
+         .= (q*(p"*p)).i by RELAT_1:55
+         .= (q*(id dom p)).i by A10,FUNCT_1:61
+         .= (q*(id dom q)).i by A13,FINSEQ_3:31
+         .= q.i by FUNCT_1:42;
+        now per cases;
+       suppose A34: q.i = TRUE;
+        hence z = p.i by A25,Th6
+           .= ((id rng p1)*p).i by A2,A5,A8,RELAT_1:79
+           .= (p1*p1"*p).i by A11,FUNCT_1:61
+           .= (p1*(p1"*p)).i by RELAT_1:55
+           .= p1.j by A27,FUNCT_1:23
+           .= MergeSequence(p1,q1).j by A33,A34,Th6;
+       suppose not q.i = TRUE;
+        then A35: q.i = FALSE by MARGREL1:39;
+        hence z = X\p.i by A25,A26,Th7
+           .= X\((id rng p1)*p).i by A2,A5,A8,RELAT_1:79
+           .= X\(p1*p1"*p).i by A11,FUNCT_1:61
+           .= X\(p1*(p1"*p)).i by RELAT_1:55
+           .= X\p1.j by A27,FUNCT_1:23
+           .= MergeSequence(p1,q1).j by A32,A33,A35,Th7;
+      end;
+      hence z in rng MergeSequence(p1,q1) by A30,FUNCT_1:def 5;
+     end;
+     then Intersect (rng MergeSequence(p1,q1)) c=
+      Intersect (rng MergeSequence(p,q)) by CANTOR_1:11;
+     then {} = Intersect (rng MergeSequence(p1,q1)) by A12,XBOOLE_1:3;
+     hence contradiction by A3,A9,A22;
+    end;
+    hence Y is in_general_position by Def3;
+   end;
+
+  theorem
+     for X be non empty set
+   for Y be empty Subset-Family of X holds
+    Y is in_general_position
+   proof
+    let X be non empty set;
+    let Y be empty Subset-Family of X;
+      not {} in {X} by TARSKI:def 1;
+    then not {} in Components(Y) by Th17;
+    hence Y is in_general_position by Def3;
+   end;
+
+  theorem
+     for X be non empty set
+   for Y be finite Subset-Family of X st Y is in_general_position holds
+    Components(Y) is a_partition of X
+   proof
+    let X be non empty set;
+    let Y be finite Subset-Family of X;
+    assume A1: Y is in_general_position;
+    A2: union Components(Y) = X by Th19;
+      for A be Subset of X st A in Components(Y) holds A <> {} &
+     for B be Subset of X st B in Components(Y) holds A = B or A misses B
+     by A1,Def3,Th20;
+    hence Components(Y) is a_partition of X by A2,EQREL_1:def 6;
+   end;
+
+begin  :: About basis of Topological Spaces
+
+  theorem Th24:
+   for L be non empty RelStr holds
+    [#]L is infs-closed sups-closed
+   proof
+    let L be non empty RelStr;
+      now let X be Subset of [#]L;
+     assume ex_inf_of X,L;
+       "/\"(X,L) in the carrier of L;
+     hence "/\"(X,L) in [#]L by PRE_TOPC:12;
+    end;
+    hence [#]L is infs-closed by WAYBEL23:19;
+      now let X be Subset of [#]L;
+     assume ex_sup_of X,L;
+       "\/"(X,L) in the carrier of L;
+     hence "\/"(X,L) in [#]L by PRE_TOPC:12;
+    end;
+    hence [#]L is sups-closed by WAYBEL23:20;
+   end;
+
+  theorem Th25:
+   for L be non empty RelStr holds
+    [#]L is with_bottom with_top
+   proof
+    let L be non empty RelStr;
+      Bottom L in the carrier of L;
+    then Bottom L in [#]L by PRE_TOPC:12;
+    hence [#]L is with_bottom by WAYBEL23:def 8;
+      Top L in the carrier of L;
+    then Top L in [#]L by PRE_TOPC:12;
+    hence [#]L is with_top by WAYBEL23:def 9;
+   end;
+
+  definition
+   let L be non empty RelStr;
+   cluster [#]L -> infs-closed sups-closed with_bottom with_top;
+   coherence by Th24,Th25;
+  end;
+
+  theorem
+     for L be continuous sup-Semilattice holds
+    [#]L is CLbasis of L
+   proof
+    let L be continuous sup-Semilattice;
+      now let x be Element of L;
+       waybelow x c= the carrier of L;
+     then waybelow x c= [#]L by PRE_TOPC:12;
+     then waybelow x /\ [#]L = waybelow x by XBOOLE_1:28;
+     hence x = sup (waybelow x /\ [#]L) by WAYBEL_3:def 5;
+    end;
+    hence [#]L is CLbasis of L by WAYBEL23:def 7;
+   end;
+
+  theorem
+     for L be up-complete (non empty Poset) st L is finite holds
+    the carrier of L = the carrier of CompactSublatt L
+   proof
+    let L be up-complete (non empty Poset);
+    assume A1: L is finite;
+    A2: the carrier of L c= the carrier of CompactSublatt L
+    proof
+     let z be set;
+     assume z in the carrier of L;
+     then reconsider z1 = z as Element of L;
+       z1 is compact by A1,WAYBEL_3:17;
+     hence z in the carrier of CompactSublatt L by WAYBEL_8:def 1;
+    end;
+      the carrier of CompactSublatt L c= the carrier of L by YELLOW_0:def 13;
+    hence the carrier of L = the carrier of CompactSublatt L
+                                                          by A2,XBOOLE_0:def 10
+;
+   end;
+
+  theorem
+     for L be lower-bounded sup-Semilattice
+   for B be Subset of L st B is infinite holds
+    Card B = Card finsups B
+   proof
+    let L be lower-bounded sup-Semilattice;
+    let B be Subset of L;
+    assume A1: B is infinite;
+    then reconsider B1 = B as non empty Subset of L;
+    defpred P[Function, set] means $2 = "\/"(rng $1,L);
+    A2: for p be Element of B1*
+     ex u be Element of finsups B1 st P[p, u]
+    proof
+     let p be Element of B1*;
+     A3: rng p c= B1 by FINSEQ_1:def 4;
+     then rng p c= the carrier of L by XBOOLE_1:1;
+     then A4: rng p is Subset of L;
+       now per cases;
+      suppose rng p is empty;
+       hence ex_sup_of rng p,L by YELLOW_0:42;
+      suppose rng p is non empty;
+       hence ex_sup_of rng p,L by A4,YELLOW_0:54;
+     end;
+     then "\/"(rng p,L) in { "\/"(Y,L) where Y is finite Subset of B1 :
+      ex_sup_of Y,L} by A3;
+     then reconsider u = "\/"(rng p,L) as Element of finsups B1
+                                                         by WAYBEL_0:def 27;
+     take u;
+     thus thesis;
+    end;
+    consider f be Function of B1*,finsups B1 such that
+     A5: for p be Element of B1* holds P[p, f.p] from FuncExD(A2);
+      B c= finsups B
+    proof
+     let z be set;
+     assume A6: z in B;
+     then reconsider z1 = z as Element of L;
+     A7: ex_sup_of {z1},L by YELLOW_0:38;
+     A8: {z1} c= B
+     proof
+      let v be set;
+      assume v in {z1};
+      hence v in B by A6,TARSKI:def 1;
+     end;
+       z = sup {z1} by YELLOW_0:39;
+     then z1 in { "\/"(Y,L) where Y is finite Subset of B : ex_sup_of Y,L }
+                                                                    by A7,A8;
+     hence z in finsups B by WAYBEL_0:def 27;
+    end;
+    then A9: Card B c= Card finsups B by CARD_1:27;
+    A10: dom f = B1* by FUNCT_2:def 1;
+      finsups B c= rng f
+    proof
+     let z be set;
+     assume z in finsups B;
+     then z in { "\/"(Y,L) where Y is finite Subset of B : ex_sup_of Y,L }
+                                                         by WAYBEL_0:def 27;
+     then consider Y be finite Subset of B such that
+      A11: z = "\/"(Y,L) and
+        ex_sup_of Y,L;
+     consider p be FinSequence such that
+      A12: rng p = Y by FINSEQ_1:73;
+     reconsider p as FinSequence of B1 by A12,FINSEQ_1:def 4;
+     reconsider p1 = p as Element of B1* by FINSEQ_1:def 11;
+       f.p1 = "\/"(rng p1,L) by A5;
+     hence z in rng f by A10,A11,A12,FUNCT_1:def 5;
+    end;
+    then Card finsups B1 c= Card (B1*) by A10,CARD_1:28;
+    then Card finsups B1 c= Card B1 by A1,CARD_4:87;
+    hence Card B = Card finsups B by A9,XBOOLE_0:def 10;
+   end;
+
+  theorem
+     for T be T_0 non empty TopSpace holds
+    Card the carrier of T c= Card the topology of T
+   proof
+    let T be T_0 non empty TopSpace;
+    defpred P[Element of T, set] means $2 = [#]T \ Cl {$1};
+    A1: for e be Element of T
+     ex u be Element of the topology of T st P[e, u]
+    proof
+     let e be Element of T;
+       [#]T \ Cl {e} is open by PRE_TOPC:def 6;
+     then reconsider u = [#]T \ Cl {e} as Element of the topology of T
+                                                          by PRE_TOPC:def 5;
+     take u;
+     thus u = [#]T \ Cl {e};
+    end;
+    consider f be Function of the carrier of T, the topology of T such that
+     A2: for e be Element of T holds P[e, f.e] from FuncExD(A1);
+    A3: dom f = the carrier of T &
+        rng f c= the topology of T by FUNCT_2:def 1,RELSET_1:12;
+      f is one-to-one
+    proof
+     let x1,x2 be set;
+     assume that
+      A4: x1 in dom f and
+      A5: x2 in dom f and
+      A6: f.x1 = f.x2;
+     reconsider y1 = x1, y2 = x2 as Element of T
+                                                          by A4,A5,FUNCT_2:def
+1;
+       (Cl {y1})` = [#]T \ Cl {y1} by PRE_TOPC:17
+         .= f.x2 by A2,A6
+         .= [#]T \ Cl {y2} by A2
+         .= (Cl {y2})` by PRE_TOPC:17;
+     then Cl {y2} c= Cl {y1} & Cl {y1} c= Cl {y2} by PRE_TOPC:19;
+     then Cl {y1} = Cl {y2} by XBOOLE_0:def 10;
+     hence x1 = x2 by YELLOW_8:32;
+    end;
+    hence Card the carrier of T c= Card the topology of T by A3,CARD_1:26;
+   end;
+
+  theorem Th30:
+   for T be TopStruct
+   for X be Subset of T st X is open
+   for B be finite Subset-Family of T st B is Basis of T
+   for Y be set st Y in Components(B) holds
+    X misses Y or Y c= X
+   proof
+    let T be TopStruct;
+    let X be Subset of T;
+    assume A1: X is open;
+    let B be finite Subset-Family of T;
+    assume A2: B is Basis of T;
+    let Y be set;
+    assume A3: Y in Components(B);
+    assume X /\ Y <> {};
+    then consider x be set such that
+     A4: x in X /\ Y by XBOOLE_0:def 1;
+    A5: x in X & x in Y by A4,XBOOLE_0:def 3;
+    consider p be FinSequence of bool the carrier of T such that
+       len p = card B and
+     A6: rng p = B and
+     A7: Components(B) = { Intersect (rng MergeSequence(p,q)) where
+      q is FinSequence of BOOLEAN : len q = len p } by Def2;
+    A8: X in the topology of T by A1,PRE_TOPC:def 5;
+      the topology of T c= UniCl B by A2,CANTOR_1:def 2;
+    then consider Z be Subset-Family of T such that
+     A9: Z c= B and
+     A10: X = union Z by A8,CANTOR_1:def 1;
+    consider b be set such that
+     A11: x in b and
+     A12: b in Z by A5,A10,TARSKI:def 4;
+    A13: b c= X by A10,A12,ZFMISC_1:92;
+    consider q be FinSequence of BOOLEAN such that
+     A14: Y = Intersect (rng MergeSequence(p,q)) and
+        len q = len p by A3,A7;
+      Y c= b
+    proof
+     let z be set;
+     assume A15: z in Y;
+     consider i be Nat such that
+      A16: i in dom p and
+      A17: p.i = b by A6,A9,A12,FINSEQ_2:11;
+     A18: i in dom MergeSequence(p,q) by A16,Th5;
+       now per cases;
+      suppose q.i = TRUE;
+       hence MergeSequence(p,q).i = b by A17,Th6;
+      suppose not q.i = TRUE;
+       then q.i = FALSE by MARGREL1:39;
+       then A19: MergeSequence(p,q).i = (the carrier of T) \ b
+                                                             by A16,A17,Th7;
+         MergeSequence(p,q).i in rng MergeSequence(p,q) by A18,FUNCT_1:def 5;
+       then Y c= (the carrier of T) \ b by A14,A19,MSSUBFAM:2;
+       hence MergeSequence(p,q).i = b by A5,A11,XBOOLE_0:def 4;
+     end;
+     then b in rng MergeSequence(p,q) by A18,FUNCT_1:def 5;
+     hence z in b by A14,A15,CANTOR_1:10;
+    end;
+    hence Y c= X by A13,XBOOLE_1:1;
+   end;
+
+  theorem
+     for T be T_0 TopSpace st T is infinite
+   for B be Basis of T holds
+    B is infinite
+   proof
+    let T be T_0 TopSpace;
+    assume A1: T is infinite;
+    let B be Basis of T;
+    assume B is finite;
+    then reconsider B1 = B as finite Subset-Family of T;
+    A2: the carrier of T is infinite by A1,GROUP_1:def 13;
+      union Components(B1) = the carrier of T by Th19;
+    then consider X be set such that
+     A3: X in Components(B1) and
+     A4: X is infinite by A2,FINSET_1:25;
+    reconsider X as infinite set by A4;
+    consider x be set such that
+     A5: x in X by XBOOLE_0:def 1;
+    consider y be set such that
+     A6: y in X and
+     A7: x <> y by A5,Th4;
+    reconsider x1 = x, y1 = y as Element of T by A3,A5,A6;
+      the carrier of T is non empty by A1,GROUP_1:def 13;
+    then T is non empty by STRUCT_0:def 1;
+    then consider Y be Subset of T such that
+     A8: Y is open and
+     A9: ((x1 in Y & not y1 in Y) or (y1 in Y & not x1 in Y))
+                                                       by A7,T_0TOPSP:def 7;
+      now per cases by A9;
+     suppose A10: x in Y & not y in Y;
+      then x in Y /\ X by A5,XBOOLE_0:def 3;
+      then Y meets X by XBOOLE_0:4;
+      then X c= Y by A3,A8,Th30;
+      hence contradiction by A6,A10;
+     suppose A11: y in Y & not x in Y;
+      then y in Y /\ X by A6,XBOOLE_0:def 3;
+      then Y meets X by XBOOLE_0:4;
+      then X c= Y by A3,A8,Th30;
+      hence contradiction by A5,A11;
+    end;
+    hence contradiction;
+   end;
+
+  theorem
+     for T be non empty TopSpace
+    st T is finite
+   for B be Basis of T
+   for x be Element of T holds
+    meet { A where A is Element of the topology of T : x in A } in B
+   proof
+    let T be non empty TopSpace;
+    assume A1: T is finite;
+    let B be Basis of T;
+    let x be Element of T;
+      { A where A is Element of the topology of T : x in A } c=
+     bool the carrier of T
+    proof
+     let z be set;
+     assume z in { A where A is Element of the topology of T : x in A };
+     then consider A be Element of the topology of T such that
+      A2: z = A and
+        x in A;
+     thus z in bool the carrier of T by A2;
+    end;
+    then reconsider sfA = { A where A is Element of the topology of T : x in
+ A }
+       as Subset-Family of T by SETFAM_1:def 7;
+    reconsider sfA as Subset-Family of T;
+      now let P be Subset of T;
+     assume P in sfA;
+     then consider A be Element of the topology of T such that
+      A3: P = A and
+        x in A;
+     thus P is open by A3,PRE_TOPC:def 5;
+    end;
+    then A4: sfA is open by TOPS_2:def 1;
+      the carrier of T is finite by A1,GROUP_1:def 13;
+    then reconsider tT = the topology of T as finite non empty set by Th3;
+    defpred P[set] means x in $1; deffunc F(set) = $1;
+      { F(A) where A is Element of tT : P[A] } is finite from FraenkelFinIm;
+    then A5: meet sfA is open by A4,TOPS_2:27;
+      the carrier of T is Element of the topology of T by PRE_TOPC:def 1;
+    then A6: the carrier of T in sfA;
+      now let Y be set;
+     assume Y in sfA;
+     then consider A be Element of the topology of T such that
+      A7: Y = A and
+      A8: x in A;
+     thus x in Y by A7,A8;
+    end;
+    then x in meet sfA by A6,SETFAM_1:def 1;
+    then consider a be Subset of T such that
+     A9: a in B and
+     A10: x in a and
+     A11: a c= meet sfA by A5,YELLOW_9:31;
+      meet sfA c= a
+    proof
+     let z be set;
+     assume A12: z in meet sfA;
+       B c= the topology of T by CANTOR_1:def 2;
+     then a in sfA by A9,A10;
+     hence z in a by A12,SETFAM_1:def 1;
+    end;
+    hence meet { A where A is Element of the topology of T : x in A } in B
+                                                       by A9,A11,XBOOLE_0:def
+10;
+   end;

@@ -1,0 +1,250 @@
+:: Lim-inf Convergence
+::  by Bart{\l}omiej Skorulski
+::
+:: Received January 6, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary BHSP_3, WAYBEL_0, ORDINAL2, YELLOW_0, FUNCT_1, RELAT_1, LATTICES,
+      YELLOW_2, LATTICE3, YELLOW_6, ORDERS_1, PRE_TOPC, RELAT_2, QUANTAL1,
+      SUBSET_1, SEQM_3, SETFAM_1, WAYBEL11, CLASSES1, CAT_1, PROB_1, YELLOW_9,
+      BOOLE, WAYBEL28;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, RELSET_1,
+      FUNCT_1, FUNCT_2, CLASSES1, SEQM_3, GRCAT_1, PRE_TOPC, ORDERS_1,
+      LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_2, WAYBEL_3, YELLOW_6, YELLOW_9,
+      WAYBEL_9, WAYBEL11, WAYBEL17;
+ constructors SEQM_3, GRCAT_1, TOPS_2, CLASSES1, YELLOW_2, WAYBEL_3, YELLOW_9,
+      WAYBEL17, MEMBERED, PARTFUN1;
+ clusters STRUCT_0, SUBSET_1, RELSET_1, LATTICE3, WAYBEL_0, WAYBEL_3, YELLOW_6,
+      YELLOW_9, WAYBEL11, WAYBEL17, CLASSES2, MEMBERED, ZFMISC_1, PARTFUN1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+theorem :: WAYBEL28:1
+for L being complete LATTICE, N being net of L holds
+  inf N <= lim_inf N;
+
+theorem :: WAYBEL28:2 ::3.1 Proposition (1)=>(2)
+  for L being complete LATTICE, N being net of L, x being Element of L holds
+  (for M being subnet of N holds x = lim_inf M) implies
+    (x=lim_inf N & for M being subnet of N holds x >= inf M);
+
+theorem :: WAYBEL28:3 ::3.1 Proposition (1b)=>(2b)
+
+for L being complete LATTICE, N being net of L, x being Element of L
+    st N in NetUniv L
+holds
+  (for M being subnet of N st M in NetUniv L holds x = lim_inf M) implies
+    (x=lim_inf N & for M being subnet of N st M in NetUniv L holds x >= inf M);
+
+definition
+  let N be non empty RelStr;
+  let f be map of N,N;
+  attr f is greater_or_equal_to_id means
+:: WAYBEL28:def 1
+    for j being Element of N holds j <= f.j;
+end;
+
+theorem :: WAYBEL28:4
+for N being reflexive non empty RelStr holds id N is greater_or_equal_to_id;
+
+theorem :: WAYBEL28:5
+for N being directed non empty RelStr, x,y being Element of N
+  ex z being Element of N st x <= z & y <= z;
+
+theorem :: WAYBEL28:6
+for N being directed non empty RelStr holds
+  ex p being map of N,N st p is greater_or_equal_to_id;
+
+definition
+  let N be directed non empty RelStr;
+  cluster greater_or_equal_to_id map of N,N;
+end;
+
+definition
+  let N be reflexive non empty RelStr;
+  cluster greater_or_equal_to_id map of N,N;
+end;
+
+definition
+  let L be non empty 1-sorted;
+  let N be non empty NetStr over L;
+  let f be map of N,N;
+  func N * f -> strict non empty NetStr over L means
+:: WAYBEL28:def 2
+    the RelStr of it = the RelStr of N &
+    the mapping of it = (the mapping of N) * f;
+end;
+
+theorem :: WAYBEL28:7
+for L being non empty 1-sorted, N being non empty NetStr over L,
+    f being map of N, N holds
+  the carrier of N * f = the carrier of N;
+
+theorem :: WAYBEL28:8
+for L being non empty 1-sorted, N being non empty NetStr over L,
+    f being map of N,N holds
+  N * f = NetStr(#the carrier of N,the InternalRel of N,(the mapping of N)*f#);
+
+theorem :: WAYBEL28:9
+for L being non empty 1-sorted,
+    N being transitive directed non empty RelStr,
+    f being Function of the carrier of N,the carrier of L
+holds NetStr (#the carrier of N,the InternalRel of N,f#) is net of L;
+
+definition
+let L be non empty 1-sorted,
+    N be transitive directed non empty RelStr,
+    f be Function of the carrier of N,the carrier of L;
+  cluster NetStr (#the carrier of N,the InternalRel of N,f#) ->
+    transitive directed non empty;
+end;
+
+theorem :: WAYBEL28:10
+for L being non empty 1-sorted, N being net of L, p being map of N,N holds
+  N * p is net of L;
+
+definition
+  let L be non empty 1-sorted, N be net of L;
+  let p be map of N,N;
+  cluster N * p -> transitive directed;
+end;
+
+theorem :: WAYBEL28:11
+for L being non empty 1-sorted, N being net of L, p being map of N,N
+st N in NetUniv L holds
+  N * p in NetUniv L;
+
+theorem :: WAYBEL28:12
+for L being non empty 1-sorted, N,M being net of L
+  st the NetStr of N = the NetStr of M holds
+    M is subnet of N;
+
+definition
+  let L be non empty 1-sorted, N be net of L;
+  cluster strict subnet of N;
+end;
+
+theorem :: WAYBEL28:13
+for L being non empty 1-sorted, N being net of L,
+    p being greater_or_equal_to_id map of N,N holds N * p is subnet of N;
+
+definition
+::3.1 Proposition (2)=>(3)
+  let L be non empty 1-sorted;
+  let N be net of L;
+  let p be greater_or_equal_to_id map of N,N;
+  redefine func N * p -> strict subnet of N;
+end;
+
+theorem :: WAYBEL28:14 ::3.1 Proposition (2b)=>(3)
+
+for L being complete LATTICE, N being net of L, x being Element of L st
+  N in NetUniv L
+holds
+    (x=lim_inf N &
+     for M being subnet of N st M in NetUniv L holds x >= inf M)
+implies
+      x=lim_inf N &
+      for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p);
+
+theorem :: WAYBEL28:15 ::3.1 Proposition (3)=>(1)
+
+for L being complete LATTICE, N being net of L, x being Element of L holds
+  (x=lim_inf N &
+   for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p) )
+     implies for M being subnet of N holds x = lim_inf M;
+
+definition
+let L be non empty RelStr;
+func lim_inf-Convergence L -> Convergence-Class of L means
+:: WAYBEL28:def 3
+ for N being net of L st N in NetUniv L
+ for x being Element of L
+  holds [N,x] in it iff for M being subnet of N holds x = lim_inf M;
+end;
+
+theorem :: WAYBEL28:16
+  for L being complete LATTICE,
+    N being net of L,
+    x being Element of L
+st N in NetUniv L
+holds [N,x] in lim_inf-Convergence L iff
+  for M being subnet of N st M in NetUniv L holds x = lim_inf M;
+
+theorem :: WAYBEL28:17
+for L being non empty RelStr,
+    N being constant net of L,
+    M being subnet of N
+holds M is constant & the_value_of N = the_value_of M;
+
+definition let L be non empty RelStr;
+func xi L -> Subset-Family of L equals
+:: WAYBEL28:def 4
+  the topology of ConvergenceSpace lim_inf-Convergence L;
+end;
+
+theorem :: WAYBEL28:18
+  for L being complete LATTICE
+holds lim_inf-Convergence L is (CONSTANTS);
+
+theorem :: WAYBEL28:19
+  for L being non empty RelStr holds
+  lim_inf-Convergence L is (SUBNETS);
+
+theorem :: WAYBEL28:20
+  for L being continuous complete LATTICE holds
+  lim_inf-Convergence L is (DIVERGENCE);
+
+theorem :: WAYBEL28:21
+  for L being non empty RelStr, N,x being set holds
+  [N,x] in lim_inf-Convergence L implies N in NetUniv L;
+
+theorem :: WAYBEL28:22
+for L being non empty 1-sorted, C1,C2 being Convergence-Class of L holds
+  C1 c= C2 implies
+   the topology of ConvergenceSpace C2 c= the topology of ConvergenceSpace C1;
+
+theorem :: WAYBEL28:23
+for L being non empty reflexive RelStr holds
+  lim_inf-Convergence L c= Scott-Convergence L;
+
+theorem :: WAYBEL28:24
+for X,Y being set holds
+  X c= Y implies X in the_universe_of Y;
+
+theorem :: WAYBEL28:25
+for L being non empty transitive reflexive RelStr,
+    D being directed non empty Subset of L holds
+Net-Str D in NetUniv L;
+
+
+theorem :: WAYBEL28:26
+for L being complete LATTICE,
+    D being directed non empty Subset of L holds
+for M being subnet of Net-Str D holds
+        lim_inf M = sup D;
+
+theorem :: WAYBEL28:27
+for L being non empty complete LATTICE,
+    D being directed non empty Subset of L holds
+[Net-Str D,sup D] in lim_inf-Convergence L;
+
+theorem :: WAYBEL28:28
+for L being complete LATTICE, U1 being Subset of L holds
+U1 in xi(L) implies U1 is property(S);
+
+theorem :: WAYBEL28:29
+for L being non empty reflexive RelStr, A being Subset of L holds
+  A in sigma L implies A in xi L;
+
+theorem :: WAYBEL28:30
+for L being complete LATTICE, A being Subset of L
+st A is upper holds A in xi L implies A in sigma L;
+
+theorem :: WAYBEL28:31 ::3.3 Proposition (ii)
+  for L being complete LATTICE , A being Subset of L
+st A is lower holds A` in xi L iff A is closed_under_directed_sups;

@@ -1,0 +1,466 @@
+:: Morphisms Into Chains, Part {I}
+::  by Artur Korni{\l}owicz
+::
+:: Received February 6, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_2, ORDERS_1, RELAT_1, LATTICES, LATTICE3, WAYBEL_0, BOOLE,
+      YELLOW_1, YELLOW_0, PRE_TOPC, FUNCT_1, SEQM_3, ORDINAL2, TARSKI,
+      WAYBEL_4, REALSET1, WAYBEL35, LATTICE7, GROUP_4, WAYBEL_1, ORDERS_2,
+      WELLORD1, WELLORD2, BHSP_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, REALSET1,
+      STRUCT_0, WELLORD1, ORDERS_1, ORDERS_2, PRE_TOPC, LATTICE3, RELAT_1,
+      RELAT_2, RELSET_1, FUNCT_1, FUNCT_2, YELLOW_0, YELLOW_1, ALG_1, YELLOW_2,
+      WAYBEL_0, WAYBEL_1, WAYBEL_4, LATTICE7;
+ constructors ORDERS_3, TOLER_1, WAYBEL_1, WAYBEL_4, LATTICE7, NAT_1, ORDERS_2,
+      DOMAIN_1, MEMBERED;
+ clusters LATTICE3, RELSET_1, STRUCT_0, WAYBEL_0, YELLOW_1, YELLOW_2, SUBSET_1,
+      TEX_2, WAYBEL_4, YELLOW_0, FINSEQ_5, MEMBERED, NUMBERS, ORDINAL2;
+ requirements SUBSET, BOOLE, NUMERALS;
+
+
+begin
+
+definition
+  let X be set;
+  cluster trivial Subset of X;
+end;
+
+definition
+  let X be trivial set;
+  cluster -> trivial Subset of X;
+end;
+
+definition
+  let L be 1-sorted;
+  cluster trivial Subset of L;
+end;
+
+definition
+  let L be RelStr;
+  cluster trivial Subset of L;
+end;
+
+definition
+  let L be non empty 1-sorted;
+  cluster non empty trivial Subset of L;
+end;
+
+definition
+  let L be non empty RelStr;
+  cluster non empty trivial Subset of L;
+end;
+
+theorem :: WAYBEL35:1
+  for X being set holds RelIncl X is_reflexive_in X;
+
+theorem :: WAYBEL35:2
+  for X being set holds RelIncl X is_transitive_in X;
+
+theorem :: WAYBEL35:3
+  for X being set holds RelIncl X is_antisymmetric_in X;
+
+begin :: Main part
+
+definition
+  let L be RelStr;
+  cluster auxiliary(i) Relation of L;
+end;
+
+definition
+  let L be transitive RelStr;
+  cluster auxiliary(i) auxiliary(ii) Relation of L;
+end;
+
+definition
+  let L be with_suprema antisymmetric RelStr;
+  cluster auxiliary(iii) Relation of L;
+end;
+
+definition
+  let L be non empty lower-bounded antisymmetric RelStr;
+  cluster auxiliary(iv) Relation of L;
+end;
+
+:: Definition 2.1, p. 203
+definition
+  let L be non empty RelStr,
+      R be Relation of L;
+  attr R is extra-order means
+:: WAYBEL35:def 1
+
+  R is auxiliary(i) auxiliary(ii) auxiliary(iv);
+end;
+
+definition
+  let L be non empty RelStr;
+  cluster extra-order ->
+    auxiliary(i) auxiliary(ii) auxiliary(iv) Relation of L;
+  cluster auxiliary(i) auxiliary(ii) auxiliary(iv) ->
+    extra-order Relation of L;
+end;
+
+definition
+  let L be non empty RelStr;
+  cluster extra-order auxiliary(iii) -> auxiliary Relation of L;
+  cluster auxiliary -> extra-order Relation of L;
+end;
+
+definition
+  let L be lower-bounded antisymmetric transitive non empty RelStr;
+  cluster extra-order Relation of L;
+end;
+
+definition
+  let L be lower-bounded with_suprema Poset,
+      R be auxiliary(ii) Relation of L;
+  func R-LowerMap -> map of L, InclPoset LOWER L means
+:: WAYBEL35:def 2
+
+  for x being Element of L holds it.x = R-below x;
+end;
+
+definition
+  let L be lower-bounded with_suprema Poset,
+      R be auxiliary(ii) Relation of L;
+  cluster R-LowerMap -> monotone;
+end;
+
+definition
+  let L be 1-sorted,
+      R be Relation of the carrier of L;
+  mode strict_chain of R -> Subset of L means
+:: WAYBEL35:def 3
+
+  for x, y being set st x in it & y in it holds
+   [x,y] in R or x = y or [y,x] in R;
+end;
+
+theorem :: WAYBEL35:4
+ for L being 1-sorted,
+     C being trivial Subset of L,
+     R being Relation of the carrier of L holds
+  C is strict_chain of R;
+
+definition
+  let L be non empty 1-sorted,
+      R be Relation of the carrier of L;
+  cluster non empty trivial strict_chain of R;
+end;
+
+theorem :: WAYBEL35:5
+ for L being antisymmetric RelStr,
+     R being auxiliary(i) (Relation of L),
+     C being strict_chain of R,
+     x, y being Element of L st x in C & y in C & x < y
+   holds [x,y] in R;
+
+theorem :: WAYBEL35:6
+   for L being antisymmetric RelStr,
+     R being auxiliary(i) (Relation of L),
+     x, y being Element of L st
+   [x,y] in R & [y,x] in R holds
+   x = y;
+
+theorem :: WAYBEL35:7
+   for L being non empty lower-bounded antisymmetric RelStr,
+     x being Element of L,
+     R being auxiliary(iv) Relation of L holds
+  {Bottom L, x} is strict_chain of R;
+
+theorem :: WAYBEL35:8
+  for L being non empty lower-bounded antisymmetric RelStr,
+      R being auxiliary(iv) (Relation of L),
+      C being strict_chain of R holds
+   C \/ {Bottom L} is strict_chain of R;
+
+definition
+  let L be 1-sorted,
+      R be (Relation of the carrier of L),
+      C be strict_chain of R;
+  attr C is maximal means
+:: WAYBEL35:def 4
+
+  for D being strict_chain of R st C c= D holds C = D;
+end;
+
+definition
+  let L be 1-sorted,
+      R be (Relation of the carrier of L),
+      C be set;
+  func Strict_Chains (R,C) means
+:: WAYBEL35:def 5
+
+  for x being set holds x in it iff x is strict_chain of R & C c= x;
+end;
+
+definition
+  let L be 1-sorted,
+      R be (Relation of the carrier of L),
+      C be strict_chain of R;
+  cluster Strict_Chains (R,C) -> non empty;
+end;
+
+definition
+  let R be Relation, X be set;
+  redefine pred X has_upper_Zorn_property_wrt R;
+  synonym X is_inductive_wrt R;
+end;
+
+:: Lemma 2.2, p. 203
+theorem :: WAYBEL35:9
+    for L being 1-sorted,
+      R being (Relation of the carrier of L),
+      C being strict_chain of R holds
+   Strict_Chains (R,C) is_inductive_wrt RelIncl Strict_Chains (R,C) &
+   ex D being set st D is_maximal_in RelIncl Strict_Chains (R,C) & C c= D;
+
+:: Lemma 2.3 (ii), p. 203
+:: It is a trivial consequence of YELLOW_0:65
+:: Maybe to cancel
+theorem :: WAYBEL35:10
+ for L being non empty transitive RelStr,
+     C being non empty Subset of L,
+     X being Subset of C st
+   ex_sup_of X,L & "\/"(X,L) in C
+  holds ex_sup_of X,subrelstr C & "\/"(X,L) = "\/"(X,subrelstr C);
+
+:: Lemma 2.3, p. 203
+theorem :: WAYBEL35:11
+ for L being non empty Poset,
+     R being auxiliary(i) auxiliary(ii) (Relation of L),
+     C being non empty strict_chain of R,
+     X being Subset of C st ex_sup_of X,L & C is maximal
+   holds ex_sup_of X,subrelstr C;
+
+:: Lemma 2.3 (i), (iii), p. 203
+theorem :: WAYBEL35:12
+   for L being non empty Poset,
+     R being auxiliary(i) auxiliary(ii) (Relation of L),
+     C being non empty strict_chain of R,
+     X being Subset of C st
+   ex_inf_of (uparrow "\/"(X,L)) /\ C,L & ex_sup_of X,L & C is maximal
+   holds
+   "\/"(X,subrelstr C) = "/\"((uparrow "\/"(X,L)) /\ C,L) &
+   (not "\/"(X,L) in C implies "\/"(X,L) < "/\"((uparrow "\/"(X,L)) /\ C,L));
+
+:: Proposition 2.4, p. 204
+theorem :: WAYBEL35:13
+    for L being complete non empty Poset,
+      R being auxiliary(i) auxiliary(ii) (Relation of L),
+      C being non empty strict_chain of R st C is maximal holds
+    subrelstr C is complete;
+
+:: Proposition 2.5 (i), p. 204
+theorem :: WAYBEL35:14
+    for L being non empty lower-bounded antisymmetric RelStr,
+      R being auxiliary(iv) (Relation of L),
+      C being strict_chain of R st C is maximal holds
+    Bottom L in C;
+
+:: Proposition 2.5 (ii), p. 204
+theorem :: WAYBEL35:15
+    for L being non empty upper-bounded Poset,
+      R being auxiliary(ii) (Relation of L),
+      C being strict_chain of R,
+      m being Element of L
+   st C is maximal & m is_maximum_of C & [m,Top L] in R
+   holds [Top L,Top L] in R & m = Top L;
+
+:: Definition (SI_C) p. 204
+definition
+  let L be RelStr,
+      C be set,
+      R be Relation of the carrier of L;
+  pred R satisfies_SIC_on C means
+:: WAYBEL35:def 6
+
+   for x, z being Element of L holds
+    x in C & z in C & [x,z] in R & x <> z implies
+     ex y being Element of L st y in C & [x,y] in R & [y,z] in R & x <> y;
+end;
+
+definition
+  let L be RelStr,
+      R be (Relation of the carrier of L),
+      C be strict_chain of R;
+  attr C is satisfying_SIC means
+:: WAYBEL35:def 7
+
+    R satisfies_SIC_on C;
+  synonym C is satisfying_the_interpolation_property;
+  synonym C satisfies_the_interpolation_property;
+end;
+
+theorem :: WAYBEL35:16
+  for L being RelStr,
+      C being set,
+      R being auxiliary(i) (Relation of L) st
+  R satisfies_SIC_on C holds
+   for x, z being Element of L holds
+    x in C & z in C & [x,z] in R & x <> z implies
+     ex y being Element of L st y in C & [x,y] in R & [y,z] in R & x < y;
+
+definition
+  let L be RelStr,
+      R be Relation of the carrier of L;
+  cluster trivial -> satisfying_SIC strict_chain of R;
+end;
+
+definition
+  let L be non empty RelStr,
+      R be Relation of the carrier of L;
+  cluster non empty trivial strict_chain of R;
+end;
+
+:: Proposition 2.5 (iii), p. 204
+theorem :: WAYBEL35:17
+    for L being lower-bounded with_suprema Poset,
+      R being auxiliary(i) auxiliary(ii) (Relation of L),
+      C being strict_chain of R st C is maximal & R is satisfying_SI holds
+    R satisfies_SIC_on C;
+
+definition
+  let R be Relation,
+      C, y be set;
+  func SetBelow (R,C,y) equals
+:: WAYBEL35:def 8
+
+    ( R"{y} ) /\ C;
+end;
+
+theorem :: WAYBEL35:18
+  for R being Relation,
+      C, x, y being set holds
+   x in SetBelow (R,C,y) iff [x,y] in R & x in C;
+
+definition
+  let L be 1-sorted,
+      R be (Relation of the carrier of L),
+      C, y be set;
+  redefine func SetBelow (R,C,y) -> Subset of L;
+end;
+
+theorem :: WAYBEL35:19
+  for L being RelStr,
+      R being auxiliary(i) (Relation of L),
+      C being set,
+      y being Element of L holds
+   SetBelow (R,C,y) is_<=_than y;
+
+theorem :: WAYBEL35:20
+  for L being reflexive transitive RelStr,
+      R being auxiliary(ii) (Relation of L),
+      C being Subset of L,
+      x, y being Element of L st x <= y
+    holds SetBelow (R,C,x) c= SetBelow (R,C,y);
+
+theorem :: WAYBEL35:21
+  for L being RelStr,
+      R being auxiliary(i) (Relation of L),
+      C being set,
+      x being Element of L st x in C & [x,x] in R &
+      ex_sup_of SetBelow (R,C,x),L
+    holds x = sup SetBelow (R,C,x);
+
+definition
+  let L be RelStr,
+      C be Subset of L;
+  attr C is sup-closed means
+:: WAYBEL35:def 9
+
+   for X being Subset of C st ex_sup_of X,L
+    holds "\/"(X,L) = "\/"(X,subrelstr C);
+end;
+
+:: Lemma 2.6, p. 205
+theorem :: WAYBEL35:22
+  for L being complete non empty Poset,
+      R being extra-order (Relation of L),
+      C being satisfying_SIC strict_chain of R,
+      p, q being Element of L st p in C & q in C & p < q
+   ex y being Element of L st p < y & [y,q] in R & y = sup SetBelow (R,C,y);
+
+:: Lemma 2.7, p. 205,  1 => 2
+theorem :: WAYBEL35:23
+    for L being lower-bounded non empty Poset,
+      R being extra-order (Relation of L),
+      C being non empty strict_chain of R st
+   C is sup-closed &
+   (for c being Element of L st c in C holds
+     ex_sup_of SetBelow (R,C,c),L)
+   &
+   R satisfies_SIC_on C holds
+   for c being Element of L st c in C holds
+    c = sup SetBelow (R,C,c);
+
+:: Lemma 2.7, p. 205, 2 => 1
+theorem :: WAYBEL35:24
+    for L being non empty reflexive antisymmetric RelStr,
+      R being auxiliary(i) (Relation of L),
+      C being strict_chain of R st
+   (for c being Element of L st c in C holds
+     ex_sup_of SetBelow (R,C,c),L & c = sup SetBelow (R,C,c))
+   holds
+   R satisfies_SIC_on C;
+
+definition
+  let L be non empty RelStr,
+      R be (Relation of the carrier of L),
+      C be set;
+  func SupBelow (R,C) means
+:: WAYBEL35:def 10
+
+   for y being set holds y in it iff y = sup SetBelow (R,C,y);
+end;
+
+definition
+  let L be non empty RelStr,
+      R be (Relation of the carrier of L),
+      C be set;
+  redefine func SupBelow (R,C) -> Subset of L;
+end;
+
+:: Lemma 2.8, (i) a), p. 205
+theorem :: WAYBEL35:25
+  for L being non empty reflexive transitive RelStr,
+      R being auxiliary(i) auxiliary(ii) (Relation of L),
+      C being strict_chain of R st
+    (for c being Element of L holds ex_sup_of SetBelow (R,C,c),L) holds
+    SupBelow (R,C) is strict_chain of R;
+
+:: Lemma 2.8, (i) b), p. 205
+theorem :: WAYBEL35:26
+    for L being non empty Poset,
+      R being auxiliary(i) auxiliary(ii) (Relation of L),
+      C being Subset of L st
+    (for c being Element of L holds ex_sup_of SetBelow (R,C,c),L) holds
+   SupBelow (R,C) is sup-closed;
+
+theorem :: WAYBEL35:27
+  for L being complete non empty Poset,
+      R being extra-order (Relation of L),
+      C being satisfying_SIC strict_chain of R,
+      d being Element of L st d in SupBelow (R,C)
+    holds
+   d = "\/"({b where b is Element of L:
+       b in SupBelow(R,C) & [b,d] in R},L);
+
+:: Lemma 2.8, (ii), p. 205
+theorem :: WAYBEL35:28
+    for L being complete non empty Poset,
+      R being extra-order (Relation of L),
+      C being satisfying_SIC strict_chain of R holds
+   R satisfies_SIC_on SupBelow (R,C);
+
+:: Lemma 2.8, (iii), p. 205
+theorem :: WAYBEL35:29
+    for L being complete non empty Poset,
+      R being extra-order (Relation of L),
+      C being satisfying_SIC strict_chain of R,
+      a, b being Element of L st
+    a in C & b in C & a < b
+   ex d being Element of L st d in SupBelow (R,C) & a < d & [d,b] in R;
+

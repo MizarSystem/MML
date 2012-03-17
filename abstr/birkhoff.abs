@@ -1,0 +1,288 @@
+:: Birkhoff Theorem for Many Sorted Algebras
+::  by Artur Korni{\l}owicz
+::
+:: Received June 19, 1997
+:: Copyright (c) 1997 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, ZF_REFLE, PBOOLE, PRALG_1, MSAFREE, ALG_1,
+      REALSET1, MSUALG_3, FUNCT_6, FUNCT_1, RELAT_1, GROUP_6, WELLORD1,
+      MSUALG_2, PRALG_2, CARD_3, MSUALG_5, MSUALG_4, FUNCOP_1, BOOLE, RLVECT_2,
+      EQREL_1, CLOSURE2, SETFAM_1, FUNCT_4, BORSUK_1, CANTOR_1, EQUATION,
+      ZF_MODEL, MCART_1, FREEALG, NATTRA_1, MSAFREE2, PRE_CIRC, BIRKHOFF;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, SETFAM_1, RELAT_1,
+      MCART_1, STRUCT_0, FUNCT_1, RELSET_1, FUNCT_2, EQREL_1, CARD_3, CANTOR_1,
+      PBOOLE, PRALG_1, MSUALG_1, MSUALG_2, PRALG_3, MSUALG_3, AUTALG_1,
+      MSAFREE, MSAFREE2, PRALG_2, PRE_CIRC, MSUALG_4, PZFMISC1, EXTENS_1,
+      MSSUBFAM, CLOSURE2, MSUALG_5, EQUATION;
+ constructors CANTOR_1, PRALG_3, PRE_CIRC, MSAFREE2, AUTALG_1, EXTENS_1,
+      PZFMISC1, CLOSURE2, MSUALG_5, BINOP_1, EQUATION, MSUALG_6, MSSUBFAM;
+ clusters CANTOR_1, CLOSURE2, FUNCT_1, MSAFREE2, MSUALG_1, MSUALG_2, MSUALG_4,
+      MSUALG_5, MSUALG_9, PBOOLE, PRALG_1, PRALG_3, RELSET_1, STRUCT_0,
+      EQUATION, EXTENS_1, MEMBERED, ORDINAL2;
+ requirements SUBSET, BOOLE;
+
+
+begin  :: Birkhoff Variety Theorem
+
+::-------------------------------------------------------------------
+:: Acknowledgements:
+:: =================
+::
+:: I would like to thank Professor Andrzej Trybulec
+:: for his help in the preparation of the article.
+::-------------------------------------------------------------------
+
+definition let S be non empty non void ManySortedSign,
+               X be non-empty ManySortedSet of the carrier of S,
+               A be non-empty MSAlgebra over S,
+               F be ManySortedFunction of X, the Sorts of A;
+ func F-hash -> ManySortedFunction of FreeMSA X, A means
+:: BIRKHOFF:def 1
+  it is_homomorphism FreeMSA X, A &
+  it || FreeGen X = F ** Reverse X;
+end;
+
+theorem :: BIRKHOFF:1
+for S being non empty non void ManySortedSign
+ for A being non-empty MSAlgebra over S
+  for X being non-empty ManySortedSet of the carrier of S
+   for F being ManySortedFunction of X, the Sorts of A
+ holds rngs F c= rngs (F-hash);
+
+
+:: Let P[] be a non empty abstract class of algebras. If P[] is closed under
+:: subalgebras and products, the free algebras exist in P[].
+
+scheme ExFreeAlg_1 { S() -> non empty non void ManySortedSign,
+                     X() -> non-empty MSAlgebra over S(),
+                     P[set] } :
+ ex A being strict non-empty MSAlgebra over S(),
+    F being ManySortedFunction of X(), A st P[A] & F is_epimorphism X(), A &
+ for B being non-empty MSAlgebra over S()
+  for G being ManySortedFunction of X(), B st G is_homomorphism X(), B & P[B]
+   ex H being ManySortedFunction of A, B st H is_homomorphism A, B &
+    H ** F = G &
+   for K being ManySortedFunction of A, B st K ** F = G holds H = K
+ provided
+ for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+ for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F];
+
+scheme ExFreeAlg_2 { S() -> non empty non void ManySortedSign,
+                     X() -> non-empty ManySortedSet of the carrier of S(),
+                     P[set] } :
+ ex A being strict non-empty MSAlgebra over S(),
+    F being ManySortedFunction of X(), the Sorts of A st P[A] &
+ for B being non-empty MSAlgebra over S()
+  for G being ManySortedFunction of X(), the Sorts of B st P[B]
+   ex H being ManySortedFunction of A, B st H is_homomorphism A, B &
+    H ** F = G &
+   for K being ManySortedFunction of A, B st
+    K is_homomorphism A, B & K ** F = G holds H = K
+ provided
+ for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+ for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F];
+
+scheme Ex_hash { S() -> non empty non void ManySortedSign,
+                 F, A() -> non-empty MSAlgebra over S(),
+                 fi() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of F(),
+                 a() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of A(),
+                 P[set] } :
+ ex H being ManySortedFunction of F(), A() st
+  H is_homomorphism F(), A() & a()-hash = H ** (fi()-hash)
+  provided
+ P[A()] and
+ for C being non-empty MSAlgebra over S()  :: F() is free in P[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                      the Sorts of C st P[C]
+      ex h being ManySortedFunction of F(), C st
+       h is_homomorphism F(), C & G = h ** fi();
+
+
+:: Let P[] be a class of algebras. If a free algebra F() in P[]
+:: relative to fi() exists, then
+:: P[] |= [t1(),t2()]  iff  (F(),fi()) |= [t1(),t2()].
+
+scheme EqTerms { S() -> non empty non void ManySortedSign,
+                 F() -> non-empty MSAlgebra over S(),
+                 fi() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of F(),
+                 s() -> SortSymbol of S(),
+                 t1, t2() -> Element of (the Sorts of TermAlg S()).s(),
+                 P[set] } :
+ for B being non-empty MSAlgebra over S() st P[B] holds B |= [t1(),t2()]
+  provided
+ fi()-hash.s().t1() = fi()-hash.s().t2() and
+ for C being non-empty MSAlgebra over S()  :: F() is free in P[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                     the Sorts of C st P[C]
+      ex h being ManySortedFunction of F(), C st
+       h is_homomorphism F(), C & G = h ** fi();
+
+
+:: Let P[] be an abstract class of algebras such that P[] is closed under
+:: subalgebras. The free algebra in P[] over X(), if it exists,
+:: is generated by X().
+
+scheme FreeIsGen { S() -> non empty non void ManySortedSign,
+                 X() -> non-empty ManySortedSet of the carrier of S(),
+                 A() -> strict non-empty MSAlgebra over S(),
+                 f() -> ManySortedFunction of X(), the Sorts of A(),
+                 P[set] } :
+ f().:.:X() is non-empty GeneratorSet of A()
+  provided
+ for C being non-empty MSAlgebra over S()  :: A() is free in P[]
+     for G being ManySortedFunction of X(), the Sorts of C st P[C]
+      ex H being ManySortedFunction of A(), C st
+       H is_homomorphism A(), C & H ** f() = G &
+      for K being ManySortedFunction of A(), C st
+       K is_homomorphism A(), C & K ** f() = G holds H = K and
+ P[A()] and
+ for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B];
+
+scheme Hash_is_onto { S() -> non empty non void ManySortedSign,
+                    A() -> strict non-empty MSAlgebra over S(),
+                    F() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of A(),
+                    P[set] } :
+ F()-hash is_epimorphism FreeMSA ((the carrier of S()) --> NAT), A()
+  provided
+ for C being non-empty MSAlgebra over S()  :: A() is free in P[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                  the Sorts of C st P[C]
+      ex H being ManySortedFunction of A(), C st
+       H is_homomorphism A(), C & H ** F() = G &
+      for K being ManySortedFunction of A(), C st
+       K is_homomorphism A(), C & K ** F() = G holds H = K and
+ P[A()] and
+ for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B];
+
+scheme FinGenAlgInVar { S() -> non empty non void ManySortedSign,
+             A() -> strict finitely-generated (non-empty MSAlgebra over S()),
+             F() -> non-empty MSAlgebra over S(),
+             fi() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                              the Sorts of F(),
+             P, Q[set] } :
+ P[A()]
+  provided
+ Q[A()] and
+ P[F()] and
+ for C being non-empty MSAlgebra over S()  :: F() is free in Q[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                      the Sorts of C st Q[C]
+      ex h being ManySortedFunction of F(), C st
+       h is_homomorphism F(), C & G = h ** fi() and
+ for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      P[A] holds P[QuotMSAlg (A,R)];
+
+scheme QuotEpi { S() -> non empty non void ManySortedSign,
+                 X, Y() -> non-empty MSAlgebra over S(),
+                 P[set] } :
+ P[Y()]
+  provided
+ ex H being ManySortedFunction of X(), Y() st H is_epimorphism X(), Y() and
+ P[X()] and
+ for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      P[A] holds P[QuotMSAlg (A,R)];
+
+
+:: An algebra X() belongs to a variety P[] whenever all its finitely
+:: generated subalgebras are in P[].
+
+scheme AllFinGen { S() -> non empty non void ManySortedSign,
+                 X() -> non-empty MSAlgebra over S(),
+                 P[set] } :
+ P[X()]
+  provided
+ for B being strict non-empty finitely-generated MSSubAlgebra of X()
+      holds P[B] and
+ for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      P[A] holds P[QuotMSAlg (A,R)] and
+ for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F];
+
+scheme FreeInModIsInVar_1 { S() -> non empty non void ManySortedSign,
+                            X() -> non-empty MSAlgebra over S(),
+                            P, Q[set] } :
+ Q[X()]
+  provided
+ for A being non-empty MSAlgebra over S() holds Q[A] iff
+    for s being SortSymbol of S(), e being Element of (Equations S()).s st
+     (for B being non-empty MSAlgebra over S() st P[B] holds B |= e)
+      holds A |= e and
+ P[X()];
+
+
+:: If P[] is a non empty variety, then the free algebras in Mod Eq P[]
+:: belong to P[].   (Q[] = Mod Eq P[])
+
+scheme FreeInModIsInVar { S() -> non empty non void ManySortedSign,
+                 X() -> strict non-empty MSAlgebra over S(),
+                 psi() -> ManySortedFunction of (the carrier of S()) --> NAT,
+                               the Sorts of X(),
+                 P, Q[set] } :
+ P[X()]
+  provided
+ for A being non-empty MSAlgebra over S() holds Q[A] iff
+    for s being SortSymbol of S(), e being Element of (Equations S()).s st
+     (for B being non-empty MSAlgebra over S() st P[B] holds B |= e)
+      holds A |= e and
+ for C being non-empty MSAlgebra over S()  :: X() is free in Q[]
+     for G being ManySortedFunction of (the carrier of S()) --> NAT,
+                                                     the Sorts of C st Q[C]
+      ex H being ManySortedFunction of X(), C st
+       H is_homomorphism X(), C & H ** psi() = G &
+      for K being ManySortedFunction of X(), C st
+       K is_homomorphism X(), C & K ** psi() = G holds H = K and
+ Q[X()] and
+
+ for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+ for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F];
+
+
+:: Let P[] be an abstract class of algebras. Then P[] is an equational class
+:: if and only if P[] is variety.
+
+scheme Birkhoff { S() -> non empty non void ManySortedSign,
+                  P[set] } :
+ ex E being EqualSet of S() st for A being non-empty MSAlgebra over S() holds
+  P[A] iff A |= E
+  provided
+ for A, B being non-empty MSAlgebra over S() st A, B are_isomorphic &
+      P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S()
+     for B being strict non-empty MSSubAlgebra of A st P[A] holds P[B] and
+ for A being non-empty MSAlgebra over S(), R being MSCongruence of A st
+      P[A] holds P[QuotMSAlg (A,R)] and
+ for I being set, F being MSAlgebra-Family of I, S() st
+     (for i being set st i in I ex A being MSAlgebra over S() st A = F.i
+      & P[A]) holds P[product F];

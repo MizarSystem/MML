@@ -1,0 +1,976 @@
+:: Propositional Calculus for Boolean Valued Functions, {VII }
+::  by Shunichi Kobayashi
+::
+:: Received February 6, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_2, MARGREL1, PARTIT1, ZF_LANG, BVFUNC_1, BINARITH;
+ notation XBOOLE_0, MARGREL1, VALUAT_1, FRAENKEL, BVFUNC_1;
+ constructors BVFUNC_1;
+ clusters MARGREL1, VALUAT_1, FRAENKEL;
+ theorems BVFUNC_1, BVFUNC_4, BVFUNC_5, BVFUNC_6, BVFUNC_7, BVFUNC_8, BVFUNC_9;
+
+begin
+
+ reserve Y for non empty set,
+         a,b,c,d for Element of Funcs(Y,BOOLEAN);
+
+theorem
+  'not' (a 'imp' b) = a '&' 'not' b
+proof
+  thus 'not' (a 'imp' b)='not' ('not' a 'or' b) by BVFUNC_4:8
+  .='not' 'not' a '&' 'not' b by BVFUNC_1:16
+  .=a '&' 'not' b by BVFUNC_1:4;
+end;
+
+theorem Th2:
+('not' b 'imp' 'not' a) 'imp' (a 'imp' b)=I_el(Y)
+proof
+     ('not' b 'imp' 'not' a) 'imp' (a 'imp' b)
+  ='not' ('not' b 'imp' 'not' a) 'or' (a 'imp' b) by BVFUNC_4:8
+ .='not' ('not' 'not' b 'or' 'not' a) 'or' (a 'imp' b) by BVFUNC_4:8
+ .='not' (b 'or' 'not' a) 'or' (a 'imp' b) by BVFUNC_1:4
+ .=('not' b '&' 'not' 'not' a) 'or' (a 'imp' b) by BVFUNC_1:16
+ .=('not' b '&' a) 'or' (a 'imp' b) by BVFUNC_1:4
+ .=('not' b '&' a) 'or' ('not' a 'or' b) by BVFUNC_4:8
+ .=(('not' b '&' a) 'or' 'not' a) 'or' b by BVFUNC_1:11
+ .=(('not' b 'or' 'not' a) '&' (a 'or' 'not' a)) 'or' b by BVFUNC_1:14
+ .=(('not' b 'or' 'not' a) '&' I_el(Y)) 'or' b by BVFUNC_4:6
+ .=('not' b 'or' 'not' a) 'or' b by BVFUNC_1:9
+ .='not' a 'or' ('not' b 'or' b) by BVFUNC_1:11
+ .='not' a 'or' I_el(Y) by BVFUNC_4:6;
+  hence thesis by BVFUNC_1:13;
+end;
+
+theorem Th3:
+a 'imp' b = 'not' b 'imp' 'not' a
+proof
+    ('not' b 'imp' 'not' a) 'imp' (a 'imp' b)=I_el(Y) by Th2;
+  then A1:('not' b 'imp' 'not' a) '<' (a 'imp' b) by BVFUNC_1:19;
+    (a 'imp' b) 'imp' ('not' b 'imp' 'not' a)=I_el(Y) by BVFUNC_5:33;
+  then a 'imp' b '<' 'not' b 'imp' 'not' a by BVFUNC_1:19;
+  hence thesis by A1,BVFUNC_1:18;
+end;
+
+theorem
+  a 'eqv' b = 'not' a 'eqv' 'not' b
+proof
+  thus 'not' a 'eqv' 'not' b
+   =('not' a 'imp' 'not' b) '&' ('not' b 'imp' 'not' a) by BVFUNC_4:7
+  .=(b 'imp' a) '&' ('not' b 'imp' 'not' a) by Th3
+  .=(b 'imp' a) '&' (a 'imp' b) by Th3
+  .=a 'eqv' b by BVFUNC_4:7;
+end;
+
+theorem Th5:
+a 'imp' b = a 'imp' (a '&' b)
+proof
+      a 'imp' (a '&' b)='not' a 'or' (a '&' b) by BVFUNC_4:8
+  .=('not' a 'or' a) '&' ('not' a 'or' b) by BVFUNC_1:14
+  .=I_el(Y) '&' ('not' a 'or' b) by BVFUNC_4:6
+  .='not' a 'or' b by BVFUNC_1:9;
+   hence thesis by BVFUNC_4:8;
+end;
+
+theorem
+  a 'eqv' b = (a 'or' b) 'imp' (a '&' b)
+proof
+  thus (a 'or' b) 'imp' (a '&' b)
+  =(a 'imp' (a '&' b)) '&' (b 'imp' (a '&' b)) by BVFUNC_7:5
+ .=(a 'imp' b) '&' (b 'imp' (a '&' b)) by Th5
+ .=(a 'imp' b) '&' (b 'imp' a) by Th5
+ .=a 'eqv' b by BVFUNC_4:7;
+end;
+
+theorem
+  a 'eqv' 'not' a = O_el(Y)
+proof
+  thus a 'eqv' 'not' a
+  =(a 'imp' 'not' a) '&' ('not' a 'imp' a) by BVFUNC_4:7
+ .=('not' a 'or' 'not' a) '&' ('not' a 'imp' a) by BVFUNC_4:8
+ .=('not' a 'or' 'not' a) '&' ('not' 'not' a 'or' a) by BVFUNC_4:8
+ .='not' a '&' ('not' 'not' a 'or' a) by BVFUNC_1:10
+ .='not' a '&' (a 'or' a) by BVFUNC_1:4
+ .='not' a '&' a by BVFUNC_1:10
+ .=O_el(Y) by BVFUNC_4:5;
+end;
+
+theorem
+  a 'imp' (b 'imp' c) = b 'imp' (a 'imp' c)
+proof
+  thus a 'imp' (b 'imp' c)
+  ='not' a 'or' (b 'imp' c) by BVFUNC_4:8
+ .='not' a 'or' ('not' b 'or' c) by BVFUNC_4:8
+ .='not' b 'or' ('not' a 'or' c) by BVFUNC_1:11
+ .='not' b 'or' (a 'imp' c) by BVFUNC_4:8
+ .=b 'imp' (a 'imp' c) by BVFUNC_4:8;
+end;
+
+theorem
+  a 'imp' (b 'imp' c) = (a 'imp' b) 'imp' (a 'imp' c)
+proof
+  thus (a 'imp' b) 'imp' (a 'imp' c)
+  =(a 'imp' b) 'imp' ('not' a 'or' c) by BVFUNC_4:8
+ .='not' (a 'imp' b) 'or' ('not' a 'or' c) by BVFUNC_4:8
+ .='not' ('not' a 'or' b) 'or' ('not' a 'or' c) by BVFUNC_4:8
+ .=('not' 'not' a '&' 'not' b) 'or' ('not' a 'or' c) by BVFUNC_1:16
+ .=(a '&' 'not' b) 'or' ('not' a 'or' c) by BVFUNC_1:4
+ .=((a '&' 'not' b) 'or' 'not' a) 'or' c by BVFUNC_1:11
+ .=((a 'or' 'not' a) '&' ('not' b 'or' 'not' a)) 'or' c by BVFUNC_1:14
+ .=(I_el(Y) '&' ('not' b 'or' 'not' a)) 'or' c by BVFUNC_4:6
+ .=('not' a 'or' 'not' b) 'or' c by BVFUNC_1:9
+ .='not' a 'or' ('not' b 'or' c) by BVFUNC_1:11
+ .='not' a 'or' (b 'imp' c) by BVFUNC_4:8
+ .=a 'imp' (b 'imp' c) by BVFUNC_4:8;
+end;
+
+theorem
+  a 'eqv' b = a 'xor' 'not' b
+proof
+    'not' (a 'xor' b) = 'not' 'not' ( a 'eqv' b) by BVFUNC_8:12;
+  then 'not' (a 'xor' b) = (a 'eqv' b) by BVFUNC_1:4;
+  hence thesis by BVFUNC_8:17;
+end;
+
+theorem
+  a '&' (b 'xor' c) = a '&' b 'xor' a '&' c
+proof
+   A1:a '&' (b 'xor' c)
+  =a '&' (('not' b '&' c) 'or' (b '&' 'not' c)) by BVFUNC_4:9
+ .=(a '&' ('not' b '&' c)) 'or' (a '&' (b '&' 'not' c)) by BVFUNC_1:15
+ .=((a '&' c) '&' 'not' b) 'or' (a '&' (b '&' 'not' c)) by BVFUNC_1:7
+ .=((a '&' c) '&' 'not' b) 'or' ((a '&' b) '&' 'not' c) by BVFUNC_1:7;
+   A2:a '&' b 'xor' a '&' c
+  =('not' (a '&' b) '&' (a '&' c)) 'or' ((a '&' b) '&' 'not' (a '&' c))
+   by BVFUNC_4:9
+ .=(('not' a 'or' 'not' b) '&' (a '&' c)) 'or'
+   ((a '&' b) '&' 'not' (a '&' c)) by BVFUNC_1:17
+ .=((a '&' c) '&' ('not' a 'or' 'not' b)) 'or'
+   ((a '&' b) '&' ('not' a 'or' 'not' c)) by BVFUNC_1:17
+ .=(((a '&' c) '&' 'not' a) 'or' ((a '&' c) '&' 'not' b)) 'or'
+   ((a '&' b) '&' ('not' a 'or' 'not' c)) by BVFUNC_1:15
+ .=(((a '&' c) '&' 'not' a) 'or' ((a '&' c) '&' 'not' b)) 'or'
+   (((a '&' b) '&' 'not' a) 'or' ((a '&' b) '&' 'not' c)) by BVFUNC_1:15
+ .=((a '&' c) '&' 'not' a) 'or' (((a '&' c) '&' 'not' b) 'or'
+   (((a '&' b) '&' 'not' c) 'or' ((a '&' b) '&' 'not' a))) by BVFUNC_1:11
+ .=((a '&' c) '&' 'not' a) 'or' ((((a '&' c) '&' 'not' b) 'or'
+   ((a '&' b) '&' 'not' c)) 'or' ((a '&' b) '&' 'not' a)) by BVFUNC_1:11
+ .=(((a '&' c) '&' 'not' a) 'or' ((a '&' b) '&' 'not' a)) 'or'
+   (((a '&' c) '&' 'not' b) 'or' ((a '&' b) '&' 'not' c)) by BVFUNC_1:11;
+     ((c '&' a) '&' 'not' a) 'or' ((b '&' a) '&' 'not' a)
+  =(c '&' (a '&' 'not' a)) 'or' ((b '&' a) '&' 'not' a) by BVFUNC_1:7
+ .=(c '&' (a '&' 'not' a)) 'or' (b '&' (a '&' 'not' a)) by BVFUNC_1:7
+ .=(c '&' O_el(Y)) 'or' (b '&' (a '&' 'not' a)) by BVFUNC_4:5
+ .=(c '&' O_el(Y)) 'or' (b '&' O_el(Y)) by BVFUNC_4:5
+ .=O_el(Y) 'or' (b '&' O_el(Y)) by BVFUNC_1:8
+ .=O_el(Y) 'or' O_el(Y) by BVFUNC_1:8
+ .=O_el(Y) by BVFUNC_1:10;
+  hence thesis by A1,A2,BVFUNC_1:12;
+end;
+
+theorem
+  a 'eqv' b = 'not' (a 'xor' b)
+proof
+    'not' (a 'xor' b) = 'not' 'not' (a 'eqv' b) by BVFUNC_8:12;
+  hence thesis by BVFUNC_1:4;
+end;
+
+theorem
+  a 'xor' a = O_el(Y)
+proof
+  thus a 'xor' a =('not' a '&' a) 'or' (a '&' 'not' a) by BVFUNC_4:9
+ .=O_el(Y) 'or' (a '&' 'not' a) by BVFUNC_4:5
+ .=O_el(Y) 'or' O_el(Y) by BVFUNC_4:5
+ .=O_el(Y) by BVFUNC_1:10;
+end;
+
+theorem
+  a 'xor' 'not' a = I_el(Y)
+proof
+ thus a 'xor' 'not' a
+  =('not' a '&' 'not' a) 'or' (a '&' 'not' 'not' a) by BVFUNC_4:9
+ .=('not' a '&' 'not' a) 'or' (a '&' a) by BVFUNC_1:4
+ .=('not' a) 'or' (a '&' a) by BVFUNC_1:6
+ .='not' a 'or' a by BVFUNC_1:6
+ .=I_el(Y) by BVFUNC_4:6;
+end;
+
+theorem
+  (a 'imp' b) 'imp' (b 'imp' a) = b 'imp' a
+proof
+     (a 'imp' b) 'imp' (b 'imp' a)
+  =('not' a 'or' b) 'imp' (b 'imp' a) by BVFUNC_4:8
+ .=('not' a 'or' b) 'imp' ('not' b 'or' a) by BVFUNC_4:8
+ .='not' ('not' a 'or' b) 'or' ('not' b 'or' a) by BVFUNC_4:8
+ .=('not' 'not' a '&' 'not' b) 'or' ('not' b 'or' a) by BVFUNC_1:16
+ .=(a '&' 'not' b) 'or' ('not' b 'or' a) by BVFUNC_1:4
+ .=((a '&' 'not' b) 'or' 'not' b) 'or' a by BVFUNC_1:11
+ .=((a 'or' 'not' b) '&' ('not' b 'or' 'not' b)) 'or' a by BVFUNC_1:14
+ .=((a 'or' 'not' b) '&' 'not' b) 'or' a by BVFUNC_1:10
+ .=((a 'or' 'not' b) 'or' a) '&' ('not' b 'or' a) by BVFUNC_1:14
+ .=('not' b 'or' (a 'or' a)) '&' ('not' b 'or' a) by BVFUNC_1:11
+ .=('not' b 'or' a) '&' ('not' b 'or' a) by BVFUNC_1:10
+ .=('not' b 'or' a) by BVFUNC_1:6;
+  hence thesis by BVFUNC_4:8;
+end;
+
+theorem Th16:
+(a 'or' b) '&' ('not' a 'or' 'not' b) = ('not' a '&' b) 'or' (a '&' 'not' b)
+proof
+    a 'xor' b = ('not' a '&' b) 'or' (a '&' 'not' b) by BVFUNC_4:9;
+  hence thesis by BVFUNC_8:13;
+end;
+
+theorem Th17:
+(a '&' b) 'or' ('not' a '&' 'not' b) = ('not' a 'or' b) '&' (a 'or' 'not' b)
+proof
+ thus (a '&' b) 'or' ('not' a '&' 'not' b)
+ =('not' 'not' a '&' b) 'or' ('not' a '&' 'not' b) by BVFUNC_1:4
+.=('not' a 'or' b) '&' ('not' 'not' a 'or' 'not' b) by Th16
+.=('not' a 'or' b) '&' (a 'or' 'not' b) by BVFUNC_1:4;
+end;
+
+theorem
+  a 'xor' (b 'xor' c) = (a 'xor' b) 'xor' c
+proof
+A1:a 'xor' (b 'xor' c)
+  =('not' a '&' (b 'xor' c)) 'or' (a '&' 'not' (b 'xor' c)) by BVFUNC_4:9
+ .=('not' a '&' (('not' b '&' c) 'or' (b '&' 'not' c))) 'or'
+   (a '&' 'not' (b 'xor' c)) by BVFUNC_4:9
+ .=('not' a '&' (('not' b '&' c) 'or' (b '&' 'not' c))) 'or'
+   (a '&' 'not' (('not' b '&' c) 'or' (b '&' 'not' c))) by BVFUNC_4:9
+ .=(('not' a '&' ('not' b '&' c)) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   (a '&' 'not' (('not' b '&' c) 'or' (b '&' 'not' c))) by BVFUNC_1:15
+ .=(('not' a '&' ('not' b '&' c)) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   (a '&' (('not' ('not' b '&' c)) '&' ('not' (b '&' 'not' c))))
+  by BVFUNC_1:16
+ .=(('not' a '&' ('not' b '&' c)) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   (a '&' ((('not' 'not' b 'or' 'not' c)) '&' ('not' (b '&' 'not' c))))
+  by BVFUNC_1:17
+ .=(('not' a '&' ('not' b '&' c)) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   (a '&' ((b 'or' 'not' c) '&' ('not' (b '&' 'not' c)))) by BVFUNC_1:4
+ .=(('not' a '&' ('not' b '&' c)) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   (a '&' ((b 'or' 'not' c) '&' (('not' b 'or' 'not' 'not' c))))
+  by BVFUNC_1:17
+ .=(('not' a '&' ('not' b '&' c)) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   (a '&' ((b 'or' 'not' c) '&' (('not' b 'or' c))))
+  by BVFUNC_1:4
+ .=(('not' a '&' ('not' b '&' c)) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   (a '&' ((b '&' c) 'or' ('not' b '&' 'not' c)))
+  by Th17
+ .=(('not' a '&' ('not' b '&' c)) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   ((a '&' (b '&' c)) 'or' (a '&' ('not' b '&' 'not' c))) by BVFUNC_1:15
+ .=(('not' a '&' 'not' b '&' c) 'or' ('not' a '&' (b '&' 'not' c))) 'or'
+   ((a '&' (b '&' c)) 'or' (a '&' ('not' b '&' 'not' c))) by BVFUNC_1:7
+ .=(('not' a '&' 'not' b '&' c) 'or' ('not' a '&' b '&' 'not' c)) 'or'
+   ((a '&' (b '&' c)) 'or' (a '&' ('not' b '&' 'not' c))) by BVFUNC_1:7
+ .=(('not' a '&' 'not' b '&' c) 'or' ('not' a '&' b '&' 'not' c)) 'or'
+   ((a '&' b '&' c) 'or' (a '&' ('not' b '&' 'not' c))) by BVFUNC_1:7
+ .=((a '&' b '&' c) 'or' (a '&' 'not' b '&' 'not' c)) 'or'
+   (('not' a '&' b '&' 'not' c) 'or' ('not' a '&' 'not' b '&' c))
+   by BVFUNC_1:7
+ .=(a '&' b '&' c) 'or' (a '&' 'not' b '&' 'not' c) 'or'
+   ('not' a '&' b '&' 'not' c) 'or' ('not' a '&' 'not' b '&' c)
+   by BVFUNC_1:11;
+     (a 'xor' b) 'xor' c
+  =(('not' a '&' b) 'or' (a '&' 'not' b)) 'xor' c by BVFUNC_4:9
+ .=('not' (('not' a '&' b) 'or' (a '&' 'not' b)) '&' c) 'or'
+   ((('not' a '&' b) 'or' (a '&' 'not' b)) '&' 'not' c) by BVFUNC_4:9
+ .=(('not' ('not' a '&' b) '&' 'not' (a '&' 'not' b)) '&' c) 'or'
+   ((('not' a '&' b) 'or' (a '&' 'not' b)) '&' 'not' c) by BVFUNC_1:16
+ .=((('not' 'not' a 'or' 'not' b) '&' 'not' (a '&' 'not' b)) '&' c) 'or'
+   ((('not' a '&' b) 'or' (a '&' 'not' b)) '&' 'not' c) by BVFUNC_1:17
+ .=(((a 'or' 'not' b) '&' 'not' (a '&' 'not' b)) '&' c) 'or'
+   ((('not' a '&' b) 'or' (a '&' 'not' b)) '&' 'not' c) by BVFUNC_1:4
+ .=(((a 'or' 'not' b) '&' ('not' a 'or' 'not' 'not' b)) '&' c) 'or'
+   ((('not' a '&' b) 'or' (a '&' 'not' b)) '&' 'not' c) by BVFUNC_1:17
+ .=(((a 'or' 'not' b) '&' ('not' a 'or' b)) '&' c) 'or'
+   ((('not' a '&' b) 'or' (a '&' 'not' b)) '&' 'not' c) by BVFUNC_1:4
+ .=(((a 'or' 'not' b) '&' ('not' a 'or' b)) '&' c) 'or'
+   (('not' a '&' b '&' 'not' c) 'or' (a '&' 'not' b '&' 'not' c))
+   by BVFUNC_1:15
+ .=(((a '&' b) 'or' ('not' a '&' 'not' b)) '&' c) 'or'
+   (('not' a '&' b '&' 'not' c) 'or' (a '&' 'not' b '&' 'not' c)) by Th17
+ .=((a '&' b '&' c) 'or' ('not' a '&' 'not' b '&' c)) 'or'
+   (('not' a '&' b '&' 'not' c) 'or' (a '&' 'not' b '&' 'not' c))
+  by BVFUNC_1:15
+ .=(a '&' b '&' c) 'or' ((a '&' 'not' b '&' 'not' c) 'or'
+   ('not' a '&' b '&' 'not' c)) 'or' ('not' a '&' 'not' b '&' c)
+  by BVFUNC_1:11
+ .=(a '&' b '&' c) 'or' (a '&' 'not' b '&' 'not' c) 'or'
+   ('not' a '&' b '&' 'not' c) 'or' ('not' a '&' 'not' b '&' c)
+  by BVFUNC_1:11;
+  hence thesis by A1;
+end;
+
+theorem
+  a 'eqv' (b 'eqv' c) = (a 'eqv' b) 'eqv' c
+proof
+A1:a 'eqv' (b 'eqv' c)
+  =(a 'imp' (b 'eqv' c)) '&' ((b 'eqv' c) 'imp' a) by BVFUNC_4:7
+ .=(a 'imp' ((b 'imp' c) '&' (c 'imp' b))) '&' ((b 'eqv' c) 'imp' a)
+  by BVFUNC_4:7
+ .=(a 'imp' ((b 'imp' c) '&' (c 'imp' b))) '&'
+   (((b 'imp' c) '&' (c 'imp' b)) 'imp' a) by BVFUNC_4:7
+ .=('not' a 'or' ((b 'imp' c) '&' (c 'imp' b))) '&'
+   (((b 'imp' c) '&' (c 'imp' b)) 'imp' a) by BVFUNC_4:8
+ .=('not' a 'or' (('not' b 'or' c) '&' (c 'imp' b))) '&'
+   (((b 'imp' c) '&' (c 'imp' b)) 'imp' a) by BVFUNC_4:8
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   (((b 'imp' c) '&' (c 'imp' b)) 'imp' a) by BVFUNC_4:8
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   ((('not' b 'or' c) '&' (c 'imp' b)) 'imp' a) by BVFUNC_4:8
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   ((('not' b 'or' c) '&' ('not' c 'or' b)) 'imp' a) by BVFUNC_4:8
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   ('not' (('not' b 'or' c) '&' ('not' c 'or' b)) 'or' a) by BVFUNC_4:8
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   (('not' ('not' b 'or' c)) 'or' ('not' ('not' c 'or' b)) 'or' a)
+  by BVFUNC_1:17
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   ((('not' 'not' b '&' 'not' c)) 'or' ('not' ('not' c 'or' b)) 'or' a)
+  by BVFUNC_1:16
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   (((b '&' 'not' c)) 'or' ('not' ('not' c 'or' b)) 'or' a) by BVFUNC_1:4
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   (((b '&' 'not' c)) 'or' (('not' 'not' c '&' 'not' b)) 'or' a) by BVFUNC_1:16
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   (((b '&' 'not' c) 'or' (c '&' 'not' b)) 'or' a) by BVFUNC_1:4
+ .=('not' a 'or' (('not' b 'or' c) '&' ('not' c 'or' b))) '&'
+   (((b 'or' c) '&' ('not' b 'or' 'not' c)) 'or' a) by Th16
+ .=(('not' a 'or' ('not' b 'or' c)) '&' ('not' a 'or' ('not' c 'or' b))) '&'
+   (((b 'or' c) '&' ('not' b 'or' 'not' c)) 'or' a) by BVFUNC_1:14
+ .=(('not' a 'or' 'not' b 'or' c) '&' ('not' a 'or' (b 'or' 'not' c))) '&'
+   (((b 'or' c) '&' ('not' b 'or' 'not' c)) 'or' a) by BVFUNC_1:11
+ .=(('not' a 'or' 'not' b 'or' c) '&' ('not' a 'or' b 'or' 'not' c)) '&'
+   (((b 'or' c) '&' ('not' b 'or' 'not' c)) 'or' a) by BVFUNC_1:11
+ .=(('not' a 'or' 'not' b 'or' c) '&' ('not' a 'or' b 'or' 'not' c)) '&'
+   ((a 'or' (b 'or' c)) '&' (a 'or' ('not' b 'or' 'not' c))) by BVFUNC_1:14
+ .=(('not' a 'or' 'not' b 'or' c) '&' ('not' a 'or' b 'or' 'not' c)) '&'
+   ((a 'or' b 'or' c) '&' (a 'or' ('not' b 'or' 'not' c))) by BVFUNC_1:11
+ .=(('not' a 'or' 'not' b 'or' c) '&' ('not' a 'or' b 'or' 'not' c)) '&'
+   ((a 'or' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c)) by BVFUNC_1:11
+ .=((a 'or' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c)) '&'
+   ('not' a 'or' b 'or' 'not' c) '&' ('not' a 'or' 'not' b 'or' c)
+  by BVFUNC_1:7;
+     (a 'eqv' b) 'eqv' c
+  =((a 'eqv' b) 'imp' c) '&' (c 'imp' (a 'eqv' b)) by BVFUNC_4:7
+ .=(((a 'imp' b) '&' (b 'imp' a)) 'imp' c) '&' (c 'imp' (a 'eqv' b))
+  by BVFUNC_4:7
+ .=(((a 'imp' b) '&' (b 'imp' a)) 'imp' c) '&'
+   (c 'imp' ((a 'imp' b) '&' (b 'imp' a))) by BVFUNC_4:7
+ .=((('not' a 'or' b) '&' (b 'imp' a)) 'imp' c) '&'
+   (c 'imp' ((a 'imp' b) '&' (b 'imp' a))) by BVFUNC_4:8
+ .=((('not' a 'or' b) '&' ('not' b 'or' a)) 'imp' c) '&'
+   (c 'imp' ((a 'imp' b) '&' (b 'imp' a))) by BVFUNC_4:8
+ .=('not' (('not' a 'or' b) '&' ('not' b 'or' a)) 'or' c) '&'
+   (c 'imp' ((a 'imp' b) '&' (b 'imp' a))) by BVFUNC_4:8
+ .=('not' (('not' a 'or' b) '&' ('not' b 'or' a)) 'or' c) '&'
+   ('not' c 'or' ((a 'imp' b) '&' (b 'imp' a))) by BVFUNC_4:8
+ .=('not' (('not' a 'or' b) '&' ('not' b 'or' a)) 'or' c) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' (b 'imp' a))) by BVFUNC_4:8
+ .=('not' (('not' a 'or' b) '&' ('not' b 'or' a)) 'or' c) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' ('not' b 'or' a))) by BVFUNC_4:8
+ .=(('not' ('not' a 'or' b) 'or' 'not' ('not' b 'or' a)) 'or' c) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' ('not' b 'or' a))) by BVFUNC_1:17
+ .=((('not' 'not' a '&' 'not' b) 'or' 'not' ('not' b 'or' a)) 'or' c) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' ('not' b 'or' a))) by BVFUNC_1:16
+ .=(((a '&' 'not' b) 'or' 'not' ('not' b 'or' a)) 'or' c) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' ('not' b 'or' a))) by BVFUNC_1:4
+ .=(((a '&' 'not' b) 'or' ('not' 'not' b '&' 'not' a)) 'or' c) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' ('not' b 'or' a))) by BVFUNC_1:16
+ .=(((a '&' 'not' b) 'or' (b '&' 'not' a)) 'or' c) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' ('not' b 'or' a))) by BVFUNC_1:4
+ .=(((a 'or' b) '&' ('not' a 'or' 'not' b)) 'or' c) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' ('not' b 'or' a))) by Th16
+ .=(((a 'or' b) 'or' c) '&' (('not' a 'or' 'not' b) 'or' c)) '&'
+   ('not' c 'or' (('not' a 'or' b) '&' ('not' b 'or' a))) by BVFUNC_1:14
+ .=((a 'or' b 'or' c) '&' ('not' a 'or' 'not' b 'or' c)) '&'
+   ((a 'or' 'not' b 'or' 'not' c) '&' ('not' a 'or' b 'or' 'not' c))
+  by BVFUNC_1:14
+ .=(a 'or' b 'or' c) '&' ((a 'or' 'not' b 'or' 'not' c) '&'
+   ('not' a 'or' b 'or' 'not' c)) '&' ('not' a 'or' 'not' b 'or' c)
+  by BVFUNC_1:7
+ .=(a 'or' b 'or' c) '&' (a 'or' 'not' b 'or' 'not' c) '&'
+   ('not' a 'or' b 'or' 'not' c) '&' ('not' a 'or' 'not' b 'or' c)
+  by BVFUNC_1:7;
+  hence thesis by A1;
+end;
+
+theorem
+  'not' 'not' a 'imp' a = I_el(Y)
+proof
+    'not' 'not' a = a by BVFUNC_1:4;
+  hence thesis by BVFUNC_5:8;
+end;
+
+theorem
+  ((a 'imp' b) '&' a) 'imp' b = I_el(Y)
+proof
+    ((a 'imp' b) '&' a) 'imp' b = (a '&' b) 'imp' b by BVFUNC_7:10;
+  hence thesis by BVFUNC_6:41;
+end;
+
+theorem Th22:
+a 'imp' ('not' a 'imp' a) = I_el(Y)
+proof
+     a 'imp' ('not' a 'imp' a)
+  ='not' a 'or' ('not' a 'imp' a) by BVFUNC_4:8
+ .='not' a 'or' ('not' 'not' a 'or' a) by BVFUNC_4:8
+ .='not' a 'or' (a 'or' a) by BVFUNC_1:4
+ .='not' a 'or' a by BVFUNC_1:10;
+  hence thesis by BVFUNC_4:6;
+end;
+
+theorem
+  ('not' a 'imp' a) 'eqv' a = I_el(Y)
+proof
+    ('not' a 'imp' a) 'eqv' a
+  = (('not' a 'imp' a) 'imp' a) '&' (a 'imp' ('not' a 'imp' a)) by BVFUNC_4:7
+ .= I_el(Y) '&' (a 'imp' ('not' a 'imp' a)) by BVFUNC_5:12
+ .= (a 'imp' ('not' a 'imp' a)) by BVFUNC_1:9;
+  hence thesis by Th22;
+end;
+
+theorem
+  a 'or' (a 'imp' b) = I_el(Y)
+proof
+     a 'or' (a 'imp' b)
+  =a 'or' ('not' a 'or' b) by BVFUNC_4:8
+ .=(a 'or' 'not' a) 'or' b by BVFUNC_1:11
+ .=I_el(Y) 'or' b by BVFUNC_4:6;
+  hence thesis by BVFUNC_1:13;
+end;
+
+theorem
+  (a 'imp' b) 'or' (c 'imp' a) = I_el(Y)
+proof
+     (a 'imp' b) 'or' (c 'imp' a)
+  =('not' a 'or' b) 'or' (c 'imp' a) by BVFUNC_4:8
+ .=('not' a 'or' b) 'or' ('not' c 'or' a) by BVFUNC_4:8
+ .='not' c 'or' (a 'or' ('not' a 'or' b)) by BVFUNC_1:11
+ .='not' c 'or' ((a 'or' 'not' a) 'or' b) by BVFUNC_1:11
+ .='not' c 'or' (I_el(Y) 'or' b) by BVFUNC_4:6
+ .='not' c 'or' I_el(Y) by BVFUNC_1:13;
+  hence thesis by BVFUNC_1:13;
+end;
+
+theorem
+  (a 'imp' b) 'or' ('not' a 'imp' b) = I_el(Y)
+proof
+     (a 'imp' b) 'or' ('not' a 'imp' b)
+  =('not' a 'or' b) 'or' ('not' a 'imp' b) by BVFUNC_4:8
+ .=('not' a 'or' b) 'or' ('not' 'not' a 'or' b) by BVFUNC_4:8
+ .=('not' a 'or' b) 'or' (a 'or' b) by BVFUNC_1:4
+ .=b 'or' ('not' a 'or' (a 'or' b)) by BVFUNC_1:11
+ .=b 'or' (('not' a 'or' a) 'or' b) by BVFUNC_1:11
+ .=b 'or' (I_el(Y) 'or' b) by BVFUNC_4:6
+ .=b 'or' I_el(Y) by BVFUNC_1:13;
+  hence thesis by BVFUNC_1:13;
+end;
+
+theorem
+  (a 'imp' b) 'or' (a 'imp' 'not' b) = I_el(Y)
+proof
+     (a 'imp' b) 'or' (a 'imp' 'not' b)
+  =('not' a 'or' b) 'or' (a 'imp' 'not' b) by BVFUNC_4:8
+ .=('not' a 'or' b) 'or' ('not' a 'or' 'not' b) by BVFUNC_4:8
+ .='not' a 'or' (b 'or' ('not' b 'or' 'not' a)) by BVFUNC_1:11
+ .='not' a 'or' ((b 'or' 'not' b) 'or' 'not' a) by BVFUNC_1:11
+ .='not' a 'or' (I_el(Y) 'or' 'not' a) by BVFUNC_4:6
+ .='not' a 'or' I_el(Y) by BVFUNC_1:13;
+  hence thesis by BVFUNC_1:13;
+end;
+
+theorem
+  'not' a 'imp' ('not' b 'eqv' (b 'imp' a)) = I_el(Y)
+proof
+     'not' a 'imp' ('not' b 'eqv' (b 'imp' a))
+  ='not' 'not' a 'or' ('not' b 'eqv' (b 'imp' a)) by BVFUNC_4:8
+ .='not' 'not' a 'or' (('not' b 'imp' (b 'imp' a)) '&'
+   ((b 'imp' a) 'imp' 'not' b)) by BVFUNC_4:7
+ .=a 'or' (('not' b 'imp' (b 'imp' a)) '&'
+   ((b 'imp' a) 'imp' 'not' b)) by BVFUNC_1:4
+ .=a 'or' (('not' 'not' b 'or' (b 'imp' a)) '&'
+   ((b 'imp' a) 'imp' 'not' b)) by BVFUNC_4:8
+ .=a 'or' ((b 'or' (b 'imp' a)) '&' ((b 'imp' a) 'imp' 'not' b)) by BVFUNC_1:4
+ .=a 'or' ((b 'or' ('not' b 'or' a)) '&' ((b 'imp' a) 'imp' 'not' b))
+  by BVFUNC_4:8
+ .=a 'or' (((b 'or' 'not' b) 'or' a) '&' ((b 'imp' a) 'imp' 'not' b))
+  by BVFUNC_1:11
+ .=a 'or' ((I_el(Y) 'or' a) '&' ((b 'imp' a) 'imp' 'not' b)) by BVFUNC_4:6
+ .=a 'or' (I_el(Y) '&' ((b 'imp' a) 'imp' 'not' b)) by BVFUNC_1:13
+ .=a 'or' ((b 'imp' a) 'imp' 'not' b) by BVFUNC_1:9
+ .=a 'or' (('not' b 'or' a) 'imp' 'not' b) by BVFUNC_4:8
+ .=a 'or' ('not' ('not' b 'or' a) 'or' 'not' b) by BVFUNC_4:8
+ .=a 'or' (('not' 'not' b '&' 'not' a) 'or' 'not' b) by BVFUNC_1:16
+ .=a 'or' ((b '&' 'not' a) 'or' 'not' b) by BVFUNC_1:4
+ .=a 'or' ((b 'or' 'not' b) '&' ('not' a 'or' 'not' b)) by BVFUNC_1:14
+ .=a 'or' (I_el(Y) '&' ('not' a 'or' 'not' b)) by BVFUNC_4:6
+ .=a 'or' ('not' a 'or' 'not' b) by BVFUNC_1:9
+ .=(a 'or' 'not' a) 'or' 'not' b by BVFUNC_1:11
+ .=I_el(Y) 'or' 'not' b by BVFUNC_4:6;
+  hence thesis by BVFUNC_1:13;
+end;
+
+theorem
+  (a 'imp' b) 'imp' (((a 'imp' c) 'imp' b) 'imp' b) = I_el(Y)
+proof
+     (a 'imp' b) 'imp' (((a 'imp' c) 'imp' b) 'imp' b)
+  ='not' (a 'imp' b) 'or' (((a 'imp' c) 'imp' b) 'imp' b) by BVFUNC_4:8
+ .='not' ('not' a 'or' b) 'or' (((a 'imp' c) 'imp' b) 'imp' b) by BVFUNC_4:8
+ .=('not' 'not' a '&' 'not' b) 'or'
+   (((a 'imp' c) 'imp' b) 'imp' b) by BVFUNC_1:16
+ .=(a '&' 'not' b) 'or' (((a 'imp' c) 'imp' b) 'imp' b) by BVFUNC_1:4
+ .=(a '&' 'not' b) 'or' ('not' ((a 'imp' c) 'imp' b) 'or' b) by BVFUNC_4:8
+ .=(a '&' 'not' b) 'or' ('not' (('not' a 'or' c) 'imp' b) 'or' b)
+  by BVFUNC_4:8
+ .=(a '&' 'not' b) 'or' ('not' ('not' ('not' a 'or' c) 'or' b) 'or' b)
+  by BVFUNC_4:8
+ .=(a '&' 'not' b) 'or' ('not' (('not' 'not' a '&' 'not' c) 'or' b) 'or' b)
+  by BVFUNC_1:16
+ .=(a '&' 'not' b) 'or' ('not' ((a '&' 'not' c) 'or' b) 'or' b)
+  by BVFUNC_1:4
+ .=(a '&' 'not' b) 'or' (('not' (a '&' 'not' c) '&' 'not' b) 'or' b)
+  by BVFUNC_1:16
+ .=(a '&' 'not' b) 'or' ((('not' a 'or' 'not' 'not' c) '&' 'not' b) 'or' b)
+  by BVFUNC_1:17
+ .=(a '&' 'not' b) 'or' ((('not' a 'or' c) '&' 'not' b) 'or' b)
+  by BVFUNC_1:4
+ .=(a '&' 'not' b) 'or' ((('not' a 'or' c) 'or' b) '&' ('not' b 'or' b))
+  by BVFUNC_1:14
+ .=(a '&' 'not' b) 'or' ((('not' a 'or' c) 'or' b) '&' I_el(Y)) by BVFUNC_4:6
+ .=(a '&' 'not' b) 'or' (('not' a 'or' c) 'or' b) by BVFUNC_1:9
+ .=((a '&' 'not' b) 'or' b) 'or' ('not' a 'or' c) by BVFUNC_1:11
+ .=((a 'or' b) '&' ('not' b 'or' b)) 'or' ('not' a 'or' c) by BVFUNC_1:14
+ .=((a 'or' b) '&' I_el(Y)) 'or' ('not' a 'or' c) by BVFUNC_4:6
+ .=(a 'or' b) 'or' ('not' a 'or' c) by BVFUNC_1:9
+ .=b 'or' (a 'or' ('not' a 'or' c)) by BVFUNC_1:11
+ .=b 'or' ((a 'or' 'not' a) 'or' c) by BVFUNC_1:11
+ .=b 'or' (I_el(Y) 'or' c) by BVFUNC_4:6
+ .=b 'or' I_el(Y) by BVFUNC_1:13;
+  hence thesis by BVFUNC_1:13;
+end;
+
+theorem
+  a 'imp' b = a 'eqv' (a '&' b)
+proof
+      a 'eqv' (a '&' b)
+   =(a 'imp' (a '&' b)) '&' ((a '&' b) 'imp' a) by BVFUNC_4:7
+  .=('not' a 'or' (a '&' b)) '&' ((a '&' b) 'imp' a) by BVFUNC_4:8
+  .=('not' a 'or' (a '&' b)) '&' ('not' (a '&' b) 'or' a) by BVFUNC_4:8
+  .=(('not' a 'or' a) '&' ('not' a 'or' b)) '&'
+    ('not' (a '&' b) 'or' a) by BVFUNC_1:14
+  .=(I_el(Y) '&' ('not' a 'or' b)) '&' ('not' (a '&' b) 'or' a) by BVFUNC_4:6
+  .=('not' a 'or' b) '&' ('not' (a '&' b) 'or' a) by BVFUNC_1:9
+  .=('not' a 'or' b) '&' (('not' a 'or' 'not' b) 'or' a) by BVFUNC_1:17
+  .=('not' a 'or' b) '&' ('not' b 'or' ('not' a 'or' a)) by BVFUNC_1:11
+  .=('not' a 'or' b) '&' ('not' b 'or' I_el(Y)) by BVFUNC_4:6
+  .=('not' a 'or' b) '&' I_el(Y) by BVFUNC_1:13
+  .='not' a 'or' b by BVFUNC_1:9;
+    hence thesis by BVFUNC_4:8;
+end;
+
+theorem
+  a 'imp' b=I_el(Y) & b 'imp' a=I_el(Y) iff a=b
+proof
+    (a 'eqv' b)=I_el(Y) iff ((a 'imp' b)=I_el(Y) & (b 'imp' a)=I_el(Y))
+  by BVFUNC_4:10;
+  hence thesis by BVFUNC_1:20;
+end;
+
+theorem
+  a = 'not' a 'imp' a
+proof
+    a 'imp' ('not' a 'imp' a) = I_el(Y) by Th22;
+  then A1:a '<' ('not' a 'imp' a) by BVFUNC_1:19;
+    ('not' a 'imp' a) 'imp' a = I_el(Y) by BVFUNC_5:12;
+  then ('not' a 'imp' a) '<' a by BVFUNC_1:19;
+  hence thesis by A1,BVFUNC_1:18;
+end;
+
+theorem Th33:
+a 'imp' ((a 'imp' b) 'imp' a) = I_el(Y)
+proof
+  thus a 'imp' ((a 'imp' b) 'imp' a)
+   ='not' a 'or' ((a 'imp' b) 'imp' a) by BVFUNC_4:8
+  .='not' a 'or' ('not' (a 'imp' b) 'or' a) by BVFUNC_4:8
+  .='not' a 'or' ('not' ('not' a 'or' b) 'or' a) by BVFUNC_4:8
+  .='not' a 'or' (('not' 'not' a '&' 'not' b) 'or' a) by BVFUNC_1:16
+  .='not' a 'or' ((a '&' 'not' b) 'or' a) by BVFUNC_1:4
+  .='not' a 'or' ((a 'or' a) '&' ('not' b 'or' a)) by BVFUNC_1:14
+  .='not' a 'or' (a '&' ('not' b 'or' a)) by BVFUNC_1:10
+  .='not' a 'or' ((a '&' 'not' b) 'or' (a '&' a)) by BVFUNC_1:15
+  .='not' a 'or' ((a '&' 'not' b) 'or' a) by BVFUNC_1:6
+  .=('not' a 'or' a) 'or' (a '&' 'not' b) by BVFUNC_1:11
+  .=I_el(Y) 'or' (a '&' 'not' b) by BVFUNC_4:6
+  .=I_el(Y) by BVFUNC_1:13;
+end;
+
+theorem
+  a = (a 'imp' b) 'imp' a
+proof
+    a 'imp' ((a 'imp' b) 'imp' a) = I_el(Y) by Th33;
+  then A1:a '<' ((a 'imp' b) 'imp' a) by BVFUNC_1:19;
+    ((a 'imp' b) 'imp' a) 'imp' a = I_el(Y) by BVFUNC_8:27;
+  then ((a 'imp' b) 'imp' a) '<' a by BVFUNC_1:19;
+  hence thesis by A1,BVFUNC_1:18;
+end;
+
+theorem
+  a = (b 'imp' a) '&' ('not' b 'imp' a)
+proof
+    a=(a 'or' b) '&' (a 'or' 'not' b) by BVFUNC_8:7
+ .=(a 'or' b) '&' (b 'imp' a) by BVFUNC_4:8
+ .=(a 'or' 'not' 'not' b) '&' (b 'imp' a) by BVFUNC_1:4
+ .=('not' b 'imp' a) '&' (b 'imp' a) by BVFUNC_4:8;
+ hence thesis;
+end;
+
+theorem
+  a '&' b = 'not' (a 'imp' 'not' b)
+proof
+    (a '&' b) 'imp' 'not'( a 'imp' 'not' b)=I_el(Y) by BVFUNC_6:35;
+  then A1:(a '&' b) '<' 'not'( a 'imp' 'not' b) by BVFUNC_1:19;
+    'not'( a 'imp' 'not' b) 'imp' (a '&' b)=I_el(Y) by BVFUNC_6:36;
+  then 'not'( a 'imp' 'not' b) '<' (a '&' b) by BVFUNC_1:19;
+  hence thesis by A1,BVFUNC_1:18;
+end;
+
+theorem
+  a 'or' b = 'not' a 'imp' b
+proof
+  thus 'not' a 'imp' b
+  ='not' 'not' a 'or' b by BVFUNC_4:8
+ .=a 'or' b by BVFUNC_1:4;
+end;
+
+theorem
+  a 'or' b = (a 'imp' b) 'imp' b
+proof
+  thus (a 'imp' b) 'imp' b
+  ='not' (a 'imp' b) 'or' b by BVFUNC_4:8
+ .='not' ('not' a 'or' b) 'or' b by BVFUNC_4:8
+ .=('not' 'not' a '&' 'not' b) 'or' b by BVFUNC_1:16
+ .=(a '&' 'not' b) 'or' b by BVFUNC_1:4
+ .=(a 'or' b) '&' ('not' b 'or' b) by BVFUNC_1:14
+ .=(a 'or' b) '&' I_el(Y) by BVFUNC_4:6
+ .= a 'or' b by BVFUNC_1:9;
+end;
+
+theorem
+  (a 'imp' b) 'imp' (a 'imp' a) = I_el(Y)
+proof
+  thus (a 'imp' b) 'imp' (a 'imp' a)=(a 'imp' b) 'imp' I_el(Y) by BVFUNC_5:8
+ .=I_el(Y) by BVFUNC_7:16;
+end;
+
+theorem
+  (a 'imp' (b 'imp' c)) 'imp' ((d 'imp' b) 'imp' (a 'imp' (d 'imp' c))) = I_el(
+Y
+)
+proof
+  thus (a 'imp' (b 'imp' c)) 'imp' ((d 'imp' b) 'imp' (a 'imp' (d 'imp' c)))
+  ='not' (a 'imp' (b 'imp' c)) 'or' ((d 'imp' b) 'imp' (a 'imp' (d 'imp' c)))
+  by BVFUNC_4:8
+ .='not' ('not' a 'or' (b 'imp' c)) 'or'
+   ((d 'imp' b) 'imp' (a 'imp' (d 'imp' c))) by BVFUNC_4:8
+ .='not' ('not' a 'or' ('not' b 'or' c)) 'or'
+   ((d 'imp' b) 'imp' (a 'imp' (d 'imp' c))) by BVFUNC_4:8
+ .='not' ('not' a 'or' ('not' b 'or' c)) 'or'
+   ('not' (d 'imp' b) 'or' (a 'imp' (d 'imp' c))) by BVFUNC_4:8
+ .='not' ('not' a 'or' ('not' b 'or' c)) 'or'
+   ('not' ('not' d 'or' b) 'or' (a 'imp' (d 'imp' c))) by BVFUNC_4:8
+ .='not' ('not' a 'or' ('not' b 'or' c)) 'or'
+   ('not' ('not' d 'or' b) 'or' ('not' a 'or' (d 'imp' c))) by BVFUNC_4:8
+ .='not' ('not' a 'or' ('not' b 'or' c)) 'or'
+   ('not' ('not' d 'or' b) 'or' ('not' a 'or' ('not' d 'or' c))) by BVFUNC_4:8
+ .=('not' 'not' a '&' 'not' ('not' b 'or' c)) 'or'
+   ('not' ('not' d 'or' b) 'or' ('not' a 'or' ('not' d 'or' c)))
+   by BVFUNC_1:16
+ .=('not' 'not' a '&' ('not' 'not' b '&' 'not' c)) 'or'
+   ('not' ('not' d 'or' b) 'or' ('not' a 'or' ('not' d 'or' c)))
+   by BVFUNC_1:16
+ .=('not' 'not' a '&' ('not' 'not' b '&' 'not' c)) 'or'
+   (('not' 'not' d '&' 'not' b) 'or' ('not' a 'or' ('not' d 'or' c)))
+   by BVFUNC_1:16
+ .=(a '&' ('not' 'not' b '&' 'not' c)) 'or'
+   (('not' 'not' d '&' 'not' b) 'or' ('not' a 'or' ('not' d 'or' c)))
+   by BVFUNC_1:4
+ .=(a '&' (b '&' 'not' c)) 'or'
+   (('not' 'not' d '&' 'not' b) 'or' ('not' a 'or' ('not' d 'or' c)))
+   by BVFUNC_1:4
+ .=(a '&' (b '&' 'not' c)) 'or'
+   ((d '&' 'not' b) 'or' ('not' a 'or' ('not' d 'or' c))) by BVFUNC_1:4
+ .=(a '&' (b '&' 'not' c)) 'or'
+   (((d '&' 'not' b) 'or' 'not' a) 'or' ('not' d 'or' c)) by BVFUNC_1:11
+ .=((a '&' (b '&' 'not' c)) 'or'
+   ('not' a 'or' (d '&' 'not' b))) 'or' ('not' d 'or' c) by BVFUNC_1:11
+ .=(((a '&' (b '&' 'not' c)) 'or' 'not' a) 'or'
+   (d '&' 'not' b)) 'or' ('not' d 'or' c) by BVFUNC_1:11
+ .=(((a 'or' 'not' a) '&' ((b '&' 'not' c) 'or' 'not' a)) 'or'
+   (d '&' 'not' b)) 'or' ('not' d 'or' c) by BVFUNC_1:14
+ .=((I_el(Y) '&' ((b '&' 'not' c) 'or' 'not' a)) 'or'
+   (d '&' 'not' b)) 'or' ('not' d 'or' c) by BVFUNC_4:6
+ .=(((b '&' 'not' c) 'or' 'not' a) 'or'
+   (d '&' 'not' b)) 'or' ('not' d 'or' c) by BVFUNC_1:9
+ .=((b '&' 'not' c) 'or' 'not' a) 'or'
+   ((d '&' 'not' b) 'or' ('not' d 'or' c)) by BVFUNC_1:11
+ .=((b '&' 'not' c) 'or' 'not' a) 'or'
+   ((('not' b '&' d) 'or' 'not' d) 'or' c) by BVFUNC_1:11
+ .=((b '&' 'not' c) 'or' 'not' a) 'or'
+   ((('not' b 'or' 'not' d) '&' (d 'or' 'not' d)) 'or' c) by BVFUNC_1:14
+ .=((b '&' 'not' c) 'or' 'not' a) 'or'
+   ((('not' b 'or' 'not' d) '&' I_el(Y)) 'or' c) by BVFUNC_4:6
+ .=((b '&' 'not' c) 'or' 'not' a) 'or'
+   (('not' b 'or' 'not' d) 'or' c) by BVFUNC_1:9
+ .='not' a 'or' (('not' c '&' b) 'or' (('not' b 'or' 'not' d) 'or' c))
+  by BVFUNC_1:11
+ .='not' a 'or' ((('not' c '&' b) 'or' ('not' b 'or' 'not' d)) 'or' c)
+  by BVFUNC_1:11
+ .='not' a 'or' (((('not' c '&' b) 'or' 'not' b) 'or' 'not' d) 'or' c)
+  by BVFUNC_1:11
+ .='not' a 'or' (((('not' c 'or' 'not' b) '&' (b 'or' 'not' b))
+  'or' 'not' d) 'or' c) by BVFUNC_1:14
+ .='not' a 'or' (((('not' c 'or' 'not' b) '&' I_el(Y))
+  'or' 'not' d) 'or' c) by BVFUNC_4:6
+ .='not' a 'or' ((('not' b 'or' 'not' c) 'or' 'not' d) 'or' c) by BVFUNC_1:9
+ .='not' a 'or' (('not' b 'or' ('not' c 'or' 'not' d)) 'or' c) by BVFUNC_1:11
+ .='not' a 'or' ('not' b 'or' (('not' d 'or' 'not' c) 'or' c)) by BVFUNC_1:11
+ .='not' a 'or' ('not' b 'or' ('not' d 'or' ('not' c 'or' c))) by BVFUNC_1:11
+ .='not' a 'or' ('not' b 'or' ('not' d 'or' I_el(Y))) by BVFUNC_4:6
+ .='not' a 'or' ('not' b 'or' I_el(Y)) by BVFUNC_1:13
+ .='not' a 'or' I_el(Y) by BVFUNC_1:13
+ .=I_el(Y) by BVFUNC_1:13;
+end;
+
+theorem
+  (((a 'imp' b) '&' a) '&' c) 'imp' b = I_el(Y)
+proof
+  thus (((a 'imp' b) '&' a) '&' c) 'imp' b
+  =((('not' a 'or' b) '&' a) '&' c) 'imp' b by BVFUNC_4:8
+ .=((('not' a '&' a) 'or' (b '&' a)) '&' c) 'imp' b by BVFUNC_1:15
+ .=((O_el(Y) 'or' (b '&' a)) '&' c) 'imp' b by BVFUNC_4:5
+ .=((b '&' a) '&' c) 'imp' b by BVFUNC_1:12
+ .='not' ((b '&' a) '&' c) 'or' b by BVFUNC_4:8
+ .=('not' (b '&' a) 'or' 'not' c) 'or' b by BVFUNC_1:17
+ .=(('not' b 'or' 'not' a) 'or' 'not' c) 'or' b by BVFUNC_1:17
+ .=(b 'or' ('not' b 'or' 'not' a)) 'or' 'not' c by BVFUNC_1:11
+ .=((b 'or' 'not' b) 'or' 'not' a) 'or' 'not' c by BVFUNC_1:11
+ .=(I_el(Y) 'or' 'not' a) 'or' 'not' c by BVFUNC_4:6
+ .=I_el(Y) 'or' 'not' c by BVFUNC_1:13
+ .=I_el(Y)by BVFUNC_1:13;
+end;
+
+theorem
+  (b 'imp' c) 'imp' ((a '&' b) 'imp' c) = I_el(Y)
+proof
+  thus (b 'imp' c) 'imp' ((a '&' b) 'imp' c)
+  ='not' (b 'imp' c) 'or' ((a '&' b) 'imp' c) by BVFUNC_4:8
+ .='not' ('not' b 'or' c) 'or' ((a '&' b) 'imp' c) by BVFUNC_4:8
+ .='not' ('not' b 'or' c) 'or' ('not' (a '&' b) 'or' c) by BVFUNC_4:8
+ .=('not' 'not' b '&' 'not' c) 'or' ('not' (a '&' b) 'or' c) by BVFUNC_1:16
+ .=(b '&' 'not' c) 'or' ('not' (a '&' b) 'or' c) by BVFUNC_1:4
+ .=(b '&' 'not' c) 'or' (('not' a 'or' 'not' b) 'or' c) by BVFUNC_1:17
+ .=((b '&' 'not' c) 'or' c) 'or' ('not' a 'or' 'not' b) by BVFUNC_1:11
+ .=((b 'or' c) '&' ('not' c 'or' c)) 'or' ('not' a 'or' 'not' b)
+  by BVFUNC_1:14
+ .=((b 'or' c) '&' I_el(Y)) 'or' ('not' a 'or' 'not' b) by BVFUNC_4:6
+ .=('not' a 'or' 'not' b) 'or' (b 'or' c) by BVFUNC_1:9
+ .=(('not' a 'or' 'not' b) 'or' b) 'or' c by BVFUNC_1:11
+ .=('not' a 'or' ('not' b 'or' b)) 'or' c by BVFUNC_1:11
+ .=('not' a 'or' I_el(Y)) 'or' c by BVFUNC_4:6
+ .=I_el(Y) 'or' c by BVFUNC_1:13
+ .=I_el(Y) by BVFUNC_1:13;
+end;
+
+theorem
+  ((a '&' b) 'imp' c) 'imp' ((a '&' b) 'imp' (c '&' b)) = I_el(Y)
+proof
+    ((a '&' b) 'imp' c) 'imp' ((a '&' b) 'imp' (c '&' b))
+  =('not' (a '&' b) 'or' c) 'imp' ((a '&' b) 'imp' (c '&' b)) by BVFUNC_4:8
+ .='not' ('not' (a '&' b) 'or' c) 'or' ((a '&' b) 'imp' (c '&' b))
+  by BVFUNC_4:8
+ .='not' ('not' (a '&' b) 'or' c) 'or' ('not' (a '&' b) 'or' (c '&' b))
+  by BVFUNC_4:8
+ .=('not' 'not' (a '&' b) '&' 'not' c) 'or' ('not' (a '&' b) 'or' (c '&' b))
+  by BVFUNC_1:16
+ .=((a '&' b) '&' 'not' c) 'or' ('not' (a '&' b) 'or' (c '&' b))
+  by BVFUNC_1:4
+ .=((a '&' b) '&' 'not' c) 'or' (('not' a 'or' 'not' b) 'or' (c '&' b))
+  by BVFUNC_1:17
+ .=((a '&' b) '&' 'not' c) 'or' ('not' a 'or' ('not' b 'or' (b '&' c)))
+  by BVFUNC_1:11
+ .=((a '&' b) '&' 'not' c) 'or' ('not' a 'or'
+   (('not' b 'or' b) '&' ('not' b 'or' c))) by BVFUNC_1:14
+ .=((a '&' b) '&' 'not' c) 'or' ('not' a 'or'
+   (I_el(Y) '&' ('not' b 'or' c))) by BVFUNC_4:6
+ .=((a '&' b) '&' 'not' c) 'or' ('not' a 'or' ('not' b 'or' c)) by BVFUNC_1:9
+ .=(((a '&' b) '&' 'not' c) 'or' 'not' a) 'or' ('not' b 'or' c) by BVFUNC_1:11
+ .=(((a '&' b) 'or' 'not' a) '&' ('not' c 'or' 'not' a)) 'or'
+   ('not' b 'or' c) by BVFUNC_1:14
+ .=(((a 'or' 'not' a) '&' (b 'or' 'not' a)) '&' ('not' c 'or' 'not' a)) 'or'
+   ('not' b 'or' c) by BVFUNC_1:14
+ .=((I_el(Y) '&' (b 'or' 'not' a)) '&' ('not' c 'or' 'not' a)) 'or'
+   ('not' b 'or' c) by BVFUNC_4:6
+ .=((b 'or' 'not' a) '&' ('not' c 'or' 'not' a)) 'or' ('not' b 'or' c)
+  by BVFUNC_1:9
+ .=(((b 'or' 'not' a) '&' ('not' c 'or' 'not' a)) 'or' c) 'or' 'not' b
+  by BVFUNC_1:11
+ .=(((b 'or' 'not' a) 'or' c) '&' (('not' c 'or' 'not' a) 'or' c))
+  'or' 'not' b by BVFUNC_1:14
+ .=(((b 'or' 'not' a) 'or' c) '&' ('not' a 'or' ('not' c 'or' c)))
+  'or' 'not' b by BVFUNC_1:11
+ .=(((b 'or' 'not' a) 'or' c) '&' ('not' a 'or' I_el(Y))) 'or' 'not' b
+  by BVFUNC_4:6
+ .=(((b 'or' 'not' a) 'or' c) '&' I_el(Y)) 'or' 'not' b by BVFUNC_1:13
+ .=((b 'or' 'not' a) 'or' c) 'or' 'not' b by BVFUNC_1:9
+ .=('not' b 'or' (b 'or' 'not' a)) 'or' c by BVFUNC_1:11
+ .=(('not' b 'or' b) 'or' 'not' a) 'or' c by BVFUNC_1:11
+ .=(I_el(Y) 'or' 'not' a) 'or' c by BVFUNC_4:6
+ .=I_el(Y) 'or' c by BVFUNC_1:13;
+  hence thesis by BVFUNC_1:13;
+end;
+
+theorem
+  (a 'imp' b) 'imp' ((a '&' c) 'imp' (b '&' c)) = I_el(Y)
+proof
+    a 'imp' b '<' (a '&' c) 'imp' (b '&' c) by BVFUNC_9:10;
+  hence thesis by BVFUNC_1:19;
+end;
+
+theorem
+  (a 'imp' b) '&' (a '&' c) 'imp' (b '&' c) = I_el(Y)
+proof
+     (a 'imp' b) '&' (a '&' c) 'imp' (b '&' c)
+  =((a 'imp' b) '&' a) '&' c 'imp' (b '&' c) by BVFUNC_1:7
+ .=(a '&' b) '&' c 'imp' (b '&' c) by BVFUNC_7:10
+ .=a '&' (b '&' c) 'imp' (b '&' c) by BVFUNC_1:7;
+  hence thesis by BVFUNC_6:39;
+end;
+
+theorem
+  a '&' (a 'imp' b) '&' (b 'imp' c) '<' c
+proof
+     (a '&' (a 'imp' b) '&' (b 'imp' c)) 'imp' c
+  ='not' (a '&' (a 'imp' b) '&' (b 'imp' c)) 'or' c by BVFUNC_4:8
+ .='not' (a '&' b '&' (b 'imp' c)) 'or' c by BVFUNC_7:10
+ .='not' (a '&' (b '&' (b 'imp' c))) 'or' c by BVFUNC_1:7
+ .='not' (a '&' (b '&' c)) 'or' c by BVFUNC_7:10
+ .='not' ((a '&' b) '&' c) 'or' c by BVFUNC_1:7
+ .=('not' (a '&' b) 'or' 'not' c) 'or' c by BVFUNC_1:17
+ .='not' (a '&' b) 'or' ('not' c 'or' c) by BVFUNC_1:11
+ .='not' (a '&' b) 'or' I_el(Y) by BVFUNC_4:6
+ .= I_el(Y) by BVFUNC_1:13;
+  hence thesis by BVFUNC_1:19;
+end;
+
+theorem
+  (a 'or' b) '&' (a 'imp' c) '&' (b 'imp' c) '<' ('not' a 'imp' (b 'or' c))
+proof
+     (a 'or' b) '&' (a 'imp' c) '&' (b 'imp' c) 'imp' ('not' a 'imp' (b 'or' c)
+)
+  ='not' ((a 'or' b) '&' (a 'imp' c) '&' (b 'imp' c)) 'or'
+   ('not' a 'imp' (b 'or' c)) by BVFUNC_4:8
+ .='not' ((a 'or' b) '&' ('not' a 'or' c) '&' (b 'imp' c)) 'or'
+   ('not' a 'imp' (b 'or' c)) by BVFUNC_4:8
+ .='not' ((a 'or' b) '&' ('not' a 'or' c) '&' ('not' b 'or' c)) 'or'
+   ('not' a 'imp' (b 'or' c)) by BVFUNC_4:8
+ .='not' ((a 'or' b) '&' ('not' a 'or' c) '&' ('not' b 'or' c)) 'or'
+   ('not' 'not' a 'or' (b 'or' c)) by BVFUNC_4:8
+ .=('not' ((a 'or' b) '&' ('not' a 'or' c)) 'or' 'not' ('not' b 'or' c)) 'or'
+   ('not' 'not' a 'or' (b 'or' c)) by BVFUNC_1:17
+ .=('not' ((a 'or' b) '&' ('not' a 'or' c)) 'or' ('not' 'not' b '&' 'not' c))
+   'or' ('not' 'not' a 'or' (b 'or' c)) by BVFUNC_1:16
+ .=('not' ((a 'or' b) '&' ('not' a 'or' c)) 'or' (b '&' 'not' c))
+   'or' ('not' 'not' a 'or' (b 'or' c)) by BVFUNC_1:4
+ .=(('not' (a 'or' b) 'or' 'not' ('not' a 'or' c)) 'or' (b '&' 'not' c))
+   'or' ('not' 'not' a 'or' (b 'or' c)) by BVFUNC_1:17
+ .=((('not' a '&' 'not' b) 'or' 'not' ('not' a 'or' c)) 'or' (b '&' 'not' c))
+   'or' ('not' 'not' a 'or' (b 'or' c)) by BVFUNC_1:16
+ .=((('not' a '&' 'not' b) 'or' 'not' ('not' a 'or' c)) 'or' (b '&' 'not' c))
+   'or' (a 'or' (b 'or' c)) by BVFUNC_1:4
+ .=((('not' a '&' 'not' b) 'or' ('not' 'not' a '&' 'not' c)) 'or'
+   (b '&' 'not' c)) 'or' (a 'or' (b 'or' c)) by BVFUNC_1:16
+ .=((('not' a '&' 'not' b) 'or' (a '&' 'not' c)) 'or'
+   (b '&' 'not' c)) 'or' (a 'or' (b 'or' c)) by BVFUNC_1:4
+ .=((('not' a 'or' (a '&' 'not' c)) '&' ('not' b 'or' (a '&' 'not' c))) 'or'
+   (b '&' 'not' c)) 'or' (a 'or' (b 'or' c)) by BVFUNC_1:14
+ .=(((('not' a 'or' a) '&' ('not' a 'or' 'not' c)) '&'
+   ('not' b 'or' (a '&' 'not' c))) 'or'
+   (b '&' 'not' c)) 'or' (a 'or' (b 'or' c)) by BVFUNC_1:14
+ .=(((I_el(Y) '&' ('not' a 'or' 'not' c)) '&' ('not' b 'or' (a '&' 'not' c)))
+   'or' (b '&' 'not' c)) 'or' (a 'or' (b 'or' c)) by BVFUNC_4:6
+ .=((('not' a 'or' 'not' c) '&' ('not' b 'or' (a '&' 'not' c))) 'or'
+   (b '&' 'not' c)) 'or' (a 'or' (b 'or' c)) by BVFUNC_1:9
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (('not' a 'or' 'not' c) '&'
+   (a '&' 'not' c))) 'or' (b '&' 'not' c)) 'or' (a 'or' (b 'or' c))
+   by BVFUNC_1:15
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' ((('not' a 'or' 'not' c)
+   '&' a) '&' 'not' c)) 'or' (b '&' 'not' c)) 'or' (a 'or' (b 'or' c))
+   by BVFUNC_1:7
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' ((('not' a '&' a) 'or'
+   ('not' c '&' a)) '&' 'not' c)) 'or' (b '&' 'not' c)) 'or'
+   (a 'or' (b 'or' c)) by BVFUNC_1:15
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' ((O_el(Y) 'or'
+   ('not' c '&' a)) '&' 'not' c)) 'or' (b '&' 'not' c)) 'or'
+   (a 'or' (b 'or' c)) by BVFUNC_4:5
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (('not' c '&' a) '&' 'not' c))
+   'or' (b '&' 'not' c)) 'or' (a 'or' (b 'or' c)) by BVFUNC_1:12
+ .=((('not' c '&' a) '&' 'not' c) 'or' ((('not' a 'or' 'not' c) '&' 'not' b)
+   'or' (b '&' 'not' c))) 'or' (a 'or' (b 'or' c)) by BVFUNC_1:11
+ .=((('not' c '&' a) '&' 'not' c) 'or' ((('not' a 'or' 'not' c) '&' 'not' b)
+   'or' (b '&' 'not' c))) 'or' (c 'or' (a 'or' b)) by BVFUNC_1:11
+ .=((((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b '&' 'not' c)) 'or'
+   (('not' c '&' a) '&' 'not' c)) 'or' c) 'or' (a 'or' b) by BVFUNC_1:11
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b '&' 'not' c)) 'or'
+   ((('not' c '&' a) '&' 'not' c) 'or' c)) 'or' (a 'or' b) by BVFUNC_1:11
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b '&' 'not' c)) 'or'
+   ((('not' c '&' a) 'or' c) '&' ('not' c 'or' c))) 'or' (a 'or' b)
+   by BVFUNC_1:14
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b '&' 'not' c)) 'or'
+   ((('not' c '&' a) 'or' c) '&' I_el(Y))) 'or' (a 'or' b) by BVFUNC_4:6
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b '&' 'not' c)) 'or'
+   ((('not' c '&' a) 'or' c))) 'or' (a 'or' b) by BVFUNC_1:9
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b '&' 'not' c)) 'or'
+   ((('not' c 'or' c) '&' (a 'or' c)))) 'or' (a 'or' b) by BVFUNC_1:14
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b '&' 'not' c)) 'or'
+   ((I_el(Y) '&' (a 'or' c)))) 'or' (a 'or' b) by BVFUNC_4:6
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b '&' 'not' c)) 'or'
+   (a 'or' c)) 'or' (a 'or' b) by BVFUNC_1:9
+ .=((('not' a 'or' 'not' c) '&' 'not' b) 'or' ((b '&' 'not' c) 'or'
+   (c 'or' a))) 'or' (a 'or' b) by BVFUNC_1:11
+ .=((('not' a 'or' 'not' c) '&' 'not' b) 'or' (((b '&' 'not' c) 'or' c)
+   'or' a)) 'or' (a 'or' b) by BVFUNC_1:11
+ .=((('not' a 'or' 'not' c) '&' 'not' b) 'or' (((b 'or' c) '&'
+   ('not' c 'or' c)) 'or' a)) 'or' (a 'or' b) by BVFUNC_1:14
+ .=((('not' a 'or' 'not' c) '&' 'not' b) 'or' (((b 'or' c) '&' I_el(Y))
+   'or' a)) 'or' (a 'or' b) by BVFUNC_4:6
+ .=((('not' a 'or' 'not' c) '&' 'not' b) 'or' ((b 'or' c)'or' a))
+   'or' (a 'or' b) by BVFUNC_1:9
+ .=((('not' a 'or' 'not' c) '&' 'not' b) 'or' (b 'or' (c 'or' a)))
+   'or' (a 'or' b) by BVFUNC_1:11
+ .=(((('not' a 'or' 'not' c) '&' 'not' b) 'or' b) 'or' (c 'or' a))
+   'or' (a 'or' b) by BVFUNC_1:11
+ .=(((('not' a 'or' 'not' c) 'or' b) '&' ('not' b 'or' b)) 'or' (c 'or' a))
+   'or' (a 'or' b) by BVFUNC_1:14
+ .=(((('not' a 'or' 'not' c) 'or' b) '&' I_el(Y)) 'or' (c 'or' a))
+   'or' (a 'or' b) by BVFUNC_4:6
+ .=((('not' a 'or' 'not' c) 'or' b) 'or' (c 'or' a))
+   'or' (a 'or' b) by BVFUNC_1:9
+ .=(((('not' a 'or' 'not' c) 'or' b) 'or' c) 'or' a)
+   'or' (a 'or' b) by BVFUNC_1:11
+ .=(((('not' a 'or' 'not' c) 'or' c) 'or' b) 'or' a)
+   'or' (a 'or' b) by BVFUNC_1:11
+ .=((('not' a 'or' ('not' c 'or' c)) 'or' b) 'or' a)
+   'or' (a 'or' b) by BVFUNC_1:11
+ .=((('not' a 'or' I_el(Y)) 'or' b) 'or' a) 'or' (a 'or' b) by BVFUNC_4:6
+ .=((I_el(Y) 'or' b) 'or' a) 'or' (a 'or' b) by BVFUNC_1:13
+ .=(I_el(Y) 'or' a) 'or' (a 'or' b) by BVFUNC_1:13
+ .=I_el(Y) 'or' (a 'or' b) by BVFUNC_1:13
+ .= I_el(Y) by BVFUNC_1:13;
+  hence thesis by BVFUNC_1:19;
+end;
+

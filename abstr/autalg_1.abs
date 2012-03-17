@@ -1,0 +1,293 @@
+:: On the Group of Automorphisms of Universal Algebra & Many
+:: Sorted Algebra
+::  by Artur Korni{\l}owicz
+::
+:: Received December 13, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary UNIALG_1, FUNCT_1, GROUP_6, ALG_1, RELAT_1, FRAENKEL, FUNCT_2,
+      BINOP_1, REALSET1, VECTSP_1, GROUP_1, PBOOLE, NATTRA_1, BOOLE, FUNCOP_1,
+      PRALG_1, MSUALG_3, ZF_REFLE, AMI_1, MSUALG_1, CARD_3, MSUHOM_1, CQC_SIM1,
+      WELLORD1, AUTALG_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, STRUCT_0, FINSEQ_1, BINOP_1, FRAENKEL, PBOOLE, VECTSP_1,
+      GROUP_1, GROUP_6, CARD_3, UNIALG_1, UNIALG_2, ALG_1, PRALG_1, MSUALG_1,
+      MSUALG_3, MSUHOM_1;
+ constructors BINOP_1, FRAENKEL, GROUP_6, ALG_1, MSUALG_3, MSUHOM_1, MEMBERED,
+      XBOOLE_0;
+ clusters FRAENKEL, FUNCT_1, GROUP_1, MSUALG_1, PBOOLE, PRALG_1, RELSET_1,
+      STRUCT_0, SUBSET_1, MEMBERED, ZFMISC_1, FUNCT_2, PARTFUN1, XBOOLE_0,
+      NUMBERS, ORDINAL2;
+ requirements BOOLE, SUBSET;
+
+
+begin
+:: On the Group of Automorphisms of Universal Algebra
+
+reserve UA for Universal_Algebra,
+        f, g for Function of UA, UA;
+
+theorem :: AUTALG_1:1
+id the carrier of UA is_isomorphism UA, UA;
+
+definition let UA;
+  func UAAut UA -> FUNCTION_DOMAIN of the carrier of UA, the carrier of UA
+  means
+:: AUTALG_1:def 1
+ (for f be Element of it holds f is Function of UA, UA) &
+  for h be Function of UA, UA holds h in it iff h is_isomorphism UA, UA;
+end;
+
+theorem :: AUTALG_1:2
+  UAAut UA c= Funcs (the carrier of UA, the carrier of UA);
+
+canceled;
+
+theorem :: AUTALG_1:4
+id the carrier of UA in UAAut UA;
+
+theorem :: AUTALG_1:5
+  for f, g st f is Element of UAAut UA & g = f" holds g is_isomorphism UA, UA;
+
+theorem :: AUTALG_1:6
+for f be Element of UAAut UA holds f" in UAAut UA;
+
+theorem :: AUTALG_1:7
+for f1, f2 be Element of UAAut UA holds f1 * f2 in UAAut UA;
+
+definition
+  let UA;
+  func UAAutComp UA -> BinOp of UAAut UA means
+:: AUTALG_1:def 2
+ for x, y be Element of UAAut UA holds it.(x, y) = y * x;
+end;
+
+definition let UA;
+  func UAAutGroup UA -> Group equals
+:: AUTALG_1:def 3
+  HGrStr (# UAAut UA, UAAutComp UA #);
+end;
+
+definition let UA;
+  cluster UAAutGroup UA -> strict;
+end;
+
+theorem :: AUTALG_1:8
+for x, y be Element of UAAutGroup UA
+ for f, g be Element of UAAut UA st x = f & y = g holds x * y = g * f;
+
+theorem :: AUTALG_1:9
+id the carrier of UA = 1.UAAutGroup UA;
+
+theorem :: AUTALG_1:10
+  for f be Element of UAAut UA
+ for g be Element of UAAutGroup UA st f = g holds f" = g";
+
+begin
+:: Some properties of Many Sorted Functions
+
+reserve I for set,
+        A, B, C for ManySortedSet of I;
+
+definition let I, A, B;
+  pred A is_transformable_to B means
+:: AUTALG_1:def 4
+ for i be set st i in I holds B.i = {} implies A.i = {};
+reflexivity;
+end;
+
+theorem :: AUTALG_1:11
+  A is_transformable_to B & B is_transformable_to C
+ implies A is_transformable_to C;
+
+theorem :: AUTALG_1:12
+for x be set, A be ManySortedSet of {x} holds A = {x} --> A.x;
+
+theorem :: AUTALG_1:13
+for F, G, H be Function-yielding Function
+ holds (H ** G) ** F = H ** (G ** F);
+
+theorem :: AUTALG_1:14
+for A, B be non-empty ManySortedSet of I
+ for F be ManySortedFunction of A, B st F is "1-1" "onto"
+  holds F"" is "1-1" "onto";
+
+theorem :: AUTALG_1:15
+  for A, B be non-empty ManySortedSet of I
+ for F be ManySortedFunction of A, B st F is "1-1" "onto"
+  holds (F"")"" = F;
+
+theorem :: AUTALG_1:16
+for F, G being Function-yielding Function st F is "1-1" & G is "1-1"
+ holds G ** F is "1-1";
+
+theorem :: AUTALG_1:17
+for B, C be non-empty ManySortedSet of I
+ for F be ManySortedFunction of A, B
+  for G be ManySortedFunction of B, C st
+   F is "onto" & G is "onto"
+    holds G ** F is "onto";
+
+theorem :: AUTALG_1:18
+  for A, B, C be non-empty ManySortedSet of I
+ for F be ManySortedFunction of A, B
+  for G be ManySortedFunction of B, C st
+   F is "1-1" "onto" & G is "1-1" "onto"
+    holds (G ** F)"" = (F"") ** (G"");
+
+theorem :: AUTALG_1:19
+for A, B be non-empty ManySortedSet of I
+ for F be ManySortedFunction of A, B
+  for G be ManySortedFunction of B, A st
+   F is "1-1" & F is "onto" & G ** F = id A
+    holds G = F"";
+
+begin
+:: On the Group of Automorphisms of Many Sorted Algebra
+
+reserve S for non void non empty ManySortedSign,
+        U1, U2 for non-empty MSAlgebra over S;
+
+definition let I, A, B;
+  func MSFuncs (A, B) -> ManySortedSet of I means
+:: AUTALG_1:def 5
+ for i be set st i in I holds it.i = Funcs(A.i, B.i);
+end;
+
+canceled;
+
+theorem :: AUTALG_1:21
+for A, B be ManySortedSet of I st A is_transformable_to B
+ for x be set st x in product MSFuncs(A, B)
+  holds x is ManySortedFunction of A, B;
+
+theorem :: AUTALG_1:22
+for A, B be ManySortedSet of I st A is_transformable_to B
+ for g be ManySortedFunction of A, B holds g in product MSFuncs(A, B);
+
+theorem :: AUTALG_1:23
+for A, B be ManySortedSet of I st A is_transformable_to B
+ holds MSFuncs(A, B) is non-empty;
+
+definition let I, A, B;
+  assume  A is_transformable_to B;
+  mode MSFunctionSet of A, B -> non empty set means
+:: AUTALG_1:def 6
+ for x be set st x in it holds x is ManySortedFunction of A, B;
+end;
+
+definition let I, A;
+  cluster MSFuncs(A, A) -> non-empty;
+end;
+
+definition let S, U1, U2;
+  mode MSFunctionSet of U1, U2 is MSFunctionSet of the Sorts of U1,
+       the Sorts of U2;
+end;
+
+definition let I be set;
+           let D be ManySortedSet of I;
+  cluster non empty MSFunctionSet of D, D;
+end;
+
+definition let I be set;
+           let D be ManySortedSet of I;
+           let A be non empty MSFunctionSet of D, D;
+  redefine mode Element of A -> ManySortedFunction of D, D;
+end;
+
+theorem :: AUTALG_1:24
+  id A is "onto";
+
+theorem :: AUTALG_1:25
+  id A is "1-1";
+
+canceled;
+
+theorem :: AUTALG_1:27
+  id the Sorts of U1 in product MSFuncs (the Sorts of U1, the Sorts of U1);
+
+definition let S, U1;
+  func MSAAut U1 -> MSFunctionSet of the Sorts of U1, the Sorts of U1 means
+:: AUTALG_1:def 7
+ (for f be Element of it holds f is ManySortedFunction of U1, U1) &
+  for h be ManySortedFunction of U1, U1 holds
+      h in it iff h is_isomorphism U1, U1;
+end;
+
+canceled;
+
+theorem :: AUTALG_1:29
+  for f be Element of MSAAut U1 holds
+ f in product MSFuncs (the Sorts of U1, the Sorts of U1);
+
+theorem :: AUTALG_1:30
+  MSAAut U1 c= product MSFuncs (the Sorts of U1, the Sorts of U1);
+
+theorem :: AUTALG_1:31
+id the Sorts of U1 in MSAAut U1;
+
+theorem :: AUTALG_1:32
+for f be Element of MSAAut U1 holds f"" in MSAAut U1;
+
+theorem :: AUTALG_1:33
+for f1, f2 be Element of MSAAut U1 holds f1 ** f2 in MSAAut U1;
+
+theorem :: AUTALG_1:34
+for F be ManySortedFunction of MSAlg UA, MSAlg UA
+ for f be Element of UAAut UA st F = {0} --> f
+  holds F in MSAAut MSAlg UA;
+
+definition let S, U1;
+  func MSAAutComp U1 -> BinOp of MSAAut U1 means
+:: AUTALG_1:def 8
+ for x, y be Element of MSAAut U1 holds it.(x, y) = y ** x;
+end;
+
+definition let S, U1;
+  func MSAAutGroup U1 -> Group equals
+:: AUTALG_1:def 9
+  HGrStr (# MSAAut U1, MSAAutComp U1 #);
+end;
+
+definition let S, U1;
+  cluster MSAAutGroup U1 -> strict;
+end;
+
+theorem :: AUTALG_1:35
+for x, y be Element of MSAAutGroup U1
+ for f, g be Element of MSAAut U1 st x = f & y = g holds x * y = g ** f;
+
+theorem :: AUTALG_1:36
+id the Sorts of U1 = 1.MSAAutGroup U1;
+
+theorem :: AUTALG_1:37
+  for f be Element of MSAAut U1
+ for g be Element of MSAAutGroup U1 st f = g holds f"" = g";
+
+begin
+:: On the Relationship of Automorphisms of 1-Sorted and Many Sorted Algebras
+
+theorem :: AUTALG_1:38
+for UA1, UA2 be Universal_Algebra st UA1, UA2 are_similar
+ for F be ManySortedFunction of MSAlg UA1, (MSAlg UA2 Over MSSign UA1)
+  holds F.0 is Function of UA1, UA2;
+
+theorem :: AUTALG_1:39
+for f be Element of UAAut UA
+ holds {0} --> f is ManySortedFunction of MSAlg UA, MSAlg UA;
+
+theorem :: AUTALG_1:40
+for h be Function st (dom h = UAAut UA &
+ for x be set st x in UAAut UA holds h.x = {0} --> x)
+  holds h is Homomorphism of UAAutGroup UA, MSAAutGroup (MSAlg UA);
+
+theorem :: AUTALG_1:41
+for h be Homomorphism of UAAutGroup UA, MSAAutGroup (MSAlg UA) st
+ for x be set st x in UAAut UA holds h.x = {0} --> x
+  holds h is_isomorphism;
+
+theorem :: AUTALG_1:42
+  UAAutGroup UA, MSAAutGroup (MSAlg UA) are_isomorphic;

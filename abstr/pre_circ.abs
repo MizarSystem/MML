@@ -1,0 +1,258 @@
+:: Preliminaries to Circuits, I
+::  by Yatsuka Nakamura, Piotr Rudnicki, Andrzej Trybulec and Pauline N. Kawamoto
+::
+:: Received November 17, 1994
+:: Copyright (c) 1994 Association of Mizar Users
+
+environ
+
+ vocabulary FINSET_1, FUNCT_1, RELAT_1, FUNCOP_1, FUNCT_4, BOOLE, SQUARE_1,
+      FINSUB_1, SETWISEO, PBOOLE, TDGROUP, FINSEQ_1, CARD_3, ZF_REFLE, TARSKI,
+      FUNCT_5, FUNCT_2, PRALG_1, PRALG_2, MCART_1, FINSEQ_2, TREES_1, TREES_3,
+      TREES_2, FUNCT_6, TREES_4, CQC_LANG, CARD_1, PRE_CIRC, ORDINAL2, ARYTM,
+      MEMBERED, SEQ_2, SEQ_4, ARYTM_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1, NAT_1, MCART_1, CARD_1, ORDINAL2, MEMBERED, SEQ_4,
+      RELAT_1, FUNCT_1, FINSET_1, FINSUB_1, SETWISEO, FUNCT_2, FUNCOP_1,
+      FUNCT_4, CARD_3, TREES_1, TREES_2, TREES_3, TREES_4, FUNCT_5, FUNCT_6,
+      PBOOLE, PRALG_1, MSUALG_1, PRALG_2, CQC_LANG, FINSEQ_1, FINSEQ_2;
+ constructors WELLORD2, NAT_1, SETWISEO, PRALG_2, CQC_LANG, XCMPLX_0, XREAL_0,
+      MEMBERED, SEQ_4, PSCOMP_1, XBOOLE_0;
+ clusters NUMBERS, SUBSET_1, FINSET_1, AMI_1, TREES_1, TREES_2, TREES_3,
+      DTCONSTR, PRELAMB, PRALG_1, MSUALG_1, PRVECT_1, FUNCT_1, RELSET_1,
+      XREAL_0, ARYTM_3, FINSEQ_1, REAL_1, FRAENKEL, MEMBERED, XBOOLE_0,
+      ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin
+
+scheme FraenkelFinIm{ A() -> finite non empty set, F(set) -> set, P[set] }:
+ { F(x) where x is Element of A() : P[x] } is finite;
+
+canceled;
+
+theorem :: PRE_CIRC:2
+    for f being Function, x, y being set st dom f = {x} & rng f = {y}
+    holds f = { [x,y] };
+
+theorem :: PRE_CIRC:3
+  for f, g, h being Function st f c= g holds f +* h c= g +* h;
+
+theorem :: PRE_CIRC:4
+    for f, g, h being Function st f c= g & dom f misses dom h
+    holds f c= g +* h;
+
+definition
+ cluster finite non empty natural-membered set;
+end;
+
+definition let A be finite non empty real-membered set;
+ redefine func upper_bound A -> real number means
+:: PRE_CIRC:def 1
+ it in A & for k being real number st k in A holds k <= it;
+ synonym max A;
+end;
+
+definition
+  let X be finite non empty natural-membered set;
+  canceled;
+  cluster max X -> natural;
+end;
+
+begin
+::---------------------------------------------------------------------------
+:: Many Sorted Sets and Functions
+::---------------------------------------------------------------------------
+
+theorem :: PRE_CIRC:5
+    for I being set, MSS being ManySortedSet of I
+    holds MSS#.<*>I = {{}};
+
+reserve i,j,x,y for set,
+        g for Function;
+
+scheme
+  MSSLambda2Part { I() -> set, P [set], F, G (set) -> set }:
+    ex f being ManySortedSet of I() st
+      for i being Element of I() st i in I()
+        holds (P[i] implies f.i = F(i)) & (not P[i] implies f.i = G(i));
+
+definition
+  let I be set;
+   let IT be ManySortedSet of I;
+  attr IT is locally-finite means
+:: PRE_CIRC:def 3
+
+      for i being set st i in I holds IT.i is finite;
+end;
+
+definition
+  let I be set;
+  cluster non-empty locally-finite ManySortedSet of I;
+end;
+
+definition
+  let I, A be set;
+  redefine func I --> A -> ManySortedSet of I;
+end;
+
+definition
+  let I be set, M be ManySortedSet of I, A be Subset of I;
+  redefine func M | A -> ManySortedSet of A;
+end;
+
+definition
+  let M be non-empty Function, A be set;
+  cluster M | A -> non-empty;
+end;
+
+theorem :: PRE_CIRC:6
+  for I being non empty set, B being non-empty ManySortedSet of I
+    holds union rng B is non empty;
+
+theorem :: PRE_CIRC:7
+  for I being set holds uncurry (I --> {}) = {};
+
+theorem :: PRE_CIRC:8
+    for I being non empty set, A being set,
+    B being non-empty ManySortedSet of I,
+    F being ManySortedFunction of (I --> A), B
+    holds dom commute F = A;
+
+scheme
+  LambdaRecCorrD {D() -> non empty set,
+                  A() -> Element of D(),
+                  F(Nat, Element of D()) -> Element of D() } :
+    (ex f being Function of NAT, D() st f.0 = A()
+      & for i being Nat holds f.(i+1) = F(i, f.i))
+      & for f1, f2 being Function of NAT, D() st (f1.0 = A()
+          & for i being Nat holds f1.(i+1) = F(i, f1.i))
+          & (f2.0 = A() & for i being Nat holds f2.(i+1) = F(i,f2.i))
+          holds f1 = f2;
+
+scheme
+  LambdaMSFD{J() -> non empty set, I() -> Subset of J(),
+    A, B() -> ManySortedSet of I(), F(set) -> set } :
+    ex f being ManySortedFunction of A(), B() st
+      for i being Element of J() st i in I() holds f.i = F(i)
+  provided
+  for i being Element of J() st i in I()
+     holds F(i) is Function of A().i, B().i;
+
+definition
+  let F be non-empty Function, f be Function;
+  cluster F * f -> non-empty;
+end;
+
+definition
+  let I be set, MSS be non-empty ManySortedSet of I;
+  cluster -> Function-like Relation-like Element of (product MSS);
+end;
+
+theorem :: PRE_CIRC:9
+    for I being set, f being non-empty ManySortedSet of I, g being Function,
+    s being Element of product f
+      st dom g c= dom f & for x being set st x in dom g holds g.x in f.x
+    holds s+*g is Element of product f;
+
+theorem :: PRE_CIRC:10
+    for A, B being non empty set,
+    C being non-empty ManySortedSet of A,
+    InpFs being ManySortedFunction of A --> B, C,
+    b being Element of B
+    ex c being ManySortedSet of A st c = (commute InpFs).b & c in C;
+
+theorem :: PRE_CIRC:11
+    for I being set, M be ManySortedSet of I,
+    x, g being Function st x in product M
+    holds x * g in product (M * g);
+
+theorem :: PRE_CIRC:12
+    for n being Nat, a being set
+    holds product ( n |-> {a} ) = { n |-> a };
+
+begin
+::---------------------------------------------------------------------------
+:: Trees
+::---------------------------------------------------------------------------
+
+reserve T,T1 for finite Tree,
+        t,p for Element of T,
+        t1 for Element of T1;
+
+definition
+  let D be non empty set;
+  cluster -> finite Element of FinTrees D;
+end;
+
+definition
+  let T be finite DecoratedTree, t be Element of dom T;
+  cluster T|t -> finite;
+end;
+
+theorem :: PRE_CIRC:13
+  T|p,{ t : p is_a_prefix_of t } are_equipotent;
+
+definition
+  let T be finite DecoratedTree, t be Element of dom T;
+  let T1 be finite DecoratedTree;
+  cluster T with-replacement (t,T1) -> finite;
+end;
+
+theorem :: PRE_CIRC:14
+  T with-replacement (p,T1) =
+    { t : not p is_a_prefix_of t } \/ { p^t1 : not contradiction };
+
+theorem :: PRE_CIRC:15
+ for f being FinSequence of NAT st f in T with-replacement (p,T1) &
+   p is_a_prefix_of f ex t1 st f = p^t1;
+
+theorem :: PRE_CIRC:16
+ for p being Tree-yielding FinSequence, k being Nat st k+1 in dom p
+  holds (tree p)|<*k*> = p.(k+1);
+
+theorem :: PRE_CIRC:17
+    for q being DTree-yielding FinSequence, k being Nat st k+1 in dom q
+        holds <*k*> in tree doms q;
+
+theorem :: PRE_CIRC:18
+ for p,q being Tree-yielding FinSequence, k being Nat
+   st len p = len q & k+1 in dom p &
+      for i being Nat st i in dom p & i <> k+1 holds p.i = q.i
+ for t being Tree st q.(k+1) = t
+  holds tree(q) = tree(p) with-replacement (<*k*>, t);
+
+theorem :: PRE_CIRC:19
+    for e1,e2 being finite DecoratedTree, x being set, k being Nat,
+      p being DTree-yielding FinSequence st
+       <*k*> in dom e1 & e1 = x-tree p
+  ex q being DTree-yielding FinSequence st
+   e1 with-replacement (<*k*>,e2) = x-tree q &
+    len q = len p & q.(k+1) = e2 &
+    for i being Nat st i in dom p & i <> k+1 holds q.i = p.i;
+
+theorem :: PRE_CIRC:20
+    for T being finite Tree, p being Element of T st p <> {}
+    holds card (T|p) < card T;
+
+theorem :: PRE_CIRC:21
+ for f being Function holds Card (f qua set) = Card dom f;
+
+theorem :: PRE_CIRC:22
+  for T, T1 being finite Tree, p being Element of T
+    holds card(T with-replacement (p,T1)) + card (T|p) = card T + card T1;
+
+theorem :: PRE_CIRC:23
+    for T, T1 being finite DecoratedTree,
+    p being Element of dom T
+    holds card(T with-replacement (p,T1)) + card (T|p) = card T + card T1;
+
+definition let x be set;
+ cluster root-tree x -> finite;
+end;
+
+theorem :: PRE_CIRC:24
+   for x being set
+    holds card root-tree x = 1;
+

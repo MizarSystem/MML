@@ -1,0 +1,1739 @@
+:: Opposite Rings, Modules and their Morphisms
+::  by Micha{\l} Muzalewski
+::
+:: Received June 22, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, VECTSP_1, OPPCAT_1, RLVECT_1, ARYTM_1, FUNCSDOM,
+      VECTSP_2, LATTICES, BINOP_1, PRE_TOPC, INCSP_1, MOD_1, ORDINAL4, GROUP_6,
+      MOD_4;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1,
+      STRUCT_0, MOD_1, BINOP_1, RLVECT_1, VECTSP_1, FUNCSDOM, VECTSP_2,
+      GRCAT_1, FUNCT_4, PRE_TOPC, RINGCAT1;
+ constructors DOMAIN_1, BINOP_1, GRCAT_1, RINGCAT1, VECTSP_2, MEMBERED,
+      PARTFUN1, XBOOLE_0;
+ clusters VECTSP_1, VECTSP_2, STRUCT_0, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ definitions RLVECT_1, STRUCT_0;
+ theorems BINOP_1, FUNCT_1, FUNCT_2, GRCAT_1, RINGCAT1, VECTSP_1, VECTSP_2,
+      FUNCT_4, RLVECT_1, RELAT_1;
+
+begin :: Funkcje przeciwne
+
+reserve A,B,C for non empty set,
+        f for Function of [:A,B:],C;
+
+definition let A,B,C,f;
+ redefine func ~f -> Function of [:B,A:],C;
+  coherence by FUNCT_4:51;
+end;
+
+theorem
+Th1: for x being Element of A, y being Element of B holds
+         f.(x,y) = ~f.(y,x)
+ proof
+   let x be Element of A, y be Element of B;
+     dom f = [:A,B:] by FUNCT_2:def 1;
+   then [x,y] in dom f;
+then A1: [y,x] in dom ~f by FUNCT_4:43;
+   thus f.(x,y) = f.[x,y] by BINOP_1:def 1
+                .= ~f.[y,x] by A1,FUNCT_4:44
+                .= ~f.(y,x) by BINOP_1:def 1;
+ end;
+
+begin :: Pierscienie przeciwne
+
+reserve K for non empty doubleLoopStr;
+
+definition let K;
+ func opp(K) -> strict doubleLoopStr equals
+ :Def1:  doubleLoopStr (# the carrier of K,
+                               the add of K,
+                               ~(the mult of K),
+                               the unity of K,
+                               the Zero of K #);
+ correctness;
+end;
+
+definition let K;
+ cluster opp(K) -> non empty;
+ coherence
+  proof
+     opp(K) = doubleLoopStr (# the carrier of K,
+                       the add of K,
+                       ~(the mult of K),
+                       the unity of K,
+                       the Zero of K #) by Def1;
+   hence the carrier of opp K is non empty;
+  end;
+end;
+
+Lm1: 0.K = 0.opp(K) & 1_ K = 1_ opp(K)
+proof
+ A1: opp(K) = doubleLoopStr (# the carrier of K,
+                          the add of K,
+                          ~(the mult of K),
+                          the unity of K,
+                          the Zero of K #) by Def1;
+ hence 0.K = the Zero of opp(K) by RLVECT_1:def 2
+         .= 0.opp(K) by RLVECT_1:def 2;
+ thus 1_ K = the unity of opp(K) by A1,VECTSP_1:def 9
+         .= 1_ opp(K) by VECTSP_1:def 9;
+end;
+
+Lm2: for K being add-associative right_zeroed
+                 right_complementable (non empty doubleLoopStr)
+for x,y being Scalar of K, a,b being Scalar of opp(K)
+       st x = a & y = b holds x+y = a+b & x*y = b*a
+proof
+ let K be add-associative right_zeroed right_complementable
+   (non empty doubleLoopStr);
+ let x,y be Scalar of K,a,b be Scalar of opp(K) such that
+ A1: x = a & y = b;
+ A2: opp(K) = doubleLoopStr (# the carrier of K,
+                          the add of K,
+                          ~(the mult of K),
+                          the unity of K,
+                          the Zero of K #) by Def1;
+ hence x+y = (the add of opp(K)).(a,b) by A1,RLVECT_1:5
+         .= a+b by RLVECT_1:5;
+ thus x*y = (the mult of K).(x,y) by VECTSP_1:def 10
+         .= (the mult of opp(K)).(b,a) by A1,A2,Th1
+         .= b*a by VECTSP_1:def 10;
+end;
+
+Lm3:
+for K being add-associative right_zeroed
+                 right_complementable (non empty doubleLoopStr)
+for x,y,z being Scalar of K, a,b,c being Scalar of opp(K)
+       st x = a & y = b & z = c holds
+         (x+y)+z = (a+b)+c & x+(y+z) = a+(b+c)
+proof
+let K be add-associative right_zeroed right_complementable
+  (non empty doubleLoopStr);
+ let x,y,z be Scalar of K, a,b,c be Scalar of opp(K); assume
+ A1: x = a & y = b & z = c;
+   then x+y = a+b & y+z = b+c by Lm2;
+ hence thesis by A1,Lm2;
+end;
+
+Lm4: now
+let K be add-associative right_zeroed right_complementable
+  (non empty doubleLoopStr);
+   set L = opp(K);
+   thus for x,y,z being Scalar of L holds
+    (x+y)+z = x+(y+z)
+    & x+(0.L) = x
+    proof
+     let x,y,z be Scalar of L;
+       opp(K) = doubleLoopStr (# the carrier of K,
+                               the add of K,
+                               ~(the mult of K),
+                               the unity of K,
+                               the Zero of K #) by Def1;
+     then reconsider a = x, b = y, c = z as Scalar of K;
+     A1: x+y = a+b & y+x = b+a & y+z = b+c
+      & 0.K = 0.L by Lm1,Lm2;
+     thus (x+y)+z = (a+b)+c by Lm3
+                 .= a+(b+c) by RLVECT_1:def 6
+                 .= x+(y+z) by Lm3;
+     thus x+(0.L) = a + 0.K by A1,Lm2
+                 .= x by RLVECT_1:def 7;
+   end;
+  end;
+
+definition let K be add-associative right_complementable right_zeroed
+  (non empty doubleLoopStr);
+  cluster opp K -> add-associative right_zeroed right_complementable;
+  coherence
+  proof
+    thus for x,y,z be Element of opp K holds
+      x + (y + z) = x + y + z by Lm4;
+    thus for x be Element of opp K holds
+      x + 0.opp K = x by Lm4;
+    let a be Element of opp K;
+A1: opp(K) = doubleLoopStr (# the carrier of K,
+                          the add of K,
+                          ~(the mult of K),
+                          the unity of K,
+                          the Zero of K #) by Def1;
+    then reconsider x = a as Element of K;
+    reconsider y = -x as Element of opp K by A1;
+    take y;
+    thus a+y = (the add of opp(K)).(a,y) by RLVECT_1:5
+       .= x+-x by A1,RLVECT_1:5
+       .= 0.K by RLVECT_1:16
+       .= 0.opp K by Lm1;
+  end;
+end;
+
+Lm5:
+for K being add-associative right_zeroed
+                 right_complementable (non empty doubleLoopStr)
+for x,y being Scalar of K, a,b being Scalar of opp(K)
+       st x = a & y = b holds x+y = a+b & x*y = b*a & -x = -a
+proof
+ let K be add-associative right_zeroed right_complementable
+   (non empty doubleLoopStr);
+ let x,y be Scalar of K,a,b be Scalar of opp(K) such that
+ A1: x = a & y = b;
+ A2: opp(K) = doubleLoopStr (# the carrier of K,
+                          the add of K,
+                          ~(the mult of K),
+                          the unity of K,
+                          the Zero of K #) by Def1;
+ hence x+y = (the add of opp(K)).(a,b) by A1,RLVECT_1:5
+         .= a+b by RLVECT_1:5;
+ thus x*y = (the mult of K).(x,y) by VECTSP_1:def 10
+         .= (the mult of opp(K)).(b,a) by A1,A2,Th1
+         .= b*a by VECTSP_1:def 10;
+  reconsider c = -a as Element of K by A2;
+  c+x = (the add of opp K).[-a,a] by A1,A2,RLVECT_1:def 3
+     .= -a+a by RLVECT_1:def 3
+     .= 0.opp K by RLVECT_1:16
+     .= 0.K by Lm1;
+ hence -x = -a by RLVECT_1:19;
+end;
+
+theorem Th2:
+the LoopStr of opp(K) = the LoopStr of K &
+(K is add-associative right_zeroed right_complementable implies
+    comp opp K = comp K)
+    & for x being set holds x is Scalar of opp(K) iff x is Scalar of K
+proof
+A1: opp(K) = doubleLoopStr (# the carrier of K,
+                          the add of K,
+                          ~(the mult of K),
+                          the unity of K,
+                          the Zero of K #) by Def1;
+ hence the LoopStr of opp(K) = the LoopStr of K;
+hereby assume A2:K is add-associative right_zeroed right_complementable;
+A3: dom comp opp K = the carrier of K by A1,FUNCT_2:def 1;
+A4: dom comp K = the carrier of K by FUNCT_2:def 1;
+   for x be set st x in the carrier of K holds (comp opp K).x = (comp K).x
+ proof
+   let x be set;
+   assume x in the carrier of K;
+   then reconsider y = x as Element of K;
+   reconsider z = y as Element of opp K by A1;
+A5: -y = -z by A2,Lm5;
+   thus (comp opp K).x = -z by VECTSP_1:def 25
+     .= (comp K).x by A5,VECTSP_1:def 25;
+ end;
+ hence comp opp K = comp K by A3,A4,FUNCT_1:9;
+ end;
+ let x be set;
+ thus thesis by A1;
+end;
+
+theorem
+Th3: opp(opp(K)) = the doubleLoopStr of K
+proof
+ A1: opp(K) = doubleLoopStr (# the carrier of K,
+                        the add of K,
+                        ~(the mult of K),
+                        the unity of K,
+                        the Zero of K #) by Def1;
+  then ~(the mult of opp(K)) = (the mult of K) by FUNCT_4:56;
+hence thesis by A1,Def1;
+end;
+
+Lm6:
+for K being add-associative right_zeroed
+                 right_complementable (non empty doubleLoopStr)
+for x,y,z,u being Scalar of K, a,b,c,d being Scalar of opp(K)
+       st x = a & y = b & z = c & u = d holds
+         (x+y)+z = (a+b)+c & x+(y+z) = a+(b+c)
+       & (x*y)*z = c*(b*a) & x*(y*z) = (c*b)*a
+       & x*(y+z) = (b+c)*a & (y+z)*x = a*(b+c)
+       & x*y+z*u = b*a+d*c
+proof
+let K be add-associative right_zeroed right_complementable
+  (non empty doubleLoopStr);
+ let x,y,z,u be Scalar of K, a,b,c,d be Scalar of opp(K); assume
+ A1: x = a & y = b & z = c & u = d;
+   then x+y = a+b & y+z = b+c
+ & x*y = b*a & y*z = c*b
+ & x*z = c*a & y*x = a*b
+ & z*u = d*c by Lm5;
+ hence thesis by A1,Lm5;
+end;
+
+theorem
+  for K being add-associative right_zeroed
+                 right_complementable (non empty doubleLoopStr) holds
+  0.K = 0.opp(K)
+     & 1_ K = 1_ opp(K)
+     & for x,y,z,u being (Scalar of K), a,b,c,d being Scalar of opp(K)
+        st x = a & y = b & z = c & u = d holds
+          x+y = a+b
+        & x*y = b*a
+        & -x = -a
+        & (x+y)+z = (a+b)+c & x+(y+z) = a+(b+c)
+        & (x*y)*z = c*(b*a) & x*(y*z) = (c*b)*a
+        & x*(y+z) = (b+c)*a & (y+z)*x = a*(b+c)
+        & x*y+z*u = b*a+d*c by Lm1,Lm5,Lm6;
+
+theorem
+Th5: for K being Ring holds opp(K) is strict Ring
+  proof
+   let K be Ring;
+   set L = opp(K);
+     for x,y,z being Scalar of L holds
+      x+y = y+x
+    & (x+y)+z = x+(y+z)
+    & x+(0.L) = x
+    & x+(-x) = (0.L)
+    & x*(1_ L) = x & (1_ L)*x = x
+    & (x*y)*z = x*(y*z)
+    & x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x
+    proof
+     let x,y,z be Scalar of L;
+     reconsider a = x, b = y, c = z as Scalar of K by Th2;
+     A1: a+b = b+a
+      & (a+b)+c = a+(b+c)
+      & a+(0.K) = a
+      & a+(-a) = (0.K)
+      & a*(1_ K) = a & (1_ K)*a = a
+      & a*(b+c) = a*b+a*c & (b+c)*a = b*a+c*a by VECTSP_2:1;
+     A2: x+y = a+b & y+x = b+a & y+z = b+c
+      & 0.K = 0.L
+      & -x = -a
+      & 1_ K = 1_ L
+      & x*y = b*a
+      & x*z = c*a & y*x = a*b & z*x = a*c by Lm1,Lm5;
+     hence x+y = y+x;
+     thus (x+y)+z = (a+b)+c by Lm6
+                 .= a+(b+c) by VECTSP_2:1
+                 .= x+(y+z) by Lm6;
+     thus x+(0.L) = x by A1,A2,Lm5;
+     thus x+(-x) = (0.L) by A1,A2,Lm5;
+     thus x*(1_ L) = x by A1,A2,Lm5;
+     thus (1_ L)*x = x by A1,A2,Lm5;
+     thus (x*y)*z = c*(b*a) by Lm6
+                 .= c*b*a by VECTSP_2:1
+                 .= x*(y*z) by Lm6;
+     thus x*(y+z) = (b+c)*a by Lm6
+                 .= b*a+c*a by VECTSP_2:1
+                 .= x*y+x*z by Lm6;
+     thus (y+z)*x = a*(b+c) by Lm6
+                 .= a*b+a*c by VECTSP_2:1
+                 .= y*x+z*x by Lm6;
+    end;
+    hence thesis by VECTSP_2:1;
+  end;
+
+definition let K be Ring;
+ cluster opp(K) -> Abelian add-associative right_zeroed right_complementable
+        well-unital distributive;
+ coherence by Th5;
+end;
+
+theorem
+Th6: for K being Ring holds opp(K) is Ring
+  proof
+   let K be Ring;
+     for x,y,z being Scalar of opp(K) holds x*(y*z) = (x*y)*z
+    proof
+     let x,y,z be Scalar of opp(K);
+     reconsider a = x,b = y,c = z as Scalar of K by Th2;
+     A1: (c*b)*a = c*(b*a) by VECTSP_1:def 16;
+       (c*b)*a = x*(y*z) by Lm6;
+     hence thesis by A1,Lm6;
+    end;
+    hence thesis by VECTSP_1:def 16;
+  end;
+
+definition let K be Ring;
+ cluster opp(K) -> associative;
+ coherence by Th6;
+end;
+
+theorem
+Th7: for K being Skew-Field holds opp(K) is Skew-Field
+  proof
+   let K be Skew-Field;
+   set L = opp(K);
+     for x being Scalar of L holds
+    (x <> 0.L implies ex y be Scalar of L st x*y = 1_ L)
+    & 0.L <> 1_ L
+    proof
+     let x be Scalar of L;
+     A1: 1_ K = 1_ L & 0.K = 0.L by Lm1;
+        x <> 0.L implies ex y be Scalar of L st x*y = 1_ L
+      proof
+       assume
+       A2: x <> 0.L;
+       reconsider a = x as Scalar of K by Th2;
+       consider b being Scalar of K such that
+       A3: b*a = 1_ K by A1,A2,VECTSP_2:40;
+       reconsider y = b as Scalar of opp(K) by Th2;
+A4:        1_ K = 1_ L & 0.K = 0.L by Lm1;
+       take y;
+       thus thesis by A3,A4,Lm5;
+      end;
+     hence thesis by A1,VECTSP_1:def 21;
+    end;
+   hence thesis by VECTSP_1:def 20,def 21;
+  end;
+
+definition let K be Skew-Field;
+ cluster opp(K) -> non degenerated Field-like associative Abelian
+   add-associative right_zeroed right_complementable well-unital distributive;
+ coherence by Th7;
+end;
+
+Lm7: for F being commutative (non empty doubleLoopStr),
+     x,y being Element of F holds x*y = y*x;
+
+theorem
+   for K being Field holds opp(K) is strict Field
+  proof
+   let K be Field;
+   set L = opp(K);
+     for x,y being Scalar of L holds x*y = y*x
+    proof
+     let x,y be Scalar of L;
+     reconsider a = x, b = y as Scalar of K by Th2;
+       b*a = x*y by Lm5;
+     hence thesis by Lm5;
+    end;
+   hence thesis by VECTSP_1:def 17;
+  end;
+
+definition let K be Field;
+ cluster opp(K) -> strict Field-like;
+ coherence;
+end;
+
+begin :: Moduly przeciwne
+
+reserve V for non empty VectSpStr over K;
+
+definition let K,V;
+ func opp(V) -> strict RightModStr over opp(K) means :Def2:
+  for o being Function of [:the carrier of V,
+   the carrier of opp(K):], the carrier of V
+    st o = ~(the lmult of V)
+   holds it = RightModStr
+    (# the carrier of V, the add of V, the Zero of V, o #);
+ existence
+  proof
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider o = ~(the lmult of V) as
+    Function of [:the carrier of V,
+    the carrier of opp(K):], the carrier of V;
+    take RightModStr
+      (#the carrier of V, the add of V, the Zero of V, o#);
+    thus thesis;
+  end;
+ uniqueness
+  proof
+    let M1,M2 be strict RightModStr over opp(K) such that
+A1:  for o being Function of [:the carrier of V,
+    the carrier of opp(K):], the carrier of V
+    st o = ~(the lmult of V) holds M1 = RightModStr
+      (# the carrier of V, the add of V, the Zero of V, o #) and
+A2:  for o being Function of [:the carrier of V,
+    the carrier of opp(K):], the carrier of V
+    st o = ~(the lmult of V) holds M2 = RightModStr
+     (# the carrier of V, the add of V, the Zero of V, o #);
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider o = ~(the lmult of V) as
+    Function of [:the carrier of V,
+    the carrier of opp(K):], the carrier of V;
+   thus M1 = RightModStr
+    (# the carrier of V, the add of V, the Zero of V, o #) by A1
+    .= M2 by A2;
+  end;
+end;
+
+definition let K,V;
+ cluster opp(V) -> non empty;
+  coherence
+ proof
+    the LoopStr of opp(K) = the LoopStr of K by Th2;
+  then reconsider o = ~(the lmult of V) as
+    Function of [:the carrier of V,the carrier of opp(K):], the carrier of V;
+    opp V = RightModStr
+    (# the carrier of V, the add of V, the Zero of V, o #)
+ by Def2;
+  hence the carrier of opp V is non empty;
+ end;
+end;
+
+theorem
+Th9: the LoopStr of opp(V) = the LoopStr of V
+ & for x being set holds x is Vector of V iff x is Vector of opp(V)
+  proof
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider p = ~(the lmult of V) as
+     Function of [:the carrier of V,
+     the carrier of opp(K):], the carrier of V;
+    A1: opp(V) = RightModStr
+     (# the carrier of V, the add of V, the Zero of V, p #)
+ by Def2;
+   hence
+   the LoopStr of opp(V) = the LoopStr of V;
+    let x be set;
+   thus thesis by A1;
+  end;
+
+definition let K,V; let o be Function of [:the carrier of K,
+ the carrier of V:], the carrier of V;
+  func opp(o) -> Function of [:the carrier of opp(V),
+    the carrier of opp(K):], the carrier of opp(V) equals
+:Def3:  ~o;
+ coherence
+  proof
+A1:  the LoopStr of opp(V) = the LoopStr of V by Th9;
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+   hence ~o is Function of [:the carrier of opp(V),
+    the carrier of opp(K):], the carrier of opp(V) by A1;
+  end;
+end;
+
+theorem
+Th10: the rmult of opp(V) = opp(the lmult of V)
+  proof
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider p = ~(the lmult of V) as
+     Function of [:the carrier of V,
+     the carrier of opp(K):], the carrier of V;
+      opp(V) = RightModStr
+     (# the carrier of V, the add of V, the Zero of V, p #) by Def2;
+   hence the rmult of opp(V) = opp(the lmult of V) by Def3;
+  end;
+
+reserve W for non empty RightModStr over K;
+
+definition let K,W;
+ func opp(W) -> strict VectSpStr over opp(K) means
+:Def4:
+  for o being Function of [:the carrier of opp(K),
+   the carrier of W:], the carrier of W
+    st o = ~(the rmult of W)
+   holds it = VectSpStr
+    (# the carrier of W, the add of W, the Zero of W, o #);
+ existence
+  proof
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider o = ~(the rmult of W) as Function of [:the carrier of opp(K
+),
+    the carrier of W:], the carrier of W;
+    take VectSpStr
+     (#the carrier of W, the add of W, the Zero of W, o#);
+    thus thesis;
+  end;
+ uniqueness
+  proof
+    let M1,M2 be strict VectSpStr over opp(K) such that
+A1:  for o being Function of [:the carrier of opp(K),
+   the carrier of W:], the carrier of W
+    st o = ~(the rmult of W) holds M1 = VectSpStr
+      (# the carrier of W, the add of W, the Zero of W, o #) and
+A2:  for o being Function of [:the carrier of opp(K),
+   the carrier of W:], the carrier of W
+    st o = ~(the rmult of W) holds M2 = VectSpStr
+     (# the carrier of W, the add of W, the Zero of W, o #);
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider o = ~(the rmult of W) as
+    Function of [:the carrier of opp(K),
+   the carrier of W:], the carrier of W;
+   thus M1 = VectSpStr
+    (# the carrier of W, the add of W, the Zero of W, o #) by A1
+    .= M2 by A2;
+  end;
+end;
+
+definition let K,W;
+ cluster opp(W) -> non empty;
+ coherence
+ proof
+    the LoopStr of opp(K) = the LoopStr of K by Th2;
+  then reconsider o = ~(the rmult of W) as Function of [:the carrier of opp(K),
+                                      the carrier of W:], the carrier of W;
+    opp W = VectSpStr
+     (#the carrier of W, the add of W, the Zero of W, o#)
+ by Def4;
+  hence the carrier of opp W is non empty;
+ end;
+end;
+
+canceled;
+
+theorem
+Th12: the LoopStr of opp(W) = the LoopStr of W
+ & for x being set holds x is Vector of W iff x is Vector of opp(W)
+  proof
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider p = ~(the rmult of W) as
+     Function of [:the carrier of opp(K),
+   the carrier of W:], the carrier of W;
+    A1: opp(W) = VectSpStr
+     (# the carrier of W, the add of W, the Zero of W, p #)
+ by Def4;
+   hence
+   the LoopStr of opp(W) = the LoopStr of W;
+    let x be set;
+   thus thesis by A1;
+  end;
+
+definition let K,W; let o be Function of [:the carrier of W,
+ the carrier of K:], the carrier of W;
+  func opp(o) -> Function of [:the carrier of opp(K),
+   the carrier of opp(W):],
+   the carrier of opp(W) equals
+:Def5:  ~o;
+ coherence
+  proof
+A1:  the LoopStr of opp(W) = the LoopStr of W by Th12;
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider o' = ~o as Function of [:the carrier of opp(K),
+    the carrier of opp(W):],
+    the carrier of opp(W) by A1;
+      o' is Function of [:the carrier of opp(K),
+   the carrier of opp(W):],
+   the carrier of opp(W);
+   hence thesis;
+  end;
+end;
+
+theorem
+Th13: the lmult of opp(W) = opp(the rmult of W)
+  proof
+      the LoopStr of opp(K) = the LoopStr of K by Th2;
+    then reconsider p = ~(the rmult of W) as
+     Function of [:the carrier of opp(K),
+    the carrier of W:], the carrier of W;
+      opp(W) = VectSpStr
+     (# the carrier of W, the add of W, the Zero of W, p #)
+ by Def4;
+   hence the lmult of opp(W) = opp(the rmult of W) by Def5;
+  end;
+
+canceled;
+
+theorem
+Th15: for o being Function of [:the carrier of K,
+  the carrier of V:], the carrier of V
+ holds opp(opp(o)) = o
+ proof
+  let o be Function of [:the carrier of K, the carrier of V:],
+   the carrier of V;
+     opp(o) = ~o by Def3;
+  hence opp(opp(o)) = ~~o by Def5 .= o by FUNCT_4:56;
+end;
+
+theorem
+Th16: for o being Function of [:the carrier of K,
+  the carrier of V:], the carrier of V,
+  x being Scalar of K, y being Scalar of opp(K),
+  v being Vector of V, w being Vector of opp(V) st x=y & v=w
+ holds (opp(o)).(w,y) = o.(x,v)
+ proof
+  let o be Function of [:the carrier of K, the carrier of V:],
+   the carrier of V,
+   x be Scalar of K, y be Scalar of opp(K),
+   v be Vector of V, w be Vector of opp(V); assume
+   x=y & v=w;
+  hence (opp(o)).(w,y) = (~o).(v,x) by Def3 .= o.(x,v) by Th1;
+end;
+
+theorem
+Th17: for K,L being Ring, V being non empty VectSpStr over K
+  for W being non empty RightModStr over L
+   for x being Scalar of K, y being Scalar of L,
+    v being Vector of V, w being Vector of W
+  st L=opp(K) & W=opp(V) & x=y & v=w
+ holds w*y = x*v
+proof let K,L be Ring, V be non empty VectSpStr over K;
+  let W be non empty RightModStr over L;
+  let x be Scalar of K, y be Scalar of L,
+     v be Vector of V, w be Vector of W such that
+A1: L=opp(K) & W=opp(V) & x=y & v=w;
+   set o = the lmult of V;
+     opp(o) = the rmult of opp(V) by Th10;
+  hence w*y = (opp(o)).(w,y) by A1,VECTSP_2:def 15
+           .= o.(x,v) by A1,Th16
+           .= x*v by VECTSP_1:def 24;
+end;
+
+theorem
+Th18: for K,L being Ring, V being non empty VectSpStr over K
+  for W being non empty RightModStr over L for v1,v2 being Vector of V,
+  w1,w2 being Vector of W
+  st L=opp(K) & W=opp(V) & v1=w1 & v2=w2
+ holds w1+w2=v1+v2
+proof
+ let K,L be Ring, V be non empty VectSpStr over K;
+ let W be non empty RightModStr over L, v1,v2 be Vector of V,
+  w1,w2 be Vector of W such that
+A1: L=opp(K) & W=opp(V) & v1=w1 & v2=w2;
+   the LoopStr of opp(V) = the LoopStr of V by Th9;
+ hence w1+w2 = (the add of V).(v1,v2) by A1,RLVECT_1:5
+            .= v1+v2 by RLVECT_1:5;
+end;
+
+theorem
+Th19: for o being Function of [:the carrier of W,
+  the carrier of K:], the carrier of W
+ holds opp(opp(o)) = o
+proof
+  let o be Function of [:the carrier of W,
+   the carrier of K:], the carrier of W;
+    opp(o) = ~o by Def5;
+  then opp(opp(o)) = ~~o by Def3;
+ hence thesis by FUNCT_4:56;
+end;
+
+theorem
+Th20: for o being Function of [:the carrier of W,
+ the carrier of K:], the carrier of W,
+  x being Scalar of K, y being Scalar of opp(K),
+  v being Vector of W, w being Vector of opp(W) st x=y & v=w
+ holds (opp(o)).(y,w) = o.(v,x)
+ proof
+  let o be Function of [:the carrier of W,the carrier of K:],
+   the carrier of W,
+   x be Scalar of K, y be Scalar of opp(K),
+   v be Vector of W, w be Vector of opp(W); assume
+   x=y & v=w;
+  hence (opp(o)).(y,w) = (~o).(x,v) by Def5 .= o.(v,x) by Th1;
+end;
+
+theorem
+Th21: for K,L being Ring, V being non empty VectSpStr over K
+  for W being non empty RightModStr over L
+   for x being Scalar of K, y being Scalar of L,
+  v being Vector of V, w being Vector of W
+  st K=opp(L) & V=opp(W) & x=y & v=w
+ holds w*y = x*v
+proof let K,L be Ring, V be non empty VectSpStr over K;
+  let W be non empty RightModStr over L;
+  let x be Scalar of K, y be Scalar of L,
+  v be Vector of V, w be Vector of W such that
+A1: K=opp(L) & V=opp(W) & x=y & v=w;
+   set o = the rmult of W;
+A2: opp(o) = the lmult of opp(W) by Th13;
+  thus w*y = o.(w,y) by VECTSP_2:def 15
+           .= (opp(o)).(x,v) by A1,Th20
+           .= x*v by A1,A2,VECTSP_1:def 24;
+end;
+
+theorem
+Th22: for K,L being Ring, V being non empty VectSpStr over K
+  for W being non empty RightModStr over L for v1,v2 being Vector of V,
+  w1,w2 being Vector of W
+  st K=opp(L) & V=opp(W) & v1=w1 & v2=w2
+ holds w1+w2=v1+v2
+proof
+  let K,L be Ring, V be non empty VectSpStr over K;
+  let W be non empty RightModStr over L; let v1,v2 be Vector of V,
+  w1,w2 be Vector of W such that
+A1: K=opp(L) & V=opp(W) & v1=w1 & v2=w2;
+    the LoopStr of opp(W) = the LoopStr of W by Th12;
+ hence w1+w2 = (the add of V).(v1,v2) by A1,RLVECT_1:5
+            .= v1+v2 by RLVECT_1:5;
+end;
+
+theorem
+  for K being strict non empty doubleLoopStr, V being non empty VectSpStr over
+K
+ holds opp(opp(V)) = the VectSpStr of V
+ proof let K be strict non empty doubleLoopStr,
+           V be non empty VectSpStr over K;
+   set W = opp(V);
+A1: the LoopStr of opp(W) = the LoopStr of W by Th12
+                         .= the LoopStr of V by Th9;
+A2: opp(the rmult of W) = opp(opp(the lmult of V)) by Th10
+                      .= the lmult of V by Th15;
+   opp(opp(K)) = K by Th3;
+  hence thesis by A1,A2,Th13;
+ end;
+
+theorem
+  for K being strict non empty doubleLoopStr,
+    W being non empty RightModStr over K
+ holds opp(opp(W)) = the RightModStr of W
+ proof let K be strict non empty doubleLoopStr,
+           W be non empty RightModStr over K;
+   set V = opp(W);
+A1: the LoopStr of opp(V) = the LoopStr of V by Th9
+                         .= the LoopStr of W by Th12;
+A2: opp(the lmult of V) = opp(opp(the rmult of W)) by Th13
+                      .= the rmult of W by Th19;
+   opp(opp(K)) = K by Th3;
+  hence thesis by A1,A2,Th10;
+ end;
+
+theorem
+Th25: for K being Ring, V being LeftMod of K holds
+       opp V is strict RightMod of opp K
+ proof let K be Ring, V be LeftMod of K;
+   set R=opp(K);
+   reconsider W=opp(V) as non empty RightModStr over R;
+A1: the LoopStr of opp V = the LoopStr of V by Th9;
+     A2: now let a,b be Element of opp V;
+      let x,y be Element of V;
+       assume A3: x = a & b = y;
+      thus a + b = (the add of opp V).(a,b) by RLVECT_1:5
+                .= x + y by A1,A3,RLVECT_1:5;
+     end;
+A4: 0.opp V = the Zero of opp V by RLVECT_1:def 2 .= 0.V by A1,RLVECT_1:def 2;
+A5:  opp V is Abelian add-associative right_zeroed right_complementable
+      proof
+       thus opp V is Abelian
+        proof let a,b be Element of opp V;
+          reconsider x = a, y = b as Element of V by Th9;
+         thus a + b = y + x by A2
+                   .= b + a by A2;
+        end;
+       hereby let a,b,c be Element of opp V;
+        reconsider x = a, y = b, z = c as Element of V by Th9;
+        A6: a + b = x + y & b + c = y + z by A2;
+       hence a + b + c = x + y + z by A2
+                     .= x + (y + z) by RLVECT_1:def 6
+                     .= a + (b + c) by A2,A6;
+       end;
+       hereby let a be Element of opp V;
+        reconsider x = a as Element of V by Th9;
+       thus a + 0.opp V = x + 0.V by A2,A4
+                    .= a by RLVECT_1:10;
+       end;
+       let a be Element of opp V;
+        reconsider x = a as Element of V by Th9;
+        consider b being Element of V such that
+A7:      x + b = 0.V by RLVECT_1:def 8;
+        reconsider b' = b as Element of opp V by Th9;
+       take b';
+       thus a + b' = 0.opp V by A2,A4,A7;
+      end;
+     now let x,y be Scalar of R, v,w be Vector of W;
+     reconsider a=x,b=y as Scalar of K by Th2;
+     reconsider p=v,q=w as Vector of V by Th9;
+A8:   v+w=p+q by Th18;
+A9:   y*x=a*b & 1_ R=1_ K & x+y=a+b by Lm1,Lm5;
+A10:   b*p=v*y & a*p=v*x & b*p=v*y & a*q=w*x by Th17;
+    thus (v+w)*x = a*(p+q) by A8,Th17
+                .= a*p+a*q by VECTSP_1:def 26
+                .= v*x+w*x by A10,Th18;
+    thus v*(x+y) = (a+b)*p by A9,Th17
+                .= a*p+b*p by VECTSP_1:def 26
+                .= v*x+v*y by A10,Th18;
+    thus v*(y*x) = (a*b)*p by A9,Th17
+                .= a*(b*p) by VECTSP_1:def 26
+                .= (v*y)*x by A10,Th17;
+    thus v*(1_ R) = (1_ K)*p by A9,Th17
+                .= v by VECTSP_1:def 26;end;
+  hence thesis by A5,VECTSP_2:def 23;
+ end;
+
+definition let K be Ring, V be LeftMod of K;
+ cluster opp(V) -> Abelian add-associative right_zeroed right_complementable
+   RightMod-like;
+ coherence by Th25;
+end;
+
+theorem
+Th26: for K being Ring, W being RightMod of K holds
+       opp W is strict LeftMod of opp K
+ proof let K be Ring, W be RightMod of K;
+   set R=opp(K);
+   reconsider V=opp(W) as non empty VectSpStr over R;
+A1: the LoopStr of opp W = the LoopStr of W by Th12;
+     A2: now let a,b be Element of opp W;
+      let x,y be Element of W;
+       assume A3: x = a & b = y;
+      thus a + b = (the add of opp W).(a,b) by RLVECT_1:5
+                .= x + y by A1,A3,RLVECT_1:5;
+     end;
+A4: 0.opp W = the Zero of opp W by RLVECT_1:def 2 .= 0.W by A1,RLVECT_1:def 2;
+A5:  opp W is Abelian add-associative right_zeroed right_complementable
+      proof
+       thus opp W is Abelian
+        proof let a,b be Element of opp W;
+          reconsider x = a, y = b as Element of W by Th12;
+         thus a + b = y + x by A2
+                   .= b + a by A2;
+        end;
+       hereby let a,b,c be Element of opp W;
+        reconsider x = a, y = b, z = c as Element of W by Th12;
+        A6: a + b = x + y & b + c = y + z by A2;
+       hence a + b + c = x + y + z by A2
+                     .= x + (y + z) by RLVECT_1:def 6
+                     .= a + (b + c) by A2,A6;
+       end;
+       hereby let a be Element of opp W;
+        reconsider x = a as Element of W by Th12;
+       thus a + 0.opp W = x + 0.W by A2,A4
+                    .= a by RLVECT_1:10;
+       end;
+       let a be Element of opp W;
+        reconsider x = a as Element of W by Th12;
+        consider b being Element of W such that
+A7:      x + b = 0.W by RLVECT_1:def 8;
+        reconsider b' = b as Element of opp W by Th12;
+       take b';
+       thus a + b' = 0.opp W by A2,A4,A7;
+      end;
+     now let x,y be Scalar of R, v,w be Vector of V;
+     reconsider a=x,b=y as Scalar of K by Th2;
+     reconsider p=v,q=w as Vector of W by Th12;
+A8:   v+w=p+q by Th22;
+A9:   x*y=b*a & 1_ R=1_ K & x+y=a+b by Lm1,Lm5;
+A10:   p*b=y*v & p*a=x*v & p*b=y*v & q*a=x*w by Th21;
+    thus x*(v+w) = (p+q)*a by A8,Th21
+                .= p*a+q*a by VECTSP_2:def 23
+                .= x*v+x*w by A10,Th22;
+    thus (x+y)*v = p*(a+b) by A9,Th21
+                .= p*a+p*b by VECTSP_2:def 23
+                .= x*v+y*v by A10,Th22;
+    thus (x*y)*v = p*(b*a) by A9,Th21
+                .= (p*b)*a by VECTSP_2:def 23
+                .= x*(y*v) by A10,Th21;
+    thus (1_ R)*v = p*(1_ K) by A9,Th21
+                .= v by VECTSP_2:def 23;end;
+  hence thesis by A5,VECTSP_1:def 26;
+ end;
+
+definition let K be Ring, W be RightMod of K;
+ cluster opp(W) -> Abelian add-associative right_zeroed right_complementable
+  VectSp-like;
+ coherence by Th26;
+end;
+
+begin :: Morfizmy pierscieni
+
+definition let K,L be non empty doubleLoopStr;
+           let IT be map of K,L;
+ attr IT is antilinear means :Def6:
+    (for x,y being Scalar of K holds IT.(x+y) = IT.x+IT.y)
+  & (for x,y being Scalar of K holds IT.(x*y) = IT.y*IT.x)
+  & IT.(1_ K) = 1_ L;
+end;
+
+definition let K,L be non empty doubleLoopStr;
+  let IT be map of K,L;
+ attr IT is monomorphism means :Def7:
+    IT is linear & IT is one-to-one;
+ attr IT is antimonomorphism means :Def8:
+    IT is antilinear & IT is one-to-one;
+end;
+
+definition let K,L be non empty doubleLoopStr;
+  let IT be map of K,L;
+ attr IT is epimorphism means :Def9:
+    IT is linear & rng IT = the carrier of L;
+ attr IT is antiepimorphism means :Def10:
+    IT is antilinear & rng IT = the carrier of L;
+end;
+
+definition let K,L be non empty doubleLoopStr;
+  let IT be map of K,L;
+ attr IT is isomorphism means :Def11:
+    IT is monomorphism & rng IT = the carrier of L;
+ attr IT is antiisomorphism means :Def12:
+    IT is antimonomorphism & rng IT = the carrier of L;
+end;
+
+reserve J for map of K,K;
+
+definition let K be non empty doubleLoopStr;
+  let IT be map of K,K;
+ attr IT is endomorphism means
+ :Def13: IT is linear;
+ attr IT is antiendomorphism means
+ :Def14: IT is antilinear;
+ attr IT is automorphism means
+ :Def15: IT is isomorphism;
+ attr IT is antiautomorphism means
+ :Def16: IT is antiisomorphism;
+end;
+
+theorem
+  J is automorphism
+iff (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
+    & (for x,y being Scalar of K holds J.(x*y) = J.x*J.y)
+    & J.(1_ K) = 1_ K
+    & J is one-to-one
+    & rng J = the carrier of K
+   proof
+    A1: now
+     assume J is automorphism;
+     then A2: J is isomorphism by Def15;
+     then A3: J is monomorphism by Def11;
+     then J is linear by Def7;
+     hence for x,y being Scalar of K holds J.(x+y) = J.x+J.y
+         & for x,y being Scalar of K holds J.(x*y) = J.x*J.y
+         & J.(1_ K) = 1_ K by RINGCAT1:def 2;
+     thus J is one-to-one by A3,Def7;
+     thus rng J = the carrier of K by A2,Def11;
+    end;
+      now assume that
+     A4:   (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
+         & (for x,y being Scalar of K holds J.(x*y) = J.x*J.y)
+         & J.(1_ K) = 1_ K and
+     A5: J is one-to-one and
+     A6: rng J = the carrier of K;
+       J is linear by A4,RINGCAT1:def 2;
+     then J is monomorphism by A5,Def7;
+     then J is isomorphism by A6,Def11;
+     hence J is automorphism by Def15;
+    end;
+    hence thesis by A1;
+   end;
+
+theorem
+Th28:  J is antiautomorphism iff
+       (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
+     & (for x,y being Scalar of K holds J.(x*y) = J.y*J.x)
+     & J.(1_ K) = 1_ K
+     & J is one-to-one
+     & rng J = the carrier of K
+   proof
+    A1: now
+     assume J is antiautomorphism;
+     then A2: J is antiisomorphism by Def16;
+     then A3: J is antimonomorphism by Def12;
+     then J is antilinear by Def8;
+     hence for x,y being Scalar of K holds J.(x+y) = J.x+J.y
+           & for x,y being Scalar of K holds J.(x*y) = J.y*J.x
+           & J.(1_ K) = 1_ K by Def6;
+     thus J is one-to-one by A3,Def8;
+     thus rng J = the carrier of K by A2,Def12;
+    end;
+      now assume that
+     A4:   (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
+         & (for x,y being Scalar of K holds J.(x*y) = J.y*J.x)
+         & J.(1_ K) = 1_ K and
+     A5: J is one-to-one and
+     A6: rng J = the carrier of K;
+       J is antilinear by A4,Def6;
+     then J is antimonomorphism by A5,Def8;
+     then J is antiisomorphism by A6,Def12;
+     hence J is antiautomorphism by Def16;end;
+    hence thesis by A1;
+ end;
+
+Lm8:
+  (for x,y being Scalar of K holds (id K).(x+y) = (id K).x+(id K).y)
+& (for x,y being Scalar of K holds (id K).(x*y) = (id K).x*(id K).y)
+& (id K).(1_ K) = 1_ K
+& id K is one-to-one
+& rng (id K) = the carrier of K
+ proof
+  set J = id K;
+  A1:  J = id (the carrier of K) by GRCAT_1:def 11;
+  thus for x,y being Scalar of K holds J.(x+y) = J.x+J.y
+   proof
+    let x,y be Scalar of K;
+       J.(x+y) = x+y & J.x = x & J.y = y by GRCAT_1:11;
+    hence J.(x+y) = J.x+J.y;
+   end;
+  thus for x,y being Scalar of K holds J.(x*y) = J.x*J.y
+   proof
+    let x,y be Scalar of K;
+       J.(x*y) = x*y & J.x = x & J.y = y by GRCAT_1:11;
+    hence J.(x*y) = J.x*J.y;
+   end;
+  thus (id K).(1_ K) = 1_ K by GRCAT_1:11;
+  thus J is one-to-one by A1,FUNCT_1:52;
+  thus rng J = the carrier of K by A1,RELAT_1:71;
+ end;
+
+theorem
+  id K is automorphism
+ proof
+  set J = id K;
+  A1: J is monomorphism
+    proof
+     A2: J is linear
+      proof
+           (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
+       & (for x,y being Scalar of K holds J.(x*y) = J.x*J.y)
+       & J.(1_ K) = 1_ K by Lm8;
+       hence thesis by RINGCAT1:def 2;
+      end;
+       J is one-to-one by Lm8;
+     hence thesis by A2,Def7;
+    end;
+     rng J = the carrier of K by Lm8;
+  then J is isomorphism by A1,Def11;
+  hence thesis by Def15;
+ end;
+
+reserve K,L for Ring;
+reserve J for map of K,L;
+reserve x,y for Scalar of K;
+
+Lm9: J is linear implies J.(0.K) = 0.L
+proof
+ assume
+ A1: J is linear;
+ set a = 0.K;
+   a+a = a by RLVECT_1:10;
+ then J.a+J.a = J.a by A1,RINGCAT1:def 2
+        .= J.a+(0.L) by RLVECT_1:10;
+ hence thesis by RLVECT_1:21;
+end;
+
+Lm10: J is linear implies J.(-x) = -J.x
+proof
+ assume
+ A1: J is linear;
+ set a = 0.K, b = 0.L, y = J.x;
+ A2: x+-x = a & y+-y = b by RLVECT_1:16;
+ then y+J.(-x) = J.a by A1,RINGCAT1:def 2
+         .= b by A1,Lm9;
+ hence thesis by A2,RLVECT_1:21;
+end;
+
+Lm11: J is linear implies J.(x-y) = J.x-J.y
+proof
+ assume
+ A1: J is linear;
+ thus J.(x-y) = J.(x+-y) by RLVECT_1:def 11
+             .= J.x+J.(-y) by A1,RINGCAT1:def 2
+             .= J.x+-J.y by A1,Lm10
+             .= J.x-J.y by RLVECT_1:def 11;
+end;
+
+theorem
+  J is linear implies
+  J.(0.K) = 0.L
+& J.(-x) = -J.x
+& J.(x-y) = J.x-J.y by Lm9,Lm10,Lm11;
+
+Lm12: J is antilinear implies J.(0.K) = 0.L
+proof
+ assume
+ A1: J is antilinear;
+ set a = 0.K;
+   a+a = a by RLVECT_1:10;
+ then J.a+J.a = J.a by A1,Def6
+        .= J.a+(0.L) by RLVECT_1:10;
+ hence thesis by RLVECT_1:21;
+end;
+
+Lm13: J is antilinear implies J.(-x) = -J.x
+proof
+ assume A1: J is antilinear;
+ set a = 0.K, b = 0.L, y = J.x;
+ A2: x+-x = a & y+-y = b by RLVECT_1:16;
+ then y+J.(-x) = J.a by A1,Def6
+         .= b by A1,Lm12;
+ hence thesis by A2,RLVECT_1:21;
+end;
+
+Lm14: J is antilinear implies J.(x-y) = J.x-J.y
+proof
+ assume
+ A1: J is antilinear;
+ thus J.(x-y) = J.(x+-y) by RLVECT_1:def 11
+             .= J.x+J.(-y) by A1,Def6
+             .= J.x+-J.y by A1,Lm13
+             .= J.x-J.y by RLVECT_1:def 11;
+end;
+
+theorem
+  J is antilinear implies
+  J.(0.K) = 0.L
+& J.(-x) = -J.x
+& J.(x-y) = J.x-J.y by Lm12,Lm13,Lm14;
+
+theorem
+  for K being Ring holds id K is antiautomorphism iff K is comRing
+proof
+ let K be Ring;
+ set J = id K;
+ A1: now assume
+  A2: J is antiautomorphism;
+    for x,y being Element of K holds x*y = y*x
+    proof
+     let x,y be Element of K;
+       J.(x*y) = x*y & J.x = x & J.y = y by GRCAT_1:11;
+     hence thesis by A2,Th28;
+    end;
+  hence K is comRing by VECTSP_1:def 17;
+ end;
+   now assume
+  A3: K is comRing;
+  A4: for x,y being Scalar of K holds J.(x*y) = J.y*J.x
+   proof
+    let x,y be Scalar of K;
+       J.(x*y) = x*y & J.x = x & J.y = y by GRCAT_1:11;
+    hence thesis by A3,Lm7;
+   end;
+      (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
+  & J.(1_ K) = 1_ K
+  & J is one-to-one
+  & rng J = the carrier of K by Lm8;
+  hence J is antiautomorphism by A4,Th28;
+ end;
+ hence thesis by A1;
+end;
+
+
+
+theorem
+  for K being Skew-Field holds id K is antiautomorphism iff K is Field
+proof
+ let K be Skew-Field;
+ set J = id K;
+ A1: now assume
+ A2: J is antiautomorphism;
+    for x,y being Scalar of K holds x*y = y*x
+    proof
+     let x,y be Scalar of K;
+       J.(x*y) = x*y & J.x = x & J.y = y by GRCAT_1:11;
+     hence thesis by A2,Th28;
+    end;
+  hence K is Field by VECTSP_1:def 17;
+ end;
+   now assume
+  A3: K is Field;
+  A4: for x,y being Scalar of K holds J.(x*y) = J.y*J.x
+   proof
+    let x,y be Scalar of K;
+        J.(x*y) = x*y & J.x = x & J.y = y by GRCAT_1:11;
+    hence thesis by A3,VECTSP_1:def 17;
+   end;
+      (for x,y being Scalar of K holds J.(x+y) = J.x+J.y)
+  & J.(1_ K) = 1_ K
+  & J is one-to-one
+  & rng J = the carrier of K by Lm8;
+  hence J is antiautomorphism by A4,Th28;
+ end;
+ hence thesis by A1;
+end;
+
+begin :: Morfizmy przeciwne do morfizmow pierscieni
+
+definition let K,L be non empty doubleLoopStr,
+               J be map of K,L;
+ func opp(J) -> map of K,opp(L) equals
+ :Def17:  J;
+ coherence
+  proof
+     the LoopStr of opp(L) = the LoopStr of L by Th2;
+   hence J is map of K,opp(L);
+  end;
+end;
+
+reserve K,L for add-associative right_zeroed right_complementable
+  (non empty doubleLoopStr);
+reserve J for map of K,L;
+
+theorem
+  opp(opp(J)) = J
+ proof
+  thus opp(opp(J)) = opp(J) by Def17
+                  .= J by Def17;
+ end;
+
+theorem Th35:
+for K,L being add-associative right_zeroed right_complementable
+  (non empty doubleLoopStr),
+ J being map of K,L holds
+ J is linear iff opp(J) is antilinear
+ proof
+ let K,L be add-associative right_zeroed right_complementable
+   (non empty doubleLoopStr);
+ let J be map of K,L;
+  set J' = opp(J), L' = opp(L);
+  A1: now assume
+   A2: J is linear;
+   A3: for x,y being Scalar of K holds J'.(x+y) = J'.x+J'.y
+    proof
+     let x,y be Scalar of K;
+     A4: J.x = J'.x & J.y = J'.y by Def17;
+     thus J'.(x+y) = J.(x+y) by Def17
+                  .= J.x+J.y by A2,RINGCAT1:def 2
+                  .= J'.x+J'.y by A4,Lm5;
+    end;
+   A5: for x,y being Scalar of K holds J'.(x*y) = J'.y*J'.x
+    proof
+     let x,y be Scalar of K;
+     A6: J.x = J'.x & J.y = J'.y by Def17;
+     thus J'.(x*y) = J.(x*y) by Def17
+                  .= J.x*J.y by A2,RINGCAT1:def 2
+                  .= J'.y*J'.x by A6,Lm5;
+    end;
+      J'.(1_ K) = J.(1_ K) by Def17
+                  .= 1_ L by A2,RINGCAT1:def 2
+                  .= 1_ L' by Lm1;
+   hence J' is antilinear by A3,A5,Def6;
+  end;
+    now assume
+   A7: J' is antilinear;
+   A8: for x,y being Scalar of K holds J.(x+y) = J.x+J.y
+    proof
+     let x,y be Scalar of K;
+     A9: J.x = J'.x & J.y = J'.y by Def17;
+     thus J.(x+y) = J'.(x+y) by Def17
+                  .= J'.x+J'.y by A7,Def6
+                  .= J.x+J.y by A9,Lm5;
+    end;
+   A10: for x,y being Scalar of K holds J.(x*y) = J.x*J.y
+    proof
+     let x,y be Scalar of K;
+     A11: J.x = J'.x & J.y = J'.y by Def17;
+     thus J.(x*y) = J'.(x*y) by Def17
+                  .= J'.y*J'.x by A7,Def6
+                  .= J.x*J.y by A11,Lm5;
+    end;
+      J.(1_ K) = J'.(1_ K) by Def17
+                  .= 1_ L' by A7,Def6
+                  .= 1_ L by Lm1;
+   hence J is linear by A8,A10,RINGCAT1:def 2;
+  end;
+  hence thesis by A1;
+ end;
+
+theorem
+Th36: J is antilinear iff opp(J) is linear
+ proof
+  set J' = opp(J), L' = opp(L);
+  A1: now assume
+   A2: J is antilinear;
+   A3: for x,y being Scalar of K holds J'.(x+y) = J'.x+J'.y
+    proof
+     let x,y be Scalar of K;
+     A4: J.x = J'.x & J.y = J'.y by Def17;
+     thus J'.(x+y) = J.(x+y) by Def17
+                  .= J.x+J.y by A2,Def6
+                  .= J'.x+J'.y by A4,Lm5;
+    end;
+   A5: for x,y being Scalar of K holds J'.(x*y) = J'.x*J'.y
+    proof
+     let x,y be Scalar of K;
+     A6: J.x = J'.x & J.y = J'.y by Def17;
+     thus J'.(x*y) = J.(x*y) by Def17
+                  .= J.y*J.x by A2,Def6
+                  .= J'.x*J'.y by A6,Lm5;
+    end;
+      J'.(1_ K) = J.(1_ K) by Def17
+                  .= 1_ L by A2,Def6
+                  .= 1_ L' by Lm1;
+   hence J' is linear by A3,A5,RINGCAT1:def 2;
+  end;
+    now assume
+   A7: J' is linear;
+   A8: for x,y being Scalar of K holds J.(x+y) = J.x+J.y
+    proof
+     let x,y be Scalar of K;
+     A9: J.x = J'.x & J.y = J'.y by Def17;
+     thus J.(x+y) = J'.(x+y) by Def17
+                  .= J'.x+J'.y by A7,RINGCAT1:def 2
+                  .= J.x+J.y by A9,Lm5;
+    end;
+   A10: for x,y being Scalar of K holds J.(x*y) = J.y*J.x
+    proof
+     let x,y be Scalar of K;
+     A11: J.x = J'.x & J.y = J'.y by Def17;
+     thus J.(x*y) = J'.(x*y) by Def17
+                  .= J'.x*J'.y by A7,RINGCAT1:def 2
+                  .= J.y*J.x by A11,Lm5;
+    end;
+      J.(1_ K) = J'.(1_ K) by Def17
+                  .= 1_ L' by A7,RINGCAT1:def 2
+                  .= 1_ L by Lm1;
+   hence J is antilinear by A8,A10,Def6;
+  end;
+  hence thesis by A1;
+ end;
+
+theorem
+Th37: J is monomorphism iff opp(J) is antimonomorphism
+ proof
+  set J' = opp(J);
+  A1: J' is antimonomorphism
+  iff J' is antilinear & J' is one-to-one by Def8;
+  A2: J' = J by Def17;
+        J is linear iff J' is antilinear by Th35;
+  hence thesis by A1,A2,Def7;
+ end;
+
+theorem
+Th38: J is antimonomorphism iff opp(J) is monomorphism
+ proof
+  set J' = opp(J);
+  A1: J' is monomorphism iff J' is linear & J' is one-to-one by Def7;
+  A2: J' = J by Def17;
+    J is antilinear iff J' is linear by Th36;
+  hence thesis by A1,A2,Def8;
+ end;
+
+theorem
+  J is epimorphism iff opp(J) is antiepimorphism
+ proof
+  set J' = opp(J), L' = opp(L);
+   the LoopStr of L = the LoopStr of L' by Th2;
+  then A1: rng J = the carrier of L iff rng J' = the carrier of L'
+ by Def17;
+    J is linear iff J' is antilinear by Th35;
+  hence thesis by A1,Def9,Def10;
+ end;
+
+theorem
+  J is antiepimorphism iff opp(J) is epimorphism
+ proof
+  set J' = opp(J), L' = opp(L);
+   the LoopStr of L = the LoopStr of L' by Th2;
+  then A1: rng J = the carrier of L iff rng J' = the carrier of L'
+ by Def17;
+    J is antilinear iff J' is linear by Th36;
+  hence thesis by A1,Def9,Def10;
+ end;
+
+theorem
+Th41: J is isomorphism iff opp(J) is antiisomorphism
+ proof
+  set J' = opp(J), L' = opp(L);
+   the LoopStr of L = the LoopStr of L' by Th2;
+  then A1: rng J = the carrier of L
+  iff rng J' = the carrier of L' by Def17;
+    J is monomorphism iff J' is antimonomorphism by Th37;
+  hence thesis by A1,Def11,Def12;
+ end;
+
+theorem
+Th42: J is antiisomorphism iff opp(J) is isomorphism
+ proof
+  set J' = opp(J), L' = opp(L);
+   the LoopStr of L = the LoopStr of L' by Th2;
+  then A1: rng J = the carrier of L
+  iff rng J' = the carrier of L' by Def17;
+    J is antimonomorphism iff J' is monomorphism by Th38;
+  hence thesis by A1,Def11,Def12;
+ end;
+
+reserve J for map of K,K;
+
+theorem
+  J is endomorphism iff opp(J) is antilinear
+ proof
+    J is linear iff opp(J) is antilinear by Th35;
+  hence thesis by Def13;
+ end;
+
+theorem
+  J is antiendomorphism iff opp(J) is linear
+ proof
+    J is antilinear iff opp(J) is linear by Th36;
+  hence thesis by Def14;
+ end;
+
+theorem
+  J is automorphism iff opp(J) is antiisomorphism
+ proof
+    J is isomorphism iff opp(J) is antiisomorphism by Th41;
+  hence thesis by Def15;
+ end;
+
+theorem
+  J is antiautomorphism iff opp(J) is isomorphism
+ proof
+    J is antiisomorphism iff opp(J) is isomorphism by Th42;
+  hence thesis by Def16;
+ end;
+
+begin :: Morfizmy grup i grup abelowych
+
+reserve G,H for AddGroup;
+
+Lm15: for x,y being Element of G holds
+        ZeroMap(G,H).(x+y) = ZeroMap(G,H).x+ZeroMap(G,H).y
+ proof
+   set f = ZeroMap(G,H);
+   thus for x,y being Element of G holds f.(x+y) = f.x+f.y
+    proof
+      let x,y be Element of G;
+         f.(x+y) = 0.H & f.x = 0.H & f.y = 0.H by GRCAT_1:15;
+      hence f.(x+y) = f.x+f.y by RLVECT_1:def 7;
+    end;
+ end;
+
+definition let G,H;
+ mode Homomorphism of G,H -> map of G,H means
+ :Def18: for x,y being Element of G holds it.(x+y) = it.x+it.y;
+ existence
+  proof
+    take ZeroMap(G,H);
+    thus thesis by Lm15;
+  end;
+end;
+
+definition let G,H;
+ redefine func ZeroMap(G,H) -> Homomorphism of G,H;
+ coherence
+  proof
+      for x,y being Element of G holds
+     ZeroMap(G,H).(x+y) = ZeroMap(G,H).x+ZeroMap(G,H).y by Lm15;
+    hence thesis by Def18;
+  end;
+end;
+
+reserve f for Homomorphism of G,H;
+
+definition let G,H;
+  let IT be Homomorphism of G,H;
+ attr IT is monomorphism means
+  IT is one-to-one;
+end;
+
+definition let G,H;
+  let IT be Homomorphism of G,H;
+ attr IT is epimorphism means
+  rng IT = the carrier of H;
+end;
+
+definition let G,H;
+  let IT be Homomorphism of G,H;
+ attr IT is isomorphism means
+ :Def21: IT is one-to-one & rng IT = the carrier of H;
+end;
+
+definition let G;
+ mode Endomorphism of G is Homomorphism of G,G;
+end;
+
+Lm16: for x being Element of G holds (id G).x = x
+ proof
+     id G = id (the carrier of G) by GRCAT_1:def 11;
+   hence thesis by FUNCT_1:35;
+ end;
+
+Lm17: (for x,y being Element of G
+   holds (id G).(x+y) = (id G).x+(id G).y)
+         & id G is one-to-one
+         & rng id G = the carrier of G
+proof
+ set f = id G;
+ A1: f = id (the carrier of G) by GRCAT_1:def 11;
+ thus for x,y being Element of G holds f.(x+y) = f.x+f.y
+  proof
+   let x,y be Element of G;
+      f.(x+y) = x+y & f.x = x & f.y = y by Lm16;
+   hence f.(x+y) = f.x+f.y;
+  end;
+ thus f is one-to-one by A1,FUNCT_1:52;
+ thus rng f = the carrier of G by A1,RELAT_1:71;
+end;
+
+definition let G;
+ cluster isomorphism Endomorphism of G;
+ existence
+  proof
+    set f = id G;
+      for x,y being Element of G holds f.(x+y) = f.x+f.y by Lm17
+;
+    then reconsider f as Homomorphism of G,G by Def18;
+    A1: f is one-to-one by Lm17;
+    A2: rng f = the carrier of G by Lm17;
+    take f;
+    thus f is isomorphism by A1,A2,Def21;
+  end;
+end;
+
+definition let G;
+ mode Automorphism of G is isomorphism Endomorphism of G;
+end;
+
+definition let G;
+ redefine func id G -> Automorphism of G;
+ coherence
+  proof
+    set f = id G;
+      for x,y being Element of G holds f.(x+y) = f.x+f.y by Lm17
+;
+    then reconsider f as Homomorphism of G,G by Def18;
+    A1: f is one-to-one by Lm17;
+       rng f = the carrier of G by Lm17;
+    hence thesis by A1,Def21;
+  end;
+end;
+
+reserve x,y for Element of G;
+
+Lm18: f.(0.G) = 0.H
+proof
+ set a = 0.G;
+   a+a = a by RLVECT_1:def 7;
+ then f.a+f.a = f.a by Def18
+        .= f.a+(0.H) by RLVECT_1:def 7;
+ hence thesis by RLVECT_1:21;
+end;
+
+Lm19: f.(-x) = -f.x
+proof
+ set a = 0.G, b = 0.H, y = f.x;
+   x+-x = a & y+-y = b by RLVECT_1:def 10;
+ then y+f.(-x) = f.a by Def18
+         .= b by Lm18;
+ hence thesis by VECTSP_1:63;
+end;
+
+Lm20: f.(x-y) = f.x-f.y
+proof
+ thus f.(x-y) = f.(x+-y) by RLVECT_1:def 11
+              .= f.x+f.(-y) by Def18
+              .= f.x+-f.y by Lm19
+              .= f.x-f.y by RLVECT_1:def 11;
+end;
+
+canceled;
+
+theorem
+    f.(0.G) = 0.H
+& f.(-x) = -f.x
+& f.(x-y) = f.x-f.y by Lm18,Lm19,Lm20;
+
+reserve G,H for AbGroup;
+reserve f for Homomorphism of G,H;
+reserve x,y for Element of G;
+
+theorem
+  f.(x-y) = f.x-f.y
+proof
+ thus f.(x-y) = f.(x+-y) by RLVECT_1:def 11
+             .= f.x+f.(-y) by Def18
+             .= f.x+-f.y by Lm19
+             .= f.x-f.y by RLVECT_1:def 11;
+end;
+
+begin :: Odwzorowania semiliniowe
+
+reserve K,L for Ring;
+reserve J for map of K,L;
+reserve V for LeftMod of K;
+reserve W for LeftMod of L;
+
+Lm21: for x,y being Vector of V holds
+        ZeroMap(V,W).(x+y) = ZeroMap(V,W).x+ZeroMap(V,W).y
+ proof
+   set f = ZeroMap(V,W);
+   thus for x,y being Vector of V holds f.(x+y) = f.x+f.y
+    proof
+      let x,y be Vector of V;
+        f.(x+y) = 0.W & f.x = 0.W & f.y = 0.W by GRCAT_1:15;
+      hence f.(x+y) = f.x+f.y by VECTSP_1:7;
+    end;
+ end;
+
+Lm22: for a being Scalar of K, x being Vector of V holds
+          ZeroMap(V,W).(a*x) = J.a*ZeroMap(V,W).x
+ proof
+   let a be Scalar of K, x be Vector of V;
+   set z = ZeroMap(V,W);
+     z.(a*x) = 0.W & z.(x) = 0.W by GRCAT_1:15;
+   hence thesis by VECTSP_1:59;
+ end;
+
+definition let K,L,J,V,W;
+ canceled;
+
+ mode Homomorphism of J,V,W -> map of V,W means
+ :Def23:
+    (for x,y being Vector of V holds it.(x+y) = it.x+it.y)
+  & for a being Scalar of K, x being Vector of V holds it.(a*x) = J.a*it.x;
+ existence
+  proof
+    take ZeroMap(V,W);
+    thus thesis by Lm21,Lm22;
+  end;
+end;
+
+theorem
+  ZeroMap(V,W) is Homomorphism of J,V,W
+ proof
+   set z = ZeroMap(V,W);
+   A1: for x,y being Vector of V holds z.(x+y) = z.x+z.y
+ by Lm21;
+      for a being Scalar of K, x being Vector of V holds z.(a*x) = J.a*z.x
+ by Lm22;
+   hence thesis by A1,Def23;
+ end;
+
+reserve f for Homomorphism of J,V,W;
+
+definition let K,L,J,V,W,f;
+ pred f is_monomorphism_wrp J means
+    f is one-to-one;
+
+ pred f is_epimorphism_wrp J means
+    rng f = the carrier of W;
+
+ pred f is_isomorphism_wrp J means
+      f is one-to-one & rng f = the carrier of W;
+end;
+
+reserve J for map of K,K;
+reserve f for Homomorphism of J,V,V;
+
+definition let K,J,V;
+ mode Endomorphism of J,V is Homomorphism of J,V,V;
+end;
+
+definition let K,J,V,f;
+ pred f is_automorphism_wrp J means
+      f is one-to-one
+  & rng f = the carrier of V;
+end;
+
+reserve W for LeftMod of K;
+
+definition let K,V,W;
+ mode Homomorphism of V,W is Homomorphism of (id K),V,W;
+end;
+
+theorem
+  for f being map of V,W holds
+      f is Homomorphism of V,W
+  iff
+        (for x,y being Vector of V holds f.(x+y) = f.x+f.y)
+      & for a being Scalar of K, x being Vector of V holds f.(a*x) = a*f.x
+ proof
+   let f be map of V,W;
+   set J = id K;
+      (for a being Scalar of K, x being Vector of V holds f.(a*x) = J.a*f.x)
+    iff for a being Scalar of K, x being Vector of V holds f.(a*x) = a*f.x
+     proof
+      A1: now assume
+A2: for a being Scalar of K, x being Vector of V holds f.(a*x) = J.a*f.x;
+       let a be Scalar of K, x be Vector of V;
+         J.a = a by GRCAT_1:11;
+       hence f.(a*x) = a*f.x by A2;end;
+        now assume A3:
+       for a being Scalar of K, x being Vector of V holds f.(a*x) = a*f.x;
+       let a be Scalar of K, x be Vector of V;
+         J.a = a by GRCAT_1:11;
+       hence f.(a*x) = J.a*f.x by A3;end;
+      hence thesis by A1;
+     end;
+   hence thesis by Def23;
+ end;
+
+definition let K,V,W;
+  let IT be Homomorphism of V,W;
+ attr IT is monomorphism means
+    IT is one-to-one;
+ attr IT is epimorphism means
+    rng IT = the carrier of W;
+ attr IT is isomorphism means
+      IT is one-to-one & rng IT = the carrier of W;
+end;
+
+definition let K,V;
+  mode Endomorphism of V is Homomorphism of V,V;
+end;
+
+definition let K,V;
+  let IT be Endomorphism of V;
+ attr IT is automorphism means
+      IT is one-to-one & rng IT = the carrier of V;
+end;

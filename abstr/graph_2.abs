@@ -1,0 +1,383 @@
+:: Vertex sequences induced by chains
+::  by Yatsuka Nakamura and Piotr Rudnicki
+::
+:: Received May 13, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FINSET_1, FUNCT_1, ARYTM_1, RELAT_1, INT_1, CARD_1,
+      BOOLE, FINSEQ_2, TARSKI, GRAPH_1, ORDERS_1, GRAPH_2, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1,
+      FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_4, CARD_1, FINSET_1, NAT_1,
+      INT_1, GRAPH_1, BINARITH;
+ constructors WELLORD2, INT_1, GRAPH_1, BINARITH, FINSEQ_4, PARTFUN1, MEMBERED;
+ clusters INT_1, FUNCT_1, FINSEQ_1, FINSET_1, CARD_1, GRAPH_1, RELSET_1, NAT_1,
+      XREAL_0, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve p, q for FinSequence,
+        X, Y, x, y for set,
+        D for non empty set,
+        i, j, k, l, m, k1, k2, n, r for Nat;
+
+scheme FinSegRng{m, n() -> Nat, F(set)->set, P[Nat]}:
+  {F(i): m()<=i & i<=n() & P[i]} is finite;
+
+theorem :: GRAPH_2:1
+m+1<=k & k<=n iff ex i being Nat st m<=i & i<n & k=i+1;
+
+theorem :: GRAPH_2:2
+q = p|Seg n implies
+ len q<=len p & for i st 1<=i & i<=len q
+      holds p.i = q.i;
+
+theorem :: GRAPH_2:3
+ X c= Seg k & Y c= dom Sgm X
+  implies (Sgm X)*(Sgm Y) = Sgm rng ((Sgm X)|Y);
+
+theorem :: GRAPH_2:4
+for m, n being Nat holds Card {k: m<=k & k<=m+n} = n+1;
+
+theorem :: GRAPH_2:5
+for l st 1<=l & l<=n holds
+   Sgm {kk where kk is Nat: m+1<=kk & kk<=m+n}.l = m+l;
+
+begin :: The cut operation
+
+definition let p be FinSequence, m, n be Nat;
+ func (m, n)-cut p -> FinSequence means
+:: GRAPH_2:def 1
+
+  len it +m = n+1 & for i being Nat st i<len it holds it.(i+1)=p.(m+i)
+     if 1<=m & m<=n+1 & n<=len p
+  otherwise it ={};
+end;
+
+theorem :: GRAPH_2:6
+  1<=m & m<=len p implies (m,m)-cut p = <*p.m*>;
+
+theorem :: GRAPH_2:7
+(1, len p)-cut p = p;
+
+theorem :: GRAPH_2:8
+m<=n & n<=r & r<=len p implies
+        (m+1, n)-cut p ^ (n+1, r)-cut p = (m+1, r)-cut p;
+
+theorem :: GRAPH_2:9
+    m<=len p implies (1, m)-cut p ^ (m+1, len p)-cut p = p;
+
+theorem :: GRAPH_2:10
+    m<=n & n<=len p implies
+        (1, m)-cut p ^ (m+1, n)-cut p ^ (n+1, len p)-cut p = p;
+
+theorem :: GRAPH_2:11
+rng ((m,n)-cut p) c= rng p;
+
+definition let D be set, p be FinSequence of D, m, n be Nat;
+ redefine func (m, n)-cut p -> FinSequence of D;
+end;
+
+theorem :: GRAPH_2:12
+1<=m & m<=n & n<=len p implies
+      ((m,n)-cut p).1 = p.m & ((m,n)-cut p).len ((m,n)-cut p)=p.n;
+
+begin  :: The glueing catenation
+
+definition let p, q be FinSequence;
+ func p ^' q -> FinSequence equals
+:: GRAPH_2:def 2
+  p^(2, len q)-cut q;
+end;
+
+theorem :: GRAPH_2:13
+q<>{} implies len (p^'q) +1 = len p + len q;
+
+theorem :: GRAPH_2:14
+  1<=k & k<=len p implies (p^'q).k=p.k;
+
+theorem :: GRAPH_2:15
+  1<=k & k<len q implies (p^'q).(len p +k) = q.(k+1);
+
+theorem :: GRAPH_2:16
+  1<len q implies (p^'q).len (p^'q) = q.len q;
+
+theorem :: GRAPH_2:17
+rng (p^'q) c= rng p \/ rng q;
+
+definition let D be set, p, q be FinSequence of D;
+ redefine func p^'q -> FinSequence of D;
+end;
+
+theorem :: GRAPH_2:18
+      p<>{} & q<>{} & p.len p = q.1 implies rng (p^'q) = rng p \/ rng q;
+
+begin :: Two valued alternating finsequences
+
+definition let f be FinSequence;
+  attr f is TwoValued means
+:: GRAPH_2:def 3
+ card rng f = 2;
+end;
+
+theorem :: GRAPH_2:19
+p is TwoValued iff len p >1 & ex x,y being set st x<>y & rng p ={x, y};
+
+definition let f be FinSequence;
+ attr f is Alternating means
+:: GRAPH_2:def 4
+
+  for i being Nat st 1<=i & (i+1)<=len f holds f.i <> f.(i+1);
+end;
+
+definition
+ cluster TwoValued Alternating FinSequence;
+end;
+
+reserve a, a1, a2 for TwoValued Alternating FinSequence;
+
+theorem :: GRAPH_2:20
+len a1 = len a2 & rng a1 = rng a2 & a1.1 = a2.1 implies a1 = a2;
+
+theorem :: GRAPH_2:21
+a1<>a2 & len a1 = len a2 & rng a1 = rng a2
+          implies for i st 1<=i & i<=len a1 holds a1.i<>a2.i;
+
+theorem :: GRAPH_2:22
+a1<>a2 & len a1 = len a2 & rng a1 = rng a2
+           implies for a st len a=len a1 & rng a=rng a1 holds a=a1 or a=a2;
+
+theorem :: GRAPH_2:23
+X <> Y & n > 1 implies ex a1 st rng a1 = {X, Y} & len a1 = n & a1.1 = X;
+
+begin    :: Finite subsequences of finite sequences
+
+definition let X; let fs be FinSequence of X;
+ mode FinSubsequence of fs -> FinSubsequence means
+:: GRAPH_2:def 5
+ it c= fs;
+end;
+
+reserve ss for FinSubsequence;
+
+theorem :: GRAPH_2:24
+ss is FinSequence implies Seq ss = ss;
+
+canceled;
+
+theorem :: GRAPH_2:26
+  for f being FinSubsequence, g, h, fg, fh, fgh being FinSequence
+   st rng g c= dom f & rng h c= dom f & fg=f*g & fh=f*h & fgh=f*(g^h)
+   holds fgh = fg^fh;
+
+reserve fs, fs1, fs2 for FinSequence of X,
+        fss, fss2 for FinSubsequence of fs;
+
+theorem :: GRAPH_2:27
+dom fss c= dom fs & rng fss c= rng fs;
+
+theorem :: GRAPH_2:28
+fs is FinSubsequence of fs;
+
+theorem :: GRAPH_2:29
+fss|Y is FinSubsequence of fs;
+
+theorem :: GRAPH_2:30
+for fss1 being FinSubsequence of fs1
+ st Seq fss = fs1 & Seq fss1 = fs2 & fss2 = fss|rng((Sgm dom fss)|dom fss1)
+  holds Seq fss2 = fs2;
+
+begin   :: Vertex sequences induced by chains
+
+reserve G for Graph;
+
+definition let G;
+ cluster the Vertices of G -> non empty;
+end;
+
+reserve v, v1, v2, v3, v4 for Element of the Vertices of G,
+        e for set;
+
+theorem :: GRAPH_2:31
+e joins v1,v2 implies e joins v2,v1;
+
+theorem :: GRAPH_2:32
+e joins v1,v2 & e joins v3,v4 implies v1=v3 & v2=v4 or v1=v4 & v2=v3;
+
+reserve vs, vs1, vs2 for FinSequence of the Vertices of G,
+        c, c1, c2 for Chain of G;
+
+definition let G;
+ cluster empty Chain of G;
+end;
+
+definition let G, X;
+ func G-VSet X -> set equals
+:: GRAPH_2:def 6
+  { v: ex e being Element of the Edges of G st e in X &
+                (v = (the Source of G).e or v = (the Target of G).e) };
+end;
+
+definition let G, vs; let c be FinSequence;
+ pred vs is_vertex_seq_of c means
+:: GRAPH_2:def 7
+
+      len vs = len c + 1 &
+      for n st 1<=n & n<=len c holds c.n joins vs/.n, vs/.(n+1);
+end;
+
+canceled;
+
+theorem :: GRAPH_2:34
+ c <>{} & vs is_vertex_seq_of c implies G-VSet rng c = rng vs;
+
+theorem :: GRAPH_2:35
+<*v*> is_vertex_seq_of {};
+
+theorem :: GRAPH_2:36
+ex vs st vs is_vertex_seq_of c;
+
+theorem :: GRAPH_2:37
+c <>{} & vs1 is_vertex_seq_of c & vs2 is_vertex_seq_of c & vs1 <> vs2
+ implies
+vs1.1<>vs2.1 & for vs st vs is_vertex_seq_of c holds vs = vs1 or vs = vs2;
+
+definition let G; let c be FinSequence;
+  pred c alternates_vertices_in G means
+:: GRAPH_2:def 8
+ len c>=1 & Card (G-VSet rng c) = 2 &
+  for n st n in dom c holds (the Source of G).(c.n) <> (the Target of G).(c.n);
+end;
+
+theorem :: GRAPH_2:38
+c alternates_vertices_in G & vs is_vertex_seq_of c
+        implies for k st k in dom c holds vs.k <> vs.(k+1);
+
+theorem :: GRAPH_2:39
+c alternates_vertices_in G & vs is_vertex_seq_of c
+    implies rng vs = {(the Source of G).(c.1), (the Target of G).(c.1)};
+
+theorem :: GRAPH_2:40
+c alternates_vertices_in G & vs is_vertex_seq_of c
+   implies vs is TwoValued Alternating FinSequence;
+
+theorem :: GRAPH_2:41
+c alternates_vertices_in G implies
+ex vs1,vs2 st vs1<>vs2 & vs1 is_vertex_seq_of c & vs2 is_vertex_seq_of c &
+     for vs st vs is_vertex_seq_of c holds vs=vs1 or vs=vs2;
+
+theorem :: GRAPH_2:42
+ vs is_vertex_seq_of c implies
+     (Card the Vertices of G = 1 or c <>{} & not c alternates_vertices_in G
+ iff for vs1 st vs1 is_vertex_seq_of c holds vs1 = vs);
+
+definition let G, c; assume
+ Card the Vertices of G = 1 or c <>{} & not c alternates_vertices_in G;
+ func vertex-seq c -> FinSequence of the Vertices of G means
+:: GRAPH_2:def 9
+   it is_vertex_seq_of c;
+end;
+
+theorem :: GRAPH_2:43
+vs is_vertex_seq_of c & c1 = c|Seg n & vs1= vs|Seg (n+1)
+    implies vs1 is_vertex_seq_of c1;
+
+theorem :: GRAPH_2:44
+1<=m & m<=n & n<=len c & q = (m,n)-cut c implies q is Chain of G;
+
+theorem :: GRAPH_2:45
+  1<=m & m<=n & n<=len c & c1 = (m,n)-cut c &
+vs is_vertex_seq_of c & vs1 = (m,n+1)-cut vs
+    implies vs1 is_vertex_seq_of c1;
+
+theorem :: GRAPH_2:46
+vs1 is_vertex_seq_of c1 & vs2 is_vertex_seq_of c2 & vs1.len vs1 = vs2.1
+    implies c1^c2 is Chain of G;
+
+theorem :: GRAPH_2:47
+vs1 is_vertex_seq_of c1 & vs2 is_vertex_seq_of c2 & vs1.len vs1 = vs2.1 &
+c = c1^c2 & vs = vs1^'vs2
+   implies vs is_vertex_seq_of c;
+
+begin
+
+definition let G;
+  let IT be Chain of G;
+   attr IT is simple means
+:: GRAPH_2:def 10
+ ex vs st vs is_vertex_seq_of IT &
+     (for n,m st 1<=n & n<m & m<=len vs & vs.n=vs.m holds n=1 & m=len vs);
+end;
+
+definition let G;
+   cluster simple Chain of G;
+end;
+
+reserve sc for simple Chain of G;
+
+canceled;
+
+theorem :: GRAPH_2:49
+sc|(Seg n) is simple Chain of G;
+
+theorem :: GRAPH_2:50
+  2<len sc & vs1 is_vertex_seq_of sc & vs2 is_vertex_seq_of sc
+     implies vs1=vs2;
+
+theorem :: GRAPH_2:51
+vs is_vertex_seq_of sc implies
+    for n, m st 1<=n & n<m & m<=len vs & vs.n = vs.m holds n=1 & m=len vs;
+
+:: A chain may have more than one simple chain spanning its endpoints.
+:: The following chain:
+::             .--->.
+::             ^    |
+::             |    v
+::        .--->.<---.--->.
+::             |    ^
+::             v    |
+::             .--->.
+:: is a case in point:
+
+theorem :: GRAPH_2:52
+not c is simple Chain of G & vs is_vertex_seq_of c implies
+  ex fc being FinSubsequence of c, fvs being FinSubsequence of vs, c1, vs1
+   st len c1 < len c & vs1 is_vertex_seq_of c1 & len vs1 < len vs &
+      vs.1 = vs1.1 & vs.len vs = vs1.len vs1 & Seq fc = c1 & Seq fvs = vs1;
+
+theorem :: GRAPH_2:53
+vs is_vertex_seq_of c implies
+ ex fc being FinSubsequence of c, fvs being FinSubsequence of vs, sc, vs1
+  st Seq fc = sc & Seq fvs = vs1 & vs1 is_vertex_seq_of sc &
+     vs.1 = vs1.1 & vs.len vs = vs1.len vs1;
+
+definition let G;
+ cluster empty -> one-to-one Chain of G;
+end;
+
+theorem :: GRAPH_2:54
+p is Path of G implies p|Seg(n) is Path of G;
+
+definition let G;
+ cluster simple Path of G;
+end;
+
+theorem :: GRAPH_2:55
+    2<len sc implies sc is Path of G;
+
+theorem :: GRAPH_2:56
+sc is Path of G iff len sc = 0 or len sc = 1 or sc.1<>sc.2;
+
+definition let G;
+ cluster empty -> oriented Chain of G;
+end;
+
+definition let G; let oc be oriented Chain of G; assume
+ oc <> {};
+ func vertex-seq oc -> FinSequence of the Vertices of G means
+:: GRAPH_2:def 11
+   it is_vertex_seq_of oc & it.1 = (the Source of G).(oc.1);
+end;

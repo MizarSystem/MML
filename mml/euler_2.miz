@@ -1,0 +1,1258 @@
+:: Euler's { T } heorem and Small { F } ermat's Theorem
+::  by Yoshinori Fujisawa , Yasushi Fuwa and Hidetaka Shimizu
+::
+:: Received June 10, 1998
+:: Copyright (c) 1998 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, FINSEQ_1, INT_2, ARYTM_3, ABSVALUE, ARYTM_1, NAT_1, RELAT_1,
+      FUNCT_1, RFINSEQ, SQUARE_1, BOOLE, CARD_1, EULER_1, FINSET_1, FILTER_0,
+      CARD_3, GROUP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, CARD_1,
+      INT_1, INT_2, SQUARE_1, FINSET_1, NAT_1, FUNCT_1, NEWTON, EULER_1,
+      RFINSEQ, RVSUM_1, RELAT_1, FINSEQ_1, FINSEQ_3, SETWOP_2, TOPREAL1,
+      TREES_4, WSIERP_1, GROUP_1;
+ constructors SQUARE_1, FINSEQ_3, REAL_1, EULER_1, RFINSEQ, MONOID_0, SETWOP_2,
+      TOPREAL1, WSIERP_1, NAT_1, INT_2, SEQ_1, MEMBERED, CARD_4;
+ clusters FINSET_1, INT_1, RELSET_1, FINSUB_1, FUNCT_1, FINSEQ_3, NAT_1,
+      XREAL_0, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI, FUNCT_1, XBOOLE_0;
+ theorems INT_2, AXIOMS, FINSEQ_1, NAT_LAT, NAT_1, ABSVALUE, REAL_1, RLVECT_1,
+      INT_1, GR_CY_2, FUNCT_1, REAL_2, EULER_1, PREPOWER, GR_CY_1, JORDAN4,
+      RFINSEQ, FINSUB_1, FINSEQ_2, RVSUM_1, TOPREAL1, FINSEQ_3, FINSET_1,
+      NEWTON, RELAT_1, JORDAN3, GROUP_4, SCMFSA9A, XBOOLE_1, XCMPLX_0,
+      XCMPLX_1, URYSOHN1;
+ schemes NAT_1, FINSEQ_1;
+
+begin :: Preliminary
+
+reserve a,b,m,x,n,k,l,xi,xj for Nat,
+        t,z for Integer,
+        f,F for FinSequence of NAT;
+
+Lm1:0 <> a & 0 <> b implies a gcd b = a hcf b
+proof
+  assume 0 <> a & 0 <> b;
+  then 0 < a & 0 < b by NAT_1:19;
+  then abs(a) = a & abs(b) = b by ABSVALUE:def 1;
+  hence thesis by INT_2:def 3;
+end;
+
+Lm2:t < 1 iff t <= 0
+proof
+   t < 1 implies t <= 0
+  proof
+    assume A1:t < 1;
+    assume A2:t > 0;
+    then reconsider t as Nat by INT_1:16;
+      t >= 1 by A2,RLVECT_1:99;
+    hence contradiction by A1;
+  end;
+  hence thesis by AXIOMS:22;
+end;
+
+Lm3:a <> 0 implies a-1 >= 0
+proof
+  assume a <> 0;
+  then a >= 1 by RLVECT_1:99;
+  then a-1 >= 1-1 by REAL_1:49;
+  hence thesis;
+end;
+
+Lm4:1 gcd z = 1
+proof
+  thus 1 gcd z = abs(1 ) hcf abs(z) by INT_2:def 3
+         .= 1 hcf abs(z) by ABSVALUE:def 1
+         .= 1 by NAT_LAT:35;
+end;
+
+Lm5:a,b are_relative_prime implies b,a are_relative_prime
+proof
+  assume a,b are_relative_prime;
+  then a hcf b = 1 by INT_2:def 6;
+  hence thesis by INT_2:def 6;
+end;
+
+::::::::::::::::::::::::::::
+::                        ::
+::  Very useful theorem   ::
+::                        ::
+::::::::::::::::::::::::::::
+
+theorem
+  Th1:a,(b qua Integer) are_relative_prime iff a,b are_relative_prime
+proof
+  thus a,(b qua Integer) are_relative_prime implies
+                                    a,b are_relative_prime
+  proof
+    assume a,(b qua Integer) are_relative_prime;
+    then A1:a gcd b = 1 by INT_2:def 4;
+      a >= 0 & b >= 0 by NAT_1:18;
+    then abs(a) = a & abs(b) = b by ABSVALUE:def 1;
+    then a hcf b = 1 by A1,INT_2:def 3;
+    hence thesis by INT_2:def 6;
+  end;
+  assume a,b are_relative_prime;
+  then A2:a hcf b = 1 by INT_2:def 6;
+    a >= 0 & b >= 0 by NAT_1:18;
+  then abs(a) = a & abs(b) = b by ABSVALUE:def 1;
+  then a gcd b = 1 by A2,INT_2:def 3;
+  hence thesis by INT_2:def 4;
+end;
+
+theorem
+  Th2:m > 1 & m*t >= 1 implies t >= 1
+proof
+  assume A1:m > 1 & m*t >= 1;
+  assume A2:t < 1;
+  A3:m > 0 by A1,AXIOMS:22;
+    t <= 0 by A2,Lm2;
+  then m*t <= 0 by A3,REAL_2:123;
+  hence contradiction by A1,Lm2;
+end;
+
+Lm6:m > 1 & 1-m <= z & z <= m-1 & m divides z implies z = 0
+proof
+  assume A1:m > 1 & 1-m <= z & z <= m-1 & m divides z;
+  assume A2:z <> 0;
+  consider t being Integer such that
+    A3:z = m*t by A1,INT_1:def 9;
+  A4:t <> 0 by A2,A3;
+    now per cases by A4;
+    suppose A5:t > 0;
+      then reconsider t as Nat by INT_1:16;
+        t >= 1 by A5,RLVECT_1:99;
+      then m*t >= m by NAT_LAT:2;
+      then m*t+1 > m by NAT_1:38;
+    hence contradiction by A1,A3,REAL_1:84;
+    suppose A6:t < 0;
+        1 <= m*t+m*1 by A1,A3,REAL_1:86;
+      then A7:1 <= m*(t+1) by XCMPLX_1:8;
+      reconsider r = (t+1) as Integer;
+        r >= 1 by A1,A7,Th2;
+      then 1-1 <= t by REAL_1:86;
+    hence contradiction by A6;
+  end;
+  hence contradiction;
+end;
+
+theorem
+  Th3:m > 1 & m*t >= 0 implies t >= 0
+proof
+  assume A1:m > 1 & m*t >= 0;
+  assume A2:t < 0;
+  then t*m < t by A1,REAL_2:145;
+  hence contradiction by A1,A2,AXIOMS:22;
+end;
+
+canceled;
+
+theorem
+  Th5:a <> 0 & b <> 0 & m <> 0 &
+                     a,m are_relative_prime & b,m are_relative_prime
+                                       implies m,a*b mod m are_relative_prime
+proof
+  assume A1:a <> 0 & b <> 0 & m <> 0 &
+                     a,m are_relative_prime & b,m are_relative_prime;
+  then a*b,m are_relative_prime by EULER_1:15;
+  then A2:a*b hcf m = 1 by INT_2:def 6;
+  consider t being Nat such that
+    A3:a*b = m*t+(a*b mod m) and
+      (a*b mod m) < m by A1,NAT_1:def 2;
+  A4:a*b mod m = a*b-m*t by A3,XCMPLX_1:26
+               .= a*b+(-m*t) by XCMPLX_0:def 8
+               .= a*b+(-t)*m by XCMPLX_1:175;
+  A5:a*b <> a*0 by A1,XCMPLX_1:5;
+  then A6:a*b+(-t)*m gcd m = a*b gcd m by A1,EULER_1:17;
+  A7: a*b gcd m = 1 by A1,A2,A5,Lm1;
+    a*b mod m >= 0 & m >= 0 by NAT_1:18;
+  then abs(a*b mod m) = a*b mod m & abs(m) = m by ABSVALUE:def 1;
+  then (a*b mod m) hcf m = 1 by A4,A6,A7,INT_2:def 3;
+  hence thesis by INT_2:def 6;
+end;
+
+theorem
+  Th6:m > 1 & b <> 0 &
+       m,n are_relative_prime & a,m are_relative_prime & n = a*b mod m
+           implies m,b are_relative_prime
+proof
+  assume A1:m > 1 & b <> 0 & m,n are_relative_prime
+         & a,m are_relative_prime & n = a*b mod m;
+  assume not m,b are_relative_prime;
+  then A2:m hcf b <> 1 by INT_2:def 6;
+  set k = m hcf b;
+  A3: m <> 0 by A1;
+  then m > 0 & b > 0 by A1,NAT_1:19;
+  then A4:k > 0 by NAT_LAT:43;
+  A5:k divides m & k divides b by NAT_1:def 5;
+  then consider km being Nat such that
+    A6:m = k*km by NAT_1:def 3;
+  A7:k <> 0 & km <> 0 by A1,A6;
+  consider kb being Nat such that
+    A8:b = k*kb by A5,NAT_1:def 3;
+  consider p being Nat such that
+    A9:a*(k*kb) = (k*km)*p+(a*(k*kb) mod (k*km)) &
+          (a*(k*kb) mod (k*km)) < k*km by A3,A6,NAT_1:def 2;
+  A10:(a*(k*kb) mod (k*km)) = a*(k*kb)-(k*km)*p by A9,XCMPLX_1:26
+                          .= (a*k)*kb-(k*km)*p by XCMPLX_1:4
+                          .= (k*a)*kb-k*(km*p) by XCMPLX_1:4
+                          .= k*(a*kb)-k*(km*p) by XCMPLX_1:4
+                          .= k*((a*kb)-(km*p)) by XCMPLX_1:40;
+  set tm = (a*kb)-(km*p);
+  A11:tm = 0 implies m gcd n <> 1
+  proof
+    assume A12: tm = 0;
+    A13:0 = abs(0) by ABSVALUE:7;
+      k*km >= 0 by NAT_1:18;
+    then k*km = abs(k*km) by ABSVALUE:def 1;
+    then k*km gcd 0 = k*km hcf 0 by A13,INT_2:def 3
+              .= k*km by NAT_LAT:36;
+    hence thesis by A1,A6,A8,A10,A12;
+  end;
+  A14:tm <> 0 implies m gcd n <> 1
+  proof
+    assume A15:tm <> 0;
+    assume A16:m gcd n = 1;
+    A17:k <> -1 by NAT_1:18;
+      m gcd n = k*(km gcd tm) by A1,A4,A6,A7,A8,A10,A15,EULER_1:16;
+    hence contradiction by A2,A16,A17,INT_1:22;
+  end;
+  A18:m gcd n = abs(m) hcf abs(n) by INT_2:def 3;
+    m >= 0 & n >= 0 by NAT_1:18;
+  then m = abs(m) & n = abs(n) by ABSVALUE:def 1;
+  hence contradiction by A1,A11,A14,A18,INT_2:def 6;
+end;
+
+theorem
+  Th7:for n holds (m mod n) mod n = m mod n
+proof
+   let n;
+   per cases;
+   suppose n <> 0;
+   then ex t being Nat st m = n*t+(m mod n) & m mod n < n by NAT_1:def 2;
+   hence thesis by GR_CY_1:4;
+   suppose
+A1:   n = 0;
+   hence (m mod n) mod n = 0 by NAT_1:def 2
+      .= m mod n by A1,NAT_1:def 2;
+ end;
+
+theorem
+    for n holds (l+m) mod n = ((l mod n)+(m mod n)) mod n
+proof
+  let n;
+  thus (l+m) mod n = ((l mod n)+m) mod n by GR_CY_1:2
+               .= ((l mod n)+(m mod n)) mod n by GR_CY_1:3;
+end;
+
+theorem
+  Th9:for n holds (l*m) mod n = (l*(m mod n)) mod n
+proof
+  let n;
+  per cases;
+  suppose n <> 0;
+    then consider t being Nat such that
+      A1: m = n*t+(m mod n) & (m mod n)<n by NAT_1:def 2;
+      (l*m) mod n =(l*(n*t)+l*(m mod n)) mod n by A1,XCMPLX_1:8
+               .=((l*t)*n+l*(m mod n)) mod n by XCMPLX_1:4;
+    hence (l*m) mod n = (l*(m mod n)) mod n by GR_CY_1:1;
+   suppose
+A2:   n = 0;
+   hence (l*m) mod n = 0 by NAT_1:def 2
+      .= (l*(m mod n)) mod n by A2,NAT_1:def 2;
+end;
+
+theorem
+  Th10:for n holds (l*m) mod n = ((l mod n)*m) mod n
+proof
+  let n;
+  per cases;
+  suppose n <> 0;
+    then consider t being Nat such that
+      A1: l = n*t+(l mod n) & (l mod n)<n by NAT_1:def 2;
+      (l*m) mod n = (m*(n*t)+m*(l mod n)) mod n by A1,XCMPLX_1:8
+             .=((m*t)*n+m*(l mod n)) mod n by XCMPLX_1:4;
+    hence (l*m) mod n = ((l mod n)*m) mod n by GR_CY_1:1;
+   suppose
+A2:   n = 0;
+   hence (l*m) mod n = 0 by NAT_1:def 2
+      .= ((l mod n)*m) mod n by A2,NAT_1:def 2;
+end;
+
+theorem
+  Th11:for n holds (l*m) mod n = ((l mod n)*(m mod n)) mod n
+proof
+  let n;
+    (l*m) mod n = (l*(m mod n)) mod n by Th9;
+  hence thesis by Th10;
+end;
+
+begin
+
+::::::::::::::::::::::::::::::::::::::::::::
+::                                        ::
+::  Function of Nat*(FinSequence of NAT)  ::
+::                                        ::
+::::::::::::::::::::::::::::::::::::::::::::
+
+definition let a,f;
+  redefine func a*f -> FinSequence of NAT;
+coherence
+  proof
+      rng(a*f) c= NAT
+    proof
+      let x be set;
+      assume x in rng (a*f);
+      then consider xx being set such that
+             A1:xx in dom (a*f) & x = (a*f).xx by FUNCT_1:def 5;
+      A2:xx in Seg len (a*f) by A1,FINSEQ_1:def 3;
+        Seg len (a*f) is Subset of NAT by FINSUB_1:def 5;
+      then reconsider xx as Nat by A2;
+        (a*f).xx = a*(f.xx) by RVSUM_1:66;
+      hence thesis by A1;
+    end;
+    hence thesis by FINSEQ_1:def 4;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::
+::                                     ::
+::  Function of Product(FinSequence of NAT) ::
+::                                     ::
+:::::::::::::::::::::::::::::::::::::::::
+
+  Lm7:for f be FinSequence of NAT, r be Nat holds
+  Product(f^<*r*>) = Product f*r
+   by RVSUM_1:126;
+
+  Lm8:for f1,f2 be FinSequence of NAT holds
+  Product(f1^f2) = Product f1*Product f2
+   by RVSUM_1:127;
+
+canceled 13;
+
+theorem
+  Th25:for R1,R2 be FinSequence of NAT
+         st R1,R2 are_fiberwise_equipotent holds Product R1 = Product R2
+proof
+  defpred P[Nat] means
+    for f,g be FinSequence of NAT st f,g are_fiberwise_equipotent & len f = $1
+      holds Product f = Product g;
+  A1:P[0]
+  proof let f,g be FinSequence of NAT; assume
+      f,g are_fiberwise_equipotent & len f = 0;
+    then len g = 0 & f = <*>NAT by FINSEQ_1:32,RFINSEQ:16;
+    hence thesis by FINSEQ_1:32;
+  end;
+  A2:for n st P[n] holds P[n+1]
+  proof let n; assume
+    A3:P[n];
+    let f,g be FinSequence of NAT; assume
+    A4:f,g are_fiberwise_equipotent & len f = n+1;
+    then A5:rng f = rng g & len f = len g by RFINSEQ:1,16;
+      0<n+1 by NAT_1:19;
+    then 0+1<=n+1 by NAT_1:38;
+    then A6:n+1 in dom f by A4,FINSEQ_3:27;
+    reconsider a = f.(n+1) as Nat;
+      a in rng g by A5,A6,FUNCT_1:def 5;
+    then consider m such that
+    A7:m in dom g & g.m = a by FINSEQ_2:11;
+    A8:g = (g|m)^(g/^m) by RFINSEQ:21;
+    A9:1<=m & m<=len g by A7,FINSEQ_3:27;
+    then max(0,m-1) = m-1 by FINSEQ_2:4;
+    then reconsider m1 = m-1 as Nat by FINSEQ_2:5;
+    set gg = g/^m,
+        gm = g|m;
+    A10:len gm = m by A9,TOPREAL1:3;
+    A11:m = m1+1 by XCMPLX_1:27;
+      m in Seg m by A9,FINSEQ_1:3;
+    then gm.m = a & m in dom g by A7,RFINSEQ:19;
+    then A12:gm = (gm|m1)^<*a*> by A10,A11,RFINSEQ:20;
+      m1<=m by A11,NAT_1:29;
+    then A13:Seg m1 c= Seg m by FINSEQ_1:7;
+    A14:gm|m1 = gm|(Seg m1) by TOPREAL1:def 1
+             .= (g|(Seg m))|(Seg m1) by TOPREAL1:def 1
+             .= g|((Seg m)/\(Seg m1)) by RELAT_1:100
+             .= g|(Seg m1) by A13,XBOOLE_1:28
+             .= g|m1 by TOPREAL1:def 1;
+    set fn = f|n;
+      n<=n+1 by NAT_1:29;
+    then A15:len fn = n by A4,TOPREAL1:3;
+    A16:f = fn ^ <*a*> by A4,RFINSEQ:20;
+      now let x be set;
+        card(f"{x}) = card(g"{x}) by A4,RFINSEQ:def 1;
+      then card(fn"{x})+card(<*a*>"{x}) = card(((g|m1)^<*a*>^(g/^m))"{x})
+                                           by A8,A12,A14,A16,FINSEQ_3:63
+      .= card(((g|m1)^<*a*>)"{x})+card((g/^m)"{x}) by FINSEQ_3:63
+      .= card((g|m1)"{x})+card(<*a*>"{x})+card((g/^m)"{x}) by FINSEQ_3:63
+      .= card((g|m1)"{x})+card((g/^m)"{x})+card(<*a*>"{x}) by XCMPLX_1:1
+      .= card(((g|m1)^(g/^m))"{x})+card(<*a*>"{x}) by FINSEQ_3:63;
+      hence card(fn"{x}) = card(((g|m1)^(g/^m))"{x}) by XCMPLX_1:2;
+    end;
+    then fn, (g|m1)^(g/^m) are_fiberwise_equipotent by RFINSEQ:def 1;
+    then Product fn = Product((g|m1)^gg) by A3,A15;
+    hence Product f = Product((g|m1)^gg)*Product <*a*> by A16,Lm8
+             .= Product(g|m1)*Product gg*Product <*a*> by Lm8
+             .= Product(g|m1)*Product <*a*>*Product gg by XCMPLX_1:4
+             .= Product gm*Product gg by A12,A14,Lm8
+             .= Product g by A8,Lm8;
+  end;
+  A17:for n holds P[n] from Ind(A1,A2);
+  let R1,R2 be FinSequence of NAT; assume
+  A18:R1,R2 are_fiberwise_equipotent;
+    len R1 = len R1;
+  hence thesis by A17,A18;
+end;
+
+begin::Modulus for Finite Sequence of Natural
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+::                                            ::
+::  Function of (FinSequence of NAT) mod Nat  ::
+::                                            ::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let f be FinSequence of NAT,m be Nat;
+  func f mod m -> FinSequence of NAT means
+:Def1:
+  len(it) = len(f) & for i being Nat st i in dom f holds it.i = (f.i) mod m;
+existence
+  proof
+    deffunc F(Nat) = (f.$1) mod m;
+    consider g be FinSequence such that
+      A1:len g = len f and
+      A2:for k being Nat st k in Seg len f holds g.k = F(k) from SeqLambda;
+      rng g c= NAT
+    proof
+      let x be set;
+      assume x in rng g;
+      then consider y being set such that
+        A3:y in dom g & x = g.y by FUNCT_1:def 5;
+        A4:y in Seg len g by A3,FINSEQ_1:def 3;
+        Seg len g is Subset of NAT by FINSUB_1:def 5;
+      then reconsider y as Nat by A4;
+        g.y = (f.y) mod m by A1,A2,A4;
+      hence x in NAT by A3;
+    end;
+    then reconsider g as FinSequence of NAT by FINSEQ_1:def 4;
+    take g;
+    thus len g = len f by A1;
+    let k be Nat;
+    assume k in dom f;
+    then k in Seg len f by FINSEQ_1:def 3;
+    hence g.k = (f.k) mod m by A2;
+  end;
+uniqueness
+  proof
+    let fa,fb be FinSequence of NAT such that
+    A5:len(f) = len(fa) &
+          for i being Nat st i in dom f holds fa.i = (f.i) mod m and
+    A6:len(f) = len(fb) &
+          for i being Nat st i in dom f holds fb.i = (f.i) mod m;
+      now let X be set such that
+      A7:dom f = X;
+      A8: dom f = Seg len f by FINSEQ_1:def 3
+           .= dom fa by A5,FINSEQ_1:def 3;
+      A9: dom f = Seg len f by FINSEQ_1:def 3
+           .= dom fb by A6,FINSEQ_1:def 3;
+        for i being Nat st i in X holds fa.i = fb.i
+      proof
+        given j being Nat such that A10: j in X & fa.j <> fb.j;
+          j in X & fa.j <> (f.j) mod m by A6,A7,A10;
+        hence contradiction by A5,A7;
+      end;
+      hence fa = fb by A7,A8,A9,FINSEQ_1:17;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem
+    for f be FinSequence of NAT st m <> 0 holds
+                          (Product(f mod m)) mod m = (Product f) mod m
+proof
+  defpred P[Nat] means
+    for f be FinSequence of NAT st m <> 0 & len f = $1 holds
+         (Product(f mod m)) mod m = (Product f) mod m;
+  A1:P[0]
+  proof
+    let f be FinSequence of NAT;
+    assume A2:m <> 0 & len f=0;
+    then A3:f = <*> NAT by FINSEQ_1:32;
+      len (f mod m) = 0 by A2,Def1;
+    hence thesis by A3,FINSEQ_1:32;
+  end;
+  A4:for n st P[n] holds P[n+1]
+  proof
+    let n;
+    assume A5:P[n];
+    let f be FinSequence of NAT;
+    assume A6:m <> 0 & len f = n+1;
+    reconsider fn = f|n as FinSequence of NAT;
+    A7:n <= n+1 by NAT_1:29;
+    A8:n <= len f by A6,NAT_1:29;
+    A9:len fn = n by A6,A7,TOPREAL1:3;
+    A10: (Product f) mod m = (Product (fn ^ <* f.(n+1) *>)) mod m by A6,RFINSEQ
+:20
+                    .= ((Product fn)*f.(n+1)) mod m by RVSUM_1:126;
+    A11:len (f mod m) = n+1 by A6,Def1;
+    A12:(f mod m)|n = fn mod m
+    proof
+      A13:len((f mod m)|n) = n by A7,A11,TOPREAL1:3;
+      then A14:len((f mod m)|n) = len(fn mod m) by A9,Def1;
+        for i being Nat st 1 <= i & i <= len ((f mod m)|n) holds
+             ((f mod m)|n).i = (fn mod m).i
+      proof
+        let i be Nat;
+        assume A15:1 <= i & i <= len ((f mod m)|n);
+        then A16:i in Seg n by A13,FINSEQ_1:3;
+        then A17: ((f mod m)|Seg n).i = (f mod m).i by FUNCT_1:72;
+          i <= len f by A8,A13,A15,AXIOMS:22;
+        then A18:i in dom f by A15,FINSEQ_3:27;
+        A19: (f|n).i = ((f|Seg n).i) by TOPREAL1:def 1;
+          i in dom fn by A9,A13,A15,FINSEQ_3:27;
+        then (fn mod m).i = fn.i mod m by Def1
+                         .= f.i mod m by A16,A19,FUNCT_1:72
+                         .= (f mod m).i by A18,Def1;
+        hence thesis by A17,TOPREAL1:def 1;
+      end;
+      hence thesis by A14,FINSEQ_1:18;
+    end;
+      0<n+1 by NAT_1:19;
+    then 0+1<=n+1 by NAT_1:38;
+    then n+1 in dom f by A6,FINSEQ_3:27;
+    then (f mod m).(n+1) = f.(n+1) mod m by Def1;
+    then f mod m = (fn mod m) ^ <* f.(n+1) mod m *> by A11,A12,RFINSEQ:20;
+    then Product (f mod m) mod m
+         = ((Product (fn mod m))*(f.(n+1) mod m)) mod m by RVSUM_1:126
+        .= (((Product (fn mod m)) mod m)*((f.(n+1) mod m) mod m)) mod m by Th11
+        .= (((Product fn) mod m)*((f.(n+1) mod m) mod m)) mod m by A5,A6,A9
+        .= (((Product fn) mod m)*(f.(n+1) mod m)) mod m by Th7;
+    hence thesis by A10,Th11;
+  end;
+  A20:for n holds P[n] from Ind(A1,A4);
+  let f be FinSequence of NAT;
+  assume A21:m <> 0;
+    len(f) is Nat;
+  hence thesis by A20,A21;
+end;
+
+theorem
+  Th27:a <> 0 & m > 1 & n <> 0 &
+      a*n mod m = n mod m & m,n are_relative_prime implies a mod m = 1
+proof
+  assume A1:a <> 0 & m > 1 & n <> 0 &
+               a*n mod m = n mod m & m,n are_relative_prime;
+  then A2:m <> 0;
+  then consider k1 be Nat such that
+    A3:a*n = m*k1+(a*n mod m) and
+      (a*n mod m) < m by NAT_1:def 2;
+  A4:(a*n mod m) = a*n-m*k1 by A3,XCMPLX_1:26;
+  consider k2 be Nat such that
+    A5:n = m*k2+(n mod m) and
+      (n mod m) < m by A2,NAT_1:def 2;
+    (n mod m) = n-m*k2 by A5,XCMPLX_1:26;
+  then a*n-1*n = m*k1-m*k2 by A1,A4,XCMPLX_1:24;
+  then (a-1)*n = m*k1-m*k2 by XCMPLX_1:40;
+  then (a-1)*n = m*(k1-k2) by XCMPLX_1:40;
+  then A6:m divides (a-1)*n by INT_1:def 9;
+  reconsider t = (a-1),m,n as Integer;
+    m,n are_relative_prime by A1,Th1;
+  then m divides t by A6,INT_2:40;
+  then consider tt be Integer such that
+    A7:(a-1) = m*tt by INT_1:def 9;
+  A8:a = m*tt+1 by A7,XCMPLX_1:27;
+    a-1 >= 0 by A1,Lm3;
+  then tt >= 0 by A1,A7,Th3;
+  then reconsider tt,m as Nat by INT_1:16;
+    a mod m = (((m*tt) mod m)+1) mod m by A8,GR_CY_1:2
+         .= (0+1) mod m by GROUP_4:101
+         .= 1 by A1,GR_CY_1:4;
+  hence thesis;
+end;
+
+theorem
+    for F holds (F mod m) mod m = F mod m
+proof
+  let F;
+  A1:dom ((F mod m) mod m) = Seg(len((F mod m) mod m)) by FINSEQ_1:def 3
+                          .= Seg(len(F mod m)) by Def1
+                          .= Seg(len F) by Def1
+                          .= dom F by FINSEQ_1:def 3;
+  A2:dom (F mod m) = Seg(len(F mod m)) by FINSEQ_1:def 3
+                  .= Seg(len F) by Def1
+                  .= dom F by FINSEQ_1:def 3;
+    for x being set st x in dom F holds ((F mod m) mod m).x = (F mod m).x
+  proof
+    let x be set;
+    assume A3:x in dom F;
+    then A4:x in Seg len F by FINSEQ_1:def 3;
+      Seg len F is Subset of NAT by FINSUB_1:def 5;
+    then reconsider x as Nat by A4;
+      ((F mod m) mod m).x = ((F mod m).x) mod m by A2,A3,Def1
+                       .= (F.x mod m) mod m by A3,Def1
+                       .= F.x mod m by Th7
+                       .= (F mod m).x by A3,Def1;
+    hence thesis;
+  end;
+  hence thesis by A1,A2,FUNCT_1:9;
+end;
+
+theorem
+    for F holds (a*(F mod m)) mod m = (a*F) mod m
+proof
+  let F;
+  A1:dom ((a*(F mod m)) mod m)
+                       = Seg(len((a*(F mod m)) mod m)) by FINSEQ_1:def 3
+                      .= Seg(len(a*(F mod m))) by Def1
+                      .= Seg(len(F mod m)) by NEWTON:6
+                      .= Seg(len F) by Def1
+                      .= dom F by FINSEQ_1:def 3;
+  A2:dom (a*(F mod m)) = Seg(len(a*(F mod m))) by FINSEQ_1:def 3
+                        .= Seg(len(F mod m)) by NEWTON:6
+                        .= Seg(len F) by Def1
+                        .= dom F by FINSEQ_1:def 3;
+  A3:dom ((a*F) mod m) = Seg(len((a*F) mod m)) by FINSEQ_1:def 3
+                        .= Seg(len(a*F)) by Def1
+                        .= Seg(len F) by NEWTON:6
+                        .= dom F by FINSEQ_1:def 3;
+  A4:dom (a*F) = Seg(len(a*F)) by FINSEQ_1:def 3
+                .= Seg(len F) by NEWTON:6
+                .= dom F by FINSEQ_1:def 3;
+    for x being set st x in dom F holds
+                     ((a*(F mod m)) mod m).x = ((a*F) mod m).x
+  proof
+    let x be set;
+    assume A5:x in dom F;
+    then A6:x in Seg len F by FINSEQ_1:def 3;
+      Seg len F is Subset of NAT by FINSUB_1:def 5;
+    then reconsider x as Nat by A6;
+      ((a*(F mod m)) mod m).x = (a*(F mod m)).x mod m by A2,A5,Def1
+                             .= (a*(F mod m).x ) mod m by RVSUM_1:66
+                             .= (a*(F.x mod m)) mod m by A5,Def1
+                             .= (a*F.x) mod m by Th9
+                             .= (a*F).x mod m by RVSUM_1:66
+                             .= ((a*F) mod m).x by A4,A5,Def1;
+    hence thesis;
+  end;
+  hence thesis by A1,A3,FUNCT_1:9;
+end;
+
+theorem
+    for F,G being FinSequence of NAT
+             holds (F ^ G) mod m = (F mod m) ^ (G mod m)
+proof
+  let F,G be FinSequence of NAT;
+  A1: dom ((F ^ G) mod m) = Seg(len((F ^ G) mod m)) by FINSEQ_1:def 3
+                         .= Seg(len(F ^ G)) by Def1
+                         .= dom (F ^ G) by FINSEQ_1:def 3;
+  A2: dom ((F mod m) ^ (G mod m))
+                  = Seg(len((F mod m) ^ (G mod m))) by FINSEQ_1:def 3
+                 .= Seg(len(F mod m)+len(G mod m)) by FINSEQ_1:35
+                 .= Seg(len(F)+len(G mod m)) by Def1
+                 .= Seg(len(F)+len(G)) by Def1
+                 .= Seg(len(F ^ G)) by FINSEQ_1:35
+                 .= dom (F ^ G) by FINSEQ_1:def 3;
+  A3: dom (F mod m) = Seg(len(F mod m)) by FINSEQ_1:def 3
+                   .= Seg(len F) by Def1
+                   .= dom F by FINSEQ_1:def 3;
+  A4: dom (G mod m) = Seg(len(G mod m)) by FINSEQ_1:def 3
+                   .= Seg(len G) by Def1
+                   .= dom G by FINSEQ_1:def 3;
+    for x being set st x in dom (F ^ G)
+                holds ((F ^ G) mod m).x = ((F mod m) ^ (G mod m)).x
+  proof
+    let x be set;
+    assume A5:x in dom (F ^ G);
+    then A6: x in Seg len (F ^ G) by FINSEQ_1:def 3;
+      Seg len (F ^ G) is Subset of NAT by FINSUB_1:def 5;
+    then reconsider x as Nat by A6;
+      now per cases by A5,FINSEQ_1:38;
+      suppose A7: x in dom F;
+        A8:((F ^ G) mod m).x = (F ^ G).x mod m by A5,Def1
+                             .= F.x mod m by A7,FINSEQ_1:def 7;
+          ((F mod m) ^ (G mod m)).x = (F mod m).x by A3,A7,FINSEQ_1:def 7
+                                 .= F.x mod m by A7,Def1;
+      hence ((F ^ G) mod m).x = ((F mod m) ^ (G mod m)).x by A8;
+      suppose ex n being Nat st n in dom G & x=len F+n;
+        then consider n being Nat such that
+          A9:n in dom G & x=len F+n;
+        A10: len (F mod m) = len F by Def1;
+        A11:((F ^ G) mod m).x = (F ^ G).x mod m by A5,Def1
+                             .= G.n mod m by A9,FINSEQ_1:def 7;
+          ((F mod m) ^ (G mod m)).x = (G mod m).n by A4,A9,A10,FINSEQ_1:def 7
+                                 .= G.n mod m by A9,Def1;
+        hence ((F ^ G) mod m).x = ((F mod m) ^ (G mod m)).x by A11;
+    end;
+    hence thesis;
+  end;
+  hence thesis by A1,A2,FUNCT_1:9;
+end;
+
+theorem
+    for F,G being FinSequence of NAT
+             holds (a*(F ^ G)) mod m = ((a*F) mod m) ^ ((a*G) mod m)
+proof
+  let F,G be FinSequence of NAT;
+  reconsider FG = F ^ G as FinSequence of NAT;
+  A1:dom ((a*(F ^ G)) mod m) = Seg(len((a*FG) mod m)) by FINSEQ_1:def 3
+                            .= Seg(len(a*FG)) by Def1
+                            .= Seg(len(FG)) by NEWTON:6
+                            .= dom (F ^ G) by FINSEQ_1:def 3;
+  A2:dom (((a*F) mod m) ^ ((a*G) mod m))
+                  = Seg(len(((a*F) mod m) ^ ((a*G) mod m))) by FINSEQ_1:def 3
+                 .= Seg(len((a*F) mod m)+len((a*G) mod m)) by FINSEQ_1:35
+                 .= Seg(len(a*F)+len((a*G) mod m)) by Def1
+                 .= Seg(len(a*F)+len(a*G)) by Def1
+                 .= Seg(len(F)+len(a*G)) by NEWTON:6
+                 .= Seg(len(F)+len(G)) by NEWTON:6
+                 .= Seg(len(F ^ G)) by FINSEQ_1:35
+                 .= dom(F ^ G) by FINSEQ_1:def 3;
+  A3:dom (a*(F ^ G)) = Seg(len(a*FG)) by FINSEQ_1:def 3
+                    .= Seg(len(FG)) by NEWTON:6
+                    .= dom (F ^ G) by FINSEQ_1:def 3;
+  A4:dom (a*F) = Seg(len(a*F)) by FINSEQ_1:def 3
+              .= Seg(len F) by NEWTON:6
+              .= dom F by FINSEQ_1:def 3;
+  A5:dom ((a*F) mod m) = Seg(len((a*F) mod m)) by FINSEQ_1:def 3
+                      .= Seg(len (a*F)) by Def1
+                      .= Seg(len(F)) by NEWTON:6
+                      .= dom F by FINSEQ_1:def 3;
+  A6:dom (a*G) = Seg(len(a*G)) by FINSEQ_1:def 3
+              .= Seg(len G) by NEWTON:6
+              .= dom G by FINSEQ_1:def 3;
+  A7:dom ((a*G) mod m) = Seg(len((a*G) mod m)) by FINSEQ_1:def 3
+                      .= Seg(len (a*G)) by Def1
+                      .= Seg(len(G)) by NEWTON:6
+                      .= dom G by FINSEQ_1:def 3;
+    for x being set st x in dom (F ^ G)
+             holds ((a*(F ^ G)) mod m).x = (((a*F) mod m) ^ ((a*G) mod m)).x
+  proof
+    let x be set;
+    assume A8:x in dom (F ^ G);
+    reconsider H = F ^ G as FinSequence of NAT;
+    A9: x in Seg len (F ^ G) by A8,FINSEQ_1:def 3;
+      Seg len (F ^ G) is Subset of NAT by FINSUB_1:def 5;
+    then reconsider x as Nat by A9;
+      now per cases by A8,FINSEQ_1:38;
+      suppose A10: x in dom F;
+        A11:((a*(F ^ G)) mod m).x = ((a*(F ^ G)).x) mod m by A3,A8,Def1
+                                 .= (a*H.x) mod m by RVSUM_1:66
+                                 .= (a*(F.x)) mod m by A10,FINSEQ_1:def 7;
+          (((a*F) mod m) ^ ((a*G) mod m)).x
+                                  = ((a*F) mod m).x by A5,A10,FINSEQ_1:def 7
+                                 .= ((a*F).x) mod m by A4,A10,Def1
+                                 .= (a*(F.x)) mod m by RVSUM_1:66;
+      hence ((a*(F ^ G)) mod m).x = (((a*F) mod m) ^ ((a*G) mod m)).x by A11;
+      suppose ex n being Nat st n in dom G & x=len F+n;
+        then consider n being Nat such that
+          A12:n in dom G & x=len F+n;
+        A13: len ((a*F) mod m) = len(a*F) by Def1
+                         .= len F by NEWTON:6;
+        A14:((a*(F ^ G)) mod m).x = ((a*(F ^ G)).x) mod m by A3,A8,Def1
+                                 .= (a*H.x) mod m by RVSUM_1:66
+                                 .= (a*G.n) mod m by A12,FINSEQ_1:def 7;
+          (((a*F) mod m) ^ ((a*G) mod m)).x
+                                  = ((a*G) mod m).n by A7,A12,A13,FINSEQ_1:def
+7
+                                 .= ((a*G).n) mod m by A6,A12,Def1
+                                 .= (a*G.n) mod m by RVSUM_1:66;
+      hence ((a*(F ^ G)) mod m).x = (((a*F) mod m) ^ ((a*G) mod m)).x by A14;
+    end;
+    hence thesis;
+  end;
+  hence thesis by A1,A2,FUNCT_1:9;
+end;
+
+
+:::::::::::::::::::::::::::::::::::
+::                               ::
+::  Function of (Nat) |^ (Nat)   ::
+::                               ::
+:::::::::::::::::::::::::::::::::::
+
+definition let n,k;
+  redefine func n |^ k -> Nat;
+coherence by URYSOHN1:8;
+end;
+
+theorem
+    a <> 0 & m <> 0 & a,m are_relative_prime
+           implies for b holds (a |^ b),m are_relative_prime
+proof
+  assume A1:a <> 0 & m <> 0 & a,m are_relative_prime;
+  A2:(a |^ 0) hcf m = 1 hcf m by NEWTON:9;
+  defpred P[Nat] means (a |^ $1),m are_relative_prime;
+  m hcf 1 = 1 by NAT_LAT:35;
+  then A3:P[0] by A2,INT_2:def 6;
+  A4:for b holds P[b] implies P[b+1]
+  proof
+    let b;
+    assume A5:(a |^ b),m are_relative_prime;
+    A6:(a |^ (b+1)) = (a |^ b)*(a |^ 1) by NEWTON:13
+                    .= (a |^ b)*a by NEWTON:10;
+      a |^ b <> 0 by A1,PREPOWER:12;
+    hence thesis by A1,A5,A6,EULER_1:15;
+  end;
+  for b holds P[b] from Ind(A3,A4);
+  hence thesis;
+end;
+
+begin:: Euler's Theorem and Small Fermat's Theorem
+::::::::::::::::::::::::::::::::::::::::::::::::
+::                                            ::
+::  Euler's Theorem & Small Fermat's Theorem  ::
+::                                            ::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem ::Euler's theorem
+  Th33:a <> 0 & m > 1 & a,m are_relative_prime
+                  implies (a |^ Euler m) mod m = 1
+proof
+  assume A1:a <> 0 & m > 1 & a,m are_relative_prime;
+  then A2:m <> 0;
+
+  set X = {k where k is Nat : m,k are_relative_prime & k >= 1 & k <= m};
+  set Y = {l where l is Nat : ex u being Nat st l = a*u mod m & u in X};
+
+::Begin Euler's Lemma1
+  A3:x in X implies a*x mod m in X
+  proof
+    assume x in X;
+    then consider t being Nat such that
+      A4:t = x and
+      A5:m,t are_relative_prime and
+      A6:t >= 1 & t <= m;
+      m hcf t = 1 by A5,INT_2:def 6;
+    then A7:t,m are_relative_prime by INT_2:def 6;
+    A8:t <> 0 by A6;
+    then A9:a*t,m are_relative_prime by A1,A2,A7,EULER_1:15;
+      m hcf t = 1 by A5,INT_2:def 6;
+    then t,m are_relative_prime by INT_2:def 6;
+    then A10:m,a*t mod m are_relative_prime by A1,A2,A8,Th5;
+      a*t mod m <> 0
+    proof
+      assume a*t mod m = 0;
+      then consider s being Nat such that
+        A11:a*t = m*s+0 and
+            0 < m by A2,NAT_1:def 2;
+        s hcf 1 = 1 by NAT_LAT:35;
+      then m*s hcf m*1 = m by EULER_1:6;
+      hence contradiction by A1,A9,A11,INT_2:def 6;
+    end;
+    then A12:a*t mod m >= 1 by RLVECT_1:99;
+      m > 0 by A2,NAT_1:19;
+    then a*t mod m <= m by NAT_1:46;
+    hence thesis by A4,A10,A12;
+  end;
+::End of Euler's Lemma1
+
+::Begin Euler's Lemma2
+  A13:xi in X & xj in X & xi <> xj implies a*xi mod m <> a*xj mod m
+  proof
+    assume A14:xi in X & xj in X & xi <> xj;
+    assume A15:a*xi mod m = a*xj mod m;
+    set tm = a*xi mod m,sm = a*xj mod m;
+    A16:m > 0 by A2,NAT_1:19;
+    consider t being Nat such that
+      A17:t = xi and
+        m,t are_relative_prime and
+      A18:t >= 1 & t <= m by A14;
+    A19:tm = (a*t)-m*((a*t) div m) by A16,A17,GR_CY_2:1;
+    consider s being Nat such that
+      A20:s = xj and
+        m,s are_relative_prime and
+    A21:s >= 1 & s <= m by A14;
+    A22:sm = (a*s)-m*((a*s) div m) by A16,A20,GR_CY_2:1;
+      tm-sm = 0 by A15,XCMPLX_1:14;
+    then 0 = ((a*t)-m*((a*t) div m))-(a*s)+m*((a*s) div m)
+             by A19,A22,XCMPLX_1:37
+          .= ((a*t)-(a*s)-m*((a*t) div m))+m*((a*s) div m) by XCMPLX_1:21
+          .= a*(t-s)-m*((a*t) div m)+m*((a*s) div m) by XCMPLX_1:40
+          .= a*(t-s)-(m*((a*t) div m)-m*((a*s) div m)) by XCMPLX_1:37
+          .= a*(t-s)-m*(((a*t) div m)-((a*s) div m)) by XCMPLX_1:40;
+    then a*(t-s) = m*(((a*t) div m)-((a*s) div m)) by XCMPLX_1:15;
+    then A23:m divides a*(t-s) by INT_1:def 9;
+    reconsider m,a,c = (t-s) as Integer;
+      a,m are_relative_prime by A1,Th1;
+    then A24:m divides c by A23,INT_2:40;
+      1-m <= c & c <= m-1 by A18,A21,REAL_1:92;
+    then t-s = 0 by A1,A24,Lm6;
+    hence contradiction by A14,A17,A20,XCMPLX_1:15;
+  end;
+::End of Euler's Lemma2
+
+::Begin Euler's Lemma3
+  A25:X = Y
+  proof
+    thus X c= Y
+    proof
+      let x be set;
+      assume x in X;
+      then consider xx being Nat such that
+        A26:x = xx and
+        A27:m,xx are_relative_prime and
+        A28:xx >= 1 & xx <= m;
+        xx <> m by A1,A27,EULER_1:2;
+      then xx < m by A28,AXIOMS:21;
+      then A29:xx mod m = xx by GR_CY_1:4;
+      A30:xx <> 0 by A28;
+      consider i,j being Integer such that
+        A31:i*a+j*m = xx by A1,EULER_1:11;
+        i = (i div m)*m+(i mod m) by A2,GR_CY_2:4;
+      then A32: xx = (i div m)*m*a+(i mod m)*a+j*m by A31,XCMPLX_1:8
+                 .= (i mod m)*a+((i div m)*a)*m+j*m by XCMPLX_1:4
+                 .= (i mod m)*a+(m*((i div m)*a)+m*j) by XCMPLX_1:1
+                 .= (i mod m)*a+(((i div m)*a)+j)*m by XCMPLX_1:8;
+      A33:m > 0 by A2,NAT_1:19;
+      A34:i mod m <> 0
+      proof
+        assume i mod m = 0;
+        then 0 = i-(i div m)*m by A2,INT_1:def 8;
+        then i = (i div m)*m by XCMPLX_1:15;
+        then A35:xx = ((i div m)*a)*m+j*m by A31,XCMPLX_1:4
+                   .= m*((i div m)*a+j) by XCMPLX_1:8;
+        then A36:((i div m)*a+j) <> 0 & 1 <> 0 by A28;
+          m gcd xx = m*1 gcd m*((i div m)*a+j) by A35
+                    .= m*(1 gcd ((i div m)*a+j)) by A33,A36,EULER_1:16
+                    .= m*1 by Lm4
+                    .= m;
+        then m hcf xx = m by A2,A30,Lm1;
+        hence contradiction by A1,A27,INT_2:def 6;
+      end;
+        i mod m >= 0 by A33,GR_CY_2:2;
+      then reconsider im = i mod m as Nat by INT_1:16;
+      A37:im >= 1 by A34,RLVECT_1:99;
+      A38:im <= m by A33,GR_CY_2:3;
+      reconsider ij = (i mod m)*a+(((i div m)*a)+j)*m as Nat by A32;
+      A39: ij mod m = ((i mod m)*a+(((i div m)*a)+j)*m) mod m by SCMFSA9A:5
+              .= (i mod m)*a mod m by EULER_1:13
+              .= im*a mod m by SCMFSA9A:5;
+      then m,im are_relative_prime by A1,A27,A29,A32,A34,Th6;
+      then im in X by A37,A38;
+      hence x in Y by A26,A29,A32,A39;
+    end;
+    let y be set;
+    assume y in Y;
+    then consider yy being Nat such that
+      A40:y = yy and
+      A41:ex u being Nat st yy = a*u mod m & u in X;
+    consider uu being Nat such that
+      A42:yy = a*uu mod m and
+      A43:uu in X by A41;
+    thus y in X by A3,A40,A42,A43;
+  end;
+::End of Euler'S Lemma3
+
+  reconsider FX = Sgm X as FinSequence of NAT;
+  reconsider FYY = (a*FX) as FinSequence of NAT;
+  reconsider FY = FYY mod m as FinSequence of NAT;
+
+::Begin Euler's Lemma4
+  A44:X c= Seg m
+  proof
+    let x be set;
+    assume x in X;
+    then consider xx being Nat such that
+      A45:x = xx and
+        m,xx are_relative_prime and
+      A46:xx >= 1 & xx <= m;
+    thus thesis by A45,A46,FINSEQ_1:3;
+  end;
+::End of Euler's Lemma4
+
+  then reconsider X as finite set by FINSET_1:13;
+  A47:len(FX) = card X by A44,FINSEQ_3:44
+        .= Euler m by EULER_1:def 1;
+
+  A48: dom FY = Seg(len FY) by FINSEQ_1:def 3
+        .= Seg(len FYY) by Def1
+        .= Seg(len FX) by NEWTON:6;
+  then A49:dom FX = dom FY by FINSEQ_1:def 3;
+    dom FYY = Seg(len FYY) by FINSEQ_1:def 3
+         .= Seg(len FX) by NEWTON:6;
+  then A50:dom FX = dom FYY by FINSEQ_1:def 3;
+
+::Begin Euler's Lemma5
+  A51:rng FY = Y
+  proof
+    thus rng FY c= Y
+    proof
+      let x be set;
+      assume x in rng FY;
+      then consider y being set such that
+        A52:y in dom FY & x = FY.y by FUNCT_1:def 5;
+      A53:y in Seg len FY by A52,FINSEQ_1:def 3;
+        Seg len FY is Subset of NAT by FINSUB_1:def 5;
+      then reconsider y as Nat by A53;
+        y in dom FX by A48,A52,FINSEQ_1:def 3;
+      then A54: FY.y = (FYY.y) mod m by A50,Def1
+               .= (a*FX.y) mod m by RVSUM_1:66;
+        FX.y in rng FX by A49,A52,FUNCT_1:def 5;
+      then FX.y in X by A44,FINSEQ_1:def 13;
+      hence thesis by A52,A54;
+    end;
+    let y be set;
+    assume y in Y;
+    then consider yy being Nat such that
+      A55:y = yy and
+      A56:ex u being Nat st yy = a*u mod m & u in X;
+    consider uu being Nat such that
+      A57:yy = a*uu mod m and
+      A58:uu in X by A56;
+    A59: Seg len FX is Subset of NAT by FINSUB_1:def 5;
+      uu in rng FX by A44,A58,FINSEQ_1:def 13;
+    then consider xx being set such that
+      A60:xx in dom FX & uu = FX.xx by FUNCT_1:def 5;
+      xx in Seg len FX by A60,FINSEQ_1:def 3;
+    then reconsider xx as Nat by A59;
+      FY.xx = (FYY.xx) mod m by A50,A60,Def1
+         .= y by A55,A57,A60,RVSUM_1:66;
+    hence y in rng FY by A49,A60,FUNCT_1:def 5;
+  end;
+::End of Euler's Lemma5
+
+::Begin Euler's Lemma6
+  A61: FY is one-to-one
+  proof
+    let x1,x2 be set;
+    assume A62: x1 in dom FY & x2 in dom FY & FY.x1 = FY.x2;
+    then A63:x1 in dom FX & x2 in dom FX & FY.x1 = FY.x2 by A48,FINSEQ_1:def 3;
+    A64:Seg len FX is Subset of NAT by FINSUB_1:def 5;
+    then reconsider x1 as Nat by A48,A62;
+    reconsider x2 as Nat by A48,A62,A64;
+    A65: FY.x1 = (FYY.x1) mod m by A50,A63,Def1
+              .= (a*FX.x1) mod m by RVSUM_1:66;
+    A66: FY.x2 = (FYY.x2) mod m by A50,A63,Def1
+              .= (a*FX.x2) mod m by RVSUM_1:66;
+    A67: FX.x1 in rng FX by A49,A62,FUNCT_1:def 5;
+    A68: FX.x2 in rng FX by A49,A62,FUNCT_1:def 5;
+    A69:FX is one-to-one by A44,FINSEQ_3:99;
+      not(FX.x1 in X & FX.x2 in X & FX.x1 <> FX.x2) by A13,A62,A65,A66;
+    hence thesis by A44,A63,A67,A68,A69,FINSEQ_1:def 13,FUNCT_1:def 8;
+  end;
+::End of Euler's Lemma6
+
+::Begin Euler's Lemma7
+    for x be set holds card (FX"{x}) = card (FY"{x})
+  proof
+    let x be set;
+      now per cases;
+      suppose A70: x in X;
+        then A71: x in rng FX by A44,FINSEQ_1:def 13;
+          FX is one-to-one by A44,FINSEQ_3:99;
+        then len(FX-{x}) = len(FX)-1 by A71,FINSEQ_3:97;
+        then 0 = len(FX)-1-len(FX-{x}) by XCMPLX_1:14
+              .= len(FX)-(1+len(FX-{x})) by XCMPLX_1:36
+              .= len(FX)-len(FX-{x})-1 by XCMPLX_1:36;
+        then 0+1 = len(FX)-len(FX-{x})-1+1;
+        then A72: 1 = len(FX)-len(FX-{x})-(1-1) by XCMPLX_1:37
+              .= len(FX)-len(FX-{x})-0;
+          len(FX-{x})-len(FX-{x})
+                 = len(FX)-card(FX"{x})-len(FX-{x}) by FINSEQ_3:66;
+        then 0 = len(FX)-card(FX"{x})-len(FX-{x}) by XCMPLX_1:14
+              .= len(FX)-(card(FX"{x})+len(FX-{x})) by XCMPLX_1:36
+              .= len(FX)-len(FX-{x})-card(FX"{x}) by XCMPLX_1:36;
+        then 0+card(FX"{x})
+               = len(FX)-len(FX-{x})-card(FX"{x})+card(FX"{x});
+        then A73: card(FX"{x})
+               = len(FX)-len(FX-{x})-(card(FX"{x})-card(FX"{x}))
+                                                        by XCMPLX_1:37
+              .= len(FX)-len(FX-{x})-0 by XCMPLX_1:14;
+          len(FY-{x}) = len(FY)-1 by A25,A51,A61,A70,FINSEQ_3:97;
+        then 0 = len(FY)-1-len(FY-{x}) by XCMPLX_1:14
+              .= len(FY)-(1+len(FY-{x})) by XCMPLX_1:36
+              .= len(FY)-len(FY-{x})-1 by XCMPLX_1:36;
+        then 0+1 = len(FY)-len(FY-{x})-1 +1;
+        then A74: 1 = len(FY)-len(FY-{x})-(1-1) by XCMPLX_1:37
+              .= len(FY)-len(FY-{x})-0;
+          len(FY-{x}) = len(FY)-card(FY"{x}) by FINSEQ_3:66;
+        then 0 = len(FY)-card(FY"{x})-len(FY-{x}) by XCMPLX_1:14
+              .= len(FY)-(card(FY"{x})+len(FY-{x})) by XCMPLX_1:36
+              .= len(FY)-len(FY-{x})-card(FY"{x}) by XCMPLX_1:36;
+        then 0+card(FY"{x})
+               = len(FY)-len(FY-{x})-card(FY"{x})+card(FY"{x});
+        then card(FY"{x})
+          = len(FY)-len(FY-{x})-(card(FY"{x})-card(FY"{x})) by XCMPLX_1:37
+         .= len(FY)-len(FY-{x})-0 by XCMPLX_1:14;
+        hence thesis by A72,A73,A74;
+      suppose A75: not(x in X);
+        then A76: not(x in rng FX) by A44,FINSEQ_1:def 13;
+          FY"{x} = {} by A25,A51,A75,FUNCT_1:142;
+        hence thesis by A76,FUNCT_1:142;
+    end;
+    hence thesis;
+  end;
+::End of Euler's Lemma7
+
+  then A77:FX,FY are_fiberwise_equipotent by RFINSEQ:def 1;
+  then A78:(Product FX) mod m = (Product FY) mod m by Th25;
+  A79:len(FX) = len(FY) by A77,RFINSEQ:16;
+
+::Begin Euler's Lemma8
+  A80:(Product FY) mod m = (a |^ len(FY)*Product FX) mod m
+  proof
+    defpred P[Nat] means
+       $1 <= len(FY) implies
+          (Product (FY|$1)) mod m = (a |^ len(FY|$1)*Product (FX|$1)) mod m;
+    A81: P[0]
+    proof
+        0 <= len FY by NAT_1:18;
+      then A82: len (FY|0) = 0 by TOPREAL1:3;
+        0 <= len FX by NAT_1:18;
+      then len (FX|0) = 0 by TOPREAL1:3;
+      then Product (FX|0) = 1 by FINSEQ_1:25,RVSUM_1:124;
+      then a |^ len(FY|0)*Product (FX|0) = 1 by A82,NEWTON:9;
+      hence thesis by A82,FINSEQ_1:25,RVSUM_1:124;
+    end;
+    A83: for n st P[n] holds P[n+1]
+    proof
+      let n;
+        now per cases;
+        suppose A84: n+1 <= len FY;
+          assume A85:P[n];
+          A86:n <= n+1 by NAT_1:29;
+          then n <= len FY by A84,AXIOMS:22;
+          then A87:len(FY|n) = n by TOPREAL1:3;
+          A88:len (FY|(n+1)) = n+1 by A84,TOPREAL1:3;
+          then A89:FY|(n+1)
+                 = (FY|(n+1))|n ^ <* (FY|(n+1)).(n+1) *> by RFINSEQ:20;
+            0 < n+1 by NAT_1:19;
+          then 0+1 <= n+1 by NAT_1:38;
+          then A90: n+1 in dom FY by A84,FINSEQ_3:27;
+          A91:(FY|(n+1))|n = FY|n by A86,JORDAN4:15;
+          A92: (FY|(n+1)).(n+1) = FY.(n+1) by JORDAN3:20;
+            len (FX|(n+1)) = n+1 by A79,A84,TOPREAL1:3;
+          then A93:FX|(n+1)
+                 = (FX|(n+1))|n ^ <* (FX|(n+1)).(n+1) *> by RFINSEQ:20;
+          A94:(FX|(n+1))|n = FX|n by A86,JORDAN4:15;
+          A95: (FX|(n+1)).(n+1) = FX.(n+1) by JORDAN3:20;
+            (Product(FY|(n+1))) mod m = (Product(FY|n)*FY.(n+1)) mod m
+          by A89,A91,A92,Lm7
+            .= (((a |^ len(FY|n)*Product(FX|n)) mod m)
+                      *(FY.(n+1) mod m)) mod m by A84,A85,A86,Th11,AXIOMS:22
+            .= (((a |^ len(FY|n)*Product(FX|n)) mod m)
+                      *((FYY.(n+1) mod m) mod m)) mod m by A49,A50,A90,Def1
+            .= (((a |^ len(FY|n)*Product(FX|n)) mod m)
+                      *((a*FX).(n+1) mod m)) mod m by Th7
+            .= ((a |^ len(FY|n)*Product(FX|n))*(a*FX).(n+1)) mod m by Th11
+            .= (a |^ len(FY|n)*Product
+(FX|n))*(a*(FX.(n+1))) mod m by RVSUM_1:66
+            .= a |^ len(FY|n)*Product(FX|n)*a*(FX.(n+1)) mod m by XCMPLX_1:4
+            .= (a |^ len(FY|n)*a)*Product(FX|n)*(FX.(n+1)) mod m by XCMPLX_1:4
+            .= (a |^ n*a)*(Product(FX|n)*(FX.(n+1))) mod m by A87,XCMPLX_1:4
+            .= (a |^ len(FY|(n+1)))*(Product(FX|n)*(FX.(n+1))) mod m
+               by A88,NEWTON:11
+            .= (a |^ len(FY|(n+1)))*(Product(FX|(n+1))) mod m by A93,A94,A95,
+Lm7;
+        hence P[n+1];
+        suppose n+1 > len FY;
+        hence thesis;
+      end;
+      hence thesis;
+    end;
+    A96: for n holds P[n] from Ind(A81,A83);
+      FY|len FY = FY|(Seg len FY) by TOPREAL1:def 1;
+    then A97:FY = FY|len FY by FINSEQ_2:23;
+      FX|len FX = FX|(Seg len FX) by TOPREAL1:def 1;
+    then FX = FX|len FY by A79,FINSEQ_2:23;
+    hence thesis by A96,A97;
+  end;
+
+::End of Euler's Lemma8
+
+  A98: len FY = Euler m by A47,A77,RFINSEQ:16;
+  A99:a |^ Euler m <> 0 by A1,PREPOWER:12;
+
+::Begin Euler's Lemma9
+  A100:Product FX <> 0
+  proof
+    assume Product FX = 0;
+    then consider k such that
+      A101:k in dom FX and
+      A102:FX.k = 0 by RVSUM_1:133;
+    A103:rng FX = X by A44,FINSEQ_1:def 13;
+      FX.k in rng FX by A101,FUNCT_1:def 5;
+    then consider p being Nat such that
+      A104:FX.k = p and
+        m,p are_relative_prime and
+      A105:p >= 1 & p <= m by A103;
+    thus contradiction by A102,A104,A105;
+  end;
+::End of Euler's Lemma9
+
+::Begin Euler's Lemma10
+    (Product FX),m are_relative_prime
+  proof
+    defpred P[Nat] means
+      $1 <= len FX implies (Product (FX|$1)),m are_relative_prime;
+    A106: P[0]
+    proof
+        0 <= len FX by NAT_1:18;
+      then len (FX|0) = 0 by TOPREAL1:3;
+      then (Product (FX|0)) = 1 by FINSEQ_1:25,RVSUM_1:124;
+      then (Product (FX|0)) hcf m = 1 by NAT_LAT:35;
+      hence thesis by INT_2:def 6;
+    end;
+    A107: for n st P[n] holds P[n+1]
+    proof
+      let n;
+        now per cases;
+        suppose A108:len FX >= n+1;
+          assume A109:P[n];
+          A110: n <= n+1 by NAT_1:29;
+          reconsider FF = (FX|(n+1)) as FinSequence of NAT;
+          reconsider ff = FF.(n+1) as Nat;
+            len FF = n+1 by A108,TOPREAL1:3;
+          then A111:FF = (FF|n) ^ <*ff*> by RFINSEQ:20;
+            n <= n+1 by NAT_1:29;
+          then A112:FX|n = FF|n by JORDAN4:15;
+          A113:rng FX = X by A44,FINSEQ_1:def 13;
+          A114:(FX|(n+1)).(n+1) = FX.(n+1) by JORDAN3:20;
+            n >= 0 by NAT_1:18;
+          then 0+1 <= (n+1) by AXIOMS:24;
+          then n+1 in dom FX by A108,FINSEQ_3:27;
+          then (FX|(n+1)).(n+1) in rng FX by A114,FUNCT_1:def 5;
+          then consider p being Nat such that
+            A115:ff = p and
+            A116:m,p are_relative_prime and
+            p >= 1 & p <= m by A113;
+          reconsider a = (Product (FF|n)),b = ff,m' = m as Integer;
+          A117:a,m' are_relative_prime by A108,A109,A110,A112,Th1,AXIOMS:22;
+            b,m' are_relative_prime by A115,A116,Th1;
+          then a*b,m' are_relative_prime by A117,INT_2:41;
+          then (Product ((FF|n) ^ <*ff*>)),m' are_relative_prime by Lm7;
+        hence P[n+1] by A111,Th1;
+        suppose len FX < n+1;
+        hence thesis;
+      end;
+      hence thesis;
+    end;
+    A118:for n holds P[n] from Ind(A106,A107);
+      FX|len(FX) = FX by TOPREAL1:2;
+    hence thesis by A118;
+  end;
+::End of Euler's Lemma10
+
+  then m,(Product FX) are_relative_prime by Lm5;
+  hence thesis by A1,A78,A80,A98,A99,A100,Th27;
+end;
+::End of Euler's Theorem
+
+theorem ::Small Fermat's theorem
+    a <> 0 & m is prime & a,m are_relative_prime
+                       implies (a |^ m) mod m = a mod m
+proof
+  assume A1: a<>0 & m is prime & a,m are_relative_prime;
+  then A2: m > 1 by INT_2:def 5;
+  then m-1 > 1-1 by REAL_1:54;
+  then reconsider mm = m-1 as Nat by INT_1:16;
+  A3:mm+1 = m-(1-1) by XCMPLX_1:37
+         .= m;
+     Euler m = m-1 by A1,EULER_1:21;
+  then ((a |^ mm) mod m)*a = 1*a by A1,A2,Th33;
+  then ((a |^ mm)*a) mod m = a mod m by Th10;
+  hence thesis by A3,NEWTON:11;
+end;

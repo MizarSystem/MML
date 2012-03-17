@@ -1,0 +1,420 @@
+:: The Equational Characterization of Continuous Lattices
+::  by Mariusz \.Zynel
+::
+:: Received October 25, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary WAYBEL_0, ORDINAL2, WAYBEL_3, FILTER_2, QUANTAL1, YELLOW_0,
+      LATTICE3, LATTICES, YELLOW_2, WAYBEL_1, YELLOW_1, PRE_TOPC, FUNCT_1,
+      RELAT_1, BHSP_3, PBOOLE, PRALG_1, FUNCOP_1, ZF_REFLE, FUNCT_6, CARD_3,
+      FINSEQ_4, BOOLE, ORDERS_1, TARSKI, YELLOW_6, CLASSES1, ZF_LANG, FUNCT_5,
+      FUNCT_2, FINSUB_1, FINSET_1, REALSET1, RELAT_2, LATTICE2, CAT_1, SGRAPH1,
+      MSUALG_3, SEQM_3, WAYBEL_5;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FINSET_1, FINSUB_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_4, FUNCT_5, FUNCT_6, FUNCOP_1,
+      STRUCT_0, ORDERS_1, LATTICE3, CARD_3, REALSET1, PBOOLE, PRALG_1, PRALG_2,
+      MSUALG_1, MSUALG_3, PRE_TOPC, PRE_CIRC, BORSUK_1, CLASSES1, CLASSES2,
+      GRCAT_1, YELLOW_0, YELLOW_1, YELLOW_2, WAYBEL_1, WAYBEL_0, WAYBEL_3,
+      YELLOW_6;
+ constructors FINSUB_1, LATTICE3, TOPS_2, PRE_CIRC, BORSUK_1, PRALG_2,
+      MSUALG_3, ORDERS_3, WAYBEL_1, WAYBEL_3, YELLOW_6, CLASSES1, GRCAT_1;
+ clusters STRUCT_0, FINSET_1, LATTICE3, ORDERS_1, PBOOLE, MSUALG_1, CIRCCOMB,
+      PRVECT_1, FRAENKEL, PRALG_1, YELLOW_0, YELLOW_2, WAYBEL_0, WAYBEL_3,
+      CLASSES2, YELLOW_6, CANTOR_1, FUNCT_2, FUNCOP_1, RELSET_1, SUBSET_1,
+      FUNCT_4, PARTFUN1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin  :: The Continuity of Lattices
+
+reserve x, y, i for set,
+        L for up-complete Semilattice;
+
+theorem :: WAYBEL_5:1  ::Theorem 2.1 (1) iff (2)
+   L is continuous iff for x being Element of L holds
+    waybelow x is Ideal of L & x <= sup waybelow x &
+      for I being Ideal of L st x <= sup I holds waybelow x c= I;
+
+theorem :: WAYBEL_5:2 ::Theorem 2.1 (1) iff (3)
+    L is continuous iff for x being Element of L
+   ex I being Ideal of L st x <= sup I &
+     for J being Ideal of L st x <= sup J holds I c= J;
+
+theorem :: WAYBEL_5:3 ::Theorem 2.1 (1) implies (4)
+    for L being continuous lower-bounded sup-Semilattice
+    holds
+   SupMap L has_a_lower_adjoint;
+
+theorem :: WAYBEL_5:4 ::Theorem 2.1 (4) implies (1)
+    for L being up-complete lower-bounded LATTICE
+    holds
+   SupMap L is upper_adjoint implies L is continuous;
+
+theorem :: WAYBEL_5:5  ::Theorem 2.1 (5) implies (4)
+    for L being complete Semilattice
+    holds
+   SupMap L is infs-preserving sups-preserving implies
+     SupMap L has_a_lower_adjoint;
+
+:: Corollary 2.2 can be found in WAYBEL_4.
+
+definition
+  let J, D be set, K be ManySortedSet of J;
+  mode DoubleIndexedSet of K, D is ManySortedFunction of K, (J --> D);
+end;
+
+definition
+  let J be set, K be ManySortedSet of J, S be 1-sorted;
+  mode DoubleIndexedSet of K, S is DoubleIndexedSet of K, the carrier of S;
+end;
+
+theorem :: WAYBEL_5:6
+  for J, D being set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, D
+  for j being set st j in J
+    holds
+   F.j is Function of K.j, D;
+
+definition
+  let J, D be non empty set, K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let j be Element of J;
+  redefine func F.j -> Function of K.j, D;
+end;
+
+definition
+  let J, D be non empty set, K be non-empty ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let j be Element of J;
+  cluster rng(F.j) -> non empty;
+end;
+
+definition
+  let J be set, D be non empty set;
+  let K be non-empty ManySortedSet of J;
+  cluster -> non-empty DoubleIndexedSet of K, D;
+end;
+
+theorem :: WAYBEL_5:7
+  for F being Function-yielding Function
+  for f being set
+    holds
+   f in dom(Frege F) implies f is Function;
+
+theorem :: WAYBEL_5:8
+  for F being Function-yielding Function
+  for f being Function st f in dom Frege F
+    holds
+   dom f = dom F & dom F = dom((Frege F).f);
+
+theorem :: WAYBEL_5:9
+  for F being Function-yielding Function
+  for f being Function st f in dom Frege F
+  for i being set st i in dom F
+    holds
+  f.i in dom(F.i) & ((Frege F).f).i = (F.i).(f.i) &
+    (F.i).(f.i) in rng((Frege F).f);
+
+theorem :: WAYBEL_5:10
+  for J, D being set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, D
+  for f being Function st f in dom(Frege F)
+    holds
+   (Frege F).f is Function of J, D;
+
+definition
+  let f be non-empty Function;
+  cluster doms f -> non-empty;
+end;
+
+definition
+  let J, D be set, K be ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  redefine func Frege F -> DoubleIndexedSet of (product doms F --> J), D;
+end;
+
+definition
+  let J, D be non empty set, K be non-empty ManySortedSet of J;
+  let F be DoubleIndexedSet of K, D;
+  let G be DoubleIndexedSet of (product doms F --> J), D;
+  let f be Element of product doms F;
+  redefine func G.f -> Function of J, D;
+end;
+
+definition
+  let L be non empty RelStr;
+  let F be Function-yielding Function;
+  func \//(F, L) -> Function of dom F, the carrier of L means
+:: WAYBEL_5:def 1
+
+  for x st x in dom F holds it.x = \\/(F.x, L);
+
+  func /\\(F, L) -> Function of dom F, the carrier of L means
+:: WAYBEL_5:def 2
+
+  for x st x in dom F holds it.x = //\(F.x, L);
+end;
+
+definition
+  let J be set, K be ManySortedSet of J, L be non empty RelStr;
+  let F be DoubleIndexedSet of K, L;
+  redefine func \//(F, L);
+  synonym Sups F;
+
+  redefine func /\\(F, L);
+  synonym Infs F;
+end;
+
+definition
+  let I, J be set, L be non empty RelStr;
+  let F be DoubleIndexedSet of (I --> J), L;
+  redefine func \//(F, L);
+  synonym Sups F;
+
+  redefine func /\\(F, L);
+  synonym Infs F;
+end;
+
+theorem :: WAYBEL_5:11
+  for L being non empty RelStr
+  for F, G being Function-yielding Function st dom F = dom G &
+    (for x st x in dom F holds \\/(F.x, L) = \\/(G.x, L))
+      holds
+     \//(F, L) = \//(G, L);
+
+theorem :: WAYBEL_5:12
+  for L being non empty RelStr
+  for F, G being Function-yielding Function st dom F = dom G &
+    (for x st x in dom F holds //\(F.x, L) = //\(G.x, L))
+      holds
+     /\\(F, L) = /\\(G, L);
+
+theorem :: WAYBEL_5:13
+  for L being non empty RelStr
+  for F being Function-yielding Function
+    holds
+   (y in rng \//(F, L) iff ex x st x in dom F & y = \\/(F.x, L)) &
+   (y in rng /\\(F, L) iff ex x st x in dom F & y = //\(F.x, L));
+
+theorem :: WAYBEL_5:14
+  for L being non empty RelStr
+  for J being non empty set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, L
+    holds
+   (x in rng Sups F iff ex j being Element of J st x = Sup(F.j)) &
+   (x in rng Infs F iff ex j being Element of J st x = Inf(F.j));
+
+definition
+  let J be non empty set, K be ManySortedSet of J, L be non empty RelStr;
+  let F be DoubleIndexedSet of K, L;
+  cluster rng Sups F -> non empty;
+
+  cluster rng Infs F -> non empty;
+end;
+
+reserve L for complete LATTICE,
+        a, b, c for Element of L,
+        J for non empty set,
+
+        K for non-empty ManySortedSet of J;
+
+theorem :: WAYBEL_5:15
+  for F being Function-yielding Function
+    holds
+   ((for f being Function st f in dom Frege F holds //\((Frege F).f, L) <= a))
+     implies Sup /\\(Frege F, L) <= a;
+
+theorem :: WAYBEL_5:16
+  for F being DoubleIndexedSet of K, L
+    holds
+   Inf Sups F >= Sup Infs Frege F;
+
+theorem :: WAYBEL_5:17
+  (L is continuous & for c st c << a holds c <= b) implies a <= b;
+
+
+theorem :: WAYBEL_5:18     ::Theorem 2.3 (2) implies (1)
+  (for J being non empty set st J in the_universe_of the carrier of L
+   for K being non-empty ManySortedSet of J st
+    for j being Element of J holds K.j in the_universe_of the carrier of L
+   for F being DoubleIndexedSet of K, L st
+    for j being Element of J holds rng(F.j) is directed
+      holds Inf Sups F = Sup Infs Frege F)
+    implies
+   L is continuous;
+
+theorem :: WAYBEL_5:19 ::Theorem 2.3 (1) iff (2)
+    L is continuous iff for J, K for F being DoubleIndexedSet of K, L st
+      for j being Element of J holds rng(F.j) is directed
+        holds
+       Inf Sups F = Sup Infs Frege F;
+
+definition
+  let J, K, D be non empty set;
+  let F be Function of [:J, K:], D;
+  redefine func curry F -> DoubleIndexedSet of (J --> K), D;
+end;
+
+reserve J, K, D for non empty set,
+        j for Element of J,
+        k for Element of K;
+
+theorem :: WAYBEL_5:20
+  for F being Function of [:J, K:], D
+    holds
+   dom curry F = J & dom((curry F).j) = K & F.[j, k] = ((curry F).j).k;
+
+theorem :: WAYBEL_5:21 ::Theorem 2.3 (1) iff (2')
+    L is continuous iff
+    for J, K being non empty set
+    for F being Function of [:J, K:], the carrier of L st
+      for j being Element of J holds rng((curry F).j) is directed
+        holds
+       Inf Sups curry F = Sup Infs Frege curry F;
+
+theorem :: WAYBEL_5:22
+  for F being Function of [:J, K:], the carrier of L
+  for X being Subset of L st X = {a where a is Element of L:
+    ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+    ex G being DoubleIndexedSet of f, L st
+      (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G}
+    holds
+   Inf Sups curry F >= sup X;
+
+theorem :: WAYBEL_5:23 ::Theorem 2.3 (1) iff (3)
+    L is continuous iff
+   (for J, K for F being Function of [:J, K:], the carrier of L
+   for X being Subset of L st X = {a where a is Element of L:
+     ex f being non-empty ManySortedSet of J st f in Funcs(J, Fin K) &
+     ex G being DoubleIndexedSet of f, L st
+       (for j, x st x in f.j holds (G.j).x = F.[j, x]) & a = Inf Sups G}
+     holds Inf Sups curry F = sup X);
+
+
+begin  :: Completely-Distributive Lattices
+
+definition ::Definition 2.4
+  let L be non empty RelStr;
+  attr L is completely-distributive means
+:: WAYBEL_5:def 3
+
+  L is complete &
+    for J being non empty set, K being non-empty ManySortedSet of J
+    for F being DoubleIndexedSet of K, L
+      holds
+     Inf Sups F = Sup Infs Frege F;
+end;
+
+reserve J for non empty set,
+
+        K for non-empty ManySortedSet of J;
+
+
+definition
+  cluster trivial -> completely-distributive (non empty Poset);
+end;
+
+definition
+  cluster completely-distributive LATTICE;
+end;
+
+theorem :: WAYBEL_5:24  ::Corollary 2.5
+  for L being completely-distributive LATTICE holds L is continuous;
+
+definition
+  cluster completely-distributive -> complete continuous LATTICE;
+end;
+
+theorem :: WAYBEL_5:25
+  for L being non empty antisymmetric transitive with_infima RelStr
+  for x being Element of L
+  for X, Y being Subset of L st ex_sup_of X,L & ex_sup_of Y,L &
+    Y = {x"/\"y where y is Element of L: y in X}
+    holds
+   x "/\" sup X >= sup Y;
+
+theorem :: WAYBEL_5:26
+  for L being completely-distributive LATTICE
+  for X being Subset of L
+  for x being Element of L
+    holds
+   x "/\" sup X = "\/"({x"/\"y where y is Element of L: y in X}, L);
+
+definition
+  cluster completely-distributive -> Heyting LATTICE;
+end;
+
+:: For distributivity confer WAYBEL_1.
+
+
+begin  :: SubFrames of Continuous Lattices
+
+definition ::Definition 2.6
+  let L be non empty RelStr;
+  mode CLSubFrame of L is infs-inheriting directed-sups-inheriting
+    (non empty full SubRelStr of L);
+end;
+
+theorem :: WAYBEL_5:27
+  for F being DoubleIndexedSet of K, L st
+    for j being Element of J holds rng(F.j) is directed
+      holds
+     rng Infs Frege F is directed;
+
+theorem :: WAYBEL_5:28 ::Theorem 2.7 (ii)
+    L is continuous implies
+    for S being CLSubFrame of L holds S is continuous LATTICE;
+
+theorem :: WAYBEL_5:29
+  for S being non empty Poset st ex g being map of L, S st
+    g is infs-preserving onto
+      holds
+     S is complete LATTICE;
+
+definition
+  let J be set, y be set;
+  redefine func J --> y;
+  synonym J => y;
+end;
+
+definition
+  let J be set, y be set;
+  redefine func J --> y -> ManySortedSet of J;
+
+  synonym J => y;
+end;
+
+definition
+  let A, B, J be set, f be Function of A, B;
+  redefine func J => f -> ManySortedFunction of (J --> A), (J --> B);
+end;
+
+theorem :: WAYBEL_5:30
+  for A, B being set
+  for f being Function of A, B, g being Function of B, A st g*f = id A
+    holds
+   (J => g)**(J => f) = id (J --> A);
+
+theorem :: WAYBEL_5:31
+  for J, A being non empty set, B being set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, A
+  for f being Function of A, B
+    holds
+   (J => f)**F is DoubleIndexedSet of K, B;
+
+theorem :: WAYBEL_5:32
+  for J, A, B being non empty set, K being ManySortedSet of J
+  for F being DoubleIndexedSet of K, A
+  for f being Function of A, B
+    holds
+   doms((J => f)**F) = doms F;
+
+theorem :: WAYBEL_5:33 ::Theorem 2.7 (iii)
+    L is continuous implies
+    for S being non empty Poset st ex g being map of L, S st
+      g is infs-preserving directed-sups-preserving & g is onto
+        holds
+       S is continuous LATTICE;
+

@@ -1,0 +1,856 @@
+:: Adjacency Concept for Pairs of Natural Numbers
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received June 10, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM_1, FINSEQ_2, FINSEQ_1, FUNCT_1, RELAT_1, FUNCOP_1, MATRIX_1,
+      GOBRD10, FINSEQ_4;
+ notation TARSKI, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1,
+      BINARITH, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, MATRIX_1,
+      FUNCOP_1;
+ constructors BINARITH, MATRIX_1, FINSEQ_4, XREAL_0, MEMBERED;
+ clusters SUBSET_1, RELSET_1, XREAL_0, NAT_1, MEMBERED, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI;
+ theorems TARSKI, NAT_1, FINSEQ_1, REAL_1, AXIOMS, FINSEQ_4, SQUARE_1,
+      BINARITH, FUNCT_1, FINSEQ_2, FUNCOP_1, FINSEQ_3, ZFMISC_1, XCMPLX_0,
+      XCMPLX_1;
+ schemes NAT_1, FINSEQ_1, FINSEQ_2;
+
+begin
+
+reserve i,j,k,k1,k2,n,m,i1,i2,j1,j2 for Nat,
+        x for set;
+
+definition let i1,i2;
+ pred i1,i2 are_adjacent1 means
+ :Def1: i2=i1+1 or i1=i2+1;
+ symmetry;
+ irreflexivity by NAT_1:38;
+end;
+
+theorem Th1:for i1,i2 st i1,i2 are_adjacent1 holds i1+1,i2+1 are_adjacent1
+proof let i1,i2;assume i1,i2 are_adjacent1;
+  then i2=i1+1 or i1=i2+1 by Def1;
+hence i1+1,i2+1 are_adjacent1 by Def1;
+end;
+
+theorem Th2:for i1,i2 st i1,i2 are_adjacent1 & 1<=i1 & 1<=i2
+   holds i1-'1,i2-'1 are_adjacent1
+proof let i1,i2;assume A1:i1,i2 are_adjacent1 & 1<=i1 & 1<=i2;
+  then i2=i1+1 or i1=i2+1 by Def1;
+  then i2-1=i1 or i1-1=i2 by XCMPLX_1:26;
+  then A2:i2-1=i1-1+1 or i1-1=i2-1+1 by XCMPLX_1:27;
+    0<=i1-1 & 0<=i2-1 by A1,SQUARE_1:12;
+  then i1-'1=i1-1 & i2-'1=i2-1 by BINARITH:def 3;
+hence i1-'1,i2-'1 are_adjacent1 by A2,Def1;
+end;
+
+definition let i1,j1,i2,j2;
+ pred i1,j1,i2,j2 are_adjacent2 means :Def2:
+ i1,i2 are_adjacent1 & j1=j2 or i1=i2 & j1,j2 are_adjacent1;
+end;
+
+theorem
+  Th3:for i1,i2,j1,j2 st i1,j1,i2,j2 are_adjacent2
+    holds i1+1,j1+1,i2+1,j2+1 are_adjacent2
+proof let i1,i2,j1,j2;assume i1,j1,i2,j2 are_adjacent2;
+ then i1,i2 are_adjacent1 & j1=j2 or i1=i2 & j1,j2 are_adjacent1 by Def2;
+ then i1+1,i2+1 are_adjacent1 & j1+1=j2+1
+  or i1+1=i2+1 & j1+1,j2+1 are_adjacent1 by Th1;
+ hence i1+1,j1+1,i2+1,j2+1 are_adjacent2 by Def2;
+end;
+
+theorem
+    for i1,i2,j1,j2 st i1,j1,i2,j2 are_adjacent2 &
+   1<=i1 & 1<=i2 & 1<=j1 & 1<=j2 holds i1-'1,j1-'1,i2-'1,j2-'1 are_adjacent2
+proof let i1,i2,j1,j2;assume A1:i1,j1,i2,j2 are_adjacent2 &
+   1<=i1 & 1<=i2 & 1<=j1 & 1<=j2;
+ then i1,i2 are_adjacent1 & j1=j2 or i1=i2 & j1,j2 are_adjacent1 by Def2;
+ then i1-'1,i2-'1 are_adjacent1 & j1-'1=j2-'1
+  or i1-'1=i2-'1 & j1-'1,j2-'1 are_adjacent1 by A1,Th2;
+ hence i1-'1,j1-'1,i2-'1,j2-'1 are_adjacent2 by Def2;
+end;
+
+definition let n, i;
+  redefine func n |-> i -> FinSequence of NAT means
+   :Def3: len it = n & for j st 1 <= j & j <= n holds it.j = i;
+   coherence by FINSEQ_2:77;
+   compatibility
+   proof
+     let a be FinSequence of NAT;
+     hereby assume A1: a = n |-> i;
+       hence len a = n by FINSEQ_2:69;
+       thus for j st 1 <= j & j <= n holds a.j = i
+       proof
+         let j; assume 1 <= j & j <= n;
+         then j in Seg n by FINSEQ_1:3;
+         hence thesis by A1,FINSEQ_2:70;
+       end;
+     end;
+     assume A2: len a = n & for j st 1 <= j & j <= n holds a.j = i;
+then A3:   dom a = Seg n by FINSEQ_1:def 3;
+       now let z be set; assume A4:z in dom a;
+       then reconsider z' = z as Nat;
+         1 <= z' & z' <= n by A3,A4,FINSEQ_1:3;
+       hence a.z = i by A2;
+     end;
+     then a = (dom a) --> i by FUNCOP_1:17;
+     hence a = n |-> i by A3,FINSEQ_2:def 2;
+   end;
+end;
+
+canceled;
+
+theorem
+  Th6:for n,i,j st i<=n & j<=n
+  holds ex fs1 being FinSequence of NAT st fs1.1=i & fs1.(len fs1)=j &
+  len fs1=(i-'j)+(j-'i)+1 &
+  (for k,k1 st 1<=k & k<=len fs1 & k1=fs1.k holds k1<=n) &
+  for i1 st 1<=i1 & i1<len fs1 holds
+    fs1.(i1+1)= (fs1/.i1)+1 or fs1.i1= (fs1/.(i1+1)) +1
+proof let n,i,j;assume A1: i<=n & j<=n;
+   now per cases by REAL_1:def 5;
+ case A2:i<j; then j-i>0 by SQUARE_1:11; then A3:j-i+1>0+1 by REAL_1:53;
+     then A4:j-i+1>0 by AXIOMS:22;
+     deffunc F(Nat) = i+$1-'1;
+       ex p being FinSequence st len p = (j+1)-'i &
+     for k st k in Seg ((j+1)-'i) holds p.k=F(k) from SeqLambda;
+     then consider p being FinSequence such that
+     A5:len p = (j+1)-'i &
+     for k st k in Seg ((j+1)-'i) holds p.k=i+k-'1;
+     A6:for k,k1 st 1<=k & k<=len p & k1=p.k holds k1<=n
+      proof let k,k1;assume A7:1<=k & k<=len p & k1=p.k;
+        then k in Seg len p by FINSEQ_1:3;
+        then A8:k1=k+i-'1 by A5,A7;
+        A9:k+i<=(j+1)-'i +i by A5,A7,AXIOMS:24;
+          j+1-i>0 by A4,XCMPLX_1:29;
+        then k+i<=j+1-i+i by A9,BINARITH:def 3;
+        then A10:k+i<=j+1 by XCMPLX_1:27;
+          k+i-1=k+(i-1) by XCMPLX_1:29;
+        then 1+(i-1)<=k+i-1 by A7,AXIOMS:24;
+        then A11:i<=k+i-1 by XCMPLX_1:27; 0<=i by NAT_1:18;
+        then k1=k+i-1 by A8,A11,BINARITH:def 3;
+        then k1<=j+1-1 by A10,REAL_1:49;
+        then k1<=j by XCMPLX_1:26;
+       hence k1<=n by A1,AXIOMS:22;
+      end;
+       j+1-i>=0 by A4,XCMPLX_1:29;
+     then (j+1)-'i=j+1-i by BINARITH:def 3;
+     then A12:(j+1)-'i=j-i+1 by XCMPLX_1:29;
+     then 1 in Seg (j+1-'i) by A3,FINSEQ_1:3;
+     then p.1=i+1-'1 by A5;
+     then A13:p.1=i by BINARITH:39;
+       j-i>=i-i by A2,REAL_1:49;
+     then A14:j-i>=0 by XCMPLX_1:14;
+     then A15:j+1-'i=j-'i+1 by A12,BINARITH:def 3;
+     then A16:(j+1-'i) in Seg (j+1-'i) by FINSEQ_1:6;
+     A17:i+(j+1-'i)= (i+(j-'i))+1 by A15,XCMPLX_1:1;
+       1<=1+(i+(j-'i)) by NAT_1:29;
+     then i+(j+1-'i)-1>=1-1 by A17,REAL_1:49;
+     then i+(j+1-'i)-'1=i+(j+1-'i)-1 by BINARITH:def 3;
+     then A18: p.(len p)=(i+(j-i+1))-1 by A5,A12,A16
+     .=(i+(j-i)+1)-1 by XCMPLX_1:1 .=(j+1)-1 by XCMPLX_1:27
+     .=j by XCMPLX_1:26;
+       i-j<j-j by A2,REAL_1:54;
+     then i-j<0 by XCMPLX_1:14; then i-'j=0 by BINARITH:def 3;
+     then A19:len p=(i-'j)+(j-'i)+1 by A5,A12,A14,BINARITH:def 3;
+       rng p c=NAT
+      proof let x;assume x in rng p;
+       then consider y being set such that
+       A20: y in dom p & p.y=x by FUNCT_1:def 5;
+       A21:y in Seg len p by A20,FINSEQ_1:def 3;
+       then y in {k:1<=k & k<=len p} by FINSEQ_1:def 1;
+       then consider k such that A22: k=y & (1<=k & k<=len p);
+         p.k=i+k-'1 by A5,A21,A22;
+      hence thesis by A20,A22;
+      end;
+     then reconsider fs2=p as FinSequence of NAT by FINSEQ_1:def 4;
+    for i1 st 1<=i1 & i1<len fs2 holds
+    fs2.(i1+1)= (fs2/.i1)+1 or fs2.i1= (fs2/.(i1+1)) +1
+    proof let i1;assume A23:1<=i1 & i1<len fs2;
+      then A24:i1+1<=len fs2 by NAT_1:38; 1<=1+i1 by NAT_1:29;
+      then i1+1 in Seg len fs2 by A24,FINSEQ_1:3;
+      then A25:fs2.(i1+1)=i+(i1+1)-'1 by A5;
+A26:    i1 in Seg len fs2 by A23,FINSEQ_1:3;
+      A27: fs2/.i1 = fs2.i1 by A23,FINSEQ_4:24;
+        0<=i by NAT_1:18;
+      then i+i1>=1+0 by A23,REAL_1:55;
+      then i+i1-1>=1-1 by REAL_1:49;
+      then A28: 1+(i+i1-'1)=1+(i+i1-1) by BINARITH:def 3
+      .=i+i1 by XCMPLX_1:27;
+      A29:fs2.(i1+1)=1+(i+i1)-'1 by A25,XCMPLX_1:1;
+        1+(i+i1)>=1 by NAT_1:29;
+      then 1+(i+i1)-1>=1-1 by REAL_1:49;
+      then (1+(i+i1))-'1=(1+(i+i1))-1 by BINARITH:def 3
+      .=i+i1 by XCMPLX_1:26;
+     hence thesis by A5,A26,A27,A28,A29;
+    end;
+  hence thesis by A6,A13,A18,A19;
+ case A30:i=j;
+   consider f being Function such that
+   A31: dom f=Seg 1 & rng f={i} by FINSEQ_1:4,FUNCT_1:15;
+   A32:rng f c=NAT by A31,ZFMISC_1:37;
+     f is FinSequence-like by A31,FINSEQ_1:def 2;
+   then reconsider fs1=f as FinSequence of NAT by A32,FINSEQ_1:def 4;
+     1 in dom f by A31,FINSEQ_1:3;
+   then fs1.1 in rng f by FUNCT_1:def 5;
+   then A33:fs1.1=i by A31,TARSKI:def 1;
+   A34:len fs1=1 by A31,FINSEQ_1:def 3;
+     i-j=0 by A30,XCMPLX_1:14;
+   then A35:i-'j=0 by BINARITH:def 3;
+   A36:(for k,k1 st 1<=k & k<=len fs1 & k1=fs1.k holds k1<=n)
+                               by A1,A33,A34,AXIOMS:21;
+     for i1 st 1<=i1 & i1<len fs1 holds
+    fs1.(i1+1)=(fs1/.i1)+1 or fs1.i1=(fs1/.(i1+1)) +1 by A31,FINSEQ_1:def 3;
+  hence thesis by A30,A33,A34,A35,A36;
+ case A37:j<i; then i-j>0 by SQUARE_1:11;
+then A38: i-j+1>0+1 by REAL_1:53;
+     then A39:i+1-j>=1 by XCMPLX_1:29;
+       i-j+1>0 by A38,AXIOMS:22;
+     then A40:i+1-j>=0 by XCMPLX_1:29;
+     deffunc F(Nat) = i+1-'$1;
+       ex p being FinSequence st len p = i+1-'j &
+     for k st k in Seg (i+1-'j) holds p.k=F(k) from SeqLambda;
+     then consider p being FinSequence such that
+     A41:len p = i+1-'j &
+     for k st k in Seg (i+1-'j) holds p.k=i+1-'k;
+     A42:for k,k1 st 1<=k & k<=len p & k1=p.k holds k1<=n
+      proof let k,k1;assume A43:1<=k & k<=len p & k1=p.k;
+        then k in Seg ((i+1)-'j) by A41,FINSEQ_1:3;
+        then A44:k1=i+1-'k by A41,A43;
+          -k<=-1 by A43,REAL_1:50;
+        then -k+(i+1)<= -1+(i+1) by AXIOMS:24;
+        then i+1-k<=i+1+-1 by XCMPLX_0:def 8;
+        then A45:i+1-k<=i+1-1 by XCMPLX_0:def 8;
+          k<=i+1-j by A40,A41,A43,BINARITH:def 3;
+        then k+j<=i+1-j+j by AXIOMS:24; then k+j<=i+1 by XCMPLX_1:27;
+        then k+j-k<=i+1-k by REAL_1:49;
+        then A46:j<=i+1-k by XCMPLX_1:26; 0<=j by NAT_1:18;
+        then k1=i+1-k by A44,A46,BINARITH:def 3;
+        then k1<=i by A45,XCMPLX_1:26;
+       hence k1<=n by A1,AXIOMS:22;
+      end;
+     A47:i+1-'j=i+1-j by A40,BINARITH:def 3;
+     then 1 in Seg (i+1-'j) by A39,FINSEQ_1:3;
+     then A48:p.1=i+1-'1 by A41;
+       i+1-1=i by XCMPLX_1:26;
+     then i+1-1>=0 by NAT_1:18;
+     then A49:p.1=i+1-1 by A48,BINARITH:def 3.=i by XCMPLX_1:26;
+      A50: i-j>=j-j by A37,REAL_1:49;
+     then A51:i-j>=0 by XCMPLX_1:14;
+     then i-j+1>=0+1 by AXIOMS:24;
+     then A52:i+1-j>=1 by XCMPLX_1:29;
+     then A53:i+1-j>=0 by AXIOMS:22;
+     then A54:i+1-'j=i+1-j by BINARITH:def 3;
+     then A55:(i+1-'j) in Seg (i+1-'j) by A52,FINSEQ_1:3;
+      i+1-(i+1-'j)=i+1-(i+1-j) by A40,BINARITH:def 3
+     .=j by XCMPLX_1:18;
+     then A56:i+1-(i+1-'j)>=0 by NAT_1:18;
+     A57: now per cases by A50,XCMPLX_1:14;
+     case i-j=0; then -(i-j)=-0;
+      then j-i=0 by XCMPLX_1:143;
+     hence j-'i=0 by BINARITH:def 3;
+     case i-j>0; then --(i-j)>0; then -(i-j)<0 by REAL_1:66;
+      then j-i<0 by XCMPLX_1:143;
+     hence j-'i=0 by BINARITH:def 3;
+     end;
+     A58:p.(len p)=(i+1-'(i+1-'j)) by A41,A55
+     .= (i+1-(i+1-'j)) by A56,BINARITH:def 3
+     .= i+1-(i+1-j) by A53,BINARITH:def 3
+     .= j by XCMPLX_1:18;
+       j-i<i-i by A37,REAL_1:54;
+     then j-i<0 by XCMPLX_1:14; then j-'i=0 by BINARITH:def 3;
+     then A59:(i-'j)+(j-'i)+1
+       =i-j+1+(j-'i) by A51,BINARITH:def 3
+      .=i+1-j by A57,XCMPLX_1:29;
+       rng p c=NAT
+      proof let x;assume x in rng p;
+       then consider y being set such that
+       A60: y in dom p & p.y=x by FUNCT_1:def 5;
+       A61:y in Seg len p by A60,FINSEQ_1:def 3;
+       then y in {k:1<=k & k<=len p} by FINSEQ_1:def 1;
+       then consider k such that A62: k=y & 1<=k & k<=len p;
+         p.k=i+1-'k by A41,A61,A62;
+      hence thesis by A60,A62;
+      end;
+     then reconsider fs2=p as FinSequence of NAT by FINSEQ_1:def 4;
+     for i1 st 1<=i1 & i1<len fs2 holds
+     fs2.(i1+1)= (fs2/.i1)+1 or fs2.i1= (fs2/.(i1+1)) +1
+    proof let i1;assume A63:1<=i1 & i1<len fs2;
+      then i1 in Seg len fs2 by FINSEQ_1:3;
+      then A64:fs2.(i1)=i+1-'i1 by A41;
+      A65:1<=i1+1 & i1+1<=len fs2 by A63,NAT_1:38;
+      then (i1+1) in Seg len fs2 by FINSEQ_1:3;
+      then fs2.(i1+1)=i+1-'(i1+1) by A41;
+      then A66:(fs2/.(i1+1))+1=1+(i+1-'(i1+1)) by A65,FINSEQ_4:24;
+        i1+1<=i-j+1 by A41,A54,A65,XCMPLX_1:29;
+      then i1<=i-j by REAL_1:53;
+      then i1+j<=i by REAL_1:84;
+      then A67:j<=i-i1 by REAL_1:84;
+        0<=j by NAT_1:18; then 0+1<=i-i1+1 by A67,AXIOMS:24;
+      then A68:1<=i+1-i1 by XCMPLX_1:29; then 1-1<=i+1-i1-1 by REAL_1:49;
+      then i+1-(i1+1)>=0 by XCMPLX_1:36;
+      then A69: 1+(i+1-'(i1+1))=1+(i+1-(i1+1)) by BINARITH:def 3
+       .=1+(i+1-i1-1) by XCMPLX_1:36 .=i+1-i1 by XCMPLX_1:27;
+        0<=i+1-i1 by A68,AXIOMS:22;
+     hence thesis by A64,A66,A69,BINARITH:def 3;
+    end;
+  hence thesis by A41,A42,A47,A49,A58,A59;
+ end;
+ hence thesis;
+end;
+
+theorem
+  Th7:for n,i,j st i<=n & j<=n
+  holds ex fs1 being FinSequence of NAT st fs1.1=i & fs1.(len fs1)=j &
+   len fs1=(i-'j)+(j-'i)+1 &
+  (for k,k1 st 1<=k & k<=len fs1 & k1=fs1.k holds k1<=n) &
+  for i1 st 1<=i1 & i1<len fs1 holds fs1/.i1,fs1/.(i1+1) are_adjacent1
+proof let n,i,j;assume i<=n & j<=n;
+  then consider fs1 being FinSequence of NAT such that
+  A1: fs1.1=i & fs1.(len fs1)=j &
+   len fs1=(i-'j)+(j-'i)+1 &
+  (for k,k1 st 1<=k & k<=len fs1 & k1=fs1.k holds k1<=n) &
+  for i1 st 1<=i1 & i1<len fs1 holds
+    fs1.(i1+1)= (fs1/.i1)+1 or fs1.i1= (fs1/.(i1+1)) +1 by Th6;
+    for i1 st 1<=i1 & i1<len fs1 holds
+  fs1/.i1,fs1/.(i1+1) are_adjacent1
+   proof let i1;assume A2:1<=i1 & i1<len fs1;
+     then 1<= i1+1 & i1+1<=len fs1 by NAT_1:38;
+    then A3:fs1.(i1+1)= fs1/.(i1+1) by FINSEQ_4:24;
+    A4:fs1.i1= fs1/.i1 by A2,FINSEQ_4:24;
+      fs1.(i1+1)= (fs1/.i1)+1 or fs1.i1= (fs1/.(i1+1)) +1 by A1,A2;
+   hence thesis by A3,A4,Def1;
+   end;
+  hence thesis by A1;
+end;
+
+theorem
+  Th8:for n,m,i1,j1,i2,j2 st i1<=n & j1<=m & i2<=n & j2<=m
+  ex fs1,fs2 being FinSequence of NAT st
+   (for i,k1,k2 st i in dom fs1 & k1=fs1.i & k2=fs2.i
+            holds k1 <= n & k2 <= m) &
+   fs1.1=i1 & fs1.(len fs1)=i2 &
+   fs2.1=j1 & fs2.(len fs2)=j2 & len fs1=len fs2 &
+   len fs1=(i1-'i2)+(i2-'i1)+(j1-'j2)+(j2-'j1)+1 &
+  for i st 1<=i & i<len fs1 holds
+     fs1/.i,fs2/.i,fs1/.(i+1),fs2/.(i+1) are_adjacent2
+proof let n,m,i1,j1,i2,j2;assume
+  A1: i1<=n & j1<=m & i2<=n & j2<=m;
+     then consider gs1 being FinSequence of NAT such that
+      A2:gs1.1=i1 & gs1.(len gs1)=i2 &
+      len gs1=(i1-'i2)+(i2-'i1)+1 &
+       (for k,k1 st 1<=k & k<=len gs1 & k1=gs1.k holds k1<=n) &
+      for k st 1<=k & k<len gs1 holds
+      gs1/.k,gs1/.(k+1) are_adjacent1 by Th7;
+     consider gs2 being FinSequence of NAT such that
+      A3:gs2.1=j1 & gs2.(len gs2)=j2 &
+      len gs2=(j1-'j2)+(j2-'j1)+1 &
+       (for k,k1 st 1<=k & k<=len gs2 & k1=gs2.k holds k1<=m) &
+      for k st 1<=k & k<len gs2 holds
+      gs2/.k,gs2/.(k+1) are_adjacent1 by A1,Th7;
+     set hs1=gs1^((len gs2-'1) |-> i2), hs2=((len gs1-'1) |-> j1)^gs2;
+       A4:1<=1 & 1<=len gs2 by A3,NAT_1:29;
+       then A5:0<=len gs2-1 by SQUARE_1:12;
+       A6:1<=1 & 1<=len gs1 by A2,NAT_1:29;
+       then A7: 1 in dom gs1 by FINSEQ_3:27;
+       A8:0<=len gs1-1 by A6,SQUARE_1:12;
+A9:   len gs2 -1>=1-1 by A4,REAL_1:49;
+A10:   len gs1 -1>=1-1 by A6,REAL_1:49;
+       A11:len hs1=len gs1 + len ((len gs2-'1) |-> i2) by FINSEQ_1:35
+             .=len gs1 + (len gs2-'1) by Def3
+             .=len gs1 + (len gs2-1) by A9,BINARITH:def 3
+             .=len gs1 +len gs2 -1 by XCMPLX_1:29
+             .=(len gs1-1)+ len gs2 by XCMPLX_1:29;
+       A12: (len gs1-1) + len gs2
+              =(len gs1-'1)+ len gs2 by A10,BINARITH:def 3
+             .=len ((len gs1-'1) |-> j1) + len gs2 by Def3
+             .=len hs2 by FINSEQ_1:35;
+        A13: now per cases;
+        case len gs1-'1=0;
+         then ((len gs1-'1) |-> j1)^gs2=<*>(NAT)^gs2 by FINSEQ_2:72
+            .=gs2 by FINSEQ_1:47;
+         hence hs2.1=j1 & hs2.len hs2=j2 by A3;
+        case A14:len gs1-'1<>0;
+          A15:len ((len gs1-'1) |-> j1)=len gs1-'1 by Def3;
+            len gs1-'1>0 by A14,NAT_1:19;
+then A16:      0+1<= len ((len gs1-'1) |-> j1) by A15,NAT_1:38;
+          then 1 in dom ((len gs1-'1) |-> j1) by FINSEQ_3:27;
+          then A17:hs2.1 = ((len gs1-'1) |-> j1).1 by FINSEQ_1:def 7;
+          A18: len ((len gs1-'1) |-> j1) = len gs1-'1 by Def3;
+         A19: len hs2=len ((len gs1-'1) |-> j1) + len gs2 by FINSEQ_1:35;
+            len gs2<=len gs2 & 1<=len gs2 by A3,NAT_1:29;
+          then len gs2 in dom gs2 by FINSEQ_3:27;
+         hence hs2.1=j1 & hs2.len hs2=j2 by A3,A16,A17,A18,A19,Def3,FINSEQ_1:
+def 7;
+        end;
+       A20: now per cases;
+        case len gs2-'1=0;
+         then gs1^((len gs2-'1) |-> i2) = gs1^<*>(NAT) by FINSEQ_2:72
+            .=gs1 by FINSEQ_1:47;
+         hence hs1.1=i1 & hs1.len hs1=i2 by A2;
+        case len gs2-'1<>0;
+          then A21:len gs2-'1>0 by NAT_1:19;
+         A22: len hs1=len gs1+len ((len gs2-'1) |-> i2) by FINSEQ_1:35;
+          A23:len ((len gs2-'1) |-> i2) = len gs2-'1 by Def3;
+A24:      0+1<=len gs2-'1 by A21,NAT_1:38;
+          then A25:len ((len gs2-'1) |-> i2) in dom ((len gs2-'1) |-> i2)
+            by A23,FINSEQ_3:27;
+            ((len gs2-'1) |-> i2).len ((len gs2-'1) |-> i2) = i2
+                              by A23,A24,Def3;
+         hence hs1.1=i1 & hs1.len hs1=i2 by A2,A7,A22,A25,FINSEQ_1:def 7;
+        end;
+     A26:(i1-'i2)+(i2-'i1)+(j1-'j2)+(j2-'j1)+1
+     = len gs1 -1+ (j1-'j2)+(j2-'j1)+1 by A2,XCMPLX_1:26
+     .= len gs1 -1+ ((j1-'j2)+(j2-'j1))+1 by XCMPLX_1:1
+     .= len hs1 by A3,A11,XCMPLX_1:1;
+    A27:for i,k1,k2 st i in dom hs1 & k1=hs1.i & k2=hs2.i
+     holds k1<=n & k2<=m
+      proof let i,k1,k2;assume A28:i in dom hs1 & k1=hs1.i & k2=hs2.i;
+         then A29:i in Seg len hs1 by FINSEQ_1:def 3;
+           dom hs1=Seg(len gs1 + len ((len gs2-'1) |-> i2))
+                                   by FINSEQ_1:def 7;
+         then A30: len hs1=len gs1 + len ((len gs2-'1) |-> i2)
+           by FINSEQ_1:def 3;
+         then A31:len hs1=len gs1 + (len gs2 -'1) by Def3;
+           len gs1<=len hs1 by A30,NAT_1:29;
+         then len hs1 -len gs1>=0 by SQUARE_1:12;
+         then A32:len hs1 -' len gs1 = len hs1 - len gs1 by BINARITH:def 3;
+         A33: 1<=i & i<=len gs1 or
+            len gs1 -len gs1<i-len gs1 & i <=len hs1 by A28,FINSEQ_3:27,REAL_1:
+54;
+         A34: now per cases by A32,A33,REAL_1:49,XCMPLX_1:14;
+         case A35:1<=i & i<=len gs1;
+           then i in dom gs1 by FINSEQ_3:27;
+           then hs1.i=gs1.i by FINSEQ_1:def 7;
+         hence k1<=n by A2,A28,A35;
+         case A36:0<i-len gs1 & i-len gs1 <=len hs1 -' len gs1;
+          then A37:i-len gs1=i-'len gs1 by BINARITH:def 3;
+          then 0+1<=i-'len gs1 by A36,NAT_1:38;
+          then (i-'len gs1) in Seg (len hs1-'len gs1)
+                        by A36,A37,FINSEQ_1:3;
+          then A38:(i-'len gs1)in Seg (len gs2-'1) by A31,BINARITH:39;
+          then (i-'len gs1)in Seg len ((len gs2-'1) |-> i2) by Def3;
+          then A39:(i-'len gs1) in dom ((len gs2-'1) |-> i2) by FINSEQ_1:def 3;
+          A40:1<=i-'len gs1 & i-'len gs1<=len gs2 -'1 by A38,FINSEQ_1:3;
+          A41:i-'len gs1=i- len gs1 by A36,BINARITH:def 3;
+            i=len gs1+(i-len gs1) by XCMPLX_1:27;
+          then hs1.i= ((len gs2-'1) |-> i2).(i-'len gs1) by A39,A41,FINSEQ_1:
+def 7
+          .=i2 by A40,Def3;
+         hence k1<=n by A1,A28;
+         end;
+           dom hs2=Seg(len ((len gs1-'1) |-> j1)+ len gs2)
+                                   by FINSEQ_1:def 7;
+         then len hs2=len ((len gs1-'1) |-> j1) + len gs2 by FINSEQ_1:def 3;
+         then A42:len hs2=(len gs1 -'1)+len gs2 by Def3;
+           1<=i & i<=len gs1-'1 or (len gs1 -'1)+1<=i & i<=len hs2
+                                    by A11,A12,A29,FINSEQ_1:3,NAT_1:38;
+         then 1<=i & i<=len gs1-'1 or len gs1-1+1<=i & i<=len hs2
+                                    by A10,BINARITH:def 3;
+         then 1<=i & i<=len gs1-1 or len gs1<=i & i<=len hs2
+                   by A10,BINARITH:def 3,XCMPLX_1:27;
+         then 1<=i & i<=len gs1-1 or
+            len gs1 -(len gs1-1)<=i-(len gs1-1) & i <=len hs2 by REAL_1:49;
+         then 1<=i & i<=len gs1-1 or
+            1<=i-(len gs1-1) & i-(len gs1-1) <=len hs2-(len gs1-1)
+                            by REAL_1:49,XCMPLX_1:18;
+         then 1<=i & i<=len gs1-1 or
+            1<=i-len gs1+1 & i-len gs1+1 <=len hs2-(len gs1-1)
+                            by XCMPLX_1:37;
+         then A43: 1<=i & i<=len gs1-1 or
+            1<=i-len gs1+1 & i-len gs1+1 <=len hs2-len gs1+1
+                            by XCMPLX_1:37;
+           now per cases by A43,REAL_1:53;
+         case A44:1<=i-len gs1+1 & i-len gs1 <=len hs2 - len gs1;
+           then A45:1<=i+1-len gs1 by XCMPLX_1:29;
+           then A46:0<=i+1-len gs1 by AXIOMS:22;
+             i-len gs1+1<=len hs2 - len gs1+1 by A44,AXIOMS:24;
+           then i+1-len gs1<=len hs2 - len gs1+1 by XCMPLX_1:29;
+           then A47:i+1-len gs1<=len hs2+1 - len gs1 by XCMPLX_1:29;
+           A48: len hs2+1 - len gs1=(len gs1 -1)+len gs2+1 - len gs1
+                              by A10,A42,BINARITH:def 3
+                       .=(len gs1 -1)+len gs2+(1-len gs1) by XCMPLX_1:29
+                       .=(len gs1 -1)+len gs2-(len gs1-1) by XCMPLX_1:38
+                       .=len gs2 by XCMPLX_1:26;
+           A49:i+1-len gs1=i+1-'len gs1 by A46,BINARITH:def 3;
+           A50:len ((len gs1-'1) |-> j1)=len gs1-'1 by Def3;
+            i+1-'len gs1 in Seg len gs2 by A45,A47,A48,A49,FINSEQ_1:3;
+          then A51:i+1-'len gs1 in dom gs2 by FINSEQ_1:def 3;
+            i=len gs1-1+(i-(len gs1-1)) by XCMPLX_1:27
+          .=len gs1-1+(i-len gs1+1) by XCMPLX_1:37
+          .=len gs1-1+(i+1-len gs1) by XCMPLX_1:29
+          .=(len ((len gs1-'1) |-> j1)+(i+1-'len gs1))
+            by A10,A49,A50,BINARITH:def 3;
+          then hs2.i= gs2.(i+1-'len gs1) by A51,FINSEQ_1:def 7;
+         hence k2<=m by A3,A28,A45,A47,A48,A49;
+         case 1<=i & i<=len gs1-1;
+          then A52:1<=i & i<=len gs1-'1 by A10,BINARITH:def 3;
+          then i in Seg (len gs1 -'1) by FINSEQ_1:3;
+          then i in Seg len ((len gs1-'1) |-> j1) by Def3;
+          then i in dom ((len gs1-'1) |-> j1) by FINSEQ_1:def 3;
+          then hs2.i= ((len gs1-'1) |-> j1).i by FINSEQ_1:def 7
+               .=j1 by A52,Def3;
+         hence k2<=m by A1,A28;
+         end;
+        hence k1<=n & k2<=m by A34;
+      end;
+       for i st 1<=i & i<len hs1 holds
+     hs1/.i,hs2/.i,hs1/.(i+1),hs2/.(i+1) are_adjacent2
+     proof let i;assume A53:1<=i & i<len hs1;
+          now per cases;
+        case A54: i<len gs1; then A55:i+1<=len gs1 by NAT_1:38;
+         A56:1<=i+1 by A53,NAT_1:38;
+            i+1-1<=len gs1 -1 by A55,REAL_1:49;
+          then i<=len gs1-1 by XCMPLX_1:26;
+          then A57:1<=i & i<=len gs1-'1 by A10,A53,BINARITH:def 3;
+          then A58:i in Seg (len gs1 -'1) by FINSEQ_1:3;
+            len ((len gs1-'1) |-> j1)=len gs1-'1 by Def3;
+          then A59:i in dom ((len gs1-'1) |-> j1) by A58,FINSEQ_1:def 3;
+          A60: dom ((len gs1-'1) |-> j1) c= dom hs2 by FINSEQ_1:39;
+          A61: hs2.i= ((len gs1-'1) |-> j1).i by A59,FINSEQ_1:def 7
+               .=j1 by A57,Def3;
+         A62: now per cases;
+         case A63:i+1<=len gs1-'1;
+          then A64:i+1 in Seg (len gs1 -'1) by A56,FINSEQ_1:3;
+            len ((len gs1-'1) |-> j1)=len gs1-'1 by Def3;
+          then A65:i+1 in dom ((len gs1-'1) |-> j1) by A64,FINSEQ_1:def 3;
+          then A66:hs2.(i+1)= ((len gs1-'1) |-> j1).(i+1) by FINSEQ_1:def 7
+               .=j1 by A56,A63,Def3;
+            dom ((len gs1-'1) |-> j1) c= dom hs2 by FINSEQ_1:39;
+          hence hs2/.(i+1)=j1 by A65,A66,FINSEQ_4:def 4;
+         case i+1>len gs1-'1;
+          then A67:len gs1-'1+1 <=i+1 by NAT_1:38;
+          A68:len gs1-'1+1=len gs1-1+1 by A8,BINARITH:def 3
+                      .=len gs1 by XCMPLX_1:27;
+          then A69:len gs1=i+1 by A55,A67,AXIOMS:21;
+            1 in Seg len gs2 by A4,FINSEQ_1:3;
+          then A70:1 in dom gs2 by FINSEQ_1:def 3;
+            len ((len gs1-'1) |-> j1)+1=i+1 by A68,A69,Def3;
+          then A71:hs2.(i+1)=j1 by A3,A70,FINSEQ_1:def 7;
+           dom hs2=Seg(len ((len gs1-'1) |-> j1)+len gs2)
+                     by FINSEQ_1:def 7;
+          then len hs2=len ((len gs1-'1) |-> j1)+len gs2 by FINSEQ_1:def 3
+                 .=(len gs1-'1)+len gs2 by Def3
+                 .=len gs1-1+len gs2 by A8,BINARITH:def 3
+                 .=len gs1+len gs2-1 by XCMPLX_1:29
+                 .=len gs1+(len gs2-1) by XCMPLX_1:29
+                 .=len gs1+(len gs2-'1) by A5,BINARITH:def 3;
+          then len gs1 <= len hs2 by NAT_1:29;
+          then len gs1 in Seg len hs2 by A6,FINSEQ_1:3;
+          then (i+1) in dom hs2 by A69,FINSEQ_1:def 3;
+          hence hs2/.(i+1)=j1 by A71,FINSEQ_4:def 4;
+         end;
+           now per cases;
+         case i+1<=len gs1-'1;
+          then i+1<=len gs1 -1 by A8,BINARITH:def 3;
+          then i+1+1<=len gs1-1+1 by AXIOMS:24;
+          then i+1+1<=len gs1 by XCMPLX_1:27;
+then A72:      i+1<len gs1 by NAT_1:38;
+A73:      1<i+1 by A53,NAT_1:38;
+          A74:i<len gs1 by A72,NAT_1:38;
+          A75: dom gs1 c= dom hs1 by FINSEQ_1:39;
+          A76:i in dom gs1 by A53,A74,FINSEQ_3:27;
+          A77: (i+1) in dom gs1 by A72,A73,FINSEQ_3:27;
+          A78:hs1/.i=hs1.i by A75,A76,FINSEQ_4:def 4
+                  .=gs1.i by A76,FINSEQ_1:def 7
+                  .=gs1/.i by A76,FINSEQ_4:def 4;
+            hs1/.(i+1)=hs1.(i+1) by A75,A77,FINSEQ_4:def 4
+                  .=gs1.(i+1) by A77,FINSEQ_1:def 7
+                  .=gs1/.(i+1) by A77,FINSEQ_4:def 4;
+          hence hs1/.i,hs1/.(i+1) are_adjacent1 by A2,A53,A74,A78;
+         case i+1>len gs1-'1;
+            0<i+1 by NAT_1:19;
+          then A79: 0+1<=i+1 by NAT_1:38;
+          A80: dom gs1 c= dom hs1 by FINSEQ_1:39;
+          A81:i in dom gs1 by A53,A54,FINSEQ_3:27;
+          A82: (i+1) in dom gs1 by A55,A79,FINSEQ_3:27;
+          A83:hs1/.i=hs1.i by A80,A81,FINSEQ_4:def 4
+                  .=gs1.i by A81,FINSEQ_1:def 7
+                  .=gs1/.i by A81,FINSEQ_4:def 4;
+            hs1/.(i+1)=hs1.(i+1) by A80,A82,FINSEQ_4:def 4
+                  .=gs1.(i+1) by A82,FINSEQ_1:def 7
+                  .=gs1/.(i+1)by A82,FINSEQ_4:def 4;
+          hence hs1/.i,hs1/.(i+1) are_adjacent1 by A2,A53,A54,A83;
+         end;
+         hence (hs1/.i,hs1/.(i+1) are_adjacent1)&(hs2/.i=hs2/.(i+1)) or
+            (hs1/.i=hs1/.(i+1))& (hs2/.i,hs2/.(i+1) are_adjacent1)
+            by A59,A60,A61,A62,FINSEQ_4:def 4;
+        case A84:i>=len gs1;
+         then A85:i-len gs1>=0 by SQUARE_1:12;
+         then A86:i-len gs1=i-'len gs1 by BINARITH:def 3;
+           i-len gs1+1>=0+1 by A85,AXIOMS:24;
+         then A87:i+1-len gs1>=1 by XCMPLX_1:29;
+         then A88: (i+1)-len gs1>=0 by AXIOMS:22;
+         A89:i in dom hs1 by A53,FINSEQ_3:27;
+           len hs1=len gs1+len ((len gs2-'1) |-> i2) by FINSEQ_1:35
+                     .=len gs1 + (len gs2-'1) by Def3;
+         then i-len gs1 < len gs1 + (len gs2 -'1) - len gs1 by A53,REAL_1:54;
+             then i-len gs1 < len gs2 -'1 by XCMPLX_1:26;
+         then A90:(i-'len gs1)<=len gs2 -'1 by A85,BINARITH:def 3;
+         A91:now assume not 1<=(i-'len gs1);
+          then i-'len gs1<0+1;
+          then i-'len gs1<=0 by NAT_1:38;
+          then i-'len gs1=0 by NAT_1:18;
+          then A92:i=len gs1 by A86,XCMPLX_1:15;
+            0<len gs1 by A6,AXIOMS:22;
+          then len gs1 in Seg len gs1 by FINSEQ_1:5;
+          then i in dom gs1 by A92,FINSEQ_1:def 3;
+         hence hs1.i=i2 by A2,A92,FINSEQ_1:def 7;
+         end;
+          A93:len ((len gs2-'1) |-> i2)=len gs2-'1 by Def3;
+           now assume A94: 1<=(i-'len gs1);
+          then (i-'len gs1) in Seg len ((len gs2-'1) |-> i2)
+                      by A90,A93,FINSEQ_1:3;
+          then A95:(i-'len gs1) in dom ((len gs2-'1) |-> i2) by FINSEQ_1:def 3;
+            i =len gs1+(i-len gs1) by XCMPLX_1:27
+           .=len gs1+(i-'len gs1) by A85,BINARITH:def 3;
+          then hs1.i= ((len gs2-'1) |-> i2).(i-'len gs1)by A95,FINSEQ_1:def 7
+           .=i2 by A90,A94,Def3;
+         hence hs1.i=i2;
+         end;
+         then A96:hs1/.i=i2 by A89,A91,FINSEQ_4:def 4;
+          A97:i+1<=len hs1 by A53,NAT_1:38;
+            0<i+1 by NAT_1:19;
+          then 0+1<=i+1 by NAT_1:38;
+          then A98:i+1 in Seg len hs1 by A97,FINSEQ_1:3;
+          then A99:i+1 in dom hs1 by FINSEQ_1:def 3;
+            len gs1<=i+1 by A84,NAT_1:37;
+          then A100:0<=i+1-len gs1 by SQUARE_1:12;
+          A101:len gs2-'1<=len gs2-'1+1 by NAT_1:29;
+            i+1<=len gs2+len gs1-1 by A11,A97,XCMPLX_1:29;
+          then i+1<=len gs2 -1+len gs1 by XCMPLX_1:29;
+          then i+1-len gs1+len gs1<=len gs2 -1+len gs1 by XCMPLX_1:27;
+          then i+1-len gs1<=len gs2 -1 by REAL_1:53;
+          then i+1-len gs1<=len gs2 -'1 by A5,BINARITH:def 3;
+          then A102:1<=(i+1-'len gs1) & (i+1-'len gs1)<=len gs2-'1
+            by A87,A88,BINARITH:def 3;
+          then 1<=(i+1-'len gs1) & (i+1-'len gs1)<=(len gs2-'1)+1
+                       by A101,AXIOMS:22;
+          then 1<=(i+1-'len gs1) & (i+1-'len gs1)<=(len gs2-1)+1
+                                by A9,BINARITH:def 3;
+          then A103:1<=(i+1-'len gs1) & (i+1-'len gs1)<=len gs2 by XCMPLX_1:27;
+            len ((len gs2-'1) |-> i2)=len gs2-'1 by Def3;
+          then (i+1-'len gs1) in Seg len ((len gs2-'1) |-> i2)
+          by A102,FINSEQ_1:3;
+          then A104:(i+1-'len gs1) in dom ((len gs2-'1) |-> i2) by FINSEQ_1:def
+3;
+            i+1 =len gs1+(i+1-len gs1) by XCMPLX_1:27
+           .=len gs1+(i+1-'len gs1) by A100,BINARITH:def 3;
+          then A105: hs1.(i+1)=
+ ((len gs2-'1) |-> i2).((i+1)-'len gs1) by A104,FINSEQ_1:def 7
+           .=i2 by A102,Def3;
+             0+1<=i-len gs1 +1 by A85,AXIOMS:24;
+           then 1<=i+1-len gs1 by XCMPLX_1:29;
+           then A106:1<=i+1-'len gs1 by A100,BINARITH:def 3;
+           A107:1<=i+1-'len gs1 +1 by NAT_1:29;
+           A108:i+1-'len gs1 in dom gs2 by A103,FINSEQ_3:27;
+           A109:i in dom hs2 by A11,A12,A53,FINSEQ_3:27;
+           A110:i+1 in dom hs2 by A11,A12,A98,FINSEQ_1:def 3;
+             i-(len gs1-1)<len gs1-1+len gs2 -(len gs1-1)
+             by A11,A53,REAL_1:54;
+           then i-(len gs1-1)<len gs2 by XCMPLX_1:26;
+           then i-len gs1+1<len gs2 by XCMPLX_1:37;
+           then i+1-len gs1<len gs2 by XCMPLX_1:29;
+           then A111:i+1-'len gs1<len gs2 by A100,BINARITH:def 3;
+           then len gs2>=i+1-'len gs1+1 by NAT_1:38;
+           then i+1-'len gs1+1 in Seg len gs2 by A107,FINSEQ_1:3;
+           then A112:i+1-'len gs1+1 in dom gs2 by FINSEQ_1:def 3;
+            len ((len gs1-'1) |-> j1)+(i+1-'len gs1+1)
+           =(len gs1-'1)+(i+1-'len gs1+1) by Def3
+           .=len gs1 -1+(i+1-'len gs1+1) by A10,BINARITH:def 3
+           .=len gs1 -1+(i+1-len gs1+1) by A100,BINARITH:def 3
+           .=len gs1 -1+(i+1-(len gs1-1)) by XCMPLX_1:37
+           .=i+1 by XCMPLX_1:27;
+           then A113:
+hs2/.(i+1)=hs2.(len ((len gs1-'1) |-> j1)+(i+1-'len gs1+1)) by A110,FINSEQ_4:
+def 4
+                  .=gs2.((i+1-'len gs1+1))
+                                   by A112,FINSEQ_1:def 7
+                  .=gs2/.(i+1-'len gs1+1) by A112,FINSEQ_4:def 4;
+            len ((len gs1-'1) |-> j1)+(i+1-'len gs1)
+           =(len gs1-'1)+(i+1-'len gs1) by Def3
+           .=len gs1 -1+(i+1-'len gs1) by A10,BINARITH:def 3
+           .=len gs1 -1+(i+1-len gs1) by A100,BINARITH:def 3
+           .=len gs1 -1+(i-len gs1+1) by XCMPLX_1:29
+           .=len gs1 -1+(i-(len gs1-1)) by XCMPLX_1:37
+           .=i by XCMPLX_1:27;
+           then hs2/.i=hs2.(len ((len gs1-'1) |-> j1)+(i+1-'len gs1)) by A109,
+FINSEQ_4:def 4
+                  .=gs2.(i+1-'len gs1) by A108,FINSEQ_1:def 7
+                  .=gs2/.(i+1-'len gs1) by A108,FINSEQ_4:def 4;
+         hence (hs1/.i,hs1/.(i+1) are_adjacent1)&(hs2/.i=hs2/.(i+1)) or
+            (hs1/.i=hs1/.(i+1))& (hs2/.i,
+hs2/.(i+1) are_adjacent1) by A3,A96,A99,A105,A106,A111,A113,FINSEQ_4:def 4;
+        end;
+     hence thesis by Def2;
+     end;
+    hence thesis by A11,A12,A13,A20,A26,A27;
+ end;
+
+reserve S for set;
+
+theorem
+     for Y being Subset of S,F being Matrix of n,m, bool S st
+   (ex i,j st i in Seg n & j in Seg m & F*(i,j) c= Y) &
+   (for i1,j1,i2,j2 st i1 in Seg n & i2 in Seg n & j1 in Seg m & j2 in Seg m
+   & i1,j1,i2,j2 are_adjacent2 holds
+           F*(i1,j1)c=Y iff F*(i2,j2)c=Y)
+   holds (for i,j st i in Seg n & j in Seg m holds F*(i,j)c=Y)
+proof let Y be Subset of S,F be Matrix of n,m, (bool S);
+ assume A1:(ex i,j st i in Seg n & j in Seg m & F*(i,j) c= Y)&
+   (for i1,j1,i2,j2 st i1 in Seg n & i2 in Seg n & j1 in Seg m & j2 in Seg m
+   & i1,j1,i2,j2 are_adjacent2 holds F*(i1,j1)c=Y iff F*(i2,j2)c=Y);
+  then consider i1,j1 such that
+  A2:i1 in Seg n & j1 in Seg m & F*(i1,j1) c= Y;
+  A3:1<=i1 & i1<=n & 1<=j1 & j1<=m by A2,FINSEQ_1:3;
+    then i1-1>=1-1 & j1-1>=1-1 by REAL_1:49;
+    then A4:i1-'1=i1-1 & j1-'1=j1-1 by BINARITH:def 3;
+  thus for i,j st i in Seg n & j in Seg m holds F*(i,j)c=Y
+  proof let i2,j2;assume i2 in Seg n & j2 in Seg m;
+    then A5:1<=i2 & i2<=n & 1<=j2 & j2<=m by FINSEQ_1:3;
+    then i2-1>=1-1 & j2-1>=1-1 by REAL_1:49;
+    then A6:i2-'1=i2-1 & j2-'1=j2-1 by BINARITH:def 3;
+      now per cases;
+    case n=0 or m=0; hence contradiction by A2,FINSEQ_1:4;
+    case n<>0 & m<>0; then n>0 & m>0 by NAT_1:19;
+      then n>=0+1 & m>=0+1 by NAT_1:38;
+      then n-1>=0 & m-1>=0 by REAL_1:84;
+      then A7:n-'1=n-1 & m-'1=m-1 by BINARITH:def 3;
+      then A8:i1-'1<=n-'1 & j1-'1<=m-'1 by A3,A4,REAL_1:49;
+        i2-'1<=n-'1 & j2-'1<=m-'1 by A5,A6,A7,REAL_1:49;
+     then consider fs1,fs2 being FinSequence of NAT such that
+      A9:(for i,k1,k2 st i in dom fs1 & k1=fs1.i & k2=fs2.i
+            holds k1 <= n-'1 & k2 <= m-'1)&
+       fs1.1=i1-'1 & fs1.(len fs1)=i2-'1 &
+       fs2.1=j1-'1 & fs2.(len fs2)=j2-'1 & len fs1=len fs2 &
+       len fs1=((i1-'1)-'(i2-'1))+((i2-'1)-'(i1-'1))
+          +((j1-'1)-'(j2-'1))+((j2-'1)-'(j1-'1))+1 &
+       for i st 1<=i & i<len fs1 holds
+        fs1/.i,fs2/.i,fs1/.(i+1),fs2/.(i+1) are_adjacent2 by A8,Th8;
+       A10:1<=len fs1 by A9,NAT_1:29;
+       deffunc F(Nat) = (fs1/.$1)+1;
+         ex p being FinSequence of NAT st len p = len fs1 &
+       for j st j in Seg len fs1 holds p.j = F(j) from SeqLambdaD;
+      then consider p1 being FinSequence of NAT such that
+      A11: len p1 = len fs1
+       & for k st k in Seg len fs1 holds p1.k=(fs1/.k)+1;
+       deffunc F(Nat) = (fs2/.$1)+1;
+        ex p being FinSequence of NAT st len p = len fs2
+       & for k st k in Seg len fs2 holds p.k=F(k) from SeqLambdaD;
+      then consider p2 being FinSequence of NAT such that
+      A12: len p2 = len fs2
+       & for k st k in Seg len fs2 holds p2.k=(fs2/.k)+1;
+      A13:1 in Seg len fs1 by A10,FINSEQ_1:3;
+      then A14:1 in dom fs1 by FINSEQ_1:def 3;
+        1-1<=len fs1-1 by A10,REAL_1:49;
+      then A15:len fs1 -'1=len fs1 -1 by BINARITH:def 3;
+      A16:1 in dom p1 by A11,A13,FINSEQ_1:def 3;
+      A17:fs1/.1=i1-'1 by A9,A14,FINSEQ_4:def 4;
+      A18: p1/.1=p1.1 by A16,FINSEQ_4:def 4 .=i1-'1 +1 by A11,A13,A17 .=
+i1 by A4,XCMPLX_1:27;
+      A19:1 in dom fs2 by A9,A13,FINSEQ_1:def 3;
+      A20:1 in dom p2 by A9,A12,A13,FINSEQ_1:def 3;
+      defpred P[Nat] means
+        $1+1<=len p1 implies F*(p1/.($1+1),p2/.($1+1)) c= Y;
+      A21:fs2/.1=j1-'1 by A9,A19,FINSEQ_4:def 4;
+        p2/.1=p2.1 by A20,FINSEQ_4:def 4 .=j1-'1 +1 by A9,A12,A13,A21 .=j1 by
+A4,XCMPLX_1:27;
+    then A22: P[0] by A2,A18;
+    A23:  for k st P[k] holds P[k+1]
+      proof let k;assume A24:k+1<=len p1 implies
+                  F*(p1/.(k+1),p2/.(k+1)) c= Y;
+       A25:1<=k+1 by NAT_1:37;
+         now per cases;
+       case A26: k+1<=len p1;
+          now per cases;
+        case A27:k+1+1<=len p1; then A28: k+1<len p1 by NAT_1:38;
+         then A29:k+1 in Seg len p1 by A25,FINSEQ_1:3;
+         then A30:k+1 in dom p1 by FINSEQ_1:def 3;
+         A31:k+1 in dom fs1 by A11,A29,FINSEQ_1:def 3;
+         set kp1=p1/.(k+1),kp2=p2/.(k+1);
+         set lp1=fs1/.(k+1),lp2=fs2/.(k+1);
+         A32:k+1 in dom p2 by A9,A11,A12,A29,FINSEQ_1:def 3;
+         A33:k+1 in dom fs2 by A9,A11,A29,FINSEQ_1:def 3;
+         A34:p1/.(k+1)=p1.(k+1) by A30,FINSEQ_4:def 4
+         .=lp1+1 by A11,A29;
+         A35:lp1=fs1.(k+1) & lp2=fs2.(k+1) by A31,A33,FINSEQ_4:def 4;
+         then lp1<=n-1 by A7,A9,A31;
+         then lp1+1<=n-1+1 by AXIOMS:24;
+         then A36:kp1<=n by A34,XCMPLX_1:27;
+           1<=1+lp1 by NAT_1:29;
+         then A37:p1/.(k+1) in Seg n by A34,A36,FINSEQ_1:3;
+         A38:p2/.(k+1)=p2.(k+1) by A32,FINSEQ_4:def 4
+         .=lp2+1 by A9,A11,A12,A29;
+           lp2<=m-'1 by A9,A31,A35;
+         then lp2+1<=m-1+1 by A7,AXIOMS:24;
+         then A39: kp2<=m by A38,XCMPLX_1:27;
+           1<=1+lp2 by NAT_1:29;
+         then A40:p2/.(k+1) in Seg m by A38,A39,FINSEQ_1:3;
+           1<=k+1+1 by NAT_1:37;
+         then A41:k+1+1 in Seg len p1 by A27,FINSEQ_1:3;
+         then A42: k+1+1 in dom p1 by FINSEQ_1:def 3;
+         set kp11=p1/.(k+1+1),kp21=p2/.(k+1+1);
+         set lp11=fs1/.(k+1+1),lp21=fs2/.(k+1+1);
+         A43:k+1+1 in dom fs1 by A11,A41,FINSEQ_1:def 3;
+         A44:k+1+1 in dom p2 by A9,A11,A12,A41,FINSEQ_1:def 3;
+         A45:k+1+1 in dom fs2 by A9,A11,A41,FINSEQ_1:def 3;
+         A46:p1/.(k+1+1)=p1.(k+1+1) by A42,FINSEQ_4:def 4
+         .=lp11+1 by A11,A41;
+         A47:fs1/.(k+1+1)=fs1.(k+1+1) by A43,FINSEQ_4:def 4;
+         A48: fs2/.(k+1+1)=fs2.(k+1+1) by A45,FINSEQ_4:def 4;
+         then lp11<=n-1 by A7,A9,A43,A47;
+         then A49: lp11+1<=n-1+1 by AXIOMS:24;
+         then A50:kp11<=n by A46,XCMPLX_1:27;
+           k+1+1 in dom p2 by A9,A11,A12,A41,FINSEQ_1:def 3;
+         then p2.(k+1+1)=p2/.(k+1+1) by FINSEQ_4:def 4;
+         then A51:p2/.(k+1+1)=lp21+1 by A9,A11,A12,A41;
+           lp21<=m-'1 by A9,A43,A47,A48;
+         then lp21+1<=m-1+1 by A7,AXIOMS:24;
+         then A52:kp11 <= n & kp21 <= m by A46,A49,A51,XCMPLX_1:27;
+           1<=1+lp11 by NAT_1:29;
+         then A53:p1/.(k+1+1) in Seg n by A46,A50,FINSEQ_1:3;
+         A54:p2/.(k+1+1)=p2.(k+1+1) by A44,FINSEQ_4:def 4
+         .=lp21+1 by A9,A11,A12,A41;
+           1<=1+lp21 by NAT_1:29;
+         then A55:p2/.(k+1+1) in Seg m by A52,A54,FINSEQ_1:3;
+           fs1/.(k+1),fs2/.(k+1),fs1/.(k+1+1),fs2/.(k+1+1) are_adjacent2
+                                    by A9,A11,A25,A28;
+         then p1/.(k+1),p2/.(k+1),p1/.(k+1+1),p2/.(k+1+1)
+                        are_adjacent2 by A34,A38,A46,A54,Th3;
+        hence k+1+1<=len p1 implies F*(p1/.(k+1+1),p2/.(k+1+1)) c= Y
+                            by A1,A24,A26,A37,A40,A53,A55;
+        case k+1+1>len p1;
+        hence k+1+1<=len p1 implies F*(p1/.(k+1+1),p2/.(k+1+1)) c= Y;
+        end;
+       hence k+1+1<=len p1 implies F*(p1/.(k+1+1),p2/.(k+1+1)) c= Y;
+       case k+1>len p1;
+       hence k+1+1<=len p1 implies F*(p1/.(k+1+1),p2/.(k+1+1)) c= Y
+       by NAT_1:38;
+       end;
+      hence k+1+1<=len p1 implies F*(p1/.(k+1+1),p2/.(k+1+1)) c= Y;
+      end;
+      A56:for i holds P[i] from Ind(A22,A23);
+        len fs1 -'1+1=len fs1 by A15,XCMPLX_1:27;
+      then A57:F*(p1/.len fs1,p2/.len fs1) c= Y by A11,A56;
+      A58:len fs1 in Seg len fs1 by A10,FINSEQ_1:3;
+      then A59:len fs1 in dom fs1 by FINSEQ_1:def 3;
+      A60:len fs1 in dom fs2 by A9,A58,FINSEQ_1:def 3;
+      A61:len fs1 in dom p1 by A11,A58,FINSEQ_1:def 3;
+      A62:len fs1 in dom p2 by A9,A12,A58,FINSEQ_1:def 3;
+      A63:(p1/.len fs1)=p1.(len fs1) by A61,FINSEQ_4:def 4
+      .= (fs1/.len fs1)+1 by A11,A58;
+        fs1/.len fs1=i2-'1 by A9,A59,FINSEQ_4:def 4;
+      then A64:(p1/.len fs1)=i2 by A6,A63,XCMPLX_1:27;
+      A65:(p2/.len fs1)=p2.(len fs1) by A62,FINSEQ_4:def 4
+      .= (fs2/.len fs1)+1 by A9,A12,A58;
+        fs2/.len fs1=j2-'1 by A9,A60,FINSEQ_4:def 4;
+    hence F*(i2,j2) c=Y by A6,A57,A64,A65,XCMPLX_1:27;
+   end;
+  hence F*(i2,j2) c=Y;
+  end;
+end;

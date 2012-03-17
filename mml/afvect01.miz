@@ -1,0 +1,376 @@
+:: One-Dimensional Congruence of Segments, Basic Facts and Midpoint Relation
+::  by Barbara Konstanta, Urszula Kowieska, Grzegorz Lewandowski and
+::     Krzysztof Pra\.zmowski
+::
+:: Received October 4, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary AFVECT0, RELAT_1, ANALOAF, PARSP_1, DIRAF, REALSET1, AFVECT01;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, ANALOAF, DIRAF,
+      AFVECT0, RELSET_1, REALSET1;
+ constructors AFVECT0, DIRAF, DOMAIN_1, MEMBERED, XBOOLE_0;
+ clusters AFVECT0, STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems ZFMISC_1, AFVECT0, STRUCT_0, ANALOAF, REALSET1, DIRAF;
+ schemes RELSET_1;
+
+begin
+
+reserve AFV for WeakAffVect;
+reserve a,a',b,b',c,d,p,p',q,q',r,r' for Element of AFV;
+
+definition
+ let A be non empty set, C be Relation of [:A,A:];
+ cluster AffinStruct(#A,C#) -> non empty;
+ coherence by STRUCT_0:def 1;
+end;
+
+Lm1: a,b '||' b,c & a<>c implies a,b // b,c
+proof assume A1: a,b '||' b,c & a<>c;
+    now assume a,b // c,b; then b,a // b,c by AFVECT0:8;
+  hence contradiction by A1,AFVECT0:5; end;
+ hence thesis by A1,DIRAF:def 4; end;
+
+Lm2: a,b // b,a iff ex p,q st a,b '||' p,q & a,p '||' p,b & a,q '||' q,b
+ proof A1: now assume A2: a,b // b,a;
+ A3: now assume A4: a=b; take p=a,q=a;
+    a,b // p,q & a,p // p,b & a,q // q,b by A4,AFVECT0:3; hence
+    a,b '||' p,q & a,p '||' p,b & a,q '||' q,b by DIRAF:def 4; end;
+    now assume A5: a<>b; consider p such that A6: Mid a,p,b by AFVECT0:24;
+  consider q such that A7: a,b // p,q by AFVECT0:def 1;
+    MDist a,b by A2,A5,AFVECT0:def 2; then MDist p,q by A7,AFVECT0:19;
+  then A8: Mid a,q,b by A6,AFVECT0:28; A9: a,p // p,b by A6,AFVECT0:def 3;
+  A10: a,q // q,b by A8,AFVECT0:def 3; take p,q; thus
+    a,b '||' p,q & a,p '||' p,b & a,q '||' q,b by A7,A9,A10,DIRAF:def 4; end;
+ hence ex p,q st a,b '||' p,q & a,p '||' p,b & a,q '||' q,b by A3; end;
+   now given p,q such that A11: a,b '||' p,q & a,p '||' p,b & a,q '||' q,b;
+    now assume A12: a<>b; then a,p // p,b & a,q // q,b by A11,Lm1;
+then A13:  Mid a,p,b & Mid a,q,b by AFVECT0:def 3;
+  A14: now assume p=q; then a,b // p,p by A11,DIRAF:def 4;
+   hence contradiction by A12,AFVECT0:def 1; end;
+     now assume A15: MDist p,q;
+    a,b // p,q or a,b // q,p by A11,DIRAF:def 4; then p,q // a,b or q,p // a,b
+  by AFVECT0:4; then MDist a,b by A15,AFVECT0:19; hence a,b // b,a
+  by AFVECT0:def 2; end;
+ hence a,b // b,a by A13,A14,AFVECT0:25; end;
+ hence a,b // b,a by AFVECT0:3; end;
+hence thesis by A1; end;
+
+Lm3: a,b '||' c,d implies b,a '||' c,d
+proof assume a,b '||' c,d; then a,b // c,d or a,b // d,c by DIRAF:def 4;
+then b,a // d,c or b,a // c,d by AFVECT0:8; hence thesis by DIRAF:def 4; end;
+
+Lm4: a,b '||' b,a
+proof a,b // a,b by AFVECT0:2; hence thesis by DIRAF:def 4; end;
+
+Lm5: a,b '||' p,p implies a=b
+proof assume a,b '||' p,p; then a,b // p,p by DIRAF:def 4;
+hence thesis by AFVECT0:def 1; end;
+
+Lm6: for a,b,c,d,p,q holds a,b '||' p,q & c,d '||' p,q implies a,b '||' c,d
+proof let a,b,c,d,p,q; assume a,b '||' p,q & c,d '||' p,q;
+then (a,b // p,q & c,d // p,q) or ( a,b // p,q & c,d // q,p) or
+(a,b // q,p & c,d // p,q) or (a,b // q,p & c,d // q,p) by DIRAF:def 4;
+then a,b // c,d or (a,b // p,q & d,c // p,q) or (a,b // q,p & d,c // q,p)
+by AFVECT0:8,def 1; then a,b // c,d or a,b // d,c by AFVECT0:def 1;
+hence thesis by DIRAF:def 4; end;
+
+Lm7: ex b st a,b '||' b,c
+proof consider b such that A1: a,b // b,c by AFVECT0:def 1; take b;
+thus a,b '||' b,c by A1,DIRAF:def 4; end;
+
+Lm8: for a,a',b,b',p st a<>a' & b<>b' & p,a '||' p,a' & p,b '||' p,b'
+ holds a,b '||' a',b'
+proof let a,a',b,b',p;
+assume a<>a' & b<>b' & p,a '||' p,a' & p,b '||' p,b';
+then a<>a' & b<>b' & a,p '||' p,a' & b,p '||' p,b' by Lm3;
+then a,p // p,a' & b,p // p,b' by Lm1;
+then Mid a,p,a' & Mid b,p,b' by AFVECT0:def 3; then a,b // b',a' by AFVECT0:30;
+hence thesis by DIRAF:def 4; end;
+
+Lm9: a=b or ex c st (a<>c & a,b '||' b,c) or ex p,p' st
+ (p<>p' & a,b '||' p,p' & a,p '||' p,b & a,p' '||' p',b)
+proof consider c such that A1: a,b // b,c by AFVECT0:def 1;
+A2: now assume a=c; then consider p,p' such that
+ A3: a,b '||' p,p' & a,p '||' p,b & a,p' '||' p',b by A1,Lm2;
+     p=p' implies a=b by A3,Lm5;
+hence a=b or ex p,p' st
+ p<>p' & a,b '||' p,p' & a,p '||' p,b & a,p' '||' p',b by A3; end;
+   now assume A4: a<>c; a,b '||' b,c by A1,DIRAF:def 4;
+ hence ex c st a<>c & a,b '||' b,c by A4; end;
+hence thesis by A2; end;
+
+Lm10: for a,b,b',p,p',c st a,b '||' b,c & b,b' '||' p,p' & b,p '||' p,b' &
+ b,p' '||' p',b' holds a,b' '||' b',c
+proof let a,b,b',p,p',c; assume A1:
+ a,b '||' b,c & b,b' '||' p,p' & b,p '||' p,b' &
+ b,p' '||' p',b'; then A2: a,b '||' b,c & b,b' // b',b by Lm2;
+A3: now assume A4: a,b // b,c; then A5: Mid a,b,c by AFVECT0:def 3;
+ A6: now assume MDist b,b'; then Mid a,b',c by A5,AFVECT0:28;
+ then a,b' // b',c by AFVECT0:def 3; hence thesis by DIRAF:def 4; end;
+     b=b' implies thesis by A4,DIRAF:def 4;
+hence thesis by A2,A6,AFVECT0:def 2; end;
+   now assume a,b // c,b; then b,a // b,c by AFVECT0:8; then a=c
+by AFVECT0:5; then a,b' // c,b' by AFVECT0:2; hence thesis by DIRAF:def 4;
+end;
+hence thesis by A1,A3,DIRAF:def 4; end;
+
+Lm11: for a,b,b',c st a<>c & b<>b' & a,b '||' b,c & a,b' '||' b',c holds
+ ex p,p' st p<>p' & b,b' '||' p,p' & b,p '||' p,b' & b,p' '||' p',b'
+proof let a,b,b',c;
+assume A1: a<>c & b<>b' & a,b '||' b,c & a,b' '||' b',c;
+then b<>b' & a,b // b,c & a,b' // b',c by Lm1;
+then b<>b' & Mid a,b,c & Mid a,b',c by AFVECT0:def 3; then b<>b' & MDist b,
+b' by AFVECT0:25;
+ then b,b' // b',b by AFVECT0:def 2; then consider p,p' such that
+ A2: b,b' '||' p,p' & b,p '||' p,b' & b,p' '||' p',b' by Lm2;
+     p<>p' implies thesis by A2;
+hence thesis by A1,A2,Lm5; end;
+
+Lm12: for a,b,c,p,p',q,q' st (a,b '||' p,p' & a,c '||' q,q' & a,p '||' p,b &
+ a,q '||' q,c & a,p' '||' p',b & a,q' '||' q',c) holds ex r,r' st
+ b,c '||' r,r' & b,r '||' r,c & b,r' '||' r',c
+proof let a,b,c,p,p',q,q';
+assume a,b '||' p,p' & a,c '||' q,q' & a,p '||' p,b & a,q '||' q,c &
+a,p' '||' p',b & a,q' '||' q',c; then a,b // b,a & a,c // c,a by Lm2;
+then b,c // c,b by AFVECT0:13; hence thesis by Lm2; end;
+
+ consider AFV0 being WeakAffVect;
+set X = the carrier of AFV0; set XX = [:X,X:];
+defpred P[set,set] means
+  ex a,b,c,d being Element of X st $1=[a,b] & $2=[c,d] & a,b '||' c,d;
+consider P being Relation of XX,XX such that
+   Lm13: for x,y being set holds [x,y] in P iff
+     x in XX & y in XX & P[x,y] from Rel_On_Set_Ex;
+
+Lm14: for a,b,c,d being Element of X holds [[a,b],[c,d]] in P iff a,b '||' c,d
+proof let a,b,c,d be Element of X;
+A1: [[a,b],[c,d]] in P implies a,b '||' c,d proof assume [[a,b],[c,d]] in P;
+ then consider a',b',c',d' being Element of X such that
+       A2: [a,b]=[a',b'] & [c,d]=[c',d'] and
+       A3: a',b' '||' c',d' by Lm13;
+   a=a' & b=b' & c = c' & d=d' by A2,ZFMISC_1:33; hence thesis by A3; end;
+      [a,b] in XX & [c,d] in XX by ZFMISC_1:def 2;
+hence thesis by A1,Lm13; end;
+set WAS = AffinStruct(#the carrier of AFV0,P#);
+Lm15: for a,b,c,d being Element of AFV0, a',b',c',d' being
+ Element
+of the carrier of WAS st a=a' & b=b' & c =c' & d=d' holds
+a,b '||' c,d iff a',b' // c',d'
+proof let a,b,c,d be Element of AFV0, a',b',c',d' be Element
+of the carrier of WAS such that A1: a=a' & b=b' & c =c' & d=d';
+A2: now assume a,b '||' c,d;
+ then [[a,b],[c,d]] in the CONGR of WAS by Lm14;
+ hence a',b' // c',d' by A1,ANALOAF:def 2; end;
+   now assume a',b' // c',d'; then [[a',b'],[c',d']] in P by ANALOAF:def 2;
+ hence a,b '||' c,d by A1,Lm14; end;
+ hence thesis by A2; end;
+
+Lm16:now
+thus ex a',b' being Element of WAS st a'<>b'
+  by REALSET1:def 20;
+thus for a',b' being Element of WAS holds a',b' // b',a' proof
+let a',b' be Element of WAS; reconsider a=a',b=b' as Element
+of the carrier of AFV0; a,b '||' b,a by Lm4; hence thesis by Lm15; end;
+thus for a',b' being Element of WAS st a',b' // a',a'
+holds a'=b' proof let a',b' be Element of WAS such that
+A1: a',b' // a',a'; reconsider a=a',b=b' as Element of AFV0
+; a,b '||' a,a by A1,Lm15; hence thesis by Lm5; end;
+thus for a,b,c,d,p,q being Element of WAS st a,b // p,q &
+ c,d // p,q holds a,b // c,d proof let a,b,c,d,p,q be Element of the carrier
+ of WAS such that A2: a,b // p,q & c,d // p,q; reconsider a1=a,b1=b,c1=c,
+ d1=d,p1=p,q1=q
+ as Element of AFV0; a1,b1 '||' p1,q1 & c1,d1 '||' p1,q1
+ by A2,Lm15; then a1,b1 '||' c1,d1 by Lm6; hence thesis by Lm15; end;
+thus for a,c being Element of WAS ex b being Element of the
+carrier of WAS st a,b // b,c proof let a,c be Element of WAS;
+reconsider a1=a,c1=c as Element of AFV0; consider b1
+being Element of AFV0 such that A3: a1,b1 '||' b1,c1 by Lm7;
+reconsider b=b1 as Element of WAS; a,b // b,c by A3,Lm15;
+hence
+ thesis; end;
+thus for a,a',b,b',p being Element of WAS st a<>a' & b<>b'&
+p,a // p,a' & p,b // p,b' holds a,b // a',b' proof let a,a',b,b',p be
+Element of WAS such that A4: a<>a' & b<>b' and A5:
+p,a // p,a' & p,b // p,b'; reconsider a1=a,a1'=a',b1=b,b1'=b',p1=p as
+Element of AFV0; p1,a1 '||' p1,a1' & p1,b1 '||' p1,b1'
+by A5,Lm15; then a1,b1 '||' a1',b1' by A4,Lm8; hence thesis by Lm15; end;
+thus for a,b being Element of WAS holds a=b or
+ex c being Element of WAS st ( a<>c & a,b // b,c) or
+ex p,p' being Element of WAS st
+            (p<>p' & a,b // p,p'& a,p // p,b & a,p' // p',b) proof
+let a,b be Element of WAS such that A6: not a=b;
+reconsider a1=a,b1=b as Element of AFV0;
+A7: now given c1 being Element of AFV0 such that
+  A8: a1<>c1 & a1,b1 '||' b1,c1; reconsider c =c1 as Element of the carrier
+  of WAS; a<>c & a,b // b,c by A8,Lm15; hence
+    ex c being Element of WAS st ( a<>c & a,b // b,c); end;
+   now given p1,p1' being Element of AFV0 such that A9:
+  (p1<>p1' & a1,b1 '||' p1,p1'& a1,p1 '||' p1,b1 & a1,p1' '||' p1',b1);
+  reconsider p=p1,p'=p1' as Element of WAS;
+    p<>p' & a,b // p,p'& a,p // p,b & a,p' // p',b by A9,Lm15;
+  hence ex p,p' being Element of WAS st
+  p<>p' & a,b // p,p'& a,p // p,b & a,p' // p',b; end;
+hence thesis by A6,A7,Lm9; end;
+thus for a,b,b',p,p',c being Element of WAS st a,b // b,c &
+b,b' // p,p' & b,p // p,b'& b,p' // p',b' holds a,b' // b',c proof
+let a,b,b',p,p',c be Element of WAS such that A10: a,b // b,c &
+b,b' // p,p' & b,p // p,b'& b,p' // p',b'; reconsider a1=a,b1=b,b1'=b',p1=p,
+p1'=p',c1=c as Element of AFV0; a1,b1 '||' b1,c1 &
+b1,b1' '||' p1,p1' & b1,p1 '||' p1,b1' & b1,p1' '||' p1',b1' by A10,Lm15;
+then a1,b1' '||' b1',c1 by Lm10; hence thesis by Lm15; end;
+thus for a,b,b',c being Element of WAS st a<>c & b<>b' &
+a,b // b,c & a,b' // b',c holds ex p,p' being Element of WAS st
+p<>p' & b,b' // p,p'& b,p // p,b' & b,p' // p',b' proof
+let a,b,b',c be Element of WAS such that A11: a<>c & b<>b' and
+A12: a,b // b,c & a,b' // b',c; reconsider a1=a,b1=b,b1'=b',c1=c as Element
+of the carrier of AFV0; a1,b1 '||' b1,c1 & a1,b1' '||' b1',c1 by A12,Lm15;
+then consider p1,p1' being Element of AFV0 such that
+A13: p1<>p1' & b1,b1' '||' p1,p1' & b1,p1 '||' p1,b1' & b1,p1' '||' p1',b1'
+by A11,Lm11; reconsider p=p1,p'=p1' as Element of WAS;
+  p<>p' & b,b' // p,p' & b,p // p,b' & b,p' // p',b' by A13,Lm15;
+hence thesis; end;
+thus for a,b,c,p,p',q,q' being Element of WAS st
+(a,b // p,p' & a,c // q,q' & a,p // p,b &
+ a,q // q,c & a,p' // p',b & a,q' // q',c) holds ex
+ r,r' being Element of WAS st
+ b,c // r,r' & b,r // r,c & b,r' // r',c proof
+ let a,b,c,p,p',q,q' be Element of WAS such that
+ A14: a,b // p,p' & a,c // q,q' & a,p // p,b & a,q // q,c & a,p' // p',b &
+ a,q' // q',c; reconsider a1=a,b1=b,c1=c,p1=p,p1'=p',q1=q,q1'=q' as Element
+ of the carrier of AFV0; a1,b1 '||' p1,p1' & a1,c1 '||' q1,q1' &
+ a1,p1 '||' p1,b1 & a1,q1 '||' q1,c1 & a1,p1' '||' p1',b1 & a1,q1' '||' q1',c1
+ by A14,Lm15; then consider r1,r1' being Element of AFV0 such
+ that A15: b1,c1 '||' r1,r1' & b1,r1 '||' r1,c1 & b1,r1' '||' r1',c1 by Lm12;
+ reconsider r=r1,r'=r1' as Element of WAS;
+   b,c // r,r' & b,r // r,c & b,r' // r',c by A15,Lm15; hence thesis; end;
+end;
+
+definition let IT be non empty AffinStruct;
+ canceled;
+
+  attr IT is WeakAffSegm-like means :Def2:
+(for a,b being Element of IT holds a,b // b,a) &
+(for a,b being Element of IT st a,b // a,a holds a=b) &
+(for a,b,c,d,p,q being Element of IT st a,b // p,q &
+  c,d // p,q holds a,b // c,d) &
+(for a,c being Element of IT ex b being Element of the carrier
+ of IT st a,b // b,c) &
+(for a,a',b,b',p being Element of IT st a<>a' & b<>b'&
+ p,a // p,a' & p,b // p,b' holds a,b // a',b') &
+(for a,b being Element of IT holds a=b or
+ ex c being Element of IT st ( a<>c & a,b // b,c) or
+ ex p,p' being Element of IT st
+             (p<>p' & a,b // p,p' & a,p // p,b & a,p' // p',b)) &
+(for a,b,b',p,p',c being Element of IT st a,b // b,c &
+ b,b' // p,p' & b,p // p,b' & b,p' // p',b' holds a,b' // b',c) &
+(for a,b,b',c being Element of IT st a<>c & b<>b' & a,b // b,c &
+ a,b' // b',c holds ex p,p' being Element of IT st
+ p<>p' & b,b' // p,p'& b,p // p,b' & b,p' // p',b') &
+(for a,b,c,p,p',q,q' being Element of IT st
+ (a,b // p,p' & a,c // q,q' & a,p // p,b &
+  a,q // q,c & a,p' // p',b & a,q' // q',c) holds ex
+  r,r' being Element of IT st
+    b,c // r,r' & b,r // r,c & b,r' // r',c);
+end;
+
+definition
+ cluster strict non trivial WeakAffSegm-like (non empty AffinStruct);
+  existence
+   proof
+      WAS is WeakAffSegm-like non trivial by Def2,Lm16,REALSET1:def 20;
+    hence thesis;
+   end;
+end;
+
+definition
+  mode WeakAffSegm is non trivial WeakAffSegm-like (non empty AffinStruct);
+end;
+
+::
+::         PROPERTIES OF RELATION OF CONGRUENCE OF THE CARRIER
+::
+
+reserve AFV for WeakAffSegm;
+reserve a,b,b',b'',c,d,p,p'
+ for Element of AFV;
+
+theorem Th1: a,b // a,b
+ proof a,b // b,a by Def2; hence thesis by Def2; end;
+
+theorem Th2: a,b // c,d implies c,d // a,b
+ proof assume A1: a,b // c,d; c,d // c,d by Th1;
+        hence thesis by A1,Def2; end;
+
+theorem Th3: a,b // c,d implies a,b // d,c
+ proof assume A1: a,b // c,d; d,c // c,d by Def2;
+ hence thesis by A1,Def2; end;
+
+theorem Th4: a,b // c,d implies b,a // c,d
+ proof assume a,b // c,d; then c,d // a,b by Th2;
+ then c,d // b,a by Th3; hence thesis by Th2; end;
+
+theorem Th5:  for a,b holds a,a // b,b
+ proof let a,b;
+    now assume A1: a<>b; consider c such that A2: a,c // c,b by Def2;
+    c,a // c,b by A2,Th4; hence thesis by A1,Def2;end;
+ hence thesis by Def2; end;
+
+theorem Th6: a,b // c,c implies a=b
+ proof assume A1: a,b // c,c; a,a // c,c by Th5;
+ then a,b // a,a by A1,Def2; hence thesis by Def2; end;
+
+theorem Th7: a,b // p,p' & a,b // b,c & a,p // p,b &
+         a,p' // p',b implies a=c
+ proof assume that A1: a,b // p,p' and
+        A2: a,b // b,c and A3: a,p // p,b and A4: a,p' // p',b;
+ A5: b,a // p,p' by A1,Th4; p,b // a,p by A3,Th2;
+ then p,b // p,a by Th3; then A6: b,p // p,a by Th4;
+   p',b // a,p' by A4,Th2; then p',b // p',a by Th3;
+ then b,p' // p',a by Th4; then a,a // a,c by A2,A5,A6,Def2;
+ then a,c // a,a by Th2; hence thesis by Def2; end;
+
+theorem a,b' // a,b'' & a,b // a,b''
+        implies b=b' or b=b'' or b'=b''
+proof assume that A1: a,b' // a,b'' and A2: a,b // a,b'';
+    now assume that A3: b'<>b'' and A4: b<>b''; b',b // b'',b'' by A1,A2,A3,A4,
+Def2; hence thesis by Th6; end;
+ hence thesis; end;
+
+::
+::          RELATION OF MAXIMAL DISTANCE AND MIDPOINT RELATION
+::
+
+definition let AFV;let a,b; canceled;
+
+pred MDist a,b means
+ :Def4: ex p,p' st p<>p' & a,b // p,p' & a,p // p,b & a,p' // p',b;
+ end;
+
+definition let AFV; let a,b,c;
+  pred Mid a,b,c means
+    (a=b & b=c & a=c) or (a=c & MDist a,b) or (a<>c & a,b // b,c);
+end;
+
+canceled 2;
+
+theorem a<>b & not MDist a,b implies ex c st ( a<>c & a,b // b,c )
+ proof assume that A1: a<>b and A2: not MDist a,b;
+    a=b or ex c st ( a<>c & a,b // b,c ) or ex p,p' st ( p<>p'&
+        a,b // p,p' & a,p // p,b & a,p' // p',b) by Def2;
+ hence thesis by A1,A2,Def4; end;
+
+theorem MDist a,b & a,b // b,c implies a=c
+ proof assume that A1: MDist a,b and A2: a,b // b,c;
+ consider p,p' such that p<>p' and
+  A3: a,b // p,p' and A4: a,p // p,b and A5: a,p' // p',b by A1,Def4;
+ thus thesis by A2,A3,A4,A5,Th7; end;
+
+theorem MDist a,b implies a<>b
+ proof assume MDist a,b; then consider p,p' such that A1: p<>p' and
+  A2: a,b // p,p' and a,p // p,b and a,p' // p',b by Def4;
+     now assume a=b; then p,p' // a,a by A2,Th2;
+   hence contradiction by A1,Th6; end;
+hence thesis; end;

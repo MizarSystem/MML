@@ -1,0 +1,721 @@
+:: Moore-Smith Convergence
+::  by Andrzej Trybulec
+::
+:: Received November 12, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCOP_1, SEQM_3, RELAT_1, FUNCT_1, BOOLE, CARD_1, ZF_LANG,
+      ORDINAL1, CLASSES1, CLASSES2, CARD_3, FUNCT_2, PROB_1, TARSKI, PRE_TOPC,
+      CONNSP_2, TOPS_1, COMPTS_1, COMPLSP1, SUBSET_1, PRALG_1, PBOOLE,
+      RLVECT_2, WAYBEL_3, YELLOW_1, FRAENKEL, ZF_REFLE, ORDERS_1, WAYBEL_0,
+      QUANTAL1, LATTICES, RELAT_2, CAT_1, YELLOW_0, WELLORD1, ORDINAL2,
+      MCART_1, REALSET1, SEQ_2, SETFAM_1, CLOSURE1, YELLOW_6;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, COMPLSP1, RELAT_1,
+      RELSET_1, FUNCT_1, FUNCT_2, BINOP_1, REALSET1, CARD_1, CARD_3, MSUALG_1,
+      PRE_CIRC, PROB_1, ORDINAL1, CLASSES1, CLASSES2, TOLER_1, SEQM_3,
+      STRUCT_0, TOPS_1, COMPTS_1, CONNSP_2, PBOOLE, PRALG_1, ORDERS_1,
+      LATTICE3, PRE_TOPC, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_3, FRAENKEL,
+      WAYBEL_3, GRCAT_1;
+ constructors SEQM_3, CLASSES1, TOPS_1, CONNSP_2, COMPTS_1, COMPLSP1, PRALG_1,
+      WAYBEL_3, TOLER_1, YELLOW_3, BINOP_1, MSUALG_1, DOMAIN_1, PRE_CIRC,
+      GRCAT_1, LATTICE3, PROB_1, TOPS_2, PRE_TOPC;
+ clusters SUBSET_1, STRUCT_0, RELSET_1, WAYBEL_0, ORDERS_1, PRALG_1, AMI_1,
+      YELLOW_1, YELLOW_3, INDEX_1, PRE_TOPC, MSUALG_1, COMPLSP1, LATTICE3,
+      YELLOW_0, PBOOLE, FUNCOP_1, RELAT_1, FUNCT_1, CLASSES2, CARD_1, FRAENKEL,
+      SEQM_3, ZFMISC_1;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin :: Preliminaries, classical mathematics
+
+scheme SubsetEq{X()-> non empty set, A,B()-> Subset of X(), P[set]}:
+ A() = B()
+provided
+ for y being Element of X() holds y in A() iff P[y] and
+ for y being Element of X() holds y in B() iff P[y];
+
+canceled;
+
+definition let f be Function;
+ assume
+ f is non empty constant;
+ func the_value_of f means
+:: YELLOW_6:def 1
+  ex x being set st x in dom f & it = f.x;
+end;
+
+definition
+ cluster non empty constant Function;
+end;
+
+theorem :: YELLOW_6:2
+ for X being non empty set, x being set holds
+  the_value_of (X --> x) = x;
+
+theorem :: YELLOW_6:3
+ for f being Function holds Card rng f c= Card dom f;
+
+definition
+ cluster universal -> epsilon-transitive being_Tarski-Class set;
+ cluster epsilon-transitive being_Tarski-Class -> universal set;
+end;
+
+ reserve x,y,z,X for set,
+         T for Universe;
+
+definition let X;
+ canceled;
+
+ func the_universe_of X equals
+:: YELLOW_6:def 3
+  Tarski-Class the_transitive-closure_of X;
+end;
+
+definition let X;
+ cluster the_universe_of X -> epsilon-transitive being_Tarski-Class;
+end;
+
+definition let X;
+ cluster the_universe_of X -> universal non empty;
+end;
+
+canceled;
+
+theorem :: YELLOW_6:5
+ for f being Function st dom f in T & rng f c= T
+  holds product f in T;
+
+begin :: Topological spaces, preliminaries
+
+theorem :: YELLOW_6:6  :: PRE_TOPC:def 13
+for T being non empty TopSpace, A being Subset of T
+for p being Point of T holds p in Cl A iff
+    for G being a_neighborhood of p holds G meets A;
+
+definition let T be non empty TopSpace;
+ redefine attr T is being_T2;
+ synonym T is Hausdorff;
+end;
+
+definition
+ cluster Hausdorff (non empty TopSpace);
+end;
+
+theorem :: YELLOW_6:7
+   for X be non empty TopSpace, A be Subset of X
+  holds [#]X is a_neighborhood of A;
+
+theorem :: YELLOW_6:8
+   for X be non empty TopSpace, A be Subset of X,
+     Y being a_neighborhood of A holds A c= Y;
+
+begin :: 1-sorted structures
+
+theorem :: YELLOW_6:9
+ for Y be non empty set
+ for J being 1-sorted-yielding ManySortedSet of Y,
+     i being Element of Y holds
+  (Carrier J).i = the carrier of J.i;
+
+definition
+ cluster non empty constant 1-sorted-yielding Function;
+end;
+
+definition
+ let J be 1-sorted-yielding Function;
+ redefine attr J is non-Empty means
+:: YELLOW_6:def 4
+ for i being set st i in rng J holds i is non empty 1-sorted;
+ synonym J is yielding_non-empty_carriers;
+end;
+
+definition
+ let X be set;
+ let L be 1-sorted;
+ cluster X --> L -> 1-sorted-yielding;
+end;
+
+definition let I be set;
+ cluster yielding_non-empty_carriers (1-sorted-yielding ManySortedSet of I);
+end;
+
+definition let I be non empty set;
+ let J be RelStr-yielding ManySortedSet of I;
+ cluster the carrier of product J -> functional;
+end;
+
+definition let I be set;
+ let J be yielding_non-empty_carriers (1-sorted-yielding ManySortedSet of I);
+ cluster Carrier J -> non-empty;
+end;
+
+theorem :: YELLOW_6:10
+ for T being non empty 1-sorted, S being Subset of T,
+     p being Element of T holds
+     not p in S iff p in S`;
+
+begin :: Preliminaries to Relational Structures
+
+definition let T be non empty RelStr, A be lower Subset of T;
+ cluster A` -> upper;
+end;
+
+definition let T be non empty RelStr, A be upper Subset of T;
+ cluster A` -> lower;
+end;
+
+definition
+ let N be non empty RelStr;
+ redefine attr N is directed means
+:: YELLOW_6:def 5
+ for x,y being Element of N ex z being Element of N st x <= z & y <= z;
+end;
+
+definition let X be set;
+ cluster BoolePoset X -> directed;
+end;
+
+definition
+ cluster non empty directed transitive strict RelStr;
+end;
+
+definition let M be non empty set, N be non empty RelStr,
+  f be Function of M, the carrier of N, m be Element of M;
+ redefine func f.m -> Element of N;
+end;
+
+definition let I be set;
+ cluster yielding_non-empty_carriers (RelStr-yielding ManySortedSet of I);
+end;
+
+definition let I be non empty set;
+ let J be yielding_non-empty_carriers (RelStr-yielding ManySortedSet of I);
+ cluster product J -> non empty;
+end;
+
+theorem :: YELLOW_6:11
+ for R1,R2 being RelStr holds
+  [#][:R1,R2:] = [:[#]R1,[#]R2:];
+
+definition let Y1,Y2 be directed RelStr;
+ cluster [:Y1,Y2:] -> directed;
+end;
+
+theorem :: YELLOW_6:12
+ for R being RelStr holds the carrier of R = the carrier of R~;
+
+definition let S be 1-sorted, N be NetStr over S;
+ attr N is constant means
+:: YELLOW_6:def 6
+  the mapping of N is constant;
+end;
+
+definition
+ let R be RelStr, T be non empty 1-sorted, p be Element of T;
+ func R --> p -> strict NetStr over T means
+:: YELLOW_6:def 7
+ the RelStr of it = the RelStr of R &
+     the mapping of it = (the carrier of it) --> p;
+end;
+
+definition
+ let R be RelStr, T be non empty 1-sorted, p be Element of T;
+ cluster R --> p -> constant;
+end;
+
+definition
+ let R be non empty RelStr,
+     T be non empty 1-sorted, p be Element of T;
+ cluster R --> p -> non empty;
+end;
+
+definition
+ let R be non empty directed RelStr,
+     T be non empty 1-sorted, p be Element of T;
+ cluster R --> p -> directed;
+end;
+
+definition
+ let R be non empty transitive RelStr,
+     T be non empty 1-sorted, p be Element of T;
+ cluster R --> p -> transitive;
+end;
+
+theorem :: YELLOW_6:13
+ for R be RelStr, T be non empty 1-sorted, p be Element of T
+  holds the carrier of R --> p = the carrier of R;
+
+theorem :: YELLOW_6:14
+  for R be non empty RelStr, T be non empty 1-sorted,
+      p be Element of T,
+      q be Element of (R-->p)
+  holds (R --> p).q = p;
+
+definition let T be non empty 1-sorted, N be non empty NetStr over T;
+ cluster the mapping of N -> non empty;
+end;
+
+begin :: Substructures of Nets
+
+theorem :: YELLOW_6:15
+ for R being RelStr holds R is full SubRelStr of R;
+
+theorem :: YELLOW_6:16
+ for R being RelStr, S being SubRelStr of R, T being SubRelStr of S
+  holds T is SubRelStr of R;
+
+definition let S be 1-sorted, N be NetStr over S;
+ mode SubNetStr of N -> NetStr over S means
+:: YELLOW_6:def 8
+ it is SubRelStr of N &
+  the mapping of it = (the mapping of N)|the carrier of it;
+end;
+
+theorem :: YELLOW_6:17
+   for S being 1-sorted, N being NetStr over S holds N is SubNetStr of N;
+
+theorem :: YELLOW_6:18
+   for Q being 1-sorted, R being NetStr over Q,
+     S being SubNetStr of R, T being SubNetStr of S
+  holds T is SubNetStr of R;
+
+definition let S be 1-sorted, N be NetStr over S, M be SubNetStr of N;
+ attr M is full means
+:: YELLOW_6:def 9
+ M is full SubRelStr of N;
+end;
+
+definition let S be 1-sorted, N be NetStr over S;
+ cluster full strict SubNetStr of N;
+end;
+
+definition let S be 1-sorted, N be non empty NetStr over S;
+ cluster full non empty strict SubNetStr of N;
+end;
+
+theorem :: YELLOW_6:19
+ for S being 1-sorted, N being NetStr over S, M be SubNetStr of N
+  holds the carrier of M c= the carrier of N;
+
+theorem :: YELLOW_6:20
+ for S being 1-sorted, N being NetStr over S, M be SubNetStr of N,
+     x,y being Element of N,
+     i,j being Element of M st x = i & y = j & i <= j
+  holds x <= y;
+
+theorem :: YELLOW_6:21
+ for S being 1-sorted, N being non empty NetStr over S,
+     M be non empty full SubNetStr of N,
+     x,y being Element of N,
+     i,j being Element of M st x = i & y = j & x <= y
+  holds i <= j;
+
+begin :: More about Nets
+
+definition let T be non empty 1-sorted;
+ cluster constant strict net of T;
+end;
+
+definition let T be non empty 1-sorted, N be constant NetStr over T;
+ cluster the mapping of N -> constant;
+end;
+
+definition let T be non empty 1-sorted, N be NetStr over T;
+ assume
+ N is constant non empty;
+ func the_value_of N -> Element of T equals
+:: YELLOW_6:def 10
+  the_value_of the mapping of N;
+end;
+
+theorem :: YELLOW_6:22
+  for R be non empty RelStr, T be non empty 1-sorted,
+      p be Element of T
+  holds the_value_of (R --> p) = p;
+
+definition let T be non empty 1-sorted, N be net of T;
+ canceled;
+
+ mode subnet of N -> net of T means
+:: YELLOW_6:def 12
+ ex f being map of it, N st
+   the mapping of it = (the mapping of N)*f &
+   for m being Element of N ex n being Element of it st
+    for p being Element of it st n <= p holds m <= f.p;
+end;
+
+theorem :: YELLOW_6:23
+   for T being non empty 1-sorted, N be net of T
+  holds N is subnet of N;
+
+theorem :: YELLOW_6:24
+   for T being non empty 1-sorted, N1,N2,N3 be net of T
+   st N1 is subnet of N2 & N2 is subnet of N3
+  holds N1 is subnet of N3;
+
+theorem :: YELLOW_6:25
+ for T being non empty 1-sorted, N be constant net of T,
+     i being Element of N
+  holds N.i = the_value_of N;
+
+theorem :: YELLOW_6:26
+ for L being non empty 1-sorted, N being net of L, X,Y being set
+  st N is_eventually_in X & N is_eventually_in Y
+  holds X meets Y;
+
+theorem :: YELLOW_6:27
+ for S being non empty 1-sorted, N being net of S, M being subnet of N,
+     X st M is_often_in X
+ holds N is_often_in X;
+
+theorem :: YELLOW_6:28
+ for S being non empty 1-sorted, N being net of S, X st N is_eventually_in X
+ holds N is_often_in X;
+
+theorem :: YELLOW_6:29
+ for S being non empty 1-sorted, N being net of S
+  holds N is_eventually_in the carrier of S;
+
+begin :: The Restriction of a Net
+
+definition let S be 1-sorted, N be NetStr over S, X;
+ func N"X -> strict SubNetStr of N means
+:: YELLOW_6:def 13
+ it is full SubRelStr of N &
+  the carrier of it = (the mapping of N)"X;
+end;
+
+definition let S be 1-sorted, N be transitive NetStr over S, X;
+ cluster N"X -> transitive full;
+end;
+
+theorem :: YELLOW_6:30
+ for S being non empty 1-sorted, N be net of S, X st N is_often_in X
+  holds N"X is non empty directed;
+
+theorem :: YELLOW_6:31
+ for S being non empty 1-sorted, N being net of S, X st N is_often_in X
+ holds N"X is subnet of N;
+
+theorem :: YELLOW_6:32
+ for S being non empty 1-sorted, N being net of S, X
+ for M being subnet of N st M = N"X
+  holds M is_eventually_in X;
+
+begin :: The Universe of Nets
+
+definition let X be non empty 1-sorted;
+ func NetUniv X means
+:: YELLOW_6:def 14
+ for x holds x in it iff
+   ex N being strict net of X st N = x &
+    the carrier of N in the_universe_of the carrier of X;
+end;
+
+definition let X be non empty 1-sorted;
+ cluster NetUniv X -> non empty;
+end;
+
+begin :: Parametrized Families of Nets, Iteration
+
+definition let X be set, T be 1-sorted;
+ mode net_set of X,T -> ManySortedSet of X means
+:: YELLOW_6:def 15
+  for i being set st i in rng it holds i is net of T;
+end;
+
+theorem :: YELLOW_6:33
+ for X being set, T being 1-sorted, F being ManySortedSet of X holds
+  F is net_set of X,T
+   iff for i being set st i in X holds F.i is net of T;
+
+definition let X be non empty set, T be 1-sorted;
+ let J be net_set of X,T, i be Element of X;
+ redefine func J.i -> net of T;
+end;
+
+definition let X be set, T be 1-sorted;
+ cluster -> RelStr-yielding net_set of X,T;
+end;
+
+definition
+ let T be 1-sorted, Y be net of T;
+ cluster -> yielding_non-empty_carriers net_set of the carrier of Y,T;
+end;
+
+definition
+ let T be non empty 1-sorted, Y be net of T,
+     J be net_set of the carrier of Y,T;
+ cluster product J -> directed transitive;
+end;
+
+definition let X be set, T be 1-sorted;
+ cluster -> yielding_non-empty_carriers net_set of X,T;
+end;
+
+definition let X be set, T be 1-sorted;
+ cluster yielding_non-empty_carriers net_set of X,T;
+end;
+
+definition
+ let T be non empty 1-sorted, Y be net of T,
+     J be net_set of the carrier of Y,T;
+ func Iterated J -> strict net of T means
+:: YELLOW_6:def 16
+ the RelStr of it = [:Y, product J:] &
+  for i being Element of Y,
+      f being Function st
+       i in the carrier of Y & f in the carrier of product J
+    holds (the mapping of it).(i,f) =(the mapping of J.i).(f.i);
+end;
+
+theorem :: YELLOW_6:34
+ for T being non empty 1-sorted, Y being net of T,
+     J being net_set of the carrier of Y,T st
+  Y in NetUniv T &
+  for i being Element of Y holds J.i in NetUniv T
+ holds Iterated J in NetUniv T;
+
+theorem :: YELLOW_6:35
+ for T being non empty 1-sorted, N being net of T
+  for J being net_set of the carrier of N, T
+    holds the carrier of Iterated J = [:the carrier of N, product Carrier J:];
+
+theorem :: YELLOW_6:36
+ for T being non empty 1-sorted, N being net of T,
+     J being net_set of the carrier of N, T,
+     i being Element of N,
+     f being Element of product J,
+     x being Element of Iterated J st x = [i,f]
+ holds (Iterated J).x = (the mapping of J.i).(f.i);
+
+theorem :: YELLOW_6:37
+ for T being non empty 1-sorted, Y being net of T,
+     J being net_set of the carrier of Y,T
+ holds rng the mapping of Iterated J c=
+  union { rng the mapping of J.i where i is Element of Y:
+            not contradiction };
+
+begin :: Poset of open neighborhoods
+
+definition let T be non empty TopSpace, p be Point of T;
+ func OpenNeighborhoods p -> RelStr equals
+:: YELLOW_6:def 17
+  (InclPoset { V where V is Subset of T: p in V & V is open })~;
+end;
+
+definition let T be non empty TopSpace, p be Point of T;
+ cluster OpenNeighborhoods p -> non empty;
+end;
+
+theorem :: YELLOW_6:38
+ for T being non empty TopSpace, p being Point of T,
+     x being Element of OpenNeighborhoods p
+  ex W being Subset of T st W = x & p in W & W is open;
+
+theorem :: YELLOW_6:39
+ for T be non empty TopSpace, p be Point of T
+ for x being Subset of T holds
+  x in the carrier of OpenNeighborhoods p iff p in x & x is open;
+
+theorem :: YELLOW_6:40
+ for T be non empty TopSpace, p be Point of T
+ for x,y being Element of OpenNeighborhoods p holds
+   x <= y iff y c= x;
+
+definition let T be non empty TopSpace, p be Point of T;
+ cluster OpenNeighborhoods p -> transitive directed;
+end;
+
+begin :: Nets in topological spaces
+
+definition let T be non empty TopSpace, N be net of T;
+ func Lim N -> Subset of T means
+:: YELLOW_6:def 18
+ for p being Point of T holds p in it iff
+  for V being a_neighborhood of p holds N is_eventually_in V;
+end;
+
+theorem :: YELLOW_6:41
+ for T being non empty TopSpace, N being net of T, Y being subnet of N
+  holds Lim N c= Lim Y;
+
+theorem :: YELLOW_6:42
+ for T being non empty TopSpace, N be constant net of T
+  holds the_value_of N in Lim N;
+
+theorem :: YELLOW_6:43
+ for T being non empty TopSpace, N be net of T, p be Point of T st p in Lim N
+ for d being Element of N
+  ex S being Subset of T st
+   S = { N.c where c is Element of N : d <= c } & p in Cl S;
+
+theorem :: YELLOW_6:44
+ for T being non empty TopSpace holds
+  T is Hausdorff iff
+   for N being net of T, p,q being Point of T st p in Lim N & q in Lim N
+    holds p = q;
+
+definition let T be Hausdorff (non empty TopSpace), N be net of T;
+ cluster Lim N -> trivial;
+end;
+
+definition let T be non empty TopSpace, N be net of T;
+ attr N is convergent means
+:: YELLOW_6:def 19
+ Lim N <> {};
+end;
+
+definition let T be non empty TopSpace;
+ cluster constant -> convergent net of T;
+end;
+
+definition let T be non empty TopSpace;
+ cluster convergent strict net of T;
+end;
+
+definition let T be Hausdorff (non empty TopSpace), N be convergent net of T;
+ func lim N -> Element of T means
+:: YELLOW_6:def 20
+ it in Lim N;
+end;
+
+theorem :: YELLOW_6:45
+   for T be Hausdorff (non empty TopSpace), N be constant net of T
+  holds lim N = the_value_of N;
+
+theorem :: YELLOW_6:46
+   for T being non empty TopSpace, N being net of T
+ for p being Point of T st not p in Lim N
+   ex Y being subnet of N st not ex Z being subnet of Y st p in Lim Z;
+
+theorem :: YELLOW_6:47
+ for T being non empty TopSpace, N being net of T st N in NetUniv T
+ for p being Point of T st not p in Lim N
+   ex Y being subnet of N st Y in NetUniv T &
+    not ex Z being subnet of Y st p in Lim Z;
+
+theorem :: YELLOW_6:48
+ for T being non empty TopSpace, N being net of T,
+     p being Point of T st p in Lim N
+   for J being net_set of the carrier of N, T st
+    for i being Element of N holds N.i in Lim(J.i)
+    holds p in Lim Iterated J;
+
+begin :: Convergence Classes
+
+definition let S be non empty 1-sorted;
+ mode Convergence-Class of S means
+:: YELLOW_6:def 21
+  it c= [:NetUniv S,the carrier of S:];
+end;
+
+definition let S be non empty 1-sorted;
+ cluster -> Relation-like Convergence-Class of S;
+end;
+
+definition let T be non empty TopSpace;
+ func Convergence T -> Convergence-Class of T means
+:: YELLOW_6:def 22
+ for N being net of T, p being Point of T holds
+   [N,p] in it iff N in NetUniv T & p in Lim N;
+end;
+
+definition let T be non empty 1-sorted, C be Convergence-Class of T;
+ attr C is (CONSTANTS) means
+:: YELLOW_6:def 23
+ for N being constant net of T st N in NetUniv T
+    holds [N,the_value_of N] in C;
+ attr C is (SUBNETS) means
+:: YELLOW_6:def 24
+ for N being net of T, Y being subnet of N st Y in NetUniv T
+       for p being Element of T
+        holds [N,p] in C implies [Y,p] in C;
+ attr C is (DIVERGENCE) means
+:: YELLOW_6:def 25
+ for X being net of T, p being Element of T
+   st X in NetUniv T & not [X,p] in C
+   ex Y being subnet of X st Y in NetUniv T &
+    not ex Z being subnet of Y st [Z,p] in C;
+ attr C is (ITERATED_LIMITS) means
+:: YELLOW_6:def 26
+ for X being net of T, p being Element of T
+       st [X,p] in C
+   for J being net_set of the carrier of X, T st
+    for i being Element of X holds [J.i,X.i] in C
+    holds [Iterated J,p] in C;
+end;
+
+definition let T be non empty TopSpace;
+ cluster Convergence T -> (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS);
+end;
+
+definition let S be non empty 1-sorted, C be Convergence-Class of S;
+ func ConvergenceSpace C -> strict TopStruct means
+:: YELLOW_6:def 27
+ the carrier of it = the carrier of S &
+ the topology of it = { V where V is Subset of S:
+   for p being Element of S st p in V
+    for N being net of S st [N,p] in C holds N is_eventually_in V};
+end;
+
+definition let S be non empty 1-sorted, C be Convergence-Class of S;
+ cluster ConvergenceSpace C -> non empty;
+end;
+
+definition let S be non empty 1-sorted, C be Convergence-Class of S;
+ cluster ConvergenceSpace C -> TopSpace-like;
+end;
+
+theorem :: YELLOW_6:49
+ for S be non empty 1-sorted, C be Convergence-Class of S
+  holds C c= Convergence ConvergenceSpace C;
+
+definition let T be non empty 1-sorted, C be Convergence-Class of T;
+ attr C is topological means
+:: YELLOW_6:def 28
+ C is (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS);
+end;
+
+definition let T be non empty 1-sorted;
+ cluster non empty topological Convergence-Class of T;
+end;
+
+definition let T be non empty 1-sorted;
+ cluster topological -> (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS)
+    Convergence-Class of T;
+ cluster (CONSTANTS) (SUBNETS) (DIVERGENCE) (ITERATED_LIMITS) -> topological
+    Convergence-Class of T;
+end;
+
+theorem :: YELLOW_6:50
+ for T being non empty 1-sorted,
+     C being topological Convergence-Class of T,
+     S being Subset of (ConvergenceSpace C qua non empty TopSpace) holds
+  S is open iff
+   for p being Element of T st p in S
+    for N being net of T st [N,p] in C holds N is_eventually_in S;
+
+theorem :: YELLOW_6:51
+ for T being non empty 1-sorted,
+     C being topological Convergence-Class of T,
+     S being Subset of (ConvergenceSpace C qua non empty TopSpace) holds
+  S is closed iff
+   for p being Element of T holds
+    for N being net of T st [N,p] in C & N is_often_in S
+      holds p in S;
+
+theorem :: YELLOW_6:52
+ for T being non empty 1-sorted,
+     C being topological Convergence-Class of T,
+     S being Subset of ConvergenceSpace C,
+     p being Point of ConvergenceSpace C st p in Cl S
+  ex N being net of ConvergenceSpace C st [N,p] in C &
+    rng the mapping of N c= S & p in Lim N;
+
+theorem :: YELLOW_6:53
+   for T be non empty 1-sorted, C be Convergence-Class of T
+  holds Convergence ConvergenceSpace C = C iff C is topological;
+

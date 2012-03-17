@@ -1,0 +1,401 @@
+:: Insert Sort on SCM+FSA
+::  by JingChao Chen
+::
+:: Received March 13, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary SCMFSA7B, AMI_1, SCMFSA_2, SCMFSA6A, SF_MASTR, AMI_3, FUNCT_1,
+      RELAT_1, FUNCT_4, CAT_1, FINSUB_1, PROB_1, SCMFSA8B, SCMFSA8A, SCMFSA_4,
+      CARD_1, AMI_5, RELOC, BOOLE, SCMFSA_9, FINSEQ_1, INT_1, RFINSEQ,
+      SCMFSA6C, SCMFSA6B, SCM_1, SCM_HALT, FUNCT_7, UNIALG_2, CARD_3, AMI_2,
+      SCMFSA8C, ARYTM_1, ABSVALUE, SCMBSORT, FINSEQ_4, SCMISORT;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, CQC_LANG, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_7, CARD_1,
+      FINSEQ_1, CARD_3, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5, SCMFSA_2,
+      SCMFSA_4, SCMFSA_5, SCMFSA6A, SEQ_1, SF_MASTR, SCMFSA6B, SCMFSA6C,
+      SCMFSA7B, SCMFSA8A, SCMFSA_9, SCMFSA8B, INT_1, FINSEQ_4, SCMBSORT,
+      FINSUB_1, PROB_1, SCMFSA8C, RFINSEQ, SCM_HALT, GROUP_1;
+ constructors NAT_1, AMI_5, SCMFSA_5, SCM_1, SCMFSA6A, SCMFSA6B, SEQ_1,
+      SCMFSA6C, SETWISEO, CQC_SIM1, SCMFSA8B, SCMFSA8C, RFINSEQ, SCM_HALT,
+      SCMFSA8A, FINSEQ_4, SCMBSORT, SCMFSA_9, SFMASTR1, PROB_1, MEMBERED;
+ clusters RELSET_1, FUNCT_1, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6C,
+      SCMFSA8A, FINSUB_1, SCM_HALT, SCMFSA_9, INT_1, CQC_LANG, NAT_1, FRAENKEL,
+      XREAL_0, MEMBERED;
+ requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+definition
+ let i be good Instruction of SCM+FSA;
+ cluster Macro i -> good;
+end;
+
+definition
+ let a be read-write Int-Location,b be Int-Location;
+ cluster AddTo(a,b) -> good;
+end;
+
+theorem :: SCMISORT:1   ::PR016
+ for f be Function,d,r be set st d in dom f holds dom f=dom (f+*(d.-->r));
+
+theorem :: SCMISORT:2   ::PR014
+   for p be programmed FinPartState of SCM+FSA,l be Instruction-Location of
+  SCM+FSA, ic be Instruction of SCM+FSA st l in dom p & (ex pc be Instruction
+  of SCM+FSA st pc=p.l & UsedIntLoc pc=UsedIntLoc ic) holds UsedIntLoc p
+  = UsedIntLoc (p+*(l.-->ic));
+
+theorem :: SCMISORT:3   ::PR020
+   for a being Int-Location,I being Macro-Instruction holds
+  if>0(a, I ';' Goto insloc 0,SCM+FSA-Stop).insloc (card I +4)
+  = goto insloc (card I +4);
+
+theorem :: SCMISORT:4   ::PR022
+   for p be programmed FinPartState of SCM+FSA,l be Instruction-Location of
+  SCM+FSA, ic be Instruction of SCM+FSA st l in dom p & (ex pc be Instruction
+  of SCM+FSA st pc=p.l & UsedInt*Loc pc=UsedInt*Loc ic) holds UsedInt*Loc p
+  = UsedInt*Loc (p+*(l.-->ic));
+
+reserve s for State of SCM+FSA,
+   I for Macro-Instruction,
+   a for read-write Int-Location;
+reserve i,j,k,n for Nat;
+
+canceled;
+
+theorem :: SCMISORT:6    ::PR026
+ for s be State of SCM+FSA,I be Macro-Instruction st s.intloc 0=1 &
+ IC s = insloc 0 holds
+   s +* I = s +* Initialized I;
+
+theorem :: SCMISORT:7    ::PR006
+ for I being Macro-Instruction,a,b being Int-Location st
+ I does_not_destroy b holds while>0(a,I) does_not_destroy b;
+
+theorem :: SCMISORT:8   ::PR029
+  n <= 11 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5
+  or n = 6 or n = 7 or n = 8 or n = 9 or n=10 or n=11;
+
+theorem :: SCMISORT:9    ::PR012
+ for f,g be FinSequence of INT,m,n be Nat st 1<=n & n <= len f &
+ 1<=m & m <= len f & g=f+*(m,f/.n) +*(n,f/.m) holds
+ f.m=g.n & f.n=g.m & (for k be set st k<>m & k<>n & k in dom f holds
+ f.k=g.k) & f,g are_fiberwise_equipotent;
+
+theorem :: SCMISORT:10
+ for s being State of SCM+FSA, I being Macro-Instruction
+     st I is_halting_on Initialize s holds
+ (for a be Int-Location holds
+     IExec(I,s).a = (Computation (Initialize s +* (I +* Start-At insloc 0))).
+         (LifeSpan (Initialize s +* (I +* Start-At insloc 0))).a);
+
+theorem :: SCMISORT:11   ::SCMFSA6B_28
+ for s1,s2 be State of SCM+FSA,I be InitHalting Macro-Instruction st
+     Initialized I c= s1 & Initialized I c= s2 &
+ s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
+ for k be Nat holds
+     (Computation s1).k, (Computation s2).k
+         equal_outside the Instruction-Locations of SCM+FSA &
+     CurInstr (Computation s1).k = CurInstr (Computation s2).k;
+
+theorem :: SCMISORT:12    ::SCMFSA6B_29
+ for s1,s2 be State of SCM+FSA,I be InitHalting Macro-Instruction st
+     Initialized I c= s1 & Initialized I c= s2 &
+ s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
+ LifeSpan s1 = LifeSpan s2 &
+ Result s1, Result s2 equal_outside the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMISORT:13   ::SCMFSA6A_49
+ for I be Macro-Instruction, f be FinSeq-Location holds
+     not f in dom I;
+
+theorem :: SCMISORT:14    ::SCMFSA6A_48
+ for I be Macro-Instruction, a be Int-Location holds
+     not a in dom I;
+
+theorem :: SCMISORT:15   ::AMI_1_46
+  for N being non empty with_non-empty_elements set
+  for S being halting IC-Ins-separated definite
+      (non empty non void AMI-Struct over N)
+  for s being State of S st (LifeSpan s) <= j & s is halting holds
+   (Computation s).j = (Computation s).(LifeSpan s);
+
+begin
+::  set D = Int-Locations U FinSeq-Locations;
+::  set IL = the Instruction-Locations of SCM+FSA;
+
+theorem :: SCMISORT:16      :: Th032
+ for s being State of SCM+FSA, I being Macro-Instruction,
+ a being read-write Int-Location
+ st s.a <= 0 holds while>0(a,I) is_halting_onInit s &
+  while>0(a,I) is_closed_onInit s;
+
+theorem :: SCMISORT:17     ::Th033
+   for a being Int-Location, I being Macro-Instruction,
+ s being State of SCM+FSA,k being Nat st
+   I is_closed_onInit s & I is_halting_onInit s &
+   k < LifeSpan (s +* Initialized I) &
+   IC (Computation (s +* Initialized while>0(a,I))).(1 + k) =
+   IC (Computation (s +* Initialized I)).k + 4 &
+   (Computation (s +* Initialized while>0(a,I))).(1 + k) | D =
+   (Computation (s +* Initialized I)).k | D
+  holds
+   IC (Computation (s +* Initialized while>0(a,I))).(1 + k+1) =
+   IC (Computation (s +* Initialized I)).(k+1) + 4 &
+   (Computation (s +* Initialized while>0(a,I))).(1 + k+1) | D =
+   (Computation (s +* Initialized I)).(k+1) | D;
+
+theorem :: SCMISORT:18    ::Th034
+   for a being Int-Location, I being Macro-Instruction,
+  s being State of SCM+FSA st
+   I is_closed_onInit s & I is_halting_onInit s &
+   IC (Computation (s +* Initialized while>0(a,I))).(1 +
+   LifeSpan (s +* Initialized I)) =
+   IC (Computation (s +* Initialized I)).LifeSpan (s +* Initialized I) + 4
+   holds
+   CurInstr (Computation (s +* Initialized while>0(a,I))).(1 +
+   LifeSpan (s +* Initialized I)) = goto insloc (card I +4);
+
+theorem :: SCMISORT:19    ::Th036
+ for s being State of SCM+FSA, I being Macro-Instruction,
+ a being read-write Int-Location
+ st I is_closed_onInit s & I is_halting_onInit s & s.a >0 holds
+    IC (Computation (s +* Initialized while>0(a,I))).
+    (LifeSpan (s +* Initialized I) + 3) = insloc 0 &
+    for k being Nat st k <= LifeSpan (s +* Initialized I) + 3
+    holds IC (Computation (s +* Initialized while>0(a,I))).k in
+    dom while>0(a,I);
+
+theorem :: SCMISORT:20     ::SCM_9_36
+   for s being State of SCM+FSA, I being Macro-Instruction,a be read-write
+ Int-Location st
+    I is_closed_onInit s & I is_halting_onInit s & s.a >0 holds
+    for k being Nat st k <= LifeSpan (s +* Initialized I) + 3
+    holds IC (Computation (s +* Initialized while>0(a,I))).k
+    in dom while>0(a,I);
+
+theorem :: SCMISORT:21     ::SCM_9_37
+ for s being State of SCM+FSA, I be Macro-Instruction,a be read-write
+ Int-Location st
+    I is_closed_onInit s & I is_halting_onInit s & s.a >0 holds
+    IC (Computation (s +* Initialized while>0(a,I))).
+    (LifeSpan (s +* Initialized I) + 3) = insloc 0 &
+    (Computation (s +* Initialized while>0(a,I))).
+    (LifeSpan (s +* Initialized I) + 3) | D =
+ (Computation (s +* Initialized I)).(LifeSpan (s +* Initialized I)) | D;
+
+theorem :: SCMISORT:22  ::TMP22B
+   for s be State of SCM+FSA, I be InitHalting Macro-Instruction,
+     a be read-write Int-Location st s.a > 0 holds
+ ex s2 be State of SCM+FSA, k be Nat st
+   s2 = s +* Initialized (while>0(a,I)) &
+   k =LifeSpan (s +* Initialized I) + 3 &
+   IC (Computation s2).k = insloc 0 &
+   (for b be Int-Location holds (Computation s2).k.b = IExec(I,s).b) &
+   (for f be FinSeq-Location holds (Computation s2).k.f = IExec(I,s).f);
+
+
+definition
+let s,I,a;
+func StepWhile>0(a,s,I) -> Function of NAT,product the Object-Kind of SCM+FSA
+  means
+:: SCMISORT:def 1
+
+   it.0 = s qua Element of (product the Object-Kind of SCM+FSA)
+qua non empty set & for i being Nat
+  holds it.(i+1)=(Computation (it.i +* Initialized while>0(a,I))).
+      (LifeSpan (it.i +* Initialized I) + 3);
+end;
+
+canceled 2;
+
+theorem :: SCMISORT:25   ::Th039
+   StepWhile>0(a,s,I).(k+1)=StepWhile>0(a,StepWhile>0(a,s,I).k,I).1;
+
+theorem :: SCMISORT:26   ::Th040
+  for I being Macro-Instruction,a being read-write Int-Location,
+   s being State of SCM+FSA holds
+   StepWhile>0(a,s,I).(0+1)=(Computation (s +* Initialized while>0(a,I))).
+   (LifeSpan (s+* Initialized I) + 3);
+
+theorem :: SCMISORT:27   ::Th041
+for I be Macro-Instruction,a be read-write Int-Location,
+  s be State of SCM+FSA,k,n be Nat st
+  IC StepWhile>0(a,s,I).k =insloc 0 & StepWhile>0(a,s,I).k=
+  (Computation (s +* Initialized while>0(a,I))).n &
+  StepWhile>0(a,s,I).k.intloc 0=1
+  holds
+  StepWhile>0(a,s,I).k = StepWhile>0(a,s,I).k +* Initialized while>0(a,I) &
+  StepWhile>0(a,s,I).(k+1)=(Computation (s +* Initialized while>0(a,I))).
+  (n +(LifeSpan (StepWhile>0(a,s,I).k +* Initialized I) + 3));
+
+theorem :: SCMISORT:28    :: Th042
+    for I be Macro-Instruction,a be read-write Int-Location,
+    s be State of SCM+FSA st
+     ex f being Function of product the Object-Kind of SCM+FSA,NAT st
+      (for k being Nat holds ( f.(StepWhile>0(a,s,I).k) <> 0 implies
+      f.(StepWhile>0(a,s,I).(k+1)) < f.(StepWhile>0(a,s,I).k) &
+      I is_closed_onInit StepWhile>0(a,s,I).k &
+      I is_halting_onInit StepWhile>0(a,s,I).k) &
+      (StepWhile>0(a,s,I).(k+1)).intloc 0=1 &
+      ( f.(StepWhile>0(a,s,I).k)=0 iff (StepWhile>0(a,s,I).k).a <= 0 ) )
+     holds
+     while>0(a,I) is_halting_onInit s & while>0(a,I) is_closed_onInit s;
+
+theorem :: SCMISORT:29    :: W_halt1
+  for I be good InitHalting Macro-Instruction,a be read-write Int-Location
+    st (for s be State of SCM+FSA holds
+    (s.a > 0 implies IExec(I, s).a < s.a ))
+    holds while>0(a,I) is InitHalting;
+
+theorem :: SCMISORT:30    :: W_halt2
+  for I be good InitHalting Macro-Instruction,a be read-write Int-Location
+    st (for s be State of SCM+FSA holds
+    IExec(I, s).a < s.a or IExec(I, s).a <= 0)
+    holds while>0(a,I) is InitHalting;
+
+definition let D be set,
+ f be Function of D,INT, d be Element of D;
+ redefine func f.d -> Integer;
+end;
+
+theorem :: SCMISORT:31    :: W_halt3
+   for I be good InitHalting Macro-Instruction,a be read-write Int-Location
+   st ex f being Function of (product the Object-Kind of SCM+FSA),INT st
+    (for s,t be State of SCM+FSA
+    holds (f.s > 0 implies f.IExec(I, s) < f.s )
+     & (s|D=t|D implies f.s=f.t) & ( f.s <= 0 iff s.a <= 0 ) )
+   holds while>0(a,I) is InitHalting;
+
+theorem :: SCMISORT:32   ::WG002
+ for s be State of SCM+FSA, I be Macro-Instruction,
+     a be read-write Int-Location st s.a <= 0 holds
+ IExec(while>0(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
+     (Initialize s) | (Int-Locations \/ FinSeq-Locations);
+
+theorem :: SCMISORT:33   ::WG004
+ for s be State of SCM+FSA, I be good InitHalting Macro-Instruction,
+    a be read-write Int-Location st s.a > 0 & while>0(a,I) is InitHalting
+   holds
+   IExec(while>0(a,I),s) | (Int-Locations \/ FinSeq-Locations) =
+   IExec(while>0(a,I),IExec(I,s)) | (Int-Locations \/ FinSeq-Locations);
+
+theorem :: SCMISORT:34   ::WG006
+ for s be State of SCM+FSA, I be Macro-Instruction,
+     f be FinSeq-Location,a be read-write Int-Location st s.a <= 0 holds
+     IExec(while>0(a,I),s).f=s.f;
+
+theorem :: SCMISORT:35   ::WG008
+ for s be State of SCM+FSA, I be Macro-Instruction,
+     b be Int-Location,a be read-write Int-Location st s.a <= 0 holds
+     IExec(while>0(a,I),s).b=(Initialize s).b;
+
+theorem :: SCMISORT:36   ::WG010
+ for s be State of SCM+FSA, I be good InitHalting Macro-Instruction,
+     f be FinSeq-Location,a be read-write Int-Location st
+     s.a > 0 & while>0(a,I) is InitHalting holds
+     IExec(while>0(a,I),s).f =IExec(while>0(a,I),IExec(I,s)).f;
+
+theorem :: SCMISORT:37   ::WG012
+ for s be State of SCM+FSA, I be good InitHalting Macro-Instruction,
+     b be Int-Location,a be read-write Int-Location st
+     s.a > 0 & while>0(a,I) is InitHalting holds
+     IExec(while>0(a,I),s).b =IExec(while>0(a,I),IExec(I,s)).b;
+
+begin
+:: set a0 = intloc 0;
+:: set a1 = intloc 1;
+:: set a2 = intloc 2;
+:: set a3 = intloc 3;
+:: set a4 = intloc 4;
+:: set a5 = intloc 5;
+:: set a6 = intloc 6;
+:: set initializeWorkMem= (a2:= a0) ';' (a3:= a0) ';'
+::                  (a4:= a0) ';' (a5:= a0) ';' (a6:= a0);
+
+definition
+ let f be FinSeq-Location;
+ func insert-sort f -> Macro-Instruction means
+:: SCMISORT:def 2
+  ::def1
+   it=
+   initializeWorkMem ';'
+       (a1:=len f) ';'
+       SubFrom(a1,a0) ';'
+       Times(a1,
+          ((a2:=len f) ';' SubFrom(a2,a1) ';' (a3 := a2) ';'
+          AddTo(a3,a0) ';' (a6:=(f,a3)) ';' SubFrom(a4,a4)) ';'
+          while>0(a2, (a5:=(f,a2)) ';' SubFrom(a5,a6) ';'
+               if>0(a5,Macro SubFrom(a2,a2),
+                    AddTo(a4,a0) ';' SubFrom(a2,a0))
+          ) ';'
+          Times(a4,
+               (a2:=a3) ';'
+               SubFrom(a3,a0) ';'
+               (a5:=(f,a2)) ';'
+               (a6:=(f,a3)) ';'
+               ((f,a2):=a6) ';'((f,a3):=a5)
+          )
+       );
+end;
+
+definition
+ func Insert-Sort-Algorithm -> Macro-Instruction means
+:: SCMISORT:def 3
+  ::def2
+  it = insert-sort fsloc 0;
+end;
+
+theorem :: SCMISORT:38    ::IS002
+ for f being FinSeq-Location holds
+  UsedIntLoc (insert-sort f) = {a0,a1,a2,a3,a4,a5,a6};
+
+theorem :: SCMISORT:39     ::IS004
+ for f being FinSeq-Location holds
+  UsedInt*Loc (insert-sort f) = {f};
+
+theorem :: SCMISORT:40   :: IS007
+ for k1,k2,k3,k4 being Instruction of SCM+FSA holds
+     card( k1 ';' k2 ';' k3 ';' k4) =8;
+
+theorem :: SCMISORT:41   :: IS009
+ for k1,k2,k3,k4,k5 being Instruction of SCM+FSA holds
+     card( k1 ';' k2 ';' k3 ';' k4 ';'k5) =10;
+
+theorem :: SCMISORT:42   :: IS010
+ for f being FinSeq-Location holds card (insert-sort f) = 82;
+
+theorem :: SCMISORT:43    :: IS012
+ for f being FinSeq-Location, k being Nat st
+   k < 82 holds insloc k in dom (insert-sort f);
+
+theorem :: SCMISORT:44     ::IS014
+  insert-sort (fsloc 0) is keepInt0_1 InitHalting;
+
+theorem :: SCMISORT:45    ::IS016
+for s be State of SCM+FSA holds
+    (s.f0, IExec(insert-sort f0,s).f0 are_fiberwise_equipotent) &
+    (for i,j be Nat st i>=1 & j<=len (s.f0) & i<j
+     for x1,x2 be Integer st x1 =IExec(insert-sort f0,s).f0.i &
+        x2=IExec(insert-sort f0,s).f0.j holds x1 >= x2);
+
+theorem :: SCMISORT:46     ::IS018
+ for i being Nat, s being State of SCM+FSA,w being FinSequence of INT
+  st Initialized Insert-Sort-Algorithm +* ((fsloc 0) .--> w) c= s
+  holds IC (Computation s).i in dom Insert-Sort-Algorithm;
+
+theorem :: SCMISORT:47    ::IS020
+  for s be State of SCM+FSA,t be FinSequence of INT st
+  Initialized Insert-Sort-Algorithm +*(fsloc 0 .--> t) c= s
+  holds ex u being FinSequence of REAL
+    st t,u are_fiberwise_equipotent & u is non-increasing &
+     u is FinSequence of INT & (Result s).(fsloc 0) = u;
+
+theorem :: SCMISORT:48     ::IS022
+ for w being FinSequence of INT holds
+  Initialized Insert-Sort-Algorithm +* ((fsloc 0) .--> w) is autonomic;
+
+theorem :: SCMISORT:49    :: IS026
+   Initialized Insert-Sort-Algorithm computes Sorting-Function;

@@ -1,0 +1,324 @@
+:: Dimension of Real Unitary Space
+::  by Noboru Endou , Takashi Mitsuishi and Yasunari Shidama
+::
+:: Received October 9, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, RLSUB_1, FINSET_1, RLVECT_2, FINSEQ_1, FUNCT_1, SEQ_1,
+      RELAT_1, FINSEQ_4, BOOLE, FUNCT_2, ARYTM_1, TARSKI, CARD_1, RLVECT_3,
+      BHSP_1, CONNSP_3, SUBSET_1, RLSUB_2, MATRLIN, VECTSP_9, RUSUB_4, ARYTM_3;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XREAL_0, REAL_1, NAT_1,
+      FINSEQ_1, FUNCT_1, CARD_1, FUNCT_2, PRE_TOPC, STRUCT_0, RLVECT_1,
+      FINSEQ_3, FINSEQ_4, FINSET_1, RLSUB_1, RLVECT_2, BHSP_1, RLVECT_3,
+      RUSUB_1, RUSUB_2, RUSUB_3;
+ constructors NAT_1, REAL_1, RLVECT_2, FINSEQ_4, DOMAIN_1, RLVECT_3, RUSUB_2,
+      FINSEQ_3, RUSUB_3, PRE_TOPC, XREAL_0, MEMBERED;
+ clusters SUBSET_1, FINSET_1, RELSET_1, STRUCT_0, FINSEQ_1, PRE_TOPC, RLVECT_1,
+      RLSUB_1, NAT_1, MEMBERED;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin  :: Finite-dimensional real unitary space
+
+theorem :: RUSUB_4:1
+for V being RealUnitarySpace, A,B being finite Subset of V,
+ v being VECTOR of V st v in Lin(A \/ B) & not v in Lin(B) holds
+  ex w being VECTOR of V st w in A & w in Lin(A \/ B \ {w} \/ {v});
+
+theorem :: RUSUB_4:2
+for V being RealUnitarySpace, A,B being finite Subset of V st
+ the UNITSTR of V = Lin(A) & B is linearly-independent holds
+  Card B <= Card A &
+   ex C being finite Subset of V st
+    C c= A & Card C = Card A - Card B & the UNITSTR of V = Lin(B \/ C);
+
+definition
+  let V be RealUnitarySpace;
+  attr V is finite-dimensional means
+:: RUSUB_4:def 1
+
+    ex A being finite Subset of V st A is Basis of V;
+end;
+
+definition
+  cluster strict finite-dimensional RealUnitarySpace;
+end;
+
+definition
+  let V be RealUnitarySpace;
+  redefine attr V is finite-dimensional means
+:: RUSUB_4:def 2
+
+  ex I being finite Subset of V st I is Basis of V;
+end;
+
+theorem :: RUSUB_4:3
+for V being RealUnitarySpace st V is finite-dimensional holds
+ for I being Basis of V holds I is finite;
+
+theorem :: RUSUB_4:4
+  for V being RealUnitarySpace, A being Subset of V st
+ V is finite-dimensional & A is linearly-independent holds A is finite;
+
+theorem :: RUSUB_4:5
+for V being RealUnitarySpace, A,B being Basis of V st
+ V is finite-dimensional holds Card A = Card B;
+
+theorem :: RUSUB_4:6
+for V being RealUnitarySpace holds (0).V is finite-dimensional;
+
+theorem :: RUSUB_4:7
+for V being RealUnitarySpace, W being Subspace of V st
+ V is finite-dimensional holds W is finite-dimensional;
+
+definition
+  let V be RealUnitarySpace;
+  cluster finite-dimensional strict Subspace of V;
+end;
+
+definition
+  let V be finite-dimensional RealUnitarySpace;
+  cluster -> finite-dimensional Subspace of V;
+end;
+
+definition
+  let V be finite-dimensional RealUnitarySpace;
+  cluster strict Subspace of V;
+end;
+
+begin  :: Dimension of real unitary space
+
+definition
+  let V be RealUnitarySpace;
+  assume  V is finite-dimensional;
+  func dim V -> Nat means
+:: RUSUB_4:def 3
+
+  for I being Basis of V holds it = Card I;
+end;
+
+theorem :: RUSUB_4:8
+for V being finite-dimensional RealUnitarySpace, W being Subspace of V holds
+ dim W <= dim V;
+
+theorem :: RUSUB_4:9
+for V being finite-dimensional RealUnitarySpace, A being Subset of V st
+ A is linearly-independent holds Card A = dim Lin(A);
+
+theorem :: RUSUB_4:10
+for V being finite-dimensional RealUnitarySpace holds
+ dim V = dim (Omega).V;
+
+theorem :: RUSUB_4:11
+  for V being finite-dimensional RealUnitarySpace, W being Subspace of V holds
+ dim V = dim W iff (Omega).V = (Omega).W;
+
+theorem :: RUSUB_4:12
+for V being finite-dimensional RealUnitarySpace holds
+ dim V = 0 iff (Omega).V = (0).V;
+
+theorem :: RUSUB_4:13
+  for V being finite-dimensional RealUnitarySpace holds
+ dim V = 1 iff ex v being VECTOR of V st v <> 0.V & (Omega).V = Lin{v};
+
+theorem :: RUSUB_4:14
+  for V being finite-dimensional RealUnitarySpace holds
+ dim V = 2 iff
+  ex u,v being VECTOR of V st u <> v & {u, v} is linearly-independent &
+   (Omega).V = Lin{u, v};
+
+theorem :: RUSUB_4:15
+for V being finite-dimensional RealUnitarySpace, W1,W2 being Subspace of V
+ holds
+  dim(W1 + W2) + dim(W1 /\ W2) = dim W1 + dim W2;
+
+theorem :: RUSUB_4:16
+  for V being finite-dimensional RealUnitarySpace,
+ W1,W2 being Subspace of V holds
+  dim(W1 /\ W2) >= dim W1 + dim W2 - dim V;
+
+theorem :: RUSUB_4:17
+  for V being finite-dimensional RealUnitarySpace,
+ W1,W2 being Subspace of V st
+  V is_the_direct_sum_of W1, W2 holds dim V = dim W1 + dim W2;
+
+begin
+
+theorem :: RUSUB_4:18
+  for V being finite-dimensional RealUnitarySpace, W being Subspace of V,
+ n being Nat holds
+  n <= dim V iff ex W being strict Subspace of V st dim W = n;
+
+definition
+let V be finite-dimensional RealUnitarySpace, n be Nat;
+  func n Subspaces_of V -> set means
+:: RUSUB_4:def 4
+
+  for x being set holds x in it
+   iff ex W being strict Subspace of V st W = x & dim W = n;
+end;
+
+theorem :: RUSUB_4:19
+  for V being finite-dimensional RealUnitarySpace, n being Nat st
+  n <= dim V holds n Subspaces_of V is non empty;
+
+theorem :: RUSUB_4:20
+  for V being finite-dimensional RealUnitarySpace, n being Nat st
+ dim V < n holds n Subspaces_of V = {};
+
+theorem :: RUSUB_4:21
+  for V being finite-dimensional RealUnitarySpace, W being Subspace of V,
+ n being Nat holds
+  n Subspaces_of W c= n Subspaces_of V;
+
+begin  :: Affine set
+
+definition
+let V be non empty RLSStruct, S be Subset of V;
+  attr S is Affine means
+:: RUSUB_4:def 5
+
+  for x,y being VECTOR of V, a being Real st
+   x in S & y in S holds (1 - a) * x + a * y in S;
+end;
+
+theorem :: RUSUB_4:22
+for V being non empty RLSStruct holds [#]V is Affine & {}V is Affine;
+
+theorem :: RUSUB_4:23
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ v being VECTOR of V holds {v} is Affine;
+
+definition
+let V be non empty RLSStruct;
+cluster non empty Affine Subset of V;
+
+cluster empty Affine Subset of V;
+end;
+
+definition
+let V be RealLinearSpace, W be Subspace of V;
+  func Up(W) -> non empty Subset of V equals
+:: RUSUB_4:def 6
+
+   the carrier of W;
+end;
+
+definition
+let V be RealUnitarySpace, W be Subspace of V;
+  func Up(W) -> non empty Subset of V equals
+:: RUSUB_4:def 7
+
+  the carrier of W;
+end;
+
+theorem :: RUSUB_4:24
+  for V being RealLinearSpace, W being Subspace of V holds
+Up(W) is Affine & 0.V in the carrier of W;
+
+theorem :: RUSUB_4:25
+for V being RealLinearSpace, A being Affine Subset of V st
+0.V in A holds for x being VECTOR of V, a being Real st x in A holds a * x in A
+;
+
+definition
+let V be non empty RLSStruct, S be non empty Subset of V;
+  attr S is Subspace-like means
+:: RUSUB_4:def 8
+
+  the Zero of V in S &
+  for x,y being Element of V, a being Real st x in S & y in S
+  holds x + y in S & a * x in S;
+end;
+
+theorem :: RUSUB_4:26
+for V being RealLinearSpace, A being non empty Affine Subset of V st
+0.V in A holds
+A is Subspace-like & A = the carrier of Lin(A);
+
+theorem :: RUSUB_4:27
+  for V being RealLinearSpace, W being Subspace of V holds
+Up(W) is Subspace-like;
+
+theorem :: RUSUB_4:28
+  for V being RealLinearSpace, W being strict Subspace of V holds
+W = Lin(Up(W));
+
+theorem :: RUSUB_4:29
+  for V being RealUnitarySpace, A being non empty Affine Subset of V st
+0.V in A holds
+A = the carrier of Lin(A);
+
+theorem :: RUSUB_4:30
+  for V being RealUnitarySpace, W being Subspace of V holds
+Up(W) is Subspace-like;
+
+theorem :: RUSUB_4:31
+  for V being RealUnitarySpace, W being strict Subspace of V holds
+W = Lin(Up(W));
+
+definition
+let V be non empty LoopStr, M be Subset of V,
+ v be Element of V;
+  func v + M -> Subset of V equals
+:: RUSUB_4:def 9
+
+  {v + u where u is Element of V: u in M};
+end;
+
+theorem :: RUSUB_4:32
+  for V being RealLinearSpace, W being strict Subspace of V,
+ M being Subset of V, v being VECTOR of V st
+  Up(W) = M holds v + W = v + M;
+
+theorem :: RUSUB_4:33
+for V being Abelian add-associative
+ RealLinearSpace-like (non empty RLSStruct),
+  M being Affine Subset of V, v being VECTOR of V
+   holds v + M is Affine;
+
+theorem :: RUSUB_4:34
+  for V being RealUnitarySpace, W being strict Subspace of V,
+ M being Subset of V, v being VECTOR of V st
+  Up(W) = M holds v + W = v + M;
+
+definition
+let V be non empty LoopStr,
+M,N be Subset of V;
+func M + N -> Subset of V equals
+:: RUSUB_4:def 10
+
+  {u + v where u,v is Element of V: u in M & v in N};
+end;
+
+theorem :: RUSUB_4:35
+for V be Abelian (non empty LoopStr), M,N be Subset of V holds
+N + M = M + N;
+
+definition
+let V be Abelian (non empty LoopStr), M,N be Subset of V;
+redefine func M + N;
+commutativity;
+end;
+
+theorem :: RUSUB_4:36
+for V being non empty LoopStr, M being Subset of V,
+ v being Element of V holds {v} + M = v + M;
+
+theorem :: RUSUB_4:37
+  for V being Abelian add-associative
+ RealLinearSpace-like (non empty RLSStruct),
+  M being Affine Subset of V, v being VECTOR of V
+   holds {v} + M is Affine;
+
+theorem :: RUSUB_4:38
+  for V being non empty RLSStruct, M,N being Affine Subset of V holds
+ M /\ N is Affine;
+
+theorem :: RUSUB_4:39
+  for V being Abelian add-associative
+ RealLinearSpace-like (non empty RLSStruct),
+  M,N being Affine Subset of V holds
+   M + N is Affine;

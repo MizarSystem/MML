@@ -1,0 +1,865 @@
+:: Quadratic Inequalities
+::  by Jan Popio\l ek
+::
+:: Received July 19, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, FUNCT_3, SQUARE_1, ARYTM_1, ARYTM_3;
+ notation ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1;
+ constructors REAL_1, SQUARE_1, MEMBERED, XBOOLE_0;
+ clusters XREAL_0, SQUARE_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements REAL, NUMERALS, SUBSET, ARITHM;
+ theorems XREAL_0, AXIOMS, REAL_1, REAL_2, SQUARE_1, XCMPLX_0, XCMPLX_1;
+
+begin
+
+ reserve x, a, b, c for real number;
+
+definition let a,b,c;
+  func delta(a,b,c) equals
+:Def1:   b^2 - 4 * a * c;
+coherence;
+end;
+
+definition let a,b,c;
+  cluster delta(a,b,c) -> real;
+coherence
+  proof
+      delta(a,b,c) = b^2 - 4 * a * c by Def1;
+    hence thesis;
+  end;
+end;
+
+definition let a,b,c be Real;
+  redefine func delta(a,b,c) -> Real;
+coherence by XREAL_0:def 1;
+end;
+
+theorem Th1:
+  a <> 0 implies
+    a * x^2 + b * x + c = a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a)
+proof
+     assume
+A1:   a <> 0;
+then A2:   4 * a <> 0 by XCMPLX_1:6;
+       a * x^2 + b * x + c = a * x^2 + (b * x) * 1 + c
+  .= a * x^2 + (b * x) * (a * (1/a)) + c by A1,XCMPLX_1:107
+  .= a * x^2 + a * ((b * x) * (1/a)) + c by XCMPLX_1:4
+  .= a * (x^2 + ((b * x) * (1/a))) + c by XCMPLX_1:8
+  .= a * (x^2 + ((b * x)/a)) + c by XCMPLX_1:100
+  .= a * (x^2 + x * (b/a)) + c by XCMPLX_1:75
+  .= a * (x^2 + x * ((2 * b)/(2 * a))) + c by XCMPLX_1:92
+  .= a * (x^2 + x * (2 * (b/(2 * a)))) + c by XCMPLX_1:75
+  .= a * (x^2 + (2 * x) * (b/(2 * a))) + c by XCMPLX_1:4
+  .= a * (x^2 + 2 * x * (b/(2 * a))) + (b^2/(4 * a) + (c - b^2/(4 * a)))
+     by XCMPLX_1:27
+  .= (a * (x^2 + 2 * x * (b/(2 * a))) + b^2/(4 * a)) + (c - b^2/(4 * a))
+     by XCMPLX_1:1
+  .= (a * (x^2 + 2 * x * (b/(2 * a))) + a * (b^2/(4 * a) * (1/a))) + (c -
+     b^2/(4 * a)) by A1,XCMPLX_1:110
+  .= (a * (x^2 + 2 * x * (b/(2 * a))) + a * ((b^2 * 1)/((4 * a) * a))) +
+     (c - b^2/(4 * a)) by XCMPLX_1:77
+  .= (a * (x^2 + 2 * x * (b/(2 * a))) + a * (b^2/(4 * (a * a)))) + (c -
+     b^2/(4 * a)) by XCMPLX_1:4
+  .= (a * (x^2 + 2 * x * (b/(2 * a))) + a * (b^2/((2 * 2) * a^2))) + (c -
+     b^2/(4 * a)) by SQUARE_1:def 3
+  .= (a * (x^2 + 2 * x * (b/(2 * a))) + a * (b^2/(2^2 * a^2))) + (c -
+     b^2/(4 * a)) by SQUARE_1:def 3
+  .= (a * (x^2 + 2 * x * (b/(2 * a))) + a * (b^2/(2 * a)^2)) + (c -
+     b^2/(4 * a)) by SQUARE_1:68
+  .= (a * (x^2 + 2 * x * (b/(2 * a))) + a * (b/(2 * a))^2) + (c -
+     b^2/(4 * a)) by SQUARE_1:69
+  .= a * ((x^2 + 2 * x * (b/(2 * a))) + (b/(2 * a))^2) + (c -
+     b^2/(4 * a)) by XCMPLX_1:8
+  .= a * (x + b/(2 * a))^2 + (c - b^2/(4 * a)) by SQUARE_1:63
+  .= a * (x + b/(2 * a))^2 - (b^2/(4 * a) - c) by XCMPLX_1:38
+  .= a * (x + b/(2 * a))^2 - (b^2/(4 * a) - ((4 * a * c)/(4 * a)))
+     by A2,XCMPLX_1:90
+  .= a * (x + b/(2 * a))^2 - (b^2 - (4 * a * c))/(4 * a) by XCMPLX_1:121;
+  hence thesis by Def1;
+  end;
+
+theorem
+    a > 0 & delta(a,b,c) <= 0 implies a * x^2 + b * x + c >= 0
+proof
+     assume that
+A1:   a > 0 and
+A2:   delta(a,b,c) <= 0;
+A3:   - delta(a,b,c) >= 0 by A2,REAL_1:26,REAL_2:109;
+     4 * a > 0 by A1,REAL_2:122;
+then (- delta(a,b,c))/(4 * a) >= 0 by A3,REAL_2:125;
+     then - delta(a,b,c)/(4 * a) >= 0 by XCMPLX_1:188;
+     then a * (x + b/(2 * a))^2 + - delta(a,b,c)/(4 * a) >= a * (x + b/(2 * a)
+)^2
+ + 0
+     by REAL_1:55;
+then A4:   a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) >= a * (x + b/(2 * a))
+^2 by XCMPLX_0:def 8;
+       (x +b/(2 * a))^2 >= 0 by SQUARE_1:72;
+     then a * (x +b/(2 * a))^2 >= 0 by A1,REAL_2:121;
+   then a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) >= 0 by A4,AXIOMS:22;
+     hence thesis by A1,Th1;
+end;
+
+theorem
+    a > 0 & delta(a,b,c) < 0 implies a * x^2 + b * x + c > 0
+proof
+     assume that
+A1:   a > 0 and
+A2:   delta(a,b,c) < 0;
+A3:   - delta(a,b,c) > 0 by A2,REAL_1:26,REAL_2:110;
+     4 * a > 0 by A1,REAL_2:122;
+then (- delta(a,b,c))/(4 * a) > 0 by A3,REAL_2:127;
+     then - delta(a,b,c)/(4 * a) > 0 by XCMPLX_1:188;
+     then a * (x + b/(2 * a))^2 + - delta(a,b,c)/(4 * a) > a * (x + b/(2 * a))
+^2
+     by REAL_1:69;
+then A4:   a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) > a * (x + b/(2 * a))^2
+     by XCMPLX_0:def 8;
+       (x +b/(2 * a))^2 >= 0 by SQUARE_1:72;
+     then a * (x +b/(2 * a))^2 >= 0 by A1,REAL_2:121;
+   then a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) > 0 by A4,AXIOMS:22;
+     hence thesis by A1,Th1;
+end;
+
+theorem
+    a < 0 & delta(a,b,c) <= 0 implies a * x^2 + b * x + c <= 0
+proof
+     assume that
+A1:   a < 0 and
+A2:   delta(a,b,c) <= 0;
+A3:   - delta(a,b,c) >= 0 by A2,REAL_1:26,REAL_2:109;
+     4 * a < 0 by A1,SQUARE_1:24;
+then (- delta(a,b,c))/(4 * a) <= 0 by A3,REAL_2:126;
+     then - delta(a,b,c)/(4 * a) <= 0 by XCMPLX_1:188;
+     then a * (x + b/(2 * a))^2 + - delta(a,b,c)/(4 * a) <= a * (x + b/(2 * a)
+)^2
+ + 0
+     by REAL_1:55;
+then A4:   a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) <= a * (x + b/(2 * a))
+^2 by XCMPLX_0:def 8;
+       (x +b/(2 * a))^2 >= 0 by SQUARE_1:72;
+     then a * (x +b/(2 * a))^2 <= 0 by A1,REAL_2:123;
+   then a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) <= 0 by A4,AXIOMS:22;
+     hence thesis by A1,Th1;
+end;
+
+theorem
+    a < 0 & delta(a,b,c) < 0 implies a * x^2 + b * x + c < 0
+proof
+     assume that
+A1:   a < 0 and
+A2:   delta(a,b,c) < 0;
+A3:   - delta(a,b,c) > 0 by A2,REAL_1:66;
+       4 * a < 0 by A1,SQUARE_1:24;
+then (- delta(a,b,c))/(4 * a) < 0 by A3,REAL_2:128;
+     then - delta(a,b,c)/(4 * a) < 0 by XCMPLX_1:188;
+     then a * (x + b/(2 * a))^2 + - delta(a,b,c)/(4 * a) < a * (x + b/(2 * a))
+^2 + 0
+     by REAL_1:53;
+then A4:   a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) < a * (x + b/(2 * a))^2
+by XCMPLX_0:def 8;
+       (x +b/(2 * a))^2 >= 0 by SQUARE_1:72;
+     then a * (x +b/(2 * a))^2 <= 0 by A1,REAL_2:123;
+   then a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) < 0 by A4,AXIOMS:22;
+     hence thesis by A1,Th1;
+end;
+
+theorem Th6:
+  a > 0 & a * x^2 + b * x + c >= 0 implies (2 * a * x + b)^2
+ - delta(a,b,c) >= 0
+proof
+     assume that
+A1:   a > 0 and
+A2:   a * x^2 + b * x + c >= 0;
+A3:   4 * a > 0 by A1,REAL_2:122;
+A4:   2 * a <> 0 by A1,REAL_2:122;
+       a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) >= 0 by A1,A2,Th1;
+     then (4 * a) * (a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a)) >= 0
+     by A3,REAL_2:121;
+     then ((4 * a) * (a * (x + b/(2 * a))^2)) - (4 * a) *
+     (delta(a,b,c)/(4 * a)) >= 0 by XCMPLX_1:40;
+     then ((4 * a) * a) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a))
+>= 0
+     by XCMPLX_1:4;
+     then (4 * (a * a)) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a))
+>= 0
+     by XCMPLX_1:4;
+     then ((2 * 2) * a^2) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) >= 0 by SQUARE_1:def 3;
+     then (2^2 * a^2) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a))
+>= 0
+     by SQUARE_1:def 3;
+     then (2 * a)^2 * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >=
+0
+     by SQUARE_1:68;
+     then ((2 * a) * (x + b/(2 * a)))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >=
+0
+     by SQUARE_1:68;
+     then ((2 * a) * x + (2 * a) * (b/(2 * a)))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) >= 0 by XCMPLX_1:8;
+then A5:   (2 * a * x + b)^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >= 0
+     by A4,XCMPLX_1:88;
+       4 * a <> 0 by A1,REAL_2:122;
+     hence thesis by A5,XCMPLX_1:88;
+end;
+
+theorem Th7:
+  a > 0 & a * x^2 + b * x + c > 0 implies (2 * a * x + b)^2 - delta(a,b,c) > 0
+proof
+     assume that
+A1:   a > 0 and
+A2:   a * x^2 + b * x + c > 0;
+A3:   4 * a > 0 by A1,REAL_2:122;
+A4:   2 * a <> 0 by A1,REAL_2:122;
+       a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) > 0 by A1,A2,Th1;
+     then (4 * a) * (a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a)) > 0
+     by A3,REAL_2:122;
+     then ((4 * a) * (a * (x + b/(2 * a))^2)) - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:40;
+     then ((4 * a) * a) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:4;
+     then (4 * (a * a)) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:4;
+     then ((2 * 2) * a^2) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by SQUARE_1:def 3;
+     then (2^2 * a^2) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >
+0
+     by SQUARE_1:def 3;
+     then (2 * a)^2 * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by SQUARE_1:68;
+     then ((2 * a) * (x + b/(2 * a)))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by SQUARE_1:68;
+     then ((2 * a) * x + (2 * a) * (b/(2 * a)))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:8;
+then A5:   (2 * a * x + b)^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by A4,XCMPLX_1:88;
+       4 * a <> 0 by A1,REAL_2:122;
+     hence thesis by A5,XCMPLX_1:88;
+end;
+
+theorem Th8:
+  a < 0 & a * x^2 + b * x + c <= 0 implies
+    (2 * a * x + b)^2 - delta(a,b,c) >= 0
+proof
+     assume that
+A1:   a < 0 and
+A2:   a * x^2 + b * x + c <= 0;
+A3:   4 * a < 0 by A1,SQUARE_1:24;
+A4:   2 * a <> 0 by A1,SQUARE_1:24;
+       a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) <= 0 by A1,A2,Th1;
+     then (4 * a) * (a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a)) >= 0
+     by A3,REAL_2:121;
+     then ((4 * a) * (a * (x + b/(2 * a))^2)) - (4 * a) *
+     (delta(a,b,c)/(4 * a)) >= 0 by XCMPLX_1:40;
+     then ((4 * a) * a) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) >= 0 by XCMPLX_1:4;
+     then (4 * (a * a)) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) >= 0 by XCMPLX_1:4;
+     then ((2 * 2) * a^2) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) >= 0 by SQUARE_1:def 3;
+     then (2^2 * a^2) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a))
+>= 0
+     by SQUARE_1:def 3;
+     then (2 * a)^2 * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >=
+0
+     by SQUARE_1:68;
+     then ((2 * a) * (x + b/(2 * a)))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >=
+0
+     by SQUARE_1:68;
+     then ((2 * a) * x + (2 * a) * (b/(2 * a)))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) >= 0 by XCMPLX_1:8;
+then A5:   (2 * a * x + b)^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >= 0
+     by A4,XCMPLX_1:88;
+       4 * a <> 0 by A1,SQUARE_1:24;
+     hence thesis by A5,XCMPLX_1:88;
+end;
+
+theorem Th9:
+  a < 0 & a * x^2 + b * x + c < 0 implies (2 * a * x + b)^2 - delta(a,b,c) > 0
+proof
+     assume that
+A1:   a < 0 and
+A2:   a * x^2 + b * x + c < 0;
+A3:   4 * a < 0 by A1,SQUARE_1:24;
+A4:   2 * a <> 0 by A1,SQUARE_1:24;
+       a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) < 0 by A1,A2,Th1;
+     then (4 * a) * (a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a)) > 0
+     by A3,REAL_2:122;
+     then ((4 * a) * (a * (x + b/(2 * a))^2)) - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:40;
+     then ((4 * a) * a) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:4;
+     then (4 * (a * a)) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:4;
+     then ((2 * 2) * a^2) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by SQUARE_1:def 3;
+     then (2^2 * a^2) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >
+0
+     by SQUARE_1:def 3;
+     then (2 * a)^2 * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by SQUARE_1:68;
+     then ((2 * a) * (x + b/(2 * a)))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by SQUARE_1:68;
+     then ((2 * a) * x + (2 * a) * (b/(2 * a)))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:8;
+then A5:   (2 * a * x + b)^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by A4,XCMPLX_1:88;
+       4 * a <> 0 by A1,SQUARE_1:24;
+     hence thesis by A5,XCMPLX_1:88;
+end;
+
+theorem
+    ( for x holds a * x^2 + b * x + c >= 0 ) & a > 0 implies delta(a,b,c) <= 0
+proof
+     assume that
+A1:   for x holds a * x^2 + b * x + c >= 0 and
+A2:   a > 0;
+A3:   2 * a <> 0 by A2,REAL_2:122;
+       now
+       a * (- b/(2 * a))^2 + b * (- b/(2 * a)) + c >= 0 by A1;
+     then (2 * a * (- b/(2 * a)) + b)^2 - delta(a,b,c) >= 0 by A2,Th6;
+     then (- (2 * a) * (b/(2 * a)) + b)^2 - delta(a,b,c) >= 0 by XCMPLX_1:175
+;
+     then (- b + b)^2 - delta(a,b,c) >= 0 by A3,XCMPLX_1:88;
+     then 0 - delta(a,b,c) >= 0 by SQUARE_1:60,XCMPLX_0:def 6;
+     then - delta(a,b,c) >= 0 by XCMPLX_1:150;
+     hence thesis by REAL_1:26,50;
+     end;
+     hence thesis;
+end;
+
+theorem
+    ( for x holds a * x^2 + b * x + c <= 0 ) & a < 0 implies delta(a,b,c) <= 0
+proof
+     assume that
+A1:   for x holds a * x^2 + b * x + c <= 0 and
+A2:   a < 0;
+A3:   2 * a <> 0 by A2,SQUARE_1:24;
+       now
+       a * (- b/(2 * a))^2 + b * (- b/(2 * a)) + c <= 0 by A1;
+     then (2 * a * (- b/(2 * a)) + b)^2 - delta(a,b,c) >= 0 by A2,Th8;
+     then (- (2 * a) * (b/(2 * a)) + b)^2 - delta(a,b,c) >= 0 by XCMPLX_1:175
+;
+     then (- b + b)^2 - delta(a,b,c) >= 0 by A3,XCMPLX_1:88;
+     then 0 - delta(a,b,c) >= 0 by SQUARE_1:60,XCMPLX_0:def 6;
+     then - delta(a,b,c) >= 0 by XCMPLX_1:150;
+     hence thesis by REAL_1:26,50;
+     end;
+     hence thesis;
+end;
+
+theorem
+    ( for x holds a * x^2 + b * x + c > 0 ) & a > 0 implies delta(a,b,c) < 0
+proof
+     assume that
+A1:   for x holds a * x^2 + b * x + c > 0 and
+A2:   a > 0;
+A3:   2 * a <> 0 by A2,REAL_2:122;
+       now
+       a * (- b/(2 * a))^2 + b * (- b/(2 * a)) + c > 0 by A1;
+     then (2 * a * (- b/(2 * a)) + b)^2 - delta(a,b,c) > 0 by A2,Th7;
+     then (- (2 * a) * (b/(2 * a)) + b)^2 - delta(a,b,c) > 0 by XCMPLX_1:175
+;
+     then (- b + b)^2 - delta(a,b,c) > 0 by A3,XCMPLX_1:88;
+     then 0 - delta(a,b,c) > 0 by SQUARE_1:60,XCMPLX_0:def 6;
+     then - delta(a,b,c) > 0 by XCMPLX_1:150;
+     hence thesis by REAL_1:66;
+     end;
+     hence thesis;
+end;
+
+theorem
+    ( for x holds a * x^2 + b * x + c < 0 ) & a < 0 implies delta(a,b,c) < 0
+proof
+     assume that
+A1:   for x holds a * x^2 + b * x + c < 0 and
+A2:   a < 0;
+A3:   2 * a <> 0 by A2,SQUARE_1:24;
+       now
+       a * (- b/(2 * a))^2 + b * (- b/(2 * a)) + c < 0 by A1;
+     then (2 * a * (- b/(2 * a)) + b)^2 - delta(a,b,c) > 0 by A2,Th9;
+     then (- (2 * a) * (b/(2 * a)) + b)^2 - delta(a,b,c) > 0 by XCMPLX_1:175
+;
+     then (- b + b)^2 - delta(a,b,c) > 0 by A3,XCMPLX_1:88;
+     then 0 - delta(a,b,c) > 0 by SQUARE_1:60,XCMPLX_0:def 6;
+     then - delta(a,b,c) > 0 by XCMPLX_1:150;
+     hence thesis by REAL_1:26,50;
+     end;
+     hence thesis;
+end;
+
+theorem Th14:
+  a <> 0 & a * x^2 + b * x + c = 0 implies (2 * a * x + b)^2
+ - delta(a,b,c) = 0
+proof
+     assume that
+A1:   a <> 0 and
+A2:   a * x^2 + b * x + c = 0;
+A3:   2 * a <> 0 by A1,XCMPLX_1:6;
+A4:   4 * a <> 0 by A1,XCMPLX_1:6;
+       a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) = 0 by A1,A2,Th1;
+     then (4 * a) * (a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a)) = 0;
+     then ((4 * a) * (a * (x + b/(2 * a))^2)) - (4 * a) *
+     (delta(a,b,c)/(4 * a)) = 0 by XCMPLX_1:40;
+     then ((4 * a) * a) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) = 0 by XCMPLX_1:4;
+     then (4 * (a * a)) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) = 0 by XCMPLX_1:4;
+     then ((2 * 2) * a^2) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) = 0 by SQUARE_1:def 3;
+     then (2^2 * a^2) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) =
+0
+     by SQUARE_1:def 3;
+     then (2 * a)^2 * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) = 0
+     by SQUARE_1:68;
+     then ((2 * a) * (x + b/(2 * a)))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) = 0
+     by SQUARE_1:68;
+     then ((2 * a) * x + (2 * a) * (b/(2 * a)))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) = 0 by XCMPLX_1:8;
+     then (2 * a * x + b)^2 - (4 * a) * (delta(a,b,c)/(4 * a)) = 0
+     by A3,XCMPLX_1:88;
+     hence thesis by A4,XCMPLX_1:88;
+end;
+
+Lm1:  a^2 = b^2 implies a = b or a = - b
+proof
+     assume a^2 = b^2;
+     then a^2 - b^2 = 0 by XCMPLX_1:14;
+     then (a + b) * (a - b) = 0 by SQUARE_1:67;
+     then a + b = 0 or a - b = 0 by XCMPLX_1:6;
+     hence thesis by XCMPLX_0:def 6,XCMPLX_1:15;
+end;
+
+theorem
+    a <> 0 & delta(a,b,c) >= 0 & a * x^2 + b * x + c = 0 implies
+     x = (- b - sqrt delta(a,b,c))/(2 * a) or
+     x = (- b + sqrt delta(a,b,c))/(2 * a)
+proof
+     assume that
+A1:   a <> 0 and
+A2:   delta(a,b,c) >= 0 and
+A3:   a * x^2 + b * x + c = 0;
+A4:   2 * a <> 0 by A1,XCMPLX_1:6;
+       (2 * a * x + b)^2 - delta(a,b,c) = 0 by A1,A3,Th14;
+     then (2 * a * x + b)^2 = delta(a,b,c) by XCMPLX_1:15;
+     then (2 * a * x + b)^2 = (sqrt delta(a,b,c))^2 by A2,SQUARE_1:def 4;
+     then 2 * a * x + b = sqrt delta(a,b,c) or 2 * a * x + b = - sqrt delta(a,
+b,c)
+     by Lm1;
+     then 2 * a * x = - b + sqrt delta(a,b,c) or
+      2 * a * x = - b + - sqrt delta(a,b,c) by XCMPLX_1:137;
+     then x = (- b + sqrt delta(a,b,c))/(2 * a) or
+      2 * a * x = - b - sqrt delta(a,b,c) by A4,XCMPLX_0:def 8,XCMPLX_1:90;
+     hence thesis by A4,XCMPLX_1:90;
+end;
+
+theorem Th16:
+  a <> 0 & delta(a,b,c) >= 0 implies a * x^2 + b * x + c = a *
+     (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+      (x - (- b + sqrt delta(a,b,c))/(2 * a))
+proof
+     assume that
+A1:   a <> 0 and
+A2:   delta(a,b,c) >= 0;
+       a * x^2 + b * x + c
+  = a * (x + b/(2 * a))^2 - 1 * (delta(a,b,c)/(4 * a)) by A1,Th1
+  .= a * (x + b/(2 * a))^2 - (a * (1/a)) * (delta(a,b,c)/(4 * a))
+     by A1,XCMPLX_1:107
+  .= a * (x + b/(2 * a))^2 - a * ((1/a) * (delta(a,b,c)/(4 * a))) by XCMPLX_1:4
+  .= a * ((x + b/(2 * a))^2 - (1/a) * (delta(a,b,c)/(4 * a))) by XCMPLX_1:40
+  .= a * ((x + b/(2 * a))^2 - (delta(a,b,c) * 1)/((4 * a) * a))
+     by XCMPLX_1:77
+  .= a * ((x + b/(2 * a))^2 - delta(a,b,c)/(4 * (a * a))) by XCMPLX_1:4
+  .= a * ((x + b/(2 * a))^2 - delta(a,b,c)/((2 * 2) * a^2)) by SQUARE_1:def 3
+  .= a * ((x + b/(2 * a))^2 - delta(a,b,c)/(2^2 * a^2)) by SQUARE_1:def 3
+  .= a * ((x + b/(2 * a))^2 - delta(a,b,c)/(2 * a)^2) by SQUARE_1:68
+  .= a * ((x + b/(2 * a))^2 - (sqrt delta(a,b,c))^2/(2 * a)^2) by A2,SQUARE_1:
+def 4
+  .= a * ((x + b/(2 * a))^2 - (sqrt delta(a,b,c)/(2 * a))^2) by SQUARE_1:69
+  .= a * (((x + b/(2 * a)) - sqrt delta(a,b,c)/(2 * a)) *
+         ((x + b/(2 * a)) + sqrt delta(a,b,c)/(2 * a))) by SQUARE_1:67
+  .= a * ((x + b/(2 * a)) - sqrt delta(a,b,c)/(2 * a)) *
+         ((x + b/(2 * a)) + sqrt delta(a,b,c)/(2 * a)) by XCMPLX_1:4
+  .= a * ((x + b/(2 * a)) - sqrt delta(a,b,c)/(2 * a)) *
+         (x - (- b/(2 * a) - sqrt delta(a,b,c)/(2 * a))) by XCMPLX_1:157
+  .= a * (x + (b/(2 * a) - sqrt delta(a,b,c)/(2 * a))) *
+         (x - (- b/(2 * a) - sqrt delta(a,b,c)/(2 * a))) by XCMPLX_1:29
+  .= a * (x - (sqrt delta(a,b,c)/(2 * a) - b/(2 * a))) *
+         (x - (- b/(2 * a) - sqrt delta(a,b,c)/(2 * a))) by XCMPLX_1:38
+  .= a * (x - (- b/(2 * a) + sqrt delta(a,b,c)/(2 * a))) *
+         (x - (- b/(2 * a) - sqrt delta(a,b,c)/(2 * a))) by XCMPLX_0:def 8
+  .= a * (x - ((- b)/(2 * a) + sqrt delta(a,b,c)/(2 * a))) *
+         (x - (- b/(2 * a) - sqrt delta(a,b,c)/(2 * a))) by XCMPLX_1:188
+  .= a * (x - ((- b)/(2 * a) + sqrt delta(a,b,c)/(2 * a))) *
+         (x - ((- b)/(2 * a) - sqrt delta(a,b,c)/(2 * a))) by XCMPLX_1:188
+  .= a * (x - (- b + sqrt delta(a,b,c))/(2 * a)) *
+         (x - ((- b)/(2 * a) - sqrt delta(a,b,c)/(2 * a))) by XCMPLX_1:63
+  .= a * (x - (- b + sqrt delta(a,b,c))/(2 * a)) *
+         (x - (- b - sqrt delta(a,b,c))/(2 * a)) by XCMPLX_1:121;
+  hence thesis by XCMPLX_1:4;
+end;
+
+theorem Th17:
+  a < 0 & delta(a,b,c) > 0 implies
+     (- b + sqrt delta(a,b,c))/(2 * a) < (- b - sqrt delta(a,b,c))/(2 * a)
+proof
+     assume that
+A1:   a < 0 and
+A2:   delta(a,b,c) > 0;
+A3:   2 * a < 0 by A1,SQUARE_1:24;
+       sqrt delta(a,b,c) > 0 by A2,SQUARE_1:93;
+     then 2 * sqrt delta(a,b,c) > 0 by REAL_2:122;
+     then sqrt delta(a,b,c) + sqrt delta(a,b,c) > 0 by XCMPLX_1:11;
+     then sqrt delta(a,b,c) > - sqrt delta(a,b,c) by REAL_2:109;
+     then - b + sqrt delta(a,b,c) > - b + - sqrt delta(a,b,c) by REAL_1:53;
+     then - b + sqrt delta(a,b,c) > - b - sqrt delta(a,b,c) by XCMPLX_0:def 8;
+     hence thesis by A3,REAL_1:74;
+end;
+
+theorem
+    ( a < 0 & delta(a,b,c) > 0 ) implies ( a * x^2 + b * x + c > 0 iff
+     (- b + sqrt delta(a,b,c))/(2 * a) < x &
+       x < (- b - sqrt delta(a,b,c))/(2 * a) )
+proof
+     assume that
+A1:   a < 0 and
+A2:   delta(a,b,c) > 0;
+     thus a * x^2 + b * x + c > 0 implies
+         (- b + sqrt delta(a,b,c))/(2 * a) < x &
+          x < (- b - sqrt delta(a,b,c))/(2 * a)
+     proof
+          assume a * x^2 + b * x + c > 0;
+          then a * (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a)) > 0 by A1,A2,Th16;
+          then a * ((x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a))) > 0 by XCMPLX_1:4;
+          then (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+       (x - (- b + sqrt delta(a,b,c))/(2 * a)) < 0/a by A1,REAL_2:178;
+          then x - (- b - sqrt delta(a,b,c))/(2 * a) > 0 &
+          x - (- b + sqrt delta(a,b,c))/(2 * a) < 0 or
+          x - (- b - sqrt delta(a,b,c))/(2 * a) < 0 &
+          x - (- b + sqrt delta(a,b,c))/(2 * a) > 0 by REAL_2:132;
+          then x > (- b - sqrt delta(a,b,c))/(2 * a) &
+          x < (- b + sqrt delta(a,b,c))/(2 * a) &
+          (- b + sqrt delta(a,b,c))/(2 * a) <
+           (- b - sqrt delta(a,b,c))/(2 * a) or
+          x < (- b - sqrt delta(a,b,c))/(2 * a) &
+          x > (- b + sqrt delta(a,b,c))/(2 * a)
+          by A1,A2,Th17,REAL_2:106,SQUARE_1:12;
+          hence thesis by AXIOMS:22;
+     end;
+     assume (- b + sqrt delta(a,b,c))/(2 * a) < x &
+     x < (- b - sqrt delta(a,b,c))/(2 * a);
+     then x - (- b + sqrt delta(a,b,c))/(2 * a) > 0 &
+     x - (- b - sqrt delta(a,b,c))/(2 * a) < 0
+     by REAL_2:105,SQUARE_1:11;
+     then (x - (- b + sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b - sqrt delta(a,b,c))/(2 * a)) < 0 by SQUARE_1:24;
+     then a * ((x - (- b + sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b - sqrt delta(a,b,c))/(2 * a))) > 0 by A1,REAL_2:122;
+     then a * (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b + sqrt delta(a,b,c))/(2 * a)) > 0 by XCMPLX_1:4;
+     hence thesis by A1,A2,Th16;
+end;
+
+theorem
+    ( a < 0 & delta(a,b,c) > 0 ) implies ( a * x^2 + b * x + c < 0 iff
+     x < (- b + sqrt delta(a,b,c))/(2 * a) or
+     x > (- b - sqrt delta(a,b,c))/(2 * a) )
+proof
+     assume that
+A1:   a < 0 and
+A2:   delta(a,b,c) > 0;
+     thus a * x^2 + b * x + c < 0 implies
+         x < (- b + sqrt delta(a,b,c))/(2 * a)
+         or x > (- b - sqrt delta(a,b,c))/(2 * a)
+     proof
+          assume a * x^2 + b * x + c < 0;
+          then a * (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a)) < 0 by A1,A2,Th16;
+          then a * ((x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a))) < 0 by XCMPLX_1:4;
+          then (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a)) > 0/a
+            by A1,REAL_2:178;
+          then x - (- b - sqrt delta(a,b,c))/(2 * a) > 0 &
+          x - (- b + sqrt delta(a,b,c))/(2 * a) > 0 or
+          x - (- b - sqrt delta(a,b,c))/(2 * a) < 0 &
+          x - (- b + sqrt delta(a,b,c))/(2 * a) < 0 by SQUARE_1:26;
+          hence thesis by REAL_2:106,SQUARE_1:12;
+     end;
+     assume x < (- b + sqrt delta(a,b,c))/(2 * a) or
+     x > (- b - sqrt delta(a,b,c))/(2 * a);
+then A3:  x - (- b + sqrt delta(a,b,c))/(2 * a) < 0 or
+     x - (- b - sqrt delta(a,b,c))/(2 * a) > 0 by REAL_2:105,SQUARE_1:11;
+       (- b + sqrt delta(a,b,c))/(2 * a) < (- b - sqrt delta(a,b,c))/(2 * a)
+     by A1,A2,Th17;
+     then x - (- b + sqrt delta(a,b,c))/(2 * a) >
+      x - (- b - sqrt delta(a,b,c))/(2 * a) by REAL_2:105;
+     then x - (- b + sqrt delta(a,b,c))/(2 * a) < 0 &
+     x - (- b - sqrt delta(a,b,c))/(2 * a) < 0 or
+     x - (- b - sqrt delta(a,b,c))/(2 * a) > 0 &
+     x - (- b + sqrt delta(a,b,c))/(2 * a) > 0 by A3,AXIOMS:22;
+     then (x - (- b + sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b - sqrt delta(a,b,c))/(2 * a)) > 0 by REAL_2:122;
+     then a * ((x - (- b + sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b - sqrt delta(a,b,c))/(2 * a))) < 0 by A1,SQUARE_1:24;
+     then a * (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b + sqrt delta(a,b,c))/(2 * a)) < 0 by XCMPLX_1:4;
+     hence thesis by A1,A2,Th16;
+end;
+
+canceled 2;
+
+theorem
+    a <> 0 & delta(a,b,c) = 0 & a * x^2 + b * x + c = 0 implies x = - b/(2 * a)
+proof
+     assume that
+A1:   a <> 0 and
+A2:   delta(a,b,c) = 0 and
+A3:   a * x^2 + b * x + c = 0;
+A4:   2 * a <> 0 by A1,XCMPLX_1:6;
+       (2 * a * x + b)^2 - 0 = 0 by A1,A2,A3,Th14;
+     then 2 * a * x + b = 0 by SQUARE_1:73;
+     then 2 * a * x = - b by XCMPLX_0:def 6;
+     then x = (- b)/(2 * a) by A4,XCMPLX_1:90;
+     hence thesis by XCMPLX_1:188;
+end;
+
+theorem Th23:
+  a > 0 & (2 * a * x + b)^2 - delta(a,b,c) > 0 implies a * x^2 + b * x + c > 0
+proof
+     assume that
+A1:   a > 0 and
+A2:   (2 * a * x + b)^2 - delta(a,b,c) > 0;
+A3:   4 * a > 0 by A1,REAL_2:122;
+A4:   2 * a <> 0 by A1,REAL_2:122;
+     4 * a <> 0 by A1,REAL_2:122;
+     then (2 * a * x + b)^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by A2,XCMPLX_1:88;
+     then (2 * a * x + (2 * a) * (b/(2 * a)))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by A4,XCMPLX_1:88;
+     then ((2 * a) * (x + b/(2 * a)))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by XCMPLX_1:8;
+     then (2 * a)^2 * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by SQUARE_1:68;
+     then (2^2 * a^2) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >
+0
+     by SQUARE_1:68;
+     then ((2 * 2) * a^2) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by SQUARE_1:def 3;
+     then (4 * (a * a)) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by SQUARE_1:def 3;
+     then ((4 * a) * a) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:4;
+     then ((4 * a) * (a * (x + b/(2 * a))^2)) - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:4;
+     then (4 * a) * (a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a)) > 0
+     by XCMPLX_1:40;
+     then a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) > 0/(4 * a)
+     by A3,REAL_2:178; hence thesis by A1,Th1;
+end;
+
+theorem
+    ( a > 0 & delta(a,b,c) = 0 ) implies ( a * x^2 + b * x + c > 0 iff
+     x <> - b/(2 * a) )
+proof
+     assume that
+A1:   a > 0 and
+A2:   delta(a,b,c) = 0;
+A3:   2 * a <> 0 by A1,REAL_2:122;
+     thus a * x^2 + b * x + c > 0 implies x <> - b/(2 * a)
+     proof
+          assume a * x^2 + b * x + c > 0;
+         then (2 * a * x + b)^2 - 0 > 0 by A1,A2,Th7;
+         then (2 * a * x + b) * (2 * a * x + b) > 0 by SQUARE_1:def 3;
+         then 2 * a * x + b <> 0;
+         then 2 * a * x <> - b by XCMPLX_0:def 6;
+         then x <> (- b)/(2 * a) by A3,XCMPLX_1:88;
+         hence thesis by XCMPLX_1:188;
+     end;
+     assume x <> - b/(2 * a);
+     then x <> (- b)/(2 * a) by XCMPLX_1:188;
+     then 2 * a * x <> - b by A3,XCMPLX_1:90;
+     then 2 * a * x + b <> 0 by XCMPLX_0:def 6;
+     then (2 * a * x + b)^2 - delta(a,b,c) > 0 by A2,SQUARE_1:74;
+     hence thesis by A1,Th23;
+end;
+
+theorem Th25:
+  a < 0 & (2 * a * x + b)^2 - delta(a,b,c) > 0 implies a * x^2 + b * x + c < 0
+proof
+     assume that
+A1:   a < 0 and
+A2:   (2 * a * x + b)^2 - delta(a,b,c) > 0;
+A3:   4 * a < 0 by A1,SQUARE_1:24;
+A4:   2 * a <> 0 by A1,SQUARE_1:24;
+       4 * a <> 0 by A1,SQUARE_1:24;
+     then (2 * a * x + b)^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by A2,XCMPLX_1:88;
+     then (2 * a * x + (2 * a) * (b/(2 * a)))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by A4,XCMPLX_1:88;
+     then ((2 * a) * (x + b/(2 * a)))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by XCMPLX_1:8;
+     then (2 * a)^2 * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) > 0
+     by SQUARE_1:68;
+     then (2^2 * a^2) * (x + b/(2 * a))^2 - (4 * a) * (delta(a,b,c)/(4 * a)) >
+0
+     by SQUARE_1:68;
+     then ((2 * 2) * a^2) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by SQUARE_1:def 3;
+     then (4 * (a * a)) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by SQUARE_1:def 3;
+     then ((4 * a) * a) * (x + b/(2 * a))^2 - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:4;
+     then ((4 * a) * (a * (x + b/(2 * a))^2)) - (4 * a) *
+     (delta(a,b,c)/(4 * a)) > 0 by XCMPLX_1:4;
+     then (4 * a) * (a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a)) > 0
+     by XCMPLX_1:40;
+     then a * (x + b/(2 * a))^2 - delta(a,b,c)/(4 * a) < 0/(4 * a)
+     by A3,REAL_2:178; hence thesis by A1,Th1;
+end;
+
+theorem
+    ( a < 0 & delta(a,b,c) = 0 ) implies ( a * x^2 + b * x + c < 0 iff
+     x <> - b/(2 * a) )
+proof
+     assume that
+A1:   a < 0 and
+A2:   delta(a,b,c) = 0;
+A3:   2 * a <> 0 by A1,SQUARE_1:24;
+     thus a * x^2 + b * x + c < 0 implies x <> - b/(2 * a)
+     proof
+          assume
+           a * x^2 + b * x + c < 0;
+         then (2 * a * x + b)^2 - 0 > 0 by A1,A2,Th9;
+         then (2 * a * x + b) * (2 * a * x + b) > 0 by SQUARE_1:def 3;
+         then 2 * a * x + b <> 0;
+         then 2 * a * x <> - b by XCMPLX_0:def 6;
+         then x <> (- b)/(2 * a) by A3,XCMPLX_1:88;
+         hence thesis by XCMPLX_1:188;
+     end;
+     assume x <> - b/(2 * a);
+     then x <> (- b)/(2 * a) by XCMPLX_1:188;
+     then 2 * a * x <> - b by A3,XCMPLX_1:90;
+     then 2 * a * x + b <> 0 by XCMPLX_0:def 6;
+     then (2 * a * x + b)^2 - delta(a,b,c) > 0 by A2,SQUARE_1:74;
+     hence thesis by A1,Th25;
+end;
+
+theorem Th27:
+  a > 0 & delta(a,b,c) > 0 implies
+     (- b + sqrt delta(a,b,c))/(2 * a) > (- b - sqrt delta(a,b,c))/(2 * a)
+proof
+     assume that
+A1:   a > 0 and
+A2:   delta(a,b,c) > 0;
+A3:   2 * a > 0 by A1,REAL_2:122;
+       sqrt delta(a,b,c) > 0 by A2,SQUARE_1:93;
+     then 2 * sqrt delta(a,b,c) > 0 by REAL_2:122;
+     then sqrt delta(a,b,c) + sqrt delta(a,b,c) > 0 by XCMPLX_1:11;
+     then sqrt delta(a,b,c) > - sqrt delta(a,b,c) by REAL_2:109;
+     then - b + sqrt delta(a,b,c) > - b + - sqrt delta(a,b,c) by REAL_1:53;
+     then - b + sqrt delta(a,b,c) > - b - sqrt delta(a,b,c) by XCMPLX_0:def 8;
+     hence thesis by A3,REAL_1:73;
+end;
+
+theorem
+    ( a > 0 & delta(a,b,c) > 0 ) implies ( a * x^2 + b * x + c < 0 iff
+     (- b - sqrt delta(a,b,c))/(2 * a) < x &
+     x < (- b + sqrt delta(a,b,c))/(2 * a) )
+proof
+     assume that
+A1:   a > 0 and
+A2:   delta(a,b,c) > 0;
+     thus a * x^2 + b * x + c < 0 implies
+         (- b - sqrt delta(a,b,c))/(2 * a) < x &
+         x < (- b + sqrt delta(a,b,c))/(2 * a)
+     proof
+          assume a * x^2 + b * x + c < 0;
+          then a * (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a)) < 0 by A1,A2,Th16;
+          then a * ((x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a))) < 0 by XCMPLX_1:4;
+          then (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a)) < 0/a
+          by A1,REAL_2:178;
+          then x - (- b - sqrt delta(a,b,c))/(2 * a) > 0 &
+          x - (- b + sqrt delta(a,b,c))/(2 * a) < 0 or
+          x - (- b - sqrt delta(a,b,c))/(2 * a) < 0 &
+          x - (- b + sqrt delta(a,b,c))/(2 * a) > 0 by REAL_2:132;
+          then x > (- b - sqrt delta(a,b,c))/(2 * a) &
+          x < (- b + sqrt delta(a,b,c))/(2 * a) or
+          (- b + sqrt delta(a,b,c))/(2 * a) >
+          (- b - sqrt delta(a,b,c))/(2 * a) &
+          x < (- b - sqrt delta(a,b,c))/(2 * a) &
+          x > (- b + sqrt delta(a,b,c))/(2 * a)
+          by A1,A2,Th27,REAL_2:106,SQUARE_1:12;
+          hence thesis by AXIOMS:22;
+     end;
+     assume (- b - sqrt delta(a,b,c))/(2 * a) < x &
+     x < (- b + sqrt delta(a,b,c))/(2 * a);
+     then x - (- b - sqrt delta(a,b,c))/(2 * a) > 0 &
+     x - (- b + sqrt delta(a,b,c))/(2 * a) < 0
+     by REAL_2:105,SQUARE_1:11;
+     then (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b + sqrt delta(a,b,c))/(2 * a)) < 0 by SQUARE_1:24;
+     then a * ((x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b + sqrt delta(a,b,c))/(2 * a))) < 0
+     by A1,SQUARE_1:24;
+     then a * (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b + sqrt delta(a,b,c))/(2 * a)) < 0 by XCMPLX_1:4;
+     hence thesis by A1,A2,Th16;
+end;
+
+theorem
+    ( a > 0 & delta(a,b,c) > 0 ) implies ( a * x^2 + b * x + c > 0 iff
+     x < (- b - sqrt delta(a,b,c))/(2 * a) or
+     x > (- b + sqrt delta(a,b,c))/(2 * a) )
+proof
+     assume that
+A1:   a > 0 and
+A2:   delta(a,b,c) > 0;
+     thus a * x^2 + b * x + c > 0 implies
+         x < (- b - sqrt delta(a,b,c))/(2 * a) or
+         x > (- b + sqrt delta(a,b,c))/(2 * a)
+     proof
+          assume a * x^2 + b * x + c > 0;
+          then a * (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a)) > 0 by A1,A2,Th16;
+          then a * ((x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a))) > 0 by XCMPLX_1:4;
+          then (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+          (x - (- b + sqrt delta(a,b,c))/(2 * a)) > 0/a
+          by A1,REAL_2:178;
+          then x - (- b - sqrt delta(a,b,c))/(2 * a) > 0 &
+          x - (- b + sqrt delta(a,b,c))/(2 * a) > 0 or
+          x - (- b - sqrt delta(a,b,c))/(2 * a) < 0 &
+          x - (- b + sqrt delta(a,b,c))/(2 * a) < 0 by SQUARE_1:26;
+          hence thesis by REAL_2:106,SQUARE_1:12;
+     end;
+     assume x < (- b - sqrt delta(a,b,c))/(2 * a) or
+     x > (- b + sqrt delta(a,b,c))/(2 * a);
+then A3:   x - (- b - sqrt delta(a,b,c))/(2 * a) < 0 or
+     x - (- b + sqrt delta(a,b,c))/(2 * a) > 0
+     by REAL_2:105,SQUARE_1:11;
+       (- b + sqrt delta(a,b,c))/(2 * a) > (- b - sqrt delta(a,b,c))/(2 * a)
+     by A1,A2,Th27;
+     then x - (- b + sqrt delta(a,b,c))/(2 * a) <
+     x - (- b - sqrt delta(a,b,c))/(2 * a) by REAL_2:105;
+     then x - (- b - sqrt delta(a,b,c))/(2 * a) < 0 &
+     x - (- b + sqrt delta(a,b,c))/(2 * a) < 0 or
+     x - (- b - sqrt delta(a,b,c))/(2 * a) > 0 &
+     x - (- b + sqrt delta(a,b,c))/(2 * a) > 0 by A3,AXIOMS:22;
+     then (x - (- b + sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b - sqrt delta(a,b,c))/(2 * a)) > 0 by REAL_2:122;
+     then a * ((x - (- b + sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b - sqrt delta(a,b,c))/(2 * a))) > 0 by A1,REAL_2:122;
+     then a * (x - (- b - sqrt delta(a,b,c))/(2 * a)) *
+     (x - (- b + sqrt delta(a,b,c))/(2 * a)) > 0 by XCMPLX_1:4;
+     hence thesis by A1,A2,Th16;
+end;
+

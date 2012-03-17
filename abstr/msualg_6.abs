@@ -1,0 +1,660 @@
+:: Translations, Endomorphisms, and Stable Equational Theories
+::  by Grzegorz Bancerek
+::
+:: Received February 9, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary MSUALG_1, FUNCT_1, PBOOLE, PRALG_1, MSUALG_3, RELAT_1, BOOLE,
+      AMI_1, CARD_3, QC_LANG1, ZF_REFLE, MOD_4, ALG_1, TDGROUP, FUNCT_4,
+      REWRITE1, FINSEQ_1, FUNCT_7, FUNCT_2, MSUALG_4, CIRCUIT2, EQREL_1,
+      MCART_1, MSUALG_5, MSUALG_6, FINSEQ_4, PARTFUN1, RELAT_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, MCART_1,
+      STRUCT_0, RELAT_1, RELAT_2, RELSET_1, EQREL_1, REWRITE1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FINSEQ_1, CARD_3, FINSEQ_4, PBOOLE, PRALG_1, MSUALG_1,
+      MSUALG_3, MSUALG_4, MSUALG_5, FUNCT_7;
+ constructors NAT_1, MCART_1, REWRITE1, MSUALG_3, MSUALG_5, FUNCT_7, FINSEQ_4,
+      MEMBERED, EQREL_1, PARTFUN1;
+ clusters FUNCT_1, PBOOLE, PRALG_1, RELSET_1, STRUCT_0, MSUALG_1, REWRITE1,
+      MSUALG_3, MSUALG_4, MSUALG_5, ALTCAT_1, FUNCT_7, FINSEQ_1, XREAL_0,
+      ARYTM_3, FUNCT_2, NUMBERS, EQREL_1, PARTFUN1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Endomorphisms and translations
+
+definition
+ let S be non empty ManySortedSign;
+ let A be MSAlgebra over S;
+ let s be SortSymbol of S;
+ mode Element of A,s is Element of (the Sorts of A).s;
+end;
+
+definition let I be set;
+ let A be ManySortedSet of I;
+ let h1,h2 be ManySortedFunction of A,A;
+ redefine func h2**h1 -> ManySortedFunction of A,A;
+end;
+
+theorem :: MSUALG_6:1
+ for S being non empty non void ManySortedSign
+ for A being MSAlgebra over S
+ for o being OperSymbol of S, a being set st a in Args(o,A)
+  holds a is Function;
+
+theorem :: MSUALG_6:2
+ for S being non empty non void ManySortedSign
+ for A being MSAlgebra over S
+ for o being OperSymbol of S, a being Function st a in Args(o,A)
+  holds dom a = dom the_arity_of o &
+   for i being set st i in dom the_arity_of o
+    holds a.i in (the Sorts of A).((the_arity_of o)/.i);
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be MSAlgebra over S;
+ attr A is feasible means
+:: MSUALG_6:def 1
+
+  for o being OperSymbol of S st Args(o,A) <> {} holds Result(o,A) <> {};
+end;
+
+theorem :: MSUALG_6:3
+ for S being non empty non void ManySortedSign
+ for o being OperSymbol of S
+ for A being MSAlgebra over S holds
+  Args(o,A) <> {} iff for i being Nat st i in dom the_arity_of o
+    holds (the Sorts of A).((the_arity_of o)/.i) <> {};
+
+definition
+ let S be non empty non void ManySortedSign;
+ cluster non-empty -> feasible MSAlgebra over S;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ cluster non-empty MSAlgebra over S;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be MSAlgebra over S;
+ mode Endomorphism of A -> ManySortedFunction of A,A means
+:: MSUALG_6:def 2
+
+  it is_homomorphism A,A;
+end;
+
+reserve S for non empty non void ManySortedSign,
+ A for MSAlgebra over S;
+
+theorem :: MSUALG_6:4
+ id the Sorts of A is Endomorphism of A;
+
+theorem :: MSUALG_6:5
+ for h1,h2 being ManySortedFunction of A,A
+ for o being OperSymbol of S
+ for a being Element of Args(o,A) st a in Args(o,A)
+  holds h2#(h1#a) = (h2**h1)#a;
+
+theorem :: MSUALG_6:6
+ for h1,h2 being Endomorphism of A holds h2**h1 is Endomorphism of A;
+
+definition let S be non empty non void ManySortedSign;
+ let A be MSAlgebra over S;
+ let h1,h2 be Endomorphism of A;
+ redefine func h2**h1 -> Endomorphism of A;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ func TranslationRel S -> Relation of the carrier of S means
+:: MSUALG_6:def 3
+
+  for s1,s2 being SortSymbol of S holds [s1,s2] in it iff
+   ex o being OperSymbol of S st the_result_sort_of o = s2 &
+   ex i being Nat st i in dom the_arity_of o & (the_arity_of o)/.i = s1;
+end;
+
+theorem :: MSUALG_6:7
+ for S being non empty non void ManySortedSign, o being OperSymbol of S
+ for A being MSAlgebra over S, a being Function st a in Args(o,A)
+ for i being Nat, x being Element of A,(the_arity_of o)/.i holds
+  a+*(i,x) in Args(o,A);
+
+theorem :: MSUALG_6:8
+ for A1,A2 being MSAlgebra over S, h being ManySortedFunction of A1,A2
+ for o being OperSymbol of S st Args(o,A1) <> {} & Args(o,A2) <> {}
+ for i being Nat st i in dom the_arity_of o
+ for x being Element of A1,(the_arity_of o)/.i holds
+  h.((the_arity_of o)/.i).x in (the Sorts of A2).((the_arity_of o)/.i);
+
+theorem :: MSUALG_6:9
+ for S being non empty non void ManySortedSign, o being OperSymbol of S
+ for i being Nat st i in dom the_arity_of o
+ for A1,A2 being MSAlgebra over S
+ for h being ManySortedFunction of A1,A2
+ for a,b being Element of Args(o,A1) st a in Args(o,A1) & h#a in Args(o,A2)
+ for f,g1,g2 being Function st f = a & g1 = h#a & g2 = h#b
+ for x being Element of A1,((the_arity_of o)/.i)
+  st b = f+*(i,x)
+  holds g2.i = h.((the_arity_of o)/.i).x & h#b = g1+*(i,g2.i);
+
+definition
+ let S be non empty non void ManySortedSign, o be OperSymbol of S;
+ let i be Nat;
+ let A be MSAlgebra over S;
+ let a be Function;
+ func transl(o,i,a,A) -> Function means
+:: MSUALG_6:def 4
+
+  dom it = (the Sorts of A).((the_arity_of o)/.i) &
+  for x being set st x in (the Sorts of A).((the_arity_of o)/.i) holds
+   it.x = Den(o,A).(a+*(i,x));
+end;
+
+theorem :: MSUALG_6:10
+ for S being non empty non void ManySortedSign, o being OperSymbol of S
+ for i being Nat st i in dom the_arity_of o
+ for A being feasible MSAlgebra over S, a being Function
+  st a in Args(o,A) holds
+  transl(o,i,a,A) is Function of (the Sorts of A).((the_arity_of o)/.i),
+                                 (the Sorts of A).the_result_sort_of o;
+
+definition
+ let S be non empty non void ManySortedSign, s1,s2 be SortSymbol of S;
+ let A be MSAlgebra over S;
+ let f be Function;
+ pred f is_e.translation_of A,s1,s2 means
+:: MSUALG_6:def 5
+
+  ex o being OperSymbol of S st the_result_sort_of o = s2 &
+  ex i being Nat st i in dom the_arity_of o & ((the_arity_of o)/.i) = s1 &
+  ex a being Function st a in Args(o,A) & f = transl(o,i,a,A);
+end;
+
+theorem :: MSUALG_6:11
+ for S being non empty non void ManySortedSign, s1,s2 being SortSymbol of S
+ for A being feasible MSAlgebra over S, f being Function
+  st f is_e.translation_of A,s1,s2
+  holds f is Function of (the Sorts of A).s1, (the Sorts of A).s2 &
+   (the Sorts of A).s1 <> {} & (the Sorts of A).s2 <> {};
+
+theorem :: MSUALG_6:12
+ for S being non empty non void ManySortedSign, s1,s2 being SortSymbol of S
+ for A being MSAlgebra over S, f being Function
+  st f is_e.translation_of A,s1,s2
+  holds [s1,s2] in TranslationRel S;
+
+theorem :: MSUALG_6:13
+   for S being non empty non void ManySortedSign, s1,s2 being SortSymbol of S
+ for A being non-empty MSAlgebra over S st [s1,s2] in TranslationRel S
+ ex f being Function st f is_e.translation_of A,s1,s2;
+
+theorem :: MSUALG_6:14
+ for S being non empty non void ManySortedSign
+ for A being feasible MSAlgebra over S
+ for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for q being RedSequence of TranslationRel S,
+     p being Function-yielding FinSequence st
+   len q = len p+1 & s1 = q.1 & s2 = q.len q &
+   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2
+ holds compose(p, (the Sorts of A).s1) is
+     Function of (the Sorts of A).s1, (the Sorts of A).s2 &
+     (p <> {} implies (the Sorts of A).s1 <> {} & (the Sorts of A).s2 <> {});
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let s1,s2 be SortSymbol of S such that
+   TranslationRel S reduces s1,s2;
+ mode Translation of A,s1,s2 ->
+    Function of (the Sorts of A).s1,(the Sorts of A).s2 means
+:: MSUALG_6:def 6
+
+  ex q being RedSequence of TranslationRel S,
+     p being Function-yielding FinSequence st
+   it = compose(p, (the Sorts of A).s1) &
+   len q = len p+1 & s1 = q.1 & s2 = q.len q &
+   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2;
+end;
+
+theorem :: MSUALG_6:15
+   for S being non empty non void ManySortedSign
+ for A being non-empty MSAlgebra over S
+ for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for q being RedSequence of TranslationRel S,
+     p being Function-yielding FinSequence st
+   len q = len p+1 & s1 = q.1 & s2 = q.len q &
+   for i being Nat, f being Function, s1,s2 being SortSymbol of S st
+      i in dom p & f = p.i & s1 = q.i & s2 = q.(i+1)
+     holds f is_e.translation_of A,s1,s2
+ holds compose(p, (the Sorts of A).s1) is Translation of A,s1,s2;
+
+reserve A for non-empty MSAlgebra over S;
+
+theorem :: MSUALG_6:16
+ for s being SortSymbol of S
+  holds id ((the Sorts of A).s) is Translation of A,s,s;
+
+theorem :: MSUALG_6:17
+ for s1,s2 being SortSymbol of S, f being Function
+  st f is_e.translation_of A,s1,s2 holds
+   TranslationRel S reduces s1,s2 & f is Translation of A,s1,s2;
+
+theorem :: MSUALG_6:18
+ for s1,s2,s3 being SortSymbol of S st
+  TranslationRel S reduces s1,s2 & TranslationRel S reduces s2,s3
+ for t1 being Translation of A,s1,s2
+ for t2 being Translation of A,s2,s3
+  holds t2*t1 is Translation of A,s1,s3;
+
+theorem :: MSUALG_6:19
+ for s1,s2,s3 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for t being Translation of A,s1,s2
+ for f being Function st f is_e.translation_of A,s2,s3
+  holds f*t is Translation of A,s1,s3;
+
+theorem :: MSUALG_6:20
+   for s1,s2,s3 being SortSymbol of S st TranslationRel S reduces s2,s3
+ for f being Function st f is_e.translation_of A,s1,s2
+ for t being Translation of A,s2,s3
+  holds t*f is Translation of A,s1,s3;
+
+scheme TranslationInd
+ {S() -> non empty non void ManySortedSign,
+  A() -> non-empty MSAlgebra over S(),
+  P[set,set,set]}:
+ for s1,s2 being SortSymbol of S() st TranslationRel S() reduces s1,s2
+ for t being Translation of A(),s1,s2 holds P[t,s1,s2]
+  provided
+  for s being SortSymbol of S() holds P[id ((the Sorts of A()).s),s,s]
+  and
+  for s1,s2,s3 being SortSymbol of S() st TranslationRel S() reduces s1,s2
+     for t being Translation of A(),s1,s2 st P[t,s1,s2]
+     for f being Function st f is_e.translation_of A(),s2,s3
+      holds P[f*t,s1,s3];
+
+theorem :: MSUALG_6:21
+ for A1,A2 being non-empty MSAlgebra over S
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ for o being OperSymbol of S, i being Nat st i in dom the_arity_of o
+ for a being Element of Args(o,A1) holds
+  (h.the_result_sort_of o)*transl(o,i,a,A1) =
+     transl(o,i,h#a,A2)*(h.((the_arity_of o)/.i));
+
+theorem :: MSUALG_6:22
+   for h being Endomorphism of A
+ for o being OperSymbol of S, i being Nat st i in dom the_arity_of o
+ for a being Element of Args(o,A) holds
+  (h.the_result_sort_of o)*transl(o,i,a,A) =
+     transl(o,i,h#a,A)*(h.((the_arity_of o)/.i));
+
+theorem :: MSUALG_6:23
+ for A1,A2 being non-empty MSAlgebra over S
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ for s1,s2 being SortSymbol of S, t being Function st
+  t is_e.translation_of A1,s1,s2
+ ex T being Function of (the Sorts of A2).s1, (the Sorts of A2).s2 st
+  T is_e.translation_of A2,s1,s2 & T*(h.s1) = (h.s2)*t;
+
+theorem :: MSUALG_6:24
+   for h being Endomorphism of A
+ for s1,s2 being SortSymbol of S, t being Function st
+  t is_e.translation_of A,s1,s2
+ ex T being Function of (the Sorts of A).s1, (the Sorts of A).s2 st
+  T is_e.translation_of A,s1,s2 & T*(h.s1) = (h.s2)*t;
+
+theorem :: MSUALG_6:25
+ for A1,A2 being non-empty MSAlgebra over S
+ for h being ManySortedFunction of A1,A2 st h is_homomorphism A1,A2
+ for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for t being Translation of A1,s1,s2
+  ex T being Translation of A2,s1,s2 st T*(h.s1) = (h.s2)*t;
+
+theorem :: MSUALG_6:26
+ for h being Endomorphism of A
+ for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+ for t being Translation of A,s1,s2
+  ex T being Translation of A,s1,s2 st T*(h.s1) = (h.s2)*t;
+
+
+begin :: Compatibility, invariantness, and stability
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be MSAlgebra over S;
+ let R be ManySortedRelation of A;
+
+ attr R is compatible means
+:: MSUALG_6:def 7
+
+  for o being OperSymbol of S, a,b being Function st
+   a in Args(o,A) & b in Args(o,A) &
+   (for n be Nat st n in dom the_arity_of o
+     holds [a.n,b.n] in R.((the_arity_of o)/.n))
+  holds [Den(o,A).a,Den(o,A).b] in R.(the_result_sort_of o);
+
+ attr R is invariant means
+:: MSUALG_6:def 8
+
+  for s1,s2 being SortSymbol of S
+  for t being Function st t is_e.translation_of A,s1,s2
+  for a,b being set st [a,b] in R.s1 holds [t.a, t.b] in R.s2;
+
+ attr R is stable means
+:: MSUALG_6:def 9
+
+  for h being Endomorphism of A
+  for s being SortSymbol of S
+  for a,b being set st [a,b] in R.s holds [(h.s).a, (h.s).b] in R.s;
+end;
+
+theorem :: MSUALG_6:27
+   for R being MSEquivalence-like ManySortedRelation of A holds
+   R is compatible iff R is MSCongruence of A;
+
+theorem :: MSUALG_6:28
+ for R being ManySortedRelation of A holds R is invariant iff
+  for s1,s2 being SortSymbol of S st TranslationRel S reduces s1,s2
+  for f being Translation of A,s1,s2
+  for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ cluster invariant -> compatible (MSEquivalence-like ManySortedRelation of A);
+
+ cluster compatible -> invariant (MSEquivalence-like ManySortedRelation of A);
+end;
+
+definition
+ let X be non empty set;
+ cluster id X -> non empty;
+end;
+
+scheme MSRExistence
+  {I() -> non empty set,
+   A() -> non-empty ManySortedSet of I(), P[set,set,set]}:
+ ex R being ManySortedRelation of A() st
+  for i being Element of I() for a,b being Element of A().i holds
+   [a,b] in R.i iff P[i,a,b];
+
+scheme MSRLambdaU{I() -> set, A() -> ManySortedSet of I(), F(set) -> set}:
+ (ex R being ManySortedRelation of A() st
+   for i being set st i in I() holds R.i = F(i)) &
+ for R1,R2 being ManySortedRelation of A() st
+   (for i being set st i in I() holds R1.i = F(i)) &
+   (for i being set st i in I() holds R2.i = F(i))
+  holds R1 = R2
+ provided
+   for i being set st i in I() holds F(i) is Relation of A().i, A().i;
+
+definition
+ let I be set, A be ManySortedSet of I;
+ func id(I,A) -> ManySortedRelation of A means
+:: MSUALG_6:def 10
+
+  for i being set st i in I holds it.i = id (A.i);
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ cluster MSEquivalence-like -> non-empty ManySortedRelation of A;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ cluster invariant stable MSEquivalence-like ManySortedRelation of A;
+end;
+
+begin :: Invariant, stable, and invariant stable closure
+
+reserve S for non empty non void ManySortedSign,
+ A for non-empty MSAlgebra over S,
+ R for ManySortedRelation of the Sorts of A;
+
+scheme MSRelCl {S() -> non empty non void ManySortedSign,
+                A() -> non-empty MSAlgebra over S(),
+                P[set,set,set], R[set],
+                R,Q() -> ManySortedRelation of A()}:
+  R[Q()] & R() c= Q() &
+  for P being ManySortedRelation of A() st R[P] & R() c= P holds Q() c= P
+ provided
+ for R being ManySortedRelation of A() holds R[R] iff
+    for s1,s2 being SortSymbol of S()
+    for f being Function of (the Sorts of A()).s1,(the Sorts of A()).s2
+     st P[f,s1,s2]
+    for a,b being set st [a,b] in R.s1 holds [f.a,f.b] in R.s2
+ and
+ for s1,s2,s3 being SortSymbol of S()
+    for f1 being Function of (the Sorts of A()).s1,(the Sorts of A()).s2
+    for f2 being Function of (the Sorts of A()).s2,(the Sorts of A()).s3
+     st P[f1,s1,s2] & P[f2,s2,s3]
+     holds P[f2*f1,s1,s3]
+ and
+ for s being SortSymbol of S() holds P[id ((the Sorts of A()).s),s,s]
+ and
+ for s being SortSymbol of S(), a,b being Element of A(),s holds
+     [a,b] in Q().s iff
+     ex s' being SortSymbol of S(),
+       f being Function of (the Sorts of A()).s',(the Sorts of A()).s,
+       x,y being Element of A(),s' st
+      P[f,s',s] & [x,y] in R().s' & a = f.x & b = f.y;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be ManySortedRelation of the Sorts of A;
+
+ func InvCl R -> invariant ManySortedRelation of A means
+:: MSUALG_6:def 11
+
+  R c= it &
+  for Q being invariant ManySortedRelation of A st R c= Q holds it c= Q;
+end;
+
+theorem :: MSUALG_6:29
+ for R being ManySortedRelation of the Sorts of A
+ for s being SortSymbol of S
+ for a,b being Element of A,s holds [a,b] in (InvCl R).s
+  iff
+   ex s' being SortSymbol of S, x,y being Element of A,s' st
+   ex t being Translation of A,s',s st
+    TranslationRel S reduces s',s & [x,y] in R.s' & a = t.x & b = t.y;
+
+theorem :: MSUALG_6:30
+ for R being stable ManySortedRelation of A holds InvCl R is stable;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be ManySortedRelation of the Sorts of A;
+
+ func StabCl R -> stable ManySortedRelation of A means
+:: MSUALG_6:def 12
+
+  R c= it &
+  for Q being stable ManySortedRelation of A st R c= Q holds it c= Q;
+end;
+
+theorem :: MSUALG_6:31
+ for R being ManySortedRelation of the Sorts of A
+ for s being SortSymbol of S
+ for a,b being Element of A,s holds [a,b] in (StabCl R).s
+  iff
+   ex x,y being Element of A,s, h being Endomorphism of A st
+    [x,y] in R.s & a = h.s.x & b = h.s.y;
+
+theorem :: MSUALG_6:32
+   InvCl StabCl R is stable;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be ManySortedRelation of the Sorts of A;
+ func TRS R -> invariant stable ManySortedRelation of A means
+:: MSUALG_6:def 13
+
+  R c= it &
+  for Q being invariant stable ManySortedRelation of A st R c= Q
+   holds it c= Q;
+end;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be non-empty ManySortedRelation of A;
+ cluster InvCl R -> non-empty;
+ cluster StabCl R -> non-empty;
+ cluster TRS R -> non-empty;
+end;
+
+theorem :: MSUALG_6:33
+   for R being invariant ManySortedRelation of A holds InvCl R = R;
+
+theorem :: MSUALG_6:34
+   for R being stable ManySortedRelation of A holds StabCl R = R;
+
+theorem :: MSUALG_6:35
+   for R being invariant stable ManySortedRelation of A holds TRS R = R;
+
+theorem :: MSUALG_6:36
+   StabCl R c= TRS R & InvCl R c= TRS R & StabCl InvCl R c= TRS R;
+
+theorem :: MSUALG_6:37
+ InvCl StabCl R = TRS R;
+
+theorem :: MSUALG_6:38
+   for R being ManySortedRelation of the Sorts of A
+ for s being SortSymbol of S, a,b being Element of A,s holds
+  [a,b] in (TRS R).s iff
+  ex s' being SortSymbol of S st TranslationRel S reduces s', s &
+  ex l,r being Element of A,s',
+     h being Endomorphism of A, t being Translation of A, s', s st
+       [l,r] in R.s' & a = t.(h.s'.l) & b = t.(h.s'.r);
+
+begin :: Equational theory
+
+theorem :: MSUALG_6:39
+ for A being set for R,E being Relation of A st
+  for a,b being set st a in A & b in A holds
+   [a,b] in E iff a,b are_convertible_wrt R
+ holds E is total symmetric transitive;
+
+theorem :: MSUALG_6:40
+ for A being set, R being Relation of A
+ for E being Equivalence_Relation of A st R c= E
+ for a,b being set st a in A & b in A & a,b are_convertible_wrt R
+  holds [a,b] in E;
+
+theorem :: MSUALG_6:41
+ for A being non empty set, R being Relation of A
+ for a,b being Element of A holds
+  [a,b] in EqCl R iff a,b are_convertible_wrt R;
+
+theorem :: MSUALG_6:42
+ for S being non empty set, A being non-empty ManySortedSet of S
+ for R being ManySortedRelation of A
+ for s being Element of S for a,b being Element of A.s holds
+  [a,b] in (EqCl R).s iff a,b are_convertible_wrt R.s;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ mode EquationalTheory of A is
+   stable invariant MSEquivalence-like ManySortedRelation of A;
+ let R be ManySortedRelation of A;
+ func EqCl(R,A) -> MSEquivalence-like ManySortedRelation of A equals
+:: MSUALG_6:def 14
+   EqCl R;
+end;
+
+theorem :: MSUALG_6:43
+ for R being ManySortedRelation of A holds R c= EqCl(R,A);
+
+theorem :: MSUALG_6:44
+ for R being ManySortedRelation of A
+ for E being MSEquivalence-like ManySortedRelation of A
+  st R c= E holds EqCl(R,A) c= E;
+
+theorem :: MSUALG_6:45
+ for R being stable ManySortedRelation of A
+ for s being SortSymbol of S for a,b being Element of A,s
+  st a,b are_convertible_wrt R.s
+ for h being Endomorphism of A holds h.s.a, h.s.b are_convertible_wrt R.s;
+
+theorem :: MSUALG_6:46
+ for R being stable ManySortedRelation of A holds EqCl(R,A) is stable;
+
+definition
+ let S,A; let R be stable ManySortedRelation of A;
+ cluster EqCl(R,A) -> stable;
+end;
+
+theorem :: MSUALG_6:47
+ for R being invariant ManySortedRelation of A
+ for s1,s2 being SortSymbol of S for a,b being Element of A,s1
+  st a,b are_convertible_wrt R.s1
+ for t being Function st t is_e.translation_of A,s1,s2
+  holds t.a, t.b are_convertible_wrt R.s2;
+
+theorem :: MSUALG_6:48
+ for R being invariant ManySortedRelation of A holds EqCl(R,A) is invariant;
+
+definition
+ let S,A; let R be invariant ManySortedRelation of A;
+ cluster EqCl(R,A) -> invariant;
+end;
+
+theorem :: MSUALG_6:49
+ for S being non empty set, A being non-empty ManySortedSet of S
+ for R,E being ManySortedRelation of A st
+  for s being Element of S for a,b being Element of A.s
+   holds [a,b] in E.s iff a,b are_convertible_wrt R.s
+ holds E is MSEquivalence_Relation-like;
+
+theorem :: MSUALG_6:50
+ for R,E being ManySortedRelation of A st
+  for s being SortSymbol of S, a,b being Element of A,s
+   holds [a,b] in E.s iff a,b are_convertible_wrt (TRS R).s
+ holds E is EquationalTheory of A;
+
+theorem :: MSUALG_6:51
+ for S being non empty set, A being non-empty ManySortedSet of S
+ for R being ManySortedRelation of A
+ for E being MSEquivalence_Relation-like ManySortedRelation of A st R c= E
+ for s being Element of S for a,b being Element of A.s
+  st a,b are_convertible_wrt R.s
+  holds [a,b] in E.s;
+
+definition
+ let S be non empty non void ManySortedSign;
+ let A be non-empty MSAlgebra over S;
+ let R be ManySortedRelation of the Sorts of A;
+ func EqTh R -> EquationalTheory of A means
+:: MSUALG_6:def 15
+
+  R c= it &
+  for Q being EquationalTheory of A st R c= Q holds it c= Q;
+end;
+
+theorem :: MSUALG_6:52
+   for R being ManySortedRelation of A holds
+  EqCl(R,A) c= EqTh R & InvCl R c= EqTh R &
+   StabCl R c= EqTh R & TRS R c= EqTh R;
+
+theorem :: MSUALG_6:53
+   for R being ManySortedRelation of A
+ for s being SortSymbol of S, a,b being Element of A,s
+  holds [a,b] in (EqTh R).s iff a,b are_convertible_wrt (TRS R).s;
+
+theorem :: MSUALG_6:54
+   for R being ManySortedRelation of A holds EqTh R = EqCl(TRS R,A);

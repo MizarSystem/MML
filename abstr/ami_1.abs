@@ -1,0 +1,813 @@
+:: A Mathematical Model of CPU
+::  by Yatsuka Nakamura and Andrzej Trybulec
+::
+:: Received October 14, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, BOOLE, FUNCT_2, FUNCT_1, RELAT_1, FUNCOP_1, CAT_1, FUNCT_4,
+      CARD_3, TARSKI, FRAENKEL, FUNCT_3, PARTFUN1, FINSET_1, AMI_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, CARD_3,
+      RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, NAT_1, CQC_LANG, FRAENKEL, FUNCOP_1,
+      FUNCT_4, FINSEQ_1, FUNCT_3, PARTFUN1, STRUCT_0;
+ constructors CARD_3, NAT_1, CQC_LANG, CAT_2, INT_2, PARTFUN1, STRUCT_0,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, INT_1, FRAENKEL, RELAT_1, FINSET_1, RELSET_1,
+      FINSEQ_1, FUNCOP_1, FUNCT_4, CQC_LANG, STRUCT_0, XBOOLE_0, FUNCT_2,
+      MEMBERED, ZFMISC_1, ORDINAL2;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve x for set;
+
+theorem :: AMI_1:1
+   NAT <> INT;
+
+theorem :: AMI_1:2
+ for a,b being set holds 1 <> [a,b];
+
+theorem :: AMI_1:3
+   for a,b being set holds 2 <> [a,b];
+
+canceled;
+
+theorem :: AMI_1:5
+ for a,b,c,d being set st a <> b holds
+  product (a,b) --> ({c},{d}) = { (a,b) --> (c,d) };
+
+definition let IT be set;
+ attr IT is with_non-empty_elements means
+:: AMI_1:def 1
+ not {} in IT;
+end;
+
+definition
+ cluster non empty with_non-empty_elements set;
+end;
+
+definition
+ let A be non empty set;
+  cluster { A } -> with_non-empty_elements;
+ let B be non empty set;
+  cluster { A, B } -> with_non-empty_elements;
+end;
+
+definition let A,B be with_non-empty_elements set;
+ cluster A \/ B -> with_non-empty_elements;
+end;
+
+begin :: General concepts
+
+reserve N for with_non-empty_elements set;
+
+definition let N be set;
+ struct (1-sorted) AMI-Struct over N
+  (# carrier -> set,
+    Instruction-Counter -> Element of the carrier,
+    Instruction-Locations -> Subset of the carrier,
+    Instruction-Codes -> non empty set,
+    Instructions -> non empty Subset of
+     [: the Instruction-Codes, ((union N) \/ the carrier)* :],
+    Object-Kind ->
+     Function of the carrier,
+                 N \/ { the Instructions, the Instruction-Locations },
+    Execution ->
+     Function of the Instructions,
+       Funcs(product the Object-Kind, product the Object-Kind)
+  #);
+end;
+
+definition let N be set;
+ func Trivial-AMI N -> strict AMI-Struct over N means
+:: AMI_1:def 2
+
+  the carrier of it = {0,1} &
+  the Instruction-Counter of it = 0 &
+  the Instruction-Locations of it = {1} &
+  the Instruction-Codes of it = {0} &
+  the Instructions of it = {[0,{}]} &
+  the Object-Kind of it = (0,1) --> ({1},{[0,{}]}) &
+  the Execution of it = {[0,{}]} --> id product (0,1) --> ({1},{[0,{}]});
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+ attr S is void means
+:: AMI_1:def 3
+ the Instruction-Locations of S is empty;
+end;
+
+definition let N be set;
+ cluster Trivial-AMI N -> non empty non void;
+end;
+
+definition let N be set;
+ cluster non empty non void AMI-Struct over N;
+end;
+
+definition let N be set; let S be non empty AMI-Struct over N;
+ cluster the carrier of S -> non empty;
+end;
+
+definition let N be set; let S be non void AMI-Struct over N;
+ cluster the Instruction-Locations of S -> non empty;
+end;
+
+definition let N be set; let S be non empty AMI-Struct over N;
+ mode Object of S is Element of S;
+end;
+
+definition let N be set; let S be non empty non void AMI-Struct over N;
+ mode Instruction-Location of S is Element of the Instruction-Locations of S;
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+ mode Instruction of S is Element of the Instructions of S;
+ canceled;
+end;
+
+definition let N be set; let S be non empty AMI-Struct over N;
+ func IC S -> Object of S equals
+:: AMI_1:def 5
+  the Instruction-Counter of S;
+end;
+
+definition let N be set; let S be non empty AMI-Struct over N;
+ let o be Object of S;
+ func ObjectKind o ->
+  Element of N \/ { the Instructions of S, the Instruction-Locations of S }
+   equals
+:: AMI_1:def 6
+  (the Object-Kind of S).o;
+end;
+
+definition let f be Function;
+ cluster product f -> functional;
+end;
+
+definition let A be set; let B be with_non-empty_elements set;
+ let f be Function of A,B;
+ cluster product f -> non empty;
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+  mode State of S is Element of product the Object-Kind of S;
+end;
+
+definition let N be with_non-empty_elements set;
+ let S be non void AMI-Struct over N;
+ let I be Instruction of S, s be State of S;
+ func Exec(I,s) -> State of S equals
+:: AMI_1:def 7
+   ((the Execution of S).I).s;
+end;
+
+definition let N; let S be non void AMI-Struct over N;
+           let I be Instruction of S;
+ attr I is halting means
+:: AMI_1:def 8
+  for s being State of S holds Exec(I,s) = s;
+end;
+
+definition let N; let S be non void AMI-Struct over N;
+ attr S is halting means
+:: AMI_1:def 9
+  ex I being Instruction of S st I is halting &
+   for J being Instruction of S st J is halting holds I = J;
+end;
+
+reserve E for set;
+
+theorem :: AMI_1:6
+ Trivial-AMI N is halting;
+
+definition let N;
+ cluster Trivial-AMI N -> halting;
+end;
+
+definition let N;
+ cluster halting (non void AMI-Struct over N);
+end;
+
+definition let N; let S be halting (non void AMI-Struct over N);
+ func halt S -> Instruction of S means
+:: AMI_1:def 10
+  ex I being Instruction of S st I is halting & it = I;
+end;
+
+definition let N; let S be halting (non void AMI-Struct over N);
+ cluster halt S -> halting;
+end;
+
+definition let N be set; let IT be non empty AMI-Struct over N;
+ attr IT is IC-Ins-separated means
+:: AMI_1:def 11
+  ObjectKind IC IT = the Instruction-Locations of IT;
+end;
+
+definition let N be set; let IT be AMI-Struct over N;
+ attr IT is data-oriented means
+:: AMI_1:def 12
+    (the Object-Kind of IT)"{ the Instructions of IT }
+     c= the Instruction-Locations of IT;
+end;
+
+definition let N be with_non-empty_elements set;
+ let IT be non empty non void AMI-Struct over N;
+ attr IT is steady-programmed means
+:: AMI_1:def 13
+  for s being State of IT, i being Instruction of IT,
+      l being Instruction-Location of IT
+   holds Exec(i,s).l = s.l;
+end;
+
+definition let N be set; let IT be non empty non void AMI-Struct over N;
+ attr IT is definite means
+:: AMI_1:def 14
+  for l being Instruction-Location of IT holds
+   ObjectKind l = the Instructions of IT;
+end;
+
+theorem :: AMI_1:7
+ Trivial-AMI E is IC-Ins-separated;
+
+theorem :: AMI_1:8
+ Trivial-AMI E is data-oriented;
+
+theorem :: AMI_1:9
+ for s1, s2 being State of Trivial-AMI E holds s1=s2;
+
+theorem :: AMI_1:10
+ Trivial-AMI N is steady-programmed;
+
+theorem :: AMI_1:11
+ Trivial-AMI E is definite;
+
+definition let E be set;
+  cluster Trivial-AMI E -> data-oriented;
+end;
+
+definition let E be set;
+  cluster Trivial-AMI E -> IC-Ins-separated definite;
+end;
+
+definition let N be with_non-empty_elements set;
+  cluster Trivial-AMI N -> steady-programmed;
+end;
+
+definition let E be set;
+ cluster data-oriented strict AMI-Struct over E;
+end;
+
+definition let M be set;
+ cluster IC-Ins-separated data-oriented definite strict
+              (non empty non void AMI-Struct over M);
+end;
+
+definition let N;
+ cluster IC-Ins-separated data-oriented halting steady-programmed definite
+         strict (non empty non void AMI-Struct over N);
+end;
+
+definition let N be with_non-empty_elements set;
+  let S be IC-Ins-separated (non empty non void AMI-Struct over N);
+ let s be State of S;
+ func IC s -> Instruction-Location of S equals
+:: AMI_1:def 15
+  s.IC S;
+end;
+
+begin :: Preliminaries
+
+reserve x,y,z,A,B for set,
+        f,g,h for Function,
+        i,j,k for Nat;
+
+canceled;
+
+theorem :: AMI_1:13
+ for f being Function holds pr1(dom f,rng f).:f = dom f;
+
+theorem :: AMI_1:14
+ f tolerates g & [x,y] in f & [x,z] in g implies y = z;
+
+theorem :: AMI_1:15
+ (for x st x in A holds x is Function) &
+ (for f,g being Function st f in A & g in A holds f tolerates g)
+  implies union A is Function;
+
+theorem :: AMI_1:16
+ dom f c= A \/ B implies f|A +* f|B = f;
+
+canceled;
+
+theorem :: AMI_1:18
+ for x1,x2,y1,y2 being set holds
+   (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2);
+
+theorem :: AMI_1:19
+ for x,y holds x .--> y = {[x,y]};
+
+theorem :: AMI_1:20
+ for a,b,c being set holds (a,a) --> (b,c) = a .--> c;
+
+theorem :: AMI_1:21
+ for f being Function holds dom f is finite iff f is finite;
+
+theorem :: AMI_1:22
+   x in product f implies x is Function;
+
+begin :: Superproducts
+
+definition let f be Function;
+ func sproduct f -> set means
+:: AMI_1:def 16
+ x in it iff ex g st x = g & dom g c= dom f &
+     for x st x in dom g holds g.x in f.x;
+end;
+
+definition let f be Function;
+ cluster sproduct f -> functional non empty;
+end;
+
+canceled 2;
+
+theorem :: AMI_1:25
+ g in sproduct f implies dom g c= dom f &
+   for x st x in dom g holds g.x in f.x;
+
+theorem :: AMI_1:26
+ {} in sproduct f;
+
+theorem :: AMI_1:27
+ product f c= sproduct f;
+
+theorem :: AMI_1:28
+ x in sproduct f implies x is PartFunc of dom f, union rng f;
+
+theorem :: AMI_1:29
+ g in product f & h in sproduct f implies g +* h in product f;
+
+theorem :: AMI_1:30
+ product f <> {} implies
+ (g in sproduct f iff ex h st h in product f & g <= h);
+
+theorem :: AMI_1:31
+ sproduct f c= PFuncs(dom f,union rng f);
+
+theorem :: AMI_1:32
+ f c= g implies sproduct f c= sproduct g;
+
+theorem :: AMI_1:33
+  sproduct {} = {{}};
+
+theorem :: AMI_1:34
+    PFuncs(A,B) = sproduct (A --> B);
+
+theorem :: AMI_1:35
+   for A, B being non empty set
+ for f being Function of A,B
+  holds sproduct f = sproduct(f|{x where x is Element of A: f.x <> {} });
+
+theorem :: AMI_1:36
+ x in dom f & y in f.x implies x .--> y in sproduct f;
+
+theorem :: AMI_1:37
+   sproduct f = {{}} iff for x st x in dom f holds f.x = {};
+
+theorem :: AMI_1:38
+ A c= sproduct f &
+ (for h1,h2 being Function st h1 in A & h2 in A holds h1 tolerates h2)
+ implies union A in sproduct f;
+
+theorem :: AMI_1:39
+   g tolerates h & g in sproduct f & h in sproduct f
+  implies g \/ h in sproduct f;
+
+theorem :: AMI_1:40
+ g c= h & h in sproduct f implies g in sproduct f;
+
+theorem :: AMI_1:41
+ g in sproduct f implies g|A in sproduct f;
+
+theorem :: AMI_1:42
+ g in sproduct f implies g|A in sproduct f|A;
+
+theorem :: AMI_1:43
+   h in sproduct(f+*g) implies
+  ex f',g' being Function st f' in sproduct f & g' in sproduct g & h = f'+*g';
+
+theorem :: AMI_1:44
+ for f',g' being Function st dom g misses dom f' \ dom g' &
+  f' in sproduct f & g' in sproduct g
+ holds f'+*g' in sproduct(f+*g);
+
+theorem :: AMI_1:45
+   for f',g' being Function st dom f' misses dom g \ dom g' &
+  f' in sproduct f & g' in sproduct g
+ holds f'+*g' in sproduct(f+*g);
+
+theorem :: AMI_1:46
+ g in sproduct f & h in sproduct f
+  implies g +* h in sproduct f;
+
+theorem :: AMI_1:47
+   for x1,x2,y1,y2 being set holds
+  x1 in dom f & y1 in f.x1 & x2 in dom f & y2 in f.x2
+   implies (x1,x2)-->(y1,y2) in sproduct f;
+
+begin :: General theory
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let s be State of S;
+ func CurInstr s -> Instruction of S equals
+:: AMI_1:def 17
+ s.IC s;
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let s be State of S;
+ func Following s -> State of S equals
+:: AMI_1:def 18
+ Exec(CurInstr s,s);
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let s be State of S;
+ func Computation s -> Function of NAT, product the Object-Kind of S
+  means
+:: AMI_1:def 19
+
+  it.0 = s &
+  for i holds it.(i+1) = Following(it.i);
+end;
+
+definition let N; let S be non void AMI-Struct over N;
+ let f be Function of NAT, product the Object-Kind of S;
+ let k;
+ redefine func f.k -> State of S;
+end;
+
+definition let N;
+ let S be halting IC-Ins-separated definite
+       (non empty non void AMI-Struct over N);
+ let IT be State of S;
+ attr IT is halting means
+:: AMI_1:def 20
+ ex k st CurInstr((Computation IT).k) = halt S;
+end;
+
+definition let N be set; let IT be AMI-Struct over N;
+ attr IT is realistic means
+:: AMI_1:def 21
+ the Instructions of IT <> the Instruction-Locations of IT;
+end;
+
+theorem :: AMI_1:48
+ for S being IC-Ins-separated definite (non empty non void AMI-Struct over E)
+  st S is realistic holds
+  not ex l being Instruction-Location of S st IC S = l;
+
+ reserve
+   S for IC-Ins-separated definite (non empty non void AMI-Struct over N),
+   s for State of S;
+
+canceled 2;
+
+theorem :: AMI_1:51
+ for k holds
+ (Computation s).(i+k) = (Computation (Computation s).i).k;
+
+theorem :: AMI_1:52
+ i <= j implies
+  for N for S being
+   halting IC-Ins-separated definite (non empty non void AMI-Struct over N)
+  for s being State of S st CurInstr((Computation s).i) = halt S
+   holds (Computation s).j = (Computation s).i;
+
+definition let N;
+ let S be halting IC-Ins-separated definite
+     (non empty non void AMI-Struct over N);
+ let s be State of S such that
+ s is halting;
+ func Result s -> State of S means
+:: AMI_1:def 22
+  ex k st it = (Computation s).k & CurInstr(it) = halt S;
+end;
+
+theorem :: AMI_1:53
+   for S being steady-programmed
+  IC-Ins-separated definite (non empty non void AMI-Struct over N)
+ for s being State of S, i be Instruction-Location of S
+  holds s.i = (Following s).i;
+
+definition let N; let S be definite (non empty non void AMI-Struct over N);
+ let s be State of S, l be Instruction-Location of S;
+ redefine func s.l -> Instruction of S;
+end;
+
+theorem :: AMI_1:54
+ for S being steady-programmed IC-Ins-separated definite
+   (non empty non void AMI-Struct over N)
+ for s being State of S, i be Instruction-Location of S, k
+  holds s.i = (Computation s).k.i;
+
+theorem :: AMI_1:55
+   for S being steady-programmed IC-Ins-separated definite
+    (non empty non void AMI-Struct over N)
+ for s being State of S
+  holds (Computation s).(k+1)
+    = Exec(s.(IC (Computation s).k),(Computation s).k);
+
+theorem :: AMI_1:56
+ for S being steady-programmed IC-Ins-separated
+ halting definite (non empty non void AMI-Struct over N)
+ for s being State of S, k st s.IC (Computation s).k = halt S
+  holds Result s = (Computation s).k;
+
+theorem :: AMI_1:57
+   for S being steady-programmed IC-Ins-separated
+ halting definite (non empty non void AMI-Struct over N)
+ for s being State of S st
+   ex k st s.IC (Computation s).k = halt S
+ for i holds Result s = Result (Computation s).i;
+
+definition let N;
+  let S be non empty non void AMI-Struct over N, o be Object of S;
+  cluster ObjectKind o -> non empty;
+end;
+
+begin :: Finite substates
+
+definition let N be set; let S be AMI-Struct over N;
+ func FinPartSt S -> Subset of sproduct the Object-Kind of S equals
+:: AMI_1:def 23
+    { p where p is Element of sproduct the Object-Kind of S: p is finite };
+end;
+
+definition let N be set; let S be AMI-Struct over N;
+ mode FinPartState of S -> Element of sproduct the Object-Kind of S means
+:: AMI_1:def 24
+ it is finite;
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let IT be FinPartState of S;
+ attr IT is autonomic means
+:: AMI_1:def 25
+  for s1,s2 being State of S st IT c= s1 & IT c= s2
+   for i holds (Computation s1).i|dom IT = (Computation s2).i|dom IT;
+end;
+
+definition let N;
+ let S be halting IC-Ins-separated definite
+     (non empty non void AMI-Struct over N);
+ let IT be FinPartState of S;
+ attr IT is halting means
+:: AMI_1:def 26
+  for s being State of S st IT c= s holds s is halting;
+end;
+
+definition let N;
+ let IT be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ attr IT is programmable means
+:: AMI_1:def 27
+ ex s being FinPartState of IT st s is non empty autonomic;
+end;
+
+theorem :: AMI_1:58
+ for S being IC-Ins-separated definite (non empty non void AMI-Struct over N)
+ for A,B being set, la,lb being Object of S st
+  ObjectKind la = A & ObjectKind lb = B
+ for a being Element of A, b being Element of B holds
+  (la,lb) --> (a,b) is FinPartState of S;
+
+theorem :: AMI_1:59
+ for S being IC-Ins-separated definite (non empty non void AMI-Struct over N)
+ for A being set, la being Object of S st ObjectKind la = A
+ for a being Element of A holds la .--> a is FinPartState of S;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let la be Object of S;
+ let a be Element of ObjectKind la;
+ redefine func la .--> a -> FinPartState of S;
+end;
+
+definition let N;
+ let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let la,lb be Object of S;
+ let a be Element of ObjectKind la,
+     b be Element of ObjectKind lb;
+ redefine func (la,lb) --> (a,b) -> FinPartState of S;
+end;
+
+theorem :: AMI_1:60
+ Trivial-AMI E is realistic;
+
+theorem :: AMI_1:61
+ Trivial-AMI N is programmable;
+
+definition let E;
+  cluster Trivial-AMI E -> realistic;
+end;
+
+definition let N;
+  cluster Trivial-AMI N -> programmable;
+end;
+
+definition let E;
+ cluster data-oriented realistic strict AMI-Struct over E;
+end;
+
+definition let M be set;
+ cluster data-oriented realistic strict IC-Ins-separated
+ definite (non empty non void AMI-Struct over M);
+end;
+
+definition let N;
+ cluster data-oriented halting steady-programmed realistic programmable
+         strict (IC-Ins-separated definite
+         (non empty non void AMI-Struct over N));
+end;
+
+theorem :: AMI_1:62
+ for S being non void AMI-Struct over N,
+     s being State of S, p being FinPartState of S
+  holds s|dom p is FinPartState of S;
+
+theorem :: AMI_1:63
+for N being set for S being AMI-Struct over N holds {} is FinPartState of S;
+
+definition let N;
+ let S be programmable
+  (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+ cluster non empty autonomic FinPartState of S;
+end;
+
+definition let N be set;
+ let S be AMI-Struct over N;
+ let f,g be FinPartState of S;
+ redefine func f +* g -> FinPartState of S;
+end;
+
+begin :: Preprograms
+
+theorem :: AMI_1:64
+for S being halting realistic IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+for loc being Instruction-Location of S
+for l being Element of ObjectKind IC S st l = loc
+for h being Element of ObjectKind loc st h = halt S
+for s being State of S st (IC S,loc) --> (l, h) c= s
+ holds CurInstr s = halt S;
+
+theorem :: AMI_1:65
+for S being halting realistic IC-Ins-separated definite
+   (non empty non void AMI-Struct over N)
+for loc being Instruction-Location of S
+for l being Element of ObjectKind IC S st l = loc
+for h being Element of ObjectKind loc st h = halt S
+ holds (IC S,loc) --> (l, h) is halting;
+
+theorem :: AMI_1:66
+for S being realistic halting IC-Ins-separated definite
+ (non empty non void AMI-Struct over N)
+for loc being Instruction-Location of S
+for l being Element of ObjectKind IC S st l = loc
+for h being Element of ObjectKind loc st h = halt S
+for s being State of S st (IC S,loc) --> (l, h) c= s
+for i holds (Computation s).i = s;
+
+theorem :: AMI_1:67
+for S be realistic halting IC-Ins-separated definite
+   (non empty non void AMI-Struct over N)
+for loc being Instruction-Location of S
+for l being Element of ObjectKind IC S st l = loc
+for h being Element of ObjectKind loc st h = halt S
+ holds (IC S,loc) --> (l, h) is autonomic;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ cluster autonomic halting FinPartState of S;
+end;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ mode pre-program of S is autonomic halting FinPartState of S;
+end;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let s be FinPartState of S;
+ assume
+ s is pre-program of S;
+ func Result(s) -> FinPartState of S means
+:: AMI_1:def 28
+   for s' being State of S st s c= s' holds it = (Result s')|dom s;
+end;
+
+begin :: Computability
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let p be FinPartState of S, F be Function;
+  pred p computes F means
+:: AMI_1:def 29
+
+  for x being set st x in dom F ex s being FinPartState of S st x = s &
+   p +* s is pre-program of S & F.s c= Result(p +* s);
+ antonym p does_not_compute F;
+end;
+
+theorem :: AMI_1:68
+ for S being realistic halting IC-Ins-separated definite
+    (non empty non void AMI-Struct over N)
+ for p being FinPartState of S
+  holds p computes {};
+
+theorem :: AMI_1:69
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for p being FinPartState of S
+  holds p is pre-program of S iff p computes {} .--> Result(p);
+
+theorem :: AMI_1:70
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for p being FinPartState of S
+  holds p is pre-program of S iff p computes {} .--> {};
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+    (non empty non void AMI-Struct over N);
+ let IT be PartFunc of FinPartSt S, FinPartSt S;
+ attr IT is computable means
+:: AMI_1:def 30
+ ex p being FinPartState of S st p computes IT;
+end;
+
+theorem :: AMI_1:71
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {}
+  holds F is computable;
+
+theorem :: AMI_1:72
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> {}
+  holds F is computable;
+
+theorem :: AMI_1:73
+ for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for p being pre-program of S
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> Result(p)
+  holds F is computable;
+
+definition let N;
+ let S be realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N);
+ let F be PartFunc of FinPartSt S, FinPartSt S such that
+ F is computable;
+  mode Program of F -> FinPartState of S means
+:: AMI_1:def 31
+it computes F;
+end;
+
+definition
+ let N be set, S be AMI-Struct over N;
+ mode InsType of S is Element of the Instruction-Codes of S;
+ canceled;
+end;
+
+theorem :: AMI_1:74
+   for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {}
+ for p being FinPartState of S
+  holds p is Program of F;
+
+theorem :: AMI_1:75
+   for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> {}
+ for p being pre-program of S holds p is Program of F;
+
+theorem :: AMI_1:76
+   for S being realistic halting IC-Ins-separated definite
+  (non empty non void AMI-Struct over N)
+ for p being pre-program of S
+ for F being PartFunc of FinPartSt S, FinPartSt S st F = {} .--> Result p
+  holds p is Program of F;

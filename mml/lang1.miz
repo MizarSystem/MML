@@ -1,0 +1,1025 @@
+:: Context-Free Grammar - Part 1
+::  by Patricia L. Carlson and Grzegorz Bancerek
+::
+:: Received February 21, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, FINSEQ_1, TDGROUP, BOOLE, FUNCT_1, FINSET_1, LANG1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, NAT_1, DOMAIN_1,
+      RELAT_1, STRUCT_0, RELSET_1, FUNCT_1, FINSEQ_1, FINSET_1, FUNCT_2,
+      FINSEQ_2;
+ constructors STRUCT_0, NAT_1, DOMAIN_1, FUNCT_2, FINSEQ_2, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, RELAT_1, FINSEQ_1, FINSET_1, RELSET_1, STRUCT_0, XBOOLE_0,
+      XREAL_0, ARYTM_3, ZFMISC_1;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions XBOOLE_0, TARSKI, RELAT_1, STRUCT_0;
+ theorems TARSKI, ZFMISC_1, AXIOMS, RELAT_1, FINSEQ_1, NAT_1, REAL_1, RELSET_1,
+      TREES_2, FUNCT_2, FINSEQ_3, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, RELAT_1, FUNCT_2;
+
+begin
+:: Grammar structure is introduced as triple (S, I, R) where S is
+:: a set of non-terminal and terminal symbols, I is an initial symbol,
+:: and R is a set of rules (ordered pairs).
+
+definition
+  struct(1-sorted) DTConstrStr (#
+           carrier -> set,
+           Rules -> Relation of the carrier, (the carrier)*
+         #);
+end;
+
+definition
+ cluster non empty strict DTConstrStr;
+ existence
+  proof
+    consider A being non empty set, P being Relation of A,A*;
+   take DTConstrStr(#A,P#);
+   thus the carrier of DTConstrStr(#A,P#) is non empty;
+   thus thesis;
+  end;
+end;
+
+definition
+  struct(DTConstrStr) GrammarStr (#
+           carrier -> set,
+           InitialSym -> Element of the carrier,
+           Rules -> Relation of the carrier, (the carrier)*
+         #);
+end;
+
+definition
+ cluster non empty GrammarStr;
+ existence
+  proof
+    consider A being non empty set, P being Relation of A,A*,
+             I being Element of A;
+   take GrammarStr(#A,I,P#);
+   thus the carrier of GrammarStr(#A,I,P#) is non empty;
+  end;
+end;
+
+   definition
+    let G be DTConstrStr;
+    mode Symbol of G is Element of G;
+    mode String of G is Element of (the carrier of G)*;
+   end;
+
+   definition
+    let D be set;
+    let p, q be Element of D*;
+    redefine func p^q -> Element of D*;
+     coherence
+      proof p^q is FinSequence of D; hence thesis by FINSEQ_1:def 11; end;
+   end;
+
+   definition
+    let D be set;
+    cluster empty Element of D*;
+     existence
+      proof
+         <*> D is Element of D* by FINSEQ_1:def 11;
+       hence thesis;
+      end;
+   end;
+
+   definition
+    let D be set;
+    redefine func <*> D -> empty Element of D*;
+     coherence by FINSEQ_1:def 11;
+   end;
+
+   definition
+    let D be non empty set;
+    let d be Element of D;
+    redefine func <*d*> -> Element of D*;
+     coherence
+      proof <*d*> is FinSequence of D; hence thesis by FINSEQ_1:def 11; end;
+    let e be Element of D;
+    func <*d,e*> -> Element of D*;
+     coherence
+      proof <*d,e*> = <*d*>^<*e*> by FINSEQ_1:def 9;
+       hence thesis by FINSEQ_1:def 11;
+      end;
+   end;
+
+   reserve
+      G for non empty DTConstrStr, s for Symbol of G, n,m for String of G;
+
+   definition
+      let G,s; let n be FinSequence;
+      pred s ==> n means:
+Def1:      [s,n] in the Rules of G;
+   end;
+
+   definition
+      let G;
+      func Terminals(G)->set equals:
+Def2:       { s : not ex n being FinSequence st s ==> n};
+      coherence;
+
+      func NonTerminals(G)->set equals:
+Def3:       { s : ex n being FinSequence st s ==> n};
+      coherence;
+   end;
+
+   theorem
+       Terminals(G) \/ NonTerminals(G) = the carrier of G
+     proof
+A1:     Terminals G = {s: not ex n being FinSequence st s ==> n} by Def2;
+A2:     NonTerminals G = {s: ex n being FinSequence st s ==> n} by Def3;
+      thus Terminals G \/ NonTerminals G c= the carrier of G
+        proof let a be set; assume a in Terminals G \/ NonTerminals G;
+          then a in Terminals G or a in NonTerminals G by XBOOLE_0:def 2;
+          then (ex s st a = s & not ex n being FinSequence st s ==> n) or
+          (ex s st a = s & ex n being FinSequence st s ==> n) by A1,A2;
+         hence thesis;
+        end;
+      let a be set; assume a in the carrier of G;
+      then reconsider s = a as Symbol of G;
+         not (ex n being FinSequence st s ==> n) or
+       (ex n being FinSequence st s ==> n);
+       then a in Terminals G or a in NonTerminals G by A1,A2;
+      hence thesis by XBOOLE_0:def 2;
+     end;
+
+   definition
+      let G,n,m;
+      pred n ==> m means
+          ex n1,n2,n3 being String of G, s st n = n1^<*s*>^n2
+        & m = n1^n3^n2 & s ==> n3;
+   end;
+
+  reserve
+    n1,n2,n3 for String of G;
+
+    theorem
+        s ==> n implies n1^<*s*>^n2 ==> n1^n^n2
+      proof
+::   We have to assume:
+        assume A1: s ==> n;
+::   Now we have to prove:
+::        ex n1',n2',n3' being String of G, s' st
+::        n1^<*s*>^n2 = n1'^<*s'*>^n2'
+::        & n1^n^n2 = n1'^n3'^n2' & s' => n3';
+        take n1,  :: n1' := n1
+             n2,  :: n2' := n2
+             n,   :: n3' := n
+             s;   :: s'  := s
+::   After assignment we have to show that:
+::        n1^<*s*>^n2 = n1^<*s*>^n2
+::        & n1^n^n2 = n1^n^n2 & s => n;
+        thus     :: final conclusion
+           n1^<*s*>^n2 = n1^<*s*>^n2 & n1^n^n2 = n1^n^n2 & s ==> n by A1;
+      end;
+
+    theorem Th3:
+      s ==> n implies <*s*> ==> n
+      proof
+        assume A1: s ==> n;
+        take n1 = <*>(the carrier of G), n2 = <*>(the carrier of G),
+          n3 = n, s;
+        thus <*s*> = n1^<*s*> by FINSEQ_1:47 .= n1^<*s*>^n2 by FINSEQ_1:47;
+        thus n = n1^n3 by FINSEQ_1:47 .= n1^n3^n2 by FINSEQ_1:47;
+        thus s ==> n3 by A1;
+      end;
+
+    theorem Th4:
+      <*s*> ==> n implies s ==> n
+      proof given n1,n2,n3 being String of G, t being Symbol of G such that
+A1:      <*s*> = n1^<*t*>^n2 & n = n1^n3^n2 & t ==> n3;
+          len <*s*> = 1 & len <*t*> = 1 & len (n1^<*t*>) = len n1 + len <*t*> &
+        len <*s*> = len (n1^<*t*>) + len n2 by A1,FINSEQ_1:35,57;
+        then 1+0 = 1+(len n1+len n2) by XCMPLX_1:1;
+        then len n1+len n2 = 0 by XCMPLX_1:2;
+        then len n1 = 0 & len n2 = 0 by NAT_1:23;
+        then n1 = {} & n2 = {} & {}^<*t*> = <*t*> & <*t*>^{} = <*t*> &
+        {}^n3 = n3 & n3^{} = n3 & <*s*>.1 = s & <*t*>.1 = t
+          by FINSEQ_1:25,47,57;
+       hence thesis by A1;
+      end;
+
+    theorem Th5:
+      n1 ==> n2 implies n^n1 ==> n^n2 & n1^n ==> n2^n
+      proof given m1,m2,m3 being String of G, s being Symbol of G such that
+A1:      n1 = m1^<*s*>^m2 & n2 = m1^m3^m2 & s ==> m3;
+       thus n^n1 ==> n^n2
+         proof take n^m1, m2, m3, s;
+          thus n^n1 = n^(m1^<*s*>)^m2 by A1,FINSEQ_1:45
+                   .= n^m1^<*s*>^m2 by FINSEQ_1:45;
+          thus n^n2 = n^(m1^m3)^m2 by A1,FINSEQ_1:45
+                   .= n^m1^m3^m2 by FINSEQ_1:45;
+          thus thesis by A1;
+         end;
+       take m1, m2^n, m3, s;
+       thus thesis by A1,FINSEQ_1:45;
+      end;
+
+    definition
+      let G, n, m;
+      pred m is_derivable_from n means:
+Def5:
+        ex p being FinSequence st
+          len p >= 1 & p.1 = n & p.(len p) = m &
+          for i being Nat st i >= 1 & i < len p ex a,b being
+            String of G st p.i = a & p.(i+1) = b & a ==> b;
+    end;
+
+    theorem Th6:
+      n is_derivable_from n
+      proof
+        take p = <*n*>;
+           len p = 1 & p.1 = n by FINSEQ_1:57; hence len p >= 1 &
+          p.1 = n & p.(len p) = n;
+        let i be Nat;
+        assume i >= 1 & i < len p;
+          hence thesis by FINSEQ_1:57;
+      end;
+
+    theorem Th7:
+      n ==> m implies m is_derivable_from n
+      proof
+        assume A1: n ==> m;
+        take p = <*n,m*>;
+        A2: len p = 2 & p.1 = n & p.2 = m by FINSEQ_1:61;
+          hence len p >= 1 & p.1 = n & p.(len p) = m;
+        let i be Nat;
+        assume A3: i >= 1 & i < len p;
+          2 = 1 + 1; then i <= 1 by A2,A3,NAT_1:38;
+          then A4: i = 1 by A3,AXIOMS:21;
+        take a = n, b = m;
+          thus p.i = a by A4,FINSEQ_1:61;
+          thus p.(i+1) = b by A4,FINSEQ_1:61;
+          thus a ==> b by A1;
+      end;
+
+    theorem Th8:
+      n1 is_derivable_from n2 &
+      n2 is_derivable_from n3 implies
+      n1 is_derivable_from n3
+      proof
+        given p1 being FinSequence such that
+        A1: len p1 >= 1 & p1.1 = n2 & p1.(len p1) = n1 &
+           for i being Nat st i >= 1 & i < len p1
+           ex a,b being String of G st p1.i = a & p1.(i+1) = b & a ==> b;
+        given p2 being FinSequence such that
+        A2: len p2 >= 1 & p2.1 = n3 & p2.(len p2) = n2 &
+           for i being Nat st i >= 1 & i < len p2
+           ex a,b being String of G st p2.i = a & p2.(i+1) = b & a ==> b;
+          len p2 <> 0 by A2;
+        then p2 <> {} by FINSEQ_1:25;
+        then consider q being FinSequence, x being set such that
+        A3: p2 = q^<*x*> by FINSEQ_1:63;
+        take p = q^p1;
+         len <*x*> = 1 by FINSEQ_1:57;
+        then A4: len p = len q+len p1 & len p2 = len q + 1 &
+           dom q = dom q & dom p2 = dom p2 & dom p1 = dom p1
+           by A3,FINSEQ_1:35;
+        then len p >= 1+len q & 1+len q >= 1 by A1,NAT_1:29,REAL_1:55;
+        hence len p >= 1 by AXIOMS:22;
+           now per cases;
+          suppose q = {};
+           then p2 = <*x*> & p = p1 by A3,FINSEQ_1:47;
+           hence p.1 = n3 by A1,A2,FINSEQ_1:57;
+          suppose q <> {};
+           then len q <> 0 & len q >= 0 by FINSEQ_1:25,NAT_1:18;
+           then len q > 0 & 0+1 = 1;
+           then len q >= 1 by NAT_1:38;
+           then 1 in dom q by FINSEQ_3:27;
+           then p.1 = q.1 & q.1 = p2.1 by A3,FINSEQ_1:def 7;
+           hence p.1 = n3 by A2;
+         end;
+        hence p.1 = n3;
+          len p1 in dom p1 by A1,FINSEQ_3:27;
+        hence p.(len p) = n1 by A1,A4,FINSEQ_1:def 7;
+        let i be Nat such that A5: i >= 1 & i < len p;
+           now per cases by AXIOMS:21;
+          suppose A6: i+1 = len p2;
+           then A7: i = len q & i < len p2 by A4,NAT_1:38,XCMPLX_1:2;
+           then consider a,b being String of G such that
+           A8: p2.i = a & p2.(i+1) = b & a ==> b by A2,A5;
+           take a, b;
+             1 in dom p1 & i in dom q by A1,A5,A7,FINSEQ_3:27;
+           then p.(i+1) = p1.1 & p2.i = q.i & q.i = p.i
+                by A3,A4,A6,FINSEQ_1:def 7;
+           hence p.i = a & p.(i+1) = b & a ==> b by A1,A2,A6,A8;
+          suppose i+1 > len p2;
+           then i >= len p2 & i+1 <= len p by A5,NAT_1:38;
+           then consider j being Nat such that
+           A9: i = len p2 + j by NAT_1:28;
+           A10: i = len q +(1+j) & 1+j >= 1 by A4,A9,NAT_1:29,XCMPLX_1:1;
+           then A11: 1+j < len p1 by A4,A5,AXIOMS:24;
+           then consider a,b being String of G such that
+           A12: p1.(1+j) = a & p1.(1+j+1) = b & a ==> b by A1,A10;
+           take a, b;
+           A13: 1+j+1 = 1+(1+j) & i+1 = len q +(1+j+1)
+            by A10,XCMPLX_1:1;
+             1+j <= len p1 & 1+j+1 <= len p1 & 1+j+1 >= 1
+                by A11,NAT_1:29,38;
+           then 1+j in dom p1 & 1+j+1 in dom p1 by A10,FINSEQ_3:27;
+           hence p.i = a & p.(i+1) = b & a ==> b
+                 by A10,A12,A13,FINSEQ_1:def 7;
+          suppose A14: i+1 < len p2;
+           then i < len p2 by NAT_1:38;
+           then consider a,b being String of G such that
+           A15: p2.i = a & p2.(i+1) = b & a ==> b by A2,A5;
+           take a, b;
+             i <= len q & i+1 <= len q & 1 <= 1+i & i+1 = 1+i
+                by A4,A14,AXIOMS:24,NAT_1:29,38;
+           then i in dom q & i+1 in dom q by A5,FINSEQ_3:27;
+           then p.i = q.i & q.i = p2.i &
+                p.(i+1) = q.(i+1) & q.(i+1) = p2.(i+1) by A3,FINSEQ_1:def 7;
+           hence p.i = a & p.(i+1) = b & a ==> b by A15;
+         end;
+        hence thesis;
+      end;
+
+
+    :: Define language
+
+    definition
+      let G be non empty GrammarStr;
+      func Lang(G)->set equals:
+Def6:  {a where a is Element of (the carrier of G)*:
+        rng a c= Terminals(G) & a is_derivable_from <*the InitialSym of G*>};
+      coherence;
+    end;
+
+
+    theorem
+       for G being non empty GrammarStr, n being String of G holds
+      n in Lang(G) iff
+      rng n c= Terminals(G) & n is_derivable_from <*the InitialSym of G*>
+       proof let G be non empty GrammarStr, n be String of G;
+A1:       Lang(G) = {a where a is Element of
+            (the carrier of G)*: rng a c= Terminals(G)
+            & a is_derivable_from <*the InitialSym of G*>} by Def6;
+              now assume n in Lang G;
+             then ex a being Element of (the carrier of G)* st
+              n = a & rng a c= Terminals(G) &
+               a is_derivable_from <*the InitialSym of G*> by A1;
+             hence rng n c= Terminals(G) &
+                  n is_derivable_from <*the InitialSym of G*>;
+            end;
+        hence thesis by A1;
+       end;
+
+:: GrammarStr(#{a},a,{[a,{}{a}]}#)             -> Lang = {{}}
+:: GrammarStr(#{a,b},a,{[a,<*b*>]}#)            -> Lang = {b}
+:: GrammarStr(#{a,b},a,{[a,{}{a}],[a,<*a,b*>]}#) -> Lang = {{}, b, bb, ...}
+:: GrammarStr(#{a,b,c},a,{[a,<*b*>}],[a,<*c*>]}#) -> Lang = {b, c}
+
+definition
+ let D,E be non empty set, a be Element of [:D,E:];
+ redefine func {a} -> Relation of D,E;
+  coherence
+   proof {a} c= [:D,E:];
+    hence thesis by RELSET_1:def 1;
+   end;
+ let b be Element of [:D,E:];
+ func {a,b} -> Relation of D,E;
+  coherence
+   proof {a,b} c= [:D,E:];
+    hence thesis by RELSET_1:def 1;
+   end;
+end;
+
+definition
+ let a be set;
+ func EmptyGrammar a -> strict GrammarStr means:
+Def7:   the carrier of it = {a} & the Rules of it = {[a,{}]};
+  existence
+   proof
+    reconsider S = a as Element of {a} by TARSKI:def 1;
+    take GrammarStr(#{a}, S, {[S,<*>{a}]}#);
+    thus thesis;
+   end;
+  uniqueness
+   proof let G1, G2 be strict GrammarStr such that
+A1:  the carrier of G1 = {a} & the Rules of G1 = {[a,{}]} and
+A2:  the carrier of G2 = {a} & the Rules of G2 = {[a,{}]};
+       the InitialSym of G1 = a & the InitialSym of G2 = a &
+     G1 = GrammarStr
+      (#the carrier of G1, the InitialSym of G1, the Rules of G1#) &
+     G2 = GrammarStr
+      (#the carrier of G2, the InitialSym of G2, the Rules of G2#)
+       by A1,A2,TARSKI:def 1;
+    hence thesis by A1,A2;
+   end;
+ let b be set;
+ func SingleGrammar(a,b) -> strict GrammarStr means:
+Def8:   the carrier of it = {a,b} & the InitialSym of it = a &
+      the Rules of it = {[a,<*b*>]};
+  existence
+   proof
+    reconsider S = a, x = b as Element of {a,b} by TARSKI:def 2;
+    take GrammarStr(#{a,b}, S, {[S,<*x*>]}#);
+    thus thesis;
+   end;
+  uniqueness;
+ func IterGrammar(a,b) -> strict GrammarStr means:
+Def9:   the carrier of it = {a,b} & the InitialSym of it = a &
+      the Rules of it = {[a,<*b,a*>],[a,{}]};
+  existence
+   proof
+    reconsider S = a, x = b as Element of {a,b} by TARSKI:def 2;
+    take GrammarStr(#{a,b}, S, {[S,<*x,S*>], [S,<*>{a,b}]}#);
+    thus thesis;
+   end;
+  uniqueness;
+end;
+
+definition
+ let a be set;
+ cluster EmptyGrammar a -> non empty;
+ coherence
+  proof
+      the carrier of EmptyGrammar a = {a} by Def7;
+   hence the carrier of EmptyGrammar a is non empty;
+  end;
+ let b be set;
+ cluster SingleGrammar(a,b) -> non empty;
+ coherence
+  proof
+      the carrier of SingleGrammar(a,b) = {a,b} by Def8;
+   hence the carrier of SingleGrammar(a,b) is non empty;
+  end;
+ cluster IterGrammar(a,b) -> non empty;
+ coherence
+  proof
+      the carrier of IterGrammar(a,b) = {a,b} by Def9;
+   hence the carrier of IterGrammar(a,b) is non empty;
+  end;
+end;
+
+definition let D be non empty set;
+ func TotalGrammar D -> strict GrammarStr means:
+Def10:   the carrier of it = D \/ {D} & the InitialSym of it = D &
+       the Rules of it = {[D,<*d,D*>] where d is Element of D: d = d} \/
+        {[D,{}]};
+  existence
+   proof A1: D in {D} by TARSKI:def 1;
+    reconsider E = D \/ {D} as non empty set;
+    reconsider S = D as Element of E by A1,XBOOLE_0:def 2;
+    set R = {[S,<*d,S*>] where d is Element of D: d = d};
+       R c= [:E,E*:]
+      proof let a be set; assume a in R;
+       then consider d being Element of D such that
+A2:      a = [S,<*d,S*>] & d = d;
+        reconsider d as Element of E by XBOOLE_0:def 2;
+          a = [S,<*d,S*>] by A2;
+       hence thesis;
+      end;
+    then reconsider R as Relation of E, E* by RELSET_1:def 1;
+    take GrammarStr(#E, S, R \/ {[S,<*>E]}#);
+    thus thesis;
+   end;
+  uniqueness;
+end;
+
+definition let D be non empty set;
+ cluster TotalGrammar D -> non empty;
+ coherence
+  proof
+      the carrier of TotalGrammar D = D \/ {D} by Def10;
+   hence the carrier of TotalGrammar D is non empty;
+  end;
+end;
+
+reserve a,b,c for set, D for non empty set, d for Element of D;
+
+theorem Th10:
+ Terminals EmptyGrammar a = {}
+  proof set E = EmptyGrammar a;
+A1:  the carrier of E = {a} & the Rules of E = {[a,{}]} &
+    Terminals E = {s where s is Symbol of E:
+               not ex n being FinSequence st s ==> n} by Def2,Def7;
+    consider b being Element of Terminals E;
+   assume not thesis;
+    then b in Terminals E;
+    then consider s being Symbol of E such that
+A2:    b = s & not ex n being FinSequence st s ==> n by A1;
+        [a,{}] in the Rules of E & s = a & {} = {} the carrier of E
+       by A1,TARSKI:def 1;
+      then s ==> <*>the carrier of E by Def1;
+     hence contradiction by A2;
+  end;
+
+theorem Th11:
+ Lang EmptyGrammar a = {{}}
+  proof set E = EmptyGrammar a;
+A1:  Lang E = {p where p is String of E: rng p c= Terminals E &
+     p is_derivable_from <*the InitialSym of E*>} by Def6;
+A2:  Terminals E = {} by Th10;
+   thus Lang E c= {{}}
+     proof let b; assume b in Lang E;
+      then consider p being String of E such that
+A3:     b = p & rng p c= Terminals E &
+       p is_derivable_from <*the InitialSym of E*> by A1;
+         rng p = {} by A2,A3,XBOOLE_1:3;
+       then b = {} by A3,FINSEQ_1:27;
+      hence thesis by TARSKI:def 1;
+     end;
+A4:  the carrier of E = {a} & the Rules of E = {[a,{}]} by Def7;
+   let b; assume b in {{}};
+then A5:  [a,{}] in the Rules of E & b = {} & {} = {} the carrier of E &
+    a = the InitialSym of E & rng {} = {} by A4,TARSKI:def 1;
+    then the InitialSym of E ==> <*> the carrier of E by Def1;
+    then <*the InitialSym of E*> ==> <*> the carrier of E by Th3;
+    then <*> the carrier of E is_derivable_from <*the InitialSym of E*> by Th7
+;
+   hence thesis by A1,A2,A5;
+  end;
+
+theorem Th12:
+ a <> b implies Terminals SingleGrammar(a,b) = {b}
+  proof assume
+A1:  a <> b;
+   set E = SingleGrammar(a,b);
+A2:  the carrier of E = {a,b} & the InitialSym of E = a &
+    the Rules of E = {[a,<*b*>]} &
+    Terminals E = {s where s is Symbol of E:
+               not ex n being FinSequence st s ==> n} by Def2,Def8;
+   then reconsider x = a, y = b as Symbol of E by TARSKI:def 2;
+      [x,<*y*>] in the Rules of E by A2,TARSKI:def 1;
+then A3:  x ==> <*y*> by Def1;
+   thus Terminals E c= {b}
+     proof let c; assume c in Terminals E;
+      then consider s being Symbol of E such that
+A4:     c = s & not ex n being FinSequence st s ==> n by A2;
+         s <> x by A3,A4;
+       then c = b by A2,A4,TARSKI:def 2;
+      hence thesis by TARSKI:def 1;
+     end;
+   let c; assume c in {b};
+then A5:  c = b by TARSKI:def 1;
+      now let n be FinSequence; assume y ==> n;
+      then [y,n] in {[a,<*b*>]} by A2,Def1;
+      then [y,n] = [a,<*b*>] by TARSKI:def 1;
+     hence contradiction by A1,ZFMISC_1:33;
+    end;
+   hence thesis by A2,A5;
+  end;
+
+theorem
+   a <> b implies Lang SingleGrammar(a,b) = {<*b*>}
+  proof assume
+A1:  a <> b;
+   set E = SingleGrammar(a,b);
+A2:  Lang E = {p where p is String of E: rng p c= Terminals E &
+     p is_derivable_from <*the InitialSym of E*>} by Def6;
+A3:  Terminals E = {b} by A1,Th12;
+A4:  the carrier of E = {a,b} & the InitialSym of E = a &
+    the Rules of E = {[a,<*b*>]} by Def8;
+   then reconsider x = a, y = b as Symbol of E by TARSKI:def 2;
+   thus Lang E c= {<*b*>}
+     proof let c; assume c in Lang E;
+      then consider p being String of E such that
+A5:     c = p & rng p c= Terminals E &
+       p is_derivable_from <*the InitialSym of E*> by A2;
+      consider q being FinSequence such that
+A6:     len q >= 1 & q.1 = <*the InitialSym of E*> & q.(len q) = p &
+       for i being Nat st i >= 1 & i < len q
+       ex a,b being String of E st q.i = a & q.(i+1) = b & a ==> b by A5,Def5;
+         now assume p = <*x*>;
+         then rng p = {x} by FINSEQ_1:55;
+         then x in rng p by TARSKI:def 1; hence contradiction by A1,A3,A5,
+TARSKI:def 1;
+       end;
+then A7:    len q > 1 by A4,A6,REAL_1:def 5;
+      then consider n, m being String of E such that
+A8:    q.1 = n & q.(1+1) = m & n ==> m by A6;
+         x ==> m by A4,A6,A8,Th4;
+       then [x,m] in {[a,<*b*>]} by A4,Def1;
+       then [x,m] = [a,<*b*>] by TARSKI:def 1;
+then A9:    m = <*b*> & 1 <= 2 by ZFMISC_1:33;
+         now assume 2 < len q;
+        then consider k, l being String of E such that
+A10:      q.2 = k & q.(2+1) = l & k ==> l by A6;
+           y ==> l by A8,A9,A10,Th4;
+         then [y,l] in {[a,<*b*>]} by A4,Def1;
+         then [y,l] = [a,<*b*>] by TARSKI:def 1;
+        hence contradiction by A1,ZFMISC_1:33;
+       end;
+       then 2 >= len q & len q >= 1+1 by A7,NAT_1:38;
+       then c = <*b*> by A5,A6,A8,A9,AXIOMS:21;
+      hence thesis by TARSKI:def 1;
+     end;
+   let c; assume c in {<*b*>};
+then A11:  [a,<*b*>] in the Rules of E & c = <*b*> & rng <*b*> = {b}
+     by A4,FINSEQ_1:55,TARSKI:def 1;
+    then the InitialSym of E ==> <*y*> by A4,Def1;
+    then <*the InitialSym of E*> ==> <*y*> by Th3;
+    then <*y*> is_derivable_from <*the InitialSym of E*> by Th7;
+   hence thesis by A2,A3,A11;
+  end;
+
+theorem Th14:
+ a <> b implies Terminals IterGrammar(a,b) = {b}
+  proof set T = IterGrammar(a,b); assume
+A1:  a <> b;
+A2:  Terminals T = {s where s is Symbol of T:
+      not ex n being FinSequence st s ==> n} by Def2;
+A3:  the carrier of T = {a,b} & the InitialSym of T = a &
+    the Rules of T = {[a,<*b,a*>],[a,{}]} by Def9;
+   then reconsider x = a, y = b as Symbol of T by TARSKI:def 2;
+   thus Terminals T c= {b}
+     proof let c; assume c in Terminals T;
+      then consider s being Symbol of T such that
+A4:     c = s & not ex n being FinSequence st s ==> n by A2;
+         [a,<*b,a*>] in the Rules of T by A3,TARSKI:def 2;
+       then x ==> <*y,x*> by Def1;
+       then s <> x by A4; then c = b by A3,A4,TARSKI:def 2;
+      hence thesis by TARSKI:def 1;
+     end;
+   let c; assume c in {b};
+then A5:  b = c by TARSKI:def 1;
+   assume not thesis;
+   then consider n being FinSequence such that
+A6:  y ==> n by A2,A5;
+      [a,<*b,a*>] <> [b,n] & [a,{}] <> [b,n] by A1,ZFMISC_1:33;
+    then not [b,n] in {[a,<*b,a*>],[a,{}]} by TARSKI:def 2;
+   hence thesis by A3,A6,Def1;
+  end;
+
+theorem
+   a <> b implies Lang IterGrammar(a,b) = {b}*
+  proof set T = IterGrammar(a,b); assume
+A1:  a <> b;
+A2:  Lang T = {p where p is String of T: rng p c= Terminals T &
+       p is_derivable_from <*the InitialSym of T*>} by Def6;
+A3:  Terminals T = {b} by A1,Th14;
+   thus Lang T c= {b}*
+     proof let a; assume a in Lang T;
+      then consider p being String of T such that
+A4:     a = p & rng p c= Terminals T &
+       p is_derivable_from <*the InitialSym of T*> by A2;
+         p is FinSequence of {b} by A3,A4,FINSEQ_1:def 4;
+      hence thesis by A4,FINSEQ_1:def 11;
+     end;
+A5:  the carrier of T = {a,b} & the InitialSym of T = a &
+    the Rules of T = {[a,<*b,a*>],[a,{}]} by Def9;
+   set I = <*the InitialSym of T*>;
+   defpred X[Nat] means for p being String of T st len p = $1 & p in {b}* holds
+      p^I is_derivable_from I;
+A6: X[0]
+     proof let p be String of T; assume len p = 0;
+       then p = {} by FINSEQ_1:25; then p^I = I by FINSEQ_1:47;
+      hence thesis by Th6;
+     end;
+A7:  for k being Nat st X[k] holds X[k+1]
+    proof let k be Nat such that
+A8:   for p being String of T st len p = k & p in {b}* holds
+        p^I is_derivable_from I;
+     let p be String of T; assume
+A9:   len p = k+1 & p in {b}*;
+     then consider q being FinSequence, c such that
+A10:   p = q^<*c*> & len q = k by TREES_2:4;
+        p is FinSequence of {b} by A9,FINSEQ_1:def 11;
+then A11:   q is FinSequence of the carrier of T & q is FinSequence of {b} &
+      <*c*> is FinSequence of the carrier of T & <*c*> is FinSequence of {b} &
+      rng <*c*> = {c} by A10,FINSEQ_1:50,55;
+     then reconsider q as String of T by FINSEQ_1:def 11;
+        q in {b}* by A11,FINSEQ_1:def 11;
+then A12:   q^I is_derivable_from I by A8,A10;
+A13:   {c} c= {b} & {c} c= the carrier of T by A11,FINSEQ_1:def 4;
+     then reconsider c as Element of {b} by ZFMISC_1:37;
+     reconsider x = c as Symbol of T by A13,ZFMISC_1:37;
+        [a,<*b,a*>] in the Rules of T & c = b by A5,TARSKI:def 1,def 2
+;
+      then the InitialSym of T ==> <*x,the InitialSym of T*> by A5,Def1;
+      then I ==> <*x,the InitialSym of T*> by Th3;
+      then q^I ==>
+ q^<*x,the InitialSym of T*> & <*x,the InitialSym of T*> = <*x*>^I
+       by Th5,FINSEQ_1:def 9;
+      then q^I ==> p^I by A10,FINSEQ_1:45;
+      then p^I is_derivable_from q^I by Th7;
+     hence p^I is_derivable_from I by A12,Th8;
+    end;
+A14:  for k being Nat holds X[k] from Ind(A6,A7);
+   let c; assume
+A15:  c in {b}*;
+   then reconsider c as FinSequence of {b} by FINSEQ_1:def 11;
+A16:  rng c c= {b} & {b} c= {a,b} by FINSEQ_1:def 4,ZFMISC_1:12;
+    then rng c c= {a,b} by XBOOLE_1:1;
+    then c is FinSequence of the carrier of T by A5,FINSEQ_1:def 4;
+   then reconsider n = c as String of T by FINSEQ_1:def 11;
+      len n = len n;
+then A17:  n^I is_derivable_from I by A14,A15;
+A18:  {} = {} the carrier of T & n^{} = n by FINSEQ_1:47;
+      [a,{}] in the Rules of T by A5,TARSKI:def 2;
+    then the InitialSym of T ==> <*> the carrier of T by A5,Def1;
+    then I ==> <*> the carrier of T by Th3;
+    then n^I ==> n by A18,Th5;
+    then n is_derivable_from n^I by Th7;
+    then n is_derivable_from I by A17,Th8;
+   hence thesis by A2,A3,A16;
+  end;
+
+theorem Th16:
+ Terminals TotalGrammar D = D
+  proof set T = TotalGrammar D;
+A1:  Terminals T = {s where s is Symbol of T:
+      not ex n being FinSequence st s ==> n} by Def2;
+A2:  the carrier of T = D \/ {D} & the InitialSym of T = D &
+    the Rules of T = {[D,<*d,D*>] where d is Element of D: d = d} \/ {[D,{}]}
+      by Def10;
+   thus Terminals T c= D
+     proof let a; assume a in Terminals T;
+      then consider s being Symbol of T such that
+A3:     a = s & not ex n being FinSequence st s ==> n by A1;
+         [D,{}] in {[D,{}]} & D in {D} by TARSKI:def 1;
+then A4:     [D,{}] in the Rules of T & D in D \/ {D} by A2,XBOOLE_0:def 2;
+      reconsider b = D as Symbol of T by Def10;
+         b ==> <*> the carrier of T by A4,Def1;
+       then s <> D by A3; then not s in {D} by TARSKI:def 1;
+      hence thesis by A2,A3,XBOOLE_0:def 2;
+     end;
+   let a; assume a in D; then reconsider a as Element of D;
+   reconsider x = a as Symbol of T by A2,XBOOLE_0:def 2;
+   assume not thesis;
+   then consider n being FinSequence such that
+A5:  x ==> n by A1;
+A6:  not a in a;
+    then a <> D;
+    then [a,n] <> [D,{}] by ZFMISC_1:33;
+    then [a,n] in the Rules of T & not [a,n] in {[D,{}]} by A5,Def1,TARSKI:def
+1
+;
+    then [a,n] in {[D,<*d,D*>]: d = d} by A2,XBOOLE_0:def 2;
+   then ex d st [a,n] = [D,<*d,D*>] & d = d;
+    then a = D by ZFMISC_1:33;
+   hence thesis by A6;
+  end;
+
+theorem
+   Lang TotalGrammar D = D*
+  proof set T = TotalGrammar D;
+A1:  Lang T = {p where p is String of T: rng p c= Terminals T &
+       p is_derivable_from <*the InitialSym of T*>} by Def6;
+A2:  Terminals T = D by Th16;
+   thus Lang T c= D*
+     proof let a; assume a in Lang T;
+      then consider p being String of T such that
+A3:     a = p & rng p c= Terminals T &
+       p is_derivable_from <*the InitialSym of T*> by A1;
+         p is FinSequence of D by A2,A3,FINSEQ_1:def 4;
+      hence thesis by A3,FINSEQ_1:def 11;
+     end;
+A4:  the carrier of T = D \/ {D} & the InitialSym of T = D &
+    the Rules of T = {[D,<*d,D*>] where d is Element of D: d = d} \/ {[D,{}]}
+      by Def10;
+   set I = <*the InitialSym of T*>;
+   defpred X[Nat] means for p being String of T st len p = $1 & p in D* holds
+      p^I is_derivable_from I;
+A5: X[0]
+     proof let p be String of T; assume len p = 0;
+       then p = {} by FINSEQ_1:25; then p^I = I by FINSEQ_1:47;
+      hence thesis by Th6;
+     end;
+A6:  for k being Nat st X[k] holds X[k+1]
+    proof let k be Nat such that
+A7:   for p being String of T st len p = k & p in D* holds
+        p^I is_derivable_from I;
+     let p be String of T; assume
+A8:   len p = k+1 & p in D*;
+     then consider q being FinSequence, a such that
+A9:   p = q^<*a*> & len q = k by TREES_2:4;
+        p is FinSequence of D by A8,FINSEQ_1:def 11;
+then A10:   q is FinSequence of the carrier of T & q is FinSequence of D &
+      <*a*> is FinSequence of the carrier of T & <*a*> is FinSequence of D&
+      rng <*a*> = {a} by A9,FINSEQ_1:50,55;
+     then reconsider q as String of T by FINSEQ_1:def 11;
+        q in D* by A10,FINSEQ_1:def 11;
+then A11:   q^I is_derivable_from I by A7,A9;
+A12:   {a} c= D & {a} c= the carrier of T by A10,FINSEQ_1:def 4;
+     then reconsider a as Element of D by ZFMISC_1:37;
+     reconsider x = a as Symbol of T by A12,ZFMISC_1:37;
+        [D,<*a,D*>] in {[D,<*d,D*>]: d = d};
+      then [D,<*a,D*>] in the Rules of T by A4,XBOOLE_0:def 2;
+      then the InitialSym of T ==> <*x,the InitialSym of T*> by A4,Def1;
+      then I ==> <*x,the InitialSym of T*> by Th3;
+      then q^I ==>
+ q^<*x,the InitialSym of T*> & <*x,the InitialSym of T*> = <*x*>^I
+       by Th5,FINSEQ_1:def 9;
+      then q^I ==> p^I by A9,FINSEQ_1:45;
+      then p^I is_derivable_from q^I by Th7;
+     hence p^I is_derivable_from I by A11,Th8;
+    end;
+A13:  for k being Nat holds X[k] from Ind(A5,A6);
+   let a; assume
+A14:  a in D*;
+   then reconsider a as FinSequence of D by FINSEQ_1:def 11;
+A15:  rng a c= D & D c= D \/ {D} by FINSEQ_1:def 4,XBOOLE_1:7;
+    then rng a c= the carrier of T by A4,XBOOLE_1:1;
+    then a is FinSequence of the carrier of T by FINSEQ_1:def 4;
+   then reconsider n = a as String of T by FINSEQ_1:def 11;
+      len n = len n;
+then A16:  n^I is_derivable_from I by A13,A14;
+A17:  {} = {} the carrier of T & n^{} = n by FINSEQ_1:47;
+      [D,{}] in {[D,{}]} by TARSKI:def 1;
+    then [D,{}] in the Rules of T by A4,XBOOLE_0:def 2;
+    then the InitialSym of T ==> <*> the carrier of T by A4,Def1;
+    then I ==> <*> the carrier of T by Th3;
+    then n^I ==> n by A17,Th5;
+    then n is_derivable_from n^I by Th7;
+    then n is_derivable_from I by A16,Th8;
+   hence thesis by A1,A2,A15;
+  end;
+
+definition let IT be non empty GrammarStr;
+ attr IT is efective means:
+Def11:
+  Lang(IT) is non empty & the InitialSym of IT in NonTerminals IT &
+  for s being Symbol of IT st s in Terminals IT
+   ex p being String of IT st p in Lang(IT) & s in rng p;
+end;
+
+definition let IT be GrammarStr;
+ attr IT is finite means
+    the Rules of IT is finite;
+end;
+
+definition
+ cluster efective finite (non empty GrammarStr);
+  existence
+   proof take G = EmptyGrammar 0;
+A1:   the carrier of G = {0} & the Rules of G = {[0,{}]} by Def7;
+    thus G is efective
+      proof
+       thus Lang(G) is non empty by Th11;
+          the InitialSym of G = 0 & {} = {} the carrier of G &
+        [0,{}] in {[0,{}]} by A1,TARSKI:def 1;
+        then the InitialSym of G ==> <*> the carrier of G &
+        NonTerminals G = {s where s is Symbol of G:
+          ex n being FinSequence st s ==> n} by A1,Def1,Def3;
+       hence the InitialSym of G in NonTerminals G;
+       thus thesis by Th10;
+      end;
+    thus the Rules of G is finite by A1;
+   end;
+end;
+
+definition
+ let G be efective (non empty GrammarStr);
+ redefine
+  func NonTerminals G -> non empty Subset of G;
+   coherence
+    proof
+A1:    NonTerminals G = {s where s is Symbol of G:
+          ex n being FinSequence st s ==> n} by Def3;
+        NonTerminals G c= the carrier of G
+       proof let a be set; assume a in NonTerminals G;
+         then ex s being Symbol of G st a = s & ex n being FinSequence st s
+==> n
+          by A1;
+        hence thesis;
+       end;
+     hence thesis by Def11;
+    end;
+end;
+
+definition
+ let X be set, Y be non empty set;
+ cluster Function-like Relation of X,Y;
+  existence
+ proof consider f being Function of X,Y;
+    f is Relation of X,Y;
+  hence thesis;
+ end;
+end;
+
+definition
+ let X,Y be non empty set, p be FinSequence of X, f be Function of X,Y;
+ redefine func f*p -> Element of Y*;
+  coherence
+   proof rng p c= X by FINSEQ_1:def 4;
+    then reconsider g = p as Function of dom p, X by FUNCT_2:def 1,RELSET_1:11;
+A1:   dom (f*g) = dom p & rng (f*g) c= Y & dom p = Seg len p
+      by FINSEQ_1:def 3,FUNCT_2:def 1,RELSET_1:12;
+     then f*g is FinSequence by FINSEQ_1:def 2;
+     then f*g is FinSequence of Y by A1,FINSEQ_1:def 4;
+    hence thesis by FINSEQ_1:def 11;
+   end;
+end;
+
+definition
+ let R be Relation;
+ func R* -> Relation means:
+Def13:
+  for x,y being set holds [x,y] in it iff x in field R & y in field R &
+   ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
+    for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
+   existence
+    proof
+      defpred X[set,set] means
+       ex p being FinSequence st len p >= 1 & p.1 = $1 & p.(len p) = $2 &
+        for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
+     thus ex S being Relation st
+      for x,y being set holds
+       [x,y] in S iff x in field R & y in field R & X[x,y]
+
+       from Rel_Existence;
+    end;
+   uniqueness
+    proof let R1,R2 be Relation such that
+A1:   for x,y being set holds [x,y] in R1 iff x in field R & y in field R &
+      ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
+      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R and
+A2:   for x,y being set holds [x,y] in R2 iff x in field R & y in field R &
+      ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
+      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
+     let x,y be set;
+     thus [x,y] in R1 implies [x,y] in R2
+       proof assume [x,y] in R1;
+         then x in field R & y in field R & ex p being FinSequence st
+         len p >= 1 & p.1 = x & p.(len p) = y &
+         for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R by A1;
+        hence [x,y] in R2 by A2;
+       end;
+     assume [x,y] in R2;
+      then x in field R & y in field R & ex p being FinSequence st
+      len p >= 1 & p.1 = x & p.(len p) = y &
+      for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R by A2;
+     hence thesis by A1;
+    end;
+end;
+
+definition
+ let X,Y be non empty set;
+ let f be Function of X,Y;
+ func f* -> Function of X*,Y* means
+     for p being Element of X* holds it.p = f*p;
+   existence
+    proof
+      deffunc U(Element of X*) = f*$1;
+     consider g being Function of X*,Y* such that
+A1:    for x being Element of X* qua non empty set holds
+       g.x = U(x) from LambdaD;
+     take g; thus thesis by A1;
+    end;
+   uniqueness
+    proof let f1,f2 be Function of X*,Y* such that
+A2:   for p being Element of X* holds f1.p = f*p and
+A3:   for p being Element of X* holds f2.p = f*p;
+        now let x be Element of X*; thus f1.x = f*x by A2 .= f2.x by A3; end;
+     hence thesis by FUNCT_2:113;
+    end;
+end;
+
+reserve R for Relation, x,y for set;
+
+theorem
+   R c= R*
+  proof let x,y; assume
+A1:  [x,y] in R;
+then A2:  x in field R & y in field R by RELAT_1:30;
+A3:  len <*x,y*> = 2 & 2 >= 1 & <*x,y*>.1 = x & <*x,y*>.2 = y by FINSEQ_1:61;
+      now let i be Nat such that
+A4:    i >= 1 & i < 2; 1+1 = 2; then i <= 1 by A4,NAT_1:38;
+      then i = 1 by A4,AXIOMS:21;
+     hence [<*x,y*>.i,<*x,y*>.(i+1)] in R by A1,A3;
+    end;
+   hence thesis by A2,A3,Def13;
+  end;
+
+definition let X be non empty set, R be Relation of X;
+ redefine func R* -> Relation of X;
+  coherence
+   proof reconsider P = [:X,X:] as Relation of X by RELSET_1:def 1;
+       R* c= P
+      proof let x,y; assume [x,y] in R*;
+        then x in field R & y in field R & field R c= X \/ X & X \/ X = X
+         by Def13,RELSET_1:19; hence thesis by ZFMISC_1:106;
+      end;
+    hence thesis by RELSET_1:def 1;
+   end;
+end;
+
+definition let G be non empty GrammarStr;
+ let X be non empty set;
+ let f be Function of the carrier of G, X;
+ func G.f -> strict GrammarStr equals
+     GrammarStr (#X, f.the InitialSym of G,
+     (f)~*(the Rules of G)*(f*) #);
+  correctness;
+end;
+
+:: The goal is to show:
+::   f is_one-to-one implies f*.:Lang(G) = Lang(G.f)
+
+theorem
+   for D1,D2 being set st D1 c= D2 holds D1* c= D2*
+  proof let D1,D2 be set such that
+A1:  D1 c= D2;
+   let x be set; assume x in D1*;
+   then reconsider p = x as FinSequence of D1 by FINSEQ_1:def 11;
+      rng p c= D1 by FINSEQ_1:def 4;
+    then rng p c= D2 by A1,XBOOLE_1:1;
+    then x is FinSequence of D2 by FINSEQ_1:def 4;
+   hence thesis by FINSEQ_1:def 11;
+  end;
+

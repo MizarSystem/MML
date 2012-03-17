@@ -1,0 +1,439 @@
+:: Three-Argument Operations and Four-Argument Operations
+::  by Michal Muzalewski and Wojciech Skaba
+::
+:: Received October 2, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, MULTOP_1;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, FUNCT_2, MCART_1, DOMAIN_1;
+ constructors FUNCT_2, DOMAIN_1, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+ theorems FUNCT_2, MCART_1;
+ schemes FUNCT_2;
+
+begin :: THREE ARGUMENT OPERATIONS
+
+definition
+  let f be Function;
+  let a,b,c be set;
+  func f.(a,b,c) -> set equals :Def1:
+    f.[a,b,c];
+  correctness;
+end;
+
+ reserve A,B,C,D,E for non empty set,
+         a for Element of A, b for Element of B,
+         c for Element of C, d for Element of D,
+         X,Y,Z,S,x,y,z,s,t for set;
+
+definition
+  let A,B,C,D;
+  let f be Function of [:A,B,C:],D;
+  let a,b,c;
+  redefine func f.(a,b,c) -> Element of D;
+  coherence
+   proof
+       f.([a,b,c]) is Element of D;
+     hence thesis by Def1;
+   end;
+end;
+
+canceled;
+
+theorem
+  Th2: for f1,f2 being Function of [:X,Y,Z:],D st
+    for x,y,z st x in X & y in Y & z in Z holds f1.[x,y,z] = f2.[x,y,z]
+       holds f1 = f2
+ proof
+   let f1,f2 be Function of [:X,Y,Z:],D such that
+   A1: for x,y,z st x in X & y in Y & z in Z
+       holds f1.[x,y,z] = f2.[x,y,z];
+     for t st t in [:X,Y,Z:] holds f1.t = f2.t
+    proof
+      let t;
+      assume t in [:X,Y,Z:];
+      then ex x,y,z st x in X & y in Y & z in Z & t = [x,y,z] by MCART_1:72;
+      hence thesis by A1;
+    end;
+   hence thesis by FUNCT_2:18;
+ end;
+
+theorem
+  Th3: for f1,f2 being Function of [:A,B,C:],D
+       st for a,b,c holds f1.[a,b,c] = f2.[a,b,c]
+       holds f1 = f2
+ proof
+   let f1,f2 be Function of [:A,B,C:],D; assume
+      for a,b,c holds f1.[a,b,c] = f2.[a,b,c];
+   then for x,y,z st x in A & y in B & z in C
+   holds f1.[x,y,z] = f2.[x,y,z];
+   hence thesis by Th2;
+ end;
+
+theorem
+    for f1,f2 being Function of [:A,B,C:],D st
+    for a being Element of A
+    for b being Element of B
+    for c being Element of C
+   holds
+     f1.(a,b,c) = f2.(a,b,c)
+     holds f1 = f2
+ proof
+   let f1,f2 be Function of [:A,B,C:],D such that
+A1:   for a being Element of A
+      for b being Element of B
+      for c being Element of C
+     holds
+       f1.(a,b,c) = f2.(a,b,c);
+      for a being Element of A
+    for b being Element of B
+    for c being Element of C
+      holds f1.[a,b,c] = f2.[a,b,c]
+     proof
+       let a be Element of A;
+       let b be Element of B;
+       let c be Element of C;
+         f1.(a,b,c) = f1.[a,b,c] & f2.(a,b,c) = f2.[a,b,c] by Def1;
+       hence thesis by A1;
+     end;
+    hence f1 = f2 by Th3;
+ end;
+
+definition let A be set;
+ mode TriOp of A is Function of [:A,A,A:],A;
+end;
+
+scheme FuncEx3D
+  { X,Y,Z,T() -> non empty set, P[set,set,set,set] } :
+ ex f being Function of [:X(),Y(),Z():],T() st
+   for x being Element of X()
+   for y being Element of Y()
+   for z being Element of Z()
+    holds P[x,y,z,f.[x,y,z]]
+provided
+A1: for x being Element of X()
+    for y being Element of Y()
+    for z being Element of Z()
+      ex t being Element of T() st P[x,y,z,t]
+ proof
+   defpred Q[set,set] means ( for x being (Element of X()),
+              y being (Element of Y()),
+              z being Element of Z()
+        st $1 = [x,y,z] holds P[x,y,z,$2]);
+A2: for p being Element of [:X(),Y(),Z():]
+      ex t being Element of T()
+       st Q[p,t]
+     proof
+       let p be Element of [:X(),Y(),Z():];
+       consider x1, y1, z1 be set such that
+A3:      x1 in X() and
+A4:      y1 in Y() and
+A5:     z1 in Z() and
+A6:      p = [x1,y1,z1] by MCART_1:72;
+       reconsider x1 as Element of X() by A3;
+       reconsider y1 as Element of Y() by A4;
+       reconsider z1 as Element of Z() by A5;
+       consider t being Element of T() such that
+A7:       P[x1,y1,z1,t] by A1;
+       take t;
+       let x be (Element of X()),
+           y be (Element of Y()),
+           z be Element of Z();
+       assume p = [x,y,z];
+       then x1 = x & y1 = y & z1 = z by A6,MCART_1:28;
+       hence P[x,y,z,t] by A7;
+     end;
+  consider f being Function of [:X(),Y(),Z():],T() such that
+A8: for p being Element of [:X(),Y(),Z():] holds Q[p,f.p] from FuncExD(A2);
+  take f;
+  let x be Element of X();
+  let y be Element of Y();
+  let z be Element of Z();
+  thus thesis by A8;
+ end;
+
+scheme TriOpEx
+  { A()->non empty set,
+    P[ Element of A(), Element of A(), Element of A(), Element of A()] }:
+    ex o being TriOp of A() st
+    for a,b,c being Element of A() holds P[a,b,c,o.(a,b,c)]
+      provided
+A1: for x,y,z being Element of A() ex t being Element of A() st P[x,y,z,t]
+ proof
+   defpred Q[Element of A(),Element of A(),Element of A(),Element of A()]
+       means for r being Element of A() st r = $4 holds P[$1,$2,$3,r];
+A2: for x,y,z being Element of A() ex t being Element of A() st
+        Q[x,y,z,t]
+     proof
+       let x,y,z be Element of A();
+       consider t being Element of A() such that
+A3:    P[x,y,z,t] by A1;
+       take t;
+       thus thesis by A3;
+     end;
+  consider f being Function of [:A(),A(),A():],A() such that
+A4:  for a,b,c being Element of A() holds Q[a,b,c,f.[a,b,c]] from FuncEx3D(A2);
+  take o = f;
+  let a,b,c be Element of A();
+    o.(a,b,c) = o.[a,b,c] by Def1;
+  hence thesis by A4;
+end;
+
+scheme Lambda3D
+  { X, Y, Z, T()->non empty set,
+    F( Element of X(), Element of Y(), Element of Z()) -> Element of T()
+  }:
+ ex f being Function of [:X(),Y(),Z():],T()
+  st for x being Element of X()
+     for y being Element of Y()
+     for z being Element of Z()
+       holds f.[x,y,z]=F(x,y,z)
+  proof
+   defpred Q[Element of X(),Element of Y(),Element of Z(),Element of T()]
+       means $4 = F($1,$2,$3);
+A1: for x being Element of X()
+    for y being Element of Y()
+    for z being Element of Z()
+      ex t being Element of T() st Q[x,y,z,t];
+   ex f being Function of [:X(),Y(),Z():],T() st
+      for x being Element of X()
+      for y being Element of Y()
+      for z being Element of Z()
+         holds Q[x,y,z,f.[x,y,z]] from FuncEx3D(A1);
+   hence thesis;
+  end;
+
+scheme TriOpLambda
+  { A,B,C,D()->non empty set,
+    O( Element of A(), Element of B(), Element of C()) -> Element of D()
+  }:
+ ex o being Function of [:A(),B(),C():],D() st
+    for a being Element of A(),
+        b being Element of B(),
+        c being Element of C() holds o.(a,b,c) = O(a,b,c)
+ proof
+   deffunc F( Element of A(), Element of B(), Element of C()) = O($1,$2,$3);
+    consider f being Function of [:A(),B(),C():],D() such that
+A1: for a being Element of A(),
+        b being Element of B(),
+        c being Element of C() holds
+      f.[a,b,c] = F(a,b,c) from Lambda3D;
+    take o = f;
+    let a be Element of A(),
+        b be Element of B(),
+        c be Element of C();
+      o.(a,b,c) = o.[a,b,c] by Def1;
+    hence thesis by A1;
+ end;
+
+:: FOUR ARGUMENT OPERATIONS
+
+definition
+  let f be Function;
+  let a,b,c,d be set;
+  func f.(a,b,c,d) -> set equals :Def2:
+    f.[a,b,c,d];
+  correctness;
+end;
+
+definition
+  let A,B,C,D,E;
+  let f be Function of [:A,B,C,D:],E;
+  let a,b,c,d;
+  redefine func f.(a,b,c,d) -> Element of E;
+  coherence
+   proof
+       f.([a,b,c,d]) is Element of E;
+     hence thesis by Def2;
+   end;
+end;
+
+canceled;
+
+theorem
+  Th6: for f1,f2 being Function of [:X,Y,Z,S:],D st
+   for x,y,z,s st x in X & y in Y & z in Z & s in S
+     holds f1.[x,y,z,s] = f2.[x,y,z,s]
+       holds
+         f1 = f2
+ proof
+   let f1,f2 be Function of [:X,Y,Z,S:],D such that
+   A1: for x,y,z,s st x in X & y in Y & z in Z & s in S
+       holds f1.[x,y,z,s] = f2.[x,y,z,s];
+     for t st t in [:X,Y,Z,S:] holds f1.t = f2.t
+    proof
+      let t;
+      assume t in [:X,Y,Z,S:];
+      then ex x,y,z,s
+        st x in X & y in Y & z in Z & s in S & t = [x,y,z,s] by MCART_1:83;
+      hence thesis by A1;
+    end;
+   hence thesis by FUNCT_2:18;
+ end;
+
+theorem
+  Th7: for f1,f2 being Function of [:A,B,C,D:],E
+      st for a,b,c,d holds f1.[a,b,c,d] = f2.[a,b,c,d]
+       holds f1 = f2
+ proof
+   let f1,f2 be Function of [:A,B,C,D:],E; assume
+      for a,b,c,d holds f1.[a,b,c,d] = f2.[a,b,c,d];
+   then for x,y,z,s st x in A & y in B & z in C & s in D
+   holds f1.[x,y,z,s] = f2.[x,y,z,s];
+   hence thesis by Th6;
+ end;
+
+theorem
+    for f1,f2 being Function of [:A,B,C,D:],E st
+    for a,b,c,d holds f1.(a,b,c,d) = f2.(a,b,c,d)
+     holds f1 = f2
+ proof
+   let f1,f2 be Function of [:A,B,C,D:],E such that
+A1:   for a,b,c,d holds f1.(a,b,c,d) = f2.(a,b,c,d);
+        for a,b,c,d holds f1.[a,b,c,d] = f2.[a,b,c,d]
+     proof
+       let a,b,c,d;
+         f1.(a,b,c,d) = f1.[a,b,c,d] & f2.(a,b,c,d) = f2.[a,b,c,d] by Def2;
+       hence thesis by A1;
+     end;
+    hence f1 = f2 by Th7;
+ end;
+
+definition let A;
+ mode QuaOp of A is Function of [:A,A,A,A:],A;
+end;
+
+scheme FuncEx4D
+  { X, Y, Z, S, T() -> non empty set, P[set,set,set,set,set] }:
+ ex f being Function of [:X(),Y(),Z(),S():],T() st
+   for x being Element of X()
+   for y being Element of Y()
+   for z being Element of Z()
+   for s being Element of S()
+    holds P[x,y,z,s,f.[x,y,z,s]]
+provided
+A1: for x being Element of X()
+    for y being Element of Y()
+    for z being Element of Z()
+    for s being Element of S()
+      ex t being Element of T() st P[x,y,z,s,t]
+ proof
+   defpred Q[set,set] means for x being (Element of X()),
+              y being (Element of Y()),
+              z being (Element of Z()),
+              s being Element of S()
+        st $1 = [x,y,z,s] holds P[x,y,z,s,$2];
+A2: for p being Element of [:X(),Y(),Z(),S():]
+      ex t being Element of T()
+       st Q[p,t]
+     proof
+       let p be Element of [:X(),Y(),Z(),S():];
+       consider x1, y1, z1, s1 be set such that
+A3:      x1 in X() and
+A4:      y1 in Y() and
+A5:     z1 in Z() and
+A6:     s1 in S() and
+A7:      p = [x1,y1,z1,s1] by MCART_1:83;
+       reconsider x1 as Element of X() by A3;
+       reconsider y1 as Element of Y() by A4;
+       reconsider z1 as Element of Z() by A5;
+       reconsider s1 as Element of S() by A6;
+       consider t being Element of T() such that
+A8:       P[x1,y1,z1,s1,t] by A1;
+       take t;
+       let x be Element of X(),
+           y be Element of Y(),
+           z be Element of Z(),
+           s be Element of S();
+       assume p = [x,y,z,s];
+       then x1 = x & y1 = y & z1 = z & s1 = s by A7,MCART_1:33;
+       hence P[x,y,z,s,t] by A8;
+     end;
+  consider f being Function of [:X(),Y(),Z(),S():],T() such that
+A9: for p being Element of [:X(),Y(),Z(),S():] holds Q[p,f.p] from FuncExD(A2);
+  take f;
+  let x be Element of X();
+  let y be Element of Y();
+  let z be Element of Z();
+  let s be Element of S();
+  thus thesis by A9;
+ end;
+
+scheme QuaOpEx
+  { A()->non empty set,
+    P[ Element of A(), Element of A(),
+       Element of A(), Element of A(), Element of A()] }:
+    ex o being QuaOp of A() st
+    for a,b,c,d being Element of A() holds P[a,b,c,d,o.(a,b,c,d)]
+      provided
+A1: for x,y,z,s being Element of A()
+      ex t being Element of A() st P[x,y,z,s,t]
+ proof
+   defpred Q[Element of A(), Element of A(),Element of A(), Element of A(),
+             Element of A()]    means
+       for r being Element of A() st r = $5 holds P[$1,$2,$3,$4,$5];
+A2: for x,y,z,s being Element of A() ex t being Element of A() st
+     Q[x,y,z,s,t]
+     proof
+       let x,y,z,s be Element of A();
+       consider t being Element of A() such that
+A3:    P[x,y,z,s,t] by A1;
+       take t;
+       thus thesis by A3;
+     end;
+  consider f being Function of [:A(),A(),A(),A():],A() such that
+A4:  for a,b,c,d being Element of A() holds Q[a,b,c,d,f.[a,b,c,d]]
+         from FuncEx4D(A2);
+  take o = f;
+  let a,b,c,d be Element of A();
+    o.(a,b,c,d) = o.[a,b,c,d] by Def2;
+  hence thesis by A4;
+end;
+
+scheme Lambda4D
+  { X, Y, Z, S, T() -> non empty set,
+    F( Element of X(), Element of Y(),
+       Element of Z(), Element of S()) -> Element of T() }:
+ ex f being Function of [:X(),Y(),Z(),S():],T()
+  st for x being Element of X()
+     for y being Element of Y()
+     for z being Element of Z()
+     for s being Element of S()
+       holds f.[x,y,z,s]=F(x,y,z,s)
+  proof
+   defpred P[Element of X(),Element of Y(),Element of Z(),Element of S(),
+             Element of T()]  means $5 = F($1,$2,$3,$4);
+A1: for x being Element of X()
+    for y being Element of Y()
+    for z being Element of Z()
+    for s being Element of S()
+     ex t being Element of T() st P[x,y,z,s,t];
+  ex f being Function of [:X(),Y(),Z(),S():],T() st
+   for x being Element of X()
+   for y being Element of Y()
+   for z being Element of Z()
+   for s being Element of S()
+    holds P[x,y,z,s,f.[x,y,z,s]]  from FuncEx4D(A1);
+
+    hence thesis;
+  end;
+
+scheme QuaOpLambda
+  { A()->non empty set, O( Element of A(), Element of A(),
+       Element of A(), Element of A()) -> Element of A() }:
+ ex o being QuaOp of A() st
+    for a,b,c,d being Element of A() holds o.(a,b,c,d) = O(a,b,c,d)
+ proof
+   deffunc F(Element of A(),Element of A(),Element of A(),Element of A())
+        =  O($1,$2,$3,$4);
+    consider f being Function of [:A(),A(),A(),A():],A() such that
+A1: for a,b,c,d being Element of A() holds
+      f.[a,b,c,d] = F(a,b,c,d) from Lambda4D;
+    take o = f;
+    let a,b,c,d be Element of A();
+      o.(a,b,c,d) = o.[a,b,c,d] by Def2;
+    hence thesis by A1;
+ end;

@@ -1,0 +1,475 @@
+:: Construction of Rings and Left-, Right-, and Bi-Modules over a Ring
+::  by Micha{\l} Muzalewski
+::
+:: Received June 20, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, RLVECT_1, LATTICES, ARYTM_1, FUNCSDOM, BINOP_1, RELAT_1,
+      ARYTM_3, FUNCT_1, BOOLE, MIDSP_1, FUNCT_3, VECTSP_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, STRUCT_0,
+      RLVECT_1, VECTSP_1, FUNCSDOM, MIDSP_1, FUNCT_3;
+ constructors BINOP_1, VECTSP_1, MIDSP_1, FUNCT_3, MEMBERED, XBOOLE_0;
+ clusters VECTSP_1, STRUCT_0, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin :: 1. RING
+
+ reserve FS for non empty doubleLoopStr;
+ reserve F for Field;
+
+definition
+  let IT be non empty multLoopStr;
+ canceled;
+
+ attr IT is well-unital means
+:: VECTSP_2:def 2
+  for x being Element of IT
+   holds x*(1_ IT) = x & (1_ IT)*x = x;
+end;
+
+definition
+ cluster well-unital -> left_unital right_unital (non empty multLoopStr);
+ cluster left_unital right_unital -> well-unital (non empty multLoopStr);
+ cluster strict Abelian add-associative right_zeroed right_complementable
+    well-unital distributive (non empty doubleLoopStr);
+end;
+
+theorem :: VECTSP_2:1
+   (for x,y,z being Scalar of FS holds
+               x+y = y+x &
+               (x+y)+z = x+(y+z) &
+               x+(0.FS) = x &
+               x+(-x) = 0.FS &
+               x*(1_ FS) = x & (1_ FS)*x = x &
+               (x*y)*z = x*(y*z) &
+               x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x)
+    iff FS is Ring;
+
+:: 3. RING
+
+definition
+ cluster strict Ring;
+end;
+
+:: 5. COMMUTATIVE RING
+
+definition
+ cluster commutative Ring;
+end;
+
+definition
+ mode comRing is commutative Ring;
+end;
+
+definition
+ cluster strict comRing;
+end;
+
+definition let IT be non empty multLoopStr_0;
+ canceled 2;
+
+ attr IT is domRing-like means
+:: VECTSP_2:def 5
+   for x,y being Element of IT holds x*y = 0.IT
+    implies x = 0.IT or y = 0.IT;
+end;
+
+definition
+ cluster strict non degenerated domRing-like comRing;
+end;
+
+definition
+ mode domRing is domRing-like non degenerated comRing;
+end;
+
+canceled 11;
+
+theorem :: VECTSP_2:13
+   F is domRing;
+
+definition
+ cluster non degenerated Field-like Ring;
+end;
+
+definition
+ mode Skew-Field is non degenerated Field-like Ring;
+end;
+
+definition
+ cluster strict Skew-Field;
+end;
+
+ reserve R for Ring;
+
+canceled 2;
+
+theorem :: VECTSP_2:16
+   (for x being Scalar of R holds
+      (x <> 0.R implies ex y be Scalar of R
+      st x*y = 1_ R) & 0.R <> 1_ R )
+      implies R is Skew-Field;
+
+:: 10. AXIOMS OF SKEW-FIELD
+
+canceled 2;
+
+theorem :: VECTSP_2:19
+   F is Skew-Field;
+
+definition
+ cluster commutative left_unital -> well-unital (non empty multLoopStr);
+ cluster commutative right_unital -> well-unital (non empty multLoopStr);
+end;
+
+:: 11. SOME PROPERTIES OF RING
+
+ reserve R for Abelian add-associative right_zeroed right_complementable
+               (non empty LoopStr),
+         x, y, z for Scalar of R;
+
+canceled 2;
+
+theorem :: VECTSP_2:22
+   (x + y = z iff x = z - y) & (x + y = z iff y = z - x);
+
+canceled 11;
+
+theorem :: VECTSP_2:34
+ for R being add-associative right_zeroed
+                right_complementable (non empty LoopStr),
+     x being Element of R holds
+x=0.R iff -x=0.R;
+
+canceled 3;
+
+theorem :: VECTSP_2:38
+   for R being add-associative right_zeroed Abelian
+              right_complementable (non empty LoopStr)
+ for x,y being Element of R
+  ex z being Element of R st x = y+z & x = z+y;
+
+:: 12. SOME PROPERTIES OF SKEW-FIELD
+
+ reserve SF for Skew-Field,
+         x, y, z for Scalar of SF;
+
+theorem :: VECTSP_2:39
+ for F being add-associative right_zeroed right_complementable
+     distributive non degenerated (non empty doubleLoopStr)
+ for x, y being Element of F holds
+   x*y = 1_ F implies x<>0.F & y<>0.F;
+
+theorem :: VECTSP_2:40
+ for SF being non degenerated Field-like associative
+    Abelian add-associative right_zeroed right_complementable
+        well-unital distributive (non empty doubleLoopStr),
+     x being Element of SF holds
+  x<>0.SF implies ex y being Element of SF st y*x = 1_ SF;
+
+theorem :: VECTSP_2:41
+ x*y = 1_ SF implies y*x = 1_ SF;
+
+theorem :: VECTSP_2:42
+ for SF being non degenerated Field-like associative
+    Abelian add-associative right_zeroed right_complementable
+        well-unital distributive (non empty doubleLoopStr),
+     x,y,z being Element of SF holds
+        x * y = x * z & x<>0.SF implies y = z;
+
+definition let SF be non degenerated Field-like associative
+    Abelian add-associative right_zeroed right_complementable
+        well-unital distributive (non empty doubleLoopStr),
+               x be Element of SF;
+  assume  x<>0.SF;
+ canceled;
+
+  func x" -> Scalar of SF
+    means
+:: VECTSP_2:def 7
+x * it = 1_ SF;
+end;
+
+definition let SF,x,y;
+  func x/y -> Scalar of SF
+    equals
+:: VECTSP_2:def 8
+x * y";
+end;
+
+theorem :: VECTSP_2:43
+   x<>0.SF implies x * x" =1_ SF & x" * x =1_ SF;
+
+canceled;
+
+theorem :: VECTSP_2:45
+ x*y = 1_ SF implies x = y" & y = x";
+
+theorem :: VECTSP_2:46
+ x<>0.SF & y<>0.SF implies x"*y"=(y*x)";
+
+theorem :: VECTSP_2:47
+   x*y = 0.SF implies x = 0.SF or y = 0.SF;
+
+theorem :: VECTSP_2:48
+  x<>0.SF implies x"<>0.SF;
+
+theorem :: VECTSP_2:49
+  x<>0.SF implies x""=x;
+
+theorem :: VECTSP_2:50
+ x<>0.SF implies ((1_ SF)/x=x" & (1_ SF)/x"=x);
+
+theorem :: VECTSP_2:51
+     x<>0.SF implies x*((1_ SF)/x)=1_ SF & ((1_ SF)/x)*x=1_ SF;
+
+theorem :: VECTSP_2:52
+    x<>0.SF implies x/x = 1_ SF;
+
+theorem :: VECTSP_2:53
+  y<>0.SF & z<>0.SF implies x/y=(x*z)/(y*z);
+
+theorem :: VECTSP_2:54
+  y<>0.SF implies (-x/y=(-x)/y & x/(-y)=-x/y);
+
+theorem :: VECTSP_2:55
+   z<>0.SF implies ( x/z + y/z = (x+y)/z ) & ( x/z - y/z = (x-y)/z );
+
+theorem :: VECTSP_2:56
+    y<>0.SF & z<>0.SF implies x/(y/z)=(x*z)/y;
+
+theorem :: VECTSP_2:57
+    y<>0.SF implies x/y*y=x;
+
+:: 13. LEFT-, RIGHT-, AND BI-MODULE STRUCTURE
+
+definition let FS be 1-sorted;
+ struct(LoopStr) RightModStr over FS (# carrier -> set,
+      add -> BinOp of the carrier,
+      Zero -> Element of the carrier,
+      rmult -> Function of [: the carrier, the carrier of FS:], the carrier #);
+end;
+
+definition let FS be 1-sorted;
+ cluster non empty RightModStr over FS;
+end;
+
+definition let FS be 1-sorted;
+ let A be non empty set, a be BinOp of A,
+     Z be Element of A, r be Function of [:A,the carrier of FS:],A;
+ cluster RightModStr(#A,a,Z,r#) -> non empty;
+end;
+
+definition let FS; let RMS be non empty RightModStr over FS;
+ mode Scalar of RMS is Element of FS;
+ mode Vector of RMS is Element of RMS;
+end;
+
+definition let FS1,FS2 be 1-sorted;
+ struct (VectSpStr over FS1, RightModStr over FS2) BiModStr over FS1,FS2
+   (# carrier -> set,
+    add -> BinOp of the carrier,
+    Zero -> Element of the carrier,
+    lmult -> Function of [:the carrier of FS1, the carrier:], the carrier,
+    rmult -> Function of [:the carrier, the carrier of FS2:], the carrier #);
+end;
+
+definition let FS1,FS2 be 1-sorted;
+ cluster non empty BiModStr over FS1,FS2;
+end;
+
+definition let FS1,FS2 be 1-sorted;
+ let A be non empty set, a be BinOp of A,
+     Z be Element of A, l be Function of [:the carrier of FS1,A:],A,
+     r be Function of [:A,the carrier of FS2:],A;
+ cluster BiModStr(#A,a,Z,l,r#) -> non empty;
+end;
+
+:: 14. PREDE LEFT-MODULE OF RING
+
+ reserve R, R1, R2 for Ring;
+
+definition let R be Abelian add-associative right_zeroed
+                    right_complementable (non empty LoopStr);
+ func AbGr R -> strict AbGroup equals
+:: VECTSP_2:def 9
+  LoopStr (#the carrier of R, the add of R, the Zero of R#);
+ end;
+
+definition let R;
+ cluster Abelian add-associative right_zeroed right_complementable
+   strict (non empty VectSpStr over R);
+end;
+
+definition let R;
+ canceled;
+
+ func LeftModule R -> Abelian add-associative right_zeroed right_complementable
+   strict (non empty VectSpStr over R) equals
+:: VECTSP_2:def 11
+    VectSpStr (# the carrier of R, the add of R,
+                           the Zero of R, the mult of R #);
+end;
+
+definition let R;
+ cluster Abelian add-associative right_zeroed right_complementable
+   strict (non empty RightModStr over R);
+end;
+
+definition let R;
+ canceled 2;
+
+ func RightModule R -> Abelian add-associative right_zeroed
+  right_complementable strict (non empty RightModStr over R) equals
+:: VECTSP_2:def 14
+   RightModStr (# the carrier of R, the add of R,
+                         the Zero of R, the mult of R #);
+end;
+
+definition let R be non empty 1-sorted, V be non empty RightModStr over R;
+  let x be Element of R;
+  let v be Element of V;
+ func v*x -> Element of V equals
+:: VECTSP_2:def 15
+   (the rmult of V).(v,x);
+end;
+
+definition
+ canceled;
+
+ func op1 -> UnOp of {{}} means
+:: VECTSP_2:def 17
+not contradiction;
+
+ func op0 -> Element of {{}} means
+:: VECTSP_2:def 18
+not contradiction;
+end;
+
+definition let R1,R2;
+ cluster Abelian add-associative right_zeroed right_complementable
+   strict (non empty BiModStr over R1,R2);
+end;
+
+definition let R1,R2;
+ canceled 2;
+
+ func BiModule(R1,R2) -> Abelian add-associative right_zeroed
+   right_complementable strict (non empty BiModStr over R1,R2) equals
+:: VECTSP_2:def 21
+   BiModStr (# {{}},op2,op0,pr2 (the carrier of R1, {{}}),
+   pr1 ({{}},the carrier of R2) #);
+end;
+
+canceled 13;
+
+theorem :: VECTSP_2:71
+ for x,y being Scalar of R
+     for v,w being Vector of LeftModule R holds
+               x*(v+w) = x*v+x*w &
+               (x+y)*v = x*v+y*v &
+               (x*y)*v = x*(y*v) &
+               (1_ R)*v = v;
+
+definition let R;
+ cluster VectSp-like Abelian add-associative right_zeroed right_complementable
+   strict (non empty VectSpStr over R);
+end;
+
+definition let R;
+ mode LeftMod of R is Abelian add-associative right_zeroed right_complementable
+  VectSp-like (non empty VectSpStr over R);
+end;
+
+definition let R;
+ cluster LeftModule R -> Abelian add-associative right_zeroed
+     right_complementable strict VectSp-like;
+end;
+
+:: 18. AXIOMS OF LEFT MODULE OF RING
+
+canceled 5;
+
+theorem :: VECTSP_2:77
+ for x,y being Scalar of R
+      for v,w being Vector of RightModule R holds
+               (v+w)*x = v*x+w*x &
+               v*(x+y) = v*x+v*y &
+               v*(y*x) = (v*y)*x &
+               v*(1_ R) = v;
+
+definition let R be non empty doubleLoopStr;
+  let IT be non empty RightModStr over R;
+ canceled;
+
+ attr IT is RightMod-like means
+:: VECTSP_2:def 23
+  for x,y being Scalar of R
+              for v,w being Vector of IT holds
+                      (v+w)*x = v*x+w*x &
+                      v*(x+y) = v*x+v*y &
+                      v*(y*x) = (v*y)*x &
+                      v*(1_ R) = v;
+end;
+
+definition let R;
+ cluster Abelian add-associative right_zeroed right_complementable
+   RightMod-like strict (non empty RightModStr over R);
+end;
+
+definition let R;
+ mode RightMod of R is Abelian add-associative right_zeroed
+   right_complementable RightMod-like (non empty RightModStr over R);
+end;
+
+definition let R;
+ cluster RightModule R -> Abelian add-associative right_zeroed
+   right_complementable RightMod-like;
+end;
+
+definition let R1,R2;
+  let IT be non empty BiModStr over R1,R2;
+ attr IT is BiMod-like means
+:: VECTSP_2:def 24
+  for x being Scalar of R1 for p being Scalar of R2
+             for v being Vector of IT holds
+               x*(v*p) = (x*v)*p;
+end;
+
+definition let R1,R2;
+ cluster Abelian add-associative right_zeroed right_complementable
+   RightMod-like VectSp-like BiMod-like strict (non empty BiModStr over R1,R2);
+end;
+
+definition let R1,R2;
+ mode BiMod of R1,R2 is Abelian add-associative right_zeroed
+  right_complementable
+    RightMod-like VectSp-like BiMod-like (non empty BiModStr over R1,R2);
+end;
+
+canceled 5;
+
+theorem :: VECTSP_2:83
+  for V being non empty BiModStr over R1,R2 holds
+            (for x,y being Scalar of R1 for p,q being Scalar of R2
+             for v,w being Vector of V holds
+               x*(v+w) = x*v+x*w &
+               (x+y)*v = x*v+y*v &
+               (x*y)*v = x*(y*v) &
+               (1_ R1)*v = v &
+               (v+w)*p = v*p+w*p &
+               v*(p+q) = v*p+v*q &
+               v*(q*p) = (v*q)*p &
+               v*(1_ R2) = v &
+               x*(v*p) = (x*v)*p)
+               iff V is RightMod-like VectSp-like BiMod-like;
+
+theorem :: VECTSP_2:84
+ BiModule(R1,R2) is BiMod of R1,R2;
+
+definition let R1,R2;
+ cluster BiModule(R1,R2) -> Abelian add-associative right_zeroed
+   right_complementable RightMod-like VectSp-like BiMod-like;
+end;

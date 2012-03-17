@@ -1,0 +1,2010 @@
+:: On Nowhere and Everywhere Dense Subspaces of Topological Spaces
+::  by Zbigniew Karno
+::
+:: Received November 9, 1993
+:: Copyright (c) 1993 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, TSEP_2, COLLSP, TOPS_3, BOOLE, TOPS_1, REALSET1,
+      SUBSET_1, TARSKI, SETFAM_1, NATTRA_1, TDLAT_3;
+ notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, TOPS_1, BORSUK_1,
+      TSEP_1, TSEP_2, TDLAT_3, TOPS_3, TEX_1, TEX_2;
+ constructors REALSET1, TOPS_1, BORSUK_1, TSEP_1, TSEP_2, TDLAT_3, TOPS_3,
+      TEX_2, MEMBERED;
+ clusters PRE_TOPC, BORSUK_1, TDLAT_3, TEX_1, TEX_2, STRUCT_0, MEMBERED,
+      ZFMISC_1;
+ requirements BOOLE, SUBSET;
+ definitions TSEP_2;
+ theorems PRE_TOPC, TOPS_1, BORSUK_1, TSEP_1, TMAP_1, TSEP_2, TOPS_3, TEX_1,
+      TEX_2, XBOOLE_0, XBOOLE_1;
+
+begin
+:: 1. Some Properties of Subsets of a Topological Space.
+reserve X for non empty TopSpace, A,B for Subset of X;
+
+theorem Th1:
+ A,B constitute_a_decomposition implies (A is non empty iff B is proper)
+ proof
+  assume A,B constitute_a_decomposition;
+   then A1: A = B` & B = A` by TSEP_2:4;
+  thus A is non empty implies B is proper
+   proof
+    assume A is non empty;
+     then B <> the carrier of X by A1,TOPS_3:1;
+    hence B is proper by TEX_2:5;
+   end;
+  assume B is proper;
+   then B <> the carrier of X by TEX_2:5;
+  hence thesis by A1,TOPS_3:1;
+ end;
+
+Lm1:
+ A is everywhere_dense & B is everywhere_dense implies A meets B
+ proof
+  assume A is everywhere_dense & B is everywhere_dense;
+   then A /\ B is everywhere_dense by TOPS_3:44;
+   then A /\ B <> {} by TOPS_3:34;
+  hence thesis by XBOOLE_0:def 7;
+ end;
+
+Lm2:
+ A is everywhere_dense & B is dense or
+   A is dense & B is everywhere_dense implies A meets B
+ proof
+  assume A is everywhere_dense & B is dense or
+           A is dense & B is everywhere_dense;
+   then A /\ B is dense by TOPS_3:45;
+   then A /\ B <> {} by TOPS_3:17;
+  hence thesis by XBOOLE_0:def 7;
+ end;
+
+theorem Th2:
+ A,B constitute_a_decomposition implies (A is dense iff B is boundary)
+ proof
+  assume A,B constitute_a_decomposition;
+   then A1: A = B` & B = A` by TSEP_2:4;
+  hence A is dense implies B is boundary by TOPS_3:18;
+  assume B is boundary;
+  hence thesis by A1,TOPS_1:def 4;
+ end;
+
+theorem
+   A,B constitute_a_decomposition implies (A is boundary iff B is dense) by Th2
+;
+
+theorem Th4:
+ A,B constitute_a_decomposition implies
+  (A is everywhere_dense iff B is nowhere_dense)
+ proof
+  assume A,B constitute_a_decomposition;
+   then A1: A = B` & B = A` by TSEP_2:4;
+  hence A is everywhere_dense implies B is nowhere_dense by TOPS_3:39;
+  assume B is nowhere_dense;
+  hence thesis by A1,TOPS_3:40;
+ end;
+
+theorem
+   A,B constitute_a_decomposition implies
+  (A is nowhere_dense iff B is everywhere_dense) by Th4;
+
+reserve Y1,Y2 for non empty SubSpace of X;
+
+theorem Th6:
+ Y1,Y2 constitute_a_decomposition implies Y1 is proper & Y2 is proper
+ proof
+     the carrier of Y1 is Subset of X &
+   the carrier of Y2 is Subset of X by TSEP_1:1;
+   then reconsider A1 = the carrier of Y1,
+              A2 = the carrier of Y2 as Subset of X;
+  assume Y1,Y2 constitute_a_decomposition;
+   then A1,A2 constitute_a_decomposition by TSEP_2:def 2;
+    then A1 is proper & A2 is proper by Th1;
+  hence Y1 is proper & Y2 is proper by TEX_2:13;
+ end;
+
+theorem
+   for X being non trivial (non empty TopSpace),
+     D being non empty proper Subset of X
+  ex Y0 being proper strict non empty SubSpace of X st D = the carrier of Y0
+ proof let X be non trivial (non empty TopSpace),
+   D be non empty proper Subset of X;
+   consider Y0 being strict non empty SubSpace of X such that
+      A1: D = the carrier of Y0 by TSEP_1:10;
+   reconsider Y0 as proper strict non empty SubSpace of X by A1,TEX_2:13;
+  take Y0;
+  thus thesis by A1;
+ end;
+
+theorem Th8:
+ for X being non trivial (non empty TopSpace),
+     Y1 being proper non empty SubSpace of X
+  ex Y2 being proper strict non empty SubSpace of X st
+    Y1,Y2 constitute_a_decomposition
+ proof let X be non trivial (non empty TopSpace),
+     Y1 be proper non empty SubSpace of X;
+   reconsider A1 = the carrier of Y1 as Subset of X by TSEP_1:1;
+       A1 is proper by TEX_2:13;
+    then A1 <> the carrier of X by TEX_2:5;
+    then A1` <> {} by TOPS_3:2;
+   then consider Y2 being strict non empty SubSpace of X such that
+          A1: A1` = the carrier of Y2 by TSEP_1:10;
+A2:   for P, Q be Subset of X
+      st P = the carrier of Y1 & Q = the carrier of Y2
+      holds P,Q constitute_a_decomposition by A1,TSEP_2:6;
+    then Y1,Y2 constitute_a_decomposition by TSEP_2:def 2;
+   then reconsider Y2 as proper strict non empty SubSpace of X by Th6;
+  take Y2;
+  thus thesis by A2,TSEP_2:def 2;
+ end;
+
+
+begin
+:: 2. Dense and Everywhere Dense Subspaces.
+
+definition let X be non empty TopSpace;
+  let IT be SubSpace of X;
+ attr IT is dense means
+:Def1: for A being Subset of X st
+  A = the carrier of IT holds A is dense;
+end;
+
+theorem Th9:
+ for X0 being SubSpace of X, A being Subset of X
+   st A = the carrier of X0 holds
+  X0 is dense iff A is dense
+ proof let X0 be SubSpace of X, A be Subset of X;
+   assume A1: A = the carrier of X0;
+  hence X0 is dense implies A is dense by Def1;
+  assume A is dense;
+    then for B be Subset of X st B = the carrier of X0 holds
+     B is dense by A1;
+    hence thesis by Def1;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster dense closed -> non proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A1: X0 is dense closed;
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+         A is dense & A is closed by A1,Th9,TSEP_1:11;
+      then Cl A = the carrier of X & Cl A = A by PRE_TOPC:52,TOPS_3:def 2;
+     then A is non proper by TEX_2:5;
+   hence thesis by TEX_2:13;
+  end;
+ cluster dense proper -> non closed SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A2: X0 is dense proper;
+   assume A3: X0 is closed;
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+         A is dense & A is closed by A2,A3,Th9,TSEP_1:11;
+      then Cl A = the carrier of X & Cl A = A by PRE_TOPC:52,TOPS_3:def 2;
+     then A is non proper by TEX_2:5;
+   hence contradiction by A2,TEX_2:13;
+  end;
+ cluster proper closed -> non dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A4: X0 is proper closed;
+   assume A5: X0 is dense;
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+         A is dense & A is closed by A4,A5,Th9,TSEP_1:11;
+      then Cl A = the carrier of X & Cl A = A by PRE_TOPC:52,TOPS_3:def 2;
+     then A is non proper by TEX_2:5;
+   hence contradiction by A4,TEX_2:13;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+ cluster dense strict non empty SubSpace of X;
+ existence
+  proof
+       X is SubSpace of X by TSEP_1:2;
+    then reconsider A0 = the carrier of X as Subset of X
+    by TSEP_1:1;
+   consider X0 being strict non empty SubSpace of X such that
+    A1: A0 = the carrier of X0 by TSEP_1:10;
+   take X0;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A1,PRE_TOPC:12;
+     hence A is dense by TOPS_3:16;
+    end;
+   hence thesis by Def1;
+  end;
+end;
+
+::Properties of Dense Subspaces.
+theorem Th10:
+ for A0 being non empty Subset of X st A0 is dense
+  ex X0 being dense strict non empty SubSpace of X st A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is dense;
+  consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+  reconsider Y0 = X0 as dense strict non empty SubSpace of X by A1,A2,Th9;
+  take Y0;
+  thus thesis by A2;
+ end;
+
+theorem
+   for X0 being dense non empty SubSpace of X,
+     A being Subset of X,
+     B being Subset of X0
+  st A = B holds B is dense iff A is dense
+ proof let X0 be dense non empty SubSpace of X,
+   A be Subset of X,
+   B be Subset of X0;
+  assume A1: A = B;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X0 as Subset of X;
+     A c= C & C is dense by A1,Th9;
+  hence thesis by A1,TOPS_3:60;
+ end;
+
+theorem
+   for X1 being dense SubSpace of X, X2 being SubSpace of X holds
+  X1 is SubSpace of X2 implies X2 is dense
+ proof let X1 be dense SubSpace of X, X2 be SubSpace of X;
+     the carrier of X1 is Subset of X by BORSUK_1:35;
+   then reconsider C = the carrier of X1 as Subset of X;
+     A1: C is dense by Def1;
+   assume X1 is SubSpace of X2;
+     then the carrier of X1 c= the carrier of X2 by TSEP_1:4;
+    then for A be Subset of X st A = the carrier of X2
+     holds A is dense by A1,TOPS_1:79;
+  hence thesis by Def1;
+ end;
+
+theorem
+   for X1 being dense non empty SubSpace of X,
+     X2 being non empty SubSpace of X holds
+  X1 is SubSpace of X2 implies X1 is dense SubSpace of X2
+ proof let X1 be dense non empty SubSpace of X, X2 be non empty SubSpace of X;
+     the carrier of X1 is Subset of X by BORSUK_1:35;
+   then reconsider C = the carrier of X1 as Subset of X;
+     A1: C is dense by Def1;
+   assume A2: X1 is SubSpace of X2;
+      for A be Subset of X2 st A = the carrier of X1
+     holds A is dense by A1,TOPS_3:59;
+  hence thesis by A2,Def1;
+ end;
+
+theorem
+   for X1 being dense non empty SubSpace of X,
+     X2 being dense non empty SubSpace of X1
+ holds X2 is dense non empty SubSpace of X
+ proof
+  let X1 be dense non empty SubSpace of X,
+      X2 be dense non empty SubSpace of X1;
+     the carrier of X1 is Subset of X by BORSUK_1:35;
+   then reconsider C = the carrier of X1 as Subset of X;
+     now let A be Subset of X;
+      A1: the carrier of X2 c= the carrier of X1 by BORSUK_1:35;
+    assume A2: A = the carrier of X2;
+     then reconsider B = A as Subset of X1 by A1;
+        C is dense & B is dense & A c= C by A2,Def1,BORSUK_1:35;
+    hence A is dense by TOPS_3:60;
+   end;
+  hence thesis by Def1,TSEP_1:7;
+ end;
+
+theorem
+   for Y1, Y2 being non empty TopSpace st Y2 = the TopStruct of Y1 holds
+  Y1 is dense SubSpace of X iff Y2 is dense SubSpace of X
+ proof let X1,X2 be non empty TopSpace;
+  assume A1: X2 = the TopStruct of X1;
+  thus X1 is dense SubSpace of X implies X2 is dense SubSpace of X
+   proof assume A2: X1 is dense SubSpace of X;
+     then reconsider Y2 = X2 as SubSpace of X by A1,TMAP_1:12;
+       for A2 be Subset of X st A2 = the carrier of Y2
+      holds A2 is dense by A1,A2,Def1;
+    hence X2 is dense SubSpace of X by Def1;
+   end;
+  assume A3: X2 is dense SubSpace of X;
+   then reconsider Y1 = X1 as SubSpace of X by A1,TMAP_1:12;
+       for A1 be Subset of X st A1 = the carrier of Y1
+      holds A1 is dense by A1,A3,Def1;
+  hence thesis by Def1;
+ end;
+
+definition let X be non empty TopSpace;
+  let IT be SubSpace of X;
+ attr IT is everywhere_dense means
+:Def2: for A being Subset of X st
+   A = the carrier of IT holds A is everywhere_dense;
+end;
+
+theorem Th16:
+ for X0 being SubSpace of X, A being Subset of X
+   st A = the carrier of X0 holds
+  X0 is everywhere_dense iff A is everywhere_dense
+ proof let X0 be SubSpace of X, A be Subset of X;
+   assume A1: A = the carrier of X0;
+  hence X0 is everywhere_dense implies A is everywhere_dense by Def2;
+  assume A is everywhere_dense;
+    then for B be Subset of X st B = the carrier of X0
+     holds B is everywhere_dense by A1;
+  hence thesis by Def2;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster everywhere_dense -> dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A1: X0 is everywhere_dense;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is everywhere_dense by A1,Def2;
+     hence A is dense by TOPS_3:33;
+    end;
+   hence thesis by Def1;
+  end;
+ cluster non dense -> non everywhere_dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A2: X0 is non dense;
+   assume A3: X0 is everywhere_dense;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is everywhere_dense by A3,Def2;
+     hence A is dense by TOPS_3:33;
+    end;
+   hence contradiction by A2,Def1;
+  end;
+ cluster non proper -> everywhere_dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A4: X0 is non proper;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is non proper by A4,TEX_2:13;
+      then A = the carrier of X by TEX_2:5;
+      then A = [#]X by PRE_TOPC:12;
+     hence A is everywhere_dense by TOPS_3:31;
+    end;
+   hence thesis by Def2;
+  end;
+ cluster non everywhere_dense -> proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A5: X0 is non everywhere_dense;
+   assume A6: X0 is non proper;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is non proper by A6,TEX_2:13;
+      then A = the carrier of X by TEX_2:5;
+      then A = [#]X by PRE_TOPC:12;
+     hence A is everywhere_dense by TOPS_3:31;
+    end;
+   hence contradiction by A5,Def2;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+ cluster everywhere_dense strict non empty SubSpace of X;
+ existence
+  proof
+       X is SubSpace of X by TSEP_1:2;
+    then reconsider A0 = the carrier of X
+     as Subset of X by TSEP_1:1;
+   consider X0 being strict non empty SubSpace of X such that
+    A1: A0 = the carrier of X0 by TSEP_1:10;
+   take X0;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A1,PRE_TOPC:12;
+     hence A is everywhere_dense by TOPS_3:31;
+    end;
+   hence thesis by Def2;
+  end;
+end;
+
+::Properties of Everywhere Dense Subspaces.
+theorem Th17:
+ for A0 being non empty Subset of X st A0 is everywhere_dense
+  ex X0 being everywhere_dense strict non empty SubSpace of X
+    st A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is everywhere_dense;
+   consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+   reconsider Y0 = X0 as everywhere_dense strict non empty SubSpace of X
+                                                    by A1,A2,Th16;
+  take Y0;
+  thus thesis by A2;
+ end;
+
+theorem
+   for X0 being everywhere_dense non empty SubSpace of X,
+   A being Subset of X, B being Subset of X0
+   st A = B holds
+  B is everywhere_dense iff A is everywhere_dense
+ proof let X0 be everywhere_dense non empty SubSpace of X,
+           A be Subset of X, B be Subset of X0;
+  assume A1: A = B;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X0 as Subset of X;
+     A c= C & C is everywhere_dense by A1,Th16;
+  hence thesis by A1,TOPS_3:64;
+ end;
+
+theorem
+   for X1 being everywhere_dense SubSpace of X, X2 being SubSpace of X holds
+  X1 is SubSpace of X2 implies X2 is everywhere_dense
+ proof let X1 be everywhere_dense SubSpace of X, X2 be SubSpace of X;
+     the carrier of X1 is Subset of X by BORSUK_1:35;
+   then reconsider C = the carrier of X1 as Subset of X;
+     A1: C is everywhere_dense by Def2;
+  assume X1 is SubSpace of X2;
+     then the carrier of X1 c= the carrier of X2 by TSEP_1:4;
+    then for A be Subset of X st A = the carrier of X2
+     holds A is everywhere_dense by A1,TOPS_3:38;
+  hence thesis by Def2;
+ end;
+
+theorem
+   for X1 being everywhere_dense non empty SubSpace of X,
+     X2 being non empty SubSpace of X holds
+  X1 is SubSpace of X2 implies X1 is everywhere_dense SubSpace of X2
+ proof let X1 be everywhere_dense non empty SubSpace of X,
+     X2 be non empty SubSpace of X;
+     the carrier of X1 is Subset of X by BORSUK_1:35;
+   then reconsider C = the carrier of X1 as Subset of X;
+     A1: C is everywhere_dense by Def2;
+   assume A2: X1 is SubSpace of X2;
+      for A be Subset of X2 st A = the carrier of X1
+     holds A is everywhere_dense by A1,TOPS_3:61;
+  hence thesis by A2,Def2;
+ end;
+
+theorem
+   for X1 being everywhere_dense non empty SubSpace of X,
+      X2 being everywhere_dense non empty SubSpace of X1 holds
+  X2 is everywhere_dense SubSpace of X
+ proof let X1 be everywhere_dense non empty SubSpace of X,
+            X2 be everywhere_dense non empty SubSpace of X1;
+     the carrier of X1 is Subset of X by BORSUK_1:35;
+   then reconsider C = the carrier of X1 as Subset of X;
+     now let A be Subset of X;
+      A1: the carrier of X2 c= the carrier of X1 by BORSUK_1:35;
+    assume A2: A = the carrier of X2;
+     then reconsider B = A as Subset of X1 by A1;
+        C is everywhere_dense & B is everywhere_dense & A c= C by A2,Def2,
+BORSUK_1:35;
+    hence A is everywhere_dense by TOPS_3:64;
+   end;
+  hence thesis by Def2,TSEP_1:7;
+ end;
+
+theorem
+   for Y1, Y2 being non empty TopSpace st Y2 = the TopStruct of Y1 holds
+ Y1 is everywhere_dense SubSpace of X iff Y2 is everywhere_dense SubSpace of X
+ proof let X1,X2 be non empty TopSpace;
+  assume A1: X2 = the TopStruct of X1;
+  thus X1 is everywhere_dense SubSpace of X implies
+         X2 is everywhere_dense SubSpace of X
+   proof assume A2: X1 is everywhere_dense SubSpace of X;
+     then reconsider Y2 = X2 as SubSpace of X by A1,TMAP_1:12;
+       for A2 be Subset of X st A2 = the carrier of Y2
+      holds A2 is everywhere_dense by A1,A2,Def2;
+    hence X2 is everywhere_dense SubSpace of X by Def2;
+   end;
+  assume A3: X2 is everywhere_dense SubSpace of X;
+   then reconsider Y1 = X1 as SubSpace of X by A1,TMAP_1:12;
+       for A1 be Subset of X st A1 = the carrier of Y1 holds
+       A1 is everywhere_dense by A1,A3,Def2;
+  hence thesis by Def2;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster dense open -> everywhere_dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A1: X0 is dense open;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is dense & A is open by A1,Th9,TSEP_1:16;
+     hence A is everywhere_dense by TOPS_3:36;
+    end;
+   hence thesis by Def2;
+  end;
+ cluster dense non everywhere_dense -> non open SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A2: X0 is dense non everywhere_dense;
+   assume A3: X0 is open;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is dense & A is open by A2,A3,Th9,TSEP_1:16;
+     hence A is everywhere_dense by TOPS_3:36;
+    end;
+   hence contradiction by A2,Def2;
+  end;
+ cluster open non everywhere_dense -> non dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A4: X0 is open non everywhere_dense;
+   assume A5: X0 is dense;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is dense & A is open by A4,A5,Th9,TSEP_1:16;
+     hence A is everywhere_dense by TOPS_3:36;
+    end;
+   hence contradiction by A4,Def2;
+  end;
+end;
+
+definition let X be non empty TopSpace;
+ cluster dense open strict non empty SubSpace of X;
+ existence
+  proof
+      X is SubSpace of X by TSEP_1:2;
+    then the carrier of X is Subset of X by TSEP_1:1;
+    then reconsider A0 = the carrier of X as Subset of X;
+       A0 = [#]X by PRE_TOPC:12;
+    then A0 is dense by TOPS_3:16;
+    then consider X0 being dense strict non empty SubSpace of X such that
+            A1: A0 = the carrier of X0 by Th10;
+   take X0;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A = [#]X by A1,PRE_TOPC:12;
+     hence A is open by TOPS_1:53;
+    end;
+   hence thesis by TSEP_1:def 1;
+  end;
+end;
+
+::Properties of Dense Open Subspaces.
+theorem Th23:
+ for A0 being non empty Subset of X st A0 is dense open
+  ex X0 being dense open strict non empty SubSpace of X
+   st A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is dense open;
+  consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+  reconsider
+     Y0 = X0 as dense open strict non empty SubSpace of X
+       by A1,A2,Th9,TSEP_1:16;
+  take Y0;
+  thus thesis by A2;
+ end;
+
+theorem
+   for X0 being SubSpace of X holds X0 is everywhere_dense iff
+  ex X1 being dense open strict SubSpace of X st X1 is SubSpace of X0
+ proof let X0 be SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+  thus X0 is everywhere_dense implies
+        ex X1 being dense open strict SubSpace of X st X1 is SubSpace of X0
+   proof
+    assume X0 is everywhere_dense;
+     then A is everywhere_dense by Def2;
+     then consider C being Subset of X such that
+           A1: C c= A and A2: C is open and A3: C is dense by TOPS_3:41;
+         C is non empty by A3,TOPS_3:17;
+     then consider X1 being dense open strict non empty SubSpace of X such that
+           A4: C = the carrier of X1 by A2,A3,Th23;
+    take X1;
+    thus thesis by A1,A4,TSEP_1:4;
+   end;
+  given X1 being dense open strict SubSpace of X such that
+          A5: X1 is SubSpace of X0;
+     the carrier of X1 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X1 as Subset of X;
+    now
+    take C;
+    thus C c= A & C is open & C is dense by A5,Def1,TSEP_1:4,16;
+   end;
+   then for A be Subset of X st A = the carrier of X0 holds
+     A is everywhere_dense by TOPS_3:41;
+  hence thesis by Def2;
+ end;
+
+reserve X1, X2 for non empty SubSpace of X;
+
+theorem
+    X1 is dense or X2 is dense implies
+   X1 union X2 is dense SubSpace of X
+ proof
+      the carrier of X1 is Subset of X by TSEP_1:1;
+    then reconsider A1 = the carrier of X1 as Subset of X;
+      the carrier of X2 is Subset of X by TSEP_1:1;
+    then reconsider A2 = the carrier of X2 as Subset of X;
+      the carrier of X1 union X2 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X1 union X2 as Subset of X;
+  assume X1 is dense or X2 is dense;
+   then A1 is dense or A2 is dense by Def1;
+  then A1 \/ A2 is dense by TOPS_3:21;
+  then A is dense by TSEP_1:def 2;
+  hence thesis by Th9;
+ end;
+
+theorem
+    X1 is everywhere_dense or X2 is everywhere_dense implies
+   X1 union X2 is everywhere_dense SubSpace of X
+ proof
+      the carrier of X1 is Subset of X by TSEP_1:1;
+    then reconsider A1 = the carrier of X1 as Subset of X;
+      the carrier of X2 is Subset of X by TSEP_1:1;
+    then reconsider A2 = the carrier of X2 as Subset of X;
+      the carrier of X1 union X2 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X1 union X2 as Subset of X;
+  assume X1 is everywhere_dense or X2 is everywhere_dense;
+   then A1 is everywhere_dense or A2 is everywhere_dense by Def2;
+  then A1 \/ A2 is everywhere_dense by TOPS_3:43;
+  then A is everywhere_dense by TSEP_1:def 2;
+  hence thesis by Th16;
+ end;
+
+theorem
+   X1 is everywhere_dense & X2 is everywhere_dense implies
+  X1 meet X2 is everywhere_dense SubSpace of X
+ proof
+      the carrier of X1 is Subset of X by TSEP_1:1;
+    then reconsider A1 = the carrier of X1 as Subset of X;
+      the carrier of X2 is Subset of X by TSEP_1:1;
+    then reconsider A2 = the carrier of X2 as Subset of X;
+      the carrier of X1 meet X2 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X1 meet X2 as Subset of X;
+  assume X1 is everywhere_dense & X2 is everywhere_dense;
+   then A1: A1 is everywhere_dense & A2 is everywhere_dense by Th16;
+  then A1 meets A2 by Lm1;
+  then A2: X1 meets X2 by TSEP_1:def 3;
+     A1 /\ A2 is everywhere_dense by A1,TOPS_3:44;
+  then A is everywhere_dense by A2,TSEP_1:def 5;
+  hence thesis by Th16;
+ end;
+
+theorem
+    X1 is everywhere_dense & X2 is dense or
+       X1 is dense & X2 is everywhere_dense implies
+  X1 meet X2 is dense SubSpace of X
+ proof
+      the carrier of X1 is Subset of X by TSEP_1:1;
+    then reconsider A1 = the carrier of X1 as Subset of X;
+      the carrier of X2 is Subset of X by TSEP_1:1;
+    then reconsider A2 = the carrier of X2 as Subset of X;
+      the carrier of X1 meet X2 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X1 meet X2 as Subset of X;
+  assume X1 is everywhere_dense & X2 is dense or
+            X1 is dense & X2 is everywhere_dense;
+    then A1: A1 is everywhere_dense & A2 is dense or
+              A1 is dense & A2 is everywhere_dense by Th9,Th16;
+   then A1 meets A2 by Lm2;
+   then A2: X1 meets X2 by TSEP_1:def 3;
+      A1 /\ A2 is dense by A1,TOPS_3:45;
+   then A is dense by A2,TSEP_1:def 5;
+  hence thesis by Th9;
+ end;
+
+begin
+:: 3. Boundary and Nowhere Dense Subspaces.
+
+definition let X be non empty TopSpace;
+  let IT be SubSpace of X;
+ attr IT is boundary means
+:Def3: for A being Subset of X st
+  A = the carrier of IT holds A is boundary;
+end;
+
+theorem Th29:
+ for X0 being SubSpace of X, A being Subset of X
+ st A = the carrier of X0 holds
+   X0 is boundary iff A is boundary
+ proof let X0 be SubSpace of X, A be Subset of X;
+   assume A1: A = the carrier of X0;
+  hence X0 is boundary implies A is boundary by Def3;
+  assume A is boundary;
+    then for B be Subset of X st B = the carrier of X0
+     holds B is boundary by A1;
+  hence thesis by Def3;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster open -> non boundary (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume A1: X0 is open;
+      now assume A2: X0 is boundary;
+        the carrier of X0 is Subset of X by TSEP_1:1;
+      then reconsider A = the carrier of X0 as Subset of X;
+         A is boundary & A is open by A1,A2,Def3,TSEP_1:16;
+      then Int A = {} & Int A = A by TOPS_1:55,84;
+     hence contradiction;
+    end;
+   hence thesis;
+  end;
+ cluster boundary -> non open (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+   assume A3: X0 is boundary;
+      now assume A4: X0 is open;
+        the carrier of X0 is Subset of X by TSEP_1:1;
+      then reconsider A = the carrier of X0 as Subset of X;
+         A is boundary & A is open by A3,A4,Def3,TSEP_1:16;
+      then Int A = {} & Int A = A by TOPS_1:55,84;
+     hence contradiction;
+    end;
+   hence thesis;
+  end;
+ cluster everywhere_dense -> non boundary SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A5: X0 is everywhere_dense;
+      now assume A6: X0 is boundary;
+        the carrier of X0 is Subset of X by TSEP_1:1;
+      then reconsider A = the carrier of X0 as Subset of X;
+          A is everywhere_dense by A5,Def2;
+       then A is not boundary & A is boundary by A6,Def3,TOPS_3:37;
+     hence contradiction;
+    end;
+   hence thesis;
+  end;
+ cluster boundary -> non everywhere_dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A7: X0 is boundary;
+   assume A8: X0 is everywhere_dense;
+        the carrier of X0 is Subset of X by TSEP_1:1;
+      then reconsider A = the carrier of X0 as Subset of X;
+          A is everywhere_dense by A8,Def2;
+      then A is not boundary & A is boundary by A7,Def3,TOPS_3:37;
+   hence contradiction;
+  end;
+end;
+
+::Properties of Boundary Subspaces.
+theorem
+   for A0 being non empty Subset of X st A0 is boundary
+  ex X0 being strict SubSpace of X st X0 is boundary & A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is boundary;
+  consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+  take X0;
+  thus thesis by A1,A2,Th29;
+ end;
+
+theorem Th31:
+ for X1,X2 being SubSpace of X st X1,X2 constitute_a_decomposition holds
+  X1 is dense iff X2 is boundary
+ proof let X1,X2 be SubSpace of X;
+    the carrier of X1 is Subset of X &
+  the carrier of X2 is Subset of X by TSEP_1:1;
+  then reconsider A1 = the carrier of X1,
+             A2 = the carrier of X2 as Subset of X;
+  assume A1: for A1, A2 being Subset of X st
+              A1 = the carrier of X1 & A2 = the carrier of X2 holds
+               A1,A2 constitute_a_decomposition;
+  thus X1 is dense implies X2 is boundary
+   proof
+    assume A2: for A1 being Subset of X
+    st A1 = the carrier of X1 holds
+                    A1 is dense;
+       now let A2 be Subset of X;
+      assume A2 = the carrier of X2;
+       then A1,A2 constitute_a_decomposition & A1 is dense by A1,A2;
+      hence A2 is boundary by Th2;
+     end;
+    hence thesis by Def3;
+   end;
+    assume A3: for A2 being Subset of X
+    st A2 = the carrier of X2 holds
+                    A2 is boundary;
+       now let A1 be Subset of X;
+      assume A1 = the carrier of X1;
+       then A1,A2 constitute_a_decomposition & A2 is boundary by A1,A3;
+      hence A1 is dense by Th2;
+     end;
+    hence thesis by Def1;
+ end;
+
+theorem
+  for X1,X2 being non empty SubSpace of X st X1,X2 constitute_a_decomposition
+ holds X1 is boundary iff X2 is dense by Th31;
+
+theorem Th33:
+ for X0 being SubSpace of X st X0 is boundary
+  for A being Subset of X st A c= the carrier of X0 holds A is boundary
+ proof let X0 be SubSpace of X;
+  assume A1: X0 is boundary;
+   let A be Subset of X;
+  assume A2: A c= the carrier of X0;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X0 as Subset of X;
+      C is boundary by A1,Def3;
+  hence thesis by A2,TOPS_3:11;
+ end;
+
+theorem Th34:
+ for X1,X2 being SubSpace of X st X1 is boundary holds
+  X2 is SubSpace of X1 implies X2 is boundary
+ proof let X1,X2 be SubSpace of X;
+   assume A1: X1 is boundary;
+   assume X2 is SubSpace of X1;
+     then the carrier of X2 c= the carrier of X1 by TSEP_1:4;
+    then for A be Subset of X st A = the carrier of X2
+     holds A is boundary by A1,Th33;
+  hence thesis by Def3;
+ end;
+
+definition let X be non empty TopSpace;
+  let IT be SubSpace of X;
+ attr IT is nowhere_dense means
+:Def4: for A being Subset of X st
+  A = the carrier of IT holds A is nowhere_dense;
+end;
+
+theorem Th35:
+ for X0 being SubSpace of X, A being Subset of X
+ st A = the carrier of X0 holds
+   X0 is nowhere_dense iff A is nowhere_dense
+ proof let X0 be SubSpace of X, A be Subset of X;
+   assume A1: A = the carrier of X0;
+  hence X0 is nowhere_dense implies A is nowhere_dense by Def4;
+  assume A is nowhere_dense;
+    then for B be Subset of X st B = the carrier of X0
+     holds B is nowhere_dense by A1;
+  hence thesis by Def4;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster nowhere_dense -> boundary SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A1: X0 is nowhere_dense;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is nowhere_dense by A1,Def4;
+     hence A is boundary by TOPS_1:92;
+    end;
+   hence thesis by Def3;
+  end;
+ cluster non boundary -> non nowhere_dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A2: X0 is non boundary;
+      now assume A3: X0 is nowhere_dense;
+           now let A be Subset of X;
+          assume A = the carrier of X0;
+           then A is nowhere_dense by A3,Def4;
+          hence A is boundary by TOPS_1:92;
+         end;
+     hence contradiction by A2,Def3;
+    end;
+   hence thesis;
+  end;
+ cluster nowhere_dense -> non dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A4: X0 is nowhere_dense;
+   assume A5: X0 is dense;
+       the carrier of X0 is Subset of X by TSEP_1:1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is nowhere_dense by A4,Def4;
+      then A is not dense & A is dense by A5,Def1,TOPS_3:25;
+   hence contradiction;
+  end;
+ cluster dense -> non nowhere_dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A6: X0 is dense;
+   assume A7: X0 is nowhere_dense;
+       the carrier of X0 is Subset of X by TSEP_1:1;
+     then reconsider A = the carrier of X0 as Subset of X;
+         A is nowhere_dense by A7,Def4;
+      then A is not dense & A is dense by A6,Def1,TOPS_3:25;
+   hence contradiction;
+  end;
+end;
+
+reserve X for non empty TopSpace;
+
+::Properties of Nowhere Dense Subspaces.
+theorem
+   for A0 being non empty Subset of X st A0 is nowhere_dense
+  ex X0 being strict SubSpace of X st
+      X0 is nowhere_dense & A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is nowhere_dense;
+  consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+  take X0;
+  thus thesis by A1,A2,Th35;
+ end;
+
+theorem Th37:
+ for X1,X2 being SubSpace of X st X1,X2 constitute_a_decomposition holds
+  X1 is everywhere_dense iff X2 is nowhere_dense
+ proof let X1,X2 be SubSpace of X;
+    the carrier of X1 is Subset of X &
+  the carrier of X2 is Subset of X by TSEP_1:1;
+  then reconsider A1 = the carrier of X1,
+             A2 = the carrier of X2 as Subset of X;
+  assume A1: for A1, A2 being Subset of X st
+              A1 = the carrier of X1 & A2 = the carrier of X2 holds
+               A1,A2 constitute_a_decomposition;
+  thus X1 is everywhere_dense implies X2 is nowhere_dense
+   proof
+    assume A2: for A1 being Subset of X
+    st A1 = the carrier of X1 holds
+                    A1 is everywhere_dense;
+       now let A2 be Subset of X;
+      assume A2 = the carrier of X2;
+       then A1,A2 constitute_a_decomposition & A1 is everywhere_dense by A1,A2
+;
+      hence A2 is nowhere_dense by Th4;
+     end;
+    hence thesis by Def4;
+   end;
+    assume A3: for A2 being Subset of X
+     st A2 = the carrier of X2 holds
+                    A2 is nowhere_dense;
+       now let A1 be Subset of X;
+      assume A1 = the carrier of X1;
+       then A1,A2 constitute_a_decomposition & A2 is nowhere_dense by A1,A3;
+      hence A1 is everywhere_dense by Th4;
+     end;
+    hence thesis by Def2;
+ end;
+
+theorem
+  for X1,X2 being non empty SubSpace of X st X1,X2 constitute_a_decomposition
+ holds X1 is nowhere_dense iff X2 is everywhere_dense by Th37;
+
+theorem Th39:
+ for X0 being SubSpace of X st X0 is nowhere_dense
+  for A being Subset of X st A c= the carrier of X0
+  holds A is nowhere_dense
+ proof let X0 be SubSpace of X;
+  assume A1: X0 is nowhere_dense;
+   let A be Subset of X;
+  assume A2: A c= the carrier of X0;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X0 as Subset of X;
+      C is nowhere_dense by A1,Def4;
+  hence thesis by A2,TOPS_3:26;
+ end;
+
+theorem Th40:
+ for X1,X2 being SubSpace of X st X1 is nowhere_dense holds
+  X2 is SubSpace of X1 implies X2 is nowhere_dense
+ proof let X1,X2 be SubSpace of X;
+   assume A1: X1 is nowhere_dense;
+   assume X2 is SubSpace of X1;
+     then the carrier of X2 c= the carrier of X1 by TSEP_1:4;
+    then for A be Subset of X st A = the carrier of X2
+     holds A is nowhere_dense by A1,Th39;
+  hence thesis by Def4;
+ end;
+
+definition let X be non empty TopSpace;
+ cluster boundary closed -> nowhere_dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A1: X0 is boundary closed;
+      now let A be Subset of X;
+     assume A = the carrier of X0;
+      then A is boundary & A is closed by A1,Th29,TSEP_1:11;
+     hence A is nowhere_dense by TOPS_1:93;
+    end;
+   hence thesis by Def4;
+  end;
+ cluster boundary non nowhere_dense -> non closed SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A2: X0 is boundary non nowhere_dense;
+      now assume A3: X0 is closed;
+            now let A be Subset of X;
+           assume A = the carrier of X0;
+            then A is boundary & A is closed by A2,A3,Th29,TSEP_1:11;
+           hence A is nowhere_dense by TOPS_1:93;
+          end;
+     hence contradiction by A2,Def4;
+    end;
+   hence thesis;
+  end;
+ cluster closed non nowhere_dense -> non boundary SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+   assume A4: X0 is closed non nowhere_dense;
+      now assume A5: X0 is boundary;
+            now let A be Subset of X;
+           assume A = the carrier of X0;
+            then A is boundary & A is closed by A4,A5,Th29,TSEP_1:11;
+           hence A is nowhere_dense by TOPS_1:93;
+          end;
+     hence contradiction by A4,Def4;
+    end;
+   hence thesis;
+  end;
+end;
+
+::Properties of Boundary Closed Subspaces.
+theorem Th41:
+ for A0 being non empty Subset of X st A0 is boundary closed
+  ex X0 being closed strict non empty SubSpace of X st
+      X0 is boundary & A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is boundary closed;
+   consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+   reconsider Y0 = X0 as closed strict non empty SubSpace of X
+    by A1,A2,TSEP_1:11;
+  take Y0;
+  thus thesis by A1,A2,Th29;
+ end;
+
+theorem
+   for X0 being non empty SubSpace of X holds X0 is nowhere_dense iff
+  ex X1 being closed strict non empty SubSpace of X st
+      X1 is boundary & X0 is SubSpace of X1
+ proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+  thus X0 is nowhere_dense implies
+      ex X1 being closed strict non empty SubSpace of X st
+          X1 is boundary & X0 is SubSpace of X1
+   proof
+    assume X0 is nowhere_dense;
+     then A is nowhere_dense by Def4;
+     then consider C being Subset of X such that
+           A1: A c= C and A2: C is closed and A3: C is boundary by TOPS_3:27;
+         C is non empty by A1,XBOOLE_1:3;
+     then consider X1 being closed strict non empty SubSpace of X such that
+          A4: X1 is boundary and A5: C = the carrier of X1 by A2,A3,Th41;
+    take X1;
+    thus thesis by A1,A4,A5,TSEP_1:4;
+   end;
+  given X1 being closed strict non empty SubSpace of X such that
+          A6: X1 is boundary and A7: X0 is SubSpace of X1;
+     the carrier of X1 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X1 as Subset of X;
+    now
+    take C;
+    thus A c= C & C is boundary & C is closed by A6,A7,Def3,TSEP_1:4,11;
+   end;
+   then for A be Subset of X st A = the carrier of X0
+    holds A is nowhere_dense by TOPS_3:27;
+  hence thesis by Def4;
+ end;
+
+reserve X1, X2 for non empty SubSpace of X;
+
+theorem
+   (X1 is boundary or X2 is boundary) & X1 meets X2 implies
+   X1 meet X2 is boundary
+ proof
+  assume A1: X1 is boundary or X2 is boundary;
+  assume A2: X1 meets X2;
+   hereby per cases by A1;
+    suppose A3: X1 is boundary;
+        X1 meet X2 is SubSpace of X1 by A2,TSEP_1:30;
+     hence X1 meet X2 is boundary by A3,Th34;
+    suppose A4: X2 is boundary;
+        X1 meet X2 is SubSpace of X2 by A2,TSEP_1:30;
+     hence X1 meet X2 is boundary by A4,Th34;
+   end;
+ end;
+
+theorem
+   X1 is nowhere_dense & X2 is nowhere_dense implies
+   X1 union X2 is nowhere_dense
+ proof
+  assume A1: X1 is nowhere_dense & X2 is nowhere_dense;
+      the carrier of X1 is Subset of X by TSEP_1:1;
+    then reconsider A1 = the carrier of X1 as Subset of X;
+      the carrier of X2 is Subset of X by TSEP_1:1;
+    then reconsider A2 = the carrier of X2 as Subset of X;
+     A1 is nowhere_dense & A2 is nowhere_dense by A1,Def4;
+  then A1 \/ A2 is nowhere_dense by TOPS_1:90;
+    then for A be Subset of X st A = the carrier of X1 union X2
+     holds A is nowhere_dense by TSEP_1:def 2;
+  hence thesis by Def4;
+ end;
+
+theorem
+   X1 is nowhere_dense & X2 is boundary or X1 is boundary & X2 is nowhere_dense
+   implies X1 union X2 is boundary
+ proof
+      the carrier of X1 is Subset of X by TSEP_1:1;
+    then reconsider A1 = the carrier of X1 as Subset of X;
+      the carrier of X2 is Subset of X by TSEP_1:1;
+    then reconsider A2 = the carrier of X2 as Subset of X;
+  assume X1 is nowhere_dense & X2 is boundary or
+            X1 is boundary & X2 is nowhere_dense;
+   then A1 is nowhere_dense & A2 is boundary or
+            A1 is boundary & A2 is nowhere_dense by Def3,Def4;
+  then A1 \/ A2 is boundary by TOPS_3:30;
+    then for A be Subset of X st A = the carrier of X1 union X2
+     holds A is boundary by TSEP_1:def 2;
+  hence thesis by Def3;
+ end;
+
+theorem
+   (X1 is nowhere_dense or X2 is nowhere_dense) & X1 meets X2 implies
+    X1 meet X2 is nowhere_dense
+ proof
+  assume A1: X1 is nowhere_dense or X2 is nowhere_dense;
+  assume A2: X1 meets X2;
+   hereby per cases by A1;
+    suppose A3: X1 is nowhere_dense;
+        X1 meet X2 is SubSpace of X1 by A2,TSEP_1:30;
+     hence X1 meet X2 is nowhere_dense by A3,Th40;
+    suppose A4: X2 is nowhere_dense;
+        X1 meet X2 is SubSpace of X2 by A2,TSEP_1:30;
+     hence X1 meet X2 is nowhere_dense by A4,Th40;
+   end;
+ end;
+
+
+begin
+:: 4. Dense and Boundary Subspaces of non Discrete Spaces.
+
+theorem
+   for X being non empty TopSpace holds
+   (for X0 being SubSpace of X holds X0 is non boundary) implies
+  X is discrete
+ proof let X be non empty TopSpace;
+  assume A1: for X0 being SubSpace of X holds X0 is non boundary;
+     now let A be non empty Subset of X;
+    consider X0 being strict non empty SubSpace of X such that
+       A2: A = the carrier of X0 by TSEP_1:10;
+       X0 is non boundary by A1;
+    hence A is not boundary by A2,Th29;
+   end;
+  hence thesis by TEX_1:def 6;
+ end;
+
+theorem
+   for X being non trivial (non empty TopSpace) holds
+   (for X0 being proper SubSpace of X holds X0 is non dense) implies
+  X is discrete
+ proof let X be non trivial (non empty TopSpace);
+  assume A1: for X0 being proper SubSpace of X holds X0 is non dense;
+     now let A be Subset of X;
+    assume A2: A <> the carrier of X;
+       now per cases;
+      suppose A is empty;
+       hence A is not dense by TOPS_3:17;
+      suppose A is non empty;
+        then consider X0 being strict non empty SubSpace of X such that
+                A3: A = the carrier of X0 by TSEP_1:10;
+            A is proper by A2,TEX_2:5;
+         then reconsider X0 as proper strict SubSpace of X by A3,TEX_2:13;
+            X0 is non dense by A1;
+       hence A is not dense by A3,Th9;
+     end;
+    hence A is not dense;
+   end;
+  hence thesis by TEX_1:35;
+ end;
+
+definition let X be discrete non empty TopSpace;
+ cluster -> non boundary (non empty SubSpace of X);
+ coherence;
+ cluster proper -> non dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is proper;
+    then A is proper by TEX_2:13;
+    then A <> the carrier of X by TEX_2:5;
+    then A is not dense by TEX_1:35;
+   hence X0 is not dense by Th9;
+  end;
+ cluster dense -> non proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+   assume A1: X0 is dense;
+   assume X0 is proper;
+    then A is proper by TEX_2:13;
+    then A <> the carrier of X by TEX_2:5;
+    then A is not dense by TEX_1:35;
+   hence contradiction by A1,Th9;
+  end;
+end;
+
+definition let X be discrete non empty TopSpace;
+ cluster non boundary strict non empty SubSpace of X;
+ existence
+  proof
+    consider X0 being strict non empty SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
+end;
+
+definition let X be discrete non trivial (non empty TopSpace);
+ cluster non dense strict SubSpace of X;
+ existence
+  proof
+    consider X0 being proper strict SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
+end;
+
+theorem
+   for X being non empty TopSpace holds
+   (ex X0 being non empty SubSpace of X st X0 is boundary) implies
+  X is non discrete
+ proof let X be non empty TopSpace;
+  given X0 being non empty SubSpace of X such that
+          A1: X0 is boundary;
+      the carrier of X0 is non empty Subset of X
+      by TSEP_1:1;
+    then reconsider A = the carrier of X0 as non empty Subset of X
+     ;
+     now
+    take A;
+    thus A is boundary by A1,Th29;
+   end;
+  hence thesis by TEX_1:def 6;
+ end;
+
+theorem
+   for X being non empty TopSpace holds
+   (ex X0 being non empty SubSpace of X st X0 is dense proper) implies
+  X is non discrete
+ proof let X be non empty TopSpace;
+  given X0 being non empty SubSpace of X such that
+          A1: X0 is dense proper;
+      the carrier of X0 is Subset of X by TSEP_1:1;
+    then reconsider A = the carrier of X0 as Subset of X;
+     now
+    take A;
+        A is proper by A1,TEX_2:13;
+    hence A <> the carrier of X by TEX_2:5;
+    thus A is dense by A1,Th9;
+   end;
+  hence thesis by TEX_1:35;
+ end;
+
+definition let X be non discrete non empty TopSpace;
+ cluster boundary strict non empty SubSpace of X;
+ existence
+  proof
+    consider A0 being non empty Subset of X such that
+           A1: A0 is boundary by TEX_1:def 6;
+    consider X0 being strict non empty SubSpace of X such that
+           A2: A0 = the carrier of X0 by TSEP_1:10;
+   take X0;
+      for A be Subset of X st A = the carrier of X0
+     holds A is boundary by A1,A2;
+   hence thesis by Def3;
+  end;
+ cluster dense proper strict non empty SubSpace of X;
+ existence
+  proof
+    consider A0 being Subset of X such that
+           A3: A0 <> the carrier of X and A4: A0 is dense by TEX_1:35;
+      A0 is non empty by A4,TOPS_3:17;
+    then consider X0 being dense strict non empty SubSpace of X such that
+           A5: A0 = the carrier of X0 by A4,Th10;
+   take X0;
+       A0 is proper by A3,TEX_2:5;
+   hence thesis by A5,TEX_2:13;
+  end;
+end;
+
+reserve X for non discrete non empty TopSpace;
+
+theorem
+   for A0 being non empty Subset of X st A0 is boundary
+  ex X0 being boundary strict SubSpace of X st A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is boundary;
+   consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+   reconsider Y0 = X0 as boundary strict SubSpace of X by A1,A2,Th29;
+  take Y0;
+  thus thesis by A2;
+ end;
+
+theorem
+   for A0 being non empty proper Subset of X st A0 is dense
+  ex X0 being dense proper strict SubSpace of X st A0 = the carrier of X0
+ proof let A0 be non empty proper Subset of X;
+  assume A1: A0 is dense;
+   consider X0 being strict non empty SubSpace of X such that
+      A2: A0 = the carrier of X0 by TSEP_1:10;
+   reconsider X0 as dense proper strict SubSpace of X by A1,A2,Th9,TEX_2:13;
+  take X0;
+  thus thesis by A2;
+ end;
+
+theorem
+   for X1 being boundary non empty SubSpace of X
+  ex X2 being dense proper strict non empty SubSpace of X st
+    X1,X2 constitute_a_decomposition
+ proof let X1 be boundary non empty SubSpace of X;
+   consider X2 being proper strict non empty SubSpace of X such that
+         A1: X1,X2 constitute_a_decomposition by Th8;
+   reconsider X2 as dense proper strict non empty SubSpace of X by A1,Th31;
+  take X2;
+  thus thesis by A1;
+ end;
+
+theorem
+   for X1 being dense proper non empty SubSpace of X
+  ex X2 being boundary strict non empty SubSpace of X st
+    X1,X2 constitute_a_decomposition
+ proof let X1 be dense proper non empty SubSpace of X;
+      consider X2 being proper strict non empty SubSpace of X such that
+         A1: X1,X2 constitute_a_decomposition by Th8;
+   reconsider X2 as boundary strict non empty SubSpace of X by A1,Th31;
+  take X2;
+  thus thesis by A1;
+ end;
+
+theorem
+   for Y1, Y2 being non empty TopSpace st Y2 = the TopStruct of Y1 holds
+  Y1 is boundary SubSpace of X iff Y2 is boundary SubSpace of X
+ proof let X1,X2 be non empty TopSpace;
+  assume A1: X2 = the TopStruct of X1;
+  thus X1 is boundary SubSpace of X implies X2 is boundary SubSpace of X
+   proof assume A2: X1 is boundary SubSpace of X;
+     then reconsider Y2 = X2 as SubSpace of X by A1,TMAP_1:12;
+       for A2 be Subset of X st A2 = the carrier of Y2
+      holds A2 is boundary by A1,A2,Def3;
+    hence X2 is boundary SubSpace of X by Def3;
+   end;
+  assume A3: X2 is boundary SubSpace of X;
+   then reconsider Y1 = X1 as SubSpace of X by A1,TMAP_1:12;
+       for A1 be Subset of X st A1 = the carrier of Y1
+      holds A1 is boundary by A1,A3,Def3;
+  hence thesis by Def3;
+ end;
+
+
+begin
+:: 5. Everywhere and Nowhere Dense Subspaces of non Almost Discrete Spaces.
+
+theorem
+   for X being non empty TopSpace holds
+   (for X0 being SubSpace of X holds X0 is non nowhere_dense) implies
+  X is almost_discrete
+ proof let X be non empty TopSpace;
+  assume A1: for X0 being SubSpace of X holds X0 is non nowhere_dense;
+     now let A be non empty Subset of X;
+    consider X0 being strict non empty SubSpace of X such that
+       A2: A = the carrier of X0 by TSEP_1:10;
+       X0 is non nowhere_dense by A1;
+    hence A is not nowhere_dense by A2,Th35;
+   end;
+  hence thesis by TEX_1:def 7;
+ end;
+
+theorem
+   for X being non trivial (non empty TopSpace) holds
+   (for X0 being proper SubSpace of X holds X0 is non everywhere_dense) implies
+  X is almost_discrete
+ proof let X be non trivial (non empty TopSpace);
+  assume A1: for X0 being proper SubSpace of X holds
+                               X0 is non everywhere_dense;
+     now let A be Subset of X;
+    assume A2: A <> the carrier of X;
+       now per cases;
+      suppose A is empty;
+       hence A is not everywhere_dense by TOPS_3:34;
+      suppose A is non empty;
+        then consider X0 being strict non empty SubSpace of X such that
+                A3: A = the carrier of X0 by TSEP_1:10;
+            A is proper by A2,TEX_2:5;
+         then reconsider X0 as proper strict SubSpace of X by A3,TEX_2:13;
+          X0 is non everywhere_dense by A1;
+       hence A is not everywhere_dense by A3,Th16;
+     end;
+    hence A is not everywhere_dense;
+   end;
+  hence thesis by TEX_1:36;
+ end;
+
+definition let X be almost_discrete non empty TopSpace;
+ cluster -> non nowhere_dense (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+       A is not nowhere_dense by TEX_1:def 7;
+   hence X0 is non nowhere_dense by Th35;
+  end;
+ cluster proper -> non everywhere_dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume X0 is proper;
+    then A is proper by TEX_2:13;
+    then A <> the carrier of X by TEX_2:5;
+    then A is not everywhere_dense by TEX_1:36;
+   hence X0 is not everywhere_dense by Th16;
+  end;
+ cluster everywhere_dense -> non proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   assume A1: X0 is everywhere_dense;
+   assume X0 is proper;
+    then A is proper by TEX_2:13;
+    then A <> the carrier of X by TEX_2:5;
+    then A is not everywhere_dense by TEX_1:36;
+   hence contradiction by A1,Th16;
+  end;
+ cluster boundary -> non closed (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as non empty Subset of X;
+   assume A2: X0 is boundary;
+   assume A3: X0 is closed;
+      now
+     take A;
+     thus A is boundary closed by A2,A3,Th29,TSEP_1:11;
+    end;
+   hence contradiction by TEX_1:37;
+  end;
+ cluster closed -> non boundary (non empty SubSpace of X);
+ coherence
+  proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as non empty Subset of X;
+   assume A4: X0 is closed;
+   assume A5: X0 is boundary;
+      now
+     take A;
+     thus A is boundary closed by A4,A5,Th29,TSEP_1:11;
+    end;
+   hence contradiction by TEX_1:37;
+  end;
+ cluster dense proper -> non open SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   reconsider B = the carrier of X0 as Subset of X by TSEP_1:1;
+   assume A6: X0 is dense proper;
+     then A7: A is dense & B is proper by Th9,TEX_2:13;
+   assume A8: X0 is open;
+      now
+     take A;
+     thus A <> the carrier of X by A7,TEX_2:5;
+     thus A is dense open by A6,A8,Th9,TSEP_1:16;
+    end;
+   hence contradiction by TEX_1:38;
+  end;
+ cluster dense open -> non proper SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   reconsider B = the carrier of X0 as Subset of X by TSEP_1:1;
+   assume A9: X0 is dense open;
+   assume X0 is proper;
+     then A10: B is proper by TEX_2:13;
+      now
+     take A;
+     thus A <> the carrier of X by A10,TEX_2:5;
+     thus A is dense open by A9,Th9,TSEP_1:16;
+    end;
+   hence contradiction by TEX_1:38;
+  end;
+ cluster open proper -> non dense SubSpace of X;
+ coherence
+  proof let X0 be SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+   reconsider B = the carrier of X0 as Subset of X by TSEP_1:1;
+   assume A11: X0 is open proper;
+     then A12: A is open & B is proper by TEX_2:13,TSEP_1:16;
+   assume A13: X0 is dense;
+      now
+     take A;
+     thus A <> the carrier of X by A12,TEX_2:5;
+     thus A is dense open by A11,A13,Th9,TSEP_1:16;
+    end;
+   hence contradiction by TEX_1:38;
+  end;
+end;
+
+definition let X be almost_discrete non empty TopSpace;
+ cluster non nowhere_dense strict non empty SubSpace of X;
+ existence
+  proof
+    consider X0 being strict non empty SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
+end;
+
+definition let X be almost_discrete non trivial (non empty TopSpace);
+ cluster non everywhere_dense strict SubSpace of X;
+ existence
+  proof
+    consider X0 being proper strict SubSpace of X;
+   take X0;
+   thus thesis;
+  end;
+end;
+
+theorem
+   for X being non empty TopSpace holds
+   (ex X0 being non empty SubSpace of X st X0 is nowhere_dense) implies
+  X is non almost_discrete
+ proof let X be non empty TopSpace;
+  given X0 being non empty SubSpace of X such that
+          A1: X0 is nowhere_dense;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as non empty Subset of X;
+     now
+    take A;
+    thus A is nowhere_dense by A1,Th35;
+   end;
+  hence thesis by TEX_1:def 7;
+ end;
+
+theorem
+   for X being non empty TopSpace holds
+   (ex X0 being non empty SubSpace of X st X0 is boundary closed) implies
+  X is non almost_discrete
+ proof let X be non empty TopSpace;
+  given X0 being non empty SubSpace of X such that
+          A1: X0 is boundary closed;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as non empty Subset of X;
+     now
+    take A;
+    thus A is boundary closed by A1,Th29,TSEP_1:11;
+   end;
+  hence thesis by TEX_1:37;
+ end;
+
+theorem
+   for X being non empty TopSpace holds
+   (ex X0 being non empty SubSpace of X st X0 is everywhere_dense proper)
+   implies
+  X is non almost_discrete
+ proof let X be non empty TopSpace;
+  given X0 being non empty SubSpace of X such that
+          A1: X0 is everywhere_dense proper;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as non empty Subset of X;
+     now
+    take A;
+        A is proper by A1,TEX_2:13;
+    hence A <> the carrier of X by TEX_2:5;
+    thus A is everywhere_dense by A1,Th16;
+   end;
+  hence thesis by TEX_1:36;
+ end;
+
+theorem
+   for X being non empty TopSpace holds
+   (ex X0 being non empty SubSpace of X st X0 is dense open proper) implies
+  X is non almost_discrete
+ proof let X be non empty TopSpace;
+  given X0 being non empty SubSpace of X such that
+          A1: X0 is dense open proper;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as non empty Subset of X;
+     now
+    take A;
+        A is proper by A1,TEX_2:13;
+    hence A <> the carrier of X by TEX_2:5;
+    thus A is dense open by A1,Th9,TSEP_1:16;
+   end;
+  hence thesis by TEX_1:38;
+ end;
+
+definition let X be non almost_discrete non empty TopSpace;
+ cluster nowhere_dense strict non empty SubSpace of X;
+ existence
+  proof
+    consider A0 being non empty Subset of X such that
+           A1: A0 is nowhere_dense by TEX_1:def 7;
+    consider X0 being strict non empty SubSpace of X such that
+           A2: A0 = the carrier of X0 by TSEP_1:10;
+   take X0;
+     for A be Subset of X st A = the carrier of X0 holds
+    A is nowhere_dense by A1,A2;
+   hence thesis by Def4;
+  end;
+ cluster everywhere_dense proper strict non empty SubSpace of X;
+ existence
+  proof
+    consider A0 being Subset of X such that
+       A3: A0 <> the carrier of X and A4: A0 is everywhere_dense by TEX_1:36;
+      A0 is non empty by A4,TOPS_3:34;
+    then consider X0 being everywhere_dense strict non empty SubSpace of X
+    such that
+           A5: A0 = the carrier of X0 by A4,Th17;
+   take X0;
+       A0 is proper by A3,TEX_2:5;
+   hence thesis by A5,TEX_2:13;
+  end;
+end;
+
+reserve X for non almost_discrete non empty TopSpace;
+
+theorem Th62:
+ for A0 being non empty Subset of X st A0 is nowhere_dense
+  ex X0 being nowhere_dense strict non empty SubSpace of X
+    st A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is nowhere_dense;
+  consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+  reconsider Y0 = X0 as nowhere_dense strict non empty SubSpace of X
+    by A1,A2,Th35;
+  take Y0;
+  thus thesis by A2;
+ end;
+
+theorem
+   for A0 being non empty proper Subset of X
+ st A0 is everywhere_dense
+  ex X0 being everywhere_dense proper strict SubSpace of X st
+     A0 = the carrier of X0
+ proof let A0 be non empty proper Subset of X;
+  assume A0 is everywhere_dense;
+   then consider X0 being everywhere_dense strict non empty SubSpace of X
+   such that
+           A1: A0 = the carrier of X0 by Th17;
+   reconsider X0 as everywhere_dense proper strict SubSpace of X by A1,TEX_2:13
+;
+  take X0;
+  thus thesis by A1;
+ end;
+
+theorem
+   for X1 being nowhere_dense non empty SubSpace of X
+  ex X2 being everywhere_dense proper strict non empty SubSpace of X st
+    X1,X2 constitute_a_decomposition
+ proof let X1 be nowhere_dense non empty SubSpace of X;
+   consider X2 being proper strict non empty SubSpace of X such that
+         A1: X1,X2 constitute_a_decomposition by Th8;
+   reconsider X2 as everywhere_dense proper strict non empty SubSpace of X
+     by A1,Th37;
+  take X2;
+  thus thesis by A1;
+ end;
+
+theorem
+   for X1 being everywhere_dense proper non empty SubSpace of X
+  ex X2 being nowhere_dense strict non empty SubSpace of X st
+    X1,X2 constitute_a_decomposition
+ proof let X1 be everywhere_dense proper non empty SubSpace of X;
+      consider X2 being proper strict non empty SubSpace of X such that
+         A1: X1,X2 constitute_a_decomposition by Th8;
+   reconsider X2 as nowhere_dense strict non empty SubSpace of X by A1,Th37;
+  take X2;
+  thus thesis by A1;
+ end;
+
+theorem
+   for Y1, Y2 being non empty TopSpace st Y2 = the TopStruct of Y1 holds
+  Y1 is nowhere_dense SubSpace of X iff Y2 is nowhere_dense SubSpace of X
+ proof let X1,X2 be non empty TopSpace;
+  assume A1: X2 = the TopStruct of X1;
+  thus X1 is nowhere_dense SubSpace of X implies
+         X2 is nowhere_dense SubSpace of X
+   proof assume A2: X1 is nowhere_dense SubSpace of X;
+     then reconsider Y2 = X2 as SubSpace of X by A1,TMAP_1:12;
+       for A2 be Subset of X st A2 = the carrier of Y2
+      holds A2 is nowhere_dense by A1,A2,Def4;
+    hence X2 is nowhere_dense SubSpace of X by Def4;
+   end;
+  assume A3: X2 is nowhere_dense SubSpace of X;
+   then reconsider Y1 = X1 as SubSpace of X by A1,TMAP_1:12;
+       for A1 be Subset of X st A1 = the carrier of Y1
+      holds A1 is nowhere_dense by A1,A3,Def4;
+  hence thesis by Def4;
+ end;
+
+definition let X be non almost_discrete non empty TopSpace;
+ cluster boundary closed strict non empty SubSpace of X;
+ existence
+  proof
+    consider A being non empty Subset of X such that
+           A1: A is nowhere_dense by TEX_1:def 7;
+     consider C being Subset of X such that
+         A2: A c= C and A3: C is closed and A4: C is boundary by A1,TOPS_3:27;
+         C is non empty by A2,XBOOLE_1:3;
+      then consider X0 being strict non empty SubSpace of X such that
+           A5: C = the carrier of X0 by TSEP_1:10;
+   take X0;
+A6: for C be Subset of X st C = the carrier of X0
+      holds C is boundary by A4,A5;
+       for C be Subset of X st C = the carrier of X0
+      holds C is closed by A3,A5;
+   hence thesis by A6,Def3,BORSUK_1:def 14;
+  end;
+ cluster dense open proper strict non empty SubSpace of X;
+ existence
+  proof
+    consider A0 being Subset of X such that
+       A7: A0 <> the carrier of X and
+       A8: A0 is dense open by TEX_1:38;
+      A0 is non empty by A8,TOPS_3:17;
+    then consider X0 being dense open strict non empty SubSpace of X such that
+           A9: A0 = the carrier of X0 by A8,Th23;
+   take X0;
+       A0 is proper by A7,TEX_2:5;
+   hence thesis by A9,TEX_2:13;
+  end;
+end;
+
+theorem Th67:
+ for A0 being non empty Subset of X st A0 is boundary closed
+  ex X0 being boundary closed strict non empty SubSpace of X
+    st A0 = the carrier of X0
+ proof let A0 be non empty Subset of X;
+  assume A1: A0 is boundary closed;
+  consider X0 being strict non empty SubSpace of X such that
+     A2: A0 = the carrier of X0 by TSEP_1:10;
+  reconsider
+     Y0 = X0 as boundary closed strict non empty SubSpace of X
+       by A1,A2,Th29,TSEP_1:11;
+  take Y0;
+  thus thesis by A2;
+ end;
+
+theorem
+   for A0 being non empty proper Subset of X st A0 is dense open
+  ex X0 being dense open proper strict SubSpace of X st
+     A0 = the carrier of X0
+ proof let A0 be non empty proper Subset of X;
+  assume A0 is dense open;
+   then consider X0 being dense open strict non empty SubSpace of X such that
+           A1: A0 = the carrier of X0 by Th23;
+   reconsider X0 as dense open proper strict SubSpace of X by A1,TEX_2:13;
+  take X0;
+  thus thesis by A1;
+ end;
+
+theorem
+   for X1 being boundary closed non empty SubSpace of X
+  ex X2 being dense open proper strict non empty SubSpace of X st
+    X1,X2 constitute_a_decomposition
+ proof let X1 be boundary closed non empty SubSpace of X;
+   consider X2 being proper strict non empty SubSpace of X such that
+         A1: X1,X2 constitute_a_decomposition by Th8;
+   reconsider X2 as dense open proper strict non empty SubSpace of X
+                                        by A1,Th31,TSEP_2:36;
+  take X2;
+  thus thesis by A1;
+ end;
+
+theorem
+   for X1 being dense open proper non empty SubSpace of X
+  ex X2 being boundary closed strict non empty SubSpace of X st
+    X1,X2 constitute_a_decomposition
+ proof let X1 be dense open proper non empty SubSpace of X;
+      consider X2 being proper strict non empty SubSpace of X such that
+         A1: X1,X2 constitute_a_decomposition by Th8;
+   reconsider X2 as boundary closed strict non empty SubSpace of X
+     by A1,Th31,TSEP_2:35;
+  take X2;
+  thus thesis by A1;
+ end;
+
+theorem
+   for X0 being non empty SubSpace of X holds X0 is nowhere_dense iff
+  ex X1 being boundary closed strict non empty SubSpace of X
+    st X0 is SubSpace of X1
+ proof let X0 be non empty SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider A = the carrier of X0 as Subset of X;
+  thus X0 is nowhere_dense implies
+      ex X1 being boundary closed strict non empty SubSpace of X
+       st X0 is SubSpace of X1
+   proof
+    assume X0 is nowhere_dense;
+     then A is nowhere_dense by Def4;
+     then consider C being Subset of X such that
+           A1: A c= C and A2: C is closed and A3: C is boundary by TOPS_3:27;
+         C is non empty by A1,XBOOLE_1:3;
+     then consider X1 being boundary closed strict non empty SubSpace of X
+     such that
+           A4: C = the carrier of X1 by A2,A3,Th67;
+    take X1;
+    thus thesis by A1,A4,TSEP_1:4;
+   end;
+  given X1 being boundary closed strict non empty SubSpace of X such that
+          A5: X0 is SubSpace of X1;
+     the carrier of X1 is Subset of X by TSEP_1:1;
+   then reconsider C = the carrier of X1 as Subset of X;
+    now
+    take C;
+    thus A c= C & C is boundary & C is closed by A5,Def3,TSEP_1:4,11;
+   end;
+   then for A be Subset of X st A = the carrier of X0
+    holds A is nowhere_dense by TOPS_3:27;
+  hence thesis by Def4;
+ end;
+
+theorem
+   for X0 being nowhere_dense non empty SubSpace of X holds
+  X0 is boundary closed or
+   ex X1 being everywhere_dense proper strict non empty SubSpace of X,
+       X2 being boundary closed strict non empty SubSpace of X st
+     X1 meet X2 = the TopStruct of X0 & X1 union X2 = the TopStruct of X
+ proof let X0 be nowhere_dense non empty SubSpace of X;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider D = the carrier of X0 as non empty Subset of X;
+  assume A1: X0 is non boundary or X0 is non closed;
+       D is nowhere_dense by Th35;
+    then consider C, B being Subset of X such that
+           A2: C is closed boundary and
+           A3: B is everywhere_dense and
+           A4: C /\ B = D and
+           A5: C \/ B = the carrier of X by TOPS_3:51;
+      C <> {} by A4;
+   then consider X2 being boundary closed strict non empty SubSpace of X
+   such that
+      A6: C = the carrier of X2 by A2,Th67;
+      B <> {} by A4;
+   then consider X1 being everywhere_dense strict non empty SubSpace of X
+   such that
+      A7: B = the carrier of X1 by A3,Th17;
+      now
+     assume B is non proper;
+      then B = the carrier of X by TEX_2:5;
+      then B = [#]X by PRE_TOPC:12;
+      then D = C by A4,PRE_TOPC:15;
+     hence contradiction by A1,A2,TSEP_1:11;
+    end;
+   then reconsider X1 as everywhere_dense proper strict non empty SubSpace of X
+                                                         by A7,TEX_2:13;
+  take X1, X2;
+     C meets B by A4,XBOOLE_0:def 7;
+   then X1 meets X2 by A6,A7,TSEP_1:def 3;
+   then the carrier of X1 meet X2 = D by A4,A6,A7,TSEP_1:def 5;
+  hence X1 meet X2 = the TopStruct of X0 by TSEP_1:5;
+  A8: the carrier of X1 union X2 = the carrier of X by A5,A6,A7,TSEP_1:def 2;
+       X is SubSpace of X by TSEP_1:2;
+  hence X1 union X2 = the TopStruct of X by A8,TSEP_1:5;
+ end;
+
+theorem
+   for X0 being everywhere_dense non empty SubSpace of X holds
+  X0 is dense open or
+   ex X1 being dense open proper strict non empty SubSpace of X,
+       X2 being nowhere_dense strict non empty SubSpace of X st
+     X1 misses X2 & X1 union X2 = the TopStruct of X0
+ proof let X0 be everywhere_dense non empty SubSpace of X;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider D = the carrier of X0 as non empty Subset of X;
+  assume A1: X0 is non dense or X0 is non open;
+       D is everywhere_dense by Th16;
+    then consider C, B being Subset of X such that
+           A2: C is open dense and
+           A3: B is nowhere_dense and
+           A4: C \/ B = D and
+           A5: C misses B by TOPS_3:49;
+      C <> {} by A2,TOPS_3:17;
+   then consider X1 being dense open strict non empty SubSpace of X such that
+          A6: C = the carrier of X1 by A2,Th23;
+      now
+     assume C is non proper;
+      then A7: C = the carrier of X by TEX_2:5;
+         C c= D & D c= the carrier of X by A4,XBOOLE_1:7;
+      then D = the carrier of X by A7,XBOOLE_0:def 10;
+      then D = [#]X by PRE_TOPC:12;
+      then D is dense open by TOPS_1:53,TOPS_3:16;
+     hence contradiction by A1,TSEP_1:16;
+    end;
+   then reconsider X1 as dense open proper strict non empty SubSpace of X
+     by A6,TEX_2:13;
+      now per cases by A1;
+     suppose A8: X0 is non dense;
+      assume B = {};
+      thus contradiction by A8;
+     suppose A9: X0 is non open;
+      assume B = {};
+      hence contradiction by A2,A4,A9,TSEP_1:16;
+    end;
+   then consider X2 being nowhere_dense strict non empty SubSpace of X
+   such that
+      A10: B = the carrier of X2 by A3,Th62;
+  take X1, X2;
+  thus X1 misses X2 by A5,A6,A10,TSEP_1:def 3;
+      the carrier of X1 union X2 = the carrier of X0 by A4,A6,A10,TSEP_1:def 2;
+  hence X1 union X2 = the TopStruct of X0 by TSEP_1:5;
+ end;
+
+theorem
+   for X0 being nowhere_dense non empty SubSpace of X
+  ex X1 being dense open proper strict non empty SubSpace of X,
+      X2 being boundary closed strict non empty SubSpace of X st
+    X1,X2 constitute_a_decomposition & X0 is SubSpace of X2
+ proof let X0 be nowhere_dense non empty SubSpace of X;
+     the carrier of X0 is non empty Subset of X by TSEP_1:1;
+   then reconsider D = the carrier of X0 as non empty Subset of X;
+       D is nowhere_dense by Th35;
+    then consider C, B being Subset of X such that
+           A1: C is closed boundary and
+           A2: B is open dense and
+           A3: C /\ (D \/ B) = D and
+           A4: C misses B and
+           A5: C \/ B = the carrier of X by TOPS_3:52;
+      B <> {} by A2,TOPS_3:17;
+   then consider X1 being dense open strict non empty SubSpace of X such that
+          A6: B = the carrier of X1 by A2,Th23;
+     A7: D c= C by A3,XBOOLE_1:17;
+    A8: C <> {} by A3;
+   then consider X2 being boundary closed strict non empty SubSpace of X
+   such that
+          A9: C = the carrier of X2 by A1,Th67;
+A10:  C /\ B = {} by A4,XBOOLE_0:def 7;
+      now
+     assume B is non proper;
+      then B = the carrier of X by TEX_2:5;
+     hence contradiction by A8,A10,XBOOLE_1:28;
+    end;
+   then reconsider X1 as dense open proper strict non empty SubSpace of X
+    by A6,TEX_2:13;
+  take X1, X2;
+     for P,Q be Subset of X st
+    P = the carrier of X1 & Q = the carrier of X2 holds
+    P,Q constitute_a_decomposition by A4,A5,A6,A9,TSEP_2:def 1;
+  hence X1,X2 constitute_a_decomposition by TSEP_2:def 2;
+  thus X0 is SubSpace of X2 by A7,A9,TSEP_1:4;
+ end;
+
+theorem
+   for X0 being everywhere_dense proper SubSpace of X
+  ex X1 being dense open proper strict SubSpace of X,
+      X2 being boundary closed strict SubSpace of X st
+    X1,X2 constitute_a_decomposition & X1 is SubSpace of X0
+ proof let X0 be everywhere_dense proper SubSpace of X;
+     the carrier of X0 is Subset of X by TSEP_1:1;
+   then reconsider D = the carrier of X0 as Subset of X;
+       D is everywhere_dense by Th16;
+    then consider C, B being Subset of X such that
+           A1: C is open dense and
+           A2: B is closed boundary and
+           A3: C \/ (D /\ B) = D and
+           A4: C misses B and
+           A5: C \/ B = the carrier of X by TOPS_3:50;
+      C <> {} by A1,TOPS_3:17;
+   then consider X1 being dense open strict non empty SubSpace of X such that
+          A6: C = the carrier of X1 by A1,Th23;
+    A7: now
+         assume C is non proper;
+          then C = the carrier of X by TEX_2:5;
+           then the carrier of X c= D & D c= the carrier of X
+                                                   by A3,XBOOLE_1:7;
+           then D = the carrier of X by XBOOLE_0:def 10;
+           then D is non proper by TEX_2:5;
+         hence contradiction by TEX_2:13;
+        end;
+   then reconsider X1 as dense open proper strict SubSpace of X by A6,TEX_2:13;
+     B is non empty by A5,A7,TEX_2:5;
+   then consider X2 being boundary closed strict non empty SubSpace of X
+   such that
+          A8: B = the carrier of X2 by A2,Th67;
+  take X1, X2;
+     for P,Q be Subset of X st
+    P = the carrier of X1 & Q = the carrier of X2
+    holds P,Q constitute_a_decomposition by A4,A5,A6,A8,TSEP_2:def 1;
+  hence X1,X2 constitute_a_decomposition by TSEP_2:def 2;
+      C c= D by A3,XBOOLE_1:7;
+  hence X1 is SubSpace of X0 by A6,TSEP_1:4;
+ end;
+
+

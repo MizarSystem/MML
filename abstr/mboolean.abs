@@ -1,0 +1,170 @@
+:: Definitions and Basic Properties of Boolean & Union of Many
+:: Sorted Sets
+::  by Artur Korni{\l}owicz
+::
+:: Received April 27, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FUNCT_1, ZF_REFLE, RELAT_1, FUNCT_4, CAT_1, BOOLE, CAT_4,
+      FUNCOP_1, ZFMISC_1, PRALG_2, AUTALG_1, FUNCT_2, TARSKI, MATRIX_1,
+      PRE_CIRC, FINSET_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1,
+      FUNCT_4, CQC_LANG, PBOOLE, PRALG_2, AUTALG_1, PRE_CIRC;
+ constructors CQC_LANG, PRALG_2, AUTALG_1, PRE_CIRC, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, PRE_CIRC, CQC_LANG, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Boolean of Many Sorted Sets
+
+ reserve x, y, I for set,
+         A, B, X, Y for ManySortedSet of I;
+
+definition let I, A;
+ func bool A -> ManySortedSet of I means
+:: MBOOLEAN:def 1
+  for i be set st i in I holds it.i = bool (A.i);
+end;
+
+definition let I, A;
+ cluster bool A -> non-empty;
+end;
+
+theorem :: MBOOLEAN:1       :: Tarski:6
+X = bool Y iff for A holds A in X iff A c= Y;
+
+theorem :: MBOOLEAN:2       :: ZFMISC_1:1
+  bool [0]I = I --> {{}};
+
+theorem :: MBOOLEAN:3
+  bool (I --> x) = I --> bool x;
+
+theorem :: MBOOLEAN:4       :: ZFMISC_1:30
+  bool (I --> {x}) = I --> { {} , {x} };
+
+theorem :: MBOOLEAN:5       :: ZFMISC_1:76
+  [0]I c= A;
+
+theorem :: MBOOLEAN:6       :: ZFMISC_1:79
+  A c= B implies bool A c= bool B;
+
+theorem :: MBOOLEAN:7       :: ZFMISC_1:81
+  bool A \/ bool B c= bool (A \/ B);
+
+theorem :: MBOOLEAN:8       :: ZFMISC_1:82
+  bool A \/ bool B = bool (A \/ B) implies
+ for i be set st i in I holds A.i,B.i are_c=-comparable;
+
+theorem :: MBOOLEAN:9       :: ZFMISC_1:83
+  bool (A /\ B) = bool A /\ bool B;
+
+theorem :: MBOOLEAN:10       :: ZFMISC_1:84
+  bool (A \ B) c= (I --> {{}}) \/ (bool A \ bool B);
+
+theorem :: MBOOLEAN:11       :: ZFMISC_1:85
+  X c= A \ B iff X c= A & X misses B;
+
+theorem :: MBOOLEAN:12       :: ZFMISC_1:86
+  bool (A \ B) \/ bool (B \ A) c= bool (A \+\ B);
+
+theorem :: MBOOLEAN:13       :: ZFMISC_1:87
+  X c= A \+\ B iff X c= A \/ B & X misses A /\ B;
+
+canceled;
+
+theorem :: MBOOLEAN:15       :: ZFMISC_1:89
+  X c= A or Y c= A implies X /\ Y c= A;
+
+theorem :: MBOOLEAN:16       :: ZFMISC_1:90
+  X c= A implies X \ Y c= A;
+
+theorem :: MBOOLEAN:17       :: ZFMISC_1:91
+  X c= A & Y c= A implies X \+\ Y c= A;
+
+theorem :: MBOOLEAN:18       :: ZFMISC_1:105
+  [|X, Y|] c= bool bool (X \/ Y);
+
+theorem :: MBOOLEAN:19       :: FIN_TOPO:4
+  X c= A iff X in bool A;
+
+theorem :: MBOOLEAN:20       :: FRAENKEL:5
+  MSFuncs (A, B) c= bool [|A, B|];
+
+begin :: Union of Many Sorted Sets
+
+definition let I, A;
+ func union A -> ManySortedSet of I means
+:: MBOOLEAN:def 2
+  for i be set st i in I holds it.i = union (A.i);
+end;
+
+definition let I;
+ cluster union [0]I -> empty-yielding;
+end;
+
+theorem :: MBOOLEAN:21       :: Tarski:def 4
+  A in union X iff ex Y st A in Y & Y in X;
+
+theorem :: MBOOLEAN:22       :: ZFMISC_1:2
+  union [0]I = [0]I;
+
+theorem :: MBOOLEAN:23
+  union (I --> x) = I --> union x;
+
+theorem :: MBOOLEAN:24       :: ZFMISC_1:31
+  union (I --> {x}) = I --> x;
+
+theorem :: MBOOLEAN:25       :: ZFMISC_1:32
+  union (I --> { {x},{y} }) = I --> {x,y};
+
+theorem :: MBOOLEAN:26       :: ZFMISC_1:92
+  X in A implies X c= union A;
+
+theorem :: MBOOLEAN:27       :: ZFMISC_1:95
+  A c= B implies union A c= union B;
+
+theorem :: MBOOLEAN:28       :: ZFMISC_1:96
+  union (A \/ B) = union A \/ union B;
+
+theorem :: MBOOLEAN:29       :: ZFMISC_1:97
+  union (A /\ B) c= union A /\ union B;
+
+theorem :: MBOOLEAN:30       :: ZFMISC_1:99
+  union bool A = A;
+
+theorem :: MBOOLEAN:31       :: ZFMISC_1:100
+  A c= bool union A;
+
+theorem :: MBOOLEAN:32       :: LATTICE4:1
+  union Y c= A & X in Y implies X c= A;
+
+theorem :: MBOOLEAN:33       :: ZFMISC_1:94
+  for Z be ManySortedSet of I
+ for A be non-empty ManySortedSet of I holds
+  (for X be ManySortedSet of I st X in A holds X c= Z) implies union A c= Z;
+
+theorem :: MBOOLEAN:34       :: ZFMISC_1:98
+  for B be ManySortedSet of I
+ for A be non-empty ManySortedSet of I holds
+  (for X be ManySortedSet of I st X in A holds X /\ B = [0]I)
+ implies union(A) /\ B = [0]I;
+
+theorem :: MBOOLEAN:35       :: ZFMISC_1:101
+  for A, B be ManySortedSet of I st A \/ B is non-empty holds
+ (for X, Y be ManySortedSet of I st X <> Y & X in A \/ B & Y in A \/ B
+  holds X /\ Y = [0]I) implies union(A /\ B) = union A /\ union B;
+
+theorem :: MBOOLEAN:36       :: LOPCLSET:31
+  for A, X be ManySortedSet of I
+ for B be non-empty ManySortedSet of I holds
+ (X c= union (A \/ B) & for Y be ManySortedSet of I st Y in
+ B holds Y /\ X = [0]I)
+  implies X c= union A;
+
+theorem :: MBOOLEAN:37       :: RLVECT_3:34
+  for A be locally-finite non-empty ManySortedSet of I st
+ (for X, Y be ManySortedSet of I st X in A & Y in A holds X c= Y or Y c= X)
+  holds union A in A;
+

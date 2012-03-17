@@ -1,0 +1,1240 @@
+:: On Some Properties of Real {H}ilbert Space, {I}
+::  by Hiroshi Yamazaki , Yasumasa Suzuki , Takao Inou\'e and Yasunari Shidama
+::
+:: Received February 25, 2003
+:: Copyright (c) 2003 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, PRE_TOPC, NORMSP_1, SEQ_2, RLVECT_1, FUNCT_1, ARYTM_1,
+      FINSET_1, BHSP_1, BHSP_3, ABSVALUE, RELAT_1, ARYTM_3, BINOP_1, FUNCT_2,
+      VECTSP_1, HAHNBAN, FINSEQ_1, SETWISEO, CARD_1, FINSOP_1, BHSP_5, BHSP_6,
+      SEMI_AF1, JORDAN2C;
+ notation TARSKI, SUBSET_1, XBOOLE_0, ZFMISC_1, CARD_1, NUMBERS, XREAL_0,
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, ABSVALUE, STRUCT_0,
+      PRE_TOPC, RLVECT_1, BHSP_1, BHSP_2, BHSP_3, NORMSP_1, BINOP_1, VECTSP_1,
+      SETWISEO, HAHNBAN, FINSEQ_1, FINSOP_1, BHSP_5;
+ constructors REAL_1, NAT_1, BHSP_2, BHSP_3, PREPOWER, SETWISEO, VECTSP_1,
+      HAHNBAN, BINOP_1, FINSOP_1, BHSP_5, MEMBERED;
+ clusters RELSET_1, FUNCT_1, SUBSET_1, FINSET_1, STRUCT_0, NAT_1, XREAL_0,
+      MEMBERED, NUMBERS, ORDINAL2;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+ theorems XBOOLE_0, XBOOLE_1, REAL_2, AXIOMS, TARSKI, REAL_1, ABSVALUE,
+      FINSEQ_1, INT_1, FINSEQ_4, FUNCT_1, NAT_1, RELSET_1, FINSET_1, FUNCT_2,
+      RVSUM_1, RLVECT_1, VECTSP_1, NORMSP_1, SEQ_2, SEQ_4, BHSP_1, BHSP_2,
+      BHSP_3, BHSP_5, HAHNBAN, FINSOP_1, CARD_2, FINSEQ_3, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, RECDEF_1, FUNCT_2;
+
+begin :: Preliminaries
+
+ reserve X for RealUnitarySpace;
+ reserve x for Point of X;
+ reserve i, n for Nat;
+
+definition
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let Y be finite Subset of X;
+  func setsum Y -> Element of X means :Def1:
+  ex p being FinSequence of the carrier of X st
+    p is one-to-one & rng p = Y & it = (the add of X) "**" p;
+  existence
+proof
+  consider p being FinSequence such that
+  A2: rng p = Y and
+  A3: p is one-to-one by FINSEQ_4:73;
+  reconsider q = p as FinSequence of the carrier of X by A2,FINSEQ_1:def 4;
+    ex p being FinSequence of the carrier of X st
+    p is one-to-one &
+    rng p = Y & (the add of X) "**" q = (the add of X) "**" p by A2,A3;
+  hence thesis;
+end;
+  uniqueness
+proof
+  let X1, X2 be Element of X such that
+  A4: ex p1 being FinSequence of the carrier of X st
+    p1 is one-to-one & rng p1 = Y & X1 = (the add of X) "**" p1 and
+  A5: ex p2 being FinSequence of the carrier of X st
+    p2 is one-to-one & rng p2 = Y & X2 = (the add of X) "**" p2;
+  consider p1 being FinSequence of the carrier of X such that
+  A6: p1 is one-to-one and
+  A7: rng p1 = Y and
+  A8: X1 = (the add of X) "**" p1 by A4;
+  consider p2 being FinSequence of the carrier of X such that
+  A9: p2 is one-to-one and
+  A10: rng p2 = Y and
+  A11: X2 = (the add of X) "**" p2 by A5;
+    dom p1 = dom p2 &
+  ex P being Permutation of dom p1 st
+    p2 = p1*P & dom P = dom p1 & rng P = dom p1
+  by A6,A7,A9,A10,BHSP_5:1;
+  then consider P being Permutation of dom p1 such that
+  A12: p2 = p1 * P;
+  thus thesis by A1,A8,A11,A12,FINSOP_1:8;
+end;
+end;
+
+theorem Th1:
+  for X st the add of X is commutative associative & the add of X has_a_unity
+  for Y be finite Subset of X
+  for I be Function of the carrier of X,the carrier of X st
+    Y c= dom I & for x be set st x in dom I holds I.x = x holds
+  setsum(Y)
+    = setopfunc(Y, the carrier of X, the carrier of X, I, the add of X)
+proof
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let Y be finite Subset of X;
+  let I be Function of the carrier of X,the carrier of X such that
+  A2: Y c= dom I & for x be set st x in dom I holds I.x = x;
+  consider p being FinSequence of the carrier of X such that
+  A3: p is one-to-one & rng p = Y & setsum(Y) = (the add of X) "**" p
+    by A1,Def1;
+  A4: dom Func_Seq(I,p)=dom p
+  proof
+      now
+      let xd be set;
+      A5: xd in dom(Func_Seq(I,p)) iff xd in dom(I*p) by BHSP_5:def 4;
+        xd in dom p implies p.xd in rng(p) by FUNCT_1:12;
+      hence xd in dom(Func_Seq(I,p)) iff xd in dom p
+        by A2,A3,A5,FUNCT_1:21;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+    now
+    let s be set;
+    assume
+    A6: s in dom Func_Seq(I,p);
+      dom Func_Seq(I,p) is Subset of NAT by RELSET_1:12;
+    then reconsider i = s as Nat by A6;
+    A7: p.i in rng(p) by A4,A6,FUNCT_1:12;
+      Func_Seq(I,p).s = (I*p).i by BHSP_5:def 4
+     .= I.(p.i) by A4,A6,FUNCT_1:23
+     .= p.i by A2,A3,A7;
+    hence Func_Seq(I,p).s = p.s;
+  end;
+  then Func_Seq(I,p) =p by A4,FUNCT_1:9;
+  hence thesis by A1,A2,A3,BHSP_5:def 5;
+end;
+
+theorem Th2:
+  for X st the add of X is commutative associative & the add of X has_a_unity
+  for Y1, Y2 be finite Subset of X st Y1 misses Y2
+  for Z be finite Subset of X st Z = Y1 \/ Y2 holds
+  setsum(Z) = setsum(Y1) + setsum(Y2)
+proof
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let Y1, Y2 be finite Subset of X such that
+  A2: Y1 misses Y2;
+  let Z be finite Subset of X such that
+  A3: Z = Y1 \/ Y2;
+      deffunc _F(set) = $1;
+  A4: for x be set st x in the carrier of X holds _F(x) in the carrier of X;
+  consider I be Function of the carrier of X, the carrier of X such that
+  A5: for x be set st x in the carrier of X holds I.x = _F(x) from Lambda1(A4);
+  A6: dom I = the carrier of X by FUNCT_2:def 1;
+  then A7: setsum(Y1)
+    = setopfunc(Y1,the carrier of X,the carrier of X,I,the add of X)
+   by A1,A5,Th1;
+  A8: setsum(Y2)
+    = setopfunc(Y2,the carrier of X,the carrier of X,I,the add of X)
+   by A1,A5,A6,Th1;
+    setopfunc(Z,the carrier of X,the carrier of X,I,the add of X)
+    = (the add of X).
+      (setopfunc(Y1,the carrier of X,the carrier of X,I,the add of X),
+       setopfunc(Y2,the carrier of X,the carrier of X,I,the add of X))
+     by A1,A2,A3,A6,BHSP_5:14
+   .=setopfunc(Y1,the carrier of X,the carrier of X,I,the add of X)
+     + setopfunc(Y2,the carrier of X,the carrier of X,I,the add of X)
+     by RLVECT_1:5;
+  hence thesis by A1,A5,A6,A7,A8,Th1;
+end;
+
+begin :: Summability
+
+definition let X;
+  let Y be Subset of X;
+  attr Y is summable_set means :Def2:
+  ex x st
+    for e be Real st e > 0 ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds ||.x-setsum(Y1).|| < e;
+end;
+
+definition let X;
+  let Y be Subset of X;
+  assume A1:Y is summable_set;
+  func sum Y -> Point of X means
+    for e be Real st e > 0 ex Y0 be finite Subset of X st
+  Y0 is non empty & Y0 c= Y &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds ||.it-setsum(Y1).|| < e;
+existence by A1,Def2;
+uniqueness
+proof
+  let y1, y2 be Point of X such that
+  A2: for e1 be Real st e1 > 0 ex Y0 be finite Subset of X st
+  Y0 is non empty & Y0 c= Y &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds ||.y1-setsum(Y1).|| < e1 and
+  A3: for e2 be Real st e2 > 0 ex Y0 be finite Subset of X st
+  Y0 is non empty & Y0 c= Y &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds ||.y2-setsum(Y1).|| < e2;
+  A4:
+  now
+    let e3 be Real such that
+    A5: e3 >0;
+    set e4 = e3/2;
+    A6: e4 is Real & e4 >0 by A5,REAL_2:127;
+    A7: e3/2 + e3/2 = e3 by XCMPLX_1:66;
+    consider Y01 be finite Subset of X such that
+    A8: Y01 is non empty & Y01 c= Y &
+    for Y1 be finite Subset of X st Y01 c= Y1 & Y1 c= Y
+    holds ||.y1-setsum(Y1).|| < e4 by A2,A6;
+    consider Y02 be finite Subset of X such that
+    A9: Y02 is non empty & Y02 c= Y &
+    for Y1 be finite Subset of X st Y02 c= Y1 & Y1 c= Y
+    holds ||.y2-setsum(Y1).|| < e4 by A3,A6;
+    set Y00 = Y01 \/ Y02;
+    A10: Y00 c= Y by A8,A9,XBOOLE_1:8;
+      Y00 is finite Subset of X & Y01 c= Y00 by XBOOLE_1:7;
+    then A11: ||.y1-setsum(Y00).|| < e4 by A8,A10;
+      Y00 is finite Subset of X & Y02 c= Y00 by XBOOLE_1:7;
+    then ||.y2-setsum(Y00).|| < e4 by A9,A10;
+    then ||.-(y2-setsum(Y00)).|| < e4 by BHSP_1:37;
+    then A12: ||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).|| < e3
+    by A7,A11,REAL_1:67;
+      ||.y1-setsum(Y00) + -(y2-setsum(Y00)).||
+        <= ||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).|| by BHSP_1:36;
+    then (||.y1-setsum(Y00) + -(y2-setsum(Y00)).||)
+        + (||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).||)
+       < (||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).||) + e3
+        by A12,REAL_1:67;
+    then ||.y1-setsum(Y00) + -(y2-setsum(Y00)).||
+        + (||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).||)
+        + - (||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).||)
+       < e3 + (||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).||)
+         + - (||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).||) by REAL_1:67;
+    then A13: ||.y1-setsum(Y00) + -(y2-setsum(Y00)).||
+       < e3 + (||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).||)
+         +- (||.y1-setsum(Y00).|| + ||.-(y2-setsum(Y00)).||) by XCMPLX_1:137;
+      ||.y1 - y2.|| = ||.(y1 - y2) + 0.X.|| by RLVECT_1:def 7
+     .= ||.(y1 - y2) + (setsum(Y00) + - setsum(Y00)).|| by RLVECT_1:16
+     .= ||.(y1 - y2) + (setsum(Y00) - setsum(Y00)).|| by RLVECT_1:def 11
+     .= ||.((y1 - y2) + setsum(Y00)) - setsum(Y00).|| by RLVECT_1:42
+     .= ||.(y1 - (y2 - setsum(Y00))) - setsum(Y00).|| by RLVECT_1:43
+     .= ||.y1 - (setsum(Y00) + (y2 - setsum(Y00))).|| by RLVECT_1:41
+     .= ||.(y1 - setsum(Y00)) - (y2 - setsum(Y00)).|| by RLVECT_1:41
+     .= ||.(y1 - setsum(Y00)) + - (y2 - setsum(Y00)).|| by RLVECT_1:def 11;
+    hence ||.y1 - y2.|| < e3 by A13,XCMPLX_1:137;
+  end;
+    y1 = y2
+  proof
+    assume y1 <> y2;
+    then y1 - y2 <> 0.X by VECTSP_1:66;
+    then A14: ||.y1 - y2.|| <> 0 by BHSP_1:32;
+      0 <= ||.y1 - y2.|| by BHSP_1:34;
+    hence contradiction by A4,A14;
+  end;
+  hence thesis;
+end;
+end;
+
+definition let X;
+           let L be linear-Functional of X;
+  attr L is Bounded means :Def4:
+  ex K be Real st K > 0 &
+  for x holds abs(L.x) <= K * ||.x.||;
+end;
+
+definition let X;
+           let Y be Subset of X;
+  attr Y is weakly_summable_set means :Def5:
+  ex x st
+  for L be linear-Functional of X st L is Bounded
+  for e be Real st e > 0
+  ex Y0 be finite Subset of X st
+  Y0 is non empty & Y0 c= Y &
+  for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+  holds abs(L.(x-setsum(Y1))) < e;
+end;
+
+definition let X;
+           let Y be Subset of X;
+           let L be Functional of X;
+  pred Y is_summable_set_by L means :Def6:
+  ex r be Real st
+    for e be Real st e > 0
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds
+    abs(r-setopfunc(Y1,the carrier of X,REAL, L, addreal)) < e;
+end;
+
+definition let X;
+           let Y be Subset of X;
+           let L be Functional of X;
+  assume A1:Y is_summable_set_by L;
+  func sum_byfunc(Y,L) -> Real means
+    for e be Real st e > 0
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds
+    abs(it-setopfunc(Y1,the carrier of X,REAL, L, addreal)) < e;
+existence by A1,Def6;
+uniqueness
+proof
+  let r1, r2 be Real such that
+  A2:
+  for e1 be Real st e1 > 0 ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds abs(r1-setopfunc(Y1,the carrier of X,REAL, L, addreal)) < e1
+  and
+  A3: for e2 be Real st e2 > 0 ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds abs(r2-setopfunc(Y1,the carrier of X,REAL, L, addreal)) < e2;
+  A4:
+  now
+    let e3 be Real such that
+    A5: e3 >0;
+    set e4 = e3/2;
+    A6: e4 is Real & e4 > 0 by A5,REAL_2:127;
+    A7: e3/2 + e3/2 = e3 by XCMPLX_1:66;
+    consider Y01 be finite Subset of X such that
+    A8: Y01 is non empty & Y01 c= Y &
+      for Y1 be finite Subset of X st Y01 c= Y1 & Y1 c= Y
+      holds abs(r1-setopfunc(Y1,the carrier of X,REAL, L, addreal))
+        < e4 by A2,A6;
+    consider Y02 be finite Subset of X such that
+    A9: Y02 is non empty & Y02 c= Y &
+      for Y1 be finite Subset of X st Y02 c= Y1 & Y1 c= Y
+      holds abs(r2-setopfunc(Y1,the carrier of X,REAL, L, addreal))
+        < e4 by A3,A6;
+    set Y00 = Y01 \/ Y02;
+    A10: Y00 c= Y by A8,A9,XBOOLE_1:8;
+      Y00 is finite Subset of X & Y01 c= Y00 by XBOOLE_1:7;
+    then A11: abs(r1-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+      < e4 by A8,A10;
+      Y00 is finite Subset of X & Y02 c= Y00 by XBOOLE_1:7;
+    then A12: abs(r2-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+      < e4 by A9,A10;
+    A13:
+    (r1-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+        - (r2-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+      = r1 - setopfunc(Y00,the carrier of X,REAL, L, addreal)
+        - r2 + setopfunc(Y00,the carrier of X,REAL, L, addreal) by XCMPLX_1:37
+     .= r1 - (setopfunc(Y00,the carrier of X,REAL, L, addreal) + r2)
+        + setopfunc(Y00,the carrier of X,REAL, L, addreal) by XCMPLX_1:36
+     .= r1-r2-setopfunc(Y00,the carrier of X,REAL, L, addreal)
+        + setopfunc(Y00,the carrier of X,REAL, L, addreal) by XCMPLX_1:36
+     .= r1 - r2 -(setopfunc(Y00,the carrier of X,REAL, L, addreal)
+        - setopfunc(Y00,the carrier of X,REAL, L, addreal)) by XCMPLX_1:37
+     .= r1 - r2 - (setopfunc(Y00,the carrier of X,REAL, L, addreal)
+        + (-setopfunc(Y00,the carrier of X,REAL, L, addreal)))
+          by XCMPLX_0:def 8
+     .= r1 - r2 - 0 by XCMPLX_0:def 6
+     .= r1 - r2;
+    A14:
+    abs((r1-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+        - (r2-setopfunc(Y00,the carrier of X,REAL, L, addreal)))
+      <= abs(r1-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+        + abs(r2-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+    by ABSVALUE:19;
+      abs(r1-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+        + abs(r2-setopfunc(Y00,the carrier of X,REAL, L, addreal))
+      < e3 by A7,A11,A12,REAL_1:67;
+    hence abs(r1-r2) < e3 by A13,A14,AXIOMS:22;
+  end;
+    r1 = r2
+  proof
+    assume
+    A15: r1 <> r2;
+    A16: abs(r1-r2) <> 0
+    proof
+      assume abs(r1-r2) = 0;
+      then r1-r2 = 0 by ABSVALUE:7;
+      hence contradiction by A15,XCMPLX_1:15;
+    end;
+      0 <= abs(r1-r2) by ABSVALUE:5;
+    hence contradiction by A4,A16;
+  end;
+  hence thesis;
+end;
+end;
+
+theorem Th3:
+  for Y be Subset of X st Y is summable_set holds
+  Y is weakly_summable_set
+proof
+  let Y be Subset of X;
+  assume Y is summable_set;
+  then consider x such that
+  A1: for e be Real st 0 < e
+      ex Y0 be finite Subset of X st
+        Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds ||.x - setsum(Y1).|| < e by Def2;
+    now
+    let L be linear-Functional of X such that
+    A2: L is Bounded;
+    consider K be Real such that
+    A3: 0 < K & for x holds abs(L.x) <= K * ||.x.|| by A2,Def4;
+      now
+      let e1 be Real such that
+      A4: 0 < e1;
+      set e = e1/K;
+      A5: 0 < e by A3,A4,REAL_2:127;
+      A6: e * K = e1 by A3,XCMPLX_1:88;
+      consider Y0 be finite Subset of X such that
+      A7: Y0 is non empty & Y0 c= Y &
+        for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c=Y
+      holds ||.x - setsum(Y1).|| < e by A1,A5;
+        now
+        let Y1 be finite Subset of X such that
+        A8: Y0 c= Y1 & Y1 c=Y;
+          ||.x - setsum(Y1).|| < e by A7,A8;
+        then A9: K * ||.x - setsum(Y1).|| < e1 by A3,A6,REAL_1:70;
+          abs (L.(x-setsum(Y1))) <= K*||.(x-setsum(Y1)).|| by A3;
+        then abs (L.(x-setsum(Y1))) + K*||.(x-setsum(Y1)).||
+          < K*||.(x-setsum(Y1)).|| + e1 by A9,REAL_1:67;
+        then abs (L.(x-setsum(Y1))) + K*||.(x-setsum(Y1)).||
+            - K*||.(x-setsum(Y1)).||
+          < K*||.(x-setsum(Y1)).|| + e1 - K*||.(x-setsum(Y1)).|| by REAL_1:92;
+        then abs (L.(x-setsum(Y1)))
+            + (K*||.(x-setsum(Y1)).|| - K*||.(x-setsum(Y1)).||)
+          < K*||.(x-setsum(Y1)).|| + e1 - K*||.(x-setsum(Y1)).|| by XCMPLX_1:29
+;
+        then abs (L.(x-setsum(Y1))) < K*||.(x-setsum(Y1)).||
+            + e1 - K*||.(x-setsum(Y1)).|| by XCMPLX_1:25;
+        then abs (L.(x-setsum(Y1)))
+          < e1 + (K*||.(x-setsum(Y1)).|| - K*||.(x-setsum(Y1)).||)
+        by XCMPLX_1:29;
+        hence abs (L.(x-setsum(Y1))) < e1 by XCMPLX_1:25;
+      end;
+      hence
+        ex Y0 be finite Subset of X st
+        Y0 is non empty & Y0 c= Y &
+        for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c=Y
+        holds abs (L.(x-setsum(Y1))) < e1 by A7;
+    end;
+    hence
+      for e1 be Real st 0 < e1
+    ex Y0 be finite Subset of X st
+      Y0 is non empty & Y0 c= Y &
+      for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c=Y
+      holds abs (L.(x-setsum(Y1))) < e1;
+  end;
+  hence thesis by Def5;
+end;
+
+theorem Th4:
+  for L be linear-Functional of X
+  for p be FinSequence of the carrier of X st len p >=1
+  for q be FinSequence of REAL st dom p = dom q &
+      (for i st i in dom q holds q.i = L.(p.i) )
+  holds L.((the add of X) "**" p) = addreal "**" q
+proof
+  let L be linear-Functional of X;
+  let p be FinSequence of the carrier of X such that
+  A1: len p >= 1;
+  let q be FinSequence of REAL such that
+  A2: dom p = dom q & (for i st i in dom q holds q.i = L.(p.i));
+  consider f be Function of NAT,the carrier of X such that
+  A3: f.1 = p.1 and
+  A4: (for n be Nat st 0 <> n & n < len p holds
+    f.(n + 1) = (the add of X).(f.n,p.(n + 1))) and
+  A5: (the add of X) "**" p = f.(len p) by A1,FINSOP_1:2;
+    Seg (len q) = dom p by A2,FINSEQ_1:def 3
+   .= Seg (len p) by FINSEQ_1:def 3;
+  then A6: len q = len p by FINSEQ_1:8;
+  then consider g be Function of NAT, REAL such that
+  A7: g.1 = q.1 and
+  A8: (for n be Nat st 0 <> n & n < len q holds
+    g.(n + 1) = addreal.(g.n,q.(n + 1))) and
+  A9: addreal "**" q = g.(len q) by A1,FINSOP_1:2;
+    defpred _P[Nat] means 1 <= $1 & $1 <= len q implies g.$1 = L.(f.$1);
+    for n holds _P[n] proof
+    A10: _P[0];
+    A11: now let n; assume
+      A12: _P[n];
+        now  assume
+        A13: 1 <=n+1 & n+1 <= len q;
+        A14: n <= n+1 by NAT_1:29;
+
+        per cases;
+        suppose A15: n=0;
+          1 in dom p by A1,FINSEQ_3:27;
+        hence g.(n+1) = L.(f.(n+1)) by A2,A3,A7,A15;
+
+        suppose
+        A16: n<>0;
+        then 0 < n by NAT_1:19;
+        then A17: 0+1 <= n by INT_1:20;
+
+          n+1-1 < len q-0 by A13,REAL_1:92;
+        then A18: n+(1-1) < len q - 0 by XCMPLX_1:29;
+        A19: n+1 in dom q by A13,FINSEQ_3:27;
+        reconsider z=f.n as Element of X;
+        A20: p.(n+1) in rng p by A2,A19,FUNCT_1:12;
+          rng p c= the carrier of X by RELSET_1:12;
+        then reconsider y=p.(n+1) as Element of X by A20;
+        reconsider z1=z as VECTOR of X;
+        reconsider y1=y as VECTOR of X;
+        set Lz=L.z1, Ly=L.y1;
+        thus g.(n+1) = addreal.(g.n,q.(n + 1)) by A8,A16,A18
+        .= addreal.(L.(f.n), L.y) by A2,A12,A13,A14,A17,A19,AXIOMS:22
+        .= Lz + Ly by VECTSP_1:def 4
+        .= L .(z1+y1) by HAHNBAN:def 4
+        .= L.((the add of X).(f.n,p.(n + 1))) by RLVECT_1:5
+        .= L.(f.(n + 1)) by A4,A6,A16,A18;
+      end;
+      hence _P[n+1];
+    end;
+    thus thesis from Ind(A10,A11);
+  end;
+  hence thesis by A1,A5,A6,A9;
+end;
+
+theorem Th5:
+  for X st the add of X is commutative associative & the add of X has_a_unity
+  for S be finite Subset of X st S is non empty
+  for L be linear-Functional of X holds
+  L.(setsum(S)) = setopfunc(S,the carrier of X,REAL, L, addreal)
+proof
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let S be finite Subset of X such that
+  A2: S is non empty;
+  let L be linear-Functional of X;
+  A3: dom L = the carrier of X by FUNCT_2:def 1;
+  consider p be FinSequence of the carrier of X such that
+  A4: p is one-to-one & rng p = S &
+    setsum(S) = (the add of X) "**" p by A1,Def1;
+  reconsider q1 = Func_Seq(L,p) as FinSequence of REAL;
+  A5: dom Func_Seq(L,p)=dom p
+  proof
+      now
+      let xd be set;
+      A6: xd in dom(Func_Seq(L,p)) iff xd in dom(L*p) by BHSP_5:def 4;
+        xd in dom p implies p.xd in rng(p) by FUNCT_1:12;
+      hence xd in dom(Func_Seq(L,p)) iff xd in dom p
+      by A3,A4,A6,FUNCT_1:21;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+  A7: for i st i in dom p holds q1.i = L.(p.i)
+  proof
+    let i such that
+    A8: i in dom p;
+      q1.i = (L*p).i by BHSP_5:def 4
+     .= L.(p.i) by A8,FUNCT_1:23;
+    hence thesis;
+  end;
+    len p >=1
+  proof
+      card S <> 0 by A2,CARD_2:59;
+    then 0 < card S by NAT_1:19;
+    then 0+1 <= card S by INT_1:20;
+    hence thesis by A4,FINSEQ_4:77;
+  end;
+  then L.((the add of X) "**" p) = addreal "**" q1 by A5,A7,Th4;
+  hence thesis by A3,A4,BHSP_5:def 5,RVSUM_1:5,6,7;
+end;
+
+theorem Th6:
+  for X st the add of X is commutative associative & the add of X has_a_unity
+  for Y be Subset of X holds
+  Y is weakly_summable_set implies
+  ex x st
+    for L be linear-Functional of X st L is Bounded
+    for e be Real st e > 0
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds abs((L.x)-(setopfunc(Y1,the carrier of X,REAL, L, addreal))) < e
+proof
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let Y be Subset of X;
+  assume Y is weakly_summable_set;
+  then consider x such that
+  A2: for L be linear-Functional of X st L is Bounded
+    for e be Real st e > 0
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+     holds abs(L.(x-setsum(Y1))) < e by Def5;
+
+  take x;
+    now
+    let L be linear-Functional of X such that
+    A3: L is Bounded;
+      now
+      let e be Real such that
+      A4: e > 0;
+      consider Y0 be finite Subset of X such that
+      A5:Y0 is non empty & Y0 c= Y &
+        for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds abs(L.(x-setsum(Y1))) < e by A2,A3,A4;
+      take Y0;
+        now
+        let Y1 be finite Subset of X such that
+        A6: Y0 c= Y1 & Y1 c= Y;
+        set r = L.(x-setsum(Y1));
+        set x1 = x;
+        set y1 = setsum(Y1);
+        A7: r = L.x1 - L.y1 by HAHNBAN:32;
+          Y1 <> {} by A5,A6,XBOOLE_1:3;
+        then L.y1=setopfunc(Y1,the carrier of X,REAL, L, addreal) by A1,Th5;
+        hence
+          abs((L.x)-(setopfunc(Y1,the carrier of X,REAL, L, addreal))) < e
+        by A5,A6,A7;
+      end;
+      hence Y0 is non empty & Y0 c= Y &
+      for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds abs((L.x)-(setopfunc(Y1,the carrier of X,REAL, L, addreal)))
+        < e by A5;
+    end;
+    hence for e be Real st e > 0
+      ex Y0 be finite Subset of X st
+        Y0 is non empty & Y0 c= Y &
+        for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+        holds abs((L.x)-(setopfunc(Y1,the carrier of X,REAL, L, addreal)))
+          < e;
+  end;
+  hence thesis;
+end;
+
+theorem Th7:
+  for X st the add of X is commutative associative & the add of X has_a_unity
+  for Y be Subset of X st Y is weakly_summable_set
+  for L be linear-Functional of X st L is Bounded holds
+  Y is_summable_set_by L
+proof
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let Y be Subset of X such that
+  A2: Y is weakly_summable_set;
+  let L be linear-Functional of X such that
+  A3: L is Bounded;
+  consider x such that
+  A4:for L be linear-Functional of X st L is Bounded
+    for e be Real st e > 0
+      ex Y0 be finite Subset of X st
+        Y0 is non empty & Y0 c= Y &
+        for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds abs((L.x)-(setopfunc(Y1,the carrier of X,REAL, L, addreal))) < e
+    by A1,A2,Th6;
+    for e be Real st e > 0
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds
+    abs((L.x)-(setopfunc(Y1,the carrier of X,REAL, L, addreal))) < e by A3,A4;
+  hence thesis by Def6;
+end;
+
+theorem
+    for X st the add of X is commutative associative & the add of X has_a_unity
+  for Y be Subset of X st Y is summable_set
+  for L be linear-Functional of X st L is Bounded holds
+  Y is_summable_set_by L
+proof
+  let X such that
+  A1: the add of X is commutative associative & the add of X has_a_unity;
+  let Y be Subset of X such that
+  A2: Y is summable_set;
+  let L be linear-Functional of X such that
+  A3: L is Bounded;
+    Y is weakly_summable_set by A2,Th3;
+  hence thesis by A1,A3,Th7;
+end;
+
+theorem
+    for Y be finite Subset of X st Y is non empty holds
+  Y is summable_set
+proof
+  let Y be finite Subset of X such that
+  A1: Y is non empty;
+  set x = setsum Y;
+    now
+    let e be Real such that
+    A2: e >0;
+      ex Y0 be finite Subset of X st
+      Y0 is non empty & Y0 c= Y &
+      for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds ||.x-setsum(Y1).|| < e
+    proof
+      take Y;
+        now
+        let Y1 be finite Subset of X such that
+        A3: Y c= Y1 & Y1 c= Y;
+          Y1 = Y by A3,XBOOLE_0:def 10;
+        then x - setsum(Y1) = 0.X by RLVECT_1:28;
+        hence ||.x-setsum(Y1).|| < e by A2,BHSP_1:32;
+      end;
+      hence thesis by A1;
+    end;
+    hence
+      ex Y0 be finite Subset of X st
+      Y0 is non empty & Y0 c= Y &
+      for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+    holds ||.x-setsum(Y1).|| < e;
+  end;
+  hence thesis by Def2;
+end;
+
+begin :: Necessary and sufficient condition for summability
+
+theorem
+    for X st
+    the add of X is commutative associative &
+    the add of X has_a_unity & X is_Hilbert_space
+  for Y be Subset of X holds Y is summable_set iff
+  (for e be Real st e > 0 holds
+  ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    (for Y1 be finite Subset of X st
+        Y1 is non empty & Y1 c= Y & Y0 misses Y1
+        holds ||.setsum(Y1).|| < e))
+proof
+  let X such that
+  A1: the add of X is commutative associative &
+  the add of X has_a_unity & X is_Hilbert_space;
+  let Y be Subset of X;
+  A2:
+  now
+    assume Y is summable_set;
+    then consider x such that
+    A3: for e be Real st e > 0 holds
+    ex Y0 be finite Subset of X st
+    Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+      holds ||.x-setsum(Y1).|| < e by Def2;
+      now
+      let e be Real such that
+      A4: e > 0;
+        0 < e/2 by A4,REAL_2:127;
+      then consider Y0 be finite Subset of X such that
+      A5: Y0 is non empty & Y0 c= Y &
+        for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+        holds ||.x-setsum(Y1).|| < e/2 by A3;
+      reconsider Y0 as finite non empty Subset of X by A5;
+        now
+        let Y1 be finite Subset of X such that
+        A6: Y1 is non empty & Y1 c= Y & Y0 misses Y1;
+        set Z = Y0 \/ Y1;
+          setsum(Z) - setsum(Y0)
+          = setsum(Y1) + setsum(Y0) - setsum(Y0) by A1,A6,Th2
+         .= setsum(Y1) + (setsum(Y0) - setsum(Y0)) by RLVECT_1:42
+         .= setsum(Y1) + (setsum(Y0) +- setsum(Y0)) by RLVECT_1:def 11
+         .= setsum(Y1) + 0.X by RLVECT_1:16
+         .= setsum(Y1) by RLVECT_1:10;
+        then A7: ||.setsum(Y1).||
+          = ||.-(setsum(Z) - setsum(Y0)).|| by BHSP_1:37
+         .= ||.setsum(Y0) + (- setsum(Z)).|| by RLVECT_1:47
+         .= ||.setsum(Y0) - setsum(Z).|| by RLVECT_1:def 11
+         .= ||.0.X + (setsum(Y0) - setsum(Z)).|| by RLVECT_1:10
+         .= ||.(x +- x) + (setsum(Y0) - setsum(Z)).|| by RLVECT_1:16
+         .= ||.(x - x) + (setsum(Y0) - setsum(Z)).|| by RLVECT_1:def 11
+         .= ||.x - (x - (setsum(Y0) - setsum(Z))).|| by RLVECT_1:43
+         .= ||.x - ((x - setsum(Y0)) + setsum(Z)).|| by RLVECT_1:43
+         .= ||.(x - setsum(Z)) - (x - setsum(Y0)).|| by RLVECT_1:41;
+          ||.(x-setsum(Z))-(x-setsum(Y0)).||
+          = ||.(x-setsum(Z)) +(- (x-setsum(Y0))).|| by RLVECT_1:def 11;
+        then ||.(x-setsum(Z))-(x-setsum(Y0)).||
+          <= ||.(x-setsum(Z)).|| + ||.-(x-setsum(Y0)).|| by BHSP_1:36;
+        then A8: ||.(x-setsum(Z))-(x-setsum(Y0)).||
+          <= ||.(x-setsum(Z)).|| + ||.(x-setsum(Y0)).|| by BHSP_1:37;
+          Y0 c= Z & Z c= Y by A5,A6,XBOOLE_1:7,8;
+        then A9: ||.x - setsum(Z).|| < e/2 by A5;
+          ||.x - setsum(Y0).|| < e/2 by A5;
+        then ||.(x - setsum(Z)).|| + ||.(x - setsum(Y0)).|| < e/2 + e/2
+          by A9,REAL_1:67;
+        then ||.(x - setsum(Z)).|| + ||.(x - setsum(Y0)).|| < e by XCMPLX_1:66
+;
+        hence ||.setsum(Y1).|| < e by A7,A8,AXIOMS:22;
+      end;
+      hence ex Y0 be finite Subset of X st
+        Y0 is non empty & Y0 c= Y &
+        for Y1 be finite Subset of X st
+          Y1 is non empty & Y1 c= Y & Y0 misses Y1
+        holds ||.setsum(Y1).|| < e by A5;
+    end;
+    hence for e be Real st e > 0 holds
+    ex Y0 be finite Subset of X st
+      Y0 is non empty & Y0 c= Y &
+    for Y1 be finite Subset of X st
+      Y1 is non empty & Y1 c= Y & Y0 misses Y1
+       holds ||.setsum(Y1).|| < e;
+  end;
+
+:::: <= ::::
+    now
+    assume
+    A10: for e be Real st e > 0
+      holds
+      ex Y0 be finite Subset of X st
+        Y0 is non empty & Y0 c= Y &
+      for Y1 be finite Subset of X st
+        Y1 is non empty & Y1 c= Y & Y0 misses Y1
+         holds ||.setsum(Y1).|| < e;
+     defpred _P[set,set] means
+      ( $2 is finite Subset of X
+       & $2 is non empty & $2 c= Y
+       & for z be Real st z=$1
+         for Y1 be finite Subset of X
+           st Y1 is non empty & Y1 c= Y & $2 misses Y1
+         holds ||.setsum(Y1).|| < 1/(z+1));
+    A11: ex B being Function of NAT, bool Y st
+      for x be set st x in NAT holds _P[x,B.x] proof
+      A12: now
+        let x be set such that
+        A13: x in NAT;
+        reconsider xx= x as Nat by A13;
+        reconsider e = 1/(xx+1) as Real;
+          0 < xx + 1 by NAT_1:19;
+        then 0/(xx + 1) < 1/(xx + 1) by REAL_1:73;
+        then consider Y0 be finite Subset of X such that
+        A14: Y0 is non empty & Y0 c= Y &
+          for Y1 be finite Subset of X st
+            Y1 is non empty & Y1 c= Y & Y0 misses Y1
+              holds ||.setsum(Y1).|| < e by A10;
+          for z be Real st z=x
+          for Y1 be finite Subset of X st
+          Y1 is non empty & Y1 c= Y & Y0 misses Y1
+            holds ||.setsum(Y1).|| < 1/(z+1) by A14;
+        hence ex y be set st
+          y in bool Y & _P[x,y] by A14;
+      end;
+      thus thesis from FuncEx1(A12);
+    end;
+      ex A be Function of NAT, bool Y st
+    for i be Nat holds
+      A.i is finite Subset of X &
+      A.i is non empty & A.i c= Y &
+      (for Y1 be finite Subset of X st
+         Y1 is non empty & Y1 c= Y & A.i misses Y1
+           holds ||.setsum(Y1).|| < 1/(i+1)) &
+      for j be Nat st i <= j holds A.i c= A.j
+    proof
+      consider B being Function of NAT,bool Y such that
+      A15: for x be set st x in NAT holds
+      B.x is finite Subset of X &
+      B.x is non empty &
+      B.x c= Y &
+      for z be Real st z=x
+        for Y1 be finite Subset of X st
+          Y1 is non empty & Y1 c= Y & B.x misses Y1
+            holds ||.setsum(Y1).|| < 1/(z+1) by A11;
+       deffunc _G(Nat,set) = B.($1+1) \/ $2;
+        ex A being Function st dom A = NAT &
+      A.0 = B.0 &
+      for n being Element of NAT holds A.(n+1) = _G(n,A.n) from LambdaRecEx;
+      then consider A being Function such that
+      A16: dom A = NAT & A.0 = B.0 &
+      for n being Element of NAT holds A.(n+1) = B.(n+1) \/ A.n;
+      defpred _R[Nat] means
+      A.$1 is finite Subset of X &
+      A.$1 is non empty &
+      A.$1 c= Y &
+      (for Y1 be finite Subset of X st
+        Y1 is non empty & Y1 c= Y & A.$1 misses Y1
+        holds ||.setsum(Y1).|| < 1/($1+1)) &
+      for j be Nat st $1 <= j holds A.$1 c= A.j;
+
+       for j0 be Nat st j0=0 holds
+        for j be Nat st j0 <= j holds A.j0 c= A.j
+      proof
+        let j0 be Nat such that
+        A17: j0 = 0;
+        defpred _P[Nat] means (j0 <= $1 implies A.j0 c= A.$1);
+        A18: _P[0] by A17;
+        A19:
+        now
+          let j be Nat such that
+          A20: _P[j];
+            A.(j+1) = (B.(j+1) \/ A.j) by A16;
+          then A.j c= A.(j+1) by XBOOLE_1:7;
+          hence  _P[j+1] by A17,A20,NAT_1:18,XBOOLE_1:1;
+        end;
+        thus
+          for j be Nat holds _P[j] from Ind(A18, A19);
+      end;
+
+      then A21: _R[0] by A15,A16;
+      A22:
+      now
+        let n be Nat such that
+        A23: _R[n];
+        A24: A.(n+1) = B.(n+1) \/ A.n by A16;
+        A25: B.(n+1) is finite Subset of X by A15;
+        A26: ex z be set st z in A.n by A23,XBOOLE_0:def 1;
+        A27: for Y1 be finite Subset of X st
+        Y1 is non empty & Y1 c= Y & A.(n+1) misses Y1
+        holds ||.setsum(Y1).|| < 1/((n+1)+1)
+        proof
+          let Y1 be finite Subset of X such that
+          A28: Y1 is non empty & Y1 c= Y & A.(n+1) misses Y1;
+            A.(n+1) = B.(n+1) \/ A.n by A16;
+          then B.(n+1) c= A.(n+1) by XBOOLE_1:7;
+          then B.(n+1) misses Y1 by A28,XBOOLE_1:63;
+          hence ||.setsum(Y1).|| < 1/((n+1)+1) by A15,A28;
+        end;
+        defpred _P[Nat] means  (n+1) <= $1 implies A.(n+1) c= A.$1;
+          for j be Nat holds _P[j] proof
+          A29: _P[0] by NAT_1:19;
+          A30: for j being Nat st _P[j] holds _P[j+1] proof
+            let j be Nat such that
+            A31: n+1 <= j implies A.(n+1) c= A.j and
+            A32: n+1 <= j+1;
+            per cases;
+            suppose n = j;
+            hence A.(n+1) c= A.(j+1);
+            suppose A33: n <> j;
+              n <= j by A32,REAL_1:53;
+            then A34: n < j by A33,REAL_1:def 5;
+              A.(j+1) = (B.(j+1) \/ A.j) by A16;
+            then A.j c= A.(j+1) by XBOOLE_1:7;
+            hence A.(n+1) c= A.(j+1)
+            by A31,A34,NAT_1:38,XBOOLE_1:1;
+          end;
+          thus thesis from Ind(A29, A30);
+        end;
+     hence _R[n+1]
+      by A23,A24,A25,A26,A27,FINSET_1:14,XBOOLE_0:def 2,XBOOLE_1:8;
+      end;
+      A35: for i be Nat holds _R[i] from Ind(A21,A22);
+        now
+        let y be set such that
+        A36: y in rng A;
+        consider x be set such that
+        A37: x in dom A & y = A.x by A36,FUNCT_1:def 5;
+        reconsider i = x as Nat by A16,A37;
+          A.i c= Y by A35;
+        hence y in bool Y by A37;
+      end;
+      then rng A c= bool Y by TARSKI:def 3;
+      then A is Function of NAT, bool Y by A16,FUNCT_2:4;
+      hence thesis by A35;
+    end;
+    then consider A be Function of NAT, bool Y such that
+    A38: for i be Nat holds
+    A.i is finite Subset of X &
+      A.i is non empty & A.i c= Y &
+      (for Y1 be finite Subset of X st
+        Y1 is non empty & Y1 c= Y & A.i misses Y1
+       holds ||.setsum(Y1).|| < 1/(i+1)) &
+      for j be Nat st i <= j holds A.i c= A.j;
+    defpred _P[set,set] means ex Y1 be finite Subset of X st
+      Y1 is non empty & A.$1 = Y1 & $2=setsum(Y1);
+    A39:for x be set st x in NAT ex y be set st y in the carrier of X &
+      _P[x,y] proof
+      let x be set such that
+      A40: x in NAT;
+      reconsider i=x as Nat by A40;
+      A41: A.i is finite Subset of X &
+        A.i is non empty & A.i c= Y &
+        (for Y1 be finite Subset of X st
+          Y1 is non empty & Y1 c= Y & A.x misses Y1
+         holds ||.setsum(Y1).|| < 1/(i+1)) &
+        for j be Nat st i <= j holds A.i c= A.j by A38;
+      then reconsider Y1 = A.x as finite Subset of X;
+      reconsider y = setsum(Y1) as set;
+        y in the carrier of X &
+      ex Y1 be finite Subset of X st Y1 is non empty set &
+      A.x = Y1 &
+      y = setsum(Y1) by A41;
+      hence thesis;
+    end;
+
+    ex F being Function of NAT, the carrier of X st for x be set st x in NAT
+      holds _P[x,F.x] from FuncEx1(A39);
+    then consider F being Function of NAT, the carrier of X such that
+    A42: for x be set st x in NAT holds
+    ex Y1 be finite Subset of X st
+      Y1 is non empty & A.x = Y1 & F.x = setsum(Y1);
+    reconsider seq = F as sequence of X by NORMSP_1:def 3;
+    A43: seq is_Cauchy_sequence
+    proof
+        now
+        let e be Real such that
+        A44: e > 0;
+        A45: e/2 > 0/2 by A44,REAL_1:73;
+          ex k be Nat st 1/(k+1) < e/2
+        proof
+          set p = e/2;
+          A46: 0<p" by A45,REAL_1:72;
+          consider k1 be Nat such that
+          A47: p"<k1 by SEQ_4:10;
+          take k = k1;
+            p"+0 < k1+1 by A47,REAL_1:67;
+          then 1/(k1+1) < 1/p" by A46,SEQ_2:10;
+          then 1/(k+1) < 1 * p"" by XCMPLX_0:def 9;
+          hence 1/(k+1) < p;
+        end;
+        then consider k be Nat such that
+        A48: 1/(k+1) < e/2;
+          now let n, m be Nat such that
+          A49: n >= k & m >= k;
+          consider Y0 be finite Subset of X such that
+          A50: Y0 is non empty & A.k = Y0 & seq.k = setsum(Y0) by A42;
+          consider Y1 be finite Subset of X such that
+          A51: Y1 is non empty & A.n = Y1 & seq.n = setsum(Y1) by A42;
+          consider Y2 be finite Subset of X such that
+          A52: Y2 is non empty & A.m = Y2 & seq.m = setsum(Y2) by A42;
+          A53: Y0 c= Y1 by A38,A49,A50,A51;
+          A54: Y0 c= Y2 by A38,A49,A50,A52;
+
+            now per cases;
+            case A55: Y0 = Y1;
+              now per cases;
+              case Y0 = Y2;
+              then (seq.n) - (seq.m) = setsum(Y0) +- setsum(Y0)
+                by A51,A52,A55,RLVECT_1:def 11
+                .= 0.X by RLVECT_1:16;
+              hence ||.(seq.n) - (seq.m).|| < e by A44,BHSP_1:32;
+
+              case A56: Y0 <> Y2;
+                ex Y02 be finite Subset of X st
+                Y02 is non empty & Y02 c= Y &
+                Y02 misses Y0 & Y0 \/ Y02 = Y2
+              proof
+                take Y02 = Y2 \ Y0;
+                A57: Y2 \ Y0 c= Y2 by XBOOLE_1:36;
+                  Y0 \/ Y02 = Y0 \/ Y2 by XBOOLE_1:39
+                 .= Y2 by A54,XBOOLE_1:12;
+                hence thesis by A52,A56,A57,XBOOLE_1:1,79;
+              end;
+              then consider Y02 be finite Subset of X such that
+              A58: Y02 is non empty & Y02 c= Y &
+                Y02 misses Y0 & Y0 \/ Y02 = Y2;
+              A59: setsum(Y2) = setsum(Y0) + setsum(Y02) by A1,A58,Th2;
+                ||.setsum(Y02).|| < 1/(k+1) by A38,A50,A58;
+              then A60: ||.setsum(Y02).|| < e/2 by A48,AXIOMS:22;
+                e*(1/2) < e*1 by A44,REAL_1:70;
+              then A61: e/2 < e by XCMPLX_1:100;
+                ||.(seq.n) - (seq.m).||
+                = ||.(setsum(Y0) - setsum(Y0)) - setsum(Y02).||
+               by A51,A52,A55,A59,RLVECT_1:41
+               .= ||.0.X - setsum(Y02).|| by RLVECT_1:28
+               .= ||. - setsum(Y02).|| by RLVECT_1:27
+               .= ||.setsum(Y02).|| by BHSP_1:37;
+              hence ||.(seq.n) - (seq.m).|| < e by A60,A61,AXIOMS:22;
+            end;
+            hence ||.(seq.n) - (seq.m).|| < e;
+
+            case A62: Y0 <> Y1;
+              now per cases;
+              case A63: Y0 = Y2;
+
+                ex Y01 be finite Subset of X st
+                Y01 is non empty & Y01 c= Y &
+                Y01 misses Y0 & Y0 \/ Y01 = Y1
+              proof
+                take Y01 = Y1 \ Y0;
+                A64: Y1 \ Y0 c= Y1 by XBOOLE_1:36;
+                  Y0 \/ Y01 = Y0 \/ Y1 by XBOOLE_1:39
+                 .= Y1 by A53,XBOOLE_1:12;
+                hence thesis by A51,A62,A64,XBOOLE_1:1,79;
+              end;
+              then consider Y01 be finite Subset of X such that
+              A65: Y01 is non empty & Y01 c= Y &
+              Y01 misses Y0 & Y0 \/ Y01 = Y1;
+                seq.n = seq.k + setsum(Y01) by A1,A50,A51,A65,Th2;
+              then A66: seq.n - seq.k
+                = seq.k + (setsum(Y01) - seq.k) by RLVECT_1:42
+               .= seq.k + (setsum(Y01) +- seq.k) by RLVECT_1:def 11
+               .= seq.k +- (seq.k - setsum(Y01)) by RLVECT_1:47
+               .= seq.k - (seq.k - setsum(Y01)) by RLVECT_1:def 11
+               .= (setsum(Y0) - setsum(Y0)) + setsum(Y01) by A50,RLVECT_1:43
+               .= (setsum(Y0) +- setsum(Y0)) + setsum(Y01) by RLVECT_1:def 11
+               .= 0.X + setsum(Y01) by RLVECT_1:16
+               .= setsum(Y01) by RLVECT_1:10;
+              A67: seq.k - seq.m
+                = setsum(Y0) +- setsum(Y0) by A50,A52,A63,RLVECT_1:def 11
+               .= 0.X by RLVECT_1:16;
+                seq.n - seq.m = seq.n - seq.m + 0.X by RLVECT_1:10
+               .= seq.n - seq.m + (seq.k +- seq.k) by RLVECT_1:16
+               .= seq.n - seq.m + (seq.k - seq.k) by RLVECT_1:def 11
+               .= seq.n - (seq.m - (seq.k - seq.k)) by RLVECT_1:43
+               .= seq.n - ((seq.m - seq.k) + seq.k) by RLVECT_1:43
+               .= seq.n - (seq.k + (seq.m +- seq.k)) by RLVECT_1:def 11
+               .= seq.n - (seq.k +- (seq.k - seq.m)) by RLVECT_1:47
+               .= seq.n - (seq.k - (seq.k - seq.m)) by RLVECT_1:def 11
+               .= setsum(Y01) + 0.X by A66,A67,RLVECT_1:43;
+             then ||.(seq.n) - (seq.m).||
+               <= ||.setsum(Y01).|| + ||.0.X.|| by BHSP_1:36;
+             then A68: ||.(seq.n) - (seq.m).|| <= ||.setsum(Y01).|| + 0
+             by BHSP_1:32;
+               ||. setsum(Y01).|| < 1/(k+1) by A38,A50,A65;
+             then ||. setsum(Y01).|| < e/2 by A48,AXIOMS:22;
+             then ||.(seq.n) - (seq.m).|| < e/2 by A68,AXIOMS:22;
+             then ||.(seq.n) - (seq.m).|| + 0 < e/2 + e/2 by A45,REAL_1:67;
+             hence ||.(seq.n) - (seq.m).|| < e by XCMPLX_1:66;
+
+             case A69: Y0<>Y2;
+               ex Y01 be finite Subset of X st
+               Y01 is non empty & Y01 c= Y &
+               Y01 misses Y0 & Y0 \/ Y01 = Y1
+             proof
+               take Y01 = Y1 \ Y0;
+               A70: Y1 \ Y0 c= Y1 by XBOOLE_1:36;
+                 Y0 \/ Y01 = Y0 \/ Y1 by XBOOLE_1:39
+                .= Y1 by A53,XBOOLE_1:12;
+               hence thesis by A51,A62,A70,XBOOLE_1:1,79;
+             end;
+             then consider
+             Y01 be finite Subset of X such that
+             A71: Y01 is non empty & Y01 c= Y &
+             Y01 misses Y0 & Y0 \/ Y01 = Y1;
+               ex Y02 be finite Subset of X st
+               Y02 is non empty & Y02 c= Y & Y02 misses Y0 & Y0 \/ Y02 = Y2
+             proof
+               take Y02 = Y2 \ Y0;
+               A72: Y2 \ Y0 c= Y2 by XBOOLE_1:36;
+                 Y0 \/ Y02 = Y0 \/ Y2 by XBOOLE_1:39
+                .= Y2 by A54,XBOOLE_1:12;
+               hence thesis by A52,A69,A72,XBOOLE_1:1,79;
+             end;
+             then consider
+             Y02 be finite Subset of X such that
+             A73: Y02 is non empty & Y02 c= Y &
+               Y02 misses Y0 & Y0 \/ Y02 = Y2;
+               ||. setsum(Y01).|| < 1/(k+1) by A38,A50,A71;
+             then A74: ||. setsum(Y01).|| < e/2 by A48,AXIOMS:22;
+               ||.setsum(Y02).|| < 1/(k+1) by A38,A50,A73;
+             then ||.setsum(Y02).|| < e/2 by A48,AXIOMS:22;
+             then ||.setsum(Y01).|| + ||. setsum(Y02).|| < e/2 + e/2
+             by A74,REAL_1:67;
+             then A75: ||.setsum(Y01).|| + ||.setsum(Y02).|| < e by XCMPLX_1:66
+;
+             A76: setsum(Y1) = setsum(Y0) + setsum(Y01)
+             by A1,A71,Th2;
+             A77: setsum(Y2) = setsum(Y0) + setsum(Y02)
+             by A1,A73,Th2;
+             A78: seq.n - seq.k
+               = setsum(Y01) + (seq.k - seq.k) by A50,A51,A76,RLVECT_1:42
+              .= setsum(Y01) + (seq.k +- seq.k) by RLVECT_1:def 11
+              .= setsum(Y01) + 0.X by RLVECT_1:16
+              .= setsum(Y01) by RLVECT_1:10;
+             A79: seq.m - seq.k
+               = setsum(Y02) + (seq.k - seq.k) by A50,A52,A77,RLVECT_1:42
+              .= setsum(Y02) + (seq.k +- seq.k) by RLVECT_1:def 11
+              .= setsum(Y02) + 0.X by RLVECT_1:16
+              .= setsum(Y02) by RLVECT_1:10;
+               seq.n - seq.m = seq.n - seq.m + 0.X by RLVECT_1:10
+              .= seq.n - seq.m + (seq.k +- seq.k) by RLVECT_1:16
+              .= seq.n - seq.m + (seq.k - seq.k) by RLVECT_1:def 11
+              .= seq.n - (seq.m - (seq.k - seq.k)) by RLVECT_1:43
+              .= seq.n - ((seq.m - seq.k) + seq.k) by RLVECT_1:43
+              .= seq.n - (seq.k + (seq.m +- seq.k)) by RLVECT_1:def 11
+              .= seq.n - (seq.k +- (seq.k - seq.m)) by RLVECT_1:47
+              .= seq.n - (seq.k - (seq.k - seq.m)) by RLVECT_1:def 11
+              .= (seq.n - seq.k) + (seq.k - seq.m) by RLVECT_1:43
+              .= (seq.n - seq.k) + (seq.k +- seq.m) by RLVECT_1:def 11
+              .= setsum(Y01) +- setsum(Y02) by A78,A79,RLVECT_1:47;
+             then ||.(seq.n) - (seq.m).||
+               <= ||. setsum(Y01).|| + ||. - setsum(Y02).|| by BHSP_1:36;
+             then ||.(seq.n) - (seq.m).||
+               <= ||. setsum(Y01).|| + ||.setsum(Y02).|| by BHSP_1:37;
+             hence ||.(seq.n) - (seq.m).|| < e by A75,AXIOMS:22;
+           end;
+           hence ||.(seq.n) - (seq.m).|| < e;
+         end;
+         hence ||.(seq.n) - (seq.m).|| < e;
+       end;
+       hence ex k be Nat st for n, m be Nat st (n >= k & m >= k)
+       holds ||.(seq.n) - (seq.m).|| < e;
+     end;
+     hence seq is_Cauchy_sequence by BHSP_3:2;
+   end;
+     X is_complete_space by A1,BHSP_3:def 7;
+   then seq is convergent by A43,BHSP_3:def 6;
+   then consider x such that
+   A80: for r be Real st r > 0 ex m be Nat st for n be Nat st n >= m
+   holds ||.seq.n - x.|| < r by BHSP_2:9;
+    now
+    let e be Real such that
+    A81: e >0;
+    A82: e/2 > 0/2 by A81,REAL_1:73;
+    then consider m be Nat such that
+    A83: for n be Nat st n >= m holds ||. (seq.n)-x .|| < e/2 by A80;
+      ex i be Nat st 1/(i+1) < e/2 & i >= m
+    proof
+      set p = e/2;
+      A84: 0<p" by A82,REAL_1:72;
+      consider k1 be Nat such that
+      A85: p"<k1 by SEQ_4:10;
+      take i = k1+m;
+        k1 <= k1 + m by NAT_1:29;
+      then p" < i by A85,AXIOMS:22;
+      then p"+0<i+1 by REAL_1:67;
+      then 1/(i+1)<1/p" by A84,SEQ_2:10;
+      then 1/(i+1)<1 * p"" by XCMPLX_0:def 9;
+      hence 1/(i+1) < p & m <= i by NAT_1:29;
+    end;
+    then consider i be Nat such that
+    A86: 1/(i+1) < e/2 & i >= m;
+    consider Y0 be finite Subset of X such that
+    A87: Y0 is non empty & A.i = Y0 & seq.i=setsum(Y0) by A42;
+    A88: ||.setsum(Y0) - x.|| < e/2 by A83,A86,A87;
+      now
+      let Y1 be finite Subset of X such that
+      A89: Y0 c= Y1 & Y1 c= Y;
+        now per cases;
+        case Y0 = Y1;
+        then ||.x - setsum(Y1).|| = ||.-(x - setsum(Y0)).|| by BHSP_1:37
+        .= ||.setsum(Y0) +- x.|| by RLVECT_1:47
+        .= ||.setsum(Y0) - x.|| by RLVECT_1:def 11;
+        then ||.x - setsum(Y1).|| < e/2 by A83,A86,A87;
+          then ||.x-setsum(Y1).|| + 0 < e/2 + e/2 by A82,REAL_1:67;
+          hence ||.x-setsum(Y1).|| < e by XCMPLX_1:66;
+          case A90: Y0 <> Y1;
+            ex Y2 be finite Subset of X st
+            Y2 is non empty & Y2 c= Y & Y0 misses Y2 & Y0 \/ Y2 = Y1
+          proof
+            take Y2 = Y1 \ Y0;
+            A91: Y1 \ Y0 c= Y1 by XBOOLE_1:36;
+              Y0 \/ Y2 = Y0 \/ Y1 by XBOOLE_1:39
+             .= Y1 by A89,XBOOLE_1:12;
+            hence thesis by A89,A90,A91,XBOOLE_1:1,79;
+          end;
+          then consider Y2 be finite Subset of X such that
+          A92: Y2 is non empty & Y2 c= Y & Y0 misses Y2 & Y0 \/ Y2 = Y1;
+            ||.setsum(Y2).|| < 1/(i+1) by A38,A87,A92;
+          then A93: ||.setsum(Y2).|| < e/2 by A86,AXIOMS:22;
+            setsum(Y1) - x
+            = setsum(Y0) + setsum(Y2) - x by A1,A92,Th2
+           .= setsum(Y0) - x + setsum(Y2) by RLVECT_1:42;
+          then ||.setsum(Y1) - x.||
+            <= ||.setsum(Y0) - x.|| + ||.setsum(Y2).|| by BHSP_1:36;
+          then ||.-(setsum(Y1) - x).||
+            <= ||.setsum(Y0) - x.|| + ||.setsum(Y2).|| by BHSP_1:37;
+          then ||.x +- setsum(Y1).||
+            <= ||.setsum(Y0) - x.|| + ||.setsum(Y2).|| by RLVECT_1:47;
+          then A94: ||.x - setsum(Y1).||
+            <= ||.setsum(Y0) - x.|| + ||.setsum(Y2).|| by RLVECT_1:def 11;
+            ||.setsum(Y0)-x.|| + ||.setsum(Y2).|| < e/2 + e/2
+            by A88,A93,REAL_1:67;
+          then ||.setsum(Y0)-x.|| + ||.setsum(Y2).|| < e by XCMPLX_1:66;
+          hence ||.x - setsum(Y1).|| < e by A94,AXIOMS:22;
+        end;
+        hence ||.x-setsum(Y1).|| < e;
+      end;
+      hence ex Y0 be finite Subset of X st
+      Y0 is non empty & Y0 c= Y &
+      for Y1 be finite Subset of X st Y0 c= Y1 & Y1 c= Y
+        holds ||.x-setsum(Y1).|| < e by A87;
+    end;
+    hence Y is summable_set by Def2;
+  end;
+  hence thesis by A2;
+end;

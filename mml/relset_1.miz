@@ -1,0 +1,729 @@
+:: Relations Defined on Sets
+::  by Edmund Woronowicz
+::
+:: Received April 14, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, BOOLE, FUNCT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1;
+ constructors TARSKI, RELAT_1, SUBSET_1, XBOOLE_0;
+ clusters XBOOLE_0, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+ definitions TARSKI;
+ theorems TARSKI, ZFMISC_1, RELAT_1, XBOOLE_0, XBOOLE_1;
+ schemes RELAT_1;
+
+begin
+
+ reserve A,B,X,X1,Y,Y1,Y2,Z for set;
+ reserve a,x,y,z for set;
+
+::
+::   RELATION AS A SUBSET OF CARTESIAN PRODUCT OF A TWO SETS
+::   _______________________________________________________
+
+definition let X,Y;
+  mode Relation of X,Y means
+ :Def1: it c= [:X,Y:];
+existence;
+end;
+
+definition let X,Y;
+ redefine mode Relation of X,Y -> Subset of [:X,Y:];
+ coherence by Def1;
+end;
+
+definition let X,Y;
+ cluster -> Relation-like Subset of [:X,Y:];
+ coherence
+  proof let S be Subset of [:X,Y:];
+      [:X,Y:] is Relation-like by RELAT_1:6;
+   hence thesis by RELAT_1:3;
+  end;
+end;
+
+reserve P,R for Relation of X,Y;
+
+canceled 3;
+
+theorem
+    A c= R implies A is Relation of X,Y
+ proof assume A c= R; then A c= [:X,Y:] by XBOOLE_1:1;
+   hence thesis by Def1;
+ end;
+
+canceled;
+
+theorem
+    a in R implies ex x,y st a = [x,y] & x in X & y in Y
+ proof assume
+  A1: a in R;
+     then consider x,y such that
+ A2: a = [x,y] by RELAT_1:def 1;
+       x in X & y in Y by A1,A2,ZFMISC_1:106;
+     hence thesis by A2;
+  end;
+
+canceled;
+
+theorem
+    x in X & y in Y implies {[x,y]} is Relation of X,Y
+ proof assume x in X & y in Y;
+    then [x,y] in [:X,Y:] by ZFMISC_1:106;
+  then {[x,y]} c= [:X,Y:] by ZFMISC_1:37;
+   hence thesis by Def1;
+ end;
+
+theorem
+    for R being Relation st dom R c= X holds R is Relation of X, rng R
+ proof let R be Relation;
+   assume A1: dom R c= X;
+   A2: R c= [:dom R, rng R:] by RELAT_1:21;
+     [:dom R, rng R:] c= [:X,rng R:] by A1,ZFMISC_1:118;
+   then R c= [:X, rng R:] by A2,XBOOLE_1:1;
+   hence thesis by Def1;
+ end;
+
+theorem
+    for R being Relation st rng R c= Y holds R is Relation of dom R, Y
+ proof let R be Relation;
+   assume A1: rng R c= Y;
+   A2: R c= [:dom R, rng R:] by RELAT_1:21;
+     [:dom R, rng R:] c= [:dom R,Y:] by A1,ZFMISC_1:118;
+   then R c= [:dom R, Y:] by A2,XBOOLE_1:1;
+   hence thesis by Def1;
+ end;
+
+theorem
+    for R being Relation st dom R c= X & rng R c= Y holds R is Relation of X,Y
+ proof let R be Relation;
+   assume A1: dom R c= X & rng R c= Y;
+   A2: R c= [:dom R, rng R:] by RELAT_1:21;
+     [:dom R, rng R:] c= [:X,Y:] by A1,ZFMISC_1:119;
+   then R c= [:X,Y:] by A2,XBOOLE_1:1;
+   hence thesis by Def1;
+ end;
+
+theorem Th12:
+  dom R c= X & rng R c= Y
+ proof
+   thus dom R c= X
+   proof let x; assume x in dom R;
+      then ex y st [x,y] in R by RELAT_1:def 4;
+     hence thesis by ZFMISC_1:106;
+   end;
+   thus rng R c= Y
+   proof let y; assume y in rng R;
+      then ex x st [x,y] in R by RELAT_1:def 5;
+     hence thesis by ZFMISC_1:106;
+   end;
+ end;
+
+theorem Th13:
+  dom R c= X1 implies R is Relation of X1,Y
+ proof assume A1: dom R c= X1;
+   A2: R c= [:dom R, rng R:] by RELAT_1:21;
+     rng R c= Y by Th12;
+   then [:dom R, rng R:] c= [:X1,Y:] by A1,ZFMISC_1:119;
+   then R c= [:X1,Y:] by A2,XBOOLE_1:1;
+   hence thesis by Def1;
+ end;
+
+theorem Th14:
+  rng R c= Y1 implies R is Relation of X,Y1
+ proof assume A1: rng R c= Y1;
+   A2: R c= [:dom R, rng R:] by RELAT_1:21;
+     dom R c= X by Th12;
+   then [:dom R, rng R:] c= [:X,Y1:] by A1,ZFMISC_1:119;
+   then R c= [:X,Y1:] by A2,XBOOLE_1:1;
+   hence thesis by Def1;
+ end;
+
+theorem
+    X c= X1 implies R is Relation of X1,Y
+ proof assume A1: X c= X1;
+     dom R c= X by Th12; then dom R c= X1 by A1,XBOOLE_1:1;
+   hence thesis by Th13;
+ end;
+
+theorem
+    Y c= Y1 implies R is Relation of X,Y1
+ proof assume A1: Y c= Y1;
+     rng R c= Y by Th12; then rng R c= Y1 by A1,XBOOLE_1:1;
+   hence thesis by Th14;
+ end;
+
+theorem
+    X c= X1 & Y c= Y1 implies R is Relation of X1,Y1
+ proof assume X c= X1 & Y c= Y1;
+   then [:X,Y:] c= [:X1,Y1:] by ZFMISC_1:119;
+   then R c= [:X1,Y1:] by XBOOLE_1:1;
+   hence thesis by Def1;
+ end;
+
+definition let X,Y,P,R;
+ redefine func P \/ R -> Relation of X,Y;
+ coherence
+  proof
+      P \/ R c= [:X,Y:];
+   hence thesis by Def1;
+  end;
+ redefine func P /\ R -> Relation of X,Y;
+ coherence
+  proof
+      P /\ R c= [:X,Y:];
+   hence thesis by Def1;
+  end;
+ redefine func P \ R -> Relation of X,Y;
+ coherence
+  proof
+      P \ R c= [:X,Y:];
+   hence thesis by Def1;
+  end;
+end;
+
+definition let X,Y,R;
+ redefine func dom R -> Subset of X;
+ coherence by Th12;
+ redefine func rng R -> Subset of Y;
+ coherence by Th12;
+end;
+
+canceled;
+
+theorem
+    field R c= X \/ Y
+ proof
+     dom R \/ rng R c= X \/ Y by XBOOLE_1:13;
+   hence thesis by RELAT_1:def 6;
+ end;
+
+canceled 2;
+
+theorem
+    (for x st x in X ex y st [x,y] in R) iff dom R = X
+ proof
+ thus (for x st x in X ex y st [x,y] in R) implies dom R = X
+   proof
+      assume A1: for x st x in X ex y st [x,y] in R;
+      thus dom R = X
+      proof
+          now let x;
+           now assume x in X;
+           then ex y st [x,y] in R by A1;
+           hence x in dom R by RELAT_1:20;
+         end;
+         hence x in dom R iff x in X;
+        end;
+      hence dom R = X by TARSKI:2;
+      end;
+  end;
+  thus dom R = X implies for x st x in X ex y st [x,y] in R by RELAT_1:def 4;
+end;
+
+theorem
+   (for y st y in Y ex x st [x,y] in R) iff rng R = Y
+ proof
+  thus (for y st y in Y ex x st [x,y] in R) implies rng R = Y
+     proof
+      assume A1: for y st y in Y ex x st [x,y] in R;
+      thus rng R = Y
+      proof
+          now let y;
+           now assume y in Y;
+           then ex x st [x,y] in R by A1;
+           hence y in rng R by RELAT_1:20;
+         end;
+         hence y in rng R iff y in Y;
+        end;
+      hence rng R = Y by TARSKI:2;
+      end;
+  end;
+  thus rng R = Y implies (for y st y in Y ex x st [x,y] in R) by RELAT_1:def 5
+;
+end;
+
+definition let X,Y,R;
+ redefine func R~ -> Relation of Y,X;
+ coherence
+  proof
+  A1:   now let x,y;
+         assume [x,y] in R~;
+      then [y,x] in R by RELAT_1:def 7;
+         hence [x,y] in [:Y,X:] by ZFMISC_1:107;
+       end;
+       reconsider P = [:Y,X:] as Relation by RELAT_1:6;
+         R~ c= P by A1,RELAT_1:def 3;
+    hence thesis by Def1;
+  end;
+end;
+
+definition let X,Y1,Y2,Z;
+           let P be Relation of X,Y1; let R be Relation of Y2,Z;
+ redefine func P*R -> Relation of X,Z;
+ coherence
+  proof
+ A1: now let x,z;
+      assume [x,z] in P*R;
+      then consider y such that
+  A2: [x,y] in P & [y,z] in R by RELAT_1:def 8;
+        x in X & z in Z by A2,ZFMISC_1:106;
+      hence [x,z] in [:X,Z:] by ZFMISC_1:106;
+    end;
+    reconsider Q = [:X,Z:] as Relation by RELAT_1:6;
+      P*R c= Q by A1,RELAT_1:def 3;
+  hence thesis by Def1;
+  end;
+end;
+
+theorem
+    dom (R~) = rng R & rng (R~) = dom R
+  proof
+    thus dom (R~) = rng R
+    proof
+       now let x;
+   A1:  now assume x in dom (R~);
+         then consider y such that
+     A2: [x,y] in R~ by RELAT_1:def 4;
+           [y,x] in R by A2,RELAT_1:def 7;
+         hence x in rng R by RELAT_1:20;
+       end;
+         now assume x in rng R;
+         then consider y such that
+     A3: [y,x] in R by RELAT_1:def 5;
+           [x,y] in R~ by A3,RELAT_1:def 7;
+         hence x in dom (R~) by RELAT_1:20;
+       end;
+       hence x in dom (R~) iff x in rng R by A1;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+   thus rng (R~) = dom R
+   proof
+       now let x;
+    A4: now assume x in rng (R~);
+         then consider y such that
+     A5: [y,x] in R~ by RELAT_1:def 5;
+           [x,y] in R by A5,RELAT_1:def 7;
+         hence x in dom R by RELAT_1:20;
+       end;
+         now assume x in dom R;
+         then consider y such that
+     A6: [x,y] in R by RELAT_1:def 4;
+           [y,x] in R~ by A6,RELAT_1:def 7;
+         hence x in rng (R~) by RELAT_1:20;
+       end;
+       hence x in rng (R~) iff x in dom R by A4;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+ end;
+
+theorem
+    {} is Relation of X,Y
+ proof {} c= [:X,Y:] by XBOOLE_1:2; hence thesis by Def1; end;
+
+theorem
+    R is Relation of {},Y implies R = {}
+ proof
+   assume R is Relation of {},Y;
+     then dom R c= {} by Th12;
+     then dom R = {} by XBOOLE_1:3;
+   hence R = {} by RELAT_1:64;
+ end;
+
+theorem
+    R is Relation of X,{} implies R = {}
+ proof
+   assume R is Relation of X,{};
+     then rng R c= {} by Th12;
+     then rng R = {} by XBOOLE_1:3;
+   hence R = {} by RELAT_1:64;
+ end;
+
+theorem Th28:
+  id X c= [:X,X:]
+   proof
+     reconsider R = [:X,X:] as Relation of X,X by Def1;
+       [x,y] in id X implies [x,y] in R
+       proof assume [x,y] in id X;
+       then x in X & x = y by RELAT_1:def 10;
+         hence [x,y] in R by ZFMISC_1:106;
+       end;
+     hence thesis by RELAT_1:def 3;
+   end;
+
+theorem
+    id X is Relation of X,X
+ proof id X c= [:X,X:] by Th28;
+   hence id X is Relation of X,X by Def1;
+ end;
+
+theorem Th30:
+  id A c= R implies A c= dom R & A c= rng R
+ proof
+   assume A1: id A c= R;
+     thus A c= dom R
+     proof let x; assume x in A;
+       then [x,x] in id A by RELAT_1:def 10; hence thesis by A1,RELAT_1:20;
+     end;
+     thus A c= rng R
+     proof let x; assume x in A;
+       then [x,x] in id A by RELAT_1:def 10; hence thesis by A1,RELAT_1:20;
+     end;
+ end;
+
+theorem
+    id X c= R implies X = dom R & X c= rng R
+ proof
+   assume A1: id X c= R;
+     thus X = dom R
+     proof
+          X c= dom R by A1,Th30;
+       hence thesis by XBOOLE_0:def 10;
+     end;
+     thus thesis by A1,Th30;
+ end;
+
+theorem
+    id Y c= R implies Y c= dom R & Y = rng R
+ proof
+   assume A1: id Y c= R;
+     hence Y c= dom R by Th30;
+     thus Y = rng R
+     proof
+          Y c= rng R by A1,Th30;
+       hence thesis by XBOOLE_0:def 10;
+     end;
+ end;
+
+definition let X,Y,R,A;
+ redefine func R|A -> Relation of X,Y;
+ coherence
+  proof
+A1:  now let x,y;
+      assume [x,y] in R|A;
+      then x in A & [x,y] in R by RELAT_1:def 11; hence [x,y] in [:X,Y:];
+    end;
+    reconsider P = [:X,Y:] as Relation by RELAT_1:6;
+      R|A c= P by A1,RELAT_1:def 3;
+    hence thesis by Def1;
+  end;
+end;
+
+definition let X,Y,B,R;
+ redefine func B|R -> Relation of X,Y;
+ coherence
+  proof
+A1:  now let x,y;
+      assume [x,y] in B|R;
+      then y in B & [x,y] in R by RELAT_1:def 12; hence [x,y] in [:X,Y:];
+    end;
+    reconsider P = [:X,Y:] as Relation by RELAT_1:6;
+      B|R c= P by A1,RELAT_1:def 3;
+    hence thesis by Def1;
+  end;
+end;
+
+theorem
+    R|X1 is Relation of X1,Y
+ proof
+A1:  now let x,y;
+      assume A2: [x,y] in R|X1;
+then A3:   x in X1 & [x,y] in R by RELAT_1:def 11;
+        y in Y by A2,ZFMISC_1:106;
+      hence [x,y] in [:X1,Y:] by A3,ZFMISC_1:106;
+    end;
+    reconsider P = [:X1,Y:] as Relation by RELAT_1:6;
+      R|X1 c= P by A1,RELAT_1:def 3;
+    hence thesis by Def1;
+ end;
+
+theorem
+    X c= X1 implies R|X1 = R
+ proof assume A1: X c= X1;
+       now let x,y;
+         now assume A2: [x,y] in R;
+         then x in X by ZFMISC_1:106;
+         hence [x,y] in R|X1 by A1,A2,RELAT_1:def 11;
+       end;
+       hence [x,y] in R|X1 iff [x,y] in R by RELAT_1:def 11;
+     end;
+     hence thesis by RELAT_1:def 2;
+ end;
+
+theorem
+    Y1|R is Relation of X,Y1
+ proof
+A1:  now let x,y;
+      assume A2: [x,y] in Y1|R;
+then A3:   y in Y1 & [x,y] in R by RELAT_1:def 12;
+        x in X by A2,ZFMISC_1:106;
+      hence [x,y] in [:X,Y1:] by A3,ZFMISC_1:106;
+    end;
+    reconsider P = [:X,Y1:] as Relation by RELAT_1:6;
+      Y1|R c= P by A1,RELAT_1:def 3;
+    hence thesis by Def1;
+ end;
+
+theorem
+    Y c= Y1 implies Y1|R = R
+ proof assume A1: Y c= Y1;
+       now let x,y;
+         now assume A2: [x,y] in R;
+         then y in Y by ZFMISC_1:106;
+         hence [x,y] in Y1|R by A1,A2,RELAT_1:def 12;
+       end;
+       hence [x,y] in Y1|R iff [x,y] in R by RELAT_1:def 12;
+     end;
+     hence thesis by RELAT_1:def 2;
+ end;
+
+definition let X,Y,R,A;
+ redefine func R.:A -> Subset of Y;
+ coherence
+  proof
+      R.:A c= rng R by RELAT_1:144;
+   hence R.:A is Subset of Y by XBOOLE_1:1;
+  end;
+
+ redefine func R"A -> Subset of X;
+ coherence
+  proof
+      R"A c= dom R by RELAT_1:167;
+   hence R"A is Subset of X by XBOOLE_1:1;
+  end;
+end;
+
+canceled;
+
+theorem Th38:
+  R.:X = rng R & R"Y = dom R
+ proof
+   thus R.:X = rng R
+   proof
+       now let y;
+   A1:  now assume y in R.:X;
+         then ex x st [x,y] in R & x in X by RELAT_1:def 13;
+         hence y in rng R by RELAT_1:20;
+       end;
+         now assume y in rng R;
+         then consider x such that
+      A2: [x,y] in R by RELAT_1:def 5;
+           x in X by A2,ZFMISC_1:106;
+         hence y in R.:X by A2,RELAT_1:def 13;
+       end;
+       hence y in R.:X iff y in rng R by A1;
+     end;
+     hence thesis by TARSKI:2;
+   end;
+   thus R"Y = dom R
+   proof
+       now let x;
+   A3:  now assume x in R"Y;
+         then ex y st [x,y] in R & y in Y by RELAT_1:def 14;
+         hence x in dom R by RELAT_1:20;
+       end;
+         now assume x in dom R;
+         then consider y such that
+      A4: [x,y] in R by RELAT_1:def 4;
+           y in Y by A4,ZFMISC_1:106;
+         hence x in R"Y by A4,RELAT_1:def 14;
+       end;
+       hence x in R"Y iff x in dom R by A3;
+    end;
+    hence thesis by TARSKI:2;
+  end;
+ end;
+
+theorem
+    R.:(R"Y) = rng R & R"(R.:X) = dom R
+ proof R"Y = dom R & R.:X = rng R by Th38;
+   hence thesis by RELAT_1:146,169;
+ end;
+
+scheme Rel_On_Set_Ex{A() -> set,B() -> set,P[set,set]}:
+ ex R being Relation of A(),B() st
+   for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y]
+ proof
+  defpred Q[set,set] means P[$1,$2];
+  consider R being Relation such that
+A1: for x,y holds [x,y] in R iff x in A() & y in B() & Q[x,y]
+                                           from Rel_Existence;
+      R c= [:A(),B():]
+     proof let x; assume
+  A2:   x in R;
+       then consider x1,x2 being set such that
+  A3:  x = [x1,x2] by RELAT_1:def 1;
+         x1 in A() & x2 in B() by A1,A2,A3;
+       hence x in [:A(),B():] by A3,ZFMISC_1:106;
+     end;
+    then reconsider R as Relation of A(),B() by Def1;
+    take R;
+    thus for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y] by A1;
+  end;
+
+::
+::            RELATION ON THE SET
+::            ___________________
+
+
+definition let X;
+  mode Relation of X is Relation of X,X;
+end;
+
+reserve R for Relation of X;
+
+canceled 5;
+
+theorem
+    R*(id X) = R & (id X)*R = R
+ proof dom R c= X & rng R c= X;
+   hence thesis by RELAT_1:77,79;
+ end;
+
+::
+::            RELATION ON THE DOMAIN
+::            ______________________
+
+reserve D,D1,D2,E,F for non empty set;
+reserve R for Relation of D,E;
+reserve x for Element of D;
+reserve y for Element of E;
+
+theorem
+    id D <> {}
+ proof
+     now assume A1: id D = {};
+     consider y being Element of D;
+       [y,y] in id D by RELAT_1:def 10;
+     hence contradiction by A1;
+   end;
+   hence thesis;
+ end;
+
+theorem
+    for x being Element of D holds
+   x in dom R iff ex y being Element of E st [x,y] in R
+ proof let x be Element of D;
+   thus x in dom R implies ex y being Element of E st [x,y] in R
+     proof assume x in dom R;
+       then consider y being set such that
+   A1: [x,y] in R by RELAT_1:def 4;
+       reconsider b = y as Element of E by A1,ZFMISC_1:106;
+       take b;
+       thus thesis by A1;
+     end;
+     given y being Element of E such that
+  A2: [x,y] in R;
+      thus x in dom R by A2,RELAT_1:20;
+ end;
+
+theorem
+    for y being Element of E holds
+   y in rng R iff ex x being Element of D st [x,y] in R
+ proof let y be Element of E;
+   thus y in rng R implies ex x being Element of D st [x,y] in R
+     proof assume y in rng R;
+       then consider x being set such that
+   A1: [x,y] in R by RELAT_1:def 5;
+       reconsider a = x as Element of D by A1,ZFMISC_1:106;
+       take a;
+       thus thesis by A1;
+     end;
+     given x being Element of D such that
+  A2: [x,y] in R;
+      thus y in rng R by A2,RELAT_1:20;
+ end;
+
+theorem
+    for x being Element of D holds
+        x in dom R implies ex y being Element of E st y in rng R
+ proof let x be Element of D;
+  assume x in dom R;
+    then consider y being set such that
+ A1: y in rng R by RELAT_1:18;
+    reconsider b = y as Element of E by A1;
+    take b;
+  thus thesis by A1;
+ end;
+
+theorem
+    for y being Element of E holds
+        y in rng R implies ex x being Element of D st x in dom R
+ proof let y be Element of E;
+  assume y in rng R;
+    then consider x being set such that
+ A1: x in dom R by RELAT_1:19;
+    reconsider a = x as Element of D by A1;
+    take a;
+  thus thesis by A1;
+ end;
+
+theorem
+    for P being (Relation of D,E), R being Relation of E,F
+    for x being Element of D, z being Element of F holds
+    [x,z] in P*R iff ex y being Element of E st [x,y] in P & [y,z] in R
+ proof
+  let P be (Relation of D,E), R be Relation of E,F;
+  let x be Element of D, z be Element of F;
+  thus [x,z] in P*R implies ex y being Element of E st [x,y] in P & [y,z] in R
+    proof
+      assume [x,z] in P*R;
+       then consider y being set such that
+   A1: [x,y] in P & [y,z] in R by RELAT_1:def 8;
+       reconsider a = y as Element of E by A1,ZFMISC_1:106;
+       take a;
+       thus thesis by A1;
+    end;
+     given y such that
+  A2: [x,y] in P & [y,z] in R;
+      thus [x,z] in P*R by A2,RELAT_1:def 8;
+ end;
+
+theorem
+    y in R.:D1 iff ex x being Element of D st [x,y] in R & x in D1
+ proof
+   thus y in R.:D1 implies ex x being Element of D st [x,y] in R & x in D1
+   proof assume y in R.:D1;
+       then consider x being set such that
+   A1: [x,y] in R & x in D1 by RELAT_1:def 13;
+       reconsider a = x as Element of D by A1,ZFMISC_1:106;
+       take a;
+       thus thesis by A1;
+   end;
+     given x such that
+  A2: [x,y] in R & x in D1;
+      thus y in R.:D1 by A2,RELAT_1:def 13;
+ end;
+
+theorem
+    x in R"D2 iff ex y being Element of E st [x,y] in R & y in D2
+ proof
+   thus x in R"D2 implies ex y being Element of E st [x,y] in R & y in D2
+     proof assume x in R"D2;
+       then consider y being set such that
+   A1: [x,y] in R & y in D2 by RELAT_1:def 14;
+       reconsider b = y as Element of E by A1,ZFMISC_1:106;
+       take b;
+       thus thesis by A1;
+     end;
+     given y being Element of E such that
+  A2: [x,y] in R & y in D2;
+      thus x in R"D2 by A2,RELAT_1:def 14;
+ end;
+
+scheme Rel_On_Dom_Ex{A,B() -> non empty set, P[set,set]}:
+ ex R being Relation of A(),B() st
+   for x being Element of A(), y being Element of B() holds
+     [x,y] in R iff P[x,y]
+ proof
+  defpred Q[set,set] means P[$1,$2];
+  consider R being Relation of A(),B() qua set such that
+A1: for x,y being set holds [x,y] in R iff x in A() & y in B() & Q[x,y]
+                                                  from Rel_On_Set_Ex;
+    take R;
+    thus thesis by A1;
+ end;

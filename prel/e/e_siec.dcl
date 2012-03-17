@@ -1,0 +1,15 @@
+HIDDEN
+RELAT_1
+TARSKI
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+SETFAM_1
+STRUCT_0
+E_SIEC
+#
+«V7 ;;;G3 ;
+«V8 ;;;G3 ;
+«V9 ;;;G3 ;
+«V7 ;V8 ;V9 ;;;G3 ;
+!

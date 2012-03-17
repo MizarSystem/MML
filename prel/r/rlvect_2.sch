@@ -1,0 +1,19 @@
+HIDDEN
+XBOOLE_0
+RELAT_1
+FUNCT_1
+ZFMISC_1
+SUBSET_1
+RELSET_1
+FUNCT_2
+#
+LambdaSep1
+LambdaSep2
+#
+M1 W1 ;;M1 W1 ;;M2 F1 ;;M2 F2 ;;M2 F2 ;;;
+ªM5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;ª&R1 K48 F1 ;F2 ;B1 F3 ;;F4 ;;M2 F1 ;;ª&ªR1 B2 F3 ;;ªR1 K48 F1 ;F2 ;B1 B2 ;F5 B2 ;;;;;
+#
+M1 W1 ;;M1 W1 ;;M2 F1 ;;M2 F1 ;;M2 F2 ;;M2 F2 ;;M2 F2 ;;;
+ªM5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;ª&R1 K48 F1 ;F2 ;B1 F3 ;;F5 ;;R1 K48 F1 ;F2 ;B1 F4 ;;F6 ;;M2 F1 ;;ª&ªR1 B2 F3 ;;ªR1 B2 F4 ;;ªR1 K48 F1 ;F2 ;B1 B2 ;F7 B2 ;;;;ªR1 F3 ;F4 ;;;
+#
+!

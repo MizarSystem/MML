@@ -1,0 +1,2379 @@
+:: Properties of Trigonometric Function
+::  by Takashi Mitsuishi and Yuguang Yang
+::
+:: Received March 13, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary ARYTM, RCOMP_1, ARYTM_3, SIN_COS, ARYTM_1, SQUARE_1, RFUNCT_2,
+      FDIFF_1, FUNCT_1, PARTFUN1, RELAT_1, ORDINAL2, VECTSP_1, SEQ_1, SEQ_2,
+      SEQM_3, BOOLE, PRE_TOPC, FCONT_1, SIN_COS2, FINSEQ_4, GROUP_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, RELAT_1, FCONT_1, FDIFF_1, NAT_1, FINSEQ_4, SQUARE_1, PREPOWER,
+      PARTFUN1, SEQ_2, SEQM_3, RCOMP_1, RFUNCT_1, RFUNCT_2, SIN_COS, SEQ_1,
+      VECTSP_1;
+ constructors NAT_1, COMSEQ_3, REAL_1, SEQ_2, RCOMP_1, FINSEQ_4, FCONT_1,
+      RFUNCT_1, FDIFF_1, GOBOARD1, SQUARE_1, PREPOWER, PARTFUN1, RFUNCT_2,
+      SIN_COS, MEMBERED;
+ clusters XREAL_0, RELSET_1, FDIFF_1, RCOMP_1, SEQ_1, MEMBERED, NUMBERS,
+      ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ theorems AXIOMS, REAL_1, REAL_2, SEQ_1, SEQM_3, SEQ_4, SQUARE_1, FINSEQ_4,
+      RCOMP_1, FUNCT_1, FDIFF_1, FDIFF_2, FCONT_3, TARSKI, FUNCT_2, RFUNCT_1,
+      SUBSET_1, RFUNCT_2, RELSET_1, PARTFUN1, ROLLE, SIN_COS, VECTSP_1, NEWTON,
+      XREAL_0, TOPREAL5, JORDAN6, RELAT_1, XBOOLE_0, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, PARTFUN2;
+
+begin :: Monotone increasing and monotone decreasing of sine and cosine.
+
+reserve p,q,r,th for Real;
+reserve n for Nat;
+
+Lm1:
+( for a, b be real number holds
+  (for th holds th in [.a,b.] iff a<=th & th<=b) &
+  (for th holds th in ].a,b.[ iff a<th & th<b) ) &
+ (for x, y be real number st x <y holds
+  (for a be real number st a>0 holds
+  (a * x < a * y & x/a < y/a)))
+ &
+ (for x, y be real number st x < y & 0< x holds 1 < y/x)
+proof
+thus for a, b be real number holds
+ (for th holds th in [.a,b.] iff a<=th & th<=b) &
+  (for th holds th in ].a,b.[ iff a<th & th<b) by JORDAN6:45,TOPREAL5:1;
+  now let x, y be real number such that
+ A1: x <y;
+     now let a be real number; assume a>0;
+     hence a * x < a * y & x/a < y/a by A1,REAL_1:70,73;
+   end;
+ hence for a be real number st a>0 holds
+  a * x < a * y & x/a < y/a;
+ end;
+hence thesis by REAL_2:142;
+end;
+
+Lm2:
+0 < PI/2 & PI/2 < PI & PI < 3/2*PI & 3/2*PI < 2*PI
+proof
+ A1: 0 < PI/2
+ proof
+   PI in ].0, 4.[ by SIN_COS:def 30;
+ then 0< PI & PI < 4 by Lm1;
+ then 0/2 <PI/2 by REAL_1:73;
+ hence 0< PI/2;
+ end;
+ A2: PI/2 < PI
+ proof
+   0 + PI/2 < PI/2 + PI/2 by A1,REAL_1:53;
+ hence PI/2 < PI by XCMPLX_1:66;
+ end;
+ A3: PI < 3/2*PI
+ proof
+ A4: PI/2 + PI/2 < PI + PI/2 by A2,REAL_1:53;
+   PI + PI/2 = ((2/2)*PI + 1*(PI/2))
+                  .= (2*PI)/2 + 1*(PI/2) + 0*(PI/2) by XCMPLX_1:75
+                  .= 2*(PI/2) + 1*(PI/2) + 0*(PI/2) by XCMPLX_1:75
+                  .= (2 + 1 + 0)*(PI/2) by XCMPLX_1:9
+                  .= (3*PI)/2 by XCMPLX_1:75
+                  .= 3/2*PI by XCMPLX_1:75;
+ hence thesis by A4,XCMPLX_1:66;
+ end;
+   3/2*PI < 2*PI
+ proof
+ A5: PI + PI/2 = ((2/2)*PI + 1*(PI/2))
+                   .= (2*PI)/2 + 1*(PI/2) + 0*(PI/2) by XCMPLX_1:75
+                   .= 2*(PI/2) + 1*(PI/2) + 0*(PI/2) by XCMPLX_1:75
+                   .= (2 + 1 + 0)*(PI/2) by XCMPLX_1:9
+                   .= (3*PI)/2 by XCMPLX_1:75
+                  .= 3/2*PI by XCMPLX_1:75;
+   PI/2 + 3/2*PI = 1*(PI/2) + 3*PI/2 + 0 by XCMPLX_1:75
+                .= 1*(PI/2) + 3*(PI/2) + 0*(PI/2) by XCMPLX_1:75
+                .= (1+3+0)*(PI/2) by XCMPLX_1:9
+                .= (4*PI)/2 by XCMPLX_1:75
+                .= 4/2*PI by XCMPLX_1:75
+                .= 2*PI;
+ hence 3/2*PI < 2*PI by A3,A5,REAL_1:53;
+ end;
+ hence thesis by A1,A2,A3;
+end;
+
+Lm3:
+(3/2*PI + PI/2 = 2*PI) & (PI + PI/2 = 3/2*PI) &
+(PI/2 + PI/2 = PI) & (2*PI - PI/2 = 3/2*PI) &
+(3/2*PI - PI/2 = PI) & (PI - PI/2 = PI/2)
+proof
+ A1:3/2*PI + PI/2 = 2*PI
+  proof
+    PI/2 + 3/2*PI = 1*(PI/2) + 3*PI/2 + 0 by XCMPLX_1:75
+                  .= 1*(PI/2) + 3*(PI/2) + 0*(PI/2) by XCMPLX_1:75
+                  .= (1+3+0)*(PI/2) by XCMPLX_1:9
+                  .= (4*PI)/2 by XCMPLX_1:75
+                  .= 4/2*PI by XCMPLX_1:75
+                .= 2*PI;
+  hence thesis;
+  end;
+ A2:PI + PI/2 = 3/2*PI
+  proof
+    PI + PI/2 = ((2/2)*PI + 1*(PI/2))
+                     .= (2*PI)/2 + 1*(PI/2) + 0*(PI/2) by XCMPLX_1:75
+                     .= 2*(PI/2) + 1*(PI/2) + 0*(PI/2) by XCMPLX_1:75
+                     .= (2 + 1 + 0)*(PI/2) by XCMPLX_1:9
+                     .= (3*PI)/2 by XCMPLX_1:75
+                     .= 3/2*PI by XCMPLX_1:75;
+  hence thesis;
+  end;
+  PI/2 + PI/2 = PI by XCMPLX_1:66;
+ hence thesis by A1,A2,XCMPLX_1:26;
+end;
+
+ theorem Th1:
+ p>=0 & r>=0 implies p+r>=2*sqrt(p*r)
+ proof
+ assume A1:p>=0 & r>=0;
+ A2:(sqrt p - sqrt r)^2>=0 by SQUARE_1:72;
+     (sqrt p - sqrt r)^2
+  =(sqrt p)^2 - 2*sqrt p*sqrt r + (sqrt r)^2 by SQUARE_1:64
+ .=p-2*sqrt p*sqrt r + (sqrt r)^2 by A1,SQUARE_1:def 4
+ .=p -2*sqrt p*sqrt r +r by A1,SQUARE_1:def 4
+ .=p+r-2*sqrt p*sqrt r by XCMPLX_1:29;
+ then 0+2*sqrt p*sqrt r <= p+r by A2,REAL_1:84;
+ then 2*(sqrt p*sqrt r) <= p+r by XCMPLX_1:4;
+ hence 2*sqrt(p*r) <= p+r by A1,SQUARE_1:97;
+ end;
+
+theorem
+  sin is_increasing_on ].0,PI/2.[
+proof
+A1: sin is_differentiable_on ].0,PI/2.[ by FDIFF_1:34,SIN_COS:73;
+  for th be Real st th in ].0,PI/2.[ holds 0 < diff(sin,th)
+ proof
+ let th be Real; assume
+   th in ].0,PI/2.[;
+ then cos.th > 0 by SIN_COS:85;
+ hence diff(sin,th) > 0 by SIN_COS:73;
+ end;
+hence thesis by A1,Lm2,ROLLE:9;
+end;
+
+Lm4:
+for th st th in ].0,PI/2.[ holds 0 < sin.th
+proof
+let th; assume th in ].0,PI/2.[;
+then 0 < th & th < PI/2 by Lm1;
+then 0-th<0 & -th>-PI/2 by REAL_1:50,REAL_2:105;
+then -th<0 & -th>-PI/2 by XCMPLX_1:150;
+then -th+PI/2 < 0+PI/2
+   & -th+PI/2 > -PI/2+ PI/2 by REAL_1:53;
+then PI/2-th < PI/2
+   & PI/2+ -th > PI/2-PI/2 by XCMPLX_0:def 8;
+then PI/2-th < PI/2
+   & PI/2-th > PI/2-PI/2 by XCMPLX_0:def 8;
+then 0 < PI/2-th & PI/2-th < PI/2 by XCMPLX_1:14;
+then PI/2-th in ].0,PI/2.[ by Lm1;
+then cos.(PI/2-th) > 0 by SIN_COS:85;
+hence sin.th > 0 by SIN_COS:83;
+end;
+
+theorem
+  sin is_decreasing_on ].PI/2,PI.[
+proof
+A1: sin is_differentiable_on ].PI/2,PI.[ by FDIFF_1:34,SIN_COS:73;
+  for th1 be Real st th1 in ].PI/2,PI.[ holds 0 > diff(sin,th1)
+ proof
+ let th1 be Real; assume
+    th1 in ].PI/2,PI.[;
+ then PI/2 < th1 & th1 < PI by Lm1;
+ then A2:PI/2 - PI/2 < th1 - PI/2
+ & th1 - PI/2 < PI - PI/2 by REAL_1:54;
+   PI/2+ 0 = PI/2;
+ then A3: PI/2 - PI/2 = 0 by XCMPLX_1:26;
+
+ then A4: th1-PI/2 in ].0,PI/2.[ by A2,Lm1,Lm3;
+ A5:
+ diff(sin,(th1))=cos.(th1+(PI/2-PI/2)) by A3,SIN_COS:73
+               .=cos.(th1+PI/2-PI/2) by XCMPLX_1:29
+               .=cos.(PI/2+(th1-PI/2)) by XCMPLX_1:29
+               .=-sin.(th1-PI/2) by SIN_COS:83;
+   sin.(th1-PI/2) > 0 by A4,Lm4;
+ then 0-sin.(th1-PI/2) < 0 by REAL_2:105;
+ hence diff(sin,(th1)) < 0 by A5,XCMPLX_1:150;
+ end;
+hence thesis by A1,Lm2,ROLLE:10;
+end;
+
+theorem
+  cos is_decreasing_on ].0,PI/2.[
+proof
+ A1: cos is_differentiable_on ].0,PI/2.[ by FDIFF_1:34,SIN_COS:72;
+   for th be Real st th in ].0,PI/2.[ holds diff(cos,th) < 0
+  proof
+  let th be Real such that
+  A2: th in ].0,PI/2.[;
+  A3: diff(cos,th) = -sin.(th) by SIN_COS:72;
+    0 < sin.(th) by A2,Lm4;
+  then 0-sin.(th) < 0 by REAL_2:105;
+  hence diff(cos,th) < 0 by A3,XCMPLX_1:150;
+  end;
+hence thesis by A1,Lm2,ROLLE:10;
+end;
+
+theorem
+  cos is_decreasing_on ].PI/2,PI.[
+proof
+ A1: cos is_differentiable_on ].PI/2,PI.[ by FDIFF_1:34,SIN_COS:72;
+   for th be Real st th in ].PI/2,PI.[ holds diff(cos,th) < 0
+  proof
+  let th be Real; assume th in ].PI/2,PI.[;
+   then PI/2 < th & th < PI by Lm1;
+   then A2:PI/2 - PI/2 < th - PI/2
+   & th - PI/2 < PI - PI/2 by REAL_1:54;
+     PI/2+ 0 = PI/2;
+   then A3: PI/2 - PI/2 = 0 by XCMPLX_1:26;
+   then A4: th-PI/2 in ].0,PI/2.[ by A2,Lm1,Lm3;
+   A5:diff(cos,(th))=-sin.(th+(PI/2-PI/2)) by A3,SIN_COS:72
+                 .=-sin.(th+PI/2-PI/2) by XCMPLX_1:29
+                 .=-sin.(PI/2+(th-PI/2)) by XCMPLX_1:29
+                 .=-cos.(th-PI/2) by SIN_COS:83;
+     cos.(th-PI/2) > 0 by A4,SIN_COS:85;
+   then 0-cos.(th-PI/2) < 0 by REAL_2:105;
+   hence diff(cos,(th)) < 0 by A5,XCMPLX_1:150;
+  end;
+hence thesis by A1,Lm2,ROLLE:10;
+end;
+
+theorem
+  sin is_decreasing_on ].PI,3/2*PI.[
+proof
+A1: sin is_differentiable_on ].PI,3/2*PI.[ by FDIFF_1:34,SIN_COS:73;
+  for th be Real st th in ].PI,3/2*PI.[ holds diff(sin,(th))<0
+ proof
+ let th be Real such that
+ A2:th in ].PI,3/2*PI.[;
+ A3:diff(sin,(th))= cos.(th + 0) by SIN_COS:73
+             .= cos.(th + (PI-PI)) by XCMPLX_1:14
+             .= cos.(th+PI-PI) by XCMPLX_1:29
+             .= cos.(PI+(th-PI)) by XCMPLX_1:29
+             .= -cos.(th-PI) by SIN_COS:83;
+   PI < th & th < 3/2*PI by A2,Lm1;
+ then PI-PI < th-PI
+   & th-PI < 3/2*PI-PI by REAL_1:54;
+ then 0<th-PI & th-PI < PI/2 by Lm3,XCMPLX_1:14,36;
+ then th-PI in ].0,PI/2.[ by Lm1;
+ then cos.(th-PI) > 0 by SIN_COS:85;
+ then 0-cos.(th-PI) < 0 by REAL_2:105;
+ hence diff(sin,(th)) < 0 by A3,XCMPLX_1:150;
+ end;
+hence thesis by A1,Lm2,ROLLE:10;
+end;
+
+theorem
+  sin is_increasing_on ].3/2*PI,2*PI.[
+proof
+A1: sin is_differentiable_on ].3/2*PI,2*PI.[ by FDIFF_1:34,SIN_COS:73;
+  for th be Real st th in ].3/2*PI,2*PI.[ holds diff(sin,(th))>0
+ proof
+ let th be Real such that
+ A2:th in ].3/2*PI,2*PI.[;
+ A3:diff(sin,(th)) = cos.(th + 0) by SIN_COS:73
+             .= cos.(th + (3/2*PI-3/2*PI)) by XCMPLX_1:14
+             .= cos.(th+3/2*PI-3/2*PI) by XCMPLX_1:29
+             .= cos.(3/2*PI+(th-3/2*PI)) by XCMPLX_1:29
+             .= cos.(PI + (PI/2+(th-3/2*PI))) by Lm3,XCMPLX_1:1
+             .= -cos.(PI/2+(th-3/2*PI)) by SIN_COS:83
+             .= -(-sin.(th-3/2*PI)) by SIN_COS:83
+             .= sin.(th-3/2*PI);
+   3/2*PI < th & th < 2*PI by A2,Lm1;
+ then A4:3/2*PI-3/2*PI < th-3/2*PI
+   & th-3/2*PI < 2*PI-3/2*PI by REAL_1:54;
+   2*PI-3/2*PI = 3/2*PI - (PI/2 + PI/2) by Lm3,XCMPLX_1:36
+            .= PI/2 by Lm3,XCMPLX_1:36;
+ then 0<th-3/2*PI & th-3/2*PI < PI/2 by A4,XCMPLX_1:14;
+ then th-3/2*PI in ].0,PI/2.[ by Lm1;
+ hence diff(sin,(th)) > 0 by A3,Lm4;
+ end;
+hence thesis by A1,Lm2,ROLLE:9;
+end;
+
+theorem
+  cos is_increasing_on ].PI,3/2*PI.[
+proof
+A1: cos is_differentiable_on ].PI,3/2*PI.[ by FDIFF_1:34,SIN_COS:72;
+  for th be Real st th in ].PI,3/2*PI.[ holds diff(cos,(th))>0
+ proof
+ let th be Real such that
+ A2:th in ].PI,3/2*PI.[;
+ A3:diff(cos,(th)) = -sin.(th + 0) by SIN_COS:72
+             .= -sin.(th + (PI-PI)) by XCMPLX_1:14
+             .= -sin.(th+PI-PI) by XCMPLX_1:29
+             .= -sin.(PI+(th-PI)) by XCMPLX_1:29
+             .= -(-sin.(th-PI)) by SIN_COS:83
+             .= sin.(th-PI);
+   PI < th & th < 3/2*PI by A2,Lm1;
+ then PI-PI < th-PI & th-PI < 3/2*PI-PI by REAL_1:54;
+ then 0<th-PI & th-PI < PI/2 by Lm3,XCMPLX_1:14,36;
+ then th-PI in ].0,PI/2.[ by Lm1;
+ hence diff(cos,(th)) > 0 by A3,Lm4;
+end;
+hence thesis by A1,Lm2,ROLLE:9;
+end;
+
+theorem
+  cos is_increasing_on ].3/2*PI,2*PI.[
+proof
+A1: cos is_differentiable_on ].3/2*PI,2*PI.[ by FDIFF_1:34,SIN_COS:72;
+  for th be Real st th in ].3/2*PI,2*PI.[ holds diff(cos,(th))>0
+ proof
+ let th be Real such that
+ A2:th in ].3/2*PI,2*PI.[;
+ A3: diff(cos,(th)) = -sin.(th + 0) by SIN_COS:72
+               .= -sin.(th + (3/2*PI-3/2*PI)) by XCMPLX_1:14
+               .= -sin.(th+3/2*PI-3/2*PI) by XCMPLX_1:29
+               .= -sin.((PI + PI/2)+(th-3/2*PI)) by Lm3,XCMPLX_1:29
+               .= -sin.(PI + (PI/2+(th-3/2*PI))) by XCMPLX_1:1
+               .= -(-sin.(PI/2+(th-3/2*PI))) by SIN_COS:83
+               .= cos.(th-3/2*PI) by SIN_COS:83;
+   3/2*PI < th & th < 2*PI by A2,Lm1;
+ then A4:3/2*PI-3/2*PI < th-3/2*PI
+   & th-3/2*PI < 2*PI-3/2*PI by REAL_1:54;
+   2*PI-3/2*PI = 2*PI -PI/2 -PI by Lm3,XCMPLX_1:36
+            .= PI/2 by Lm3,XCMPLX_1:36;
+ then 0<th-3/2*PI & th-3/2*PI < PI/2 by A4,XCMPLX_1:14;
+ then th-3/2*PI in ].0,PI/2.[ by Lm1;
+ hence diff(cos,(th)) > 0 by A3,SIN_COS:85;
+ end;
+hence thesis by A1,Lm2,ROLLE:9;
+end;
+
+theorem
+  sin.th = sin.(2*PI*n + th)
+proof
+  defpred X[Nat] means for th holds sin.th = sin.(2*PI*$1 + th);
+A1: X[0];
+A2:for n st X[n] holds X[n+1]
+ proof
+ let n such that
+ A3:for th holds sin.th = sin.(2*PI*n + th);
+  for th holds sin.th = sin.(2*PI*(n+1) + th)
+  proof
+  let th;
+    sin.(2*PI*(n+1) + th) = sin.((2*PI)*n+(2*PI)*1 + th) by XCMPLX_1:8
+                        .= sin.((2*PI*n+th) + 2*PI) by XCMPLX_1:1
+                        .= sin.(2*PI*n + th) by SIN_COS:83
+                        .= sin.th by A3;
+  hence thesis;
+  end;
+  hence thesis;
+ end;
+   for n holds X[n] from Ind(A1,A2);
+ hence thesis;
+end;
+
+theorem
+  cos.th = cos.(2*PI*n + th)
+proof
+ defpred X[Nat] means for th holds cos.th = cos.(2*PI*$1 + th);
+A1: X[0];
+A2: for n st X[n] holds X[n+1]
+proof
+ let n such that
+ A3:for th holds cos.th = cos.(2*PI*n + th);
+  for th holds cos.th = cos.(2*PI*(n+1) + th)
+  proof
+  let th;
+    cos.(2*PI*(n+1) + th) = cos.((2*PI)*n+(2*PI)*1 + th) by XCMPLX_1:8
+                        .= cos.((2*PI*n+th) + 2*PI) by XCMPLX_1:1
+                        .= cos.(2*PI*n + th) by SIN_COS:83
+                        .= cos.th by A3;
+  hence thesis;
+  end;
+  hence thesis;
+ end;
+   for n holds X[n] from Ind(A1,A2);
+ hence thesis;
+end;
+
+begin ::Hyperbolic sine, hyperbolic cosine and hyperbolic tangent.
+
+definition
+func sinh -> PartFunc of REAL, REAL means :Def1:
+ dom it= REAL & for d being real number holds it.d=(exp.(d) - exp.(-d))/2;
+ existence
+  proof
+    defpred X[set] means $1 in REAL;
+    deffunc U(Real) = (exp.($1) - exp.(-$1))/2;
+   consider f being PartFunc of REAL, REAL such that
+   A1: for d be Element of REAL holds d in dom f iff X[d] and
+   A2: for d be Element of REAL st d in dom f holds f/.d = U(d) from LambdaPFD;
+   take f;
+   thus dom(f)=REAL
+    proof
+       A3:  dom(f) c=REAL by RELSET_1:12;
+          for x be set st x in REAL holds x in dom f by A1;
+        then REAL c=dom(f) by TARSKI:def 3;
+     hence dom(f)=REAL by A3,XBOOLE_0:def 10;
+    end;
+     let d be real number;
+A4:   d is Real by XREAL_0:def 1;
+      then A5: d in dom f by A1;
+      then f/.d = (exp.(d) - exp.(-d))/2 by A2,A4;
+      hence f.d = (exp.(d) - exp.(-d))/2 by A5,FINSEQ_4:def 4;
+    end;
+ uniqueness
+  proof
+   let f1,f2 be PartFunc of REAL, REAL;
+   assume
+   A6: dom f1= REAL & for d being real number holds
+   f1.d=(exp.(d) - exp.(-d))/2;
+   assume
+   A7: dom f2= REAL & for d being real number holds
+   f2.d=(exp.(d) - exp.(-d))/2;
+     for d being Element of REAL st d in REAL holds f1.d = f2.d
+    proof
+     let d be Element of REAL such that
+       d in REAL;
+     thus f1.d=(exp.(d) - exp.(-d))/2 by A6
+             .=f2.d by A7;
+    end;
+   hence f1=f2 by A6,A7,PARTFUN1:34;
+  end;
+ end;
+
+definition
+let d be number;
+ func sinh(d) equals :Def2:
+ sinh.d;
+correctness;
+end;
+
+definition
+  let d be number;
+ cluster sinh(d) -> real;
+coherence
+  proof
+      sinh(d) = sinh.d by Def2;
+    hence thesis;
+  end;
+end;
+
+definition
+let d be number;
+ redefine func sinh(d) -> Real;
+coherence by XREAL_0:def 1;
+end;
+
+definition
+func cosh -> PartFunc of REAL, REAL means :Def3:
+ dom it= REAL & for d being real number holds it.d=(exp.(d) + exp.(-d))/2;
+ existence
+  proof
+    defpred X[set] means $1 in REAL;
+    deffunc U(Real) = (exp.($1) + exp.(-$1))/2;
+   consider f being PartFunc of REAL, REAL such that
+   A1:   for d be Element of REAL holds d in dom f iff X[d] and
+   A2:   for d be Element of REAL st d in dom f holds f/.d = U(d)
+    from LambdaPFD;
+   take f;
+
+   thus dom(f)=REAL
+    proof
+       A3:  dom(f) c=REAL by RELSET_1:12;
+          for x be set st x in REAL holds x in dom f by A1;
+        then REAL c=dom(f) by TARSKI:def 3;
+       hence dom(f)=REAL by A3,XBOOLE_0:def 10;
+    end;
+    let d be real number;
+A4:  d is Real by XREAL_0:def 1;
+      then A5: d in dom f by A1;
+      then f/.d = (exp.(d) + exp.(-d))/2 by A2,A4;
+     hence f.d = (exp.(d) + exp.(-d))/2 by A5,FINSEQ_4:def 4;
+  end;
+ uniqueness
+  proof
+   let f1,f2 be PartFunc of REAL, REAL;
+   assume
+   A6: dom f1= REAL & for d being real number holds
+   f1.d=(exp.(d) + exp.(-d))/2;
+   assume
+   A7: dom f2= REAL & for d being real number holds
+   f2.d=(exp.(d) + exp.(-d))/2;
+     for d being Element of REAL st d in REAL holds f1.d = f2.d
+    proof
+     let d  be Element of REAL such that
+       d in REAL;
+     thus f1.d=(exp.(d) + exp.(-d))/2 by A6
+             .=f2.d by A7;
+    end;
+   hence f1=f2 by A6,A7,PARTFUN1:34;
+  end;
+ end;
+
+definition let d be number;
+  func cosh(d) equals :Def4:
+  cosh.d;
+ correctness;
+end;
+
+definition let d be number;
+ cluster cosh(d) -> real;
+coherence
+  proof
+      cosh(d) = cosh.d by Def4;
+    hence thesis;
+  end;
+end;
+
+definition let d be number;
+ redefine func cosh(d) -> Real;
+coherence by XREAL_0:def 1;
+end;
+
+ definition
+ func tanh -> PartFunc of REAL, REAL means :Def5:
+  dom it= REAL &
+  for d being real number holds it.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d));
+  existence
+   proof
+    defpred X[set] means $1 in REAL;
+    deffunc U(Real) = (exp.($1) - exp.(-$1))/(exp.($1) + exp.(-$1));
+    consider f being PartFunc of REAL, REAL such that
+    A1: for d be Element of REAL holds d in dom f iff X[d] and
+    A2: for d be Element of REAL st d in dom f holds f/.d = U(d)
+                      from LambdaPFD;
+    take f;
+    thus dom(f)=REAL
+     proof
+       A3:  dom(f) c=REAL by RELSET_1:12;
+           for x be set st x in REAL holds x in dom f by A1;
+         then REAL c=dom(f) by TARSKI:def 3;
+      hence dom(f)=REAL by A3,XBOOLE_0:def 10;
+     end;
+     let d be real number;
+A4:  d is Real by XREAL_0:def 1;
+       then A5: d in dom f by A1;
+       then f/.d = (exp.(d) - exp.(-d))/(exp.(d) + exp.(-d)) by A2,A4;
+        hence f.d = (exp.(d) - exp.(-d))/(exp.(d) + exp.(-d))
+        by A5,FINSEQ_4:def 4;
+   end;
+  uniqueness
+   proof
+    let f1,f2 be PartFunc of REAL, REAL;
+    assume
+    A6: dom f1= REAL & for d being real number holds
+        f1.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d));
+    assume
+    A7: dom f2= REAL & for d being real number holds
+        f2.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d));
+      for d being Element of REAL st d in REAL holds f1.d = f2.d
+     proof
+      let d  be Element of REAL such that
+        d in REAL;
+      thus f1.d=(exp.(d) - exp.(-d))/(exp.(d) + exp.(-d)) by A6
+              .=f2.d by A7;
+     end;
+    hence f1=f2 by A6,A7,PARTFUN1:34;
+   end;
+ end;
+
+ definition let d be number;
+   func tanh(d) equals :Def6:
+   tanh.d;
+  correctness;
+ end;
+
+ definition let d be number;
+  cluster tanh(d) -> real;
+  correctness
+  proof
+      tanh(d) = tanh.d by Def6;
+    hence thesis;
+  end;
+ end;
+
+ definition let d be number;
+   redefine func tanh(d) -> Real;
+  correctness by XREAL_0:def 1;
+ end;
+
+ theorem Th12:
+ exp.(p+q) = exp.(p) * exp.(q)
+ proof
+   exp.(p+q) = exp(p+q) by SIN_COS:def 27
+          .= exp(p) * exp(q) by SIN_COS:55
+          .= exp.(p) * exp(q) by SIN_COS:def 27
+          .= exp.(p) * exp.(q) by SIN_COS:def 27;
+ hence thesis;
+ end;
+
+ theorem Th13:
+ exp.0 = 1 by SIN_COS:56,def 27;
+
+ theorem Th14:
+ (cosh.p)^2-(sinh.p)^2=1 &
+ (cosh.p)*(cosh.p)-(sinh.p)*(sinh.p)=1
+ proof
+  A1: (cosh.p)*(cosh.p)
+    = ((exp.(p) + exp.(-p))/2)*(cosh.p) by Def3
+   .= ((exp.(p) + exp.(-p))/2)*((exp.(p) + exp.(-p))/2) by Def3
+   .= ((exp.(p) + exp.(-p))*(exp.(p) + exp.(-p)))/(2*2) by XCMPLX_1:77
+   .= ((exp.(p))*(exp.(p))+(exp.(p))*(exp.(-p))
+      +(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/(2*2) by XCMPLX_1:10
+   .= ((exp.(p+p))+(exp.(p))*(exp.(-p))
+      +(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/4 by Th12
+   .= ((exp.(p+p))+(exp.(p+-p))
+      +(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/4 by Th12
+   .= ((exp.(p+p))+(exp.(p+-p))
+      +(exp.(-p))*(exp.(p))+(exp.(-p+-p)))/4 by Th12
+   .= ((exp.(p+p)) + (exp.(p+-p))
+      + (exp.(-p+p)) + (exp.(-p+-p)))/4 by Th12
+   .= ((exp.(p+p)) + (exp.(0))
+      + (exp.(-p+p)) + (exp.(-p+-p)))/4 by XCMPLX_0:def 6
+   .= ((exp.(p+p)) + 1 + 1 + (exp.(-p+-p)))/4 by Th13,XCMPLX_0:def 6
+   .=(((exp.(p+p)) + ( 1 + 1 )) + (exp.(-p+-p)))/4 by XCMPLX_1:1
+   .= ((exp.(p+p)) + 2 + (exp.(-p+-p)))/4;
+     (sinh.p)*(sinh.p)
+    = ((exp.(p) - exp.(-p))/2)*(sinh.p) by Def1
+   .= ((exp.(p) - exp.(-p))/2)*((exp.(p) - exp.(-p))/2) by Def1
+   .= ((exp.(p) - exp.(-p))*(exp.(p) - exp.(-p)))/(2*2) by XCMPLX_1:77
+   .= ((exp.(p))*(exp.(p))-(exp.(p))*(exp.(-p))
+      -(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/(2*2) by XCMPLX_1:47
+   .= ((exp.(p+p))-(exp.(p))*(exp.(-p))
+      -(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/4 by Th12
+   .= ((exp.(p+p))-(exp.(p+-p))
+      -(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)))/4 by Th12
+   .= ((exp.(p+p))-(exp.(p+-p))
+      -(exp.(-p))*(exp.(p))+(exp.(-p+-p)))/4 by Th12
+   .= ((exp.(p+p)) - (exp.(p+-p))
+      - (exp.(-p+p)) + (exp.(-p+-p)))/4 by Th12
+   .= ((exp.(p+p)) - (exp.(0))
+      - (exp.(-p+p)) + (exp.(-p+-p)))/4 by XCMPLX_0:def 6
+   .= ((exp.(p+p)) - 1 - 1 + (exp.(-p+-p)))/4 by Th13,XCMPLX_0:def 6;
+  then A2: (cosh.p)*(cosh.p)-(sinh.p)*(sinh.p)
+  =(((exp.(p+p)) + 2 + (exp.(-p+-p)))-((exp.(p+p)) - 1 - 1 + (exp.(-p+-p))))/4
+   by A1,XCMPLX_1:121
+ .=(((exp.(p+p)) + 2 + (exp.(-p+-p)))-((exp.(p+p)) - 1 - 1)-(exp.(-p+-p)))/4
+   by XCMPLX_1:36
+ .=(((exp.(p+p)) + 2 + (exp.(-p+-p)))+-((exp.(p+p)) - 1 - 1)-(exp.(-p+-p)))/4
+   by XCMPLX_0:def 8
+ .=((exp.(p+p))+2+(exp.(-p+-p))+(-(exp.(p+p))+1+1)-(exp.(-p+-p)))/4
+   by XCMPLX_1:170
+ .=((exp.(p+p))+2+(exp.(-p+-p))+(-(exp.(p+p))+(1+1))-(exp.(-p+-p)))/4
+   by XCMPLX_1:1
+ .=(((exp.(p+p))+(2+(exp.(-p+-p))))+(-(exp.(p+p))+2)-(exp.(-p+-p)))/4
+   by XCMPLX_1:1
+ .=((exp.(p+p))+(-(exp.(p+p))+2)+(2+(exp.(-p+-p)))-(exp.(-p+-p)))/4
+   by XCMPLX_1:1
+ .=(((exp.(p+p))+-(exp.(p+p)))+2+(2+(exp.(-p+-p)))-(exp.(-p+-p)))/4
+   by XCMPLX_1:1
+ .=(0+2+(2+(exp.(-p+-p)))-(exp.(-p+-p)))/4
+   by XCMPLX_0:def 6
+ .=(2+2+(exp.(-p+-p))-(exp.(-p+-p)))/4
+   by XCMPLX_1:1
+ .=(-(exp.(-p+-p))+(exp.(-p+-p))+4)/4 by XCMPLX_1:155
+ .=(0+4)/4 by XCMPLX_0:def 6
+ .=1;
+    (cosh.p)^2-(sinh.p)^2
+     = (cosh.p)*(cosh.p) - (sinh.p)^2 by SQUARE_1:def 3
+    .= 1 by A2,SQUARE_1:def 3;
+ hence thesis by A2;
+ end;
+
+Lm5: for a1 be real number holds
+p+q+r+a1+p-q-r+a1 = p+p+a1+a1 &
+p+q+r+a1+p-q-r+a1 = 2*p + 2*a1 &
+p+q+r+a1+p-q-r+a1 = (p+q+r+a1)+(p-q-r+a1) &
+(p+q+r+a1)+(p-q-r+a1) = 2*p + 2*a1 &
+(p+q-r-a1)+(p-q+r-a1) = 2*p+2*(-a1)
+proof
+let a1 be real number;
+A1:
+  p+q+r+a1+p-q-r+a1=(q+(p+r))+a1+p-q-r+a1 by XCMPLX_1:1
+.=q+((p+r)+a1)+p-q-r+a1 by XCMPLX_1:1
+.=q+(((p+r)+a1)+p)-q-r+a1 by XCMPLX_1:1
+.=-q+q+(((p+r)+a1)+p)-r+a1 by XCMPLX_1:155
+.=0+(((p+r)+a1)+p)-r+a1 by XCMPLX_0:def 6
+.=r+(p+a1)+p-r+a1 by XCMPLX_1:1
+.=r+((p+a1)+p)-r+a1 by XCMPLX_1:1
+.=-r+r+((p+a1)+p)+a1 by XCMPLX_1:155
+.=0+((p+a1)+p)+a1 by XCMPLX_0:def 6
+.=p+p+a1+a1 by XCMPLX_1:1;
+then A2:
+  p+q+r+a1+p-q-r+a1
+ =2*p +a1+a1 by XCMPLX_1:11
+.=2*p +(a1+a1) by XCMPLX_1:1
+.=2*p + 2*a1 by XCMPLX_1:11;
+A3:
+ (p+q+r+a1)+(p-q-r+a1)
+ = (p+q+r+a1)+(p-(q+r)+a1) by XCMPLX_1:36
+.= (p+q+r+a1)+(p-(q+r)) + a1 by XCMPLX_1:1
+.= (p+q+r+a1)+p-(q+r) + a1 by XCMPLX_1:29
+.= p+q+r+a1+p-q-r+ a1 by XCMPLX_1:36;
+    (p+q-r-a1)+(p-q+r-a1)
+  =p+q-r-a1 +(p-(q-r)-a1) by XCMPLX_1:37
+ .=p+q+-r-a1+(p-(q-r)-a1) by XCMPLX_0:def 8
+ .=p+(q+-r)-a1+(p-(q-r)-a1) by XCMPLX_1:1
+ .=(q+-r)+p-a1+(-(q-r)+p-a1) by XCMPLX_0:def 8
+ .=((q+-r)+p-a1)+(-(q-r)+p+-a1) by XCMPLX_0:def 8
+ .=((q+-r)+p-a1)+(-(q-r)+(p+-a1)) by XCMPLX_1:1
+ .=((q+-r)+p+-a1)+(-(q-r)+(p+-a1)) by XCMPLX_0:def 8
+ .=((q+-r)+(p+-a1))+(-(q-r)+(p+-a1)) by XCMPLX_1:1
+ .=(p+-a1)+((q+-r)+(-(q-r)+(p+-a1))) by XCMPLX_1:1
+ .=(p+-a1)+( ((q+-r)+-(q-r))+(p+-a1) ) by XCMPLX_1:1
+ .=(p+-a1)+( ((q-r)+-(q-r))+(p+-a1) ) by XCMPLX_0:def 8
+ .=(p+-a1)+( (0)+(p+-a1) ) by XCMPLX_0:def 6
+ .=2*(p+-a1) by XCMPLX_1:11
+ .=2*p+2*(-a1) by XCMPLX_1:8;
+hence thesis by A1,A2,A3;
+end;
+
+Lm6:
+cosh.(p+r)=(cosh.p)*(cosh.r) + (sinh.p)*(sinh.r)
+proof
+    (cosh.p)*(cosh.r) + (sinh.p)*(sinh.r)
+ =((exp.(p) + exp.(-p))/2)*(cosh.r)
+  +(sinh.p)*(sinh.r) by Def3
+.=((exp.(p) + exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
+  +(sinh.p)*(sinh.r) by Def3
+.=((exp.(p) + exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
+  +((exp.(p) - exp.(-p))/2)*(sinh.r) by Def1
+.=((exp.(p) + exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
+  +((exp.(p) - exp.(-p))/2)*((exp.(r) - exp.(-r))/2) by Def1
+.=((exp.(p) + exp.(-p))*(exp.(r) + exp.(-r)))/(2*2)
+  +((exp.(p) - exp.(-p))/2)*((exp.(r) - exp.(-r))/2) by XCMPLX_1:77
+.=((exp.(p) + exp.(-p))*(exp.(r) + exp.(-r)))/(4)
+  +((exp.(p) - exp.(-p))*(exp.(r) - exp.(-r)))/(2*2) by XCMPLX_1:77
+.=( (exp.(p))*(exp.(r))+(exp.(p))*(exp.(-r))
+  +(exp.(-p))*(exp.(r))+(exp.(-p))*(exp.(-r)) )/4
+  +((exp.(p) - exp.(-p))*(exp.(r) - exp.(-r)))/(2*2) by XCMPLX_1:10
+.=( (exp.(p))*(exp.(r))+(exp.(p))*(exp.(-r))
+  +(exp.(-p))*(exp.(r))+(exp.(-p))*(exp.(-r)) )/4
+  +( (exp.(p))*(exp.(r))-(exp.(p))*(exp.(-r))
+  -(exp.(-p))*(exp.(r))+(exp.(-p))*(exp.(-r)) )/4 by XCMPLX_1:47
+.=( ( (exp.(p))*(exp.(r))+(exp.(p))*(exp.(-r))
+   +(exp.(-p))*(exp.(r))+(exp.(-p))*(exp.(-r)) ) +
+    ( (exp.(p))*(exp.(r))-(exp.(p))*(exp.(-r))
+  -(exp.(-p))*(exp.(r))+(exp.(-p))*(exp.(-r)) ) )/4 by XCMPLX_1:63
+.=( 2*((exp.(p))*(exp.(r))) + 2*((exp.(-p))*(exp.(-r))) )/4 by Lm5
+.=( 2*(exp.(p+r)) + 2*((exp.(-p))*(exp.(-r))) )/4 by Th12
+.=( 2*(exp.(p+r)) + 2*(exp.(-p+-r)) )/4 by Th12
+.=(2*(exp.(p+r)))/4 + ( 2*(exp.(-p+-r)) )/4 by XCMPLX_1:63
+.=(exp.(p+r)+exp.(p+r))/4 + ( 2*(exp.(-p+-r)) )/4 by XCMPLX_1:11
+.=(exp.(p+r)+exp.(p+r))/4 + (exp.(-p+-r) + exp.(-p+-r))/4 by XCMPLX_1:11
+.=(exp.(p+r))/4 +(exp.(p+r))/4 + (exp.(-p+-r) + exp.(-p+-r))/4 by XCMPLX_1:63
+
+.=(exp.(p+r))/2 + ((exp.(-p+-r) + exp.(-p+-r))/4) by XCMPLX_1:72
+.=(exp.(p+r))/2 + ((exp.(-p+-r))/4 + (exp.(-p+-r))/4) by XCMPLX_1:63
+.=(exp.(p+r))/2 + (exp.(-p+-r))/2 by XCMPLX_1:72
+.=(exp.(p+r)+exp.(-p+-r))/2 by XCMPLX_1:63
+.=(exp.(p+r)+exp.(-(p+r)))/2 by XCMPLX_1:140
+.=cosh.(p+r) by Def3;
+hence thesis;
+end;
+
+Lm7:
+sinh.(p+r)=(sinh.p)*(cosh.r) + (cosh.p)*(sinh.r)
+proof
+   (sinh.p)*(cosh.r) + (cosh.p)*(sinh.r)
+ =((exp.(p) - exp.(-p))/2)*(cosh.r) + (cosh.p)*(sinh.r) by Def1
+.=((exp.(p) - exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
+   + (cosh.p)*(sinh.r) by Def3
+.=((exp.(p) - exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
+   + ((exp.(p) + exp.(-p))/2)*(sinh.r) by Def3
+.=((exp.(p) - exp.(-p))/2)*((exp.(r) + exp.(-r))/2)
+   + ((exp.(p) + exp.(-p))/2)*((exp.(r) - exp.(-r))/2) by Def1
+.=((exp.(p) - exp.(-p))*(exp.(r) + exp.(-r)))/(2*2)
+  +((exp.(p) + exp.(-p))/2)*((exp.(r) - exp.(-r))/2) by XCMPLX_1:77
+.=((exp.(p) - exp.(-p))*(exp.(r) + exp.(-r)))/(4)
+  +((exp.(p) + exp.(-p))*(exp.(r) - exp.(-r)))/(2*2) by XCMPLX_1:77
+.=( (exp.(p))*(exp.(r))+(exp.(p))*(exp.(-r))
+  -(exp.(-p))*(exp.(r))-(exp.(-p))*(exp.(-r)) )/4
+  +((exp.(p) + exp.(-p))*(exp.(r) - exp.(-r)))/(2*2) by XCMPLX_1:46
+.=( (exp.(p))*(exp.(r))+(exp.(p))*(exp.(-r))
+  -(exp.(-p))*(exp.(r))-(exp.(-p))*(exp.(-r)) )/4
+  +( (exp.(p))*(exp.(r))-(exp.(p))*(exp.(-r))
+  +(exp.(-p))*(exp.(r))-(exp.(-p))*(exp.(-r)) )/4 by XCMPLX_1:45
+.=( ( (exp.(p))*(exp.(r))+(exp.(p))*(exp.(-r))
+  -(exp.(-p))*(exp.(r))-(exp.(-p))*(exp.(-r)) )+
+  ( (exp.(p))*(exp.(r))-(exp.(p))*(exp.(-r))
+  +(exp.(-p))*(exp.(r))-(exp.(-p))*(exp.(-r)) ) )/4 by XCMPLX_1:63
+.=( 2*( (exp.(p))*(exp.(r)) )+2*( -((exp.(-p))*(exp.(-r))) ) )/4
+           by Lm5
+.=( 2*(exp.(p+r))+2*( -(exp.(-p))*(exp.(-r)) ) )/4 by Th12
+.=( 2*(exp.(p+r))+2*( -(exp.(-p+-r)) ) )/4 by Th12
+.=(2*(exp.(p+r)))/4 + ( 2*(-exp.(-p+-r)) )/4 by XCMPLX_1:63
+.=(exp.(p+r)+exp.(p+r))/4 + ( 2*(-exp.(-p+-r)) )/4 by XCMPLX_1:11
+.=(exp.(p+r)+exp.(p+r))/4 + (-exp.(-p+-r) + -exp.(-p+-r))/4 by XCMPLX_1:11
+.=(exp.(p+r))/4 +(exp.(p+r))/4
+  + (-exp.(-p+-r) + -exp.(-p+-r))/4 by XCMPLX_1:63
+.=(exp.(p+r))/2 + ((-exp.(-p+-r) + -exp.(-p+-r))/4) by XCMPLX_1:72
+.=(exp.(p+r))/2 + ((-exp.(-p+-r))/4 + (-exp.(-p+-r))/4) by XCMPLX_1:63
+.=(exp.(p+r))/2 + (-exp.(-p+-r))/2 by XCMPLX_1:72
+.=(exp.(p+r)+-exp.(-p+-r))/2 by XCMPLX_1:63
+.=(exp.(p+r)+-exp.(-(p+r)))/2 by XCMPLX_1:140
+.=(exp.(p+r)-exp.(-(p+r)))/2 by XCMPLX_0:def 8
+.=sinh.(p+r) by Def1;
+hence thesis;
+end;
+
+theorem Th15:
+cosh.p <> 0 & cosh.p > 0 & cosh.0 = 1
+proof
+ A1: cosh.0 = 1
+  proof
+    cosh.0 = (exp.0+exp.(-0))/2 by Def3
+        .= (1+exp.0)/2 by SIN_COS:56,def 27
+        .= (1+1)/2 by SIN_COS:56,def 27
+        .= 1;
+  hence thesis;
+  end;
+   cosh.p > 0
+  proof
+    exp.p > 0 & exp.(-p) > 0 by SIN_COS:59;
+  then exp.p + exp.(-p) > 0+0 by REAL_1:67;
+  then (exp.p+exp.(-p))/2 > 0 by REAL_2:127;
+  hence thesis by Def3;
+  end;
+  hence thesis by A1;
+end;
+
+theorem Th16:
+sinh.0 = 0
+proof
+  sinh.0 = (exp.0-exp.(-0))/2 by Def1
+      .= (1-exp.0)/2 by SIN_COS:56,def 27
+      .= (1-1)/2 by SIN_COS:56,def 27
+      .= 0;
+hence thesis;
+end;
+
+theorem Th17:
+tanh.p = (sinh.p)/(cosh.p)
+proof
+    (sinh.p)/(cosh.p)
+ =((exp.(p) - exp.(-p))/2)/(cosh.p) by Def1
+.=((exp.(p) - exp.(-p))/2)/((exp.(p) + exp.(-p))/2) by Def3
+.=(exp.(p) - exp.(-p))/(exp.(p) + exp.(-p)) by XCMPLX_1:55
+.=tanh.p by Def5;
+hence thesis;
+end;
+
+Lm8: for a1 be real number holds r<>0 & q<>0 & r*q + p*a1 <> 0 implies
+(p*q + r*a1)/(r*q + p*a1) = (p/r + a1/q)/(1 + (p/r)*(a1/q))
+ proof
+ let a1 be real number;
+ assume A1: r<>0 & q<>0 & r*q + p*a1 <> 0;
+ then A2: r<>0 & q<>0 & r*q <> 0 & r*q + p*a1 <> 0 by XCMPLX_1:6;
+   then (p*q + r*a1)/(r*q + p*a1)
+  =( (p*q + r*a1)/(r*q) )/( (r*q + p*a1)/(r*q) ) by XCMPLX_1:55
+ .=( (p*q)/(r*q) + (r*a1)/(r*q) )/( (r*q + p*a1)/(r*q) ) by XCMPLX_1:63
+ .=( (p*q)/(r*q) + (r*a1)/(r*q) )/
+   ( (r*q)/(r*q) + (p*a1)/(r*q) ) by XCMPLX_1:63
+ .=( p/r + (a1*r)/(q*r) )/( (r*q)/(r*q) + (p*a1)/(r*q) ) by A1,XCMPLX_1:92
+ .=( p/r + a1/q )/( (r*q)/(r*q) + (p*a1)/(r*q) ) by A1,XCMPLX_1:92
+ .=( p/r + a1/q )/( 1 + (p*a1)/(r*q) ) by A2,XCMPLX_1:60
+ .=( p/r + a1/q )/( 1 + (p/r)*(a1/q) ) by XCMPLX_1:77;
+ hence thesis;
+end;
+
+Lm9:
+tanh.(p+r) = (tanh.p + tanh.r)/(1+ (tanh.p)*(tanh.r))
+proof
+A1: cosh.r <> 0 & cosh.p <> 0 &
+    (cosh.p)*(cosh.r) + (sinh.p)*(sinh.r) <> 0
+ proof
+     (cosh.p)*(cosh.r) + (sinh.p)*(sinh.r)
+ =cosh.(p+r) by Lm6;
+ hence thesis by Th15;
+ end;
+    tanh.(p+r)
+ =(sinh.(p+r))/(cosh.(p+r)) by Th17
+.=( (sinh.p)*(cosh.r) + (cosh.p)*(sinh.r) )/(cosh.(p+r)) by Lm7
+.=( (sinh.p)*(cosh.r) + (cosh.p)*(sinh.r) )/
+  ( (cosh.p)*(cosh.r) + (sinh.p)*(sinh.r) ) by Lm6
+.=( (sinh.p)/(cosh.p) + (sinh.r)/(cosh.r) )/
+  ( 1 + ( (sinh.p)/(cosh.p) )*( (sinh.r)/(cosh.r) ) ) by A1,Lm8
+.=( tanh.p + (sinh.r)/(cosh.r) )/
+  ( 1 + ( (sinh.p)/(cosh.p) )*( (sinh.r)/(cosh.r) ) ) by Th17
+.=( tanh.p + tanh.r )/
+  ( 1 + ( (sinh.p)/(cosh.p) )*( (sinh.r)/(cosh.r) ) ) by Th17
+.=( tanh.p + tanh.r )/
+  ( 1 + ( tanh.p )*( (sinh.r)/(cosh.r) ) ) by Th17
+.=( tanh.p + tanh.r )/( 1 + ( tanh.p )*( tanh.r ) ) by Th17;
+hence thesis;
+end;
+
+theorem Th18:
+(sinh.p)^2 = 1/2*(cosh.(2*p) - 1) &
+(cosh.p)^2 = 1/2*(cosh.(2*p) + 1)
+proof
+A1: (sinh.p)^2 = 1/2*(cosh.(2*p) - 1)
+ proof
+     (sinh.p)^2
+  =(sinh.p)*(sinh.p) by SQUARE_1:def 3
+ .=( (exp.(p) - exp.(-p))/2 )*(sinh.p) by Def1
+ .=( (exp.(p) - exp.(-p))/2 )*( (exp.(p) - exp.(-p))/2 ) by Def1
+ .=( (exp.(p) - exp.(-p))*(exp.(p) - exp.(-p)) )/(2*2) by XCMPLX_1:77
+ .=( (exp.(p))*(exp.(p))-(exp.(p))*(exp.(-p))
+   -(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)) )/4 by XCMPLX_1:47
+ .=( (exp.(p+p))-(exp.(p))*(exp.(-p))
+   -(exp.(p))*(exp.(-p))+(exp.(-p))*(exp.(-p)) )/4 by Th12
+ .=( (exp.(p+p))-(exp.(p))*(exp.(-p))
+   -(exp.(p))*(exp.(-p))+(exp.(-p+ -p)) )/4 by Th12
+ .=( (exp.(p+p))-(exp.(p+ -p))
+   -(exp.(p))*(exp.(-p))+(exp.(-p+ -p)) )/4 by Th12
+ .=( (exp.(p+p))-(exp.(p+ -p))
+   -(exp.(p+ -p))+(exp.(-p+ -p)) )/4 by Th12
+ .=( ((exp.(p+p))+ -(exp.(p+ -p))
+    -(exp.(p+ -p)) )+(exp.(-p+ -p)) )/4 by XCMPLX_0:def 8
+ .=( ((exp.(p+p))+ -(exp.(p+ -p))
+    + -(exp.(p+ -p)) )+(exp.(-p+ -p)) )/4 by XCMPLX_0:def 8
+ .=( ( (exp.(p+p)) + (-(exp.(p+-p)) + -(exp.(p+-p)) ) )
+   +exp.(-p+-p) )/4 by XCMPLX_1:1
+ .=( ( (exp.(p+p)) + (-(exp.(0)) + -(exp.(p+-p)) ) )
+   +exp.(-p+-p) )/4 by XCMPLX_0:def 6
+ .=( ( (exp.(p+p)) + (-(exp.(0)) + -(exp.(0)) ) )
+   +exp.(-p+-p) )/4 by XCMPLX_0:def 6
+ .=( (exp.(p+p)) + 2*(-(exp.(0))) +exp.(-p+-p) )/4 by XCMPLX_1:11
+ .=( exp.(2*p) + 2*(-(exp.(0))) +exp.(-p+-p) )/4 by XCMPLX_1:11
+ .=( exp.(2*p) + 2*(-(exp.(0))) +exp.(-(p+p)) )/4 by XCMPLX_1:140
+ .=( exp.(2*p) + 2*(-1) +exp.(-(p+p)) )/4 by SIN_COS:56,def 27
+ .=( exp.(2*p) + 2*(-1) +exp.(-(2*p)) )/4 by XCMPLX_1:11
+ .=( exp.(2*p) +exp.(-(2*p))+ 2*(-1) )/4 by XCMPLX_1:1
+ .=( exp.(2*p) +exp.(-(2*p)) )/(2*2) + ((-1)*2)/(2*2) by XCMPLX_1:63
+ .=1/2*( ( exp.(2*p) +exp.(-(2*p)) )/2 ) + ((-1)*2)/(2*2) by XCMPLX_1:104
+
+ .=1/2*(cosh.(2*p))+ 1/2*((2*(-1))/2) by Def3
+ .=1/2*( cosh.(2*p)+ -1 ) by XCMPLX_1:8
+ .=1/2*( cosh.(2*p) - 1 ) by XCMPLX_0:def 8;
+ hence thesis;
+ end;
+  (cosh.p)^2 = 1/2*(cosh.(2*p) + 1)
+ proof
+      (cosh.p)^2
+   =(cosh.p)*(cosh.p) by SQUARE_1:def 3
+  .=( (exp.(p) + exp.(-p))/2 )*(cosh.p) by Def3
+  .=( (exp.(p) + exp.(-p))/2 )*( (exp.(p) + exp.(-p))/2 ) by Def3
+  .=( (exp.(p) + exp.(-p))*(exp.(p) + exp.(-p)) )/(2*2) by XCMPLX_1:77
+  .=( (exp.(p))*(exp.(p))+(exp.(p))*(exp.(-p))
+    +(exp.(-p))*(exp.(p))+(exp.(-p))*(exp.(-p)) )/4 by XCMPLX_1:10
+  .=( (exp.(p+p))+(exp.(p))*(exp.(-p))
+    +(exp.(p))*(exp.(-p))+(exp.(-p))*(exp.(-p)) )/4 by Th12
+  .=( (exp.(p+p))+(exp.(p))*(exp.(-p))
+    +(exp.(p))*(exp.(-p))+(exp.(-p+ -p)) )/4 by Th12
+  .=( (exp.(p+p))+(exp.(p+ -p))
+    +(exp.(p))*(exp.(-p))+(exp.(-p+ -p)) )/4 by Th12
+  .=( (exp.(p+p))+(exp.(p+ -p))
+    +(exp.(p+ -p))+(exp.(-p+ -p)) )/4 by Th12
+  .=( ( (exp.(p+p)) + (exp.(p+-p) + exp.(p+-p) ) )
+    +exp.(-p+-p) )/4 by XCMPLX_1:1
+  .=( ( exp.(p+p) + (exp.(0) + exp.(p+-p) ) )
+    +exp.(-p+-p) )/4 by XCMPLX_0:def 6
+  .=( ( (exp.(p+p)) + (exp.(0) + exp.(0) ) )
+    +exp.(-p+-p) )/4 by XCMPLX_0:def 6
+  .=( exp.(p+p) + 2*(exp.(0)) +exp.(-p+-p) )/4 by XCMPLX_1:11
+  .=( exp.(2*p) + 2*(exp.(0)) +exp.(-p+-p) )/4 by XCMPLX_1:11
+  .=( exp.(2*p) + 2*(exp.(0)) +exp.(-(p+p)) )/4 by XCMPLX_1:140
+  .=( exp.(2*p) + 2*1 +exp.(-(p+p)) )/4 by SIN_COS:56,def 27
+  .=( exp.(2*p) + 2*1 +exp.(-(2*p)) )/4 by XCMPLX_1:11
+  .=( exp.(2*p) +exp.(-(2*p))+ 2*1 )/4 by XCMPLX_1:1
+  .=( exp.(2*p) +exp.(-(2*p)) )/(2*2) + (1*2)/(2*2) by XCMPLX_1:63
+  .=1/2*( ( exp.(2*p) +exp.(-(2*p)) )/2 ) + (1*2)/(2*2) by XCMPLX_1:104
+  .=1/2*(cosh.(2*p))+ 1/2*((2*1/2)) by Def3
+  .=1/2*( cosh.(2*p)+ 1 ) by XCMPLX_1:8;
+ hence thesis;
+ end;
+hence thesis by A1;
+end;
+
+Lm10:
+sinh.(2*p) = 2*(sinh.p)*(cosh.p) &
+cosh.(2*p) = 2*(cosh.p)^2 - 1
+proof
+A1: sinh.(2*p) = 2*(sinh.p)*(cosh.p)
+ proof
+     2*(sinh.p)*(cosh.p)
+  =2*( (exp.(p) - exp.(-p))/2 )*(cosh.p) by Def1
+ .=2*( (exp.(p) - exp.(-p))/2 )*( (exp.(p) + exp.(-p))/2 ) by Def3
+ .=2*(( (exp.(p) - exp.(-p))/2 )*( (exp.(p) + exp.(-p))/2 )) by XCMPLX_1:4
+ .=2*(( (exp.(p) + exp.(-p))*(exp.(p) - exp.(-p)) )/(2*2)) by XCMPLX_1:77
+ .=( ( (exp.p)^2 - (exp.(-p))^2 )/4 )*2 by SQUARE_1:67
+ .=2/4*((exp.p)^2 - (exp.(-p))^2) by XCMPLX_1:76
+ .=2/4*((exp.p)*(exp.p) - (exp.(-p))^2) by SQUARE_1:def 3
+ .=2/4*((exp.p)*(exp.p) - (exp.(-p))*(exp.(-p))) by SQUARE_1:def 3
+ .=2/4*( exp.(p+p)- (exp.(-p))*(exp.(-p)) ) by Th12
+ .=2/4*(exp.(p+p)- exp.(-p+ -p)) by Th12
+ .=2/4*(exp.(2*p)- exp.(-p+ -p)) by XCMPLX_1:11
+ .=2/4*(exp.(2*p)- exp.(-(p+p))) by XCMPLX_1:140
+ .=1/2*( exp.(2*p)- exp.(-(2*p)) ) by XCMPLX_1:11
+ .=( ( exp.(2*p)- exp.(-(2*p)) )/2 )*1 by XCMPLX_1:76
+ .=sinh.(2*p) by Def1;
+ hence thesis;
+ end;
+  cosh.(2*p) = 2*(cosh.p)^2 - 1
+ proof
+   2*(cosh.p)^2 = cosh.(2*p) + 1
+  proof
+      2*(cosh.p)^2
+   =2*( 1/2*(cosh.(2*p) + 1) ) by Th18
+  .=2*(1/2)*(cosh.(2*p) + 1) by XCMPLX_1:4
+  .=cosh.(2*p) + 1;
+  hence thesis;
+  end;
+ hence cosh.(2*p) = 2*(cosh.p)^2 - 1 by XCMPLX_1:26;
+ end;
+hence thesis by A1;
+end;
+
+theorem Th19:
+cosh.(-p) = cosh.p &
+sinh.(-p) = -sinh.p &
+tanh.(-p) = -tanh.p
+proof
+ A1: cosh.(-p) = cosh.p
+ proof
+   cosh.(-p) = (exp.(-p) + exp.(-(-p)))/2 by Def3
+          .= cosh.p by Def3;
+ hence thesis;
+ end;
+ A2: sinh.(-p) = -sinh.p
+ proof
+   sinh.(-p) = (exp.(-p) - exp.(-(-p)))/2 by Def1
+          .= (-(exp.(p) - exp.(-p)))/2 by XCMPLX_1:143
+          .= -(exp.(p) - exp.(-p))/2 by XCMPLX_1:188
+          .= -sinh.p by Def1;
+ hence thesis;
+ end;
+   tanh.(-p) = -tanh.p
+ proof
+   tanh.(-p) = (-sinh.p)/(cosh.(-p)) by A2,Th17
+          .= -(sinh.p)/(cosh.p) by A1,XCMPLX_1:188
+          .= -tanh.p by Th17;
+ hence thesis;
+ end;
+hence thesis by A1,A2;
+end;
+
+Lm11:
+cosh.(p-r)=(cosh.p)*(cosh.r) - (sinh.p)*(sinh.r)
+proof
+    cosh.(p-r)=cosh.(p+ -r) by XCMPLX_0:def 8
+.=(cosh.p)*(cosh.-r) + (sinh.p)*(sinh.-r) by Lm6
+.=(cosh.p)*(cosh.r) + (sinh.p)*(sinh.-r) by Th19
+.=(cosh.p)*(cosh.r) + (sinh.p)*(-sinh.r) by Th19
+.=(cosh.p)*(cosh.r) + (sinh.p)*((-1)*sinh.r) by XCMPLX_1:180
+.=(cosh.p)*(cosh.r) + (-1)*((sinh.p)*(sinh.r)) by XCMPLX_1:4
+.=(cosh.p)*(cosh.r) + -((sinh.p)*(sinh.r)) by XCMPLX_1:180
+.=(cosh.p)*(cosh.r) - ((sinh.p)*(sinh.r)) by XCMPLX_0:def 8;
+hence thesis;
+end;
+
+theorem
+  cosh.(p+r)=(cosh.p)*(cosh.r) + (sinh.p)*(sinh.r) &
+cosh.(p-r)=(cosh.p)*(cosh.r) - (sinh.p)*(sinh.r) by Lm6,Lm11;
+
+Lm12:
+sinh.(p-r)=(sinh.p)*(cosh.r) - (cosh.p)*(sinh.r)
+proof
+    sinh.(p-r)=sinh.(p+-r) by XCMPLX_0:def 8
+.=(sinh.p)*(cosh.-r) +(cosh.p)*(sinh.-r) by Lm7
+.=(sinh.p)*(cosh.r) + (cosh.p)*(sinh.-r) by Th19
+.=(sinh.p)*(cosh.r) + (cosh.p)*(-sinh.r) by Th19
+.=(sinh.p)*(cosh.r) + (cosh.p)*((-1)*(sinh.r)) by XCMPLX_1:180
+.=(sinh.p)*(cosh.r) + (-1)*((cosh.p)*(sinh.r)) by XCMPLX_1:4
+.=(sinh.p)*(cosh.r) + -((cosh.p)*(sinh.r)) by XCMPLX_1:180
+.=(sinh.p)*(cosh.r) -((cosh.p)*(sinh.r)) by XCMPLX_0:def 8;
+hence thesis;
+end;
+
+theorem
+  sinh.(p+r)=(sinh.p)*(cosh.r) + (cosh.p)*(sinh.r) &
+sinh.(p-r)=(sinh.p)*(cosh.r) - (cosh.p)*(sinh.r) by Lm7,Lm12;
+
+Lm13:
+tanh.(p-r) = (tanh.p - tanh.r)/(1- (tanh.p)*(tanh.r))
+proof
+    tanh.(p-r)=tanh.(p+-r) by XCMPLX_0:def 8
+.=(tanh.p + tanh.-r)/(1+ (tanh.p)*(tanh.-r)) by Lm9
+.=(tanh.p + -tanh.r)/(1+ (tanh.p)*(tanh.-r)) by Th19
+.=(tanh.p + -tanh.r)/(1+ (tanh.p)*(-tanh.r)) by Th19
+.=(tanh.p - tanh.r)/(1+ (tanh.p)*(-tanh.r)) by XCMPLX_0:def 8
+.=(tanh.p - tanh.r)/(1+ (tanh.p)*((-1)*tanh.r)) by XCMPLX_1:180
+.=(tanh.p - tanh.r)/(1+ (-1)*(tanh.p*tanh.r)) by XCMPLX_1:4
+.=(tanh.p - tanh.r)/(1+ -(tanh.p*tanh.r)) by XCMPLX_1:180
+.=(tanh.p - tanh.r)/(1 -(tanh.p*tanh.r)) by XCMPLX_0:def 8;
+hence thesis;
+end;
+
+theorem
+  tanh.(p+r) = (tanh.p + tanh.r)/(1+ (tanh.p)*(tanh.r)) &
+tanh.(p-r) = (tanh.p - tanh.r)/(1- (tanh.p)*(tanh.r))
+by Lm9,Lm13;
+
+theorem
+   sinh.(2*p) = 2*(sinh.p)*(cosh.p) &
+ cosh.(2*p) = 2*(cosh.p)^2 - 1 &
+ tanh.(2*p) = (2*tanh.p)/(1+(tanh.p)^2)
+ proof
+     tanh.(2*p)=tanh.(p+p) by XCMPLX_1:11
+ .=(tanh.p + tanh.p)/(1+ (tanh.p)*(tanh.p)) by Lm9
+ .=(2*tanh.p)/(1+ (tanh.p)*(tanh.p)) by XCMPLX_1:11
+ .=(2*tanh.p)/(1+ (tanh.p)^2) by SQUARE_1:def 3;
+ hence thesis by Lm10;
+ end;
+
+theorem Th24:
+(sinh.p)^2 - (sinh.q)^2 = (sinh.(p+q))*(sinh.(p-q)) &
+(sinh.(p+q))*(sinh.(p-q)) = (cosh.p)^2 - (cosh.q)^2 &
+(sinh.p)^2 - (sinh.q)^2 = (cosh.p)^2 - (cosh.q)^2
+proof
+ A1:
+ (sinh.(p+q))*(sinh.(p-q)) = (sinh.p)^2*(cosh.q)^2 - (sinh.q)^2*(cosh.p)^2
+ proof
+     (sinh.(p+q))*(sinh.(p-q))
+  =((sinh.p)*(cosh.q) + (cosh.p)*(sinh.q))*(sinh.(p-q)) by Lm7
+ .=((sinh.p)*(cosh.q) + (cosh.p)*(sinh.q))*(sinh.(p+(-q))) by XCMPLX_0:def 8
+ .=((sinh.p)*(cosh.q) + (cosh.p)*(sinh.q))
+   *((sinh.p)*(cosh.(-q)) + (cosh.p)*(sinh.(-q))) by Lm7
+ .=((sinh.p)*(cosh.q) + (cosh.p)*(sinh.q))
+   *((sinh.p)*(cosh.q) + (cosh.p)*(sinh.(-q))) by Th19
+ .=((sinh.p)*(cosh.q) + (cosh.p)*(sinh.q))
+   *((sinh.p)*(cosh.q) + (cosh.p)*(-sinh.q)) by Th19
+ .= ((sinh.p)*(cosh.q))*((sinh.p)*(cosh.q))
+    +((sinh.p)*(cosh.q))*((-sinh.q)*(cosh.p))
+    +((cosh.p)*(sinh.q))*((sinh.p)*(cosh.q))
+    +((cosh.p)*(sinh.q))*((-sinh.q)*(cosh.p)) by XCMPLX_1:10
+ .= ((sinh.p)*(cosh.q))^2
+     +((sinh.p)*(cosh.q))*((-sinh.q)*(cosh.p))
+     +((cosh.p)*(sinh.q))*((sinh.p)*(cosh.q))
+     +((cosh.p)*(sinh.q))*((-sinh.q)*(cosh.p)) by SQUARE_1:def 3
+ .= ((sinh.p)*(cosh.q))^2
+     +( ((sinh.p)*(cosh.q))*(( (-1)*(sinh.q) )*(cosh.p) ) )
+     +((cosh.p)*(sinh.q))*((sinh.p)*(cosh.q))
+     +((cosh.p)*(sinh.q))*((-sinh.q)*(cosh.p)) by XCMPLX_1:180
+ .= ((sinh.p)*(cosh.q))^2
+     +( (-1)*((sinh.q)*(cosh.p)) )*((sinh.p)*(cosh.q))
+     +((sinh.q)*(cosh.p))*((sinh.p)*(cosh.q))
+     +((cosh.p)*(sinh.q))*((-sinh.q)*(cosh.p)) by XCMPLX_1:4
+ .= ((sinh.p)*(cosh.q))^2
+     +(-1)*(((sinh.q)*(cosh.p))*((sinh.p)*(cosh.q)))
+     +(((sinh.q)*(cosh.p))*((sinh.p)*(cosh.q)))
+     +((cosh.p)*(sinh.q))*((-sinh.q)*(cosh.p)) by XCMPLX_1:4
+ .= ((sinh.p)*(cosh.q))^2
+     + -(((sinh.q)*(cosh.p))*((sinh.p)*(cosh.q)))
+     +(((sinh.q)*(cosh.p))*((sinh.p)*(cosh.q)))
+     +((cosh.p)*(sinh.q))*((-sinh.q)*(cosh.p)) by XCMPLX_1:180
+ .= ((sinh.p)*(cosh.q))^2
+     +( -(((sinh.q)*(cosh.p))*((sinh.p)*(cosh.q)))
+     +(((sinh.q)*(cosh.p))*((sinh.p)*(cosh.q))) )
+     +((cosh.p)*(sinh.q))*((-sinh.q)*(cosh.p)) by XCMPLX_1:1
+ .= ((sinh.p)*(cosh.q))^2+0
+     +( ((cosh.p)*(sinh.q))*((-sinh.q)*(cosh.p)) ) by XCMPLX_0:def 6
+ .= ((sinh.p)*(cosh.q))^2
+     +(((-1)*(sinh.q))*(cosh.p))*((cosh.p)*(sinh.q)) by XCMPLX_1:180
+ .= ((sinh.p)*(cosh.q))^2
+     +((-1)*( (sinh.q)*(cosh.p) ))*((cosh.p)*(sinh.q)) by XCMPLX_1:4
+ .= ((sinh.p)*(cosh.q))^2
+     +(-1)*( ( (sinh.q)*(cosh.p) )*((cosh.p)*(sinh.q)) ) by XCMPLX_1:4
+ .= ((sinh.p)*(cosh.q))^2+(-1)*((sinh.q)*(cosh.p))^2 by SQUARE_1:def 3
+ .= ((sinh.p)*(cosh.q))^2+-((sinh.q)*(cosh.p))^2 by XCMPLX_1:180
+ .= ((sinh.p)*(cosh.q))^2-((sinh.q)*(cosh.p))^2 by XCMPLX_0:def 8
+ .= (sinh.p)^2*(cosh.q)^2-((sinh.q)*(cosh.p))^2 by SQUARE_1:68
+ .= (sinh.p)^2*(cosh.q)^2-(sinh.q)^2*(cosh.p)^2 by SQUARE_1:68;
+ hence thesis;
+ end;
+ A2: (sinh.p)^2 - (sinh.q)^2 = (sinh.(p+q))*(sinh.(p-q))
+ proof
+   (sinh.(p+q))*(sinh.(p-q))
+  =(sinh.p)^2*(cosh.q)^2 +0 -(sinh.q)^2*(cosh.p)^2 by A1
+ .=(sinh.p)^2*(cosh.q)^2
+   +( -((sinh.p)^2*(sinh.q)^2) + ((sinh.p)^2*(sinh.q)^2) )
+   -(sinh.q)^2*(cosh.p)^2 by XCMPLX_0:def 6
+ .=( (sinh.p)^2*(cosh.q)^2 + -((sinh.p)^2*(sinh.q)^2) )
+   + ((sinh.q)^2*(sinh.p)^2)-(sinh.q)^2*(cosh.p)^2 by XCMPLX_1:1
+ .=( (cosh.q)^2*(sinh.p)^2 -(sinh.p)^2*(sinh.q)^2 )
+   + ((sinh.q)^2*(sinh.p)^2)-(sinh.q)^2*(cosh.p)^2 by XCMPLX_0:def 8
+ .=(sinh.p)^2*( (cosh.q)^2 -(sinh.q)^2 )
+   + ((sinh.q)^2*(sinh.p)^2)-(sinh.q)^2*(cosh.p)^2 by XCMPLX_1:40
+ .=(sinh.p)^2*1 + (sinh.p)^2*(sinh.q)^2-(sinh.q)^2*(cosh.p)^2 by Th14
+ .=(sinh.p)^2 + (sinh.p)^2*(sinh.q)^2 + -(sinh.q)^2*(cosh.p)^2 by XCMPLX_0:def
+8
+ .=(sinh.p)^2 + ( (sinh.p)^2*(sinh.q)^2+ -(sinh.q)^2*(cosh.p)^2 ) by XCMPLX_1:1
+ .=(sinh.p)^2 + ( (sinh.p)^2*(sinh.q)^2 -(sinh.q)^2*(cosh.p)^2
+ ) by XCMPLX_0:def 8
+ .=(sinh.p)^2 + (sinh.q)^2*((sinh.p)^2-(cosh.p)^2) by XCMPLX_1:40
+ .=(sinh.p)^2 + (sinh.q)^2*(-((cosh.p)^2-(sinh.p)^2)) by XCMPLX_1:143
+ .=(sinh.p)^2 + (sinh.q)^2*(-1) by Th14
+ .=(sinh.p)^2 + -(sinh.q)^2 by XCMPLX_1:180
+ .=(sinh.p)^2 - (sinh.q)^2 by XCMPLX_0:def 8;
+ hence thesis;
+ end;
+   (sinh.(p+q))*(sinh.(p-q)) = (cosh.p)^2 - (cosh.q)^2
+ proof
+   (sinh.(p+q))*(sinh.(p-q))
+  =(sinh.p)^2*(cosh.q)^2 +0 -(sinh.q)^2*(cosh.p)^2 by A1
+ .=(sinh.p)^2*(cosh.q)^2
+   +( -((cosh.p)^2*(cosh.q)^2) + ((cosh.p)^2*(cosh.q)^2) )
+   -(sinh.q)^2*(cosh.p)^2 by XCMPLX_0:def 6
+ .=((sinh.p)^2*(cosh.q)^2+ -((cosh.p)^2*(cosh.q)^2) )
+   +((cosh.p)^2*(cosh.q)^2)-(sinh.q)^2*(cosh.p)^2 by XCMPLX_1:1
+ .=((sinh.p)^2*(cosh.q)^2+ -((cosh.p)^2*(cosh.q)^2) )
+   +((cosh.p)^2*(cosh.q)^2)+ -(sinh.q)^2*(cosh.p)^2 by XCMPLX_0:def 8
+ .=((sinh.p)^2*(cosh.q)^2+ -((cosh.p)^2*(cosh.q)^2) )
+   +( ((cosh.p)^2*(cosh.q)^2)+ -(sinh.q)^2*(cosh.p)^2 ) by XCMPLX_1:1
+ .=((sinh.p)^2*(cosh.q)^2-((cosh.q)^2*(cosh.p)^2) )
+   +( ((cosh.p)^2*(cosh.q)^2)+ -(sinh.q)^2*(cosh.p)^2 ) by XCMPLX_0:def 8
+ .=(cosh.q)^2*( (sinh.p)^2-(cosh.p)^2 )
+   +( ((cosh.p)^2*(cosh.q)^2)+ -(sinh.q)^2*(cosh.p)^2 ) by XCMPLX_1:40
+ .=(cosh.q)^2*( -((cosh.p)^2-(sinh.p)^2) )
+   +( ((cosh.p)^2*(cosh.q)^2)+ -(sinh.q)^2*(cosh.p)^2 ) by XCMPLX_1:143
+ .=(cosh.q)^2*( -1 )
+   +( ((cosh.p)^2*(cosh.q)^2)+ -(sinh.q)^2*(cosh.p)^2 ) by Th14
+ .=(cosh.q)^2*( -1 )
+   +( (cosh.q)^2*(cosh.p)^2 -(cosh.p)^2*(sinh.q)^2 ) by XCMPLX_0:def 8
+ .=(cosh.q)^2*( -1 )
+   +( (cosh.p)^2*( (cosh.q)^2-(sinh.q)^2 ) ) by XCMPLX_1:40
+ .=(cosh.q)^2*( -1 )+ ((cosh.p)^2*1) by Th14
+ .=(cosh.p)^2 + -(cosh.q)^2 by XCMPLX_1:180
+ .=(cosh.p)^2 -(cosh.q)^2 by XCMPLX_0:def 8;
+ hence thesis;
+ end;
+hence thesis by A2;
+end;
+
+theorem Th25:
+(sinh.p)^2 + (cosh.q)^2 = (cosh.(p+q))*(cosh.(p-q)) &
+(cosh.(p+q))*(cosh.(p-q)) = (cosh.p)^2 + (sinh.q)^2 &
+(sinh.p)^2 + (cosh.q)^2 = (cosh.p)^2 + (sinh.q)^2
+proof
+ A1:
+ (cosh.(p+q))*(cosh.(p-q)) = (cosh.p)^2*(cosh.q)^2- (sinh.p)^2*(sinh.q)^2
+ proof
+     (cosh.(p+q))*(cosh.(p-q))
+  =( (cosh.p)*(cosh.q) + (sinh.p)*(sinh.q) )*
+   (cosh.(p-q)) by Lm6
+ .=( (cosh.p)*(cosh.q) + (sinh.p)*(sinh.q) )*
+   (cosh.(p + -q)) by XCMPLX_0:def 8
+ .=( ( (cosh.p)*(cosh.q) ) + ( (sinh.p)*(sinh.q) ) )*
+   ( ( (cosh.p)*(cosh.-q) ) + ( (sinh.p)*(sinh.-q) ) ) by Lm6
+ .=( (cosh.p)*(cosh.q) )*( (cosh.p)*(cosh.-q) )
+  +( (cosh.p)*(cosh.q) )*( (sinh.p)*(sinh.-q) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.-q) )
+  +( (sinh.p)*(sinh.q) )*( (sinh.p)*(sinh.-q) ) by XCMPLX_1:10
+ .=( (cosh.p)*(cosh.q) )*( (cosh.p)*(cosh.q) )
+  +( (cosh.p)*(cosh.q) )*( (sinh.-q)*(sinh.p) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.-q) )
+  +( (sinh.p)*(sinh.q) )*( (sinh.-q)*(sinh.p) ) by Th19
+ .=( (cosh.p)*(cosh.q) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.-q)*(sinh.p) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.-q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by Th19
+ .=( (cosh.p)*(cosh.q) )^2
+  +( (sinh.-q)*(sinh.p) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.-q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by SQUARE_1:def 3
+ .=( (cosh.p)*(cosh.q) )^2
+  +( (-sinh.q)*(sinh.p) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.-q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by Th19
+ .=( (cosh.p)*(cosh.q) )^2
+  +( (-sinh.q)*(sinh.p) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) )
+  +( (-sinh.q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by Th19
+ .=( (cosh.p)*(cosh.q) )^2
+  +( (-1)*(sinh.q)*(sinh.p) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) )
+  +( (-sinh.q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by XCMPLX_1:180
+ .=( (cosh.p)*(cosh.q) )^2
+  +( (-1)*(sinh.q)*(sinh.p) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) )
+  +( (-1)*(sinh.q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by XCMPLX_1:180
+ .=( (cosh.p)*(cosh.q) )^2
+  +( (-1)*((sinh.q)*(sinh.p)) )*( (cosh.p)*(cosh.q) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) )
+  +( (-1)*(sinh.q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by XCMPLX_1:4
+ .=( (cosh.p)*(cosh.q) )^2
+  + (-1)*( ((sinh.q)*(sinh.p)) *( (cosh.p)*(cosh.q) ) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) )
+  +( (-1)*(sinh.q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by XCMPLX_1:4
+ .=( (cosh.p)*(cosh.q) )^2
+  + ( (-1)*( ((sinh.q)*(sinh.p)) *( (cosh.p)*(cosh.q) ) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) ) )
+  +( (-1)*(sinh.q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by XCMPLX_1:1
+ .=( (cosh.p)*(cosh.q) )^2
+  + ( -( ((sinh.q)*(sinh.p)) *( (cosh.p)*(cosh.q) ) )
+  +( (sinh.p)*(sinh.q) )*( (cosh.p)*(cosh.q) ) )
+  +( (-1)*(sinh.q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by XCMPLX_1:180
+ .=( (cosh.p)*(cosh.q) )^2 + 0
+  +( (-1)*(sinh.q)*(sinh.p) )*( (sinh.p)*(sinh.q) ) by XCMPLX_0:def 6
+ .=( (cosh.p)*(cosh.q) )^2 + 0
+  +(-1)*((sinh.q)*(sinh.p))*( (sinh.p)*(sinh.q) ) by XCMPLX_1:4
+ .=( (cosh.p)*(cosh.q) )^2 + 0
+  +(-1)*( ((sinh.q)*(sinh.p))*( (sinh.p)*(sinh.q) )) by XCMPLX_1:4
+ .=( (cosh.p)*(cosh.q) )^2 +(-1)*((sinh.q)*(sinh.p))^2 by SQUARE_1:def 3
+ .=(cosh.p)^2*(cosh.q)^2 +(-1)*((sinh.q)*(sinh.p))^2 by SQUARE_1:68
+ .=(cosh.p)^2*(cosh.q)^2 + -((sinh.q)*(sinh.p))^2 by XCMPLX_1:180
+ .=(cosh.p)^2*(cosh.q)^2 - ((sinh.q)*(sinh.p))^2 by XCMPLX_0:def 8
+ .=(cosh.p)^2*(cosh.q)^2 - (sinh.q)^2*(sinh.p)^2 by SQUARE_1:68;
+ hence thesis;
+ end;
+ A2:(sinh.p)^2 + (cosh.q)^2 = (cosh.(p+q))*(cosh.(p-q))
+ proof
+     (cosh.(p+q))*(cosh.(p-q))
+  =(cosh.p)^2*(cosh.q)^2 + 0 - (sinh.q)^2*(sinh.p)^2 by A1
+ .=(cosh.p)^2*(cosh.q)^2
+  +( -((sinh.p)^2*(cosh.q)^2) + ((sinh.p)^2*(cosh.q)^2) )
+  -(sinh.q)^2*(sinh.p)^2 by XCMPLX_0:def 6
+ .=( (cosh.p)^2*(cosh.q)^2 + -((sinh.p)^2*(cosh.q)^2) )
+  +((cosh.q)^2*(sinh.p)^2)-(sinh.p)^2*(sinh.q)^2 by XCMPLX_1:1
+ .=((cosh.p)^2*(cosh.q)^2-(cosh.q)^2*(sinh.p)^2)
+  +(cosh.q)^2*(sinh.p)^2-(sinh.p)^2*(sinh.q)^2 by XCMPLX_0:def 8
+ .=(cosh.q)^2*((cosh.p)^2-(sinh.p)^2)
+  +(cosh.q)^2*(sinh.p)^2-((sinh.p)^2*(sinh.q)^2) by XCMPLX_1:40
+ .=(cosh.q)^2*((cosh.p)^2-(sinh.p)^2)
+  +(cosh.q)^2*(sinh.p)^2 + -((sinh.p)^2*(sinh.q)^2) by XCMPLX_0:def 8
+ .=(cosh.q)^2*((cosh.p)^2-(sinh.p)^2)
+  +( (cosh.q)^2*(sinh.p)^2 + -(sinh.p)^2*(sinh.q)^2 ) by XCMPLX_1:1
+ .=(cosh.q)^2*1
+  +( (cosh.q)^2*(sinh.p)^2 + -(sinh.p)^2*(sinh.q)^2 ) by Th14
+ .=(cosh.q)^2*1
+  +( (cosh.q)^2*(sinh.p)^2-(sinh.p)^2*(sinh.q)^2 ) by XCMPLX_0:def 8
+ .=(cosh.q)^2+(sinh.p)^2*( (cosh.q)^2-(sinh.q)^2 ) by XCMPLX_1:40
+ .=(cosh.q)^2+(sinh.p)^2*1 by Th14
+ .=(cosh.q)^2+(sinh.p)^2;
+ hence thesis;
+ end;
+  (cosh.(p+q))*(cosh.(p-q)) = (cosh.p)^2 + (sinh.q)^2
+ proof
+     (cosh.(p+q))*(cosh.(p-q))
+  =(cosh.p)^2*(cosh.q)^2 + 0 - (sinh.q)^2*(sinh.p)^2 by A1
+ .=(cosh.q)^2*(cosh.p)^2
+  +( -((cosh.p)^2*(sinh.q)^2) + ((cosh.p)^2*(sinh.q)^2) )
+  -((sinh.q)^2*(sinh.p)^2) by XCMPLX_0:def 6
+ .=( (cosh.q)^2*(cosh.p)^2+ -((cosh.p)^2*(sinh.q)^2) )
+  + ((cosh.p)^2*(sinh.q)^2) -((sinh.q)^2*(sinh.p)^2) by XCMPLX_1:1
+ .=( (cosh.q)^2*(cosh.p)^2 -(cosh.p)^2*(sinh.q)^2 )
+  + ((cosh.p)^2*(sinh.q)^2) -((sinh.q)^2*(sinh.p)^2) by XCMPLX_0:def 8
+ .=(cosh.p)^2*( (cosh.q)^2-(sinh.q)^2 )
+  + ((cosh.p)^2*(sinh.q)^2) -((sinh.q)^2*(sinh.p)^2) by XCMPLX_1:40
+ .=(cosh.p)^2*( (cosh.q)^2-(sinh.q)^2 )
+  + ((cosh.p)^2*(sinh.q)^2) + -((sinh.q)^2*(sinh.p)^2) by XCMPLX_0:def 8
+ .=(cosh.p)^2*1
+  + ((cosh.p)^2*(sinh.q)^2) + -((sinh.q)^2*(sinh.p)^2) by Th14
+ .=(cosh.p)^2+(((cosh.p)^2*(sinh.q)^2) + -((sinh.q)^2*(sinh.p)^2)) by XCMPLX_1:
+1
+ .=(cosh.p)^2+((cosh.p)^2*(sinh.q)^2-(sinh.q)^2*(sinh.p)^2) by XCMPLX_0:def 8
+ .=(cosh.p)^2+(sinh.q)^2*((cosh.p)^2-(sinh.p)^2) by XCMPLX_1:40
+ .=(cosh.p)^2+(sinh.q)^2*1 by Th14
+ .=(cosh.p)^2+(sinh.q)^2;
+ hence thesis;
+ end;
+ hence thesis by A2;
+end;
+
+theorem
+   sinh.p + sinh.r = 2*(sinh.(p/2+r/2))*(cosh.(p/2-r/2)) &
+ sinh.p - sinh.r = 2*(sinh.(p/2-r/2))*(cosh.(p/2+r/2))
+ proof
+ A1:
+   2*(sinh.(p/2+r/2))*(cosh.(p/2-r/2))
+  =2*((sinh.(p/2))*(cosh.(r/2))+(cosh.(p/2))*(sinh.(r/2)))
+    *(cosh.(p/2-r/2)) by Lm7
+ .=2*((sinh.(p/2))*(cosh.(r/2))+(cosh.(p/2))*(sinh.(r/2)))
+    *((cosh.(p/2))*(cosh.(r/2))-(sinh.(p/2))*(sinh.(r/2))) by Lm11
+ .=2*( (((sinh.(p/2))*(cosh.(r/2)))+((cosh.(p/2))*(sinh.(r/2))))
+    *(((cosh.(p/2))*(cosh.(r/2)))-((sinh.(p/2))*(sinh.(r/2)))) ) by XCMPLX_1:4
+ .=2*( ((sinh.(p/2))*(cosh.(r/2)))*((cosh.(r/2))*(cosh.(p/2)))
+      -((cosh.(r/2))*(sinh.(p/2)))*((sinh.(p/2))*(sinh.(r/2)))
+      +((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:45
+ .=2*( (sinh.(p/2))*((cosh.(r/2))*((cosh.(r/2))*(cosh.(p/2))))
+      -((cosh.(r/2))*(sinh.(p/2)))*((sinh.(p/2))*(sinh.(r/2)))
+      +((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*(((cosh.(r/2))*(cosh.(r/2)))*(cosh.(p/2)))
+       -((cosh.(r/2))*(sinh.(p/2)))*((sinh.(p/2))*(sinh.(r/2)))
+       +((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+       -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+       -((cosh.(r/2))*(sinh.(p/2)))*((sinh.(p/2))*(sinh.(r/2)))
+       +((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+       -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) )
+             by SQUARE_1:def 3
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      -(cosh.(r/2))*((sinh.(p/2))*((sinh.(p/2))*(sinh.(r/2))))
+      +((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      -(cosh.(r/2))*(((sinh.(p/2))*(sinh.(p/2)))*(sinh.(r/2)))
+      +((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+     -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by SQUARE_1:def
+3
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +(sinh.(r/2))*((cosh.(p/2))*((cosh.(p/2))*(cosh.(r/2))))
+     -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +(sinh.(r/2))*(((cosh.(p/2))*(cosh.(p/2)))*(cosh.(r/2)))
+     -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+     -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by SQUARE_1:def
+3
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+     -(cosh.(p/2))*((sinh.(r/2))*((sinh.(r/2))*(sinh.(p/2)))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+     -(cosh.(p/2))*(((sinh.(r/2))*(sinh.(r/2)))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+     -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by SQUARE_1:def 3
+ .=2*( (sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:30
+ .=2*( ((sinh.(r/2))*(cosh.(r/2)))*(cosh.(p/2))^2
+     -(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+     +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:4
+ .=2*( ((sinh.(r/2))*(cosh.(r/2)))*(cosh.(p/2))^2
+     -((sinh.(r/2))*(cosh.(r/2)))*(sinh.(p/2))^2
+     +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:4
+ .=2*( ((sinh.(r/2))*(cosh.(r/2)))*((cosh.(p/2))^2-(sinh.(p/2))^2)
+     +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:40
+ .=2*( ((sinh.(r/2))*(cosh.(r/2)))*1
+     +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by Th14
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+     -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 )
+     +(sinh.(r/2))*(cosh.(r/2)) ) by XCMPLX_1:29
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))*(cosh.(r/2))^2
+     -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 )
+     +(sinh.(r/2))*(cosh.(r/2)) ) by XCMPLX_1:4
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))*(cosh.(r/2))^2
+     -((cosh.(p/2))*(sinh.(p/2)))*(sinh.(r/2))^2
+     +(sinh.(r/2))*(cosh.(r/2)) ) by XCMPLX_1:4
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))*((cosh.(r/2))^2 -(sinh.(r/2))^2 )
+      +(sinh.(r/2))*(cosh.(r/2)) ) by XCMPLX_1:40
+ .=2*( ((sinh.(p/2))*(cosh.(p/2))*1)+(sinh.(r/2))*(cosh.(r/2)) ) by Th14
+ .=2*((sinh.(p/2))*(cosh.(p/2))) + 2*((sinh.(r/2))*(cosh.(r/2))) by XCMPLX_1:8
+ .=2*(sinh.(p/2))*(cosh.(p/2)) + 2*((sinh.(r/2))*(cosh.(r/2))) by XCMPLX_1:4
+ .=2*(sinh.(p/2))*(cosh.(p/2)) + 2*(sinh.(r/2))*(cosh.(r/2)) by XCMPLX_1:4
+ .=sinh.(2*(p/2)) + 2*(sinh.(r/2))*(cosh.(r/2)) by Lm10
+ .=sinh.(2*(p/2)) + sinh.(2*(r/2)) by Lm10
+ .=sinh.p + sinh.(2*(r/2)) by XCMPLX_1:88
+ .=sinh.p + sinh.r by XCMPLX_1:88;
+
+     2*(sinh.(p/2-r/2))*(cosh.(p/2+r/2))
+  =2*( (sinh.(p/2))*(cosh.(r/2))-(cosh.(p/2))*(sinh.(r/2)) )
+    *(cosh.(p/2+r/2)) by Lm12
+ .=2*((sinh.(p/2))*(cosh.(r/2))-(cosh.(p/2))*(sinh.(r/2)))
+    *((cosh.(p/2))*(cosh.(r/2))+(sinh.(p/2))*(sinh.(r/2))) by Lm6
+ .=2*( (((sinh.(p/2))*(cosh.(r/2)))-((cosh.(p/2))*(sinh.(r/2))))
+    *(((cosh.(p/2))*(cosh.(r/2)))+((sinh.(p/2))*(sinh.(r/2)))) ) by XCMPLX_1:4
+ .=2*( ((sinh.(p/2))*(cosh.(r/2)))*((cosh.(r/2))*(cosh.(p/2)))
+      +((cosh.(r/2))*(sinh.(p/2)))*((sinh.(p/2))*(sinh.(r/2)))
+      -((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:46
+ .=2*( (sinh.(p/2))*((cosh.(r/2))*((cosh.(r/2))*(cosh.(p/2))))
+      +((cosh.(r/2))*(sinh.(p/2)))*((sinh.(p/2))*(sinh.(r/2)))
+      -((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*(((cosh.(r/2))*(cosh.(r/2)))*(cosh.(p/2)))
+      +((cosh.(r/2))*(sinh.(p/2)))*((sinh.(p/2))*(sinh.(r/2)))
+      -((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +((cosh.(r/2))*(sinh.(p/2)))*((sinh.(p/2))*(sinh.(r/2)))
+      -((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) )
+             by SQUARE_1:def 3
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*((sinh.(p/2))*((sinh.(p/2))*(sinh.(r/2))))
+      -((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*(((sinh.(p/2))*(sinh.(p/2)))*(sinh.(r/2)))
+      -((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+      -((sinh.(r/2))*(cosh.(p/2)))*((cosh.(p/2))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by SQUARE_1:
+def 3
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+      -(sinh.(r/2))*((cosh.(p/2))*((cosh.(p/2))*(cosh.(r/2))))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+      -(sinh.(r/2))*(((cosh.(p/2))*(cosh.(p/2)))*(cosh.(r/2)))
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+      -(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+      -((cosh.(p/2))*(sinh.(r/2)))*((sinh.(r/2))*(sinh.(p/2))) ) by SQUARE_1:
+def 3
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+      -(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+      -(cosh.(p/2))*((sinh.(r/2))*((sinh.(r/2))*(sinh.(p/2)))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+      -(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+      -(cosh.(p/2))*(((sinh.(r/2))*(sinh.(r/2)))*(sinh.(p/2))) ) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      +(cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+      -(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+      -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by SQUARE_1:def 3
+ .=2*( (cosh.(r/2))*( (sinh.(r/2))*(sinh.(p/2))^2 )
+      -(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+      +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:29
+ .=2*( ((cosh.(r/2))*(sinh.(r/2)))*(sinh.(p/2))^2
+        -(sinh.(r/2))*( (cosh.(r/2))*(cosh.(p/2))^2 )
+        +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+        -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:4
+ .=2*( ((cosh.(r/2))*(sinh.(r/2)))*(sinh.(p/2))^2
+      -((sinh.(r/2))*(cosh.(r/2)))*(cosh.(p/2))^2
+      +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:4
+ .=2*( ((cosh.(r/2))*(sinh.(r/2)))*((sinh.(p/2))^2-(cosh.(p/2))^2)
+      +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:40
+ .=2*( ((cosh.(r/2))*(sinh.(r/2)))*(-((cosh.(p/2))^2-(sinh.(p/2))^2))
+       +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+       -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by XCMPLX_1:143
+ .=2*( ((cosh.(r/2))*(sinh.(r/2)))*(-1)
+      +(sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 ) ) by Th14
+ .=2*( (sinh.(p/2))*( (cosh.(p/2))*(cosh.(r/2))^2 )
+      -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 )
+      +(-1)*((cosh.(r/2))*(sinh.(r/2))) ) by XCMPLX_1:29
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))*(cosh.(r/2))^2
+      -(cosh.(p/2))*( (sinh.(p/2))*(sinh.(r/2))^2 )
+      +(-1)*((cosh.(r/2))*(sinh.(r/2))) ) by XCMPLX_1:4
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))*(cosh.(r/2))^2
+      -((cosh.(p/2))*(sinh.(p/2)))*(sinh.(r/2))^2
+      +(-1)*((cosh.(r/2))*(sinh.(r/2))) ) by XCMPLX_1:4
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))*((cosh.(r/2))^2-(sinh.(r/2))^2)
+      +(-1)*((cosh.(r/2))*(sinh.(r/2))) ) by XCMPLX_1:40
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))*1
+      +(-1)*((cosh.(r/2))*(sinh.(r/2))) ) by Th14
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))
+      +-((cosh.(r/2))*(sinh.(r/2))) ) by XCMPLX_1:180
+ .=2*( ((sinh.(p/2))*(cosh.(p/2)))-((cosh.(r/2))*(sinh.(r/2))) ) by XCMPLX_0:
+def 8
+ .= 2*((sinh.(p/2))*(cosh.(p/2)))-2*((cosh.(r/2))*(sinh.(r/2))) by XCMPLX_1:40
+ .= 2*(sinh.(p/2))*(cosh.(p/2))-2*((sinh.(r/2))*(cosh.(r/2))) by XCMPLX_1:4
+ .= 2*(sinh.(p/2))*(cosh.(p/2))-2*(sinh.(r/2))*(cosh.(r/2)) by XCMPLX_1:4
+ .=sinh.(2*(p/2)) - 2*(sinh.(r/2))*(cosh.(r/2)) by Lm10
+ .=sinh.(2*(p/2)) - sinh.(2*(r/2)) by Lm10
+ .=sinh.p - sinh.(2*(r/2)) by XCMPLX_1:88
+ .=sinh.p - sinh.r by XCMPLX_1:88;
+ hence thesis by A1;
+ end;
+
+ theorem
+   cosh.p + cosh.r = 2*(cosh.(p/2+r/2))*(cosh.(p/2-r/2)) &
+ cosh.p - cosh.r = 2*(sinh.(p/2-r/2))*(sinh.(p/2+r/2))
+ proof
+ A1:2*(cosh.(p/2+r/2))*(cosh.(p/2-r/2))
+  =2*((cosh.(p/2+r/2))*(cosh.(p/2-r/2))) by XCMPLX_1:4
+ .=2*( (sinh.(p/2))^2+(cosh.(r/2))^2 ) by Th25
+ .=2*( 1/2*(cosh.(2*(p/2)) - 1)+(cosh.(r/2))^2 ) by Th18
+ .=2*( 1/2*(cosh.(2*(p/2)) - 1)+1/2*(cosh.(2*(r/2)) + 1) ) by Th18
+ .=2*( 1/2*(cosh.p - 1)+1/2*(cosh.(2*(r/2)) + 1) ) by XCMPLX_1:88
+ .=2*( 1/2*(cosh.p - 1)+1/2*(cosh.r + 1) ) by XCMPLX_1:88
+ .=2*( 1/2*(cosh.p - 1) )+ 2*( 1/2*(cosh.r + 1) ) by XCMPLX_1:8
+ .=2*(1/2)*(cosh.p - 1)+ 2*( 1/2*(cosh.r + 1) ) by XCMPLX_1:4
+ .=2*(1/2)*(cosh.p - 1)+ 2*(1/2)*(cosh.r + 1) by XCMPLX_1:4
+ .=-1+(1+cosh.r)+cosh.p by XCMPLX_1:156
+ .=-1+1+cosh.r+cosh.p by XCMPLX_1:1
+ .=cosh.r+cosh.p;
+
+     2*(sinh.(p/2-r/2))*(sinh.(p/2+r/2))
+  =2*((sinh.(p/2-r/2))*(sinh.(p/2+r/2))) by XCMPLX_1:4
+ .=2*( (cosh.(p/2))^2 - (cosh.(r/2))^2 ) by Th24
+ .=2*( 1/2*(cosh.(2*(p/2)) + 1)-(cosh.(r/2))^2 ) by Th18
+ .=2*( 1/2*(cosh.(2*(p/2)) + 1)-1/2*(cosh.(2*(r/2)) + 1) ) by Th18
+ .=2*( 1/2*(cosh.p + 1)-1/2*(cosh.(2*(r/2)) + 1) ) by XCMPLX_1:88
+ .=2*( 1/2*(cosh.p + 1)-1/2*(cosh.r + 1) ) by XCMPLX_1:88
+ .=2*( 1/2*(cosh.p + 1) )- 2*( 1/2*(cosh.r + 1) ) by XCMPLX_1:40
+ .=2*(1/2)*(cosh.p + 1)- 2*( 1/2*(cosh.r + 1) ) by XCMPLX_1:4
+ .=2*(1/2)*(cosh.p + 1)- 2*(1/2)*(cosh.r + 1) by XCMPLX_1:4
+ .=-(cosh.r+1)+1+cosh.p by XCMPLX_1:155
+ .=-cosh.r-1+1+cosh.p by XCMPLX_1:161
+ .=-1+1-cosh.r+cosh.p by XCMPLX_1:166
+ .=-cosh.r+cosh.p by XCMPLX_1:150
+ .=cosh.p-cosh.r by XCMPLX_0:def 8;
+ hence thesis by A1;
+ end;
+
+ theorem
+   tanh.p + tanh.r = (sinh.(p+r))/((cosh.p)*(cosh.r)) &
+ tanh.p - tanh.r = (sinh.(p-r))/((cosh.p)*(cosh.r))
+ proof
+ A1:cosh.p<>0 & cosh.r<>0 by Th15;
+ A2:
+   (sinh.(p+r))/((cosh.p)*(cosh.r))
+  =( (sinh.p)*(cosh.r)+(cosh.p)*(sinh.r) )/((cosh.p)*(cosh.r)) by Lm7
+ .= ((sinh.p)*(cosh.r))/((cosh.p)*(cosh.r))
+   +((cosh.p)*(sinh.r))/((cosh.p)*(cosh.r)) by XCMPLX_1:63
+ .=(sinh.p)/(cosh.p)+((cosh.p)*(sinh.r))/((cosh.p)*(cosh.r)) by A1,XCMPLX_1:92
+ .=(sinh.p)/(cosh.p)+(sinh.r)/(cosh.r) by A1,XCMPLX_1:92
+ .=tanh.p+(sinh.r)/(cosh.r) by Th17
+ .=tanh.p+tanh.r by Th17;
+
+     (sinh.(p-r))/((cosh.p)*(cosh.r))
+  =( (sinh.p)*(cosh.r)-(cosh.p)*(sinh.r) )/((cosh.p)*(cosh.r)) by Lm12
+ .= ((sinh.p)*(cosh.r))/((cosh.p)*(cosh.r))
+   -((cosh.p)*(sinh.r))/((cosh.p)*(cosh.r)) by XCMPLX_1:121
+ .=(sinh.p)/(cosh.p)-((cosh.p)*(sinh.r))/((cosh.p)*(cosh.r)) by A1,XCMPLX_1:92
+ .=(sinh.p)/(cosh.p)-(sinh.r)/(cosh.r) by A1,XCMPLX_1:92
+ .=tanh.p-(sinh.r)/(cosh.r) by Th17
+ .=tanh.p-tanh.r by Th17;
+ hence thesis by A2;
+ end;
+
+theorem
+  (cosh.p + sinh.p) |^ n = cosh.(n*p) + sinh.(n*p)
+proof
+  defpred X[Nat] means
+      for p holds (cosh.p + sinh.p) |^ $1 = cosh.($1*p) + sinh.($1*p);
+ A1: X[0] by Th15,Th16,NEWTON:9;
+ A2:for n st X[n] holds X[n+1]
+ proof
+ let n such that
+ A3: for p holds (cosh.p + sinh.p) |^ n = cosh.(n*p) + sinh.(n*p);
+
+  for p holds (cosh.p + sinh.p) |^ (n+1) = cosh.((n+1)*p) + sinh.((n+1)*p)
+  proof
+  let p;
+  A4:
+  (cosh.(n*p))*(cosh.p)+(sinh.(n*p))*(sinh.p)=cosh.((n+1)*p)
+   proof
+     (cosh.(n*p))*(cosh.p)+(sinh.(n*p))*(sinh.p)
+    =((exp.(n*p) + exp.(-n*p))/2)*(cosh.p)
+    +(sinh.(n*p))*(sinh.p) by Def3
+   .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p + exp.-p)/2)
+    +(sinh.(n*p))*(sinh.p) by Def3
+   .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p + exp.-p)/2)
+    +((exp.(n*p) - exp.(-n*p))/2)*(sinh.p) by Def1
+   .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p + exp.-p)/2)
+    +((exp.(n*p) - exp.(-n*p))/2)*((exp.p - exp.-p)/2) by Def1
+   .=( (exp.(n*p))/2 + (exp.(-n*p))/2 )*( (exp.p + exp.-p)/2 )
+    +((exp.(n*p) - exp.(-n*p))/2)*((exp.p - exp.-p)/2) by XCMPLX_1:63
+   .=((exp.(n*p))/2 + (exp.(-n*p))/2)*((exp.p)/2 + (exp.-p)/2)
+    +((exp.(n*p) - exp.(-n*p))/2)*((exp.p - exp.-p)/2) by XCMPLX_1:63
+   .=((exp.(n*p))/2 + (exp.(-n*p))/2)*((exp.p)/2 + (exp.-p)/2)
+    +((exp.(n*p))/2 - (exp.(-n*p))/2)*((exp.p - exp.-p)/2)
+                                       by XCMPLX_1:121
+   .=(((exp.(n*p))/2) + ((exp.(-n*p))/2))*(((exp.p)/2) + ((exp.-p)/2))
+    +(((exp.(n*p))/2) - ((exp.(-n*p))/2))*(((exp.p)/2) - ((exp.-p)/2))
+                                         by XCMPLX_1:121
+   .=( (exp.(n*p))/2 )*((exp.p)/2) + ((exp.(n*p))/2)*((exp.-p)/2)
+    +( (exp.(-n*p))/2)*((exp.p)/2) + ((exp.(-n*p))/2)*((exp.-p)/2)
+    +(((exp.(n*p))/2) - ((exp.(-n*p))/2))*(((exp.p)/2) - ((exp.-p)/2))
+                                         by XCMPLX_1:10
+   .=( (((exp.(n*p))/2 )*((exp.p)/2)) + (((exp.(n*p))/2)*((exp.-p)/2))
+    +(((exp.(-n*p))/2)*((exp.p)/2)) + (((exp.(-n*p))/2)*((exp.-p)/2)) )
+    +( (((exp.(n*p))/2 )*((exp.p)/2)) - (((exp.(n*p))/2)*((exp.-p)/2))
+    -( ((exp.(-n*p))/2)*((exp.p)/2)) + (((exp.(-n*p))/2)*((exp.-p)/2)) )
+                                     by XCMPLX_1:47
+   .=2*( ((exp.(n*p))/2 )*((exp.p)/2) )
+    +2*(((exp.(-n*p))/2)*((exp.-p)/2)) by Lm5
+   .=2*( ( (exp.(n*p))*(exp.p) )/(2*2) )
+    +2*(((exp.(-n*p))/2)*((exp.-p)/2)) by XCMPLX_1:77
+   .=2*( ( (exp.(n*p))*(exp.p) )/(2*2) )
+    +2*( ( (exp.(-n*p))*(exp.-p) )/(2*2) ) by XCMPLX_1:77
+   .=2*( exp.(p*n+p*1)/(2*2) )
+    +2*( ( (exp.(-n*p))*(exp.-p) )/(2*2) ) by Th12
+   .=2*( exp.(p*(n+1))/(2*2) )
+    +2*( ( (exp.(-n*p))*(exp.-p) )/(2*2) ) by XCMPLX_1:8
+   .=2*( exp.(p*(n+1))/(2*2) )
+    +2*( exp.(-n*p+-p)/(2*2) ) by Th12
+   .=2*( exp.(p*(n+1))/(2*2) )
+    +2*( exp.((-p)*n+(-p)*1)/(2*2) ) by XCMPLX_1:175
+   .=2*( exp.(p*(n+1))/4 )
+    +2*( exp.((-p)*(n+1))/4 ) by XCMPLX_1:8
+   .=exp.(p*(n+1))/(4/2)+2*( exp.((-p)*(n+1))/4 ) by XCMPLX_1:82
+   .=exp.(p*(n+1))/(4/2)+exp.((-p)*(n+1))/(4/2) by XCMPLX_1:82
+   .=exp.(p*(n+1))/2+exp.(-(p*(n+1)))/2 by XCMPLX_1:175
+   .=(exp.(p*(n+1))+exp.(-(p*(n+1))))/2 by XCMPLX_1:63
+   .=cosh.(p*(n+1)) by Def3;
+   hence thesis;
+   end;
+  A5:
+  (cosh.(n*p))*(sinh.p)+(sinh.(n*p))*(cosh.p)=sinh.((n+1)*p)
+   proof
+     (cosh.(n*p))*(sinh.p)+(sinh.(n*p))*(cosh.p)
+   =((exp.(n*p) + exp.(-n*p))/2)*(sinh.p)
+   +(sinh.(n*p))*(cosh.p) by Def3
+  .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p - exp.-p)/2)
+   +(sinh.(n*p))*(cosh.p) by Def1
+  .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p - exp.-p)/2)
+   +((exp.(n*p) - exp.(-n*p))/2)*(cosh.p) by Def1
+  .=((exp.(n*p) + exp.(-n*p))/2)*((exp.p - exp.-p)/2)
+   +((exp.(n*p) - exp.(-n*p))/2)*((exp.p + exp.-p)/2) by Def3
+  .=((exp.(n*p))/2 + (exp.(-n*p))/2)*((exp.p - exp.-p)/2)
+   +((exp.(n*p) - exp.(-n*p))/2)*((exp.p + exp.-p)/2) by XCMPLX_1:63
+  .=(((exp.(n*p))/2) + ((exp.(-n*p))/2))*(((exp.p)/2) - ((exp.-p)/2))
+   +((exp.(n*p) - exp.(-n*p))/2)*((exp.p + exp.-p)/2) by XCMPLX_1:121
+  .=((exp.(n*p))/2)*((exp.p)/2) - ((exp.(n*p))/2)*((exp.-p)/2)
+   +((exp.(-n*p))/2)*((exp.p)/2) - ((exp.(-n*p))/2)*((exp.-p)/2)
+   +((exp.(n*p) - exp.(-n*p))/2)*((exp.p + exp.-p)/2) by XCMPLX_1:45
+  .=((exp.(n*p))/2)*((exp.p)/2) - ((exp.(n*p))/2)*((exp.-p)/2)
+   +((exp.(-n*p))/2)*((exp.p)/2) - ((exp.(-n*p))/2)*((exp.-p)/2)
+   +((exp.(n*p))/2 - (exp.(-n*p))/2)*((exp.p + exp.-p)/2)
+            by XCMPLX_1:121
+  .=((exp.(n*p))/2)*((exp.p)/2) - ((exp.(n*p))/2)*((exp.-p)/2)
+   +((exp.(-n*p))/2)*((exp.p)/2) - ((exp.(-n*p))/2)*((exp.-p)/2)
+   +(((exp.(n*p))/2) - ((exp.(-n*p))/2))*(((exp.p)/2) + ((exp.-p)/2))
+            by XCMPLX_1:63
+  .=( (((exp.(n*p))/2)*((exp.p)/2)) - (((exp.(n*p))/2)*((exp.-p)/2))
+   +(((exp.(-n*p))/2)*((exp.p)/2)) - (((exp.(-n*p))/2)*((exp.-p)/2)) )
+   +( (((exp.(n*p))/2)*((exp.p)/2)) + (((exp.(n*p))/2)*((exp.-p)/2))
+   -(((exp.(-n*p))/2)*((exp.p)/2)) - (((exp.(-n*p))/2)*((exp.-p)/2)) )
+              by XCMPLX_1:46
+  .=2*(((exp.(n*p))/2)*((exp.p)/2))
+   +2*(-(((exp.(-n*p))/2)*((exp.-p)/2))) by Lm5
+  .=2*( ( (exp.(n*p))*(exp.p) )/(2*2) )
+   +2*( -( ((exp.(-n*p))/2)*((exp.-p)/2) )) by XCMPLX_1:77
+  .=2*(( (exp.(n*p))*(exp.p) )/4 )
+   +2*( -( ((exp.(-n*p))*(exp.-p))/(2*2) )) by XCMPLX_1:77
+  .=2*( exp.(n*p+p)/4 )
+   +2*( -( ((exp.(-n*p))*(exp.-p))/4 )) by Th12
+  .=2*( exp.(n*p+p)/4 )
+   +2*( -( (exp.(-n*p+-p))/4 ) ) by Th12
+  .=2*( exp.(n*p+p*1)/4 )
+   +-(2*( (exp.(-n*p+-p))/4 ) ) by XCMPLX_1:175
+  .=2*( exp.(p*(n+1))/4 )
+   +-(2*( (exp.(-n*p+-p))/4 ) ) by XCMPLX_1:8
+  .=2*( exp.(p*(n+1))/4 )
+   +-(2*( ( exp.((-p)*n+(-p)*1)) /4 ) ) by XCMPLX_1:175
+  .=2*( exp.(p*(n+1))/4 )
+   +-(2*( ( exp.((-p)*(n+1)) ) /4 ) ) by XCMPLX_1:8
+  .=2*( exp.(p*(n+1))/4 )
+   +-( exp.((-p)*(n+1))/(4/2) ) by XCMPLX_1:82
+  .=2*( exp.(p*(n+1))/4 )
+   +-( exp.(-(p*(n+1)))/(4/2) ) by XCMPLX_1:175
+  .=exp.(p*(n+1))/(4/2)
+   +-( exp.(-(p*(n+1)))/(4/2) ) by XCMPLX_1:82
+  .=exp.(p*(n+1))/(4/2)
+   -( exp.(-(p*(n+1)))/(4/2) ) by XCMPLX_0:def 8
+  .=( exp.(p*(n+1))- exp.(-(p*(n+1))) )/2 by XCMPLX_1:121
+  .=sinh.(p*(n+1)) by Def1;
+   hence thesis;
+   end;
+    (cosh.p + sinh.p) |^ (n+1)
+   =(cosh.p + sinh.p) |^ n * (cosh.p + sinh.p) by NEWTON:11
+  .=(cosh.(n*p) + sinh.(n*p)) * (cosh.p + sinh.p) by A3
+  .=(cosh.(n*p))*(cosh.p)+(cosh.(n*p))*(sinh.p)
+   +(sinh.(n*p))*(cosh.p)+(sinh.(n*p))*(sinh.p) by XCMPLX_1:10
+  .=(cosh.(n*p))*(cosh.p)+( (cosh.(n*p))*(sinh.p)
+   +(sinh.(n*p))*(cosh.p) )+(sinh.(n*p))*(sinh.p) by XCMPLX_1:1
+  .=sinh.((n+1)*p)+cosh.((n+1)*p) by A4,A5,XCMPLX_1:1;
+  hence thesis;
+  end;
+  hence thesis;
+ end;
+   for n holds X[n] from Ind(A1,A2);
+ hence thesis;
+end;
+
+definition
+  cluster sinh -> total;
+  coherence
+  proof
+      dom sinh=REAL by Def1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+
+  cluster cosh -> total;
+  coherence
+  proof
+      dom cosh=REAL by Def3;
+    hence thesis by PARTFUN1:def 4;
+  end;
+
+  cluster tanh -> total;
+  coherence
+  proof
+      dom tanh=REAL by Def5;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+theorem Th30:
+dom sinh=REAL & dom cosh=REAL & dom tanh=REAL by Def1,Def3,Def5;
+
+ Lm14:for d being real number holds compreal.d=(-1)*d
+ proof
+   let d be real number;
+     d is Real by XREAL_0:def 1;
+   hence compreal.d= -d by VECTSP_1:def 5
+   .= (-1)*d by XCMPLX_1:180;
+ end;
+
+ Lm15:
+ dom(compreal)=REAL & rng(compreal)c=REAL by FUNCT_2:def 1,RELSET_1:12;
+
+  Lm16:
+ for f being PartFunc of REAL,REAL st f = compreal holds
+ for p holds f is_differentiable_in p & diff(f,p) = -1
+ proof
+     let f be PartFunc of REAL,REAL such that
+    A1:f = compreal;
+     let p;
+    defpred X[set] means $1 in REAL;
+    deffunc U(Real) = -$1;
+    consider f1 being PartFunc of REAL,REAL such that
+    A2:for p be Element of REAL holds p in dom f1 iff X[p] and
+    A3:for p be Element of REAL st p in dom f1 holds f1/.p=U(p) from LambdaPFD;
+    A4:f1 is LINEAR
+     proof
+       dom f1 = REAL
+      proof
+        A5:  dom f1 c=REAL by RELSET_1:12;
+          for x be set st x in REAL holds x in dom f1 by A2;
+        then REAL c=dom f1 by TARSKI:def 3;
+       hence dom f1=REAL by A5,XBOOLE_0:def 10;
+      end;
+
+    then A6:f1 is total by PARTFUN1:def 4;
+
+    A7: for p be Element of REAL holds
+          f1.p = - p
+         proof
+         let p be Element of REAL;
+         A8:  p in dom f1 by A2;
+         then f1/.p = -p by A3;
+         hence f1.p = -p by A8,FINSEQ_4:def 4;
+         end;
+      for p be Real holds f1.p=(-1)*p
+     proof
+      let p be Real;
+       f1.p = -p by A7;
+      hence f1.p = (-1)*p by XCMPLX_1:180;
+      end;
+    hence f1 is LINEAR by A6,FDIFF_1:def 4;
+    end;
+
+    defpred X[set] means $1 in REAL;
+    deffunc U(Real) = 0;
+    consider f2 being PartFunc of REAL,REAL such that
+       A9:for p be Element of REAL holds p in dom f2 iff X[p] and
+       A10:for p be Element of REAL st p in dom f2
+                            holds f2/.p= U(p) from LambdaPFD;
+   A11:f2 is REST
+    proof
+    A12:dom f2 = REAL
+         proof
+           A13:  dom f2 c=REAL by RELSET_1:12;
+             for x be set st x in REAL holds x in dom f2 by A9;
+           then REAL c=dom f2 by TARSKI:def 3;
+          hence dom f2=REAL by A13,XBOOLE_0:def 10;
+         end;
+       then A14:f2 is total by PARTFUN1:def 4;
+
+  A15: for d be Element of REAL holds
+        f2.d = 0
+       proof
+       let d be Element of REAL;
+       A16: d in dom f2 by A9;
+       then f2/.d = 0 by A10;
+       hence f2.d = 0 by A16,FINSEQ_4:def 4;
+    end;
+
+    f2 is REST-like PartFunc of REAL,REAL
+   proof
+     for hy1 be convergent_to_0 Real_Sequence holds
+          (hy1")(#)(f2*hy1) is convergent & lim ((hy1")(#)(f2*hy1)) = 0
+    proof
+    let hy1 be convergent_to_0 Real_Sequence;
+    A17: for n holds ((hy1")(#)(f2*hy1)).n=0
+      proof
+      let n;
+      A18: ((hy1")(#)(f2*hy1)).n
+         = (hy1".n)*((f2*hy1).n) by SEQ_1:12
+        .= (hy1.n)"*((f2*hy1).n) by SEQ_1:def 8;
+         rng hy1 c= dom f2 by A12;
+      then ((hy1")(#)(f2*hy1)).n
+         =(hy1.n)"*(f2.(hy1.n)) by A18,RFUNCT_2:21
+        .=(hy1.n)"*(0) by A15
+        .= 0;
+      hence thesis;
+      end;
+   then A19:(hy1")(#)(f2*hy1) is constant by SEQM_3:def 6;
+   for n holds lim ((hy1")(#)(f2*hy1)) = 0
+    proof
+    let n;
+        lim ((hy1")(#)(f2*hy1))
+     =((hy1")(#)(f2*hy1)).n by A19,SEQ_4:41
+    .=0 by A17;
+    hence lim ((hy1")(#)(f2*hy1)) = 0;
+    end;
+   hence thesis by A19,SEQ_4:39;
+   end;
+   hence thesis by A14,FDIFF_1:def 3;
+   end;
+   hence thesis;
+   end;
+
+  A20: ex N being Neighbourhood of p st N c= dom compreal &
+   for r be Real st r in N holds compreal.r - compreal.p = f1.(r-p) + f2.(r-p)
+     proof
+       A21: for r st r in ].p-1,p+1 .[ holds compreal.r - compreal.p =
+          f1.(r-p) + f2.(r-p)
+      proof
+       let r;
+         A22: for p be real number holds f1.p = - p
+          proof
+          let p be real number;
+A23:       p is Real by XREAL_0:def 1;
+          then A24:  p in dom f1 by A2;
+          then f1/.p = -p by A3,A23;
+          hence f1.p = -p by A24,FINSEQ_4:def 4;
+          end;
+         A25: for d be real number holds f2.d = 0
+          proof
+          let d be real number;
+A26:       d is Real by XREAL_0:def 1;
+          then A27: d in dom f2 by A9;
+          then f2/.d = 0 by A10,A26;
+          hence f2.d = 0 by A27,FINSEQ_4:def 4;
+          end;
+        compreal.r-compreal.p
+        =(-1)*r - compreal.p by Lm14
+       .=(-1)*r -(-1)*p + 0 by Lm14
+       .=(-1)*r -(-1)*p + f2.(r-p) by A25
+       .=(-1)*(r-p) + f2.(r-p) by XCMPLX_1:40
+       .=-(r-p) + f2.(r-p) by XCMPLX_1:180
+       .=f1.(r-p) + f2.(r-p) by A22;
+       hence thesis;
+       end;
+     take ].p-1,p+1 .[;
+     thus thesis by A21,Lm15,RCOMP_1:def 7;
+    end;
+   then A28:f is_differentiable_in p by A1,A4,A11,FDIFF_1:def 5;
+   A29: for p be Element of REAL holds f1.p = - p
+           proof
+            let p be Element of REAL;
+            A30:  p in dom f1 by A2;
+            then f1/.p = -p by A3;
+            hence f1.p = -p by A30,FINSEQ_4:def 4;
+          end;
+     diff(f,p) = f1.1 by A1,A4,A11,A20,A28,FDIFF_1:def 6
+             .=-1 by A29;
+   hence thesis by A1,A4,A11,A20,FDIFF_1:def 5;
+end;
+
+ Lm17:
+ for f being PartFunc of REAL,REAL st f = compreal holds
+ exp*f is_differentiable_in p &
+ diff(exp*f,p) = (-1)*exp.(f.p)
+ proof
+  let f be PartFunc of REAL,REAL such that
+A1: f = compreal;
+ A2: exp is_differentiable_in f.p by SIN_COS:70;
+ A3: f is_differentiable_in p by A1,Lm16;
+   then diff(exp*f,p)
+  =diff(exp,f.p)*diff(f,p) by A2,FDIFF_2:13
+ .=diff(exp,f.p)*(-1) by A1,Lm16
+ .=exp.(f.p)*(-1) by SIN_COS:70;
+ hence thesis by A2,A3,FDIFF_2:13;
+ end;
+
+ Lm18:
+for f being PartFunc of REAL,REAL st f = compreal holds exp.((-1)*p)= (exp*f).p
+ proof
+  let f be PartFunc of REAL,REAL;
+   assume A1:f = compreal;
+ then exp.((-1)*p)
+ =exp.(f.p) by Lm14
+ .=(exp*f).p by A1,FUNCT_2:70;
+ hence thesis;
+ end;
+
+ Lm19:
+ for f being PartFunc of REAL,REAL st f = compreal holds
+ (exp-(exp*f)) is_differentiable_in p &
+ (exp+(exp*f)) is_differentiable_in p &
+ diff(exp-(exp*f),p)=exp.p+exp.(-p) &
+ diff(exp+(exp*f),p)=exp.p-exp.(-p)
+ proof
+  let f be PartFunc of REAL,REAL;
+  assume
+A1:  f = compreal;
+  then A2:
+  exp is_differentiable_in p & exp*f is_differentiable_in p
+    by Lm17,SIN_COS:70;
+  then A3:
+    diff(exp-(exp*f),p)
+   =diff(exp,p)-diff((exp*f),p) by FDIFF_1:22
+  .=exp.p-diff((exp*f),p) by SIN_COS:70
+  .=exp.p- (-1)*exp.(f.p) by A1,Lm17
+  .=exp.p- (-1)*exp.((-1)*p) by A1,Lm14
+  .=exp.p- (-1)*exp.(-p) by XCMPLX_1:180
+  .=exp.p- -exp.(-p) by XCMPLX_1:180
+  .=exp.p+exp.(-p) by XCMPLX_1:151;
+
+    diff(exp+(exp*f),p)
+   =diff(exp,p)+diff((exp*f),p) by A2,FDIFF_1:21
+  .=exp.p+diff((exp*f),p) by SIN_COS:70
+  .=exp.p+ (-1)*exp.(f.p) by A1,Lm17
+  .=exp.p+ (-1)*exp.((-1)*p) by A1,Lm14
+  .=exp.p+ (-1)*exp.(-p) by XCMPLX_1:180
+  .=exp.p+ -exp.(-p) by XCMPLX_1:180
+  .=exp.p-exp.(-p) by XCMPLX_0:def 8;
+  hence thesis by A2,A3,FDIFF_1:21,22;
+ end;
+
+ Lm20:
+ for f being PartFunc of REAL,REAL st f = compreal holds
+ (1/2)(#)(exp-exp*f) is_differentiable_in p &
+ diff(((1/2)(#)(exp-exp*f)),p) = (1/2)*diff((exp-(exp*f)),p)
+ proof
+  let f be PartFunc of REAL,REAL;
+  assume
+   f = compreal;
+then (exp-exp*f) is_differentiable_in p by Lm19;
+ hence thesis by FDIFF_1:23;
+ end;
+
+ Lm21:
+ for ff being PartFunc of REAL,REAL st ff = compreal holds
+  sinh.p=((1/2)(#)(exp-exp*ff)).p
+ proof
+  let ff be PartFunc of REAL,REAL such that
+A1:  ff = compreal;
+ reconsider p as Real;
+ A2: dom (exp - exp*ff) = dom exp /\ dom (exp*ff) &
+  for p be Real st p in dom (exp - exp*ff) holds
+  exp.(p) - (exp*ff).p = (exp - exp*ff).p by SEQ_1:def 4;
+ A3:dom (exp - exp*ff) = REAL
+  proof
+       dom (exp*ff) = REAL by A1,Lm15,RELAT_1:46,SIN_COS:51;
+     hence thesis by A2,SIN_COS:51;
+  end;
+ then A4:dom((1/2)(#)(exp-exp*ff))=REAL by SEQ_1:def 6;
+     sinh.p
+  =(exp.(p) - exp.(-p))/2 by Def1
+ .=(1/2)*(exp.(p) - exp.(-p)) by XCMPLX_1:100
+ .=(1/2)*(exp.(p) - exp.((-1)*p)) by XCMPLX_1:180
+ .=(1/2)*(exp.(p) - (exp*ff).p) by A1,Lm18
+ .=(1/2)*((exp - exp*ff).p) by A3,SEQ_1:def 4
+ .=((1/2)(#)(exp-exp*ff)).p by A4,SEQ_1:def 6;
+ hence thesis;
+ end;
+
+ Lm22:
+ for ff being PartFunc of REAL,REAL st ff = compreal holds
+ sinh = (1/2)(#)(exp-exp*ff)
+ proof
+   let ff be PartFunc of REAL,REAL such that
+A1:   ff = compreal;
+   A2: dom (exp - exp*ff) = dom exp /\ dom (exp*ff) &
+    for p be Real st p in dom (exp - exp*ff) holds
+    exp.(p) - (exp*ff).p = (exp - exp*ff).p by SEQ_1:def 4;
+    dom (exp - exp*ff) = REAL
+    proof
+      dom (exp*ff) = REAL by A1,Lm15,RELAT_1:46,SIN_COS:51;
+    hence thesis by A2,SIN_COS:51;
+    end;
+   then A3:REAL=dom(sinh) & REAL=dom((1/2)(#)(exp-exp*ff)) by Def1,SEQ_1:def 6;
+    for p being Element of REAL st p in REAL holds
+     sinh.p=((1/2)(#)(exp-exp*ff)).p by A1,Lm21;
+      hence
+    sinh=(1/2)(#)(exp-exp*ff) by A3,PARTFUN1:34;
+ thus thesis;
+ end;
+
+ theorem Th31:
+ sinh is_differentiable_in p & diff(sinh,p)=cosh.p
+ proof
+   reconsider ff = compreal as PartFunc of REAL,REAL;
+A1:sinh = (1/2)(#)(exp-exp*ff) by Lm22;
+     diff(sinh,p)
+  =diff( ((1/2)(#)(exp-exp*ff)),p ) by Lm22
+ .=(1/2)*diff((exp-(exp*ff)),p) by Lm20
+ .=(1/2)*( exp.p+exp.(-p) ) by Lm19
+ .=( exp.p+exp.(-p) )/2 by XCMPLX_1:100
+ .=cosh.p by Def3;
+ hence thesis by A1,Lm20;
+ end;
+
+ Lm23:
+ for ff being PartFunc of REAL,REAL st ff = compreal holds
+  (1/2)(#)(exp+exp*ff) is_differentiable_in p &
+  diff(((1/2)(#)(exp+exp*ff)),p) = (1/2)*diff((exp+(exp*ff)),p)
+  proof
+   let ff be PartFunc of REAL,REAL; assume
+     ff = compreal;
+  then (exp+exp*ff) is_differentiable_in p by Lm19;
+  hence thesis by FDIFF_1:23;
+  end;
+
+  Lm24:
+   for ff being PartFunc of REAL,REAL st ff = compreal holds
+   cosh.p=((1/2)(#)(exp+exp*ff)).p
+  proof
+   let ff be PartFunc of REAL,REAL such that
+A1:   ff = compreal;
+   reconsider p as Real;
+A2: dom (exp + exp*ff) = dom exp /\ dom (exp*ff) &
+   for p be Real st p in dom (exp + exp*ff) holds
+   exp.(p) + (exp*ff).p = (exp + exp*ff).p by SEQ_1:def 3;
+   A3:dom (exp + exp*ff) = REAL
+   proof
+     dom (exp*ff) = REAL by A1,Lm15,RELAT_1:46,SIN_COS:51;
+   hence thesis by A2,SIN_COS:51;
+   end;
+  then A4:dom((1/2)(#)(exp+exp*ff))=REAL by SEQ_1:def 6;
+      cosh.p
+   =(exp.(p) + exp.(-p))/2 by Def3
+  .=(1/2)*(exp.(p) + exp.(-p)) by XCMPLX_1:100
+  .=(1/2)*(exp.(p) + exp.((-1)*p)) by XCMPLX_1:180
+  .=(1/2)*(exp.(p) + (exp*ff).p) by A1,Lm18
+  .=(1/2)*((exp + exp*ff).p) by A3,SEQ_1:def 3
+  .=((1/2)(#)(exp+exp*ff)).p by A4,SEQ_1:def 6;
+  hence thesis;
+  end;
+
+
+  Lm25:
+  for ff being PartFunc of REAL,REAL st ff = compreal holds
+  cosh = (1/2)(#)(exp+exp*ff)
+  proof
+   let ff be PartFunc of REAL,REAL such that
+   A1: ff = compreal;
+   A2: dom (exp + exp*ff) = dom exp /\ dom (exp*ff) &
+     for p be Real st p in dom (exp + exp*ff) holds
+    exp.(p) + (exp*ff).p = (exp + exp*ff).p by SEQ_1:def 3;
+     dom (exp + exp*ff) = REAL
+     proof
+       dom (exp*ff) = REAL by A1,Lm15,RELAT_1:46,SIN_COS:51;
+     hence thesis by A2,SIN_COS:51;
+     end;
+   then A3:REAL=dom(cosh) & REAL=dom((1/2)(#)(exp+exp*ff)) by Def3,SEQ_1:def 6;
+     for p being Element of REAL st p in REAL holds
+      cosh.p=((1/2)(#)(exp+exp*ff)).p by A1,Lm24;
+    hence
+     cosh=(1/2)(#)(exp+exp*ff) by A3,PARTFUN1:34;
+    end;
+
+  theorem Th32:
+  cosh is_differentiable_in p & diff(cosh,p)=sinh.p
+  proof
+   reconsider ff = compreal as PartFunc of REAL,REAL;
+A1: cosh = (1/2)(#)(exp+exp*ff) by Lm25;
+      diff(cosh,p)
+   =diff( ((1/2)(#)(exp+exp*ff)),p ) by Lm25
+  .=(1/2)*diff((exp+(exp*ff)),p) by Lm23
+  .=(1/2)*( exp.p-exp.(-p) ) by Lm19
+  .=( exp.p-exp.(-p) )/2 by XCMPLX_1:100
+  .=sinh.p by Def1;
+  hence thesis by A1,Lm23;
+  end;
+
+ Lm26:
+  sinh/cosh is_differentiable_in p &
+  diff(sinh/cosh,p) = 1/(cosh.p)^2
+  proof
+  A1:cosh.p<>0 by Th15;
+  A2:sinh is_differentiable_in p by Th31;
+  A3:cosh is_differentiable_in p by Th32;
+    then diff(sinh/cosh,p)
+   =(diff(sinh,p) * cosh.p - diff(cosh,p)*sinh.p)/(cosh.p)^2
+        by A1,A2,FDIFF_2:14
+  .=((cosh.p)*(cosh.p) - diff(cosh,p) * sinh.p)/(cosh.p)^2 by Th31
+  .=( (cosh.p)*(cosh.p) - (sinh.p)*(sinh.p) )/(cosh.p)^2 by Th32
+  .=( (cosh.p)^2 - (sinh.p)*(sinh.p) )/(cosh.p)^2 by SQUARE_1:def 3
+  .=( (cosh.p)^2 - (sinh.p)^2 )/(cosh.p)^2 by SQUARE_1:def 3
+  .=1/(cosh.p)^2 by Th14;
+   hence thesis by A1,A2,A3,FDIFF_2:14;
+  end;
+
+  Lm27:
+  tanh=sinh/cosh
+  proof
+  A1: dom (sinh/cosh) = dom sinh /\ (dom cosh \ cosh"{0}) &
+       for p be Real st p in dom (sinh/cosh) holds
+       (sinh/cosh).p = sinh.p*(cosh.p)" by RFUNCT_1:def 4;
+    not(0 in rng(cosh))
+    proof
+    assume 0 in rng(cosh);
+    then consider p be Real such that
+    A2:p in dom(cosh) & 0=cosh.p by PARTFUN1:26;
+    thus contradiction by A2,Th15;
+    end;
+ then A3: cosh"{0}={} by FUNCT_1:142;
+   for p being Element of REAL st p in REAL holds
+     tanh.p=(sinh/cosh).p
+   proof
+   let p;
+      (sinh/cosh).p
+    =sinh.p*(cosh.p)" by A1,A3,Th30
+   .=(sinh.p)/(cosh.p) by XCMPLX_0:def 9
+   .=tanh.p by Th17;
+   hence thesis;
+   end;
+  hence
+    tanh=sinh/cosh by A1,A3,Th30,PARTFUN1:34;
+ thus thesis;
+ end;
+
+ theorem
+  tanh is_differentiable_in p & diff(tanh,p)=1/(cosh.p)^2
+ by Lm26,Lm27;
+
+ theorem Th34:
+   sinh is_differentiable_on REAL &
+   diff(sinh,p)=cosh.p
+  proof
+    REAL is open Subset of REAL &
+  REAL c= dom(sinh) &
+  for p be Real st p in REAL holds sinh is_differentiable_in p
+     by Def1,Th31,FCONT_3:4,SUBSET_1:def 4;
+  hence thesis by Th31,FDIFF_1:16;
+  end;
+
+ theorem Th35:
+  cosh is_differentiable_on REAL &
+  diff(cosh,p)=sinh.p
+  proof
+    REAL is open Subset of REAL &
+  REAL c=dom cosh &
+  for r be Real st r in REAL holds cosh is_differentiable_in r
+  by Def3,Th32,FCONT_3:4,SUBSET_1:def 4;
+  hence thesis by Th32,FDIFF_1:16;
+  end;
+
+ theorem Th36:
+  tanh is_differentiable_on REAL &
+  diff(tanh,p)=1/(cosh.p)^2
+  proof
+    REAL is open Subset of REAL &
+  for p be Real st p in REAL holds tanh is_differentiable_in p
+     by Lm26,Lm27,FCONT_3:4,SUBSET_1:def 4;
+   hence thesis by Lm26,Lm27,Th30,FDIFF_1:16;
+  end;
+
+ Lm28:
+ exp.p + exp.-p >= 2
+ proof
+ A1:exp.p >= 0 by SIN_COS:59;
+ A2: exp.-p>= 0 by SIN_COS:59;
+     2*sqrt((exp.p) * (exp.-p))
+  =2*sqrt(exp.(p+-p)) by Th12
+ .=2*sqrt(exp.0) by XCMPLX_0:def 6
+ .=2*1 by SIN_COS:56,def 27,SQUARE_1:83;
+ hence thesis by A1,A2,Th1;
+ end;
+
+ theorem
+   cosh.p >= 1
+ proof
+    (exp.p + exp.-p)>=2 by Lm28;
+ then (exp.p + exp.-p)/2 >= 2/2 by REAL_1:73;
+ hence thesis by Def3;
+ end;
+
+ theorem
+   sinh is_continuous_in p
+ proof
+    sinh is_differentiable_in p by Th31;
+ hence thesis by FDIFF_1:32;
+ end;
+
+ theorem
+   cosh is_continuous_in p
+ proof
+   cosh is_differentiable_in p by Th32;
+ hence thesis by FDIFF_1:32;
+ end;
+
+ theorem
+   tanh is_continuous_in p
+ proof
+   tanh is_differentiable_in p by Lm26,Lm27;
+ hence thesis by FDIFF_1:32;
+ end;
+
+ theorem
+   sinh is_continuous_on REAL by Th34,FDIFF_1:33;
+
+ theorem
+   cosh is_continuous_on REAL by Th35,FDIFF_1:33;
+
+ theorem
+   tanh is_continuous_on REAL by Th36,FDIFF_1:33;
+
+ theorem
+   tanh.p<1 & tanh.p>-1
+ proof
+  thus tanh.p<1
+  proof
+  assume tanh.p>=1;
+  then A1: (exp.p - exp.(-p))/(exp.p + exp.(-p))>=1 by Def5;
+    (exp.p + exp.-p) >= 2 by Lm28;
+  then (exp.p + exp.(-p))>=0 by AXIOMS:22;
+  then A2:(exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
+                    >=1*(exp.p + exp.(-p)) by A1,AXIOMS:25;
+    exp.p > 0 & exp.(-p) > 0 by SIN_COS:59;
+  then exp.p + exp.(-p) > 0+0 by REAL_1:67;
+  then (exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
+       =exp.p - exp.(-p) by XCMPLX_1:88;
+  then A3:(exp.p - exp.(-p))-exp.p
+        >= (exp.p + exp.(-p))-exp.p by A2,REAL_1:49;
+  A4: (exp.p - exp.(-p))-exp.p
+     =exp.p -exp.p - exp.(-p) by XCMPLX_1:21
+    .=0-exp.(-p) by XCMPLX_1:14
+    .=-exp.(-p) by XCMPLX_1:150;
+        (exp.p + exp.(-p))-exp.p
+     =exp.p -exp.p+ exp.(-p) by XCMPLX_1:29
+    .=0+exp.(-p) by XCMPLX_1:14
+    .=exp.(-p);
+  then A5: -exp.(-p)+exp.(-p) >= exp.(-p)+exp.(-p) by A3,A4,AXIOMS:24;
+    exp.(-p) > 0 & exp.(-p) > 0 by SIN_COS:59;
+  then exp.(-p) + exp.(-p) > 0+0 by REAL_1:67;
+  hence contradiction by A5,XCMPLX_0:def 6;
+  end;
+  assume tanh.p<=-1;
+  then A6: (exp.p - exp.(-p))/(exp.p + exp.(-p))<=-1 by Def5;
+    (exp.p + exp.-p) >= 2 by Lm28;
+  then (exp.p + exp.(-p))>=0 by AXIOMS:22;
+  then A7:(exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
+                    <=(-1)*(exp.p + exp.(-p)) by A6,AXIOMS:25;
+    exp.p > 0 & exp.(-p) > 0 by SIN_COS:59;
+  then exp.p + exp.(-p) > 0+0 by REAL_1:67;
+  then (exp.p - exp.(-p))/(exp.p + exp.(-p))*(exp.p + exp.(-p))
+       =exp.p - exp.(-p) by XCMPLX_1:88;
+  then exp.p - exp.(-p)<=-(exp.p + exp.(-p)) by A7,XCMPLX_1:180;
+  then exp.p - exp.(-p)<=-exp.p + -exp.(-p) by XCMPLX_1:140;
+  then A8:exp.p - exp.(-p)+exp.(-p)
+           <=-exp.p + -exp.(-p)+exp.(-p) by AXIOMS:24;
+  A9:exp.p - exp.(-p)+exp.(-p)
+    =exp.(-p) - exp.(-p)+exp.p by XCMPLX_1:30
+   .=0+exp.p by XCMPLX_1:14;
+      -exp.p + -exp.(-p)+exp.(-p)
+    =-exp.p + (-exp.(-p)+exp.(-p)) by XCMPLX_1:1
+   .=-exp.p +0 by XCMPLX_0:def 6;
+  then A10: exp.p+exp.p<=-exp.p+exp.p by A8,A9,AXIOMS:24;
+    exp.p > 0 & exp.p > 0 by SIN_COS:59;
+  then exp.p + exp.p > 0+0 by REAL_1:67;
+  hence contradiction by A10,XCMPLX_0:def 6;
+  end;

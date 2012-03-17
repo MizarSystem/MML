@@ -1,0 +1,195 @@
+:: Properties of Caratheodor's Measure
+::  by J\'ozef Bia{\l}as
+::
+:: Received June 25, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary SUPINF_1, MEASURE1, RLVECT_1, ARYTM_3, ARYTM_1, SETFAM_1, FUNCT_1,
+      BOOLE, TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0,
+      RELAT_1, FUNCT_1, FUNCT_2, REAL_1, NAT_1, SETFAM_1, SUPINF_1, SUPINF_2,
+      MEASURE1, MEASURE3;
+ constructors ENUMSET1, NAT_1, REAL_1, SUPINF_2, PROB_2, MEASURE3, MEMBERED,
+      XBOOLE_0;
+ clusters SUBSET_1, FUNCT_1, SUPINF_1, MEASURE1, RELSET_1, NAT_1, MEMBERED,
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Some theorems about R_eal numbers
+
+ reserve x,y,z for R_eal,
+         A,B,X for set,
+         S for sigma_Field_Subset of X;
+
+theorem :: MEASURE4:1
+   0.<=' x & 0.<=' y & 0.<=' z implies (x + y) + z = x + (y + z);
+
+theorem :: MEASURE4:2
+   (not x = -infty & not x = +infty) implies (y + x <=' z iff y <=' z - x);
+
+theorem :: MEASURE4:3
+     (0. <=' x & 0. <=' y) implies x + y = y + x;
+
+:: Some additional theorems about measures and functions
+
+theorem :: MEASURE4:4
+   for S being non empty Subset-Family of X,
+       F, G being Function of NAT,S,
+       A being Element of S st
+   for n being Element of NAT holds G.n = A /\ F.n holds
+   union rng G = A /\ union rng F;
+
+theorem :: MEASURE4:5
+   for S being non empty Subset-Family of X
+   for F, G being Function of NAT,S st
+   (G.0 = F.0 &
+   for n being Element of NAT holds G.(n+1) = F.(n+1) \/ G.n) holds
+   for H being Function of NAT,S st
+   (H.0 = F.0 &
+   for n being Element of NAT holds H.(n+1) = F.(n+1) \ G.n) holds
+   union rng F = union rng H;
+
+theorem :: MEASURE4:6
+   bool X is sigma_Field_Subset of X;
+
+definition let X be set;
+   let F be Function of NAT,bool X;
+   redefine func rng F -> Subset-Family of X;
+end;
+
+definition let X be set;
+   let A be Subset-Family of X;
+   redefine func union A -> Element of bool X;
+end;
+
+definition let Y be set; let X,Z be non empty set;
+   let F be Function of Y,X;
+   let M be Function of X,Z;
+  redefine func M*F -> Function of Y,Z;
+end;
+
+theorem :: MEASURE4:7
+   for a,b being R_eal holds
+   ex M being Function of bool X,ExtREAL st
+   for A being Element of bool X holds
+   ((A = {} implies M.A = a) & (A <> {} implies M.A = b));
+
+theorem :: MEASURE4:8
+   ex M being Function of bool X,ExtREAL st
+   for A being Element of bool X holds M.A = 0.;
+
+canceled 2;
+
+theorem :: MEASURE4:11
+   ex M being Function of bool X,ExtREAL st
+   M is nonnegative & M.{} = 0. &
+   for A,B being Element of bool X st A c= B holds M.A <=' M.B &
+   for F being Function of NAT,bool X holds
+   M.(union rng F) <=' SUM(M*F);
+
+definition let X be set;
+ canceled;
+
+  mode C_Measure of X -> Function of bool X,ExtREAL means
+:: MEASURE4:def 2
+it is nonnegative &
+       it.{} = 0. &
+       for A,B being Element of bool X st A c= B holds it.A <=' it.B &
+       for F being Function of NAT,bool X holds
+       it.(union rng F) <=' SUM(it*F);
+end;
+
+ reserve C for C_Measure of X;
+
+definition let X be set;
+   let C be C_Measure of X;
+  func sigma_Field(C) -> non empty Subset-Family of X means
+:: MEASURE4:def 3
+for A being Element of bool X holds
+      (A in it iff for W,Z being Element of bool X holds
+      (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)));
+end;
+
+theorem :: MEASURE4:12
+   for W,Z being Element of bool X holds
+   C.(W \/ Z) <=' C.W + C.Z;
+
+theorem :: MEASURE4:13
+     for W,Z being Element of bool X holds C.Z + C.W = C.W + C.Z;
+
+theorem :: MEASURE4:14
+   for A being Element of bool X holds
+   (A in sigma_Field(C) iff for W,Z being Element of bool X holds
+   (W c= A & Z c= X \ A implies C.W + C.Z = C.(W \/ Z)));
+
+theorem :: MEASURE4:15
+   for W,Z being Element of bool X holds
+   (W in sigma_Field(C) & Z in sigma_Field(C) & Z misses W) implies
+   C.(W \/ Z) = C.W + C.Z;
+
+theorem :: MEASURE4:16
+   A in sigma_Field(C) implies X \ A in sigma_Field(C);
+
+theorem :: MEASURE4:17
+   A in sigma_Field(C) & B in sigma_Field(C) implies A \/ B in sigma_Field(C);
+
+theorem :: MEASURE4:18
+   A in sigma_Field(C) & B in sigma_Field(C) implies A /\ B in sigma_Field(C);
+
+theorem :: MEASURE4:19
+   A in sigma_Field(C) & B in sigma_Field(C) implies A \ B in sigma_Field(C);
+
+theorem :: MEASURE4:20
+   for N being Function of NAT,S holds
+   for A being Element of S holds
+   ex F being Function of NAT,S st
+   for n being Element of NAT holds F.n = A /\ N.n;
+
+theorem :: MEASURE4:21
+   sigma_Field(C) is sigma_Field_Subset of X;
+
+definition let X be set;
+   let C be C_Measure of X;
+   cluster sigma_Field(C) -> sigma_Field_Subset-like compl-closed non empty;
+end;
+
+definition let X be set;
+   let S be sigma_Field_Subset of X;
+   let A be N_Sub_fam of S;
+   redefine func union A -> Element of S;
+end;
+
+definition let X be set;
+   let C be C_Measure of X;
+  func sigma_Meas(C) -> Function of sigma_Field(C),ExtREAL means
+:: MEASURE4:def 4
+for A being Element of bool X st A in sigma_Field(C) holds it.A = C.A;
+end;
+
+theorem :: MEASURE4:22
+   sigma_Meas(C) is Measure of sigma_Field(C);
+
+definition let X be set;
+   let C be C_Measure of X;
+   let A be Element of sigma_Field(C);
+   redefine func C.A -> R_eal;
+end;
+
+theorem :: MEASURE4:23
+   sigma_Meas(C) is sigma_Measure of sigma_Field(C);
+
+definition let X be set;
+   let C be C_Measure of X;
+   redefine func sigma_Meas(C) -> sigma_Measure of sigma_Field(C);
+end;
+
+theorem :: MEASURE4:24
+   for A being Element of bool X holds
+   C.A = 0. implies A in sigma_Field(C);
+
+theorem :: MEASURE4:25
+     sigma_Meas(C) is_complete sigma_Field(C);
+

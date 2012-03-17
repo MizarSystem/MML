@@ -1,0 +1,680 @@
+:: Relations and Their Basic Properties
+::  by Edmund Woronowicz
+::
+:: Received March 15, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary BOOLE, TARSKI, RELAT_1, ZF_REFLE, FUNCT_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1;
+ constructors TARSKI, SUBSET_1, XBOOLE_0;
+ clusters XBOOLE_0, SUBSET_1, ZFMISC_1;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+reserve A,X,X1,X2,Y,Y1,Y2,a,b,c,d,x,y,z for set;
+
+definition let IT be set;
+ attr IT is Relation-like means
+:: RELAT_1:def 1
+  x in IT implies ex y,z st x = [y,z];
+end;
+
+definition
+ cluster Relation-like empty set;
+end;
+
+definition
+ mode Relation is Relation-like set;
+end;
+
+reserve P,P1,P2,Q,R,S for Relation;
+
+canceled 2;
+
+theorem :: RELAT_1:3
+  A c= R implies A is Relation-like;
+
+theorem :: RELAT_1:4
+    {[x,y]} is Relation-like;
+
+theorem :: RELAT_1:5
+    {[a,b],[c,d]} is Relation-like;
+
+theorem :: RELAT_1:6
+    [:X,Y:] is Relation-like;
+
+scheme Rel_Existence{A,B() -> set, P[set,set]}:
+  ex R being Relation st
+   for x,y holds [x,y] in R iff x in A() & y in B() & P[x,y];
+
+definition let P,R;
+ redefine pred P = R means
+:: RELAT_1:def 2
+  for a,b holds [a,b] in P iff [a,b] in R;
+end;
+
+definition let P,R;
+ cluster P /\ R -> Relation-like;
+
+ cluster P \/ R -> Relation-like;
+
+ cluster P \ R -> Relation-like;
+end;
+
+definition let P,R;
+ redefine pred P c= R means
+:: RELAT_1:def 3
+ for a,b holds [a,b] in P implies [a,b] in R;
+end;
+
+canceled 2;
+
+theorem :: RELAT_1:9
+  X /\ R is Relation;
+
+theorem :: RELAT_1:10
+    R \ X is Relation;
+
+
+::             DOMAIN OF RELATION
+::             __________________
+
+definition let R;
+   func dom R -> set means
+:: RELAT_1:def 4
+ x in it iff ex y st [x,y] in R;
+ end;
+
+canceled 2;
+
+theorem :: RELAT_1:13
+  dom(P \/ R) = dom P \/ dom R;
+
+theorem :: RELAT_1:14
+  dom(P /\ R) c= dom P /\ dom R;
+
+theorem :: RELAT_1:15
+    dom P \ dom R c= dom(P \ R);
+
+::            CODOMAIN OF RELATION
+::            ____________________
+
+definition let R;
+  func rng R -> set means
+:: RELAT_1:def 5
+ y in it iff ex x st [x,y] in R;
+end;
+
+canceled 2;
+
+theorem :: RELAT_1:18
+    x in dom R implies ex y st y in rng R;
+
+theorem :: RELAT_1:19
+    y in rng R implies ex x st x in dom R;
+
+theorem :: RELAT_1:20
+    [x,y] in R implies x in dom R & y in rng R;
+
+theorem :: RELAT_1:21
+  R c= [:dom R, rng R:];
+
+theorem :: RELAT_1:22
+    R /\ [:dom R, rng R:] = R;
+
+theorem :: RELAT_1:23
+  R = {[x,y]} implies dom R = {x} & rng R = {y};
+
+theorem :: RELAT_1:24
+    R = {[a,b],[x,y]} implies dom R = {a,x} & rng R = {b,y};
+
+theorem :: RELAT_1:25
+  P c= R implies dom P c= dom R & rng P c= rng R;
+
+theorem :: RELAT_1:26
+  rng(P \/ R) = rng P \/ rng R;
+
+theorem :: RELAT_1:27
+  rng(P /\ R) c= rng P /\ rng R;
+
+theorem :: RELAT_1:28
+    rng P \ rng R c= rng(P \ R);
+
+::                  FIELD OF RELATION
+::                  _________________
+
+definition let R;
+  func field R -> set equals
+:: RELAT_1:def 6
+ dom R \/ rng R;
+end;
+
+theorem :: RELAT_1:29
+  dom R c= field R & rng R c= field R;
+
+theorem :: RELAT_1:30
+    [a,b] in R implies a in field R & b in field R;
+
+theorem :: RELAT_1:31
+    P c= R implies field P c= field R;
+
+theorem :: RELAT_1:32
+    R = {[x,y]} implies field R = {x,y};
+
+theorem :: RELAT_1:33
+    field(P \/ R) = field P \/ field R;
+
+theorem :: RELAT_1:34
+    field(P /\ R) c= field P /\ field R;
+
+
+::                  CONVERSE RELATION
+::                  _________________
+
+ definition
+  let R;
+   func R~ -> Relation means
+:: RELAT_1:def 7
+ [x,y] in it iff [y,x] in R;
+ involutiveness;
+end;
+
+canceled 2;
+
+theorem :: RELAT_1:37
+   rng R = dom(R~) & dom R = rng(R~);
+
+theorem :: RELAT_1:38
+    field R = field(R~);
+
+theorem :: RELAT_1:39
+    (P /\ R)~ = P~ /\ R~;
+
+theorem :: RELAT_1:40
+    (P \/ R)~ = P~ \/ R~;
+
+theorem :: RELAT_1:41
+    (P \ R)~ = P~ \ R~;
+
+
+::               COMPOSITION OF RELATIONS
+::               ________________________
+
+definition
+ let P,R;
+   func P*R -> Relation means
+:: RELAT_1:def 8
+ [x,y] in it iff ex z st [x,z] in P & [z,y] in R;
+end;
+
+canceled 2;
+
+theorem :: RELAT_1:44
+  dom(P*R) c= dom P;
+
+theorem :: RELAT_1:45
+  rng(P*R) c= rng R;
+
+theorem :: RELAT_1:46
+    rng R c= dom P implies dom(R*P)=dom R;
+
+theorem :: RELAT_1:47
+    dom P c= rng R implies rng(R*P)=rng P;
+
+theorem :: RELAT_1:48
+  P c= R implies Q*P c= Q*R;
+
+theorem :: RELAT_1:49
+  P c= Q implies P*R c= Q*R;
+
+theorem :: RELAT_1:50
+    P c= R & Q c= S implies P*Q c= R*S;
+
+theorem :: RELAT_1:51
+    P*(R \/ Q) = (P*R) \/ (P*Q);
+
+theorem :: RELAT_1:52
+    P*(R /\ Q) c= (P*R) /\ (P*Q);
+
+theorem :: RELAT_1:53
+    (P*R) \ (P*Q) c= P*(R \ Q);
+
+theorem :: RELAT_1:54
+    (P*R)~ = R~*P~;
+
+theorem :: RELAT_1:55
+  (P*R)*Q = P*(R*Q);
+
+
+::               EMPTY RELATION
+::               ______________
+
+definition
+ cluster empty -> Relation-like set;
+end;
+
+definition
+ cluster {} -> Relation-like;
+end;
+
+definition
+  cluster non empty Relation;
+end;
+
+definition
+ let f be non empty Relation;
+ cluster dom f -> non empty;
+ cluster rng f -> non empty;
+end;
+
+theorem :: RELAT_1:56
+ (for x,y holds not [x,y] in R) implies R = {};
+
+canceled 3;
+
+theorem :: RELAT_1:60
+  dom {} = {} & rng {} = {};
+
+canceled;
+
+theorem :: RELAT_1:62
+  {}*R = {} & R*{} = {};
+
+definition let X be empty set;
+ cluster dom X -> empty;
+ cluster rng X -> empty;
+ let R;
+ cluster X*R -> empty;
+ cluster R*X -> empty;
+end;
+
+theorem :: RELAT_1:63
+    R*{} = {}*R;
+
+theorem :: RELAT_1:64
+  dom R = {} or rng R = {} implies R = {};
+
+theorem :: RELAT_1:65
+    dom R = {} iff rng R = {};
+
+theorem :: RELAT_1:66
+  {}~ = {};
+
+definition let X be empty set;
+ cluster X~ -> empty;
+end;
+
+theorem :: RELAT_1:67
+    rng R misses dom P implies R*P = {};
+
+definition let R be Relation;
+  attr R is non-empty means
+:: RELAT_1:def 9
+     not {} in rng R;
+end;
+
+::             IDENTITY RELATION
+::             _________________
+
+ definition let X;
+   func id X -> Relation means
+:: RELAT_1:def 10
+ [x,y] in it iff x in X & x = y;
+end;
+
+canceled 3;
+
+theorem :: RELAT_1:71
+  dom id X = X & rng id X = X;
+
+theorem :: RELAT_1:72
+    (id X)~ = id X;
+
+theorem :: RELAT_1:73
+    (for x st x in X holds [x,x] in R) implies id X c=R;
+
+theorem :: RELAT_1:74
+  [x,y] in (id X)*R iff x in X & [x,y] in R;
+
+theorem :: RELAT_1:75
+  [x,y] in R*id Y iff y in Y & [x,y] in R;
+
+theorem :: RELAT_1:76
+  R*(id X) c= R & (id X)*R c= R;
+
+theorem :: RELAT_1:77
+  dom R c= X implies (id X)*R = R;
+
+theorem :: RELAT_1:78
+    (id dom R)*R = R;
+
+theorem :: RELAT_1:79
+  rng R c= Y implies R*(id Y) = R;
+
+theorem :: RELAT_1:80
+    R*(id rng R) = R;
+
+theorem :: RELAT_1:81
+    id {} = {};
+
+theorem :: RELAT_1:82
+    dom R = X & rng P2 c= X & P2*R = id(dom P1) & R*P1 = id X
+    implies P1 =P2;
+
+definition let R,X;
+  func R|X -> Relation means
+:: RELAT_1:def 11
+ [x,y] in it iff x in X & [x,y] in R;
+end;
+
+canceled 3;
+
+theorem :: RELAT_1:86
+  x in dom(R|X) iff x in X & x in dom R;
+
+theorem :: RELAT_1:87
+    dom(R|X) c= X;
+
+theorem :: RELAT_1:88
+  R|X c= R;
+
+theorem :: RELAT_1:89
+    dom(R|X) c= dom R;
+
+theorem :: RELAT_1:90
+  dom(R|X) = dom R /\ X;
+
+theorem :: RELAT_1:91
+    X c= dom R implies dom(R|X) = X;
+
+theorem :: RELAT_1:92
+    (R|X)*P c= R*P;
+
+theorem :: RELAT_1:93
+    P*(R|X) c= P*R;
+
+theorem :: RELAT_1:94
+    R|X = (id X)*R;
+
+theorem :: RELAT_1:95
+    R|X = {} iff dom R misses X;
+
+theorem :: RELAT_1:96
+  R|X = R /\ [:X,rng R:];
+
+theorem :: RELAT_1:97
+  dom R c= X implies R|X = R;
+
+theorem :: RELAT_1:98
+    R|dom R = R;
+
+theorem :: RELAT_1:99
+    rng(R|X) c= rng R;
+
+theorem :: RELAT_1:100
+  (R|X)|Y = R|(X /\ Y);
+
+theorem :: RELAT_1:101
+    (R|X)|X = R|X;
+
+theorem :: RELAT_1:102
+    X c= Y implies (R|X)|Y = R|X;
+
+theorem :: RELAT_1:103
+    Y c= X implies (R|X)|Y = R|Y;
+
+theorem :: RELAT_1:104
+  X c= Y implies R|X c= R|Y;
+
+theorem :: RELAT_1:105
+  P c= R implies P|X c= R|X;
+
+theorem :: RELAT_1:106
+    P c= R & X c= Y implies P|X c= R|Y;
+
+theorem :: RELAT_1:107
+    R|(X \/ Y) = (R|X) \/ (R|Y);
+
+theorem :: RELAT_1:108
+    R|(X /\ Y) = (R|X) /\ (R|Y);
+
+theorem :: RELAT_1:109
+    R|(X \ Y) = R|X \ R|Y;
+
+theorem :: RELAT_1:110
+    R|{} = {};
+
+theorem :: RELAT_1:111
+    {}|X = {};
+
+theorem :: RELAT_1:112
+    (P*R)|X = (P|X)*R;
+
+definition let Y,R;
+ func Y|R -> Relation means
+:: RELAT_1:def 12
+ [x,y] in it iff y in Y & [x,y] in R;
+end;
+
+canceled 2;
+
+theorem :: RELAT_1:115
+  y in rng(Y|R) iff y in Y & y in rng R;
+
+theorem :: RELAT_1:116
+  rng(Y|R) c= Y;
+
+theorem :: RELAT_1:117
+  Y|R c= R;
+
+theorem :: RELAT_1:118
+  rng(Y|R) c= rng R;
+
+theorem :: RELAT_1:119
+  rng(Y|R) = rng R /\ Y;
+
+theorem :: RELAT_1:120
+    Y c= rng R implies rng(Y|R) = Y;
+
+theorem :: RELAT_1:121
+    (Y|R)*P c= R*P;
+
+theorem :: RELAT_1:122
+    P*(Y|R) c= P*R;
+
+theorem :: RELAT_1:123
+    Y|R = R*(id Y);
+
+theorem :: RELAT_1:124
+  Y|R = R /\ [:dom R,Y:];
+
+theorem :: RELAT_1:125
+  rng R c= Y implies Y|R = R;
+
+theorem :: RELAT_1:126
+    rng R|R=R;
+
+theorem :: RELAT_1:127
+   Y|(X|R) = (Y /\ X)|R;
+
+theorem :: RELAT_1:128
+    Y|(Y|R) = Y|R;
+
+theorem :: RELAT_1:129
+    X c= Y implies Y|(X|R) = X|R;
+
+theorem :: RELAT_1:130
+    Y c= X implies Y|(X|R) = Y|R;
+
+theorem :: RELAT_1:131
+  X c= Y implies X|R c= Y|R;
+
+theorem :: RELAT_1:132
+  P1 c= P2 implies Y|P1 c= Y|P2;
+
+theorem :: RELAT_1:133
+    P1 c= P2 & Y1 c= Y2 implies Y1|P1 c= Y2|P2;
+
+theorem :: RELAT_1:134
+    (X \/ Y)|R = (X|R) \/ (Y|R);
+
+theorem :: RELAT_1:135
+    (X /\ Y)|R = X|R /\ Y|R;
+
+theorem :: RELAT_1:136
+    (X \ Y)|R = X|R \ Y|R;
+
+theorem :: RELAT_1:137
+    {}|R = {};
+
+theorem :: RELAT_1:138
+    Y|{} = {};
+
+theorem :: RELAT_1:139
+    Y|(P*R) = P*(Y|R);
+
+theorem :: RELAT_1:140
+    (Y|R)|X = Y|(R|X);
+
+::           IMAGE OF SET IN RELATION
+::           ________________________
+
+definition let R,X;
+  func R.:X -> set means
+:: RELAT_1:def 13
+  y in it iff ex x st [x,y] in R & x in X;
+end;
+
+canceled 2;
+
+theorem :: RELAT_1:143
+  y in R.:X iff ex x st x in dom R & [x,y] in R & x in X;
+
+theorem :: RELAT_1:144
+  R.:X c= rng R;
+
+theorem :: RELAT_1:145
+    R.:X = R.:(dom R /\ X);
+
+theorem :: RELAT_1:146
+  R.:dom R = rng R;
+
+theorem :: RELAT_1:147
+    R.:X c= R.:(dom R);
+
+theorem :: RELAT_1:148
+    rng(R|X) = R.:X;
+
+theorem :: RELAT_1:149
+    R.:{} = {};
+
+theorem :: RELAT_1:150
+    {}.:X = {};
+
+theorem :: RELAT_1:151
+    R.:X = {} iff dom R misses X;
+
+theorem :: RELAT_1:152
+    X <> {} & X c= dom R implies R.:X <> {};
+
+theorem :: RELAT_1:153
+    R.:(X \/ Y) = R.:X \/ R.:Y;
+
+theorem :: RELAT_1:154
+    R.:(X /\ Y) c= R.:X /\ R.:Y;
+
+theorem :: RELAT_1:155
+    R.:X \ R.:Y c= R.:(X \ Y);
+
+theorem :: RELAT_1:156
+  X c= Y implies R.:X c= R.:Y;
+
+theorem :: RELAT_1:157
+  P c= R implies P.:X c= R.:X;
+
+theorem :: RELAT_1:158
+    P c= R & X c= Y implies P.:X c= R.:Y;
+
+theorem :: RELAT_1:159
+    (P*R).:X=R.:(P.:X);
+
+theorem :: RELAT_1:160
+    rng(P*R) = R.:(rng P);
+
+theorem :: RELAT_1:161
+    (R|X).:Y c= R.:Y;
+
+canceled;
+
+theorem :: RELAT_1:163
+    (dom R) /\ X c= (R~).:(R.:X);
+
+::          INVERSE IMAGE OF SET IN RELATION
+::          ________________________________
+
+definition
+ let R,Y;
+  func R"Y -> set means
+:: RELAT_1:def 14
+ x in it iff ex y st [x,y] in R & y in Y;
+end;
+
+canceled 2;
+
+theorem :: RELAT_1:166
+  x in R"Y iff ex y st y in rng R & [x,y] in R & y in Y;
+
+theorem :: RELAT_1:167
+  R"Y c= dom R;
+
+theorem :: RELAT_1:168
+    R"Y = R"(rng R /\ Y);
+
+theorem :: RELAT_1:169
+  R"rng R = dom R;
+
+theorem :: RELAT_1:170
+    R"Y c= R"rng R;
+
+theorem :: RELAT_1:171
+    R"{} = {};
+
+theorem :: RELAT_1:172
+    {}"Y = {};
+
+theorem :: RELAT_1:173
+    R"Y = {} iff rng R misses Y;
+
+theorem :: RELAT_1:174
+    Y <> {} & Y c= rng R implies R"Y <> {};
+
+theorem :: RELAT_1:175
+    R"(X \/ Y) = R"X \/ R"Y;
+
+theorem :: RELAT_1:176
+    R"(X /\ Y) c= R"X /\ R"Y;
+
+theorem :: RELAT_1:177
+    R"X \ R"Y c= R"(X \ Y);
+
+theorem :: RELAT_1:178
+  X c= Y implies R"X c= R"Y;
+
+theorem :: RELAT_1:179
+  P c= R implies P"Y c= R"Y;
+
+theorem :: RELAT_1:180
+    P c= R & X c= Y implies P"X c= R"Y;
+
+theorem :: RELAT_1:181
+    (P*R)"Y = P"(R"Y);
+
+theorem :: RELAT_1:182
+    dom(P*R) = P"(dom R);
+
+theorem :: RELAT_1:183
+    (rng R) /\ Y c= (R~)"(R"Y);

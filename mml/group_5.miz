@@ -1,0 +1,1981 @@
+:: Commutator and Center of a Group
+::  by Wojciech A. Trybulec
+::
+:: Received May 15, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary INT_1, REALSET1, GROUP_2, GROUP_3, FINSEQ_1, GROUP_1, RELAT_1,
+      LATTICES, BINOP_1, FUNCT_1, BOOLE, QC_LANG1, RCOMP_1, ARYTM_1, GROUP_4,
+      RLSUB_1, VECTSP_1, SUBSET_1, FINSET_1, CARD_1, TARSKI, GROUP_5, CARD_3,
+      FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NAT_1, STRUCT_0, XCMPLX_0, FUNCT_1,
+      CARD_1, FINSEQ_1, FINSET_1, FINSEQ_4, INT_1, RLVECT_1, VECTSP_1, GROUP_1,
+      GROUP_2, GROUP_3, GROUP_4, DOMAIN_1;
+ constructors REAL_1, GROUP_4, DOMAIN_1, NAT_1, FINSEQ_4, MEMBERED, XBOOLE_0;
+ clusters CARD_1, INT_1, GROUP_1, GROUP_2, GROUP_3, RELSET_1, STRUCT_0,
+      MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET;
+ definitions TARSKI, VECTSP_1, XBOOLE_0;
+ theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, GROUP_1, GROUP_2,
+      GROUP_3, GROUP_4, TARSKI, ZFMISC_1, RLVECT_1, VECTSP_1, XBOOLE_0,
+      XBOOLE_1;
+ schemes COMPLSP1, FINSEQ_2, DOMAIN_1;
+
+begin :: Preliminaries.
+
+scheme SubsetFD3{C,D,E() -> non empty set,
+    F(set,set,set) -> Element of D(), P[set,set,set]}:
+ {F(c,d,e) where c is Element of C(),d is Element of D(),
+                 e is Element of E() : P[c,d,e]} is Subset of D()
+ proof
+    set A = {F(a,b,c) where a is Element of C(), b is Element of D(),
+                            c is Element of E() : P[a,b,c]};
+       A c= D()
+      proof let x be set;
+        assume x in A;
+         then ex a being Element of C(), b being Element of D(),
+                 c being Element of E() st x = F(a,b,c) & P[a,b,c];
+       hence thesis;
+      end;
+  hence thesis;
+ end;
+
+ reserve x,y for set,
+         k,n for Nat,
+         i for Integer,
+         G for Group,
+         a,b,c,d,e for Element of G,
+         A,B,C,D for Subset of G,
+         H,H1,H2,H3,H4 for Subgroup of G,
+         N1,N2 for normal Subgroup of G,
+         F,F1,F2 for FinSequence of the carrier of G,
+         I,I1,I2 for FinSequence of INT;
+
+theorem Th1:
+ x in (1).G iff x = 1.G
+  proof
+   thus x in (1).G implies x = 1.G
+    proof assume x in (1).G;
+      then x in the carrier of (1).G by RLVECT_1:def 1;
+      then x in {1.G} by GROUP_2:def 7;
+     hence thesis by TARSKI:def 1;
+    end;
+   thus thesis by GROUP_2:55;
+  end;
+
+theorem
+   a in H & b in H implies a |^ b in H
+  proof assume a in H & b in H;
+    then b" in H & a * b in H by GROUP_2:59,60;
+    then b " * (a * b) in H by GROUP_2:59;
+   hence thesis by GROUP_3:20;
+  end;
+
+theorem Th3:
+ for N being strict normal Subgroup of G
+ holds a in N implies a |^ b in N
+  proof let N be strict normal Subgroup of G;
+   assume a in N;
+    then a |^ b in N |^ b by GROUP_3:70;
+   hence thesis by GROUP_3:def 13;
+  end;
+
+theorem Th4:
+ x in H1 * H2 iff ex a,b st x = a * b & a in H1 & b in H2
+  proof
+   thus x in H1 * H2 implies ex a,b st x = a * b & a in H1 & b in H2
+    proof assume x in H1 * H2;
+     then x in carr H1 * H2 by GROUP_4:57;
+     then consider a,b such that A1: x = a * b & a in carr H1 & b in H2
+                                                              by GROUP_2:114;
+       a in H1 by A1,GROUP_2:88;
+     hence thesis by A1;
+    end;
+    given a,b such that A2: x = a * b & a in H1 & b in H2;
+       b in carr H2 by A2,GROUP_2:88;
+     then x in H1 * carr H2 by A2,GROUP_2:115;
+   hence thesis by GROUP_4:57;
+  end;
+
+theorem Th5:
+ H1 * H2 = H2 * H1 implies
+  (x in H1 "\/" H2 iff ex a,b st x = a * b & a in H1 & b in H2)
+   proof assume A1: H1 * H2 = H2 * H1;
+    thus x in H1 "\/" H2 implies ex a,b st x = a * b & a in H1 & b in H2
+     proof assume x in H1 "\/" H2;
+       then x in the carrier of H1 "\/" H2 by RLVECT_1:def 1;
+       then x in H1 * H2 by A1,GROUP_4:69;
+      hence thesis by Th4;
+     end;
+     given a,b such that A2: x = a * b & a in H1 & b in H2;
+        x in H1 * H2 by A2,Th4;
+      then x in the carrier of H1 "\/" H2 by A1,GROUP_4:69;
+    hence thesis by RLVECT_1:def 1;
+   end;
+
+theorem
+   G is commutative Group implies
+  (x in H1 "\/" H2 iff ex a,b st x = a * b & a in H1 & b in H2)
+   proof assume G is commutative Group;
+     then H1 * H2 = H2 * H1 by GROUP_4:65;
+    hence thesis by Th5;
+   end;
+
+theorem Th7:
+ for N1,N2 being strict normal Subgroup of G
+ holds x in N1 "\/" N2 iff ex a,b st x = a * b & a in N1 & b in N2
+  proof let N1,N2 be strict normal Subgroup of G;
+      N1 * N2 = N2 * N1 by GROUP_4:64;
+   hence thesis by Th5;
+  end;
+
+theorem
+   for N being normal Subgroup of G holds
+ H * N = N * H
+  proof let N be normal Subgroup of G;
+   thus H * N = carr H * N by GROUP_4:57
+             .= N * carr H by GROUP_3:143
+             .= N * H by GROUP_4:57;
+  end;
+
+Lm1: for E being non empty set, p,q being FinSequence of E st
+ k in dom p holds (p ^ q)/.k = p/.k
+  proof let E be non empty set, p,q be FinSequence of E;
+    assume A1:k in dom p;
+     then k in dom(p ^ q) by FINSEQ_3:24;
+   hence (p ^ q)/.k = (p ^ q).k by FINSEQ_4:def 4
+                   .= p.k by A1,FINSEQ_1:def 7
+                   .= p/.k by A1,FINSEQ_4:def 4;
+  end;
+
+Lm2: for E being non empty set, p,q being FinSequence of E st
+ k in dom q holds (p ^ q)/.(len p + k) = q/.k
+  proof let E be non empty set, p,q be FinSequence of E;
+    assume A1: k in dom q;
+     then len p + k in dom(p ^ q) by FINSEQ_1:41;
+   hence (p ^ q)/.(len p + k) = (p ^ q).(len p + k) by FINSEQ_4:def 4
+                           .= q.k by A1,FINSEQ_1:def 7
+                           .= q/.k by A1,FINSEQ_4:def 4;
+  end;
+
+definition let G,F,a;
+ func F |^ a -> FinSequence of the carrier of G means
+  :Def1: len it = len F &
+        for k st k in dom F holds it.k = (F/.k) |^ a;
+ existence
+  proof
+A1: Seg len F = dom F by FINSEQ_1:def 3;
+    deffunc F(Nat) = (F/.$1) |^ a;
+      ex F1 st len F1 = len F &
+     for k st k in Seg len F holds F1.k = F(k) from SeqLambdaD;
+   hence thesis by A1;
+  end;
+ correctness
+  proof let F1,F2;
+    assume that A2: len F1 = len F and
+                A3: for k st k in dom F holds F1.k = (F/.k) |^ a and
+                A4: len F2 = len F and
+                A5: for k st k in dom F holds F2.k = (F/.k) |^ a;
+       now let k;
+       assume k in Seg len F;
+       then A6: k in dom F by FINSEQ_1:def 3;
+      hence F1.k = (F/.k) |^ a by A3
+                .= F2.k by A5,A6;
+     end;
+   hence thesis by A2,A4,FINSEQ_2:10;
+  end;
+end;
+
+canceled 3;
+
+theorem Th12:
+ (F1 |^ a) ^ (F2 |^ a) = (F1 ^ F2) |^ a
+  proof A1:  len(F1 |^ a) + len(F2 |^ a) = len F1 + len(F2 |^ a) by Def1
+                                      .= len F1 + len F2 by Def1
+                                      .= len(F1 ^ F2) by FINSEQ_1:35
+                                      .= len((F1 ^ F2) |^ a) by Def1;
+    A2: now let k;
+      assume k in dom(F1 |^ a);
+       then k in Seg len(F1 |^ a) by FINSEQ_1:def 3;
+       then k in Seg len F1 by Def1;
+       then A3: k in dom F1 by FINSEQ_1:def 3;
+       then A4: F1/.k = (F1 ^ F2)/.k & k in dom(F1 ^ F2) by Lm1,FINSEQ_3:24;
+     thus (F1 |^ a).k = (F1/.k) |^ a by A3,Def1
+                     .= ((F1 ^ F2) |^ a).k by A4,Def1;
+    end;
+      now let k;
+      assume A5: k in dom(F2 |^ a);
+         len F2 = len(F2 |^ a) by Def1;
+       then A6: k in dom F2 by A5,FINSEQ_3:31;
+       then len F1 + k in dom(F1 ^ F2) & k in dom F2 by FINSEQ_1:41;
+       then len(F1 |^ a) + k in dom(F1 ^ F2) by Def1;
+     hence ((F1 ^ F2) |^ a).(len(F1 |^ a) + k) =
+           ((F1 ^ F2)/.(len(F1 |^ a) + k)) |^ a by Def1
+        .= ((F1 ^ F2)/.(len F1 + k)) |^ a by Def1
+        .= (F2/.k) |^ a by A6,Lm2
+        .= (F2 |^ a).k by A6,Def1;
+    end;
+   hence thesis by A1,A2,FINSEQ_3:43;
+  end;
+
+theorem Th13:
+ (<*> the carrier of G) |^ a = {}
+  proof len((<*> the carrier of G) |^ a) = len <*> the carrier of G by Def1
+                                        .= 0 by FINSEQ_1:32;
+   hence thesis by FINSEQ_1:25;
+  end;
+
+theorem Th14:
+ <* a *> |^ b = <* a |^ b *>
+  proof A1: len<* a |^ b *> = 1 by FINSEQ_1:57
+                         .= len<* a *> by FINSEQ_1:56;
+      now let k;
+      assume k in dom<* a *>;
+       then k in {1} by FINSEQ_1:4,55;
+       then A2: k = 1 by TARSKI:def 1;
+     hence <* a |^ b *>.k = a |^ b by FINSEQ_1:57
+                        .= (<* a *>/.k) |^ b by A2,FINSEQ_4:25;
+    end;
+   hence thesis by A1,Def1;
+  end;
+
+theorem Th15:
+ <* a,b *> |^ c = <* a |^ c,b |^ c *>
+  proof
+   thus <* a,b *> |^ c = (<* a *> ^ <* b *>) |^ c by FINSEQ_1:def 9
+                     .= (<* a *> |^ c) ^ (<* b *> |^ c) by Th12
+                     .= <* a |^ c *> ^ (<* b *> |^ c) by Th14
+                     .= <* a |^ c *> ^ <* b |^ c *> by Th14
+                     .= <* a |^ c, b |^ c *> by FINSEQ_1:def 9;
+  end;
+
+theorem
+   <* a,b,c *> |^ d = <* a |^ d,b |^ d,c |^ d *>
+  proof
+   thus <* a,b,c *> |^ d = (<* a *> ^ <* b,c *>) |^ d by FINSEQ_1:60
+                       .= (<* a *> |^ d) ^ (<* b,c *> |^ d) by Th12
+                       .= <* a *> |^ d ^ <* b |^ d,c |^ d *> by Th15
+                       .= <* a |^ d *> ^ <* b |^ d,c |^ d *> by Th14
+                       .= <* a |^ d,b |^ d,c |^ d *> by FINSEQ_1:60;
+  end;
+
+theorem Th17:
+ Product(F |^ a) = Product(F) |^ a
+  proof
+   defpred  P[FinSequence of the carrier of G]
+     means Product($1 |^ a) = Product($1) |^ a;
+    A1: P[<*> the carrier of G]
+     proof set p = <*> the carrier of G;
+      thus Product(p |^ a) = Product p by Th13
+                     .= 1.G by GROUP_4:11
+                     .= (1.G) |^ a by GROUP_3:22
+                     .= Product p |^ a by GROUP_4:11;
+     end;
+    A2: now let F,b;
+      assume A3: P[F];
+      thus  P[F^<*b*>]
+      proof
+       thus Product((F ^ <* b *>) |^ a) = Product((F |^ a) ^ (<* b *> |^ a))
+        by Th12
+                 .= Product(F) |^ a * Product(<* b *> |^ a) by A3,GROUP_4:8
+                 .= Product(F) |^ a * Product<* b |^ a *> by Th14
+                               .= Product(F) |^ a * (b |^ a) by GROUP_4:12
+                               .= (Product(F) * b) |^ a by GROUP_3:28
+                               .= Product(F ^ <* b *>) |^ a by GROUP_4:9;
+      end;
+    end;
+      for F holds P[F] from IndSeqD(A1,A2);
+   hence thesis;
+  end;
+
+theorem Th18:
+ (F |^ a) |^ I = (F |^ I) |^ a
+  proof
+    A1: len(F |^ a) = len F by Def1;
+    then A2: dom(F |^ a) = dom F by FINSEQ_3:31;
+    A3: len((F |^ a) |^ I) = len(F |^ a) by GROUP_4:def 4;
+    A4: len(F |^ I |^ a) = len(F |^ I) by Def1
+                        .= len F by GROUP_4:def 4;
+       len(F |^ I) = len F by GROUP_4:def 4;
+    then A5:  dom(F |^ I) = dom F by FINSEQ_3:31;
+      now let k;
+      assume k in Seg len F;
+    then A6: k in dom F by FINSEQ_1:def 3;
+    then A7:  (F |^ a)/.k = (F |^ a).k & (F |^ I)/.k = (F |^ I).k
+                                                 by A2,A5,FINSEQ_4:def 4;
+   thus ((F |^ a) |^ I).k = ((F |^ a)/.k) |^ @(I/.k) by A2,A6,GROUP_4:def 4
+                           .= ((F/.k) |^ a) |^ @(I/.k) by A6,A7,Def1
+                           .= ((F/.k) |^ @(I/.k)) |^ a by GROUP_3:34
+                           .= ((F |^ I)/.k) |^ a by A6,A7,GROUP_4:def 4
+                           .= ((F |^ I) |^ a).k by A5,A6,Def1;
+    end;
+   hence thesis by A1,A3,A4,FINSEQ_2:10;
+  end;
+
+begin :: Commutators.
+
+definition let G,a,b;
+ func [.a,b.] -> Element of G equals
+  :Def2:  a" * b" * a * b;
+ correctness;
+end;
+
+theorem Th19:
+ [.a,b.] = a" * b" * a * b & [.a,b.] = a" * (b" * a) * b &
+ [.a,b.] = a" * (b" * a * b) & [.a,b.] = a" * (b" * (a * b)) &
+ [.a,b.] = (a" * b") * (a * b)
+  proof
+   thus [.a,b.] = a" * b" * a * b by Def2;
+   thus [.a,b.] = a" * b" * a * b by Def2
+               .= a" * (b" * a) * b by VECTSP_1:def 16;
+   hence [.a,b.] = a" * (b" * a * b) by VECTSP_1:def 16;
+   hence [.a,b.] = a" * (b" * (a * b)) by VECTSP_1:def 16;
+   thus [.a,b.] = a" * b" * a * b by Def2
+               .= (a" * b") * (a * b) by VECTSP_1:def 16;
+  end;
+
+theorem Th20:
+ [.a,b.] = (b * a)" * (a * b)
+  proof
+   thus [.a,b.] = (a" * b") * (a * b) by Th19
+               .= (b * a)" * (a * b) by GROUP_1:25;
+  end;
+
+theorem Th21:
+ [.a,b.] = (b" |^ a) * b & [.a,b.] = a" * (a |^ b)
+  proof
+   thus [.a,b.] = a" * b" * a * b by Th19
+               .= (b" |^ a) * b by GROUP_3:20;
+   thus [.a,b.] = a" * (b" * a * b) by Th19
+               .= a" * (a |^ b) by GROUP_3:20;
+  end;
+
+theorem Th22:
+ [.1.G,a.] = 1.G & [.a,1.G.] = 1.G
+  proof
+   thus [.1.G,a.] = ((1.G)" * a") * ((1.G) * a) by Th19
+                 .= ((1.G)" * a") * a by GROUP_1:def 4
+                 .= (1.G * a") * a by GROUP_1:16
+                 .= a" * a by GROUP_1:def 4
+                 .= 1.G by GROUP_1:def 5;
+   thus [.a,1.G.] = (a" * (1.G)") * (a * 1.G) by Th19
+                 .= (a" * (1.G)") * a by GROUP_1:def 4
+                 .= (a" * 1.G) * a by GROUP_1:16
+                 .= a" * a by GROUP_1:def 4
+                 .= 1.G by GROUP_1:def 5;
+  end;
+
+theorem Th23:
+ [.a,a.] = 1.G
+  proof
+   thus [.a,a.] = (a * a)" * (a * a) by Th20
+               .= 1.G by GROUP_1:def 5;
+  end;
+
+theorem
+   [.a,a".] = 1.G & [.a",a.] = 1.G
+  proof
+   thus [.a,a".] = (a" * a"") * (a * a") by Th19
+                .= 1.G * (a * a") by GROUP_1:def 5
+                .= a * a" by GROUP_1:def 4
+                .= 1.G by GROUP_1:def 5;
+   thus [.a",a.] = (a"" * a") * (a" * a) by Th19
+                .= (a"" * a") * 1.G by GROUP_1:def 5
+                .= a"" * a" by GROUP_1:def 4
+                .= 1.G by GROUP_1:def 5;
+  end;
+
+theorem Th25:
+ [.a,b.]" = [.b,a.]
+  proof
+   thus [.a,b.]" = ((a" * b") * (a * b))" by Th19
+                .= (a * b)" * (a" * b")" by GROUP_1:25
+                .= (b" * a") * (a" * b")" by GROUP_1:25
+                .= (b" * a") * (b"" * a"") by GROUP_1:25
+                .= (b" * a") * (b"" * a) by GROUP_1:19
+                .= (b" * a") * (b * a) by GROUP_1:19
+                .= [.b,a.] by Th19;
+  end;
+
+theorem Th26:
+ [.a,b.] |^ c = [.a |^ c,b |^ c.]
+  proof
+   thus [.a,b.] |^ c = c" * [.a,b.] * c by GROUP_3:20
+        .= c" * (a" * b" * a * b) * c by Th19
+        .= c" * (a" * 1.G * b" * a * b) * c by GROUP_1:def 4
+        .= c" * (a" * (c * c") * b" * a * b) * c by GROUP_1:def 5
+        .= c" * (a" * (c * c") * b" * (a * b)) * c by VECTSP_1:def 16
+        .= c" * (a" * (c * c") * (b" * (a * b))) * c by VECTSP_1:def 16
+        .= c" * (a" * ((c * c") * (b" * (a * b)))) * c by VECTSP_1:def 16
+        .= c" * a" * ((c * c") * (b" * (a * b))) * c by VECTSP_1:def 16
+        .= c" * a" * (c * (c" * (b" * (a * b)))) * c by VECTSP_1:def 16
+        .= c" * a" * c * (c" * (b" * (a * b))) * c by VECTSP_1:def 16
+        .= (a" |^ c) * (c" * (b" * (a * b))) * c by GROUP_3:20
+        .= (a |^ c)" * (c" * (b" * (a * b))) * c by GROUP_3:32
+        .= (a |^ c)" * (c" * (b" * 1.G * (a * b))) * c by GROUP_1:def 4
+        .= (a |^ c)" * (c" * (b" * (c * c") * (a * b))) * c by GROUP_1:def 5
+        .= (a |^ c)" * (c" * (b" * ((c * c") * (a * b)))) * c by VECTSP_1:def
+16
+        .= (a |^ c)" * (c" * b" * ((c * c") * (a * b))) * c by VECTSP_1:def 16
+        .= (a |^ c)" * (c" * b" * (c * (c" * (a * b)))) * c by VECTSP_1:def 16
+        .= (a |^ c)" * (c" * b" * c * (c" * (a * b))) * c by VECTSP_1:def 16
+        .= (a |^ c)" * ((b" |^ c) * (c" * (a * b))) * c by GROUP_3:20
+        .= (a |^ c)" * ((b |^ c)" * (c" * (a * b))) * c by GROUP_3:32
+        .= (a |^ c)" * ((b |^ c)" * (c" * (a * 1.G * b))) * c by GROUP_1:def 4
+        .= (a |^ c)" * ((b |^ c)" * (c" * (a * (c * c") * b))) * c
+           by GROUP_1:def 5
+        .= (a |^ c)" * ((b |^ c)" * (c" * (a * ((c * c") * b)))) * c
+            by VECTSP_1:def 16
+        .= (a |^ c)" * ((b |^ c)" * (c" * a * ((c * c") * b))) * c by VECTSP_1:
+def 16
+        .= (a |^ c)" * ((b |^ c)" * (c" * a * (c * (c" * b)))) * c by VECTSP_1:
+def 16
+        .= (a |^ c)" * ((b |^ c)" * (c" * a * c * (c" * b))) * c by VECTSP_1:
+def 16
+        .= (a |^ c)" * ((b |^ c)" * ((a |^ c) * (c" * b))) * c by GROUP_3:20
+   .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * (c" * b))) * c) by VECTSP_1:def 16
+        .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * (c" * b) * c))) by VECTSP_1:
+def 16
+        .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * ((c" * b) * c)))) by VECTSP_1:
+def 16
+        .= (a |^ c)" * (((b |^ c)" * ((a |^ c) * (b |^ c)))) by GROUP_3:20
+        .= [.a |^ c,b |^ c.] by Th19;
+  end;
+
+theorem
+   [.a,b.] = (a" |^ 2) * ((a * b") |^ 2)* (b |^ 2)
+  proof
+   thus [.a,b.] = (a" * b") * (a * b) by Th19
+               .= (a" * 1.G * b") * (a * b) by GROUP_1:def 4
+               .= (a" * 1.G * b") * (a * 1.G * b) by GROUP_1:def 4
+               .= (a" * (a" * a) * b") * (a * 1.G * b) by GROUP_1:def 5
+               .= (a" * (a" * a) * b") * (a * (b" * b) * b) by GROUP_1:def 5
+               .= (a" * a" * a * b") * (a * (b" * b) * b) by VECTSP_1:def 16
+               .= (a" |^ 2 * a * b") * (a * (b" * b) * b) by GROUP_1:45
+               .= (a" |^ 2 * a * b") * (a * ((b" * b) * b)) by VECTSP_1:def 16
+               .= (a" |^ 2 * a * b") * (a * (b" * (b * b))) by VECTSP_1:def 16
+               .= (a" |^ 2 * a * b") * (a * (b" * (b |^ 2))) by GROUP_1:45
+   .= (a" |^ 2 * (a * b")) * (a * (b" * (b |^ 2))) by VECTSP_1:def 16
+   .= (a" |^ 2) * ((a * b") * (a * (b" * (b |^ 2)))) by VECTSP_1:def 16
+   .= (a" |^ 2) * ((a * b") * (a * b" * (b |^ 2))) by VECTSP_1:def 16
+   .= (a" |^ 2) * ((a * b") * (a * b") * (b |^ 2)) by VECTSP_1:def 16
+   .= (a" |^ 2) * ((a * b") * (a * b")) * (b |^ 2) by VECTSP_1:def 16
+   .= (a" |^ 2) * ((a * b") |^ 2) * (b |^ 2) by GROUP_1:45;
+  end;
+
+theorem Th28:
+ [.a * b,c.] = [.a,c.] |^ b * [.b,c.]
+  proof
+   thus [.a * b,c.] =
+        ((a * b)" * c") * (a * b * c) by Th19
+     .= (b" * a" * c") * (a * b * c) by GROUP_1:25
+     .= (b" * a" * c") * (a * 1.G * b * c) by GROUP_1:def 4
+     .= (b" * a" * c") * (a * (c * c") * b * c) by GROUP_1:def 5
+     .= (b" * a" * c") * (a * (c * 1.G * c") * b * c) by GROUP_1:def 4
+     .= (b" * a" * c") * (a * (c * (b * b") * c") * b * c) by GROUP_1:def 5
+     .= b" * (a" * c") * (a * (c * (b * b") * c") * b * c) by VECTSP_1:def 16
+     .= b" * (a" * c") * (a * (c * (b * b") * c") * (b * c)) by VECTSP_1:def 16
+     .= b" * (a" * c") * (a * (c * b * b" * c") * (b * c)) by VECTSP_1:def 16
+     .= b" * (a" * c") * (a * (c * b * (b" * c")) * (b * c)) by VECTSP_1:def 16
+     .= b" * (a" * c") * (a * (c * (b * (b" * c"))) * (b * c)) by VECTSP_1:def
+16
+     .= b" * (a" * c") * (a * c * (b * (b" * c")) * (b * c)) by VECTSP_1:def 16
+     .= b" * (a" * c") * (a * c * ((b * (b" * c")) * (b * c))) by VECTSP_1:def
+16
+     .= b" * (a" * c") * (a * c) * ((b * (b" * c")) * (b * c)) by VECTSP_1:def
+16
+     .= b" * ((a" * c") * (a * c)) * ((b * (b" * c")) * (b * c)) by VECTSP_1:
+def 16
+     .= b" * ((a" * c") * (a * c)) * (b * ((b" * c") * (b * c))) by VECTSP_1:
+def 16
+     .= b" * ((a" * c") * (a * c)) * b * ((b" * c") * (b * c)) by VECTSP_1:def
+16
+     .= b" * [.a,c.] * b * ((b" * c") * (b * c)) by Th19
+     .= [.a,c.] |^ b * ((b" * c") * (b * c)) by GROUP_3:20
+     .= [.a,c.] |^ b * [.b,c.] by Th19;
+  end;
+
+theorem
+   [.a,b * c.] = [.a,c.] * ([.a,b.] |^ c)
+  proof
+   thus [.a,b * c.] = (a" * (b * c)") * (a * (b * c)) by Th19
+     .= (a" * (c" * b")) * (a * (b * c)) by GROUP_1:25
+     .= (a" * (c" * 1.G * b")) * (a * (b * c)) by GROUP_1:def 4
+     .= (a" * (c" * (a * a") * b")) * (a * (b * c)) by GROUP_1:def 5
+     .= (a" * (c" * (a * 1.G * a") * b")) * (a * (b * c)) by GROUP_1:def 4
+     .= (a" * (c" * (a * (c * c") * a") * b")) * (a * (b * c)) by GROUP_1:def 5
+     .= (a" * (c" * (a * c * c" * a") * b")) * (a * (b * c)) by VECTSP_1:def 16
+     .= (a" * (c" * ((a * c) * (c" * a")) * b")) * (a * (b * c)) by VECTSP_1:
+def 16
+     .= (a" * (c" * (((a * c) * (c" * a")) * b"))) * (a * (b * c)) by VECTSP_1:
+def 16
+     .= ((a" * c") * (a * c * (c" * a") * b")) * (a * (b * c)) by VECTSP_1:def
+16
+     .= ((a" * c") * ((a * c) * (c" * a")) * b") * (a * (b * c)) by VECTSP_1:
+def 16
+     .= ((a" * c") * (a * c)) * (c" * a") * b" * (a * (b * c)) by VECTSP_1:def
+16
+     .= ((a" * c") * (a * c)) * ((c" * a") * b") * (a * (b * c)) by VECTSP_1:
+def 16
+     .= ((a" * c") * (a * c)) * (((c" * a") * b") * (a * (b * c))) by VECTSP_1:
+def 16
+     .= ((a" * c") * (a * c)) * (((c" * a") * b") * ((a * b) * c)) by VECTSP_1:
+def 16
+     .= ((a" * c") * (a * c)) * ((c" * (a" * b")) * ((a * b) * c)) by VECTSP_1:
+def 16
+     .= ((a" * c") * (a * c)) * (c" * ((a" * b") * ((a * b) * c))) by VECTSP_1:
+def 16
+     .= ((a" * c") * (a * c)) * (c" * ((a" * b") * (a * b) * c)) by VECTSP_1:
+def 16
+     .= ((a" * c") * (a * c)) * (c" * ((a" * b") * (a * b)) * c) by VECTSP_1:
+def 16
+     .= [.a,c.] * (c" * ((a" * b") * (a * b)) * c) by Th19
+     .= [.a,c.] * (c" * [.a,b.] * c) by Th19
+     .= [.a,c.] * ([.a,b.] |^ c) by GROUP_3:20;
+  end;
+
+theorem Th30:
+ [.a",b.] = [.b,a.] |^ a"
+  proof
+   thus [.a",b.] = a"" * (b" * (a" * b)) by Th19
+                .= a"" * (b" * (a" * b)) * 1.G by GROUP_1:def 4
+                .= a"" * (b" * (a" * b)) * (a * a") by GROUP_1:def 5
+                .= a"" * (b" * (a" * b)) * a * a" by VECTSP_1:def 16
+                .= a"" * ((b" * (a" * b)) * a) * a" by VECTSP_1:def 16
+                .= a"" * [.b,a.] * a" by Th19
+                .= [.b,a.] |^ a" by GROUP_3:20;
+  end;
+
+theorem Th31:
+ [.a,b".] = [.b,a.] |^ b"
+  proof
+   thus [.a,b".] = a" * b"" * a * b" by Def2
+                .= a" * b * a * b" by GROUP_1:19
+                .= 1.G * (a" * b * a * b") by GROUP_1:def 4
+                .= (b"" * b") * (a" * b * a * b") by GROUP_1:def 5
+                .= (b"" * b") * (a" * b * a) * b" by VECTSP_1:def 16
+                .= b"" * (b" * (a" * b * a)) * b" by VECTSP_1:def 16
+                .= b"" * [.b,a.] * b" by Th19
+                .= [.b,a.] |^ b" by GROUP_3:20;
+  end;
+
+theorem
+   [.a",b".] = [.a,b.] |^ (a * b)" & [.a",b".] = [.a,b.] |^ (b * a)"
+  proof
+   thus [.a",b".] = [.b",a.] |^ a" by Th30
+                 .= ([.a,b.] |^ b") |^ a" by Th30
+                 .= [.a,b.] |^ (b" * a") by GROUP_3:29
+                 .= [.a,b.] |^ (a * b)" by GROUP_1:25;
+   thus [.a",b".] = [.b,a".] |^ b" by Th31
+                 .= [.a,b.] |^ a" |^ b" by Th31
+                 .= [.a,b.] |^ (a" * b") by GROUP_3:29
+                 .= [.a,b.] |^ (b * a)" by GROUP_1:25;
+  end;
+
+theorem
+   [.a,b |^ a".] = [.b,a".]
+  proof
+   thus [.a,b |^ a".] = a" * (b |^ a")" * a * (b |^ a") by Th19
+                   .= a" * (b" |^ a") * a * (b |^ a") by GROUP_3:32
+                   .= a" * (a"" * (b" * a")) * a * (b |^ a") by GROUP_3:20
+                   .= (b" * a") * a * (b |^ a") by GROUP_3:1
+                   .= b" * (b |^ a") by GROUP_3:1
+                   .= b" * (a"" * b * a") by GROUP_3:20
+                   .= [.b,a".] by Th19;
+  end;
+
+theorem
+   [.a |^ b",b.] = [.b",a.]
+  proof
+   thus [.a |^ b",b.] = (a |^ b")" * b" * (a |^ b") * b by Th19
+                    .= (a" |^ b") * b" * (a |^ b") * b by GROUP_3:32
+                    .= (a" |^ b") * b" * (b"" * a * b") * b by GROUP_3:20
+            .= (a" |^ b") * (b" * (b"" * a * b")) * b by VECTSP_1:def 16
+            .= (a" |^ b") * (b" * (b"" * (a * b"))) * b by VECTSP_1:def 16
+                    .= (a" |^ b") * (a * b") * b by GROUP_3:1
+                    .= (a" |^ b") * ((a * b") * b) by VECTSP_1:def 16
+                    .= (a" |^ b") * a by GROUP_3:1
+                    .= [.b",a.] by Th21;
+  end;
+
+theorem
+   [.a |^ n,b.] = a |^ (- n) * ((a |^ b) |^ n)
+  proof
+   thus [.a |^ n,b.] = (a |^ n)" * (b" * (a |^ n) * b) by Th19
+                   .= a |^ (- n) * (b" * (a |^ n) * b) by GROUP_1:71
+                   .= a |^ (- n) * ((a |^ n) |^ b) by GROUP_3:20
+                   .= a |^ (- n) * ((a |^ b) |^ n) by GROUP_3:33;
+  end;
+
+theorem
+   [.a,b |^ n.] = (b |^ a) |^ (- n) * (b |^ n)
+  proof
+   thus [.a,b |^ n.] = a" * (b |^ n)" * a * (b |^ n) by Th19
+                   .= a" * (b |^ (- n)) * a * (b |^ n) by GROUP_1:71
+                   .= (b |^ (- n)) |^ a * (b |^ n) by GROUP_3:20
+                   .= (b |^ a) |^ (- n) * (b |^ n) by GROUP_3:34;
+  end;
+
+theorem
+   [.a |^ i,b.] = a |^ (- i) * ((a |^ b) |^ i)
+  proof
+   thus [.a |^ i,b.] = (a |^ i)" * (b" * (a |^ i) * b) by Th19
+                   .= a |^ (- i) * (b" * (a |^ i) * b) by GROUP_1:70
+                   .= a |^ (- i) * ((a |^ i) |^ b) by GROUP_3:20
+                   .= a |^ (- i) * ((a |^ b) |^ i) by GROUP_3:34;
+  end;
+
+theorem
+   [.a,b |^ i.] = (b |^ a) |^ (- i) * (b |^ i)
+  proof
+   thus [.a,b |^ i.] = a" * (b |^ i)" * a * (b |^ i) by Th19
+                   .= a" * (b |^ (- i)) * a * (b |^ i) by GROUP_1:70
+                   .= (b |^ (- i)) |^ a * (b |^ i) by GROUP_3:20
+                   .= (b |^ a) |^ (- i) * (b |^ i) by GROUP_3:34;
+  end;
+
+theorem Th39:
+ [.a,b.] = 1.G iff a * b = b * a
+  proof
+   thus [.a,b.] = 1.G implies a * b = b * a
+    proof assume [.a,b.] = 1.G;
+      then (b * a)" * (a * b) = 1.G by Th20;
+      then a * b = (b * a)"" by GROUP_1:20;
+     hence thesis by GROUP_1:19;
+    end;
+    assume a * b = b * a;
+     then (b * a)" = b" * a" & [.a,b.] = (b * a)" * (a * b) by Th20,GROUP_1:26
+;
+   hence [.a,b.] = (b" * a") * a * b by VECTSP_1:def 16
+                .= b" * b by GROUP_3:1
+                .= 1.G by GROUP_1:def 5;
+  end;
+
+Lm3:
+for G being commutative Group
+ for a,b being Element of G holds a * b = b * a;
+
+theorem
+   G is commutative Group iff for a,b holds [.a,b.] = 1.G
+  proof
+   thus G is commutative Group implies for a,b holds [.a,b.] = 1.G
+    proof assume A1: G is commutative Group;
+     let a,b;
+         a * b = b * a by A1,Lm3;
+     hence thesis by Th39;
+    end;
+    assume A2: for a,b holds [.a,b.] = 1.G;
+     G is commutative
+    proof
+     let a,b;
+        [.a,b.] = 1.G by A2;
+     hence a * b = b * a by Th39;
+    end;
+   hence thesis;
+  end;
+
+theorem Th41:
+ a in H & b in H implies [.a,b.] in H
+  proof assume a in H & b in H;
+    then a" in H & b" in H & a * b in H by GROUP_2:59,60;
+    then a" * b" in H & a * b in H by GROUP_2:59;
+    then (a" * b") * (a * b) in H by GROUP_2:59;
+   hence thesis by Th19;
+  end;
+
+definition let G,a,b,c;
+ func [.a,b,c.] -> Element of G equals
+  :Def3:  [.[.a,b.],c.];
+ correctness;
+end;
+
+canceled;
+
+theorem
+   [.a,b,1.G.] = 1.G & [.a,1.G,b.] = 1.G & [.1.G,a,b.] = 1.G
+  proof
+   thus [.a,b,1.G.] = [.[.a,b.],1.G.] by Def3
+                   .= 1.G by Th22;
+   thus [.a,1.G,b.] = [.[.a,1.G.],b.] by Def3
+                   .= [.1.G,b.] by Th22
+                   .= 1.G by Th22;
+   thus [.1.G,a,b.] = [.[.1.G,a.],b.] by Def3
+                   .= [.1.G,b.] by Th22
+                   .= 1.G by Th22;
+  end;
+
+theorem
+   [.a,a,b.] = 1.G
+  proof
+   thus [.a,a,b.] = [.[.a,a.],b.] by Def3
+                 .= [.1.G,b.] by Th23
+                 .= 1.G by Th22;
+  end;
+
+theorem
+   [.a,b,a.] = [.a |^ b,a.]
+  proof
+   thus [.a,b,a.] = [.[.a,b.],a.] by Def3
+                 .= [.a,b.]" * a" * [.a,b.] * a by Th19
+                 .= [.b,a.] * a" * [.a,b.] * a by Th25
+                 .= ((b" * a") * b * a) * a" * [.a,b.] * a by Th19
+                 .= (b" * a" * b) * [.a,b.] * a by GROUP_3:1
+                 .= (b" * a" * b) * (a" * b" * a * b) * a by Th19
+                 .= (a" |^ b) * (a" * b" * a * b) * a by GROUP_3:20
+                 .= (a |^ b)" * (a" * b" * a * b) * a by GROUP_3:32
+                 .= (a |^ b)" * (a" * b" * (a * b)) * a by VECTSP_1:def 16
+                 .= (a |^ b)" * (a" * (b" * (a * b))) * a by VECTSP_1:def 16
+                 .= (a |^ b)" * (a" * (a |^ b)) * a by GROUP_3:20
+                 .= [.a |^ b,a.] by Th19;
+  end;
+
+theorem
+   [.b,a,a.] = ([.b,a".] * [.b,a.]) |^ a
+  proof
+   thus [.b,a,a.] = [.[.b,a.],a.] by Def3
+                 .= [.b,a.]" * a" * [.b,a.] * a by Th19
+                 .= [.a,b.] * a" * [.b,a.] * a by Th25
+                 .= (a" * (b" * (a * b))) * a" * [.b,a.] * a by Th19
+                 .= (a" * ((b" * (a"" * b))) * a") * [.b,a.] * a by GROUP_1:19
+         .= (a" * (((b" * (a"" * b))) * a")) * [.b,a.] * a by VECTSP_1:def 16
+                 .= a" * [.b,a".] * [.b,a.] * a by Th19
+                 .= a" * ([.b,a".] * [.b,a.]) * a by VECTSP_1:def 16
+                 .= ([.b,a".] * [.b,a.]) |^ a by GROUP_3:20;
+  end;
+
+theorem
+   [.a,b,b |^ a.] = [.b,[.b,a.].]
+  proof
+   thus [.a,b,b |^ a.] = [.[.a,b.],b |^ a.] by Def3
+     .= [.a,b.]" * (b |^ a)" * [.a,b.] * (b |^ a) by Th19
+     .= [.b,a.] * (b |^ a)" * [.a,b.] * (b |^ a) by Th25
+     .= [.b,a.] * (b" |^ a) * [.a,b.] * (b |^ a) by GROUP_3:32
+     .= (b" * a" * b * a) * (b" |^ a) * [.a,b.] * (b |^ a) by Th19
+     .= (b" * a" * b * a) * (a" * (b" * a)) * [.a,b.] * (b |^ a) by GROUP_3:20
+     .= (b" * a" * b * a) * a" * (b" * a) * [.a,b.] * (b |^ a) by VECTSP_1:def
+16
+     .= (b" * a" * b) * (b" * a) * [.a,b.] * (b |^ a) by GROUP_3:1
+     .= b" * a" * (b * (b" * a)) * [.a,b.] * (b |^ a) by VECTSP_1:def 16
+     .= b" * a" * a * [.a,b.] * (b |^ a) by GROUP_3:1
+     .= b" * [.a,b.] * (b |^ a) by GROUP_3:1
+     .= b" * (a"* b"* a * b) * (b |^ a) by Th19
+     .= b" * (a"* b"* a * b) * (a" * b * a) by GROUP_3:20
+     .= b" * (a"* b"* a * b) * 1.G * (a" * b * a) by GROUP_1:def 4
+     .= b" * (a"* b"* a * b) * (b * b") * (a" * b * a) by GROUP_1:def 5
+     .= b" * [.a,b.] * (b * b") * (a" * b * a) by Th19
+     .= b" * [.a,b.] * ((b * b") * (a" * b * a)) by VECTSP_1:def 16
+     .= b" * [.a,b.] * (b * (b" * (a" * b * a))) by VECTSP_1:def 16
+     .= b" * [.a,b.] * (b * [.b,a.]) by Th19
+     .= b" * [.b,a.]" * (b * [.b,a.]) by Th25
+     .= [.b,[.b,a.].] by Th19;
+  end;
+
+theorem
+   [.a * b,c.] = [.a,c.] * [.a,c,b.] * [.b,c.]
+  proof [.a,c.] * [.a,c,b.] * [.b,c.] =
+       a" * c" * a * c * [.a,c,b.] * [.b,c.] by Th19
+    .= a" * c" * a * c * [.[.a,c.],b.] * [.b,c.] by Def3
+    .= a" * c" * a * c * ([.a,c.]" * b" * [.a,c.] * b) * [.b,c.] by Th19
+    .= a" * c" * a * c * ([.c,a.] * b" * [.a,c.] * b) * [.b,c.] by Th25
+    .= a" * c" * a * c * ((c" * a") * (c * a) * b" * [.a,c.] * b) * [.b,c.]
+                                                                        by Th19
+    .= a" * c" * a * c * ((a * c)" * (c * a) * b" * [.a,c.] * b) * [.b,c.]
+                                                                 by GROUP_1:25
+    .= a" * c" * (a * c) * ((a * c)" * (c * a) * b" * [.a,c.] * b) * [.b,c.]
+                                                       by VECTSP_1:def 16
+    .= a" * c" * ((a * c) * ((a * c)" * (c * a) * b" * [.a,c.] * b)) * [.b,c.]
+                                                       by VECTSP_1:def 16
+    .= a" * c" * ((a * c) * ((a * c)" * (c * a) *
+       b" * ([.a,c.] * b))) * [.b,c.] by VECTSP_1:def 16
+    .= a" * c" * ((a * c) * ((a * c)" * (c * a) *
+       (b" * ([.a,c.] * b)))) * [.b,c.] by VECTSP_1:def 16
+    .= a" * c" * ((a * c) * ((a * c)" * ((c * a) *
+       (b" * ([.a,c.] * b))))) * [.b,c.] by VECTSP_1:def 16
+    .= a" * c" * ((a * c) * (a * c)" * ((c * a) *
+       (b" * ([.a,c.] * b)))) * [.b,c.] by VECTSP_1:def 16
+    .= a" * c" * (1.G * ((c * a) * (b" * ([.a,c.] * b)))) * [.b,c.]
+                                                              by GROUP_1:def 5
+    .= a" * c" * ((c * a) * (b" * ([.a,c.] * b))) * [.b,c.] by GROUP_1:def 4
+    .= a" * c" * (c * a) * (b" * ([.a,c.] * b)) * [.b,c.] by VECTSP_1:def 16
+    .= (c * a)" * (c * a) * (b" * ([.a,c.] * b)) * [.b,c.] by GROUP_1:25
+    .= 1.G * (b" * ([.a,c.] * b)) * [.b,c.] by GROUP_1:def 5
+    .= b" * ([.a,c.] * b) * [.b,c.] by GROUP_1:def 4
+    .= b" * ([.a,c.] * b) * ((b" * c") * (b * c)) by Th19
+    .= b" * ((a" * c" * a * c) * b) * ((b" * c") * (b * c)) by Th19
+    .= b" * ((a" * c" * a) * c) * b * ((b" * c") * (b * c)) by VECTSP_1:def 16
+    .= b" * (a" * c" * (a * c)) * b * ((b" * c") * (b * c)) by VECTSP_1:def 16
+    .= b" * (a" * (c" * (a * c))) * b * ((b" * c") * (b * c)) by VECTSP_1:def
+16
+    .= b" * a" * (c" * (a * c)) * b * ((b" * c") * (b * c)) by VECTSP_1:def 16
+    .= b" * a" * c" * (a * c) * b * ((b" * c") * (b * c)) by VECTSP_1:def 16
+    .= b" * a" * c" * a * c * b * ((b" * c") * (b * c)) by VECTSP_1:def 16
+    .= b" * a" * c" * a * (c * b) * ((b" * c") * (b * c)) by VECTSP_1:def 16
+    .= b" * a" * c" * a * (c * b) * (b" * c") * (b * c) by VECTSP_1:def 16
+    .= b" * a" * c" * a * (c * b) * (c * b)" * (b * c) by GROUP_1:25
+    .= b" * a" * c" * a * ((c * b) * (c * b)") * (b * c) by VECTSP_1:def 16
+    .= b" * a" * c" * a * 1.G * (b * c) by GROUP_1:def 5
+    .= b" * a" * c" * a * (b * c) by GROUP_1:def 4
+    .= (a * b)" * c" * a * (b * c) by GROUP_1:25
+    .= (a * b)" * c" * (a * (b * c)) by VECTSP_1:def 16
+    .= (a * b)" * c" * (a * b * c) by VECTSP_1:def 16;
+   hence thesis by Th19;
+  end;
+
+theorem
+   [.a,b * c.] = [.a,c.] * [.a,b.] * [.a,b,c.]
+  proof [.a,c.] * [.a,b.] * [.a,b,c.] =
+       [.a,c.] * ([.a,b.] * [.a,b,c.]) by VECTSP_1:def 16
+    .= [.a,c.] * ([.a,b.] * [.[.a,b.],c.]) by Def3
+    .= [.a,c.] * ((a" * b") * (a * b) * [.[.a,b.],c.]) by Th19
+    .= [.a,c.] * ((a" * b") * (a * b) * ([.a,b.]" * c" * [.a,b.] * c)) by Th19
+    .= [.a,c.] * ((a" * b") * (a * b) * ([.b,a.] * c" * [.a,b.] * c)) by Th25
+    .= [.a,c.] * ((a" * b") * (a * b) *
+       ((b" * a" * (b * a)) * c" * [.a,b.] * c)) by Th19
+    .= [.a,c.] * ((a" * b") * ((a * b) *
+       (((b" * a") * (b * a)) * c" * [.a,b.] * c))) by VECTSP_1:def 16
+    .= [.a,c.] * ((a" * b") * ((a * b) *
+       (((b" * a") * (b * a)) * c" * ([.a,b.] * c)))) by VECTSP_1:def 16
+    .= [.a,c.] * ((a" * b") * ((a * b) *
+       (((b" * a") * (b * a)) * (c" * ([.a,b.] * c))))) by VECTSP_1:def 16
+    .= [.a,c.] * ((a" * b") * ((a * b) *
+       ((b" * a") * (b * a)) * (c" * ([.a,b.] * c)))) by VECTSP_1:def 16
+    .= [.a,c.] * ((a" * b") * ((a * b) *
+       (b" * a") * (b * a) * (c" * ([.a,b.] * c)))) by VECTSP_1:def 16
+    .= [.a,c.] * ((a" * b") * ((a * b) *
+       (a * b)" * (b * a) * (c" * ([.a,b.] * c)))) by GROUP_1:25
+    .= [.a,c.] * ((a" * b") * (1.G *
+       (b * a) * (c" * ([.a,b.] * c)))) by GROUP_1:def 5
+    .= [.a,c.] * ((a" * b") * ((b * a) * (c" * ([.a,b.] * c)))) by GROUP_1:def
+4
+    .= [.a,c.] * ((a" * b") * (b * a) * (c" * ([.a,b.] * c))) by VECTSP_1:def
+16
+    .= [.a,c.] * ((b * a)" * (b * a) * (c" * ([.a,b.] * c))) by GROUP_1:25
+    .= [.a,c.] * (1.G * (c" * ([.a,b.] * c))) by GROUP_1:def 5
+    .= [.a,c.] * (c" * ([.a,b.] * c)) by GROUP_1:def 4
+    .= (a" * c") * (a * c) * (c" * ([.a,b.] * c)) by Th19
+    .= (a" * c") * (a * c) * (c" * ((a" * (b" * a * b)) * c)) by Th19
+    .= (a" * c") * (a * c) * (c" * (a" * (b" * a * b)) * c) by VECTSP_1:def 16
+    .= (a" * c") * (a * c) * ((c" * a") * (b" * a * b) * c) by VECTSP_1:def 16
+    .= (a" * c") * (a * c) * ((c" * a") * ((b" * a * b) * c)) by VECTSP_1:def
+16
+    .= (a" * c") * (a * c) * (c" * a") * ((b" * a * b) * c) by VECTSP_1:def 16
+    .= (a" * c") * ((a * c) * (c" * a")) * ((b" * a * b) * c) by VECTSP_1:def
+16
+    .= (a" * c") * ((a * c) * (a * c)") * ((b" * a * b) * c) by GROUP_1:25
+    .= (a" * c") * 1.G * ((b" * a * b) * c) by GROUP_1:def 5
+    .= (a" * c") * ((b" * a * b) * c) by GROUP_1:def 4
+    .= (a" * c") * (b" * a * b) * c by VECTSP_1:def 16
+    .= (a" * c") * (b" * (a * b)) * c by VECTSP_1:def 16
+    .= a" * c" * b" * (a * b) * c by VECTSP_1:def 16
+    .= a" * (c" * b") * (a * b) * c by VECTSP_1:def 16
+    .= a" * (c" * b") * ((a * b) * c) by VECTSP_1:def 16
+    .= a" * (c" * b") * (a * (b * c)) by VECTSP_1:def 16
+    .= a" * (b * c)" * (a * (b * c)) by GROUP_1:25;
+   hence thesis by Th19;
+  end;
+
+::
+::  P. Hall Identity.
+::
+
+theorem
+   ([.a,b",c.] |^ b) * ([.b,c",a.] |^ c) * ([.c,a",b.] |^ a) = 1.G
+  proof set d = a" * [.b,c".] * a; set e = c" * [.a,b".] * c;
+        set f = b" * [.c,a".] * b;
+        set x = [.a,b",c.] |^ b; set y = [.b,c",a.] |^ c;
+        set z = [.c,a",b.] |^ a;
+    A1: [.b,c",a.] = [.[.b,c".],a.] by Def3
+                 .= [.b,c".]" * (a" * [.b,c".] * a) by Th19
+                 .= [.c",b.] * (a" * [.b,c".] * a) by Th25;
+    A2: [.c",b.] = c"" * (b" * c" * b) by Th19;
+    A3: [.b,c",a.] |^ c = c" * [.b,c",a.] * c by GROUP_3:20
+                     .= c" * (c"" * ((b" * c" * b) * d)) * c by A1,A2,VECTSP_1:
+def 16
+                     .= (b" * c" * b) * d * c by GROUP_3:1
+                     .= (b" * c" * b) * (d * c) by VECTSP_1:def 16
+                     .= b" * (c" * b) * (d * c) by VECTSP_1:def 16
+                     .= b" * ((c" * b) * (d * c)) by VECTSP_1:def 16;
+    A4: [.c,a",b.] = [.[.c,a".],b.] by Def3
+                 .= [.c,a".]" * f by Th19
+                 .= [.a",c.] * f by Th25;
+    A5: [.a",c.] = a"" * (c" * a" * c) by Th19;
+    A6: [.a,b",c.] = [.[.a,b".],c.] by Def3
+                 .= [.a,b".]" * e by Th19
+                 .= [.b",a.] * e by Th25;
+    A7: [.b",a.] = b"" * (a" * b" * a) by Th19;
+    A8: z = a" * [.c,a",b.] * a by GROUP_3:20
+        .= a" * (a"" * ((c" * a" * c) * f)) * a by A4,A5,VECTSP_1:def 16
+        .= (c" * a" * c) * f * a by GROUP_3:1;
+      [.a,b",c.] |^ b = b" * [.a,b",c.] * b by GROUP_3:20
+                  .= b" * (b"" * ((a" * b" * a) * e)) * b by A6,A7,VECTSP_1:def
+16
+                  .= (a" * b" * a) * e * b by GROUP_3:1;
+    then x * y = (a" * b" * a) * e * (b * (b" * ((c" * b) * (d * c))))
+                                                    by A3,VECTSP_1:def 16
+      .= (a" * b" * a) * e * ((c" * b) * (d * c)) by GROUP_3:1
+      .= (a" * b" * a) * (c" * ([.a,b".] * c)) * ((c" * b) * (d * c))
+                                                      by VECTSP_1:def 16
+      .= (a" * b" * a) * c" * ([.a,b".] * c) * ((c" * b) * (d * c))
+                                                      by VECTSP_1:def 16
+      .= (a" * b" * a) * c" * (([.a,b".] * c) * ((c" * b) * (d * c)))
+                                                      by VECTSP_1:def 16
+      .= (a" * b" * a) * c" * (([.a,b".] * c) * (c" * b) * (d * c))
+                                                      by VECTSP_1:def 16
+      .= (a" * b" * a) * c" * (([.a,b".] * c) * c" * b * (d * c)) by VECTSP_1:
+def 16
+      .= (a" * b" * a) * c" * ([.a,b".] * b * (d * c)) by GROUP_3:1
+      .= (a" * b" * a) * c" * ((a" * b"" * a) * b" * b * (d * c)) by Th19
+      .= (a" * b" * a) * c" * ((a" * b"" * a) * (d * c)) by GROUP_3:1
+      .= (a" * b" * a) * c" * ((a" * b"" * a) * (a" * [.b,c".] * (a * c)))
+                                                      by VECTSP_1:def 16
+      .= (a" * b" * a) * c" * ((a" * b"" * a) * (a" * ([.b,c".] * (a * c))))
+                                                       by VECTSP_1:def 16
+      .= (a" * b" * a) * c" * ((a" * b"" * a) * a" * ([.b,c".] * (a * c)))
+                                                       by VECTSP_1:def 16
+      .= (a" * b" * a) * c" * ((a" * b"") * ([.b,c".] * (a * c))) by GROUP_3:1
+      .= (a" * b" * a) * c" * ((a" * b"") * [.b,c".] * (a * c)) by VECTSP_1:def
+16
+      .= (a" * b" * a) * c" * ((a" * b"") * (b" * (c"" * b * c")) * (a * c))
+                                                                       by Th19
+      .= (a" * b" * a) * c" * ((a" * b"") * ((b" * (c"" * b * c")) * (a * c)))
+                                                                by VECTSP_1:def
+16
+      .= (a" * b" * a) * c" * ((a" * b"") * (b" * ((c"" * b * c") * (a * c))))
+                                                                  by VECTSP_1:
+def 16
+      .= (a" * b" * a) * c" * ((a" * b"") * b" * ((c"" * b * c") * (a * c)))
+                                                                  by VECTSP_1:
+def 16
+      .= (a" * b" * a) * c" * (a" * ((c"" * b * c") * (a * c))) by GROUP_3:1;
+    then x * y * z =
+        ((a" * b" * a) * c" * (a" * (c"" * b * c") * (a * c))) *
+        ((c" * a" * c) * f * a) by A8,VECTSP_1:def 16
+     .= ((a" * b" * a) * (c" * (a" * (c"" * b * c") * (a * c)))) *
+        ((c" * a" * c) * f * a) by VECTSP_1:def 16
+     .= ((a" * b" * a) * (c" * (a" * ((c"" * b * c") * (a * c))))) *
+        ((c" * a" * c) * f * a) by VECTSP_1:def 16
+     .= ((a" * b" * a) * c" * (a" * ((c"" * b * c") * (a * c)))) *
+        ((c" * a" * c) * f * a) by VECTSP_1:def 16
+     .= ((a" * b" * a) * c" * (a" * (c"" * (b * c") * (a * c)))) *
+        ((c" * a" * c) * f * a) by VECTSP_1:def 16
+     .= ((a" * b" * a) * c" * (a" * (c"" * (b * c" * (a * c))))) *
+        ((c" * a" * c) * f * a) by VECTSP_1:def 16
+     .= ((a" * b" * a) * c" * a" * (c"" * (b * c" * (a * c)))) *
+        ((c" * a" * c) * f * a) by VECTSP_1:def 16
+     .= ((a" * b" * a) * c" * a" * c"" * (b * c" * (a * c))) *
+        (c" * a" * c * f * a) by VECTSP_1:def 16
+     .= ((a" * b" * a) * c" * a" * c"" * (b * (c" * (a * c)))) *
+        (c" * a" * c * f * a) by VECTSP_1:def 16
+     .= ((a" * b" * a) * c" * a" * c"" * b * (c" * (a * c))) *
+        (c" * a" * c * f * a) by VECTSP_1:def 16
+     .= (((a" * b" * a) * c" * a" * c"") * b * c" * (a * c)) *
+        (c" * a" * c * f * a) by VECTSP_1:def 16
+     .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
+        (c" * a" * c * f * a)) by VECTSP_1:def 16
+     .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
+        (c" * a" * c * (f * a))) by VECTSP_1:def 16
+     .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
+        (c" * a" * (c * (f * a)))) by VECTSP_1:def 16
+     .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
+        (c" * a") * (c * (f * a))) by VECTSP_1:def 16
+     .= (((a" * b") * a * c") * a" * c"" * b * c") * ((a * c) *
+        (a * c)" * (c * (f * a))) by GROUP_1:25
+     .= (((a" * b") * a * c") * a" * c"" * b * c") * (1.G *
+        (c * (f * a))) by GROUP_1:def 5
+     .= (((a" * b") * a * c") * a" * c"" * b * c") * ((c * (f * a)))
+                                                               by GROUP_1:def 4
+     .= (((a" * b") * a * c") * a" * c"" * b * c") * c * (f * a) by VECTSP_1:
+def 16
+     .= (((a" * b") * a * c") * a" * c"" * b) * (f * a) by GROUP_3:1
+     .= (((a" * b") * a * c") * a" * c"" * b) * (b" * [.c,a".] * (b * a))
+                                                                  by VECTSP_1:
+def 16
+     .= (((a" * b") * a * c") * a" * c"" * b) * (b" * ([.c,a".] * (b * a)))
+                                                                  by VECTSP_1:
+def 16
+     .= (((a" * b") * a * c") * a" * c"" * b) * b" * ([.c,a".] * (b * a))
+                                                                  by VECTSP_1:
+def 16
+     .= (((a" * b") * a * c") * a" * c"") * ([.c,a".] * (b * a)) by GROUP_3:1
+     .= (((a" * b") * a * c") * a" * c"") * (c" * (a"" * c * a") * (b * a))
+                                                                         by
+Th19
+     .= (((a" * b") * a * c") * a" * c"") * (c" * ((a"" * c * a") * (b * a)))
+                                                                   by VECTSP_1:
+def 16
+     .= (((a" * b") * a * c") * a" * c"") * c" * ((a"" * c * a") * (b * a))
+                                                                   by VECTSP_1:
+def 16
+     .= (((a" * b") * a * c") * a") * ((a"" * c * a") * (b * a)) by GROUP_3:1
+     .= (((a" * b") * a * c") * a") * (a"" * (c * a") * (b * a)) by VECTSP_1:
+def 16
+     .= (((a" * b") * a * c") * a") * (a"" * ((c * a") * (b * a))) by VECTSP_1:
+def 16
+     .= (((a" * b") * a * c") * a") * a"" * ((c * a") * (b * a)) by VECTSP_1:
+def 16
+     .= ((a" * b") * a * c") * ((c * a") * (b * a)) by GROUP_3:1
+     .= ((a" * b") * a * c") * (c * a") * (b * a) by VECTSP_1:def 16
+     .= (a" * b") * (a * c") * (c * a") * (b * a) by VECTSP_1:def 16
+     .= (a" * b") * (a * c") * (c"" * a") * (b * a) by GROUP_1:19
+     .= (a" * b") * (a * c") * (a * c")" * (b * a) by GROUP_1:25
+     .= (a" * b") * ((a * c") * (a * c")") * (b * a) by VECTSP_1:def 16
+     .= (a" * b") * 1.G * (b * a) by GROUP_1:def 5
+     .= (a" * b") * (b * a) by GROUP_1:def 4
+     .= (b * a)" * (b * a) by GROUP_1:25;
+   hence thesis by GROUP_1:def 5;
+  end;
+
+definition let G,A,B;
+ func commutators(A,B) -> Subset of G equals
+  :Def4:  {[.a,b.] : a in A & b in B};
+ coherence
+  proof
+    deffunc F(Element of G,Element of G) =
+      [.$1,$2.];
+    defpred P[Element of G,Element of G] means
+      $1 in A & $2 in B;
+    {F(a,b) : P[a,b]} is Subset of G from SubsetFD2;
+   hence thesis;
+  end;
+end;
+
+canceled;
+
+theorem Th52:
+ x in commutators(A,B) iff ex a,b st x = [.a,b.] & a in A & b in B
+  proof
+   thus x in commutators(A,B) implies ex a,b st x = [.a,b.] & a in A & b in B
+    proof assume x in commutators(A,B);
+       then x in {[.a,b.] : a in A & b in B} by Def4;
+     hence thesis;
+    end;
+    given a,b such that A1: x = [.a,b.] & a in A & b in B;
+       x in {[.c,d.] : c in A & d in B} by A1;
+   hence thesis by Def4;
+  end;
+
+theorem
+   commutators({} the carrier of G,A) = {} & commutators(A,{}
+ the carrier of G) = {}
+  proof
+   thus commutators({} the carrier of G,A) = {}
+    proof
+     thus commutators({} the carrier of G,A) c= {}
+      proof let x;
+        assume x in commutators({} the carrier of G,A);
+         then consider a,b such that x = [.a,b.] and
+          A1: a in {} the carrier of G and b in A by Th52;
+       thus thesis by A1;
+      end;
+     thus {} c= commutators({} the carrier of G,A) by XBOOLE_1:2;
+    end;
+     thus commutators(A,{} the carrier of G) c= {}
+      proof let x;
+        assume x in commutators(A,{} the carrier of G);
+         then consider a,b such that x = [.a,b.] & a in A and
+          A2: b in {} the carrier of G by Th52;
+       thus thesis by A2;
+      end;
+     thus {} c= commutators(A,{} the carrier of G) by XBOOLE_1:2;
+  end;
+
+theorem
+   commutators({a},{b}) = {[.a,b.]}
+  proof
+   thus commutators({a},{b}) c= {[.a,b.]}
+    proof let x;
+      assume x in commutators({a},{b});
+       then consider c,d such that A1: x = [.c,d.] and A2: c in {a} & d in {b}
+                                                                     by Th52;
+          c = a & b = d by A2,TARSKI:def 1;
+     hence thesis by A1,TARSKI:def 1;
+    end;
+   let x;
+    assume x in {[.a,b.]};
+     then x = [.a,b.] & a in {a} & b in {b} by TARSKI:def 1;
+   hence thesis by Th52;
+  end;
+
+theorem Th55:
+ A c= B & C c= D implies commutators(A,C) c= commutators(B,D)
+  proof assume A1: A c= B & C c= D;
+   let x;
+    assume x in commutators(A,C);
+     then consider a,c such that A2: x = [.a,c.] and A3: a in A & c in
+ C by Th52;
+      thus thesis by A1,A2,A3,Th52;
+  end;
+
+theorem Th56:
+ G is commutative Group iff
+  for A,B st A <> {} & B <> {} holds commutators(A,B) = {1.G}
+   proof
+    thus G is commutative Group implies for A,B st A <> {} & B <> {} holds
+     commutators(A,B) = {1.G}
+      proof assume A1: G is commutative Group;
+       let A,B;
+        assume A2: A <> {} & B <> {};
+       thus commutators(A,B) c= {1.G}
+        proof let x;
+          assume x in commutators(A,B);
+           then consider a,b such that A3: x = [.a,b.] and a in A & b in B
+                                                                   by Th52;
+              x = a" * (b" * a) * b by A3,Th19
+             .= a" * (a * b") * b by A1,Lm3
+             .= b" * b by GROUP_3:1
+             .= 1.G by GROUP_1:def 5;
+         hence thesis by TARSKI:def 1;
+        end;
+       let x;
+        assume x in {1.G};
+          then A4: x = 1.G by TARSKI:def 1;
+         consider a being Element of A;
+         consider b being Element of B;
+         reconsider a,b as Element of G by A2,TARSKI:def 3;
+            [.a,b.] = a" * (b" * a) * b by Th19
+                 .= a" * (a * b") * b by A1,Lm3
+                 .= b" * b by GROUP_3:1
+                 .= x by A4,GROUP_1:def 5;
+       hence thesis by A2,Th52;
+      end;
+    assume A5: for A,B st A <> {} & B <> {} holds commutators(A,B) = {1.G};
+      G is commutative
+     proof
+      let a,b;
+         a in {a} & b in {b} & {a} <> {} & {b} <> {} by TARSKI:def 1;
+       then [.a,b.] in commutators({a},{b}) & commutators({a},{b}) ={1.G}
+                                                               by A5,Th52;
+       then [.a,b.] = 1.G by TARSKI:def 1;
+       then (a" * b") * (a * b) = 1.G by Th19;
+       then (b * a)" * (a * b) = 1.G by GROUP_1:25;
+       then a * b = (b * a)"" by GROUP_1:20;
+      hence thesis by GROUP_1:19;
+     end;
+    hence thesis;
+   end;
+
+definition let G,H1,H2;
+ func commutators(H1,H2) -> Subset of G equals
+  :Def5:  commutators(carr H1,carr H2);
+ correctness;
+end;
+
+canceled;
+
+theorem Th58:
+ x in commutators(H1,H2) iff ex a,b st x = [.a,b.] & a in H1 & b in H2
+  proof
+   thus x in commutators(H1,H2) implies ex a,b st x = [.a,b.] & a in H1 & b in
+ H2
+    proof assume x in commutators(H1,H2);
+       then x in commutators(carr H1,carr H2) by Def5;
+      then consider a,b such that A1: x = [.a,b.] and
+                                  A2: a in carr H1 & b in carr H2 by Th52;
+         a in H1 & b in H2 by A2,GROUP_2:88;
+     hence thesis by A1;
+    end;
+    given a,b such that A3: x = [.a,b.] and A4: a in H1 & b in H2;
+       a in carr H1 & b in carr H2 by A4,GROUP_2:88;
+     then x in commutators(carr H1,carr H2) by A3,Th52;
+   hence thesis by Def5;
+  end;
+
+theorem Th59:
+ 1.G in commutators(H1,H2)
+  proof [.1.G,1.G.] = 1.G & 1.G in H1 & 1.G in H2 by Th22,GROUP_2:55;
+   hence thesis by Th58;
+  end;
+
+theorem
+   commutators((1).G,H) = {1.G} & commutators(H,(1).G) = {1.G}
+  proof
+   thus commutators((1).G,H) = {1.G}
+    proof
+     thus commutators((1).G,H) c= {1.G}
+      proof let x;
+        assume x in commutators((1).G,H);
+         then consider a,b such that A1: x = [.a,b.] & a in (1).G & b in H
+                                                                 by Th58;
+            a = 1.G by A1,Th1;
+          then x = 1.G by A1,Th22;
+       hence thesis by TARSKI:def 1;
+      end;
+        1.G in commutators((1).G,H) by Th59;
+     hence thesis by ZFMISC_1:37;
+    end;
+   thus commutators(H,(1).G) c= {1.G}
+    proof let x;
+      assume x in commutators(H,(1).G);
+       then consider a,b such that A2: x = [.a,b.] & a in H & b in (1).G
+                                                               by Th58;
+          b = 1.G by A2,Th1;
+        then x = 1.G by A2,Th22;
+     hence thesis by TARSKI:def 1;
+    end;
+      1.G in commutators(H,(1).G) by Th59;
+   hence thesis by ZFMISC_1:37;
+  end;
+
+theorem Th61:
+ for N being strict normal Subgroup of G
+ holds commutators(H,N) c= carr N & commutators(N,H) c= carr N
+  proof let N be strict normal Subgroup of G;
+   thus commutators(H,N) c= carr N
+    proof let x;
+      assume x in commutators(H,N);
+       then consider a,b such that A1: x = [.a,b.] and a in H and A2: b in N
+                                                                   by Th58;
+          b" in N by A2,GROUP_2:60;
+        then b" |^ a in N |^ a by GROUP_3:70;
+        then x = (b" |^ a) * b & b" |^ a in N by A1,Th21,GROUP_3:def 13;
+        then x in N by A2,GROUP_2:59;
+     hence thesis by GROUP_2:88;
+    end;
+   let x;
+    assume x in commutators(N,H);
+     then consider a,b such that A3: x = [.a,b.] and A4: a in N and b in H
+                                                                   by Th58;
+        a |^ b in N |^ b by A4,GROUP_3:70;
+      then x = a" * (a |^ b) & a |^ b in N & a" in N
+                                      by A3,A4,Th21,GROUP_2:60,GROUP_3:def 13;
+      then x in N by GROUP_2:59;
+   hence thesis by GROUP_2:88;
+  end;
+
+theorem Th62:
+ H1 is Subgroup of H2 & H3 is Subgroup of H4 implies
+  commutators(H1,H3) c= commutators(H2,H4)
+ proof assume H1 is Subgroup of H2 & H3 is Subgroup of H4;
+   then the carrier of H1 c= the carrier of H2 &
+        the carrier of H3 c= the carrier of H4 &
+        the carrier of H1 = carr H1 &
+        the carrier of H2 = carr H2 &
+        the carrier of H3 = carr H3 &
+        the carrier of H4 = carr H4 &
+        commutators(H1,H3) = commutators(carr H1,carr H3) &
+        commutators(H2,H4) = commutators(carr H2,carr H4)
+         by Def5,GROUP_2:def 5,def 9;
+  hence thesis by Th55;
+ end;
+
+theorem Th63:
+ G is commutative Group iff for H1,H2 holds commutators(H1,H2) = {1.G}
+  proof
+   thus G is commutative Group
+     implies for H1,H2 holds commutators(H1,H2) = {1.G}
+    proof assume A1: G is commutative Group;
+     let H1,H2;
+        carr H1 <> {} & carr H2 <> {} by GROUP_2:87;
+      then commutators(carr H1,carr H2) = {1.G} by A1,Th56;
+     hence thesis by Def5;
+    end;
+    assume A2: for H1,H2 holds commutators(H1,H2) = {1.G};
+     G is commutative
+    proof
+     let a,b;
+        a in {a} & b in {b} by TARSKI:def 1;
+      then a in gr{a} & b in gr{b} by GROUP_4:38;
+      then [.a,b.] in commutators(gr{a},gr{b}) by Th58;
+      then [.a,b.] in {1.G} by A2;
+      then [.a,b.] = 1.G by TARSKI:def 1;
+     hence thesis by Th39;
+    end;
+   hence thesis;
+  end;
+
+definition let G;
+ func commutators G -> Subset of G equals
+  :Def6:  commutators((Omega).G,(Omega).G);
+ correctness;
+end;
+
+canceled;
+
+theorem Th65:
+ x in commutators G iff ex a,b st x = [.a,b.]
+  proof
+   thus x in commutators G implies ex a,b st x = [.a,b.]
+    proof assume x in commutators G;
+       then x in commutators((Omega).G,(Omega).G) by Def6;
+      then ex a,b st x = [.a,b.] & a in (Omega).G & b in (Omega).G by Th58;
+     hence thesis;
+    end;
+    given a,b such that A1: x = [.a,b.];
+       a in the HGrStr of G & b in the HGrStr of G by RLVECT_1:def 1;
+     then a in (Omega).G & b in (Omega).G by GROUP_2:def 8;
+     then x in commutators((Omega).G,(Omega).G) by A1,Th58;
+   hence thesis by Def6;
+  end;
+
+theorem
+   G is commutative Group iff commutators G = {1.G}
+  proof
+   thus G is commutative Group implies commutators G = {1.G}
+    proof assume G is commutative Group;
+      then commutators((Omega).G,(Omega).G) = {1.G} by Th63;
+     hence thesis by Def6;
+    end;
+    assume A1: commutators G = {1.G};
+     G is commutative
+    proof
+     let a,b;
+         [.a,b.] in {1.G} by A1,Th65;
+       then [.a,b.] = 1.G by TARSKI:def 1;
+     hence thesis by Th39;
+    end;
+   hence thesis;
+  end;
+
+definition let G,A,B;
+ func [.A,B.] -> strict Subgroup of G equals
+  :Def7:  gr commutators(A,B);
+ correctness;
+end;
+
+canceled;
+
+theorem Th68:
+ a in A & b in B implies [.a,b.] in [.A,B.]
+  proof assume a in A & b in B;
+    then [.a,b.] in commutators(A,B) by Th52;
+    then [.a,b.] in gr commutators(A,B) by GROUP_4:38;
+   hence thesis by Def7;
+  end;
+
+theorem Th69:
+ x in [.A,B.] iff
+  ex F,I st len F = len I & rng F c= commutators(A,B) & x = Product(F |^ I)
+ proof
+  thus x in [.A,B.] implies
+    ex F,I st len F = len I & rng F c= commutators(A,B) & x = Product(F |^ I)
+   proof assume A1: x in [.A,B.];
+      then x in G by GROUP_2:49;
+     then reconsider a = x as Element of G by RLVECT_1:def 1;
+        a in gr commutators(A,B) by A1,Def7;
+    hence thesis by GROUP_4:37;
+   end;
+     gr commutators(A,B) = [.A,B.] by Def7;
+  hence thesis by GROUP_4:37;
+ end;
+
+theorem
+   A c= C & B c= D implies [.A,B.] is Subgroup of [.C,D.]
+  proof assume A c= C & B c= D;
+    then commutators(A,B) c= commutators(C,D) by Th55;
+    then gr commutators(A,B) is Subgroup of gr commutators(C,D) by GROUP_4:41;
+    then [.A,B.] is Subgroup of gr commutators(C,D) by Def7;
+   hence thesis by Def7;
+  end;
+
+definition let G,H1,H2;
+ func [.H1,H2.] -> strict Subgroup of G equals
+  :Def8:  [.carr H1,carr H2.];
+ correctness;
+end;
+
+canceled;
+
+theorem Th72:
+ [.H1,H2.] = gr commutators(H1,H2)
+  proof
+   thus [.H1,H2.] = [.carr H1,carr H2.] by Def8
+                 .= gr commutators(carr H1,carr H2) by Def7
+                 .= gr commutators(H1,H2) by Def5;
+  end;
+
+theorem Th73:
+ x in [.H1,H2.] iff
+  ex F,I st len F = len I & rng F c= commutators(H1,H2) & x = Product(F |^ I)
+ proof
+  thus x in [.H1,H2.] implies
+ ex F,I st len F = len I & rng F c= commutators(H1,H2) & x = Product(F |^ I)
+   proof assume x in [.H1,H2.];
+      then x in [.carr H1,carr H2.] by Def8;
+     then consider F,I such that
+      A1: len F = len I & rng F c= commutators(carr H1,carr H2) &
+         x = Product(F |^ I) by Th69;
+        rng F c= commutators(H1,H2) by A1,Def5;
+     hence thesis by A1;
+    end;
+    given F,I such that
+     A2: len F = len I & rng F c= commutators(H1,H2) & x = Product(F |^ I);
+       commutators(H1,H2) = commutators(carr H1,carr H2) by Def5;
+     then x in [.carr H1,carr H2.] by A2,Th69;
+   hence thesis by Def8;
+  end;
+
+theorem Th74:
+ a in H1 & b in H2 implies [.a,b.] in [.H1,H2.]
+  proof assume a in H1 & b in H2;
+    then a in carr H1 & b in carr H2 by GROUP_2:88;
+    then [.a,b.] in [.carr H1,carr H2.] by Th68;
+   hence thesis by Def8;
+  end;
+
+theorem
+   H1 is Subgroup of H2 & H3 is Subgroup of H4 implies
+  [.H1,H3.] is Subgroup of [.H2,H4.]
+ proof assume H1 is Subgroup of H2 & H3 is Subgroup of H4;
+   then commutators(H1,H3) c= commutators(H2,H4) by Th62;
+   then gr commutators(H1,H3) is Subgroup of gr commutators(H2,H4)
+                                                           by GROUP_4:41;
+   then [.H1,H3.] is Subgroup of gr commutators(H2,H4) by Th72;
+  hence thesis by Th72;
+ end;
+
+theorem
+   for N being strict normal Subgroup of G holds
+ [.N,H.] is Subgroup of N & [.H,N.] is Subgroup of N
+  proof let N be strict normal Subgroup of G;
+      now let a;
+      assume a in [.N,H.];
+       then consider F,I such that A1: len F = len I and
+        A2: rng F c= commutators(N,H) and A3: a = Product(F |^ I) by Th73;
+          commutators(N,H) c= carr N by Th61;
+        then rng F c= carr N by A2,XBOOLE_1:1;
+        then a in gr carr N by A1,A3,GROUP_4:37;
+     hence a in N by GROUP_4:40;
+    end;
+   hence [.N,H.] is Subgroup of N by GROUP_2:67;
+      now let a;
+      assume a in [.H,N.];
+       then consider F,I such that A4: len F = len I and
+        A5: rng F c= commutators(H,N) and A6: a = Product(F |^ I) by Th73;
+          commutators(H,N) c= carr N by Th61;
+        then rng F c= carr N by A5,XBOOLE_1:1;
+        then a in gr carr N by A4,A6,GROUP_4:37;
+     hence a in N by GROUP_4:40;
+    end;
+   hence thesis by GROUP_2:67;
+  end;
+
+theorem Th77:
+ for N1,N2 being strict normal Subgroup of G
+ holds [.N1,N2.] is normal Subgroup of G
+  proof let N1,N2 be strict normal Subgroup of G;
+      now let a;
+        now let b;
+        assume b in [.N1,N2.] |^ a;
+         then consider c such that A1: b = c |^ a and A2: c in [.N1,N2.]
+                                                             by GROUP_3:70;
+            c in [.carr N1,carr N2.] by A2,Def8;
+          then c in gr commutators(carr N1,carr N2) by Def7;
+         then consider F,I such that A3: len F = len I and
+          A4: rng F c= commutators(carr N1,carr N2) and
+          A5: c = Product(F |^ I) by GROUP_4:37;
+          A6: b = Product(F |^ I |^ a) by A1,A5,Th17
+              .= Product((F |^ a) |^ I) by Th18;
+          A7: len(F |^ a) = len F by Def1;
+            rng(F |^ a) c= commutators(carr N1,carr N2)
+           proof let x;
+             assume x in rng(F |^ a);
+              then consider y such that A8: y in dom(F |^ a) and
+                                        A9: (F |^ a).y = x by FUNCT_1:def 5;
+              reconsider y as Nat by A8;
+                  y in dom F by A7,A8,FINSEQ_3:31;
+               then F.y in rng F by FUNCT_1:def 5;
+               then consider d,e such that A10: F.y = [.d,e.] and
+               A11: d in carr N1 & e in carr N2 by A4,Th52;
+                 y in dom F by A7,A8,FINSEQ_3:31;
+               then x = (F/.y) |^ a & F.y = (F/.y) by A9,Def1,FINSEQ_4:def 4;
+               then A12: x = [.d |^ a,e |^ a.] by A10,Th26;
+                 d in N1 & e in N2 by A11,GROUP_2:88;
+               then d |^ a in N1 |^ a & e |^ a in N2 |^ a by GROUP_3:70;
+               then d |^ a in N1 & e |^ a in N2 by GROUP_3:def 13;
+               then d |^ a in carr N1 & e |^ a in carr N2 by GROUP_2:88;
+            hence thesis by A12,Th52;
+           end;
+          then b in gr commutators(carr N1,carr N2) by A3,A6,A7,GROUP_4:37;
+          then b in [.carr N1,carr N2.] by Def7;
+       hence b in [.N1,N2.] by Def8;
+      end;
+     hence [.N1,N2.] |^ a is Subgroup of [.N1,N2.] by GROUP_2:67;
+    end;
+   hence thesis by GROUP_3:145;
+  end;
+
+Lm4: [.N1,N2.] is Subgroup of [.N2,N1.]
+ proof
+     now let a;
+     assume a in [.N1,N2.];
+      then consider F,I such that len F = len I and
+       A1: rng F c= commutators(N1,N2) and A2: a = Product(F |^ I) by Th73;
+      deffunc F(Nat) = (F/.$1)";
+      consider F1 such that A3: len F1 = len F and
+       A4: for k st k in Seg len F holds F1.k = F(k) from SeqLambdaD;
+      deffunc F(Nat) = @(- @(I/.$1));
+      consider I1 such that A5: len I1 = len F and
+       A6: for k st k in Seg len F holds I1.k = F(k) from SeqLambdaD;
+A7:   dom F = Seg len F by FINSEQ_1:def 3;
+A8:   dom F1 = dom F by A3,FINSEQ_3:31;
+A9:   dom I1 = dom F by A5,FINSEQ_3:31;
+      set J = F1 |^ I1;
+       A10: len J = len F & len(F |^ I) = len F by A3,GROUP_4:def 4;
+         now let k;
+         assume A11: k in Seg len F;
+       then A12: k in dom F by FINSEQ_1:def 3;
+            J.k = (F1/.k) |^ @(I1/.k) & F1/.k = F1.k & F1.k = (F/.k)" &
+          I1.k = (I1/.k) & @(I1/.k) = I1/.k &
+          I1.k = @(- @(I/.k)) & @(- @(I/.k)) = - @(I/.k)
+            by A4,A6,A7,A8,A9,A11,FINSEQ_4:def 4,GROUP_4:def 2,def 4;
+          then J.k = ((F/.k)" |^ @(I/.k))" by GROUP_1:70
+                  .= ((F/.k) |^ @(I/.k))"" by GROUP_1:72
+                  .= (F/.k) |^ @(I/.k) by GROUP_1:19;
+        hence (F |^ I).k = J.k by A12,GROUP_4:def 4;
+       end;
+       then A13: J = F |^ I by A10,FINSEQ_2:10;
+         rng F1 c= commutators(N2,N1)
+        proof let x;
+          assume x in rng F1;
+           then consider y such that A14: y in dom F1 and A15: F1.y = x
+                                                             by FUNCT_1:def 5;
+           reconsider y as Nat by A14;
+              y in dom F by A3,A14,FINSEQ_3:31;
+            then F.y in rng F by FUNCT_1:def 5;
+            then consider b,c such that A16: F.y = [.b,c.] and
+            A17: b in N1 & c in N2 by A1,Th58;
+              y in dom F by A3,A14,FINSEQ_3:31;
+            then x = (F/.y)" & F/.y = F.y by A4,A7,A15,FINSEQ_4:def 4;
+            then x = [.c,b.] by A16,Th25;
+         hence thesis by A17,Th58;
+        end;
+    hence a in [.N2,N1.] by A2,A3,A5,A13,Th73;
+   end;
+  hence thesis by GROUP_2:67;
+ end;
+
+theorem Th78:
+ [.N1,N2.] = [.N2,N1.]
+  proof [.N1,N2.] is Subgroup of [.N2,N1.] &
+        [.N2,N1.] is Subgroup of [.N1,N2.] by Lm4;
+   hence thesis by GROUP_2:64;
+  end;
+
+theorem Th79:
+ for N1,N2,N3 being strict normal Subgroup of G
+ holds [.N1 "\/" N2,N3.] = [.N1,N3.] "\/" [.N2,N3.]
+  proof let N1,N2,N3 be strict normal Subgroup of G;
+   A1: [.N1,N3.] is normal Subgroup of G &
+           [.N2,N3.] is normal Subgroup of G by Th77;
+      commutators(N1 "\/" N2,N3) c= [.N1,N3.] * [.N2,N3.]
+     proof let x;
+       assume x in commutators(N1 "\/" N2,N3);
+        then consider a,b such that A2: x = [.a,b.] and A3: a in N1 "\/" N2 and
+                                    A4: b in N3 by Th58;
+        consider c,d such that A5: a = c * d and A6: c in N1 and A7: d in N2
+                                                                 by A3,Th7;
+         A8: x = [.c,b.] |^ d * [.d,b.] by A2,A5,Th28;
+           [.c,b.] in [.N1,N3.] by A4,A6,Th74;
+         then [.c,b.] |^ d in [.N1,N3.] |^ d by GROUP_3:70;
+         then [.c,b.] |^ d in [.N1,N3.] & [.d,b.] in [.N2,N3.]
+                                               by A1,A4,A7,Th74,GROUP_3:def 13;
+      hence thesis by A8,Th4;
+     end;
+    then gr commutators(N1 "\/"
+ N2,N3) is Subgroup of gr ([.N1,N3.] * [.N2,N3.]) by GROUP_4:41;
+    then [.N1 "\/" N2,N3.] is Subgroup of gr([.N1,N3.] * [.N2,N3.]) by Th72;
+    then A9: [.N1 "\/" N2,N3.] is Subgroup of [.N1,N3.] "\/" [.N2,N3.]
+                                                              by GROUP_4:68;
+      now let a;
+      assume a in [.N1,N3.] "\/" [.N2,N3.];
+       then consider b,c such that A10: a = b * c and A11: b in [.N1,N3.] and
+                                   A12: c in [.N2,N3.] by A1,Th7;
+       consider F1,I1 such that A13: len F1 = len I1 and
+        A14: rng F1 c= commutators(N1,N3) and A15: b = Product
+(F1 |^ I1) by A11,Th73;
+       consider F2,I2 such that A16: len F2 = len I2 and
+        A17: rng F2 c= commutators(N2,N3) and A18: c = Product
+(F2 |^ I2) by A12,Th73;
+        A19: Product((F1 ^ F2) |^ (I1 ^ I2)) =
+                Product((F1 |^ I1) ^ (F2 |^ I2)) by A13,A16,GROUP_4:25
+             .= a by A10,A15,A18,GROUP_4:8;
+          rng(F1 ^ F2) = rng F1 \/ rng F2 by FINSEQ_1:44;
+        then A20: rng(F1 ^ F2) c= commutators(N1,N3) \/ commutators(N2,N3)
+                                                          by A14,A17,XBOOLE_1:
+13;
+          N1 is Subgroup of N1 "\/" N2 & N2 is Subgroup of N1 "\/" N2 &
+        N3 is Subgroup of N3 by GROUP_2:63,GROUP_4:78;
+        then commutators(N1,N3) c= commutators(N1 "\/" N2,N3) &
+             commutators(N2,N3) c= commutators(N1 "\/" N2,N3) by Th62;
+        then commutators(N1,N3) \/ commutators(N2,N3) c=
+             commutators(N1 "\/" N2,N3) by XBOOLE_1:8;
+        then A21: rng(F1 ^ F2) c= commutators(N1 "\/" N2,N3) by A20,XBOOLE_1:1;
+          len(F1 ^ F2) = len I1 + len I2 by A13,A16,FINSEQ_1:35
+                    .= len(I1 ^ I2) by FINSEQ_1:35;
+     hence a in [.N1 "\/" N2,N3.] by A19,A21,Th73;
+    end;
+    then [.N1,N3.] "\/" [.N2,N3.] is Subgroup of [.N1 "\/"
+ N2,N3.] by GROUP_2:67;
+   hence thesis by A9,GROUP_2:64;
+  end;
+
+theorem
+   for N1,N2,N3 being strict normal Subgroup of G holds
+ [.N1,N2 "\/" N3.] = [.N1,N2.] "\/" [.N1,N3.]
+  proof let N1,N2,N3 be strict normal Subgroup of G;
+      N2 "\/" N3 is normal Subgroup of G by GROUP_4:72;
+   hence [.N1,N2 "\/" N3.] = [.N2 "\/" N3,N1.] by Th78
+                       .= [.N2,N1.] "\/" [.N3,N1.] by Th79
+                       .= [.N1,N2.] "\/" [.N3,N1.] by Th78
+                       .= [.N1,N2.] "\/" [.N1,N3.] by Th78;
+  end;
+
+definition let G be Group;
+ func G` -> strict normal Subgroup of G equals
+  :Def9:  [.(Omega).G,(Omega).G.];
+ coherence
+  proof (Omega).G is normal Subgroup of G by GROUP_3:137;
+   hence thesis by Th77;
+  end;
+end;
+
+canceled;
+
+theorem Th82:
+ for G being Group holds
+ G` = gr commutators G
+  proof let G be Group;
+   thus G` = [.(Omega).G,(Omega).G.] by Def9
+          .= gr commutators((Omega).G,(Omega).G) by Th72
+          .= gr commutators G by Def6;
+  end;
+
+theorem Th83:
+ for G being Group holds
+ x in G` iff
+  ex F being FinSequence of the carrier of G,I
+    st len F = len I & rng F c= commutators G & x = Product(F |^ I)
+ proof let G be Group;
+  thus x in G` implies
+        ex F being FinSequence of the carrier of G,I
+        st len F = len I & rng F c= commutators G & x = Product(F |^ I)
+   proof assume A1: x in G`;
+      then A2: x in gr commutators G by Th82;
+        x in G by A1,GROUP_2:49;
+     then reconsider a = x as Element of G by RLVECT_1:def 1;
+        ex F being FinSequence of the carrier of G,I st
+ len F = len I & rng F c= commutators G & a = Product(F |^ I)
+                                                      by A2,GROUP_4:37;
+    hence thesis;
+   end;
+  given F being FinSequence of the carrier of G,I such that
+   A3: len F = len I & rng F c= commutators G & x = Product(F |^ I);
+     Product(F |^ I) in gr commutators G by A3,GROUP_4:37;
+  hence thesis by A3,Th82;
+ end;
+
+theorem Th84:
+ for G being strict Group, a,b be Element of G
+    holds [.a,b.] in G`
+  proof let G be strict Group, a,b be Element of G;
+     a in G & b in G by RLVECT_1:def 1;
+    then a in (Omega).G & b in (Omega).G by GROUP_2:def 8;
+    then [.a,b.] in [.(Omega).G,(Omega).G.] by Th74;
+   hence thesis by Def9;
+  end;
+
+theorem
+   for G being strict Group holds G is commutative Group iff G` = (1).G
+  proof let G be strict Group;
+   thus G is commutative Group implies G` = (1).G
+    proof assume A1: G is commutative Group;
+        now let a be Element of G;
+        assume a in G`;
+         then a in [.(Omega).G,(Omega).G.] by Def9;
+         then a in [.carr(Omega).G,carr(Omega).G.] by Def8;
+         then a in gr commutators(carr(Omega).G,carr(Omega).G) &
+              carr(Omega).G <> {} by Def7,GROUP_2:87;
+         then a in gr {1.G} by A1,Th56;
+         then a in gr({1.G} \ {1.G}) & {} = {} the carrier of G
+                                           by GROUP_4:44;
+         then a in gr {} the carrier of G by XBOOLE_1:37;
+       hence a in (1).G by GROUP_4:39;
+      end;
+      then G` is Subgroup of (1).G & (1).G is Subgroup of G`
+                                              by GROUP_2:67,77;
+     hence thesis by GROUP_2:64;
+    end;
+    assume A2: G` = (1).G;
+     G is commutative
+    proof
+     let a,b be Element of G;
+        [.a,b.] in G` by Th84;
+      then [.a,b.] = 1.G by A2,Th1;
+     hence thesis by Th39;
+    end;
+   hence thesis;
+  end;
+
+theorem
+   for G being Group, H being strict Subgroup of G holds
+ Left_Cosets H is finite & index H = 2 implies G` is Subgroup of H
+  proof let G be Group, H be strict Subgroup of G;
+   assume that A1: Left_Cosets H is finite and A2: index H = 2;
+     A3: H is normal Subgroup of G by A1,A2,GROUP_3:151;
+      now let a be Element of G;
+      assume a in G`;
+       then consider F being FinSequence of the carrier of G,I such that
+       A4: len F = len I and
+        A5: rng F c= commutators G and A6: a = Product(F |^ I) by Th83;
+          rng F c= carr H
+         proof let X be set;
+           assume X in rng F;
+             then consider a,b being Element of G such that
+            A7: X = [.a,b.] by A5,Th65;
+               ex B being finite set st
+               B = Left_Cosets H & index H = card B by A1,GROUP_2:176;
+            then consider x,y such that x <> y and A8: Left_Cosets H = {x,y}
+                                                           by A2,GROUP_3:166;
+               x in Left_Cosets H by A8,TARSKI:def 2;
+            then consider d being Element of G such that
+            A9: x = d * H by GROUP_2:def 15;
+               y in Left_Cosets H by A8,TARSKI:def 2;
+            then consider e being Element of G such that
+            A10: y = e * H by GROUP_2:def 15;
+               carr H in Left_Cosets H by GROUP_2:165;
+             then Left_Cosets H = {carr H,e * H} or
+                  Left_Cosets H = {d * H,carr H} by A8,A9,A10,TARSKI:def 2;
+            then consider c being Element of G such that
+            A11: Left_Cosets H = {carr H,c * H};
+               a in the carrier of G & b in the carrier of G;
+             then a in union Left_Cosets H & b in union Left_Cosets H
+                                                            by GROUP_2:167;
+             then A12: a in carr H \/ c * H & b in carr H \/ c * H
+                                                         by A11,ZFMISC_1:93;
+               now per cases by A12,XBOOLE_0:def 2;
+              suppose a in carr H & b in carr H;
+                then a in H & b in H by GROUP_2:88;
+                then X in H by A7,Th41;
+               hence thesis by GROUP_2:88;
+              suppose a in carr H & b in c * H;
+                then a in H by GROUP_2:88;
+                then a |^ b in H & a" in H by A3,Th3,GROUP_2:60;
+                then a" * (a |^ b) in H by GROUP_2:59;
+                then X in H by A7,Th21;
+               hence thesis by GROUP_2:88;
+              suppose a in c * H & b in carr H;
+                then A13: b in H by GROUP_2:88;
+                then b" in H by GROUP_2:60;
+                then b" |^ a in H by A3,Th3;
+                then b" |^ a * b in H by A13,GROUP_2:59;
+                then X in H by A7,Th21;
+               hence thesis by GROUP_2:88;
+              suppose A14: a in c * H & b in c * H;
+                then consider d being Element of G such that
+                A15: a = c * d & d in H by GROUP_2:125;
+                consider e being Element of G such that
+                A16: b = c * e & e in H
+                                                             by A14,GROUP_2:125
+;
+                 A17: [.a,b.] = (a" * b") * (a * b) by Th19
+                  .= (d" * c" * b") * (c * d * (c * e)) by A15,A16,GROUP_1:25
+                  .= (d" * c" * (e" * c")) * (c * d * (c * e)) by A16,GROUP_1:
+25
+                  .= (d" * c" * e" * c") * (c * d * (c * e)) by VECTSP_1:def 16
+                  .= (d" * c" * e" * c") * (c * (d * (c * e))) by VECTSP_1:def
+16
+                  .= ((d" * c" * e") * c") * c * (d * (c * e)) by VECTSP_1:def
+16
+                  .= (d" * c" * e") * (c" * c) * (d * (c * e)) by VECTSP_1:def
+16
+                  .= (d" * c" * e") * (1.G) * (d * (c * e)) by GROUP_1:def 5
+                  .= (d" * c" * e") * (c * c") * (d * (c * e)) by GROUP_1:def 5
+                  .= (d" * c" * e") * c * c" * (d * (c * e)) by VECTSP_1:def 16
+                  .= (d" * (c" * e")) * c * c" * (d * (c * e)) by VECTSP_1:def
+16
+                  .= d" * ((c" * e") * c) * c" * (d * (c * e)) by VECTSP_1:def
+16
+                  .= d" * (e" |^ c) * c" * (d * (c * e)) by GROUP_3:20
+                  .= d" * (e" |^ c) * c" * (d * c * e) by VECTSP_1:def 16
+                  .= d" * (e" |^ c) * (c" * (d * c * e)) by VECTSP_1:def 16
+                  .= d" * (e" |^ c) * (c" * (d * (c * e))) by VECTSP_1:def 16
+                  .= d" * (e" |^ c) * (c" * d * (c * e)) by VECTSP_1:def 16
+                  .= d" * (e" |^ c) * (c" * d * c * e) by VECTSP_1:def 16
+                  .= d" * (e" |^ c) * (d |^ c * e) by GROUP_3:20;
+                   e" in H by A16,GROUP_2:60;
+                 then d" in H & e" |^ c in H & d |^ c in H
+                    by A3,A15,Th3,GROUP_2:60;
+                 then d" * (e" |^ c) in H & d |^ c * e in H by A16,GROUP_2:59;
+                 then X in H by A7,A17,GROUP_2:59;
+              hence thesis by GROUP_2:88;
+             end;
+          hence thesis;
+         end;
+       then a in gr carr H by A4,A6,GROUP_4:37;
+     hence a in H by GROUP_4:40;
+    end;
+   hence thesis by GROUP_2:67;
+  end;
+
+begin :: Center of a Group.
+
+definition let G;
+ func center G -> strict Subgroup of G means
+  :Def10: the carrier of it = {a : for b holds a * b = b * a};
+ existence
+  proof
+    defpred P[Element of G] means for b holds $1 * b = b * $1;
+    reconsider A = {a : P[a]} as Subset of G from SubsetD;
+       now let b;
+         1.G * b = b & b * 1.G = b by GROUP_1:def 4;
+      hence 1.G * b = b * 1.G;
+     end;
+     then A1: 1.G in A;
+     A2: now let a,b;
+       assume that A3: a in A and A4: b in A;
+        consider c such that A5: c = a & for b holds c * b = b * c by A3;
+        consider d such that A6: d = b & for a holds d * a = a * d by A4;
+           now let e;
+          thus a * b * e = a * (b * e) by VECTSP_1:def 16
+                        .= a * (e * d) by A6
+                        .= a * e * b by A6,VECTSP_1:def 16
+                        .= e * c * b by A5
+                        .= e * (a * b) by A5,VECTSP_1:def 16;
+         end;
+      hence a * b in A;
+     end;
+       now let a;
+       assume a in A;
+        then consider b such that A7: b = a & for c holds b * c = c * b;
+           now let c;
+          thus a" * c = (a" * c)"" by GROUP_1:19
+                     .= (c" * a"")" by GROUP_1:25
+                     .= (c" * b)" by A7,GROUP_1:19
+                     .= (b * c")" by A7
+                     .= (a"" * c")" by A7,GROUP_1:19
+                     .= (c * a")"" by GROUP_1:25
+                     .= c * a" by GROUP_1:19;
+         end;
+      hence a" in A;
+     end;
+   hence thesis by A1,A2,GROUP_2:61;
+  end;
+ uniqueness by GROUP_2:68;
+end;
+
+canceled 2;
+
+theorem Th89:
+ a in center G iff for b holds a * b = b * a
+  proof
+   thus a in center G implies for b holds a * b = b * a
+    proof assume a in center G;
+       then a in the carrier of center G by RLVECT_1:def 1;
+       then a in {b : for c holds b * c = c * b} by Def10;
+      then ex b st a = b & for c holds b * c = c * b;
+     hence thesis;
+    end;
+    assume for b holds a * b = b * a;
+     then a in {c : for b holds c * b = b * c};
+     then a in the carrier of center G by Def10;
+   hence thesis by RLVECT_1:def 1;
+  end;
+
+theorem
+   center G is normal Subgroup of G
+  proof
+      now let a;
+     thus a * center G c= center G * a
+      proof let x;
+        assume x in a * center G;
+         then consider b such that A1: x = a * b and A2: b in center G
+                                                             by GROUP_2:125;
+           x = b * a by A1,A2,Th89;
+       hence thesis by A2,GROUP_2:126;
+      end;
+    end;
+   hence thesis by GROUP_3:141;
+  end;
+
+theorem
+   for H being Subgroup of G holds
+ H is Subgroup of center G implies H is normal Subgroup of G
+  proof let H be Subgroup of G;
+   assume A1: H is Subgroup of center G;
+      now let a;
+     thus H * a c= a * H
+      proof let x;
+        assume x in H * a;
+         then consider b such that A2: x = b * a and A3: b in H by GROUP_2:126;
+            b in center G by A1,A3,GROUP_2:49;
+          then x = a * b by A2,Th89;
+       hence thesis by A3,GROUP_2:125;
+      end;
+    end;
+   hence thesis by GROUP_3:142;
+  end;
+
+theorem
+   center G is commutative
+  proof let a,b be Element of center G;
+    reconsider x = a, y = b as Element of G by GROUP_2:51;
+     A1: a in center G by RLVECT_1:def 1;
+   thus a * b = x * y by GROUP_2:52
+             .= y * x by A1,Th89
+             .= b * a by GROUP_2:52;
+  end;
+
+theorem
+   a in center G iff con_class a = {a}
+  proof
+   thus a in center G implies con_class a = {a}
+    proof assume A1: a in center G;
+     thus con_class a c= {a}
+      proof let x;
+        assume x in con_class a;
+         then consider b such that A2: b = x and A3: a,b are_conjugated
+                                                             by GROUP_3:95;
+         consider c such that A4: a = b |^ c by A3,GROUP_3:def 7;
+            a = c" * (b * c) by A4,GROUP_3:20;
+          then c * a = b * c by GROUP_1:21;
+          then a * c = b * c by A1,Th89;
+          then a = b by GROUP_1:14;
+       hence thesis by A2,TARSKI:def 1;
+      end;
+        a in con_class a by GROUP_3:98;
+     hence {a} c= con_class a by ZFMISC_1:37;
+    end;
+    assume A5: con_class a = {a};
+       now let b;
+         a |^ b in con_class a by GROUP_3:97;
+       then a |^ b = a by A5,TARSKI:def 1;
+       then b" * (a * b) = a by GROUP_3:20;
+      hence a * b = b * a by GROUP_1:21;
+     end;
+   hence thesis by Th89;
+  end;
+
+theorem
+   for G being strict Group holds
+ G is commutative Group iff center G = G
+ proof let G be strict Group;
+  thus G is commutative Group implies center G = G
+   proof assume A1: G is commutative Group;
+       now let a be Element of G;
+         for b being Element of G holds a * b = b * a by A1,Lm3;
+      hence a in center G by Th89;
+     end;
+    hence thesis by GROUP_2:71;
+   end;
+   assume A2: center G = G;
+    G is commutative
+   proof
+    let a,b be Element of G;
+       a in G by RLVECT_1:def 1;
+    hence a * b = b * a by A2,Th89;
+   end;
+  hence thesis;
+ end;
+
+begin :: Auxiliary theorems.
+
+reserve E for non empty set,
+        p, q for FinSequence of E;
+
+theorem
+   k in dom p implies (p ^ q)/.k = p/.k by Lm1;
+
+theorem
+   k in dom q implies (p ^ q)/.(len p + k) = q/.k by Lm2;

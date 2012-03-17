@@ -1,0 +1,1342 @@
+:: Introduction to Banach and Hilbert spaces - Part III
+::  by Jan Popio{\l}ek
+::
+:: Received July 19, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary BHSP_1, PRE_TOPC, NORMSP_1, ORDINAL2, SEQM_3, SEQ_1, RLVECT_1,
+      METRIC_1, FUNCT_1, ARYTM_1, ARYTM_3, ABSVALUE, RELAT_1, SEQ_2, LATTICES,
+      BHSP_3, ARYTM;
+ notation TARSKI, ORDINAL1, NUMBERS, XREAL_0, REAL_1, NAT_1, RELAT_1, FUNCT_1,
+      FUNCT_2, SEQ_1, SEQM_3, ABSVALUE, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_1,
+      BHSP_1, BHSP_2;
+ constructors REAL_1, NAT_1, SEQ_1, ABSVALUE, BHSP_2, MEMBERED, XBOOLE_0;
+ clusters FUNCT_1, SEQM_3, STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, MEMBERED,
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ theorems REAL_1, NAT_1, REAL_2, AXIOMS, FUNCT_1, SEQ_2, SEQM_3, SEQ_4,
+      FUNCT_2, ABSVALUE, RLVECT_1, BHSP_1, BHSP_2, NORMSP_1, RELAT_1, RELSET_1,
+      XREAL_0, XBOOLE_1, XCMPLX_0, XCMPLX_1;
+ schemes NAT_1, SEQ_1, BHSP_1;
+
+begin
+
+ reserve X for RealUnitarySpace,
+         x, g, g1, h for Point of X,
+         a, p, r, M, M1, M2 for Real,
+         seq, seq1, seq2, seq3 for sequence of X,
+         Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat,
+         Rseq for Real_Sequence,
+         k, l, l1, l2, l3, n, m, m1, m2 for Nat;
+
+deffunc 0'(RealUnitarySpace) = 0.$1;
+
+definition
+          let X;
+          let seq;
+          attr seq is Cauchy means
+:Def1:    for r st r > 0 ex k st for n, m st ( n >= k & m >= k )
+          holds dist((seq.n), (seq.m)) < r;
+  synonym seq is_Cauchy_sequence;
+end;
+
+theorem
+    seq is constant implies seq is_Cauchy_sequence
+proof
+     assume
+A1:     seq is constant;
+     let r such that
+A2:   r > 0;
+     take k = 0;
+     let n, m such that
+       n >= k & m >= k;
+       dist((seq.n), (seq.m)) = dist((seq.n), (seq.n)) by A1,BHSP_1:70
+                            .= 0 by BHSP_1:41;
+     hence dist((seq.n), (seq.m)) < r by A2;
+  end;
+
+theorem
+    seq is_Cauchy_sequence iff for r st r > 0 ex k st for n, m st
+    ( n >= k & m >= k ) holds ||.(seq.n) - (seq.m).|| < r
+proof
+     thus
+       seq is_Cauchy_sequence implies for r st r > 0 ex k st for n, m st
+     ( n >= k & m >= k ) holds ||.(seq.n) - (seq.m).|| < r
+     proof
+          assume
+A1:          seq is_Cauchy_sequence;
+          let r; assume r > 0;
+          then consider l such that
+     A2:   for n, m st ( n >= l & m >= l ) holds
+          dist((seq.n), (seq.m)) < r by A1,Def1;
+          take k = l;
+          let n, m; assume n >= k & m >= k;
+          then dist((seq.n), (seq.m)) < r by A2;
+          hence thesis by BHSP_1:def 5;
+          end;
+       ( for r st r > 0 ex k st for n, m st ( n >= k & m >= k ) holds
+     ||.(seq.n) - (seq.m).|| < r ) implies seq is_Cauchy_sequence
+     proof
+          assume
+     A3:   for r st r > 0 ex k st for n, m st ( n >= k & m >= k )
+          holds ||.(seq.n) - (seq.m).|| < r;
+          let r; assume r > 0;
+          then consider l such that
+     A4:   for n, m st ( n >= l & m >= l ) holds
+          ||.(seq.n) - (seq.m).|| < r by A3;
+          take k = l;
+          let n, m; assume n >= k & m >= k;
+          then ||.(seq.n) - (seq.m).|| < r by A4;
+          hence dist((seq.n), (seq.m)) < r by BHSP_1:def 5;
+     end;
+     hence thesis;
+end;
+
+theorem
+    seq1 is_Cauchy_sequence & seq2 is_Cauchy_sequence implies
+    seq1 + seq2 is_Cauchy_sequence
+proof
+     assume that
+ A1:  seq1 is_Cauchy_sequence and
+ A2:  seq2 is_Cauchy_sequence;
+      let r; assume r > 0;
+ then A3:  r/2 > 0 by SEQ_2:3;
+      then consider m1 such that
+ A4:  for n, m st ( n >= m1 & m >= m1 ) holds
+      dist((seq1.n), (seq1.m)) < r/2 by A1,Def1;
+      consider m2 such that
+ A5:  for n, m st ( n >= m2 & m >= m2 ) holds
+      dist((seq2.n), (seq2.m)) < r/2 by A2,A3,Def1;
+      take k = m1 + m2;
+      let n, m such that
+  A6:  n >= k & m >= k;
+        m1 + m2 >= m1 by NAT_1:37;
+      then n >= m1 & m >= m1 by A6,AXIOMS:22;
+  then A7:  dist((seq1.n), (seq1.m)) < r/2 by A4;
+        k >= m2 by NAT_1:37;
+      then n >= m2 & m >= m2 by A6,AXIOMS:22;
+      then dist((seq2.n), (seq2.m)) < r/2 by A5;
+      then dist((seq1.n), (seq1.m)) + dist((seq2.n), (seq2.m)) < r/2 + r/2
+      by A7,REAL_1:67;
+  then A8:  dist((seq1.n), (seq1.m)) + dist((seq2.n), (seq2.m)) < r
+      by XCMPLX_1:66;
+        dist((seq1 + seq2).n, (seq1 + seq2).m)
+    = dist((seq1.n) + (seq2.n), (seq1 + seq2).m) by NORMSP_1:def 5
+   .= dist((seq1.n) + (seq2.n), (seq1.m) + (seq2.m)) by NORMSP_1:def 5;
+      then dist((seq1 + seq2).n, (seq1 + seq2).m) <=
+      dist((seq1.n), (seq1.m)) + dist((seq2.n), (seq2.m)) by BHSP_1:47;
+      hence dist((seq1 + seq2).n, (seq1 + seq2).m) < r by A8,AXIOMS:22;
+  end;
+
+theorem
+    seq1 is_Cauchy_sequence & seq2 is_Cauchy_sequence implies
+    seq1 - seq2 is_Cauchy_sequence
+proof
+     assume that
+ A1:  seq1 is_Cauchy_sequence and
+ A2:  seq2 is_Cauchy_sequence;
+      let r; assume r > 0;
+ then A3:  r/2 > 0 by SEQ_2:3;
+      then consider m1 such that
+ A4:  for n, m st ( n >= m1 & m >= m1 ) holds
+      dist((seq1.n), (seq1.m)) < r/2 by A1,Def1;
+      consider m2 such that
+ A5:  for n, m st ( n >= m2 & m >= m2 ) holds
+      dist((seq2.n), (seq2.m)) < r/2 by A2,A3,Def1;
+      take k = m1 + m2;
+      let n, m such that
+  A6:  n >= k & m >= k;
+        m1 + m2 >= m1 by NAT_1:37;
+      then n >= m1 & m >= m1 by A6,AXIOMS:22;
+  then A7:  dist((seq1.n), (seq1.m)) < r/2 by A4;
+        k >= m2 by NAT_1:37;
+      then n >= m2 & m >= m2 by A6,AXIOMS:22;
+      then dist((seq2.n), (seq2.m)) < r/2 by A5;
+      then dist((seq1.n), (seq1.m)) + dist((seq2.n), (seq2.m)) < r/2 + r/2
+      by A7,REAL_1:67;
+  then A8:  dist((seq1.n), (seq1.m)) + dist((seq2.n), (seq2.m)) < r
+      by XCMPLX_1:66;
+        dist((seq1 - seq2).n, (seq1 - seq2).m)
+    = dist((seq1.n) - (seq2.n), (seq1 - seq2).m) by NORMSP_1:def 6
+   .= dist((seq1.n) - (seq2.n), (seq1.m) - (seq2.m)) by NORMSP_1:def 6;
+      then dist((seq1 - seq2).n, (seq1 - seq2).m) <=
+      dist((seq1.n), (seq1.m)) + dist((seq2.n), (seq2.m)) by BHSP_1:48;
+      hence dist((seq1 - seq2).n, (seq1 - seq2).m) < r by A8,AXIOMS:22;
+  end;
+
+theorem Th5:
+  seq is_Cauchy_sequence implies a * seq is_Cauchy_sequence
+proof
+     assume
+A1:         seq is_Cauchy_sequence;
+     A2:    now assume
+     A3:   a = 0;
+           let r; assume r > 0;
+           then consider m1 such that
+     A4:   for n, m st ( n >= m1 & m >= m1 ) holds
+           dist((seq.n), (seq.m)) < r by A1,Def1;
+           take k = m1;
+           let n, m; assume n >= k & m >= k;
+     then A5:   dist((seq.n), (seq.m)) < r by A4;
+          dist(a * (seq.n), a * (seq.m))
+         = dist(0'(X), 0 * (seq.m)) by A3,RLVECT_1:23
+        .= dist(0'(X), 0'(X)) by RLVECT_1:23
+        .= 0 by BHSP_1:41;
+           then dist(a * (seq.n), a * (seq.m)) < r by A5,BHSP_1:44;
+           then dist((a * seq).n, a * (seq.m)) < r by NORMSP_1:def 8;
+           hence dist((a * seq).n, (a * seq).m) < r by NORMSP_1:def 8;
+           end;
+             now assume
+A6:        a <> 0;
+     then A7:   abs(a) > 0 by ABSVALUE:6;
+           let r such that
+     A8:   r > 0;
+     A9:   abs(a) <> 0 by A6,ABSVALUE:6;
+             0/abs(a) = 0;
+           then r/abs(a) > 0 by A7,A8,REAL_1:73;
+           then consider m1 such that
+     A10:   for n, m st ( n >= m1 & m >= m1 ) holds
+           dist((seq.n), (seq.m)) < r/abs(a) by A1,Def1;
+           take k = m1;
+           let n, m; assume n >= k & m >= k;
+     then A11:   dist((seq.n), (seq.m)) < r/abs(a) by A10;
+     A12:   dist(a * (seq.n), a * (seq.m))
+         = ||.(a * (seq.n)) - (a * (seq.m)).|| by BHSP_1:def 5
+        .= ||.a * ((seq.n) - (seq.m)).|| by RLVECT_1:48
+        .= abs(a) * ||.(seq.n) - (seq.m).|| by BHSP_1:33
+        .= abs(a) * dist((seq.n), (seq.m)) by BHSP_1:def 5;
+             abs(a) * (r/abs(a)) = abs(a) * (abs(a)" * r) by XCMPLX_0:def 9
+                            .= abs(a) *abs(a)" * r by XCMPLX_1:4
+                            .= 1 * r by A9,XCMPLX_0:def 7
+                            .= r;
+           then dist((a * (seq.n)), (a * (seq.m))) < r
+           by A7,A11,A12,REAL_1:70;
+           then dist((a * seq).n, (a * (seq.m))) < r by NORMSP_1:def 8;
+           hence dist((a * seq).n, (a * seq).m) < r by NORMSP_1:def 8;
+           end;
+     hence thesis by A2,Def1;
+end;
+
+theorem
+    seq is_Cauchy_sequence implies - seq is_Cauchy_sequence
+proof
+     assume seq is_Cauchy_sequence;
+     then (-1) * seq is_Cauchy_sequence by Th5;
+     hence thesis by BHSP_1:77;
+end;
+
+theorem Th7:
+  seq is_Cauchy_sequence implies seq + x is_Cauchy_sequence
+proof
+     assume
+A1:         seq is_Cauchy_sequence;
+           let r; assume r > 0;
+           then consider m1 such that
+     A2:    for n, m st ( n >= m1 & m >= m1 ) holds
+           dist((seq.n), (seq.m)) < r by A1,Def1;
+           take k = m1;
+           let n, m; assume n >= k & m >= k;
+     then A3:    dist((seq.n), (seq.m)) < r by A2;
+             dist((seq.n) + x, (seq.m) + x) <= dist((seq.n), (seq.m)) +
+           dist(x, x) by BHSP_1:47;
+           then dist((seq.n) + x, (seq.m) + x) <=
+           dist((seq.n), (seq.m)) + 0 by BHSP_1:41;
+           then dist((seq.n) + x, (seq.m) + x) < r by A3,AXIOMS:22;
+           then dist((seq + x).n, (seq.m) + x) < r by BHSP_1:def 12;
+           hence dist((seq + x).n, (seq + x).m) < r by BHSP_1:def 12;
+end;
+
+theorem
+    seq is_Cauchy_sequence implies seq - x is_Cauchy_sequence
+proof
+     assume seq is_Cauchy_sequence;
+     then seq + (-x) is_Cauchy_sequence by Th7;
+     hence thesis by BHSP_1:78;
+end;
+
+theorem
+    seq is convergent implies seq is_Cauchy_sequence
+proof
+     assume seq is convergent;
+     then consider h such that
+A1:   for r st r > 0 ex k st for n st n >= k holds
+     dist((seq.n), h) < r by BHSP_2:def 1;
+     let r; assume r > 0;
+     then r/2 > 0 by SEQ_2:3;
+     then consider m1 such that
+A2:   for n st n >= m1 holds dist((seq.n), h) < r/2 by A1;
+     take k = m1;
+     let n, m; assume
+A3:   n >= k & m >= k;
+then A4:   dist((seq.n), h) < r/2 by A2;
+     A5: dist((seq.m), h) < r/2 by A2,A3;
+A6:   dist((seq.n), (seq.m)) <= dist((seq.n), h) + dist(h, (seq.m))
+     by BHSP_1:42;
+       dist((seq.n), h) + dist(h, (seq.m)) < r/2 + r/2
+     by A4,A5,REAL_1:67;
+     then dist((seq.n), h) + dist(h, (seq.m)) < r by XCMPLX_1:66;
+     hence dist((seq.n), (seq.m)) < r by A6,AXIOMS:22;
+end;
+
+definition
+          let X;
+          let seq1, seq2;
+          pred seq1 is_compared_to seq2 means
+:Def2:    for r st r > 0 ex m st for n st n >= m holds
+          dist(seq1.n, seq2.n) < r;
+end;
+
+theorem
+Th10:  seq is_compared_to seq
+proof
+     let r such that
+A1:   r > 0;
+     take m = 0;
+     let n such that
+       n >= m;
+     thus dist((seq.n), (seq.n)) < r by A1,BHSP_1:41;
+  end;
+
+theorem
+Th11:  seq1 is_compared_to seq2 implies seq2 is_compared_to seq1
+proof
+     assume
+A1:     seq1 is_compared_to seq2;
+     let r; assume r > 0;
+     then consider k such that
+A2:   for n st n >= k holds
+     dist((seq1.n), (seq2.n)) < r by A1,Def2;
+     take m = k;
+     let n; assume n >= m;
+     hence thesis by A2;
+end;
+
+definition let X; let seq1, seq2;
+  redefine pred seq1 is_compared_to seq2;
+  reflexivity by Th10;
+  symmetry by Th11;
+end;
+
+theorem
+    seq1 is_compared_to seq2 & seq2 is_compared_to seq3
+    implies seq1 is_compared_to seq3
+proof
+     assume that
+A1:  seq1 is_compared_to seq2 and
+A2:  seq2 is_compared_to seq3;
+     let r; assume r > 0;
+then A3:  r/2 > 0 by SEQ_2:3;
+     then consider m1 such that
+A4:  for n st n >= m1 holds
+     dist((seq1.n), (seq2.n)) < r/2 by A1,Def2;
+     consider m2 such that
+A5:  for n st n >= m2 holds
+     dist((seq2.n), (seq3.n)) < r/2 by A2,A3,Def2;
+     take m = m1 + m2;
+     let n such that
+A6:   n >= m;
+       m1 + m2 >= m1 by NAT_1:37;
+     then n >= m1 by A6,AXIOMS:22;
+then A7:   dist((seq1.n), (seq2.n)) < r/2 by A4;
+       m >= m2 by NAT_1:37;
+     then n >= m2 by A6,AXIOMS:22;
+     then dist((seq2.n), (seq3.n)) < r/2 by A5;
+     then dist((seq1.n), (seq2.n)) + dist((seq2.n), (seq3.n)) < r/2 + r/2
+     by A7,REAL_1:67;
+then A8:   dist((seq1.n), (seq2.n)) + dist((seq2.n), (seq3.n)) < r
+     by XCMPLX_1:66;
+       dist((seq1.n), (seq3.n)) <=
+     dist((seq1.n), (seq2.n)) + dist((seq2.n), (seq3.n))
+     by BHSP_1:42;
+     hence dist((seq1.n), (seq3.n)) < r by A8,AXIOMS:22;
+end;
+
+theorem
+    seq1 is_compared_to seq2 iff for r st r > 0 ex m st
+    for n st n >= m holds ||.(seq1.n) - (seq2.n).|| < r
+proof
+     thus
+       seq1 is_compared_to seq2 implies for r st r > 0 ex m st
+     for n st n >= m holds ||.(seq1.n) - (seq2.n).|| < r
+     proof
+          assume
+A1:          seq1 is_compared_to seq2;
+          let r; assume r > 0;
+          then consider m1 such that
+     A2:   for n st n >= m1 holds
+          dist((seq1.n), (seq2.n)) < r by A1,Def2;
+          take m = m1;
+          let n; assume n >= m;
+          then dist((seq1.n), (seq2.n)) < r by A2;
+          hence thesis by BHSP_1:def 5;
+          end;
+       ( for r st r > 0 ex m st for n st n >= m holds
+     ||.(seq1.n) - (seq2.n).|| < r ) implies seq1 is_compared_to seq2
+     proof
+          assume
+     A3:   for r st r > 0 ex m st for n st n >= m holds
+          ||.(seq1.n) - (seq2.n).|| < r;
+          let r; assume r > 0;
+          then consider m1 such that
+     A4:   for n st n >= m1 holds
+          ||.(seq1.n) - (seq2.n).|| < r by A3;
+          take m = m1;
+          let n; assume n >= m;
+          then ||.(seq1.n) - (seq2.n).|| < r by A4;
+          hence thesis by BHSP_1:def 5;
+          end;
+     hence thesis;
+end;
+
+theorem
+    ( ex k st for n st n >= k holds seq1.n = seq2.n )
+    implies seq1 is_compared_to seq2
+proof
+     assume
+A1:   ex k st for n st n >= k holds seq1.n = seq2.n;
+     let r such that
+A2:   r > 0;
+     consider m such that
+A3:   for n st n >= m holds seq1.n = seq2.n by A1;
+     take k = m;
+     let n; assume n >= k;
+     then dist((seq1.n), (seq2.n)) = dist((seq1.n), (seq1.n)) by A3
+                              .= 0 by BHSP_1:41;
+     hence dist((seq1.n), (seq2.n)) < r by A2;
+end;
+
+theorem
+    seq1 is_Cauchy_sequence & seq1 is_compared_to seq2
+     implies seq2 is_Cauchy_sequence
+proof
+     assume that
+A1:   seq1 is_Cauchy_sequence and
+A2:   seq1 is_compared_to seq2;
+     let r; assume r > 0;
+then A3:   r/3 > 0 by SEQ_4:4;
+     then consider m1 such that
+A4:   for n, m st ( n >= m1 & m >= m1 ) holds
+     dist((seq1.n), (seq1.m)) < r/3 by A1,Def1;
+     consider m2 such that
+A5:   for n st n >= m2 holds
+     dist((seq1.n), (seq2.n)) < r/3 by A2,A3,Def2;
+     take k = m1 + m2;
+     let n, m such that
+A6:   n >= k & m >= k;
+       m1 + m2 >= m1 by NAT_1:37;
+     then n >= m1 & m >= m1 by A6,AXIOMS:22;
+then A7:   dist((seq1.n), (seq1.m)) < r/3 by A4;
+     A8:   k >= m2 by NAT_1:37;
+     then n >= m2 by A6,AXIOMS:22;
+     then A9: dist((seq1.n), (seq2.n)) < r/3 by A5;
+       m >= m2 by A6,A8,AXIOMS:22;
+then A10:   dist((seq1.m), (seq2.m)) < r/3 by A5;
+A11:   dist((seq2.n), (seq1.n)) + dist((seq1.n), (seq1.m)) < r/3 + r/3
+     by A7,A9,REAL_1:67;
+       dist((seq2.n), (seq1.m)) <=
+     dist((seq2.n), (seq1.n)) + dist((seq1.n), (seq1.m))
+     by BHSP_1:42;
+     then dist((seq2.n), (seq1.m)) < r/3 + r/3 by A11,AXIOMS:22;
+     then dist((seq2.n), (seq1.m)) + dist((seq1.m), (seq2.m)) <
+     r/3 + r/3 + r/3 by A10,REAL_1:67;
+then A12:   dist((seq2.n), (seq1.m)) + dist((seq1.m), (seq2.m)) < r by XCMPLX_1
+:69;
+       dist((seq2.n), (seq2.m)) <= dist((seq2.n), (seq1.m)) +
+     dist((seq1.m), (seq2.m)) by BHSP_1:42;
+     hence dist((seq2.n), (seq2.m)) < r by A12,AXIOMS:22;
+end;
+
+theorem
+    seq1 is convergent & seq1 is_compared_to seq2
+    implies seq2 is convergent
+proof
+     assume that
+A1:   seq1 is convergent and
+A2:   seq1 is_compared_to seq2;
+       now let r; assume r > 0;
+then A3:   r/2 > 0 by SEQ_2:3;
+     then consider m1 such that
+A4:   for n st n >= m1 holds
+     dist((seq1.n), (lim seq1)) < r/2 by A1,BHSP_2:def 2;
+     consider m2 such that
+A5:   for n st n >= m2 holds
+     dist((seq1.n), (seq2.n)) < r/2 by A2,A3,Def2;
+     take m = m1 + m2;
+     let n such that
+A6:   n >= m;
+       m1 + m2 >= m1 by NAT_1:37;
+     then n >= m1 by A6,AXIOMS:22;
+then A7:   dist((seq1.n), (lim seq1)) < r/2 by A4;
+       m >= m2 by NAT_1:37;
+     then n >= m2 by A6,AXIOMS:22;
+     then dist((seq1.n), (seq2.n)) < r/2 by A5;
+     then dist((seq2.n), (seq1.n)) + dist((seq1.n), (lim seq1)) <
+     r/2 + r/2 by A7,REAL_1:67;
+then A8:   dist((seq2.n), (seq1.n)) + dist((seq1.n), (lim seq1)) < r
+     by XCMPLX_1:66;
+       dist((seq2.n), (lim seq1)) <=
+     dist((seq2.n), (seq1.n)) + dist((seq1.n), (lim seq1))
+     by BHSP_1:42;
+     hence dist((seq2.n), (lim seq1)) < r by A8,AXIOMS:22;
+     end;
+     hence thesis by BHSP_2:def 1;
+end;
+
+theorem
+    seq1 is convergent & lim seq1 = g & seq1 is_compared_to seq2
+    implies seq2 is convergent & lim seq2 = g
+proof
+     assume that
+A1:  seq1 is convergent and
+A2:  lim seq1 = g and
+A3:   seq1 is_compared_to seq2;
+A4:   now let r; assume r > 0;
+then A5:   r/2 > 0 by SEQ_2:3;
+     then consider m1 such that
+A6:   for n st n >= m1 holds
+     dist((seq1.n), g) < r/2 by A1,A2,BHSP_2:def 2;
+     consider m2 such that
+A7:   for n st n >= m2 holds
+     dist((seq1.n), (seq2.n)) < r/2 by A3,A5,Def2;
+     take m = m1 + m2;
+     let n such that
+A8:   n >= m;
+       m1 + m2 >= m1 by NAT_1:37;
+     then n >= m1 by A8,AXIOMS:22;
+then A9:   dist((seq1.n), g) < r/2 by A6;
+       m >= m2 by NAT_1:37;
+     then n >= m2 by A8,AXIOMS:22;
+     then dist((seq1.n), (seq2.n)) < r/2 by A7;
+     then dist((seq2.n), (seq1.n)) + dist((seq1.n), g) <
+     r/2 + r/2 by A9,REAL_1:67;
+then A10:   dist((seq2.n), (seq1.n)) + dist((seq1.n), g) < r by XCMPLX_1:66;
+       dist((seq2.n), g) <=
+     dist((seq2.n), (seq1.n)) + dist((seq1.n), g)
+     by BHSP_1:42;
+     hence dist((seq2.n), g) < r by A10,AXIOMS:22;
+     end;
+     then seq2 is convergent by BHSP_2:def 1;
+     hence thesis by A4,BHSP_2:def 2;
+end;
+
+definition
+          let X;
+          let seq;
+          attr seq is bounded means
+:Def3:   ex M st M > 0 & for n holds ||.seq.n.|| <= M;
+end;
+
+theorem Th18:
+  seq1 is bounded & seq2 is bounded implies seq1 + seq2 is bounded
+proof
+     assume that
+A1:  seq1 is bounded and
+A2:  seq2 is bounded;
+     consider M1 such that
+A3:  M1 > 0 and
+A4:  for n holds ||.seq1.n.|| <= M1 by A1,Def3;
+     consider M2 such that
+A5:  M2 > 0 and
+A6:  for n holds ||.seq2.n.|| <= M2 by A2,Def3;
+A7:   M1 + M2 > 0 + 0 by A3,A5,REAL_1:67;
+       now let n;
+A8:  ||.seq1.n.|| <= M1 by A4;
+       ||.seq2.n.|| <= M2 by A6;
+then A9:   ||.seq1.n.|| + ||.seq2.n.|| <= M1 + M2 by A8,REAL_1:55;
+       ||.(seq1 + seq2).n.|| = ||.seq1.n + seq2.n.|| by NORMSP_1:def 5;
+     then ||.(seq1 + seq2).n.|| <= ||.seq1.n.|| + ||.seq2.n.|| by BHSP_1:36;
+     hence ||.(seq1 + seq2).n.|| <= M1 + M2 by A9,AXIOMS:22;
+     end;
+     hence thesis by A7,Def3;
+end;
+
+theorem Th19:
+  seq is bounded implies -seq is bounded
+proof
+     assume seq is bounded;
+    then consider M such that
+A1:  M > 0 and
+A2:  for n holds ||.seq.n.|| <= M by Def3;
+      now let n;
+      ||.(- seq).n.|| = ||.- (seq.n).|| by BHSP_1:def 10
+                 .= ||.seq.n.|| by BHSP_1:37;
+    hence ||.(- seq).n.|| <= M by A2;
+    end;
+    hence thesis by A1,Def3;
+end;
+
+theorem
+    seq1 is bounded & seq2 is bounded implies seq1 - seq2 is bounded
+proof
+     assume that
+A1:   seq1 is bounded and
+A2:   seq2 is bounded;
+A3:   - seq2 is bounded by A2,Th19;
+       seq1 - seq2 = seq1 + (- seq2) by BHSP_1:71;
+     hence thesis by A1,A3,Th18;
+end;
+
+theorem
+    seq is bounded implies a * seq is bounded
+proof
+     assume seq is bounded;
+    then consider M such that
+A1:  M > 0 and
+A2:  for n holds ||.seq.n.|| <= M by Def3;
+A3:  a = 0 implies a * seq is bounded
+    proof
+    assume
+A4: a = 0;
+      now let n;
+      ||.(a * seq).n.|| = ||.0 * (seq.n).|| by A4,NORMSP_1:def 8
+                   .= ||.0'(X).|| by RLVECT_1:23
+                   .= 0 by BHSP_1:32;
+    hence ||.(a * seq).n.|| <= M by A1;
+    end;
+    hence thesis by A1,Def3;
+    end;
+      a <> 0 implies a * seq is bounded
+    proof
+    assume a <> 0;
+    then abs(a) > 0 by ABSVALUE:6;
+then A5:  abs(a) * M > 0 by A1,REAL_2:122;
+      now let n;
+A6:  ||.seq.n.|| <= M by A2;
+A7:  ||.(a * seq).n.|| = ||.a * (seq.n).|| by NORMSP_1:def 8
+                   .= abs(a) * ||.seq.n.|| by BHSP_1:33;
+      abs(a) >= 0 by ABSVALUE:5;
+    hence ||.(a * seq).n.|| <= abs(a) * M by A6,A7,AXIOMS:25;
+    end;
+    hence thesis by A5,Def3;
+    end;
+    hence thesis by A3;
+end;
+
+theorem
+    seq is constant implies seq is bounded
+proof
+     assume
+       seq is constant;
+     then consider x such that
+A1:   for n holds seq.n = x by NORMSP_1:def 4;
+A2:   x = 0'(X) implies seq is bounded
+     proof
+     assume
+A3:  x = 0'(X);
+     consider M being real number such that
+A4:  M > 0 by REAL_1:76;
+     reconsider M as Real by XREAL_0:def 1;
+       now let n;
+       seq.n = 0'(X) by A1,A3;
+     hence ||.seq.n.|| <= M by A4,BHSP_1:32;
+     end;
+     hence thesis by A4,Def3;
+     end;
+       x <> 0'(X) implies seq is bounded
+     proof
+     assume x <> 0'(X);
+     then A5: ||.x.|| >= 0 & ||.x.|| <> 0 by BHSP_1:32,34;
+     consider M being real number such that
+A6:  ||.x.|| < M by REAL_1:76;
+     reconsider M as Real by XREAL_0:def 1;
+       for n holds ||.seq.n.|| <= M by A1,A6;
+     hence thesis by A5,A6,Def3;
+     end;
+     hence thesis by A2;
+end;
+
+theorem Th23:
+  for m ex M st ( M > 0 & for n st n <= m holds ||.seq.n.|| < M )
+proof
+   defpred _P[Nat] means
+   ex M st ( M > 0 & for n st n <= $1 holds ||.seq.n.|| < M );
+A1: _P[0] proof take M = ||.(seq.0).|| + 1;
+       ||.(seq.0).|| >= 0 by BHSP_1:34;
+     then ||.(seq.0).|| + 1 > 0 + 0 by REAL_1:67;
+     hence M > 0;
+     let n such that
+A2:   n <= 0;
+      n = 0 by A2,NAT_1:18;
+     then ||.seq.n.|| + 0 < M by REAL_1:67;
+     hence ||.seq.n.|| < M;
+     end;
+A3:  for m st _P[m] holds _P[m+1] proof let m;
+     given M1 such that
+A4:   M1 > 0 and
+A5:   for n st n <= m holds ||.seq.n.|| < M1;
+A6:   now assume
+A7:   ||.seq.(m+1).|| <= M1;
+     take M = M1 + 1;
+       M1 + 1 > 0 + 0 by A4,REAL_1:67;
+     hence M > 0;
+     let n such that
+A8:   n <= m + 1;
+A9:   now assume m >= n;
+then A10:   ||.seq.n.|| < M1 by A5;
+       M > M1 + 0 by REAL_1:67;
+     hence ||.seq.n.|| < M by A10,AXIOMS:22;
+     end;
+       now assume A11: n = m + 1;
+       M > M1 + 0 by REAL_1:67;
+     hence ||.seq.n.|| < M by A7,A11,AXIOMS:22;
+     end;
+     hence ||.seq.n.|| < M by A8,A9,NAT_1:26;
+     end;
+       now assume
+A12:   ||.seq.(m+1).|| >= M1;
+     take M = ||.seq.(m+1).|| + 1;
+       ||.seq.(m+1).|| >= 0 by BHSP_1:34;
+     then M > 0 + 0 by REAL_1:67;
+     hence M > 0;
+     let n such that
+A13:   n <= m + 1;
+A14:   now assume m >= n;
+     then ||.seq.n.|| < M1 by A5;
+     then ||.seq.n.|| < ||.seq.(m+1).|| by A12,AXIOMS:22;
+     then ||.seq.n.|| + 0 < M by REAL_1:67;
+     hence ||.seq.n.|| < M;
+     end;
+       now assume n = m + 1;
+     then ||.seq.n.|| + 0 < M by REAL_1:67;
+     hence ||.seq.n.|| < M;
+     end;
+     hence ||.seq.n.|| < M by A13,A14,NAT_1:26;
+     end;
+     hence ex M st ( M > 0 & for n st n <= m + 1 holds ||.seq.n.|| < M )
+     by A6;
+     end;
+     thus for m holds _P[m] from Ind(A1,A3);
+end;
+
+theorem Th24:
+  seq is convergent implies seq is bounded
+proof
+     assume seq is convergent;
+     then consider g such that
+A1:   for r st r > 0 ex m st for n st n >= m
+     holds ||.seq.n - g.|| < r by BHSP_2:9;
+     consider m1 such that
+A2:   for n st n >= m1 holds
+     ||.seq.n - g.|| < 1 by A1;
+A3:   now take p = ||.g.|| + 1;
+       ||.g.|| >= 0 by BHSP_1:34;
+     then 0 + 0 < p by REAL_1:67;
+     hence p > 0;
+     let n; assume n >= m1;
+then A4:   ||.seq.n - g.|| < 1 by A2;
+       ||.seq.n.|| - ||.g.|| <= ||.seq.n - g.|| by BHSP_1:38;
+     then ||.seq.n.|| - ||.g.|| < 1 by A4,AXIOMS:22;
+     hence ||.seq.n.|| < p by REAL_1:84;
+     end;
+       now consider M1 such that
+A5:   M1 > 0 and
+A6:   for n st n >= m1 holds ||.seq.n.|| < M1 by A3;
+     consider M2 such that
+A7:   M2 > 0 and
+A8:   for n st n <= m1 holds ||.seq.n.|| < M2 by Th23;
+     take M = M1 + M2;
+       M > 0 + 0 by A5,A7,REAL_1:67;
+     hence M > 0;
+     A9: M > M1 + 0 by A7,REAL_1:67;
+     A10: M > 0 + M2 by A5,REAL_1:67;
+     let n;
+A11:   now assume n >= m1;
+     then ||.seq.n.|| < M1 by A6;
+     hence ||.seq.n.|| <= M by A9,AXIOMS:22;
+     end;
+       now assume n <= m1;
+     then ||.seq.n.|| < M2 by A8;
+     hence ||.seq.n.|| <= M by A10,AXIOMS:22;
+     end;
+     hence ||.seq.n.|| <= M by A11;
+     end;
+     hence thesis by Def3;
+  end;
+
+theorem
+    seq1 is bounded & seq1 is_compared_to seq2 implies seq2 is bounded
+proof
+     assume that
+A1:   seq1 is bounded and
+A2:   seq1 is_compared_to seq2;
+     consider p such that
+A3:   p > 0 and
+A4:   for n holds ||.seq1.n.|| <= p by A1,Def3;
+     consider m1 such that
+A5:   for n st n >= m1 holds
+     dist((seq1.n), (seq2.n)) < 1 by A2,Def2;
+A6:     p + 1 > 0 + 0 by A3,REAL_1:67;
+A7:   ex M st ( M > 0 & for n st n >= m1 holds ||.seq2.n.|| < M )
+     proof
+     take M = p + 1;
+       now let n; assume n >= m1;
+     then dist((seq1.n), (seq2.n)) < 1 by A5;
+then A8:   ||.seq2.n - seq1.n.|| < 1 by BHSP_1:def 5;
+       ||.seq2.n.|| - ||.seq1.n.|| <= ||.seq2.n - seq1.n.|| by BHSP_1:38;
+     then ||.seq2.n.|| - ||.seq1.n.|| < 1 by A8,AXIOMS:22;
+then A9:   ||.seq2.n.|| < ||.seq1.n.|| + 1 by REAL_1:84;
+       ||.seq1.n.|| <= p by A4;
+     then ||.seq1.n.|| + 1 <= p + 1 by AXIOMS:24;
+     hence ||.seq2.n.|| < M by A9,AXIOMS:22;
+     end;
+     hence thesis by A6;
+     end;
+       now consider M1 such that
+A10:   M1 > 0 and
+A11:   for n st n >= m1 holds ||.seq2.n.|| < M1 by A7;
+     consider M2 such that
+A12:   M2 > 0 and
+A13:   for n st n <= m1 holds ||.seq2.n.|| < M2 by Th23;
+     take M = M1 + M2;
+       M > 0 + 0 by A10,A12,REAL_1:67;
+     hence M > 0;
+     A14: M > M1 + 0 by A12,REAL_1:67;
+     A15: M > 0 + M2 by A10,REAL_1:67;
+     let n;
+A16:   now assume n >= m1;
+     then ||.seq2.n.|| < M1 by A11;
+     hence ||.seq2.n.|| <= M by A14,AXIOMS:22;
+     end;
+       now assume n <= m1;
+     then ||.seq2.n.|| < M2 by A13;
+     hence ||.seq2.n.|| <= M by A15,AXIOMS:22;
+     end;
+     hence ||.seq2.n.|| <= M by A16;
+     end;
+     hence thesis by Def3;
+  end;
+
+definition let X, Nseq, seq;
+  redefine func seq * Nseq -> sequence of X;
+coherence
+         proof
+         A1:   dom Nseq = NAT by FUNCT_2:def 1;
+         A2:   rng seq c= the carrier of X by RELSET_1:12;
+                rng Nseq c= NAT by SEQM_3:def 8;
+              then rng Nseq c= dom seq by FUNCT_2:def 1;
+         then A3:   dom (seq * Nseq) = NAT by A1,RELAT_1:46;
+                rng (seq * Nseq) c= rng seq by RELAT_1:45;
+              then rng (seq * Nseq) c= the carrier of X
+              by A2,XBOOLE_1:1;
+              then seq * Nseq is Function of NAT, the carrier of X
+                  by A3,FUNCT_2:def 1,RELSET_1:11;
+              hence thesis by NORMSP_1:def 3;
+         end;
+end;
+
+definition let X be non empty 1-sorted,
+               s1, s be sequence of X;
+  pred s1 is_subsequence_of s means :Def4:
+   ex N being increasing Seq_of_Nat st s1 = s * N;
+end;
+
+theorem Th26:
+  for X being RealUnitarySpace,
+      s being sequence of X,
+      N being increasing Seq_of_Nat
+  for n being Nat holds (s * N).n=s.(N.n)
+proof
+  let X be RealUnitarySpace,
+      s be sequence of X,
+      N be increasing Seq_of_Nat;
+  let n be Nat;
+    dom (s * N) = NAT by FUNCT_2:def 1;
+  hence (s * N).n = s.(N.n) by FUNCT_1:22;
+end;
+
+theorem
+    seq is_subsequence_of seq
+proof deffunc _F(Nat) = $1;
+     consider Rseq such that
+A1:   for n holds Rseq.n = _F(n) from ExRealSeq;
+       now let n;
+         Rseq.n = n & Rseq.(n+1) = n+1 by A1;
+       hence Rseq.n < Rseq.(n+1) by NAT_1:38;
+     end;
+then A2:   Rseq is increasing by SEQM_3:def 11;
+       for n holds Rseq.n is Nat by A1;
+     then reconsider Rseq as increasing Seq_of_Nat by A2,SEQM_3:29;
+     take Nseq = Rseq;
+       now let n;
+     thus (seq * Nseq).n = seq.(Nseq.n) by Th26
+                        .= seq.n by A1;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    seq1 is_subsequence_of seq2 & seq2 is_subsequence_of seq3
+    implies seq1 is_subsequence_of seq3
+proof
+     assume that
+A1:  seq1 is_subsequence_of seq2 and
+A2:  seq2 is_subsequence_of seq3;
+     consider Nseq1 such that
+A3:  seq1 = seq2 * Nseq1 by A1,Def4;
+     consider Nseq2 such that
+A4:  seq2 = seq3 * Nseq2 by A2,Def4;
+     take Nseq = Nseq2 * Nseq1;
+     thus seq1 = seq3 * Nseq by A3,A4,RELAT_1:55;
+end;
+
+theorem Th29:
+  seq is constant & seq1 is_subsequence_of seq implies seq1 is constant
+proof
+     assume that
+A1:  seq is constant and
+A2:  seq1 is_subsequence_of seq;
+     consider Nseq such that
+A3:   seq1 = seq * Nseq by A2,Def4;
+       now let n;
+       seq.(Nseq.n) = seq.(Nseq.(n + 1)) by A1,BHSP_1:70;
+     then (seq * Nseq).(n + 1) = seq.(Nseq.n) by Th26;
+     hence seq1.n = seq1.(n+1) by A3,Th26;
+     end;
+     hence thesis by BHSP_1:68;
+end;
+
+theorem
+    seq is constant & seq1 is_subsequence_of seq implies seq = seq1
+proof
+     assume that
+A1:  seq is constant and
+A2:  seq1 is_subsequence_of seq;
+     consider Nseq such that
+A3:   seq1 = seq * Nseq by A2,Def4;
+       now let n;
+     thus seq1.n = seq.(Nseq.n) by A3,Th26
+                .= seq.n by A1,BHSP_1:70;
+     end;
+     hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th31:
+  seq is bounded & seq1 is_subsequence_of seq implies seq1 is bounded
+proof
+     assume that
+A1:  seq is bounded and
+A2:  seq1 is_subsequence_of seq;
+     consider M1 such that
+A3:  M1 > 0 and
+A4:  for n holds ||.seq.n.|| <= M1 by A1,Def3;
+     consider Nseq such that
+A5:   seq1 = seq * Nseq by A2,Def4;
+     take M = M1;
+       now let n;
+       seq1.n = seq.(Nseq.n) by A5,Th26;
+     hence ||.seq1.n.|| <= M by A4;
+     end;
+     hence thesis by A3;
+end;
+
+theorem Th32:
+  seq is convergent & seq1 is_subsequence_of seq implies seq1 is convergent
+proof
+     assume that
+A1:   seq is convergent and
+A2:   seq1 is_subsequence_of seq;
+     consider g1 such that
+A3:   for r st r > 0 ex m st for n st n >= m holds
+     ||.(seq.n) - g1.|| < r by A1,BHSP_2:9;
+     consider Nseq such that
+A4:   seq1 = seq * Nseq by A2,Def4;
+       now let r; assume r > 0;
+     then consider m1 such that
+A5:   for n st n >= m1 holds ||.(seq.n) - g1.|| < r by A3;
+     take m = m1;
+     let n such that
+A6:   n >= m;
+       Nseq.n >= n by SEQM_3:33;
+then A7:   Nseq.n >= m by A6,AXIOMS:22;
+       seq1.n = seq.(Nseq.n) by A4,Th26;
+     hence ||.(seq1.n) - g1.|| < r by A5,A7;
+     end;
+     hence thesis by BHSP_2:9;
+end;
+
+theorem Th33:
+  seq1 is_subsequence_of seq & seq is convergent implies lim seq1=lim seq
+proof
+     assume that
+A1:   seq1 is_subsequence_of seq and
+A2:   seq is convergent;
+A3:   seq1 is convergent by A1,A2,Th32;
+     consider Nseq such that
+A4:   seq1 = seq * Nseq by A1,Def4;
+       now let r; assume r > 0;
+     then consider m1 such that
+A5:   for n st n >= m1 holds
+     dist((seq.n), (lim seq)) < r by A2,BHSP_2:def 2;
+     take m = m1;
+     let n such that
+A6:   n >= m;
+       Nseq.n >= n by SEQM_3:33;
+then A7:   Nseq.n >= m by A6,AXIOMS:22;
+       seq1.n = seq.(Nseq.n) by A4,Th26;
+     hence dist((seq1.n), (lim seq)) < r by A5,A7;
+     end;
+    hence thesis by A3,BHSP_2:def 2;
+end;
+
+theorem Th34:
+  seq is_Cauchy_sequence & seq1 is_subsequence_of seq
+    implies seq1 is_Cauchy_sequence
+proof
+     assume that
+A1:   seq is_Cauchy_sequence and
+A2:   seq1 is_subsequence_of seq;
+     consider Nseq such that
+A3:   seq1 = seq * Nseq by A2,Def4;
+       now let r; assume r > 0;
+     then consider l such that
+A4:   for n, m st ( n >= l & m >= l )
+     holds dist((seq.n), (seq.m)) < r by A1,Def1;
+     take k = l;
+     let n, m such that
+A5:   n >= k & m >= k;
+       Nseq.n >= n & Nseq.m >= m by SEQM_3:33;
+then A6:   Nseq.n >= k & Nseq.m >= k by A5,AXIOMS:22;
+       seq1.n = seq.(Nseq.n) &
+     seq1.m = seq.(Nseq.m) by A3,Th26;
+     hence dist((seq1.n), (seq1.m)) < r by A4,A6;
+     end;
+     hence thesis by Def1;
+end;
+
+definition
+          let X;
+          let seq;
+          let k;
+          func seq ^\k -> sequence of X means
+:Def5:  for n holds it.n=seq.(n + k);
+existence proof deffunc _F(Nat) = seq.($1 + k);
+  thus ex IT being sequence of X st for n holds IT.n=_F(n) from Ex_Seq_in_RUS;
+end;
+uniqueness
+          proof
+              let seq1, seq2;
+              assume that
+          A1: for n holds seq1.n = seq.(n + k) and
+          A2: for n holds seq2.n = seq.(n + k);
+                now let n;
+              seq1.n = seq.(n + k) by A1;
+              hence seq1.n = seq2.n by A2;
+              end;
+              hence seq1 = seq2 by FUNCT_2:113;
+          end;
+end;
+
+theorem
+    seq ^\0 = seq
+proof
+       now let n;
+     thus (seq ^\0).n = seq.(n + 0) by Def5
+                    .= seq.n;
+     end;
+     hence thesis by FUNCT_2:113;
+ end;
+
+theorem
+    (seq ^\k)^\m = (seq ^\m)^\k
+proof
+       now let n;
+     thus ((seq ^\k)^\m).n = (seq ^\k).(n + m) by Def5
+                        .= seq.(n + m + k) by Def5
+                        .= seq.(n + k + m) by XCMPLX_1:1
+                        .= (seq ^\m).(n + k) by Def5
+                        .= ((seq ^\m)^\k).n by Def5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    (seq ^\k)^\m=seq ^\(k + m)
+proof
+       now let n;
+     thus
+       ((seq ^\k)^\m).n = (seq ^\k).(n + m) by Def5
+                   .= seq.(n + m + k) by Def5
+                   .= seq.(n + (k + m)) by XCMPLX_1:1
+                   .= (seq ^\(k + m)).n by Def5;
+     end;
+     hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th38:
+  (seq1 + seq2) ^\k = (seq1 ^\k) + (seq2 ^\k)
+proof
+       now let n;
+     thus
+       ((seq1 + seq2) ^\k).n = (seq1 + seq2).(n + k) by Def5
+                         .= seq1.(n + k) + seq2.(n + k) by NORMSP_1:def 5
+                         .= (seq1 ^\k).n + seq2.(n + k) by Def5
+                         .= (seq1 ^\k).n + (seq2 ^\k).n by Def5
+                         .= ((seq1 ^\k) + (seq2 ^\k)).n by NORMSP_1:def 5;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem Th39:
+  (-seq) ^\k = -(seq ^\k)
+proof
+       now let n;
+     thus
+       ((-seq) ^\k).n = (-seq).(n + k) by Def5
+                  .= -(seq.(n + k)) by BHSP_1:def 10
+                  .= -((seq ^\ k).n) by Def5
+                  .= (-(seq ^\k)).n by BHSP_1:def 10;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    (seq1 - seq2) ^\k = (seq1 ^\k) - (seq2 ^\k)
+proof
+     thus
+       (seq1 - seq2) ^\k = (seq1 + (-seq2)) ^\k by BHSP_1:71
+                     .= (seq1 ^\k) + ((-seq2) ^\k) by Th38
+                     .= (seq1 ^\k) + -(seq2 ^\k) by Th39
+                     .= (seq1 ^\k) - (seq2 ^\k) by BHSP_1:71;
+end;
+
+theorem
+    (a * seq) ^\k = a * (seq ^\k)
+proof
+       now let n;
+     thus
+       ((a * seq) ^\k).n = (a * seq).(n + k) by Def5
+                     .= a * (seq.(n + k)) by NORMSP_1:def 8
+                     .= a * ((seq ^\k).n) by Def5
+                     .= (a * (seq ^\k)).n by NORMSP_1:def 8;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem
+    (seq * Nseq) ^\k = seq * (Nseq ^\k)
+proof
+       now let n;
+     thus
+       ((seq * Nseq) ^\k).n = (seq * Nseq).(n + k) by Def5
+                        .= seq.(Nseq.(n + k)) by Th26
+                        .= seq.((Nseq ^\k).n) by SEQM_3:def 9
+                        .= (seq * (Nseq ^\k)).n by Th26;
+     end;
+     hence thesis by FUNCT_2:113;
+end;
+
+theorem Th43:
+  seq ^\k is_subsequence_of seq
+proof deffunc _F(Nat) = $1 + k;
+     consider Rseq such that
+A1:   for n holds Rseq.n = _F(n) from ExRealSeq;
+       now let n;
+A2:   Rseq.n = n + k & Rseq.(n + 1) = n + 1 + k by A1;
+       n + k < n + k + 1 by NAT_1:38;
+     hence Rseq.n < Rseq.(n + 1) by A2,XCMPLX_1:1;
+     end;
+then A3:   Rseq is increasing by SEQM_3:def 11;
+       now let n;
+       n + k is Nat;
+     hence Rseq.n is Nat by A1;
+     end;
+     then reconsider Rseq as increasing Seq_of_Nat by A3,SEQM_3:29;
+     take Nseq=Rseq;
+       now let n;
+     thus
+       (seq * Nseq).n = seq.(Nseq.n) by Th26
+                   .= seq.(n + k) by A1
+                   .= (seq ^\k).n by Def5;
+     end;
+     hence thesis by FUNCT_2:113;
+  end;
+
+theorem
+    seq is convergent implies ((seq ^\k) is convergent &
+     lim (seq ^\k)=lim seq)
+proof
+    assume
+A1:  seq is convergent;
+A2:  seq ^\k is_subsequence_of seq by Th43;
+    hence seq ^\k is convergent by A1,Th32;
+    thus lim (seq ^\k) = lim seq by A1,A2,Th33;
+end;
+
+canceled;
+
+theorem
+    seq is convergent & (ex k st seq = seq1 ^\k) implies seq1 is convergent
+proof
+     assume that
+A1:   seq is convergent and
+A2:   ex k st seq = seq1 ^\k;
+     consider k such that
+A3:   seq = seq1 ^\k by A2;
+     consider g1 such that
+A4:   for r st r > 0 ex m st for n st n >= m holds
+     ||.seq.n - g1.|| < r by A1,BHSP_2:9;
+       now take g = g1;
+     let r; assume r > 0;
+     then consider m1 such that
+A5:   for n st n >= m1 holds ||.seq.n - g.|| < r by A4;
+     take m = m1 + k;
+     let n; assume
+A6:   n >= m;
+     then consider m2 such that
+A7:   n = m1 + k + m2 by NAT_1:28;
+       n - k = m1 + k + m2 + -k by A7,XCMPLX_0:def 8
+          .= m1 + m2 + k + -k by XCMPLX_1:1
+          .= m1 + m2 + k - k by XCMPLX_0:def 8
+          .= m1 + m2 + (k - k) by XCMPLX_1:29
+          .= m1 + m2 + 0 by XCMPLX_1:14
+          .= m1 + m2;
+     then consider l such that
+A8:   l = n - k;
+A9:   now assume l < m1;
+     then l + k < m1 + k by REAL_1:53;
+     then n - (k - k) < m1 + k by A8,XCMPLX_1:37;
+     then n - 0 < m1 + k by XCMPLX_1:14;
+     hence contradiction by A6;
+     end;
+A10:   l + k = n - (k - k) by A8,XCMPLX_1:37
+           .= n - 0 by XCMPLX_1:14
+           .= n;
+       ||.seq.l - g.|| < r by A5,A9;
+     hence ||.seq1.n - g.|| < r by A3,A10,Def5;
+     end;
+     hence thesis by BHSP_2:9;
+ end;
+
+theorem
+    seq is_Cauchy_sequence & (ex k st seq = seq1 ^\k)
+    implies seq1 is_Cauchy_sequence
+proof
+     assume that
+A1:   seq is_Cauchy_sequence and
+A2:   ex k st seq = seq1 ^\k;
+     consider k such that
+A3:   seq = seq1 ^\k by A2;
+     let r; assume r > 0;
+     then consider l1 such that
+A4:   for n, m st ( n >= l1 & m >= l1 ) holds
+     dist((seq.n), (seq.m)) < r by A1,Def1;
+     take l = l1 + k;
+     let n, m; assume
+A5:   n >= l & m >= l;
+     then consider m1 such that
+A6:   n = l1 + k + m1 by NAT_1:28;
+A7:   n - k = l1 + k + m1 + -k by A6,XCMPLX_0:def 8
+          .= l1 + m1 + k + -k by XCMPLX_1:1
+          .= l1 + m1 + k - k by XCMPLX_0:def 8
+          .= l1 + m1 + (k - k) by XCMPLX_1:29
+          .= l1 + m1 + 0 by XCMPLX_1:14
+          .= l1 + m1;
+     consider m2 such that
+A8:   m = l1 + k + m2 by A5,NAT_1:28;
+A9:   m - k = l1 + k + m2 + -k by A8,XCMPLX_0:def 8
+          .= l1 + m2 + k + -k by XCMPLX_1:1
+          .= l1 + m2 + k - k by XCMPLX_0:def 8
+          .= l1 + m2 + (k - k) by XCMPLX_1:29
+          .= l1 + m2 + 0 by XCMPLX_1:14
+          .= l1 + m2;
+     consider l2 such that
+A10:   l2 = n - k by A7;
+A11:   now assume l2 < l1;
+     then l2 + k < l1 + k by REAL_1:53;
+     then n - (k - k) < l1 + k by A10,XCMPLX_1:37;
+     then n - 0 < l1 + k by XCMPLX_1:14;
+     hence contradiction by A5;
+     end;
+     consider l3 such that
+A12:   l3 = m - k by A9;
+A13:   now assume l3 < l1;
+     then l3 + k < l1 + k by REAL_1:53;
+     then m - (k - k) < l1 + k by A12,XCMPLX_1:37;
+     then m - 0 < l1 + k by XCMPLX_1:14;
+     hence contradiction by A5;
+     end;
+A14:   l2 + k = n - (k - k) by A10,XCMPLX_1:37
+           .= n - 0 by XCMPLX_1:14
+           .= n;
+A15:   l3 + k = m - (k - k) by A12,XCMPLX_1:37
+           .= m - 0 by XCMPLX_1:14
+           .= m;
+        dist((seq.l2), (seq.l3)) < r by A4,A11,A13;
+      then dist((seq1.n), (seq.l3)) < r by A3,A14,Def5;
+      hence dist((seq1.n), (seq1.m)) < r by A3,A15,Def5;
+end;
+
+theorem
+    seq is_Cauchy_sequence implies (seq ^\k) is_Cauchy_sequence
+proof
+    assume
+A1:  seq is_Cauchy_sequence;
+      seq ^\k is_subsequence_of seq by Th43;
+    hence thesis by A1,Th34;
+end;
+
+theorem
+    seq1 is_compared_to seq2 implies (seq1 ^\k) is_compared_to (seq2 ^\k)
+proof
+     assume
+A1:     seq1 is_compared_to seq2;
+     let r; assume r > 0;
+     then consider m1 such that
+A2:   for n st n >= m1 holds
+     dist((seq1.n), (seq2.n)) < r by A1,Def2;
+     take m = m1;
+     let n such that
+A3:   n >= m;
+       n + k >= n by NAT_1:29;
+     then n + k >= m by A3,AXIOMS:22;
+     then dist((seq1.(n + k)), (seq2.(n + k))) < r by A2;
+     then dist((seq1 ^\k).n, (seq2.(n + k))) < r by Def5;
+     hence dist((seq1 ^\k).n, (seq2 ^\k).n) < r by Def5;
+end;
+
+theorem
+    seq is bounded implies (seq ^\k) is bounded
+proof
+    assume
+A1:  seq is bounded;
+      seq ^\k is_subsequence_of seq by Th43;
+    hence thesis by A1,Th31;
+end;
+
+theorem
+    seq is constant implies (seq ^\k) is constant
+proof
+    assume
+A1:  seq is constant;
+      seq ^\k is_subsequence_of seq by Th43;
+    hence thesis by A1,Th29;
+end;
+
+definition
+          let X;
+          attr X is complete means
+:Def6:    for seq holds
+          seq is_Cauchy_sequence implies seq is convergent;
+  synonym X is_complete_space;
+end;
+
+canceled;
+
+theorem
+    X is_complete_space & seq is_Cauchy_sequence implies seq is bounded
+proof
+     assume that
+A1:   X is_complete_space and
+A2:   seq is_Cauchy_sequence;
+       seq is convergent by A1,A2,Def6;
+     hence thesis by Th24;
+end;
+
+definition
+          let X;
+          attr X is Hilbert means
+            X is RealUnitarySpace & X is_complete_space;
+  synonym X is_Hilbert_space;
+end;

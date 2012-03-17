@@ -1,0 +1,422 @@
+:: From Loops to Abelian Multiplicative Groups with Zero
+::  by Micha{\l} Muzalewski and Wojciech Skaba
+::
+:: Received July 10, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BOOLE, MIDSP_1, REALSET1, ARYTM_1, VECTSP_1, CAT_1,
+      VECTSP_2, BINOP_1, RELAT_1, ARYTM_3, FUNCT_1, ALGSTR_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, REAL_1, BINOP_1, STRUCT_0,
+      VECTSP_1, RLVECT_1, VECTSP_2, MIDSP_1;
+ constructors BINOP_1, VECTSP_2, MIDSP_1, REAL_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, VECTSP_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: GROUPS
+
+ reserve L for non empty LoopStr;
+ reserve a,b,c,x,y,z for Element of L;
+
+theorem :: ALGSTR_1:1
+(for a holds a + 0.L = a)
+     & (for a ex x st a+x = 0.L)
+     & (for a,b,c holds (a+b)+c = a+(b+c))
+   implies (a+b = 0.L implies b+a = 0.L);
+
+theorem :: ALGSTR_1:2
+(for a holds a + 0.L = a)
+     & (for a ex x st a+x = 0.L)
+     & (for a,b,c holds (a+b)+c = a+(b+c))
+   implies 0.L+a = a+0.L;
+
+theorem :: ALGSTR_1:3
+(for a holds a + 0.L = a)
+     & (for a ex x st a+x = 0.L)
+     & (for a,b,c holds (a+b)+c = a+(b+c))
+   implies for a ex x st x+a = 0.L;
+
+definition let x be set;
+ canceled 2;
+
+  func Extract x -> Element of {x} equals
+:: ALGSTR_1:def 3
+x;
+ end;
+
+definition
+ func L_Trivial -> strict LoopStr equals
+:: ALGSTR_1:def 4
+  LoopStr (# {{}}, op2, Extract {} #);
+end;
+
+definition
+ cluster L_Trivial -> non empty;
+end;
+
+canceled;
+
+theorem :: ALGSTR_1:5
+ for a,b being Element of L_Trivial holds a = b;
+
+theorem :: ALGSTR_1:6
+    for a,b be Element of L_Trivial holds a+b = 0.L_Trivial;
+
+definition let IT be non empty LoopStr;
+  attr IT is left_zeroed means
+:: ALGSTR_1:def 5
+ for a being Element of IT holds 0.IT + a = a;
+end;
+
+definition let L be non empty LoopStr;
+  attr L is add-left-cancelable means
+:: ALGSTR_1:def 6
+    for a,b,c being Element of L holds
+      a + b = a + c implies b = c;
+
+  attr L is add-right-cancelable means
+:: ALGSTR_1:def 7
+    for a,b,c being Element of L holds
+      b + a = c + a implies b = c;
+
+  attr L is add-left-invertible means
+:: ALGSTR_1:def 8
+    for a,b be Element of L
+      ex x being Element of L st x + a = b;
+
+  attr L is add-right-invertible means
+:: ALGSTR_1:def 9
+    for a,b be Element of L
+      ex x being Element of L st a + x = b;
+end;
+
+definition let IT be non empty LoopStr;
+  attr IT is Loop-like means
+:: ALGSTR_1:def 10
+    IT is add-left-cancelable add-right-cancelable
+          add-left-invertible add-right-invertible;
+end;
+
+definition
+  cluster Loop-like -> add-left-cancelable add-right-cancelable
+             add-left-invertible add-right-invertible (non empty LoopStr);
+  cluster add-left-cancelable add-right-cancelable
+          add-left-invertible add-right-invertible ->
+              Loop-like (non empty LoopStr);
+end;
+
+theorem :: ALGSTR_1:7
+  for L being non empty LoopStr holds
+    L is Loop-like iff
+     (for a,b be Element of L
+        ex x being Element of L st a+x=b)
+     & (for a,b be Element of L
+        ex x being Element of L st x+a=b)
+     & (for a,x,y be Element of L holds a+x=a+y implies x=y)
+     & (for a,x,y be Element of L holds x+a=y+a implies x=y);
+
+definition
+  cluster L_Trivial -> add-associative Loop-like right_zeroed left_zeroed;
+end;
+
+definition
+ cluster strict left_zeroed right_zeroed Loop-like (non empty LoopStr);
+end;
+
+definition
+  mode Loop is left_zeroed right_zeroed Loop-like (non empty LoopStr);
+end;
+
+definition
+ cluster strict add-associative Loop;
+end;
+
+definition
+  mode Group is add-associative Loop;
+end;
+
+definition
+ cluster Loop-like -> right_complementable (non empty LoopStr);
+ cluster add-associative right_zeroed right_complementable
+              -> left_zeroed Loop-like (non empty LoopStr);
+end;
+
+canceled;
+
+theorem :: ALGSTR_1:9
+   L is Group iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c));
+
+definition
+  cluster L_Trivial -> Abelian;
+end;
+
+definition
+ cluster strict Abelian Group;
+end;
+
+canceled;
+
+theorem :: ALGSTR_1:11
+     L is Abelian Group iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a);
+
+definition
+ func multL_Trivial -> strict multLoopStr equals
+:: ALGSTR_1:def 11
+  multLoopStr (# {{}}, op2, Extract {} #);
+end;
+
+definition
+ cluster multL_Trivial -> non empty;
+end;
+
+canceled 6;
+
+theorem :: ALGSTR_1:18
+ for a,b being Element of multL_Trivial holds a = b;
+
+theorem :: ALGSTR_1:19
+     for a,b be Element of multL_Trivial
+  holds a*b = 1_ multL_Trivial;
+
+  definition let IT be non empty multLoopStr;
+    attr IT is invertible means
+:: ALGSTR_1:def 12
+       (for a,b   be Element of IT
+       ex x being Element of IT st a*x=b)
+       & (for a,b   be Element of IT
+       ex x being Element of IT st x*a=b);
+    attr IT is cancelable means
+:: ALGSTR_1:def 13
+       (for a,x,y be Element of IT holds a*x=a*y implies x=y)
+       & (for a,x,y be Element of IT holds x*a=y*a implies x=y);
+  end;
+
+definition
+ cluster strict well-unital invertible cancelable (non empty multLoopStr);
+end;
+
+definition
+    mode multLoop is well-unital invertible cancelable (non empty multLoopStr);
+end;
+
+  definition
+    cluster multL_Trivial -> well-unital invertible cancelable;
+  end;
+
+definition
+ cluster strict associative multLoop;
+end;
+
+definition
+    mode multGroup is associative multLoop;
+end;
+
+ reserve L for non empty multLoopStr;
+ reserve a,b,c,x,y,z for Element of L;
+
+canceled 2;
+
+theorem :: ALGSTR_1:22
+   L is multGroup iff
+     (for a holds a * 1_ L = a)
+   & (for a ex x st a*x = 1_ L)
+   & (for a,b,c holds (a*b)*c = a*(b*c));
+
+definition
+  cluster multL_Trivial -> associative;
+end;
+
+definition
+ cluster strict commutative multGroup;
+end;
+
+canceled;
+
+theorem :: ALGSTR_1:24
+     L is commutative multGroup iff
+     (for a holds a * 1_ L = a)
+   & (for a ex x st a*x = 1_ L)
+   & (for a,b,c holds (a*b)*c = a*(b*c))
+   & (for a,b holds a*b = b*a);
+
+definition
+  let L be invertible cancelable (non empty multLoopStr);
+  let a be Element of L;
+ canceled 2;
+
+  func a" -> Element of L means
+:: ALGSTR_1:def 16
+    a*it = 1_ L;
+end;
+
+ reserve G for multGroup;
+ reserve a,b,c,x for Element of G;
+
+canceled;
+
+theorem :: ALGSTR_1:26
+    a*(a") = 1_ G & a"*a=1_ G;
+
+definition
+  let L be invertible cancelable (non empty multLoopStr);
+  let a, b be Element of L;
+  func a/b -> Element of L equals
+:: ALGSTR_1:def 17
+      a*(b");
+end;
+
+definition
+ canceled 3;
+
+ func multEX_0 -> strict multLoopStr_0 equals
+:: ALGSTR_1:def 21
+  multLoopStr_0 (# REAL, multreal, 1, 0 #);
+end;
+
+definition
+ cluster multEX_0 -> non empty;
+end;
+
+canceled 5;
+
+theorem :: ALGSTR_1:32
+   for q,p be Real st q<>0 ex y be Real st p=q*y;
+
+theorem :: ALGSTR_1:33
+   for q,p be Real st q<>0 ex y be Real st p=y*q;
+
+definition let IT be non empty multLoopStr_0;
+  attr IT is almost_invertible means
+:: ALGSTR_1:def 22
+     (for a,b be Element of IT st a<>0.IT
+       ex x be Element of IT st a*x=b) &
+     (for a,b be Element of IT st a<>0.IT
+       ex x be Element of IT st x*a=b);
+
+  attr IT is almost_cancelable means
+:: ALGSTR_1:def 23
+     (for a,x,y be Element of IT st a<>0.IT
+         holds a*x=a*y implies x=y) &
+     (for a,x,y be Element of IT st a<>0.IT
+           holds x*a=y*a implies x=y);
+end;
+
+definition let IT be non empty multLoopStr_0;
+  attr IT is multLoop_0-like means
+:: ALGSTR_1:def 24
+    IT is almost_invertible almost_cancelable
+     & (for a be Element of IT holds a*0.IT = 0.IT)
+     & (for a be Element of IT holds 0.IT*a = 0.IT);
+end;
+
+theorem :: ALGSTR_1:34
+  for L being non empty multLoopStr_0 holds
+    L is multLoop_0-like iff
+     (for a,b be Element of L st a<>0.L
+         ex x be Element of L st a*x=b) &
+     (for a,b be Element of L st a<>0.L
+         ex x be Element of L st x*a=b) &
+     (for a,x,y be Element of L st a<>0.L
+           holds a*x=a*y implies x=y) &
+     (for a,x,y be Element of L st a<>0.L
+           holds x*a=y*a implies x=y) &
+     (for a be Element of L holds a*0.L = 0.L) &
+     (for a be Element of L holds 0.L*a = 0.L);
+
+definition
+  cluster multLoop_0-like -> almost_invertible almost_cancelable
+    (non empty multLoopStr_0);
+end;
+
+definition
+ cluster strict well-unital multLoop_0-like non degenerated
+               (non empty multLoopStr_0);
+end;
+
+definition
+  mode multLoop_0 is well-unital non degenerated multLoop_0-like
+     (non empty multLoopStr_0);
+end;
+
+definition
+  cluster multEX_0 -> well-unital multLoop_0-like;
+end;
+
+definition
+ cluster strict associative non degenerated multLoop_0;
+end;
+
+definition
+    mode multGroup_0 is associative non degenerated multLoop_0;
+end;
+
+ reserve L for non empty multLoopStr_0;
+ reserve a,b,c,x,y,z for Element of L;
+
+canceled;
+
+theorem :: ALGSTR_1:36
+   L is multGroup_0 iff
+       0.L <> 1_ L
+     & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+     & (for a holds 0.L*a = 0.L);
+
+definition
+  cluster multEX_0 -> associative;
+end;
+
+definition
+ cluster strict commutative multGroup_0;
+end;
+
+canceled;
+
+theorem :: ALGSTR_1:38
+     L is commutative multGroup_0 iff
+       (0.L <> 1_ L)
+     & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+     & (for a holds 0.L*a = 0.L)
+     & (for a,b holds a*b = b*a);
+
+definition
+  let L be almost_invertible almost_cancelable (non empty multLoopStr_0);
+  let a be Element of L;
+  assume  a<>0.L;
+  func a" -> Element of L means
+:: ALGSTR_1:def 25
+    a*it = 1_ L;
+end;
+
+reserve G for associative almost_invertible almost_cancelable well-unital
+  (non empty multLoopStr_0);
+reserve a,x for Element of G;
+
+canceled;
+
+theorem :: ALGSTR_1:40
+    a<>0.G implies a*(a") = 1_ G & a"*a=1_ G;
+
+definition
+  let L be almost_invertible almost_cancelable (non empty multLoopStr_0);
+  let a, b be Element of L;
+  func a/b -> Element of L equals
+:: ALGSTR_1:def 26
+      a*(b");
+end;
+
+

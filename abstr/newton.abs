@@ -1,0 +1,243 @@
+:: Factorial and Newton coeffitients
+::  by Rafa{\l} Kwiatek
+::
+:: Received July 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ORDINAL2, ARYTM, FINSEQ_1, ARYTM_3, ARYTM_1, RELAT_1, FUNCT_1,
+      BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3;
+ notation TARSKI, XBOOLE_0, ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0,
+      REAL_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, NAT_1, RVSUM_1;
+ constructors FINSEQOP, INT_1, REAL_1, NAT_1, RVSUM_1, FINSEQ_4, SEQ_1,
+      MEMBERED, XBOOLE_0;
+ clusters RELSET_1, FINSEQ_2, INT_1, XREAL_0, NAT_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, ORDINAL2;
+ requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+  reserve i,k,n,m,l for Nat;
+  reserve s,t,r for natural number;
+  reserve a,b,x,y for real number;
+  reserve F,G,H for FinSequence of REAL;
+
+canceled 2;
+
+theorem :: NEWTON:3
+ for F,G being FinSequence st
+     len F = len G & (for i st i in dom F holds F.i = G.i) holds F = G;
+
+canceled;
+
+theorem :: NEWTON:5
+ for n st n>=1 holds Seg n = {1} \/ {k: 1<k & k<n} \/ {n};
+
+theorem :: NEWTON:6
+ for F holds len (a*F) = len F;
+
+theorem :: NEWTON:7
+ n in dom G iff n in dom (a*G);
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::    x |^ n  Function                                                      ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+ definition
+ let i be natural number; let x be real number;
+ redefine func i |-> x -> FinSequence of REAL;
+end;
+
+definition
+  let x be real number; let n be natural number;
+  func x|^n equals
+:: NEWTON:def 1
+Product(n |-> x);
+end;
+
+definition
+  let x be real number; let n be natural number;
+  cluster x|^n -> real;
+end;
+
+definition
+  let x be Real; let n be natural number;
+  redefine func x|^n -> Real;
+end;
+
+canceled;
+
+theorem :: NEWTON:9
+ for x holds x|^0 = 1;
+
+theorem :: NEWTON:10
+ for x holds x|^1 = x;
+
+theorem :: NEWTON:11
+ for s holds x|^(s+1) = x|^s*x;
+
+theorem :: NEWTON:12
+   (x*y)|^s = x|^s*y|^s;
+
+theorem :: NEWTON:13
+   x|^(s+t) = x|^s*x|^t;
+
+theorem :: NEWTON:14
+   (x|^s)|^t = x|^(s*t);
+
+theorem :: NEWTON:15
+ for s holds 1|^s = 1;
+
+theorem :: NEWTON:16
+   for s st s >=1 holds 0|^s = 0;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::     n!  Function                                                         ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let n be natural number;
+ redefine func idseq n -> FinSequence of REAL;
+end;
+
+definition
+  let n be natural number;
+  func n! equals
+:: NEWTON:def 2
+Product(idseq n);
+end;
+
+definition
+  let n be natural number;
+  cluster n! -> real;
+end;
+
+definition
+  let n be natural number;
+  redefine func n! -> Real;
+end;
+
+canceled;
+
+theorem :: NEWTON:18
+ 0! = 1;
+
+theorem :: NEWTON:19
+   1! = 1;
+
+theorem :: NEWTON:20
+   2! = 2;
+
+
+theorem :: NEWTON:21
+ for s holds (s+1)! = (s!) * (s+1);
+
+theorem :: NEWTON:22
+   for s holds s! is Nat;
+
+theorem :: NEWTON:23
+ for s holds s!>0;
+
+canceled;
+
+theorem :: NEWTON:25
+ for s,t holds (s!) * (t!)<>0;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::     n choose k  Function                                                 ::
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+ let k,n be natural number;
+ func n choose k means
+:: NEWTON:def 3
+    for l be natural number st l = n-k holds
+     it = (n!)/((k!) * (l!)) if n >= k
+  otherwise it = 0;
+end;
+
+definition
+ let k,n be natural number;
+ cluster n choose k -> real;
+end;
+
+definition
+ let k,n be natural number;
+ redefine func n choose k -> Real;
+end;
+
+canceled;
+
+theorem :: NEWTON:27
+ 0 choose 0 = 1;
+
+canceled;
+
+theorem :: NEWTON:29
+ for s holds (s choose 0) = 1;
+
+theorem :: NEWTON:30
+ for s,t st s>=t holds
+       (for r st r = s-t holds (s choose t) = (s choose r));
+
+theorem :: NEWTON:31
+ for s holds s choose s = 1;
+
+
+theorem :: NEWTON:32
+ for s,t st s<t holds
+        (((t+1) choose (s+1)) = (t choose (s+1)) + (t choose s)
+        & ((t+1) choose (s+1)) = (t choose s) + (t choose (s+1)));
+
+theorem :: NEWTON:33
+ for s st s >= 1 holds s choose 1 = s;
+
+theorem :: NEWTON:34
+   for s,t st s>=1 & t = s-1 holds s choose t = s;
+
+theorem :: NEWTON:35
+   for s holds (for r holds (s choose r) is Nat);
+
+theorem :: NEWTON:36
+   for m,F st m <> 0 & len F = m & (for i,l st i in dom F & l = n+i-1
+      holds F.i = l choose n) holds Sum F = (n+m) choose (n+1);
+
+definition
+let a,b be real number;
+let n be natural number;
+func (a,b) In_Power n -> FinSequence of REAL means
+:: NEWTON:def 4
+   len it = n+1 &
+   (for i,l,m being natural number st i in dom it & m = i - 1 & l = n-m holds
+   it.i = (n choose m)* a|^l * b|^m);
+end;
+
+canceled;
+
+theorem :: NEWTON:38
+ (a,b) In_Power 0 = <*1*>;
+
+theorem :: NEWTON:39
+ ((a,b) In_Power s).1 = a|^s;
+
+theorem :: NEWTON:40
+ ((a,b) In_Power s).(s+1) = b|^s;
+
+theorem :: NEWTON:41
+ for s holds (a+b)|^s = Sum((a,b) In_Power s);
+
+definition let n be natural number;
+func Newton_Coeff n -> FinSequence of REAL means
+:: NEWTON:def 5
+len it = n+1 &
+ (for i,k be natural number st i in dom it & k = i-1 holds it.i = n choose k);
+end;
+
+canceled;
+
+theorem :: NEWTON:43
+ for s holds Newton_Coeff s = (1,1) In_Power s;
+
+theorem :: NEWTON:44
+   for s holds 2|^s = Sum(Newton_Coeff s);

@@ -1,0 +1,1328 @@
+:: Semi-Affine Space
+::  by Eugeniusz Kusak and Krzysztof Radziszewski
+::
+:: Received November 30, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary ANALOAF, DIRAF, INCSP_1, PARSP_2, FDIFF_1, SEMI_AF1;
+ notation STRUCT_0, ANALOAF, DIRAF;
+ constructors AFF_1, XBOOLE_0;
+ clusters ANALOAF, ZFMISC_1, XBOOLE_0;
+ theorems PARDEPAP, DIRAF;
+
+begin
+
+definition let IT be non empty AffinStruct;
+ attr IT is Semi_Affine_Space-like means
+ :Def1: (for a,b being Element of IT holds a,b // b,a) &
+          (for a,b,c being Element of IT holds a,b // c,c) &
+          (for a,b,p,q,r,s being Element of IT holds
+             ( a<>b & a,b // p,q & a,b // r,s implies p,q // r,s )) &
+          (for a,b,c being Element of IT holds
+             ( a,b // a,c implies b,a // b,c )) &
+          (ex a,b,c being Element of IT st not a,b // a,c) &
+          (for a,b,p being Element of IT
+           ex q being Element of IT st
+             ( a,b // p,q & a,p // b,q )) &
+          (for o,a being Element of IT holds
+           (ex p being Element of IT st
+           (for b,c being Element of IT holds o,a // o,p &
+           (ex d being Element of IT st
+             ( o,p // o,b implies o,c // o,d & p,c // b,d ))))) &
+          (for o,a,a',b,b',c,c' being Element of IT holds
+             ( not o,a // o,b & not o,a // o,c & o,a // o,a' & o,b // o,b' &
+               o,c // o,c' & a,b // a',b' & a,c // a',c' implies
+               b,c // b',c' )) &
+          (for a,a',b,b',c,c' being Element of IT holds
+         ( not a,a' // a,b & not a,a' // a,c & a,a' // b,b' & a,a' // c,c' &
+               a,b // a',b' & a,c // a',c' implies b,c // b',c' )) &
+          (for a1,a2,a3,b1,b2,b3 being Element of IT holds
+     ( a1,a2 // a1,a3 & b1,b2 // b1,b3 & a1,b2 // a2,b1 & a2,b3 // a3,b2
+               implies a3,b1 // a1,b3 )) &
+          (for a,b,c,d being Element of IT holds
+             ( not a,b // a,c & a,b // c,d & a,c // b,d implies
+             not a,d // b,c ));
+end;
+
+definition
+ cluster Semi_Affine_Space-like (non empty AffinStruct);
+existence proof consider SAS being AffinPlane such that
+A1: for o,a,a',b,b',c,c' being Element of SAS holds
+     ( not o,a // o,b & not o,a // o,c & o,a // o,a' & o,b // o,b' &
+  o,c // o,c' & a,b // a',b' & a,c // a',c' implies b,c // b',c' ) and
+A2: for a,a',b,b',c,c' being Element of SAS holds
+     ( not a,a' // a,b & not a,a' // a,c & a,a' // b,b' & a,a' // c,c' &
+  a,b // a',b' & a,c // a',c' implies b,c // b',c' ) and
+A3: for a1,a2,a3,b1,b2,b3 being Element of SAS holds
+      ( a1,a2 // a1,a3 & b1,b2 // b1,b3 & a1,b2 // a2,b1 & a2,b3 // a3,b2
+              implies a3,b1 // a1,b3 ) and
+A4: for a,b,c,d being Element of SAS holds
+     ( not a,b // a,c & a,b // c,d & a,c // b,d implies not a,d // b,c )
+by PARDEPAP:5; reconsider AS=SAS as non empty AffinStruct; take AS;
+thus for a,b being Element of AS holds a,b // b,a
+ by DIRAF:47;
+thus thesis by A1,A2,A3,A4,DIRAF:47,PARDEPAP:6; end;
+end;
+
+definition
+ mode Semi_Affine_Space is Semi_Affine_Space-like (non empty AffinStruct);
+end;
+
+::
+::                        AXIOMS OF SEMI_AFFINE SPACE
+::
+
+reserve SAS for Semi_Affine_Space;
+reserve a,a',a1,a2,a3,a4,b,b',c,c',d,d',d1,d2,o,p,p1,p2,q,r,r1,r2,s,x,
+        y,t,z for Element of SAS;
+
+
+canceled 11;
+
+theorem
+Th12: a,b // a,b
+proof b,a // b,b by Def1; hence a,b // a,b by Def1; end;
+
+theorem
+Th13: a,b // c,d implies c,d // a,b
+proof assume A1: a,b // c,d;
+  a,b // a,b by Th12; then a<>b implies c,d // a,b by A1,Def1;
+hence thesis by Def1; end;
+
+theorem
+Th14: a,a // b,c
+proof b,c // a,a by Def1; hence a,a // b,c by Th13; end;
+
+theorem
+Th15: a,b // c,d implies b,a // c,d
+proof assume A1: a,b // c,d;
+  a,b // b,a by Def1; then a<>b implies b,a // c,d by A1,Def1;
+hence thesis by A1; end;
+
+theorem
+Th16: a,b // c,d implies a,b // d,c
+proof assume a,b // c,d; then c,d // a,b by Th13; then d,c // a,b by Th15;
+hence a,b // d,c by Th13; end;
+
+theorem
+Th17: a,b // c,d implies
+      b,a // c,d & a,b // d,c & b,a // d,c & c,d // a,b &
+      d,c // a,b & c,d // b,a & d,c // b,a
+proof assume a,b // c,d; then c,d // a,b by Th13;
+then A1: d,c // a,b by Th15; then A2: d,c // b,a by Th16;
+then c,d // b,a by Th15;
+hence thesis by A1,A2,Th13,Th15; end;
+
+theorem
+Th18: a,b // a,c implies
+       a,c // a,b & b,a // a,c & a,b // c,a & a,c // b,a & b,a // c,a &
+       c,a // a,b & c,a // b,a & b,a // b,c & a,b // b,c & b,a // c,b &
+       b,c // b,a & a,b // c,b & c,b // b,a & b,c // a,b & c,b // a,b &
+       c,a // c,b & a,c // c,b & c,a // b,c & a,c // b,c & c,b // c,a &
+       b,c // c,a & c,b // a,c & b,c // a,c
+proof assume A1: a,b // a,c; then A2: b,a // b,c by Def1;
+     a,c // a,b by A1,Th13; then c,a // c,b by Def1;
+hence thesis by A1,A2,Th17; end;
+
+canceled;
+
+theorem
+Th20: a<>b & p,q // a,b & a,b // r,s implies p,q // r,s
+proof assume a<>b & p,q // a,b & a,b // r,s;
+then a<>b & a,b // p,q & a,b // r,s by Th17; hence thesis by Def1; end;
+
+theorem
+  not a,b // a,d implies a<>b & b<>d & d<>a by Def1,Th12,Th14;
+
+theorem
+   not a,b // p,q implies a<>b & p<>q by Def1,Th14;
+
+theorem
+   a,b // a,x & b,c // b,x & c,a // c,x implies a,b // a,c
+proof assume A1: a,b // a,x & b,c // b,x & c,a // c,x;
+
+   now assume a<>x;
+then a<>x & a,x // a,b & a,x // a,c by A1,Th18; hence thesis by Def1; end;
+hence thesis by A1,Th18; end;
+
+canceled;
+
+theorem
+Th25: not a,b // a,c & p<>q implies not p,q // p,a or not p,q // p,b or
+      not p,q // p,c
+proof assume A1: not a,b // a,c & p<>q; now assume a<>p & p,q // p,a &
+p,q // p,b & p,q // p,c; then a<>p & p,a // p,b & p,a // p,c by A1,Def1;
+then a<>p & a,p // a,b & a,p // a,c by Def1; hence contradiction by A1,Def1;
+end;
+hence thesis by A1,Def1; end;
+
+theorem
+Th26: p<>q implies ex r st not p,q // p,r
+proof assume A1: p<>q; consider a,b,c such that A2: not a,b // a,c by Def1;
+  not p,q // p,a or not p,q // p,b or not p,q // p,c by A1,A2,Th25;
+hence thesis; end;
+
+canceled;
+
+theorem
+Th28: not a,b // a,c implies not a,b // c,a & not b,a // a,c & not b,a // c,a &
+      not a,c // a,b & not a,c // b,a & not c,a // a,b & not c,a // b,a &
+      not b,a // b,c & not b,a // c,b & not a,b // b,c & not a,b // c,b &
+      not b,c // b,a & not b,c // a,b & not c,b // a,b & not c,b // b,a &
+      not c,b // c,a & not c,b // a,c & not b,c // c,a & not b,c // a,c &
+      not c,a // c,b & not c,a // b,c & not a,c // b,c & not a,c // c,b
+proof assume A1: not a,b // a,c; assume A2: not thesis;
+A3:  not b,a // b,c by A1,Th18;
+   now assume a,c // c,b; then c,a // c,b by Th17;
+ hence contradiction by A1,Th18; end;
+hence thesis by A1,A2,A3,Th17; end;
+
+theorem
+Th29: not a,b // c,d & a,b // p,q & c,d // r,s & p<>q & r<>s implies
+not p,q // r,s
+proof assume A1: not a,b // c,d & a,b // p,q & c,d // r,s & p<>q & r<>s;
+assume p,q // r,s; then a,b // r,s & c,d // r,s & r<>s by A1,Th20; then r<>
+s &
+r,s // a,b & r,s // c,d by Th17; hence contradiction by A1,Def1; end;
+
+theorem
+Th30: not a,b // a,c & a,b // p,q & a,c // p,r & b,c // q,r & p<>q implies
+not p,q // p,r
+proof assume A1: not a,b // a,c & a,b // p,q & a,c // p,r & b,c // q,r & p<>q;
+   now assume p=r; then p<>q & p,q // a,b & p,q // b,c by A1,Th17
+; then a,b // b,c
+by Def1; then b,a // b,c by Th15;
+hence contradiction by A1,Th18; end;
+  hence thesis by A1,Th29; end;
+
+theorem
+Th31: not a,b // a,c & a,c // p,r & b,c // p,r implies p=r
+proof assume not a,b // a,c & a,c // p,r & b,c // p,r;
+then not a,c // b,c & p,r // a,c & p,r // b,c
+by Th17,Th28; hence thesis by Def1; end;
+
+theorem
+Th32: not p,q // p,r1 & p,r1 // p,r2 & q,r1 // q,r2 implies r1=r2
+proof assume not p,q // p,r1 & p,r1 // p,r2 & q,r1 // q,r2;
+then not r1,p // r1,q &
+r1,r2 // r1,p & r1,r2 // r1,q by Th28; hence thesis by Def1; end;
+
+theorem
+Th33: not a,b // a,c & a,b // p,q & a,c // p,r1 & a,c // p,r2 & b,c // q,r1 &
+b,c // q,r2 implies r1=r2
+proof assume A1: not a,b // a,c & a,b // p,q & a,c // p,r1 & a,c // p,r2 &
+ b,c // q,r1 & b,c // q,r2; A2: now assume p=q; then p=r1 & p=r2 by A1,Th31;
+ hence thesis; end; now assume p<>q; then not p,q // p,r1 & a<>c & b<>c &
+ a,c // p,r1 & a,c // p,r2 & b,c // q,r1 & b,c // q,r2 by A1,Def1,Th12,Th30;
+ then not p,q // p,r1 & p,r1 // p,r2 & q,r1 // q,r2 by Def1;
+ hence thesis by Th32; end;
+ hence thesis by A2; end;
+
+ theorem
+   a=b or c =d or (a=c & b=d) or (a=d & b=c) implies a,b // c,d
+ by Def1,Th12,Th14;
+
+theorem
+  a=b or a=c or b=c implies a,b // a,c by Def1,Th12,Th14;
+
+::
+::          BASIC FACTS ABOUT  COLLINEARITY RELATION
+::
+
+definition let SAS,a,b,c;
+ pred a,b,c is_collinear means
+ :Def2: a,b // a,c;
+end;
+
+canceled;
+
+theorem
+Th37: a1,a2,a3 is_collinear implies a1,a3,a2 is_collinear & a2,a1,a3
+is_collinear & a2,a3,a1 is_collinear & a3,a1,a2 is_collinear & a3,a2,a1
+is_collinear
+proof assume a1,a2,a3 is_collinear; then a1,a2 // a1,a3 by Def2;
+then a1,a3 // a1,a2 & a2,a1 // a2,a3 & a2,a3 // a2,a1 & a3,a2 // a3,a1 &
+a3,a1 // a3,a2
+by Th18; hence thesis by Def2; end;
+
+canceled;
+
+theorem
+Th39: not a,b,c is_collinear & a,b // p,q & a,c // p,r & p<>q & p<>r
+implies not
+p,q,r is_collinear
+proof assume not a,b,c is_collinear & a,b // p,q & a,c // p,r & p<>q & p<>r;
+then not a,b // a,c & a,b // p,q & a,c // p,r & p<>q & p<>r by Def2; then not
+p,q // p,r by Th29; hence thesis by Def2; end;
+
+theorem
+Th40: a=b or b=c or c =a implies a,b,c is_collinear
+proof assume a=b or b=c or c =a; then a,b // a,c by Def1,Th12,Th14; hence
+ thesis by Def2;
+end;
+
+theorem
+Th41: p<>q implies ex r st not p,q,r is_collinear
+proof assume p<>q; then consider r such that A1: not p,q // p,r by Th26;
+take r; thus not p,q,r is_collinear by A1,Def2; thus thesis; end;
+
+theorem Th42:
+a,b,c is_collinear & a,b,d is_collinear implies a,b // c,d
+proof assume A1: a,b,c is_collinear & a,b,d is_collinear;
+    now assume a<>b & a<>c; then a<>b & a<>c & a,b // a,c &
+a,b // a,d by A1,Def2; then a<>c & a,b // a,c & a,c // a,d by Def1; then a<>c
+&
+a,b // a,c & a,c // c,d by Th18; hence thesis by Th20; end;
+hence thesis by A1,Def2,Th14;
+end;
+
+theorem
+Th43: not a,b,c is_collinear & a,b // c,d implies not a,b,d is_collinear
+proof assume A1: not a,b,c is_collinear & a,b // c,d;
+   now assume A2:c <>d & a,b,d is_collinear;
+A3: not a,b // a,c & a,b // c,d & a,c // c,a by A1,Def1,Def2;
+then A4: c <>a & a<>b & a,b // d,c by Def1,Th14,Th17; a,b // a,d by A2,Def2;
+then a,b // d,a by Th17;
+then not c,d // c,a & d,c // d,a by A2,A3,A4,Def1,Th29; hence contradiction
+ by Th18; end; hence thesis by A1; end;
+
+theorem
+Th44: not a,b,c is_collinear & a,b // c,d & c <>d & c,d,x is_collinear
+implies not a,b,x is_collinear
+proof assume A1: not a,b,c is_collinear & a,b // c,d & c <>d & c,d,x
+is_collinear;
+then c <>d & a,b // c,d & c,d // c,x by Def2;
+then not a,b,c is_collinear & a,b // c,x by A1,Th20;hence thesis by Th43; end
+;
+
+theorem
+   not o,a,b is_collinear & o,a,x is_collinear & o,b,x is_collinear implies
+o=x
+proof assume not o,a,b is_collinear & o,a,x is_collinear & o,b,x is_collinear;
+then not a,b,o is_collinear & o,a,x is_collinear & b,o,x is_collinear by Th37
+; then not a,b // a,o & o,a // o,x & b,o // b,x by Def2; then not a,b // a,o
+&
+a,o // a,x & b,o // b,x by Th28; hence thesis by Th32; end;
+
+theorem
+   o<>a & o<>b & o,a,b is_collinear & o,a,a' is_collinear & o,b,b'
+is_collinear implies a,b // a',b'
+proof assume A1: o<>a & o<>b & o,a,b is_collinear & o,a,a' is_collinear & o,b,
+b'
+is_collinear; A2: now assume o=a'; then a'<>b & a',a // a',b & a',b // a',b'
+by A1,Def2; then a'<>b & a,b // a',b & a',b // a',b' by Th18; hence thesis
+by Th20
+; end;
+  now assume o<>a'; then o<>a' & o<>b & o<>a & o,a // o,b & o,a // o,a' &
+o,b // o,b' by A1,Def2; then o<>a' & o<>b & o,b // a,b & o,b // o,a' & o,b //
+o,b' by Def1,Th18; then o<>a' & o<>b & o,b // a,b & o,b // o,a' & o,a' // o,b'
+by Def1;
+then o<>a' & a,b // o,a' & o,a' // a',b' by Def1,Th18;
+hence thesis by Th20; end;
+hence thesis by A2; end;
+
+canceled;
+
+theorem
+   not a,b // c,d & a,b,p1 is_collinear & a,b,p2 is_collinear & c,d,p1
+is_collinear & c,d,p2 is_collinear implies p1=p2
+proof assume not a,b // c,d & a,b,p1 is_collinear & a,b,p2 is_collinear &
+c,d,p1
+is_collinear & c,d,p2 is_collinear; then not a,b // c,d & a,b // p1,p2 &
+c,d // p1,p2 by Th42; then not a,b // c,d & p1,p2 // a,b & p1,p2 // c,d by Th17
+; hence thesis by Def1; end;
+
+theorem
+Th49: a<>b & a,b,c is_collinear & a,b // c,d implies a,c // b,d
+proof assume A1: a<>b & a,b,c is_collinear & a,b // c,d;
+   now assume b<>c; then b<>a & b<>c
+& a,b // a,c & a,b // c,d by A1,Def2; then b<>a & b<>c & b,c // a,c &
+a,b // c,b &
+a,b // c,d by Th18; then b<>c & b,c // a,c & c,b // c,d by Def1; then b<>c &
+b,c // a,c & b,c // b,d by Th18; hence thesis by Def1; end; hence thesis by A1;
+end;
+
+theorem
+Th50: a<>b & a,b,c is_collinear & a,b // c,d implies c,b // c,d
+proof assume A1: a<>b & a,b,c is_collinear & a,b // c,d;
+   now assume a<>c; then a<>c &
+a<>b & a,b // a,c & a,b // c,d by A1,Def2; then a<>c & a,c // c,b &
+a,c // c,d by Def1,Th18; hence thesis by Def1; end; hence thesis by A1; end;
+
+theorem
+Th51: not o,a,c is_collinear & o,a,b is_collinear & o,c,d1 is_collinear &
+o,c,d2 is_collinear & a,c // b,d1 & a,c // b,d1 & a,c // b,d2 implies d1=d2
+proof assume not o,a,c is_collinear & o,a,b is_collinear & o,c,d1 is_collinear
+& o,c,d2 is_collinear & a,c // b,d1 & a,c // b,d1 & a,c // b,d2; then not
+o,a // o,c & o,a // o,b & o,c // o,d1 & o,c // o,d2 & a,c // b,d1 & a,c //
+b,d2 by Def2; hence thesis by Th33; end;
+
+theorem
+   a<>b & a,b,c is_collinear & a,b,d is_collinear implies a,c,d is_collinear
+proof assume a<>b & a,b,c is_collinear & a,b,d is_collinear; then a<>b &
+a,b // a,c & a,b // a,d by Def2; then a,c // a,d by Def1; hence thesis by Def2
+; end;
+
+::
+::                              PARALLELOGRAM
+::
+
+definition let SAS,a,b,c,d;
+ pred parallelogram a,b,c,d means
+ :Def3: not a,b,c is_collinear & a,b // c,d & a,c // b,d;
+end;
+
+canceled;
+
+theorem
+Th54: parallelogram a,b,c,d implies a<>b & a<>c & c <>b & a<>d & b<>d & c <>d
+proof assume A1: parallelogram a,b,c,d; then not a,b,c is_collinear by Def3;
+hence a<>b & a<>c & c <>b by Th40;
+assume A2: not thesis;
+A3:now assume a=d;
+then not a,b,c is_collinear & a,b // c,a by A1,Def3
+; then not a,b,c is_collinear & a,b // a,c by Th17; hence contradiction by Def2
+; end;
+A4:now assume b=d;
+then not a,b,c is_collinear & a,b // c,b by A1,Def3
+; then not a,b,c is_collinear & b,a // b,c by Th17; then not a,b,c
+is_collinear & b,a,c is_collinear by Def2; hence
+  contradiction by Th37; end;
+  now assume c =d;
+then not a,b,c is_collinear & a,c // b,c by A1,Def3
+; then not a,b,c is_collinear &
+c,a // c,b by Th17; then not a,b,c is_collinear & c,a,b is_collinear by Def2;
+hence contradiction by Th37; end;
+hence contradiction by A2,A3,A4; end;
+
+theorem
+Th55: parallelogram a,b,c,d implies not a,b,c is_collinear & not b,a,d
+is_collinear & not c,d,a is_collinear & not d,c,b is_collinear
+proof assume A1: parallelogram a,b,c,d; hence not a,b,c is_collinear by Def3;
+  not a,b,c
+is_collinear & a,b // b,a & a,c // b,d & b<>a & b<>d by A1,Def1,Def3,Th54
+; hence not b,a,d
+is_collinear by Th39;
+  not a,b,c is_collinear & a,b // c,d & a,c // c,a & c <>d & c <>a by A1,Def1,
+Def3,Th54
+; hence not c,d,a is_collinear by Th39; not a,b,c is_collinear & a,b // c,d
+&
+a,c // b,d & c <>d & d<>b by A1,Def3,Th54
+; then not a,b,c is_collinear & a,b // d,c &
+a,c // d,b & c <>d & d<>b by Th17; hence thesis by Th39; end;
+
+theorem
+Th56: parallelogram a1,a2,a3,a4 implies not a1,a2,a3 is_collinear &
+not a1,a3,a2 is_collinear & not a1,a2,a4 is_collinear &
+not a1,a4,a2 is_collinear & not a1,a3,a4 is_collinear &
+not a1,a4,a3 is_collinear & not a2,a1,a3 is_collinear &
+not a2,a3,a1 is_collinear & not a2,a1,a4 is_collinear &
+not a2,a4,a1 is_collinear & not a2,a3,a4 is_collinear &
+not a2,a4,a3 is_collinear & not a3,a1,a2 is_collinear &
+not a3,a2,a1 is_collinear & not a3,a1,a4 is_collinear &
+not a3,a4,a1 is_collinear & not a3,a2,a4 is_collinear &
+not a3,a4,a2 is_collinear & not a4,a1,a2 is_collinear &
+not a4,a2,a1 is_collinear & not a4,a1,a3 is_collinear &
+not a4,a3,a1 is_collinear & not a4,a2,a3 is_collinear &
+not a4,a3,a2 is_collinear
+proof assume parallelogram a1,a2,a3,a4; then not a1,a2,a3 is_collinear &
+not a2,a1,a4 is_collinear & not a3,a4,a1 is_collinear & not a4,a3,a2
+is_collinear by Th55; hence thesis by Th37; end;
+
+theorem
+Th57: parallelogram a,b,c,d implies not a,b,x is_collinear or not c,d,x
+is_collinear
+proof assume parallelogram a,b,c,d; then not a,b,c is_collinear & a,b // c,d
+&
+c <>d by Def3,Th54; hence thesis by Th44; end;
+
+theorem
+   parallelogram a,b,c,d implies parallelogram a,c,b,d
+proof assume parallelogram a,b,c,d; then not a,c,b is_collinear & a,b // c,d
+&
+ a,c // b,d by Def3,Th56; hence thesis by Def3; end;
+
+ theorem
+    parallelogram a,b,c,d implies parallelogram c,d,a,b
+ proof assume parallelogram a,b,c,d; then not c,d,a is_collinear & a,b // c,d
+&
+ a,c // b,d by Def3,Th56; then not c,d,a is_collinear & c,d // a,b &
+ c,a // d,b by Th17; hence thesis by Def3; end;
+
+ theorem
+    parallelogram a,b,c,d implies parallelogram b,a,d,c
+ proof assume parallelogram a,b,c,d; then not b,a,d is_collinear & a,b // c,d
+&
+ a,c // b,d by Def3,Th56; then not b,a,d is_collinear & b,a // d,c & b,d //
+ a,c by Th17; hence thesis by Def3; end;
+
+ theorem
+ Th61: parallelogram a,b,c,d implies parallelogram a,c,b,d & parallelogram
+ c,d,a,b & parallelogram b,a,d,c & parallelogram c,a,d,b & parallelogram
+ d,b,c,a & parallelogram b,d,a,c
+ proof assume A1: parallelogram a,b,c,d; then not a,b,c is_collinear &
+ a,b // c,d & a,c // b,d by Def3;
+ then not a,c,b is_collinear & a,c // b,d & a,b // c,d &
+ not c,d,a is_collinear & c,d // a,b & c,a // d,b &
+ not b,a,d is_collinear & b,a // d,c & b,d // a,c &
+ not c,a,d is_collinear & c,a // d,b & c,d // a,b &
+ not d,b,c is_collinear & d,b // c,a & d,c // b,a &
+ not b,d,a is_collinear & b,d // a,c & b,a // d,c by A1,Th17,Th56;
+ hence thesis by Def3; end;
+
+theorem
+Th62: not a,b,c is_collinear implies ex d st parallelogram a,b,c,d
+proof assume A1: not a,b,c is_collinear; consider d such that A2:
+a,b // c,d & a,c // b,d by Def1; take d; thus thesis by A1,A2,Def3; end;
+
+theorem
+Th63: parallelogram a,b,c,d1 & parallelogram a,b,c,d2 implies d1=d2
+proof assume parallelogram a,b,c,d1 & parallelogram a,b,c,d2;
+then not b,c,a is_collinear & a,b // c,d1 & a,c // b,d1 & a,b // c,d2 & a,c //
+b,d2
+by Def3,Th56; then not b,c // b,a & b,c // c,b &
+b,a // c,d1 & b,a // c,d2 & c,a // b,d1 & c,a // b,d2 by Def1,Def2,Th17;
+hence thesis by Th33; end;
+
+theorem
+Th64: parallelogram a,b,c,d implies not a,d // b,c
+proof assume parallelogram a,b,c,d; then not a,b,c is_collinear & a,b // c,d
+& a,c // b,d by Def3; then not a,b // a,c & a,b // c,d & a,c // b,d by Def2;
+hence thesis by Def1; end;
+
+theorem
+Th65: parallelogram a,b,c,d implies not parallelogram a,b,d,c
+proof assume A1: parallelogram a,b,c,d; assume not thesis;
+then A2: not a,b,d is_collinear & a,b // d,c & a,d // b,c by Def3;
+  not a,b,c is_collinear & a,b // c,d & a,c // b,d by A1,Def3;
+then not a,b // a,c & a,b // c,d & a,c // b,d by Def2;hence contradiction by A2
+,Def1
+; end;
+
+theorem
+Th66:a<>b implies ex c st a,b,c is_collinear & c <>a & c <>b
+proof assume a<>b; then consider p such that A1: not a,b,p is_collinear by Th41
+; consider q such that A2: parallelogram a,b,p,q by A1,Th62;
+   not p,q,b is_collinear & parallelogram a,b,p,q by A2,Th56; then consider
+c such that A3: parallelogram p,q,b,c by Th62; take c; A4: p<>q & a,b // p,q &
+p,q // b,c & p,b // q,c by A2,A3,Def3,Th54; A5: not b,c,p is_collinear by A3,
+Th55;
+   a,b // b,c by A4,Th20;
+ then b,a // b,c & not a,q // b,p & c,q // b,p by A2,A4,Th17,Th64;
+then b,a,c is_collinear & a<>c by Def2; hence thesis by A5,Th37,Th40; end;
+
+theorem
+Th67: parallelogram a,a',b,b' & parallelogram a,a',c,c' implies b,c // b',c'
+proof assume parallelogram a,a',b,b' & parallelogram a,a',c,c';
+then not a,a',b is_collinear & not a,a',c is_collinear & a,a' // b,b' &
+a,b // a',b' &
+a,a' // c,c' & a,c // a',c' by Def3; then not a,a' // a,b & not a,a' // a,c &
+a,a' // b,b' & a,b // a',b' & a,a' // c,c' & a,c // a',c' by Def2;
+hence thesis by Def1; end;
+
+theorem
+Th68: not b,b',c is_collinear & parallelogram a,a',b,b' & parallelogram
+a,a',c,c' implies parallelogram b,b',c,c'
+proof assume not b,b',c is_collinear & parallelogram a,a',b,b' &
+parallelogram a,a',c,c'; then not b,b',c is_collinear & a<>a' & a,a' // b,b' &
+a,a' // c,c' & b,c // b',c' by Def3,Th54,Th67; then not b,b',c is_collinear &
+b,b' // c,c' & b,c // b',c' by Def1; hence thesis by Def3; end;
+
+theorem
+Th69: a,b,c is_collinear & b<>c & parallelogram a,a',b,b' & parallelogram
+a,a',c,c' implies parallelogram b,b',c,c'
+proof assume a,b,c is_collinear & b<>c & parallelogram a,a',b,b' &
+parallelogram a,a',c,c'; then a,b // a,c & not a,a',b is_collinear &
+a,a' // b,b'
+& b<>b' & b<>c & parallelogram a,a',b,b' & parallelogram a,a',c,c' by Def2,Def3
+,Th54; then not a,a',b is_collinear & a,a' // b,b' & a,b // b,c & b<>b' & b<>c
+&
+parallelogram a,a',b,b' & parallelogram a,a',c,c' by Th18; then not b,b',c
+is_collinear & parallelogram a,a',b,b' & parallelogram a,a',c,c' by Th39; hence
+  thesis by Th68; end;
+
+theorem
+Th70: parallelogram a,a',b,b' & parallelogram a,a',c,c' & parallelogram
+b,b',d,d' implies c,d // c',d'
+proof assume A1: parallelogram a,a',b,b' & parallelogram a,a',c,c' &
+parallelogram b,b',d,d'; A2: now assume not b,b',c is_collinear;
+then parallelogram b,b',c,c' & parallelogram b,b',d,d' by A1,Th68; hence
+ thesis by Th67; end; A3: now assume not a,a',d is_collinear; then not a,a',d
+is_collinear
+& parallelogram b,b',a,a' & parallelogram b,b',d,d' & parallelogram a,a',c,c'
+by A1,Th61; then parallelogram a,a',d,d' & parallelogram a,a',c,c' by Th68;
+hence thesis by Th67; end;
+      now assume A4: b,b',c is_collinear & a,a',d is_collinear;
+           a<>b by A1,Th54;
+        then consider x such that A5: a,b,x is_collinear & x<>a & x<>b by Th66;
+        A6: a,b // a,x by A5,Def2;
+        A7: not a,a',b is_collinear by A1,Th56;
+        A8: a,a' // a,a' by Th12;
+           a<>a' by A1,Th54;
+        then not a,a',x is_collinear by A5,A6,A7,A8,Th39;
+        then consider y such that A9: parallelogram a,a',x,y by Th62;
+        A10: parallelogram b,b',x,y by A1,A5,A9,Th69;
+        then not x,y,c is_collinear & not x,y,d is_collinear by A4,A9,Th57;
+        then parallelogram x,y,c,c' & parallelogram x,y,d,d' by A1,A9,A10,Th68
+;
+        hence thesis by Th67;
+       end;
+   hence thesis by A2,A3;
+ end;
+
+Lm1: a<>b implies ex c,d st parallelogram a,b,c,d
+ proof assume a<>b; then consider c such that A1: not a,b,c is_collinear by
+Th41;
+    ex d st parallelogram a,b,c,d by A1,Th62;
+  hence thesis;
+ end;
+
+theorem
+   a<>d implies ex b,c st parallelogram a,b,c,d
+ proof assume a<>d; then consider b such that A1: not a,d,b is_collinear by
+Th41;
+     not b,a,d is_collinear by A1,Th37;
+  then consider c such that A2: parallelogram b,a,d,c by Th62;
+     parallelogram a,b,c,d by A2,Th61;
+  hence thesis;
+ end;
+
+::
+::                                 CONGRUENCE
+::
+
+definition let SAS,a,b,r,s;
+ pred congr a,b,r,s means
+ :Def4: (a=b & r =s) or (ex p,q st parallelogram p,q,a,b &
+ parallelogram p,q,r,s);
+end;
+
+canceled;
+
+theorem
+Th73: congr a,a,b,c implies b=c
+ proof assume congr a,a,b,c;
+  then (a=a & b=c) or (ex p,q st parallelogram p,q,a,a & parallelogram
+   p,q,b,c) by Def4;
+  hence thesis by Th54;
+ end;
+
+theorem
+Th74: congr a,b,c,c implies a=b
+ proof assume congr a,b,c,c;
+  then (a=b & c =c) or (ex p,q st parallelogram p,q,a,b & parallelogram
+   p,q,c,c) by Def4;
+  hence thesis by Th54;
+ end;
+
+theorem
+Th75: congr a,b,b,a implies a=b
+ proof assume A1: congr a,b,b,a;
+    now assume a<>b;
+   then ex p,q st parallelogram p,q,a,b & parallelogram p,q,b,a by A1,Def4;
+   hence contradiction by Th65;
+  end;
+  hence thesis;
+ end;
+
+theorem
+Th76: congr a,b,c,d implies a,b // c,d
+ proof assume A1: congr a,b,c,d;
+     now assume a<>b;
+       then consider p,q such that A2: parallelogram p,q,a,b & parallelogram p,
+q,c,d
+        by A1,Def4;
+         p<>q & p,q // a,b & p,q // c,d by A2,Def3,Th54;
+       hence thesis by Def1;
+      end;
+  hence thesis by Th14;
+ end;
+
+theorem
+Th77: congr a,b,c,d implies a,c // b,d
+ proof assume A1: congr a,b,c,d;
+  A2: now assume a=b;
+       then a=b & c =d by A1,Th73;
+       hence thesis by Th12;
+      end;
+     now assume a<>b;
+       then ex p,q st parallelogram p,q,a,b & parallelogram p,q,c,d
+        by A1,Def4;
+       hence thesis by Th67;
+      end;
+  hence thesis by A2;
+ end;
+
+theorem
+Th78: congr a,b,c,d & not a,b,c is_collinear implies parallelogram a,b,c,d
+ proof assume congr a,b,c,d & not a,b,c is_collinear;
+  then not a,b,c is_collinear & a,b // c,d & a,c // b,d by Th76,Th77;
+  hence thesis by Def3;
+ end;
+
+theorem
+Th79: parallelogram a,b,c,d implies congr a,b,c,d
+ proof assume A1: parallelogram a,b,c,d;
+  then a<>c by Th54;
+  then consider p such that A2: a,c,p is_collinear & a<>p & c <>p by Th66;
+    not a,c,b is_collinear & a,c // a,p & a,b // a,b & a<>p & a<>b
+                                     by A1,A2,Def2,Th12,Th54,Th56;
+  then not a,p,b is_collinear by Th39;
+  then consider q such that A3: parallelogram a,p,b,q by Th62;
+     parallelogram a,b,p,q by A3,Th61;
+  then parallelogram c,d,p,q by A1,A2,Th69;
+  then parallelogram p,q,a,b & parallelogram p,q,c,d by A3,Th61;
+  hence thesis by Def4;
+ end;
+
+theorem
+Th80: congr a,b,c,d & a,b,c is_collinear & parallelogram r,s,a,b implies
+ parallelogram r,s,c,d
+ proof assume A1: congr a,b,c,d & a,b,c is_collinear & parallelogram r,s,a,b;
+
+     now assume A2: a<>b;
+       then consider p,q such that A3: parallelogram p,q,a,b & parallelogram p,
+q,c,d
+        by A1,Def4;
+       A4: not r,s,c is_collinear by A1,Th57;
+         a<>b & r,s // a,b & a,b // c,d by A1,A2,Def3,Th76;
+       then A5: r,s // c,d by Th20;
+         parallelogram a,b,r,s & parallelogram a,b,p,q & parallelogram p,q,c,d
+       by A1,A3,Th61;
+       then r,c // s,d by Th70;
+       hence thesis by A4,A5,Def3;
+      end;
+  hence thesis by A1,Th54;
+ end;
+
+theorem
+Th81: congr a,b,c,x & congr a,b,c,y implies x=y
+ proof assume A1: congr a,b,c,x & congr a,b,c,y;
+  A2: now assume a=b;
+       then c =x & c =y by A1,Th73;
+       hence thesis;
+      end;
+  A3: now assume A4: a<>b & a,b,c is_collinear;
+       then consider p,q such that A5: parallelogram a,b,p,q by Lm1;
+         parallelogram p,q,a,b by A5,Th61; then parallelogram p,q,c,x &
+        parallelogram p,q,c,y by A1,A4,Th80;
+       hence thesis by Th63;
+      end;
+     now assume a<>b & not a,b,c is_collinear;
+       then parallelogram a,b,c,x & parallelogram a,b,c,y by A1,Th78;
+       hence thesis by Th63;
+      end;
+  hence thesis by A2,A3;
+ end;
+
+theorem
+Th82: ex d st congr a,b,c,d
+ proof
+  A1:now assume a=b; then congr a,b,c,c by Def4;
+      hence thesis;
+     end;
+  A2: now assume A3: a<>b & a,b,c is_collinear;
+       then consider p,q such that A4: parallelogram a,b,p,q by Lm1;
+       A5: parallelogram p,q,a,b & not p,q,c is_collinear by A3,A4,Th57,Th61;
+       then consider d such that A6: parallelogram p,q,c,d by Th62;
+        congr a,b,c,d by A5,A6,Def4;
+       hence thesis;
+      end;
+     now assume a<>b & not a,b,c is_collinear;
+       then consider d such that A7: parallelogram a,b,c,d by Th62;
+        congr a,b,c,d by A7,Th79;
+       hence thesis;
+      end;
+  hence thesis by A1,A2;
+ end;
+
+canceled;
+
+theorem
+Th84: congr a,b,a,b
+ proof
+    now assume a<>b;
+   then consider p,q such that A1: parallelogram a,b,p,q by Lm1;
+     parallelogram p,q,a,b & parallelogram p,q,a,b by A1,Th61;
+   hence thesis by Def4;
+  end;
+  hence thesis by Def4;
+ end;
+
+theorem
+Th85: congr r,s,a,b & congr r,s,c,d implies congr a,b,c,d
+ proof assume A1: congr r,s,a,b & congr r,s,c,d;
+  A2: now assume r=s;
+       then a=b & c =d by A1,Th73;
+       hence thesis by Def4;
+      end;
+  A3: now assume A4: r<>s & r,s,a is_collinear;
+       then consider p,q such that A5: parallelogram p,q,r,s & parallelogram
+        p,q,c,d by A1,Def4;
+         parallelogram p,q,a,b by A1,A4,A5,Th80;
+       hence thesis by A5,Def4;
+      end;
+  A6: now assume A7: r<>s & r,s,c is_collinear;
+       then consider p,q such that A8: parallelogram p,q,r,s & parallelogram p,
+q,a,b
+        by A1,Def4;
+         parallelogram p,q,c,d by A1,A7,A8,Th80;
+       hence thesis by A8,Def4;
+      end;
+     now assume r<>s & not r,s,a is_collinear & not r,s,c is_collinear;
+       then parallelogram r,s,a,b & parallelogram r,s,c,d by A1,Th78;
+       hence thesis by Def4;
+      end;
+  hence thesis by A2,A3,A6;
+ end;
+
+theorem
+Th86: congr a,b,c,d implies congr c,d,a,b
+ proof assume congr a,b,c,d;
+  then congr a,b,c,d & congr a,b,a,b by Th84;
+  hence thesis by Th85;
+ end;
+
+theorem
+Th87: congr a,b,c,d implies congr b,a,d,c
+ proof assume A1: congr a,b,c,d;
+  A2: now assume a=b;
+       then a=b & c =d by A1,Th73;
+       hence thesis by Def4;
+      end;
+     now assume a<>b;
+       then consider p,q such that A3: parallelogram p,q,a,b & parallelogram p,
+q,c,d
+        by A1,Def4;
+         parallelogram q,p,b,a & parallelogram q,p,d,c by A3,Th61;
+       hence thesis by Def4;
+      end;
+  hence thesis by A2;
+ end;
+
+theorem
+Th88: congr a,b,c,d implies congr a,c,b,d
+ proof assume A1: congr a,b,c,d;
+  A2: now assume a=b; then a=b & c =d by A1,Th73;
+       hence thesis by Th84;
+      end;
+  A3: now assume a=c;
+       then a=c & congr a,b,a,d & congr a,b,a,b by A1,Th84;
+       then a=c & b=d by Th81;
+       hence thesis by Def4;
+      end;
+  A4: now assume A5: a<>b & a<>c & a,b,c is_collinear;
+       then consider p,q such that A6: parallelogram p,q,a,b & parallelogram p,
+q,c,d
+        by A1,Def4;
+         not a,b,p is_collinear & a,b // a,c & a,p // a,p & a<>c & a<>p
+                        by A5,A6,Def2,Th12,Th54,Th56;
+       then not a,c,p is_collinear by Th39;
+       then consider r such that A7: parallelogram a,c,p,r by Th62;
+       A8: parallelogram p,r,a,c by A7,Th61;
+         a,c,b is_collinear by A5,Th37; then A9: not p,r,b is_collinear by A7,
+Th57;
+         p<>q & p,q // a,b & p,q // c,d by A6,Def3,Th54;
+       then A10: a,b // c,d by Def1;
+       then a,c // b,d & a,c // p,r & a<>c by A5,A7,Def3,Th49;
+       then A11: p,r // b,d by Def1; p,q // a,b by A6,Def3;
+       then a<>b & a,b // a,c & a,b // p,q by A5,Def2,Th17;
+       then a<>c & a,c // p,q & a,c // p,r by A5,A7,Def1,Def3;
+       then p,q // p,r by Def1;
+       then A12: r,q // r,p by Th18;
+         c,b // c,d by A5,A10,Th50; then A13: b,c // b,d by Th18;
+         p,a // r,c & p,a // q,b & p<>a by A6,A8,Def3,Th54;
+       then A14: r,c // q,b by Def1;
+         p,c // q,d by A6,Def3;
+       then q,d // p,c by Th17;
+       then p,b // r,d by A12,A13,A14,Def1;
+       then parallelogram p,r,a,c & parallelogram p,r,b,d by A7,A9,A11,Def3,
+Th61;
+       hence thesis by Def4;
+      end;
+     now assume a<>b & a<>c & not a,b,c is_collinear;
+       then parallelogram a,b,c,d by A1,Th78;
+       then parallelogram a,c,b,d by Th61;
+       hence thesis by Th79;
+      end;
+  hence thesis by A2,A3,A4;
+ end;
+
+theorem
+Th89: congr a,b,c,d implies congr c,d,a,b & congr b,a,d,c & congr a,c,b,d &
+                         congr d,c,b,a & congr b,d,a,c & congr c,a,d,b &
+                         congr d,b,c,a
+ proof assume A1: congr a,b,c,d;
+  then congr c,d,a,b & congr b,a,d,c & congr a,c,b,d
+                            by Th86,Th87,Th88;
+  then congr d,c,b,a & congr b,d,a,c & congr c,a,d,b by Th87,Th88;
+  hence thesis by A1,Th86;
+ end;
+
+theorem
+Th90: congr a,b,p,q & congr b,c,q,s implies congr a,c,p,s
+ proof assume congr a,b,p,q & congr b,c,q,s; then congr b,q,a,p & congr b,q,c
+,s
+  by Th89;
+  then congr a,p,c,s by Th85;
+  hence thesis by Th88;
+ end;
+
+theorem
+Th91: congr b,a,p,q & congr c,a,p,r implies congr b,c,r,q
+ proof assume A1: congr b,a,p,q & congr c,a,p,r;
+  consider s such that A2: congr p,q,r,s by Th82;
+   congr p,q,b,a & congr p,q,r,s & congr r,p,s,q & congr r,p,a,c by A1,A2,Th89;
+  then congr b,a,r,s & congr a,c,s,q by Th85;
+  hence thesis by Th90;
+ end;
+
+theorem
+   congr a,o,o,p & congr b,o,o,q implies congr a,b,q,p by Th91;
+
+theorem
+Th93: congr b,a,p,q & congr c,a,p,r implies b,c // q,r
+ proof assume congr b,a,p,q & congr c,a,p,r;
+  then congr b,c,r,q by Th91;
+  then b,c // r,q by Th76;
+  hence thesis by Th17;
+ end;
+
+theorem
+  congr a,o,o,p & congr b,o,o,q implies a,b // p,q by Th93;
+
+::
+::                          A VECTOR' GROUP
+::
+
+definition let SAS,a,b,o;
+func sum(a,b,o) -> Element of SAS means
+ :Def5: congr o,a,b,it;
+ correctness by Th81,Th82;
+end;
+
+definition let SAS,a,o;
+func opposite(a,o) -> Element of SAS means
+ :Def6: sum(a,it,o) = o;
+ existence
+  proof consider b being Element of SAS such that
+    A1: congr a,o,o,b by Th82; A2: congr o,a,b,o by A1,Th87;
+    take b; thus thesis by A2,Def5;
+  end;
+ uniqueness
+  proof let b1,b2 be Element of SAS such that
+   A3: sum(a,b1,o) = o and A4: sum(a,b2,o) = o;
+    congr o,a,b1,o & congr o,a,b2,o by A3,A4,Def5;
+  then congr a,o,o,b1 & congr a,o,o,b2 by Th87;
+   hence thesis by Th81;
+  end;
+end;
+
+definition let SAS,a,b,o;
+func diff(a,b,o) -> Element of SAS equals
+ :Def7: sum(a,opposite(b,o),o);
+ correctness;
+end;
+
+canceled 4;
+
+theorem
+Th99: sum(a,o,o)=a
+ proof congr o,a,o,sum(a,o,o) & congr o,a,o,a by Def5,Th84;
+  hence thesis by Th81;
+ end;
+
+theorem
+   ex x st sum(a,x,o)=o
+ proof consider x such that A1: congr a,o,o,x by Th82;
+   congr o,a,x,sum(a,x,o) & congr o,a,x,o by A1,Def5,Th89;
+  then sum(a,x,o)=o by Th81; hence thesis;
+ end;
+
+theorem
+   sum(sum(a,b,o),c,o)=sum(a,sum(b,c,o),o)
+ proof congr o,a,b,sum(a,b,o) & congr o,sum(a,b,o),c,sum(sum(a,b,o),c,o) &
+ congr o,a,sum(b,c,o),sum(a,sum(b,c,o),o) & congr o,b,c,sum(b,c,o) by Def5
+;
+ then congr b,sum(a,b,o),sum(b,c,o),sum(a,sum(b,c,o),o) & congr b,o,sum(b,c,o)
+,c &
+ congr o,sum(a,b,o),c,sum(sum(a,b,o),c,o) by Th85,Th89;
+ then congr b,sum(a,b,o),sum(b,c,o),sum(a,sum(b,c,o),o) &
+ congr b,sum(a,b,o),sum(b,c,o),sum(sum(a,b,o),c,o) by Th90; hence thesis by
+Th81;
+ end;
+theorem
+Th102: sum(a,b,o)=sum(b,a,o)
+ proof congr o,a,b,sum(a,b,o) & congr o,b,a,sum(b,a,o) by Def5;
+ then congr o,a,b,sum(a,b,o) & congr o,a,b,sum(b,a,o) by Th89;hence thesis
+by Th81;
+ end;
+
+theorem
+   sum(a,a,o)=o implies a=o
+ proof assume sum(a,a,o)=o; then congr o,a,a,o by Def5;
+  hence thesis by Th75;
+ end;
+
+theorem
+Th104: sum(a,x,o)=sum(a,y,o) implies x=y
+ proof assume sum(a,x,o)=sum(a,y,o);
+  then sum(a,x,o)=sum(a,y,o) & congr o,a,x,sum(a,x,o) & congr o,a,y,sum(a,y,o)
+by Def5;
+ then congr a,o,sum(a,x,o),x & congr a,o,sum(a,x,o),y by Th89; hence thesis
+by Th81;
+ end;
+
+canceled;
+
+theorem
+Th106: congr a,o,o,opposite(a,o)
+ proof
+    sum(a,opposite(a,o),o)=o & congr o,a,opposite(a,o),sum(a,opposite(a,o),o)
+by Def5,Def6;hence thesis by Th89;
+ end;
+
+theorem
+Th107: opposite(a,o)=opposite(b,o) implies a=b
+ proof assume opposite(a,o)=opposite(b,o);
+ then congr a,o,o,opposite(a,o) & congr b,o,o,opposite(b,o) & opposite(a,o)=
+ opposite(b,o) by Th106; then congr opposite(a,o),o,o,a &
+ congr opposite(a,o),o,o,b by Th89; hence thesis by Th81;
+ end;
+
+theorem
+   a,b // opposite(a,o),opposite(b,o)
+ proof sum(a,opposite(a,o),o)=o & sum(b,opposite(b,o),o)=o by Def6;
+ then congr o,a,opposite(a,o),o & congr o,b,opposite(b,o),o by Def5;
+ then congr a,o,o,opposite(a,o) & congr b,o,o,opposite(b,o) by Th89; hence
+ thesis by Th93;
+ end;
+
+theorem
+   opposite(o,o)=o
+ proof sum(o,opposite(o,o),o)=o by Def6; then sum(opposite(o,o),o,o)=o by Th102
+;
+  hence thesis by Th99;
+ end;
+
+theorem
+Th110: p,q // sum(p,r,o),sum(q,r,o)
+ proof congr o,p,r,sum(p,r,o) & congr o,q,r,sum(q,r,o) by Def5;
+ then congr p,o,sum(p,r,o),r & congr o,q,r,sum(q,r,o) by Th89;
+ then congr p,q,sum(p,r,o),sum(q,r,o) by Th90; hence thesis by Th76;
+ end;
+
+theorem
+   p,q // r,s implies p,q // sum(p,r,o),sum(q,s,o)
+ proof assume A1: p,q // r,s;
+     now assume A2: p<>q & r<>s;
+   consider t such that A3: congr o,q,r,t by Th82;
+     congr o,q,r,t & congr o,q,s,sum(q,s,o) by A3,Def5;
+   then congr r,t,s,sum(q,s,o) by Th85;
+   then congr r,s,t,sum(q,s,o) by Th89;
+   then t<>sum(q,s,o) & r,s // t,sum(q,s,o) by A2,Th74,Th76;
+   then A4: t<>sum(q,s,o) & p,q // t,sum(q,s,o) by A1,A2,Th20;
+     congr o,p,r,sum(p,r,o) by Def5;
+   then congr p,o,sum(p,r,o),r & congr o,q,r,t by A3,Th89;
+   then congr p,q,sum(p,r,o),t by Th90; then p,q // sum(p,r,o),t by Th76;
+   then p,q // t,sum(p,r,o) by Th17;
+   then t,sum(q,s,o) // t,sum(p,r,o) by A2,A4,Def1;
+   then t,sum(q,s,o) // sum(p,r,o),sum(q,s,o) by Th18;
+   hence thesis by A4,Th20;end;
+  hence thesis by Th14,Th110;
+ end;
+
+canceled;
+
+theorem
+Th113: diff(a,b,o)=o iff a=b
+ proof
+  A1: diff(a,b,o)=o implies a=b
+   proof assume diff(a,b,o)=o;
+    then sum(a,opposite(b,o),o)=o & sum(a,opposite(a,o),o)=o by Def6,Def7;
+then opposite(a,o)=
+    opposite(b,o) by Th104;
+    hence thesis by Th107;
+   end;
+     a=b implies diff(a,b,o)=o
+   proof assume a=b;
+    then diff(a,b,o)=sum(a,opposite(a,o),o) by Def7; hence thesis by Def6;
+   end;
+  hence thesis by A1;
+ end;
+
+theorem
+Th114: o,diff(b,a,o) // a,b
+ proof
+    diff(b,a,o)=sum(b,opposite(a,o),o) &
+   congr o,b,opposite(a,o),sum(b,opposite(a,o),o) by Def5,Def7;
+  then congr o,opposite(a,o),b,diff(b,a,o) & congr a,o,o,opposite(a,o) by Th89,
+Th106
+;
+  then congr o,opposite(a,o),b,diff(b,a,o) & congr o,opposite(a,o),a,o by Th89
+;
+  then congr a,o,b,diff(b,a,o) by Th85; then congr o,diff(b,a,o),a,b by Th89;
+  hence thesis by Th76;
+ end;
+
+theorem
+   o,diff(b,a,o),diff(d,c,o) is_collinear iff a,b // c,d
+ proof
+  A1: o,diff(b,a,o),diff(d,c,o) is_collinear implies a,b // c,d
+   proof assume A2: o,diff(b,a,o),diff(d,c,o) is_collinear;
+  A3: now assume o=diff(b,a,o) or o=diff(d,c,o); then a=b or c =d by Th113;
+    hence thesis by Def1,Th14; end;
+     now assume o<>diff(b,a,o) & o<>diff(d,c,o);
+    then o<>diff(b,a,o) & o<>diff(d,c,o) & o,diff(b,a,o) // o,diff(d,c,o) &
+     o,diff(b,a,o) // a,b & o,diff(d,c,o) // c,d & o<>diff(d,c,o) by A2,Def2,
+Th114
+; then o<>diff(d,c,o) & o,diff(d,c,o) // a,b & o,diff(d,c,o) // c,d by Def1;
+    hence thesis by Def1; end;
+   hence thesis by A3;
+  end;
+     a,b // c,d implies o,diff(b,a,o),diff(d,c,o) is_collinear
+   proof assume A4: a,b // c,d;
+  A5: now assume a=b or c =d; then o=diff(b,a,o) or o=diff(d,c,o) by Th113
+;
+    then o,diff(b,a,o) // o,diff(d,c,o) by Def1,Th14; hence thesis by Def2;
+end;
+     now assume a<>b & c <>d;
+    then a<>b & c <>d & o,diff(b,a,o) // a,b & o,diff(d,c,o) // c,d by Th114;
+    then a<>b & c <>d & a,b // o,diff(b,a,o) & c,d // o,diff(d,c,o) &
+    a,b // c,d by A4,Th17;
+    then o,diff(b,a,o) // c,d & c,d // o,diff(d,c,o) & c <>d by Def1;
+    then o,diff(b,a,o) // o,diff(d,c,o) by Th20;
+    hence thesis by Def2; end;
+   hence thesis by A5;
+  end;
+  hence thesis by A1;
+ end;
+
+::
+::                       A TRAPEZIUM RELATION
+::
+
+definition let SAS,a,b,c,d,o;
+pred trap a,b,c,d,o means
+ :Def8: not o,a,c is_collinear & o,a,b is_collinear & o,c,d is_collinear &
+  a,c // b,d;
+end;
+
+definition let SAS,o,p;
+pred qtrap o,p means
+ :Def9: for b,c holds (ex d st ( o,p,b is_collinear implies
+  o,c,d is_collinear & p,c // b,d));
+end;
+
+canceled 2;
+
+theorem
+Th118: trap a,b,c,d,o implies o<>a & a<>c & c <>o
+ proof assume trap a,b,c,d,o; then not o,a,c is_collinear by Def8;hence
+ thesis
+ by Th40;
+ end;
+
+theorem
+   trap a,b,c,x,o & trap a,b,c,y,o implies x=y
+ proof assume trap a,b,c,x,o & trap a,b,c,y,o;
+  then not o,a,c is_collinear & o,a,b is_collinear & o,c,x is_collinear &
+  o,c,y is_collinear & a,c // b,x & a,c // b,y by Def8;
+  hence thesis by Th51;
+ end;
+
+theorem
+   not o,a,b is_collinear implies trap a,o,b,o,o
+ proof assume A1: not o,a,b is_collinear;
+    o,a,o is_collinear & o,b,o is_collinear & a,b // o,o by Def1,Th40;
+  hence thesis by A1,Def8;
+ end;
+
+theorem
+Th121: trap a,b,c,d,o implies trap c,d,a,b,o
+ proof assume trap a,b,c,d,o;
+  then not o,a,c is_collinear & o,a,b is_collinear & o,c,d is_collinear &
+   a,c // b,d by Def8;
+  then not o,c,a is_collinear & o,a,b is_collinear & o,c,d is_collinear &
+   c,a // d,b by Th17,Th37;
+  hence thesis by Def8;
+ end;
+
+theorem
+Th122: o<>b & trap a,b,c,d,o implies o<>d
+ proof assume o<>b & trap a,b,c,d,o;
+  then A1: o<>b & not o,a,c is_collinear & o,a,b is_collinear & o,c,d
+is_collinear
+    & a,c // b,d by Def8;
+  assume not thesis;
+  then o,a // o,b & a,c // b,o & o<>b by A1,Def2;
+  then o<>b & o,b // a,o & o,b // a,c by Th17;
+  then a,o // a,c by Def1;
+  then o,a // o,c by Th18;
+  hence contradiction by A1,Def2;
+ end;
+
+theorem
+Th123: o<>b & trap a,b,c,d,o implies not o,b,d is_collinear
+ proof assume o<>b & trap a,b,c,d,o;
+  then o<>b & o<>d & not o,a,c is_collinear & o,a,b is_collinear &
+ o,c,d is_collinear by Def8,Th122; then o<>b & o<>d & not o,a,c is_collinear &
+  o,a // o,b & o,c // o,d by Def2;
+  hence thesis by Th39;
+ end;
+
+theorem
+   o<>b & trap a,b,c,d,o implies trap b,a,d,c,o
+ proof assume o<>b & trap a,b,c,d,o;
+  then not o,b,d is_collinear & o,a,b is_collinear & o,c,d is_collinear &
+   a,c // b,d by Def8,Th123;
+  then not o,b,d is_collinear & o,b,a is_collinear & o,d,c is_collinear &
+   b,d // a,c by Th17,Th37;
+  hence thesis by Def8;
+ end;
+
+theorem
+Th125: (o=b or o=d) & trap a,b,c,d,o implies o=b & o=d
+ proof assume (o=b or o=d) & trap a,b,c,d,o;
+  then (o=b & trap c,d,a,b,o) or (o=d & trap a,b,c,d,o) by Th121;
+  hence thesis by Th122;
+ end;
+
+theorem
+Th126: trap a,p,b,q,o & trap a,p,c,r,o implies b,c // q,r
+ proof assume trap a,p,b,q,o & trap a,p,c,r,o;
+  then not o,a,b is_collinear & o,a,p is_collinear & o,b,q is_collinear & a,b
+// p,q
+   & not o,a,c is_collinear & o,c,r is_collinear & a,c // p,r by Def8;
+  then not o,a // o,b & o,a //o,p & o,b //o,q & a,b // p,q & not o,a //o,c &
+                                        o,c //o,r & a,c // p,r by Def2;
+  hence thesis by Def1;
+ end;
+
+theorem
+Th127: trap a,p,b,q,o & trap a,p,c,r,o & not o,b,c is_collinear implies
+ trap b,q,c,r,o
+ proof assume trap a,p,b,q,o & trap a,p,c,r,o & not o,b,c is_collinear;
+  then not o,b,c is_collinear & o,b,q is_collinear & o,c,r is_collinear &
+   b,c // q,r by Def8,Th126;
+  hence thesis by Def8;
+ end;
+
+theorem
+   trap a,p,b,q,o & trap a,p,c,r,o & trap b,q,d,s,o implies c,d // r,s
+ proof assume A1: trap a,p,b,q,o & trap a,p,c,r,o & trap b,q,d,s,o;
+  A2: now assume not o,b,c is_collinear; then trap b,q,d,s,o & trap b,q,c,r,o
+   by A1,Th127;
+      hence thesis by Th126; end;
+  A3: now assume not o,a,d is_collinear; then not o,a,d is_collinear &
+   trap b,q,a,p,o by A1,Th121;
+      then trap a,p,d,s,o & trap a,p,c,r,o by A1,Th127; hence thesis by Th126
+;
+      end;
+  A4: now assume o=p; then o=p & o=q by A1,Th125; then o=r & o=s by A1,Th125
+;
+hence thesis by Def1; end;
+     now assume A5: o<>p & o,b,c is_collinear & o,a,d is_collinear;
+      then not o,a,b is_collinear & not o,p,q is_collinear by A1,Def8,Th123;
+      then A6: not b,a,o is_collinear & not q,p,o is_collinear by Th37;
+      then consider x such that A7: parallelogram b,a,o,x by Th62;
+      consider y such that A8: parallelogram q,p,o,y by A6,Th62;
+        a,b // p,q by A1,Def8;
+      then b,a // q,p & b,a // o,x & q,p // o,y & b<>a & q<>p
+                         by A7,A8,Def3,Th17,Th54;
+                         then q<>p & q,p // o,x & q,p // o,y by Def1;
+      then o,x // o,y by Def1; then A9: o,x,y is_collinear by Def2;
+        o,b,q is_collinear by A1,Def8; then o,b // o,q by Def2;
+      then b,o // q,o & b,o // a,x & q,o // p,y & b<>o & o<>q
+                         by A7,A8,Def3,Th17,Th54;
+      then q,o // a,x & q,o // p,y & q<>o by Def1;
+      then a,x // p,y & o,a,p is_collinear & not o,a,x is_collinear by A1,A7,
+Def1,Def8,Th56;
+      then A10: trap a,p,x,y,o by A9,Def8;
+        not o,b,x is_collinear by A7,Th56; then A11:trap b,q,x,y,o by A1,A10,
+Th127;
+        o,b // o,c & o,a // o,d & o,a // o,a & not o,x,b is_collinear & o<>x &
+     o<>d & o<>c & not o,x,a is_collinear & o,x // o,x by A1,A5,A7,Def2,Th12,
+Th54,Th56,Th118; then not o,x,c is_collinear & not o,x,d is_collinear by Th39
+;
+      then trap x,y,c,r,o & trap x,y,d,s,o by A1,A10,A11,Th127
+; hence thesis by Th126;
+       end;
+  hence thesis by A2,A3,A4;
+ end;
+
+theorem
+Th129: for o,a holds (ex p st o,a,p is_collinear & qtrap o,p)
+ proof let o,a;
+  consider p such that
+A1: for b,c holds o,a // o,p & ex d st
+   o,p // o,b implies o,c // o,d & p,c // b,d by Def1;
+  take p;
+     now
+    thus o,a,p is_collinear by A1,Def2;
+    let b,c;
+    consider d such that
+A2:  o,p // o,b implies o,c // o,d & p,c // b,d by A1;
+    take d;
+    assume o,p,b is_collinear;
+    hence o,c,d is_collinear & p,c // b,d by A2,Def2;
+   end;
+   hence thesis by Def9;
+        end;
+
+theorem
+Th130: ex x,y,z st x<>y & y<>z & z<>x
+ proof consider x,y,z such that A1: not x,y // x,z by Def1;
+       take x,y,z;
+       thus thesis by A1,Def1,Th12,Th14;
+       end;
+
+theorem
+Th131: qtrap o,p implies o<>p
+ proof assume A1: qtrap o,p;
+       assume A2: not thesis;
+         ex b st o<>b proof
+        consider x,y,z such that A3: x<>y & y<>z & z<>x by Th130;
+          o<>x or o<>y or o<>z by A3; hence thesis; end;
+     then consider b such that
+    A4: o<>b;
+
+       consider c such that
+    A5: not o,b // o,c by A4,Th26;
+
+       consider d such that
+    A6: o,p,b is_collinear implies o,c,d is_collinear & p,c // b,d by A1,Def9;
+          o,o // o,b implies o,c // o,d & o,c // b,d by A2,A6,Def2;
+       then A7: (b=d & not o,b // o,c & o,c // o,d) or (b<>d & o<>c &
+       not o,b // o,c & o,c // o,d & o,c // b,d) by A5,Def1,Th14;
+          now assume A8: b<>d & not o,b // o,c & o,d // b,d & o,c // b,d;
+        then d,o // d,b by Th17; hence b<>d & not o,b // o,c & b,d // o,b &
+        b,d // o,c by A8,Th17,Th18; end;
+        hence contradiction by A7,Def1,Th17;
+        end;
+
+theorem
+   qtrap o,p implies ex q st not o,p,q is_collinear & qtrap o,q
+ proof assume qtrap o,p;
+         then A1: o<>p by Th131;
+         then consider r such that
+      A2: not o,p,r is_collinear by Th41;
+         consider q such that
+      A3: o,r,q is_collinear & qtrap o,q by Th129;
+         take q;
+           o<>q & not o,p,r is_collinear & o,p // o,p & o,r // o,q & qtrap o,q
+         by A2,A3,Def2,Th12,Th131;
+         hence thesis by A1,Th39;
+       end;
+
+theorem
+   not o,p,c is_collinear & o,p,b is_collinear & qtrap o,p implies
+      ex d st trap p,b,c,d,o
+ proof assume A1: not o,p,c is_collinear & o,p,b is_collinear & qtrap o,p;
+       then consider d such that
+    A2: o,p,b is_collinear implies o,c,d is_collinear & p,c // b,d by Def9;
+       take d;
+       thus thesis by A1,A2,Def8;
+     end;

@@ -1,0 +1,2344 @@
+:: Function Spaces in the Category of Directed Suprema Preserving Maps
+::  by Grzegorz Bancerek and Adam Naumowicz
+::
+:: Received November 26, 1999
+:: Copyright (c) 1999 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, RELAT_1, PRALG_1, FUNCT_5, PRALG_2, BOOLE, FUNCT_2,
+      PBOOLE, FRAENKEL, MCART_1, MONOID_0, ORDERS_1, GROUP_1, BHSP_3, WAYBEL_0,
+      YELLOW_0, BINOP_1, PRE_TOPC, GROUP_6, SEQM_3, CAT_1, FUNCT_3, CARD_3,
+      FUNCOP_1, YELLOW_1, RLVECT_2, WAYBEL26, WAYBEL25, WAYBEL24, ORDINAL2,
+      WELLORD2, WELLORD1, RELAT_2, WAYBEL11, WAYBEL_9, WAYBEL17, QUANTAL1,
+      YELLOW_9, LATTICES, WAYBEL18, PROB_1, SUBSET_1, WAYBEL_1, WAYBEL_8,
+      BORSUK_1, WAYBEL27, RLVECT_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, TOLER_1, FRAENKEL, MCART_1,
+      RELAT_1, FUNCT_1, PARTFUN1, FUNCT_3, FUNCT_4, FUNCT_5, CARD_3, MONOID_0,
+      PRALG_1, PBOOLE, PRE_CIRC, QUANTAL1, PRALG_2, STRUCT_0, PRE_TOPC,
+      GRCAT_1, FUNCT_2, TOPS_2, ORDERS_1, CANTOR_1, LATTICE3, YELLOW_0,
+      WAYBEL_0, YELLOW_1, YELLOW_2, WAYBEL_1, YELLOW_3, WAYBEL_3, WAYBEL_8,
+      WAYBEL_9, WAYBEL11, YELLOW_9, WAYBEL17, WAYBEL18, WAYBEL24, WAYBEL25,
+      YELLOW16, WAYBEL26;
+ constructors ORDERS_3, WAYBEL_8, YELLOW_9, WAYBEL17, WAYBEL18, WAYBEL26,
+      WAYBEL24, GRCAT_1, ENUMSET1, QUANTAL1, T_0TOPSP, TOPS_2, WAYBEL_5,
+      CANTOR_1, WAYBEL_1, WAYBEL_6, PRALG_2, TOLER_1, YELLOW16, MONOID_0;
+ clusters RELSET_1, RELAT_1, FUNCT_1, PRALG_1, SUBSET_1, STRUCT_0, LATTICE3,
+      TOPS_1, WAYBEL14, MONOID_0, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2,
+      YELLOW_3, WAYBEL_1, WAYBEL_2, WAYBEL_8, WAYBEL10, FUNCT_2, WAYBEL17,
+      WAYBEL18, YELLOW16, WAYBEL24, WAYBEL25, FRAENKEL, YELLOW_9, PARTFUN1;
+ requirements BOOLE, SUBSET;
+ definitions TARSKI, FRAENKEL, MONOID_0, WAYBEL_0, PRALG_1, WAYBEL_1, XBOOLE_0;
+ theorems STRUCT_0, YELLOW_1, CARD_3, PBOOLE, FUNCT_2, FUNCT_1, PRE_TOPC,
+      TARSKI, PRALG_1, FUNCOP_1, YELLOW_0, WELLORD1, WAYBEL17, WAYBEL10,
+      TOPS_2, TOPS_3, YELLOW_9, WAYBEL24, WAYBEL26, WAYBEL_0, RELSET_1,
+      ORDERS_1, RELAT_1, FRAENKEL, FUNCT_6, YELLOW14, WAYBEL18, WAYBEL20,
+      WAYBEL25, WAYBEL_1, WAYBEL15, QUANTAL1, WAYBEL14, WAYBEL13, YELLOW16,
+      ZFMISC_1, PRALG_2, FUNCT_5, FUNCT_3, GRCAT_1, YELLOW_2, WAYBEL_3,
+      WAYBEL_8, YELLOW_3, MCART_1, FUNCT_4, MONOID_0, WAYBEL21, XBOOLE_0,
+      XBOOLE_1, PARTFUN1;
+ schemes FUNCT_2, PRALG_2, XBOOLE_0;
+
+begin
+
+definition
+ let F be Function;
+ attr F is uncurrying means :Def1:
+  (for x being set st x in dom F holds x is Function-yielding Function) &
+  for f being Function st f in dom F holds F.f = uncurry f;
+ attr F is currying means :Def2:
+  (for x being set st x in dom F holds x is Function & proj1 x is Relation) &
+  for f being Function st f in dom F holds F.f = curry f;
+ attr F is commuting means :Def3:
+  (for x being set st x in dom F holds x is Function-yielding Function) &
+  for f being Function st f in dom F holds F.f = commute f;
+end;
+
+definition
+cluster empty -> uncurrying currying commuting Function;
+coherence
+ proof
+  let F be Function;
+  assume A1: F is empty;
+  hence for x being set st x in dom F holds x is Function-yielding Function
+by RELAT_1:60;
+  thus for f being Function st f in dom F holds F.f = uncurry f by A1,RELAT_1:
+60;
+  thus for x being set st x in dom F holds x is Function & proj1 x is Relation
+    by A1,RELAT_1:60;
+  thus for f being Function st f in dom F holds F.f = curry f by A1,RELAT_1:60
+;
+  thus for x being set st x in
+ dom F holds x is Function-yielding Function by A1,RELAT_1:60;
+  thus thesis by A1,RELAT_1:60;
+ end;
+end;
+
+definition
+ cluster uncurrying currying commuting Function;
+ existence
+  proof reconsider F={} as Function;
+   take F; thus thesis;
+  end;
+end;
+
+definition
+ let F be uncurrying Function, X be set;
+ cluster F|X -> uncurrying;
+ coherence
+  proof
+A1: for x being set st x in dom (F|X) holds x is Function-yielding Function
+    proof
+     let x be set;
+     assume x in dom (F|X);
+     then x in dom F by RELAT_1:86;
+     hence x is Function-yielding Function by Def1;
+    end;
+     for f being Function st f in dom (F|X) holds (F|X).f = uncurry f
+    proof
+     let f be Function;
+     assume A2: f in dom (F|X);
+     then A3: f in dom F by RELAT_1:86;
+     thus (F|X).f = F.f by A2,FUNCT_1:70
+                 .= uncurry f by A3,Def1;
+    end;
+   hence thesis by A1,Def1;
+  end;
+end;
+
+definition
+ let F be currying Function, X be set;
+ cluster F|X -> currying;
+ coherence
+  proof
+A1: for x being set st x in dom (F|X) holds x is Function & proj1 x is Relation
+    proof
+     let x be set;
+     assume x in dom (F|X);
+     then x in dom F by RELAT_1:86;
+     hence x is Function & proj1 x is Relation by Def2;
+    end;
+     for f being Function st f in dom (F|X) holds (F|X).f = curry f
+    proof
+     let f be Function;
+     assume A2: f in dom (F|X);
+     then A3: f in dom F by RELAT_1:86;
+     thus (F|X).f = F.f by A2,FUNCT_1:70
+                  .= curry f by A3,Def2;
+    end;
+   hence thesis by A1,Def2;
+  end;
+end;
+
+theorem Th1:
+ for X,Y,Z,D being set st D c= Funcs(X, Funcs(Y,Z))
+ ex F being ManySortedSet of D
+ st F is uncurrying & rng F c= Funcs([:X,Y:], Z)
+  proof
+   let X,Y,Z,D be set such that
+A1: D c= Funcs(X, Funcs(Y,Z));
+   per cases;
+   suppose D is empty;
+   then reconsider F={} as ManySortedSet of D by PBOOLE:def 3,RELAT_1:60;
+   take F;
+   thus F is uncurrying;
+   thus rng F c= Funcs([:X,Y:], Z) by RELAT_1:60,XBOOLE_1:2;
+   suppose A2: D is non empty;
+     for x being set st x in D holds x is Function by A1,FUNCT_2:121;
+   then reconsider E=D as non empty functional set by A2,FRAENKEL:def 1;
+   deffunc F(Function) = uncurry $1;
+   consider F being ManySortedSet of E such that
+A3: for d being Element of E holds F.d = F(d) from LambdaDMS;
+   reconsider F1=F as ManySortedSet of D;
+   take F1;
+   thus F1 is uncurrying
+    proof
+     hereby
+      let x be set;
+      assume x in dom F1;
+      then x in D by PBOOLE:def 3;
+      then consider x1 being Function such that
+A4:   x1=x & dom x1=X & rng x1 c= Funcs(Y,Z) by A1,FUNCT_2:def 2;
+        x1 is Function-yielding
+       proof
+        let a be set;
+        assume a in dom x1;
+        then x1.a in rng x1 by FUNCT_1:def 5;
+        hence x1.a is Function by A4,FUNCT_2:121;
+       end;
+      hence x is Function-yielding Function by A4;
+     end;
+     let f be Function;
+     assume f in dom F1;
+     then reconsider d=f as Element of E by PBOOLE:def 3;
+     thus F1.f = F.d
+              .= uncurry f by A3;
+    end;
+   thus rng F1 c= Funcs([:X,Y:], Z)
+    proof
+     let y be set;
+     assume y in rng F1;
+     then consider x being set such that
+A5:   x in dom F1 & y = F1.x by FUNCT_1:def 5;
+     reconsider d=x as Element of E by A5,PBOOLE:def 3;
+       y = uncurry d & d in Funcs(X, Funcs(Y,Z)) by A1,A3,A5,TARSKI:def 3;
+     hence y in Funcs([:X,Y:], Z) by FUNCT_6:20;
+    end;
+  end;
+
+theorem Th2:
+ for X,Y,Z,D being set st D c= Funcs([:X,Y:], Z)
+ ex F being ManySortedSet of D
+ st F is currying &
+ ((Y = {} implies X = {}) implies rng F c= Funcs(X, Funcs(Y, Z)))
+  proof
+   let X,Y,Z,D be set;
+   assume
+A1: D c= Funcs([:X,Y:], Z);
+   per cases;
+   suppose D is empty;
+   then reconsider F={} as ManySortedSet of D by PBOOLE:def 3,RELAT_1:60;
+   take F;
+   thus F is currying;
+   assume Y = {} implies X = {};
+   thus rng F c= Funcs(X, Funcs(Y, Z)) by RELAT_1:60,XBOOLE_1:2;
+   suppose A2: D is non empty;
+     for x being set st x in D holds x is Function by A1,FUNCT_2:121;
+   then reconsider E=D as non empty functional set by A2,FRAENKEL:def 1;
+   deffunc F(Function) = curry $1;
+   consider F being ManySortedSet of E such that
+A3: for d being Element of E holds F.d = F(d) from LambdaDMS;
+   reconsider F1=F as ManySortedSet of D;
+   take F1;
+   thus F1 is currying
+    proof
+     hereby
+      let x be set;
+      assume x in dom F1;
+      then x in D by PBOOLE:def 3;
+      then consider x1 being Function such that
+A4:   x1=x & dom x1=[:X,Y:] & rng x1 c= Z by A1,FUNCT_2:def 2;
+      thus x is Function by A4;
+      reconsider R = [:X,Y:] as Relation by RELAT_1:6;
+        proj1 x c= R by A4,FUNCT_5:21;
+      hence proj1 x is Relation by RELAT_1:3;
+     end;
+     let f be Function;
+     assume f in dom F1;
+     then reconsider d=f as Element of E by PBOOLE:def 3;
+     thus F1.f = F.d
+              .= curry f by A3;
+    end;
+   assume A5: Y = {} implies X = {};
+   thus rng F1 c= Funcs(X, Funcs(Y, Z))
+    proof
+     let y be set;
+     assume y in rng F1;
+     then consider x being set such that
+A6:   x in dom F1 & y = F1.x by FUNCT_1:def 5;
+     reconsider d=x as Element of E by A6,PBOOLE:def 3;
+A7:   y = curry d & d in Funcs([:X,Y:], Z) by A1,A3,A6,TARSKI:def 3;
+     per cases;
+     suppose A8: [:X,Y:] = {};
+     then d is Function of {}, Z by A7,FUNCT_2:121;
+     then A9: d = {} by PARTFUN1:57;
+   now assume A10: X = {};
+      then y is Function of X, Funcs(Y,Z) by A7,A9,FUNCT_2:55,FUNCT_5:49,
+RELAT_1:60;
+      hence y in Funcs(X, Funcs(Y,Z)) by A10,FUNCT_2:11;
+     end;
+     hence thesis by A5,A8,ZFMISC_1:113;
+     suppose [:X,Y:] <> {};
+     hence y in Funcs(X, Funcs(Y,Z)) by A7,FUNCT_6:19;
+    end;
+  end;
+
+definition
+ let X,Y,Z be set;
+ cluster uncurrying ManySortedSet of Funcs(X, Funcs(Y, Z));
+ existence
+  proof
+      ex F being ManySortedSet of Funcs(X, Funcs(Y, Z))
+     st F is uncurrying & rng F c= Funcs([:X,Y:], Z) by Th1;
+   hence thesis;
+  end;
+ cluster currying ManySortedSet of Funcs([:X, Y:], Z);
+ existence
+  proof
+     ex F being ManySortedSet of Funcs([:X, Y:], Z) st F is currying &
+   ((Y = {} implies X = {}) implies rng F c= Funcs(X, Funcs(Y, Z))) by Th2;
+   hence thesis;
+  end;
+end;
+
+theorem Th3:
+ for A,B being non empty set, C being set
+ for f,g being commuting Function
+  st dom f c= Funcs(A, Funcs(B, C)) & rng f c= dom g
+  holds g*f = id dom f
+   proof
+    let A,B be non empty set;
+    let C be set;
+    let f,g be commuting Function;
+    assume
+A1:  dom f c= Funcs(A, Funcs(B, C)) & rng f c= dom g;
+then A2:  dom (g*f) = dom f by RELAT_1:46;
+      now
+     let x be set;
+     assume A3: x in dom f;
+     then reconsider X=x as Function by Def3;
+     A4: f.x in rng f by A3,FUNCT_1:def 5;
+     then reconsider Y=f.x as Function by A1,Def3;
+     thus (g*f).x = g.(f.x) by A3,FUNCT_1:23
+                 .= commute Y by A1,A4,Def3
+                 .= commute (commute X) by A3,Def3
+                 .= x by A1,A3,PRALG_2:6;
+    end;
+    hence g*f = id dom f by A2,FUNCT_1:34;
+   end;
+
+theorem Th4:
+ for B being non empty set, A,C being set
+ for f being uncurrying Function
+ for g being currying Function
+  st dom f c= Funcs(A, Funcs(B, C)) & rng f c= dom g
+  holds g*f = id dom f
+   proof
+    let B be non empty set;
+    let A,C be set;
+    let f be uncurrying Function;
+    let g be currying Function;
+    assume
+A1:  dom f c= Funcs(A, Funcs(B, C)) & rng f c= dom g;
+then A2:  dom (g*f) = dom f by RELAT_1:46;
+      now
+     let x be set;
+     assume A3: x in dom f;
+     then reconsider X=x as Function by Def1;
+     consider F being Function such that
+A4:   X = F & dom F = A & rng F c= Funcs(B, C) by A1,A3,FUNCT_2:def 2;
+     A5: f.x in rng f by A3,FUNCT_1:def 5;
+     then reconsider Y=f.x as Function by A1,Def2;
+     thus (g*f).x = g.(f.x) by A3,FUNCT_1:23
+                 .= curry Y by A1,A5,Def2
+                 .= curry (uncurry X) by A3,Def1
+                 .= x by A4,FUNCT_5:55;
+    end;
+    hence g*f = id dom f by A2,FUNCT_1:34;
+   end;
+
+theorem Th5:
+ for A,B,C being set
+ for f being currying Function
+ for g being uncurrying Function
+  st dom f c= Funcs([:A, B:], C) & rng f c= dom g
+  holds g*f = id dom f
+   proof
+    let A,B,C be set;
+    let f be currying Function;
+    let g be uncurrying Function;
+    assume
+A1:  dom f c= Funcs([:A, B:], C) & rng f c= dom g;
+then A2:  dom (g*f) = dom f by RELAT_1:46;
+      now
+     let x be set;
+     assume A3: x in dom f;
+     then reconsider X=x as Function by Def2;
+     consider F being Function such that
+A4:   X = F & dom F = [:A, B:] & rng F c= C by A1,A3,FUNCT_2:def 2;
+     A5: f.x in rng f by A3,FUNCT_1:def 5;
+     then reconsider Y=f.x as Function by A1,Def1;
+     thus (g*f).x = g.(f.x) by A3,FUNCT_1:23
+                 .= uncurry Y by A1,A5,Def1
+                 .= uncurry (curry X) by A3,Def2
+                 .= x by A4,FUNCT_5:56;
+    end;
+    hence g*f = id dom f by A2,FUNCT_1:34;
+   end;
+
+theorem Th6:
+ for f being Function-yielding Function
+ for i,A being set st i in dom commute f
+  holds ((commute f).i).:A c= pi(f.:A, i)
+  proof
+   let f be Function-yielding Function;
+   let i,A be set;
+   assume A1: i in dom commute f;
+A2: commute f = curry' uncurry f by PRALG_2:def 5
+            .= curry ~(uncurry f) by FUNCT_5:def 5;
+   thus ((commute f).i).:A c= pi(f.:A, i)
+    proof
+     let x be set;
+     assume x in ((commute f).i).:A;
+     then consider y being set such that
+A3:   y in dom ((commute f).i) & y in A & x = ((commute f).i).y by FUNCT_1:def
+12;
+     A4:  [i,y] in dom ~(uncurry f) by A1,A2,A3,FUNCT_5:38;
+     then A5:  [y,i] in dom uncurry f by FUNCT_4:43;
+     then consider a being set,g being Function, b being set such that
+A6:   [y,i] = [a,b] & a in dom f & g = f.a & b in dom g by FUNCT_5:def 4;
+       y in dom f by A6,ZFMISC_1:33;
+     then A7:  f.y in f.:A by A3,FUNCT_1:def 12;
+     A8: [y,i]`1=y & [y,i]`2=i by MCART_1:7;
+       x = ~(uncurry f).([i,y]) by A1,A2,A3,FUNCT_5:38
+      .= (uncurry f).([y,i]) by A4,FUNCT_4:44
+      .= (f.y).i by A5,A8,FUNCT_5:def 4;
+     hence x in pi(f.:A, i) by A7,CARD_3:def 6;
+    end;
+  end;
+
+theorem Th7:
+ for f being Function-yielding Function
+ for i,A being set st for g being Function st g in f.:A holds i in dom g
+  holds pi(f.:A, i) c= ((commute f).i).:A
+  proof
+   let f be Function-yielding Function;
+   let i,A be set;
+   assume A1: for g being Function st g in f.:A holds i in dom g;
+   let x be set;
+   assume x in pi(f.:A, i);
+   then consider g being Function such that
+A2: g in f.:A & x = g.i by CARD_3:def 6;
+   consider y being set such that
+A3: y in dom f & y in A & g = f.y by A2,FUNCT_1:def 12;
+A4: commute f = curry' uncurry f by PRALG_2:def 5
+            .= curry ~(uncurry f) by FUNCT_5:def 5;
+A5: i in {i} by TARSKI:def 1;
+     i in dom g by A1,A2;
+   then A6: [y,i] in dom uncurry f by A3,FUNCT_5:def 4;
+then A7: [i,y] in dom ~(uncurry f) by FUNCT_4:def 2;
+then A8: i in proj1 dom ~(uncurry f) & y in
+proj2 dom ~(uncurry f) by FUNCT_5:def 1,def 2;
+   then [i,y] in [:{i},proj2 dom ~(uncurry f):] by A5,ZFMISC_1:106;
+then A9: [i,y]in(dom ~(uncurry f) /\ [:{i},proj2 dom ~(uncurry f):]) by A7,
+XBOOLE_0:def 3;
+   consider h being Function such that
+A10: (curry ~(uncurry f)).i = h &
+   dom h = proj2 (dom ~(uncurry f) /\ [:{i},proj2 dom ~(uncurry f):]) &
+   for b being set st b in dom h holds h.b = (~(uncurry f)).([i,b])
+              by A8,FUNCT_5:def 3;
+   A11: y in proj2 (dom ~(uncurry f) /\ [:{i},proj2 dom ~(uncurry f):])
+   by A9,FUNCT_5:def 2;
+A12: y in dom ((commute f).i) by A4,A9,A10,FUNCT_5:def 2;
+     A13: i in dom curry ~(uncurry f) by A8,FUNCT_5:def 3;
+     A14: [y,i]`1=y & [y,i]`2=i by MCART_1:7;
+        ((commute f).i).y = ~(uncurry f).([i,y]) by A4,A12,A13,FUNCT_5:38
+                       .= (uncurry f).([y,i]) by A6,FUNCT_4:def 2
+                       .= x by A2,A3,A6,A14,FUNCT_5:def 4;
+   hence x in ((commute f).i).:A by A3,A4,A10,A11,FUNCT_1:def 12;
+  end;
+
+theorem Th8:
+ for X,Y being set, f being Function st rng f c= Funcs(X, Y)
+ for i,A being set st i in X
+  holds ((commute f).i).:A = pi(f.:A, i)
+  proof let X,Y be set, f be Function; assume
+A1:  rng f c= Funcs(X, Y);
+A2:  f is Function-yielding
+     proof let x be set; assume x in dom f;
+       then f.x in rng f by FUNCT_1:def 5;
+       then ex g being Function st f.x = g & dom g = X & rng g c= Y
+        by A1,FUNCT_2:def 2;
+      hence thesis;
+     end;
+A3:  f in Funcs(dom f, Funcs(X, Y)) by A1,FUNCT_2:def 2;
+   let i, A be set; assume
+A4:  i in X;
+   per cases; suppose dom f = {};
+then A5:   f = {} by RELAT_1:64;
+     then (commute f).i = {} by FUNCT_1:def 4,PRALG_2:7,RELAT_1:60;
+     then ((commute f).i).:A = {} & f.:A = {} by A5,RELAT_1:150;
+    hence thesis by CARD_3:24;
+   suppose dom f <> {};
+     then commute f in Funcs(X, Funcs(dom f, Y)) by A3,A4,PRALG_2:4;
+     then ex g being Function st commute f = g & dom g = X &
+       rng g c= Funcs(dom f, Y) by FUNCT_2:def 2;
+    hence ((commute f).i).:A c= pi(f.:A, i) by A2,A4,Th6;
+       now let g be Function; assume
+A6:     g in f.:A; f.:A c= rng f by RELAT_1:144;
+       then g in rng f by A6;
+       then ex h being Function st g = h & dom h = X & rng h c= Y by A1,FUNCT_2
+:def 2;
+      hence i in dom g by A4;
+     end;
+    hence thesis by A2,Th7;
+  end;
+
+theorem Th9:
+ for f being Function
+ for i,A being set st [:A,{i}:] c= dom f
+  holds pi((curry f).:A, i) = f.:[:A,{i}:]
+  proof let f be Function, i, A be set such that
+A1:  [:A,{i}:] c= dom f;
+A2:  i in {i} by TARSKI:def 1;
+   thus pi((curry f).:A, i) c= f.:[:A,{i}:]
+     proof let x be set; assume x in pi((curry f).:A, i);
+      then consider g being Function such that
+A3:     g in (curry f).:A & x = g.i by CARD_3:def 6;
+      consider a being set such that
+A4:     a in dom curry f & a in A & g = (curry f).a by A3,FUNCT_1:def 12;
+A5:     [a,i] in [:A, {i}:] by A2,A4,ZFMISC_1:def 2;
+       then f. [a,i] in f.:[:A, {i}:] by A1,FUNCT_1:def 12;
+      hence thesis by A1,A3,A4,A5,FUNCT_5:27;
+     end;
+   let x be set; assume x in f.:[:A,{i}:];
+   then consider y being set such that
+A6:  y in dom f & y in [:A, {i}:] & x = f.y by FUNCT_1:def 12;
+   consider y1,y2 being set such that
+A7:  y1 in A & y2 in {i} & y = [y1,y2] by A6,ZFMISC_1:def 2;
+   reconsider g = (curry f).y1 as Function by A6,A7,FUNCT_5:26;
+      y2 = i by A7,TARSKI:def 1;
+then A8:  x = g.i by A6,A7,FUNCT_5:27;
+      y1 in dom curry f by A6,A7,FUNCT_5:26;
+    then g in (curry f).:A by A7,FUNCT_1:def 12;
+   hence thesis by A8,CARD_3:def 6;
+  end;
+
+definition
+ let X be set;
+ let Y be non empty functional set;
+ cluster -> Function-yielding Function of X, Y;
+ coherence
+  proof let f be Function of X, Y;
+   let x be set; assume x in dom f;
+    then f.x in rng f & rng f c= Y by FUNCT_1:def 5,RELSET_1:12;
+    then f.x is Element of Y;
+   hence thesis;
+  end;
+end;
+
+definition
+ let T be constituted-Functions 1-sorted;
+ cluster the carrier of T -> functional;
+ coherence
+  proof let x be set; assume x in the carrier of T;
+   hence thesis by MONOID_0:def 1;
+  end;
+end;
+
+definition
+ let X be set;
+ let L be non empty RelStr;
+ cluster L|^X -> constituted-Functions;
+ coherence
+  proof let a be Element of L|^X;
+      the carrier of L|^X = Funcs(X, the carrier of L) by YELLOW_1:28;
+   hence thesis by FUNCT_2:121;
+  end;
+end;
+
+definition
+ cluster constituted-Functions complete strict LATTICE;
+ existence
+  proof consider L be complete LATTICE;
+   take L|^{}; thus thesis;
+  end;
+ cluster constituted-Functions non empty 1-sorted;
+ existence
+  proof consider L be complete LATTICE;
+   take L|^{}; thus thesis;
+  end;
+end;
+
+definition
+ let T be constituted-Functions non empty RelStr;
+ cluster -> constituted-Functions (non empty SubRelStr of T);
+ coherence
+  proof let S be non empty SubRelStr of T;
+   let a be Element of S;
+      a in the carrier of S & the carrier of S c= the carrier of T
+     by YELLOW_0:def 13;
+    then a is Element of T;
+   hence thesis;
+  end;
+end;
+
+theorem Th10:
+ for S,T being complete LATTICE
+ for f being idempotent map of T,T
+ for h being map of S, Image f
+  holds f*h = h
+  proof
+   let S,T be complete LATTICE;
+   let f be idempotent map of T,T;
+   let h be map of S, Image f;
+     rng h c= the carrier of Image f;
+   then A1: rng h c= rng f by YELLOW_2:11;
+     f*f = f by QUANTAL1:def 9;
+   then rng f c= dom f by FUNCT_1:27;
+   then rng h c= dom f by A1,XBOOLE_1:1;
+   hence f*h = h by A1,YELLOW16:4;
+  end;
+
+theorem
+ for S being non empty RelStr
+for T,T1 being non empty RelStr st T is SubRelStr of T1
+for f being map of S, T for f1 being map of S, T1 holds
+f is monotone & f=f1 implies f1 is monotone
+ proof
+  let S be non empty RelStr;
+  let T,T1 be non empty RelStr;
+  assume A1: T is SubRelStr of T1;
+  let f be map of S, T;
+  let f1 be map of S, T1;
+  assume A2: f is monotone & f=f1;
+  thus f1 is monotone
+   proof
+    let x,y be Element of S;
+    assume x <= y;
+    then f.x <= f.y by A2,WAYBEL_1:def 2;
+    hence f1.x <= f1.y by A1,A2,YELLOW_0:60;
+   end;
+ end;
+
+theorem Th12:
+for S being non empty RelStr
+for T,T1 being non empty RelStr st T is full SubRelStr of T1
+for f being map of S, T for f1 being map of S, T1 holds
+f1 is monotone & f=f1 implies f is monotone
+ proof
+  let S be non empty RelStr;
+  let T,T1 be non empty RelStr;
+  assume A1: T is full SubRelStr of T1;
+  let f be map of S, T;
+  let f1 be map of S, T1;
+  assume A2: f1 is monotone & f=f1;
+  thus f is monotone
+   proof
+    let x,y be Element of S;
+    assume x <= y;
+    then f1.x <= f1.y by A2,WAYBEL_1:def 2;
+    hence f.x <= f.y by A1,A2,YELLOW_0:61;
+   end;
+ end;
+
+theorem Th13:
+ for X being set, V being Subset of X
+  holds chi(V,X)"{1} = V & chi(V,X)"{0} = X\V
+  proof
+   let X be set;
+   let V be Subset of X;
+   thus chi(V,X)"{1} = V
+    proof
+     thus chi(V,X)"{1} c= V
+      proof
+       let x be set;
+       assume x in chi(V,X)"{1};
+       then x in dom chi(V,X) & chi(V,X).x in {1} by FUNCT_1:def 13;
+       then x in X & chi(V,X).x = 1 by FUNCT_3:def 3,TARSKI:def 1;
+       hence x in V by FUNCT_3:def 3;
+      end;
+     let x be set; assume A1: x in V;
+     then x in X;
+     then A2:  x in dom chi(V,X) by FUNCT_3:def 3;
+       chi(V,X).x = 1 by A1,FUNCT_3:def 3;
+     then chi(V,X).x in {1} by TARSKI:def 1;
+     hence x in chi(V,X)"{1} by A2,FUNCT_1:def 13;
+    end;
+   thus chi(V,X)"{0} = X\V
+    proof
+     thus chi(V,X)"{0} c= X\V
+      proof
+       let x be set; assume A3: x in chi(V,X)"{0};
+       then x in dom chi(V,X) & chi(V,X).x in {0} by FUNCT_1:def 13;
+       then A4: x in X & chi(V,X).x = 0 by FUNCT_3:def 3,TARSKI:def 1;
+         (x in V implies chi(V,X).x = 1) & (not x in
+ V implies chi(V,X).x = 0)
+       by A3,FUNCT_3:def 3;
+       hence x in X\V by A4,XBOOLE_0:def 4;
+      end;
+     let x be set; assume x in X\V;
+     then x in X & not x in V by XBOOLE_0:def 4;
+     then x in dom chi(V,X) & chi(V,X).x = 0 by FUNCT_3:def 3;
+     then x in dom chi(V,X) & chi(V,X).x in {0} by TARSKI:def 1;
+     hence x in chi(V,X)"{0} by FUNCT_1:def 13;
+    end;
+  end;
+
+begin
+
+definition
+ let X be non empty set;
+ let T be non empty RelStr;
+ let f be Element of T|^X;
+ let x be Element of X;
+ redefine func f.x -> Element of T;
+ coherence
+  proof
+   reconsider p = f as Element of product (X --> T) by YELLOW_1:def 5;
+      p.x is Element of (X --> T).x;
+   hence thesis by FUNCOP_1:13;
+  end;
+end;
+
+theorem Th14:
+ for X being non empty set, T being non empty RelStr
+ for f,g being Element of T|^X
+  holds f <= g iff for x being Element of X holds f.x <= g.x
+  proof let X be non empty set, T be non empty RelStr;
+   let f,g be Element of T|^X;
+A1:  T|^X = product (X --> T) by YELLOW_1:def 5;
+   reconsider a = f, b = g as Element of product (X --> T) by YELLOW_1:def 5;
+   hereby assume
+A2:   f <= g;
+    let x be Element of X;
+       (X --> T).x = T by FUNCOP_1:13;
+    hence f.x <= g.x by A1,A2,WAYBEL_3:28;
+   end;
+   assume
+A3:  for x being Element of X holds f.x <= g.x;
+      now let x be Element of X;
+        (X --> T).x = T by FUNCOP_1:13;
+     hence a.x <= b.x by A3;
+    end;
+   hence thesis by A1,WAYBEL_3:28;
+  end;
+
+theorem Th15:
+for X being set
+for L,S being non empty RelStr st the RelStr of L = the RelStr of S
+holds L|^X = S|^X
+ proof
+  let X be set;
+  let L,S be non empty RelStr such that
+A1: the RelStr of L = the RelStr of S;
+    reconsider tXS = (X)--> S as
+               RelStr-yielding ManySortedSet of X;
+    reconsider tXL = (X)--> L as
+               RelStr-yielding ManySortedSet of X;
+A2: dom (Carrier tXS) = X by PBOOLE:def 3
+                     .= dom (Carrier tXL) by PBOOLE:def 3;
+A3: for x being set st x in dom (Carrier tXS) holds
+              (Carrier tXS).x = (Carrier tXL).x
+     proof
+      let x be set;
+      assume x in dom (Carrier tXS);
+      then A4:    x in X by PBOOLE:def 3;
+      then consider R being 1-sorted such that
+A5:    tXS.x = R & (Carrier tXS).x = the carrier of R by PRALG_1:def 13;
+      consider R1 being 1-sorted such that
+A6:   tXL.x = R1 & (Carrier tXL).x = the carrier of R1 by A4,PRALG_1:def 13;
+      thus (Carrier tXS).x = the carrier of S by A4,A5,FUNCOP_1:13
+                          .= (Carrier tXL).x by A1,A4,A6,FUNCOP_1:13;
+     end;
+A7:  the carrier of S|^X
+        = the carrier of product tXS by YELLOW_1:def 5
+       .= product Carrier tXS by YELLOW_1:def 4
+       .= product Carrier tXL by A2,A3,FUNCT_1:9
+       .= the carrier of product tXL by YELLOW_1:def 4
+       .= the carrier of L|^X by YELLOW_1:def 5;
+A8: the InternalRel of S|^X c=
+                                   the InternalRel of L|^X
+     proof
+      let x be set;
+      assume
+A9:    x in the InternalRel of S|^X;
+      then consider a,b being set such that
+A10:   x = [a,b] &
+      a in the carrier of S|^X &
+      b in the carrier of S|^X by RELSET_1:6;
+      reconsider a,b as Element of S|^X by A10;
+
+      reconsider tXS=(X) --> S as RelStr-yielding
+                                       ManySortedSet of X;
+      reconsider tXL=(X) --> L as RelStr-yielding
+                                       ManySortedSet of X;
+A11:    S|^X = product tXS by YELLOW_1:def 5;
+      then A12:   the carrier of S|^X=product Carrier tXS
+                                     by YELLOW_1:def 4;
+        a <= b by A9,A10,ORDERS_1:def 9;
+      then consider f,g being Function such that
+A13:   f = a & g = b &
+      for i be set st i in X
+      ex R being RelStr, xi,yi being Element of R
+      st R = tXS.i & xi = f.i & yi = g.i & xi <= yi by A11,A12,YELLOW_1:def 4;
+
+      reconsider a1=a,b1=b as Element of L|^X
+                                                   by A7;
+A14:    ex f,g being Function st f = a1 & g = b1 &
+      for i be set st i in X
+      ex R being RelStr, xi,yi being Element of R
+      st R = tXL.i & xi = f.i & yi = g.i & xi <= yi
+       proof
+        take f,g;
+        thus f=a1 & g=b1 by A13;
+        let i be set; assume
+A15:      i in X;
+        then consider R being RelStr, xi,yi being Element of R such that
+A16:      R = tXS.i & xi = f.i & yi = g.i & xi <= yi by A13;
+A17:      the carrier of R = the carrier of L &
+           the InternalRel of R = the InternalRel of S by A1,A15,A16,FUNCOP_1:
+13;
+        take R1=L;
+        reconsider xi1=xi,yi1=yi as Element of R1 by A17;
+        take xi1,yi1;
+        thus R1=tXL.i by A15,FUNCOP_1:13;
+        thus xi1 = f.i & yi1 = g.i by A16;
+          [xi1,yi1] in the InternalRel of R1 by A1,A16,A17,ORDERS_1:def 9;
+        hence xi1 <= yi1 by ORDERS_1:def 9;
+       end;
+A18:   L|^X = product tXL by YELLOW_1:def 5;
+      then the carrier of L|^X=product Carrier tXL by YELLOW_1:def 4;
+      then a1 <= b1 by A14,A18,YELLOW_1:def 4;
+      hence x in the InternalRel of L|^X by A10,ORDERS_1:def 9;
+     end;
+      the InternalRel of L|^X c=
+                                   the InternalRel of S|^X
+     proof
+      let x be set;
+      assume
+A19:    x in the InternalRel of L|^X;
+      then consider a,b being set such that
+A20:   x = [a,b] &
+      a in the carrier of L|^X &
+      b in the carrier of L|^X by RELSET_1:6;
+      reconsider a,b as Element of L|^X by A20;
+
+      reconsider tXL=(X) --> L as RelStr-yielding
+                                       ManySortedSet of X;
+      reconsider tXS=(X) --> S as RelStr-yielding
+                                       ManySortedSet of X;
+A21:    L|^X = product tXL by YELLOW_1:def 5;
+      then A22:   the carrier of L|^X=product Carrier tXL by YELLOW_1:def 4;
+        a <= b by A19,A20,ORDERS_1:def 9;
+      then consider f,g being Function such that
+A23:   f = a & g = b &
+      for i be set st i in X
+      ex R being RelStr, xi,yi being Element of R
+      st R = tXL.i & xi = f.i & yi = g.i & xi <= yi by A21,A22,YELLOW_1:def 4;
+
+      reconsider a1=a,b1=b as Element of S|^X
+                                                   by A7;
+A24:    ex f,g being Function st f = a1 & g = b1 &
+      for i be set st i in X
+      ex R being RelStr, xi,yi being Element of R
+      st R = tXS.i & xi = f.i & yi = g.i & xi <= yi
+       proof
+        take f,g;
+        thus f=a1 & g=b1 by A23;
+        let i be set; assume
+A25:      i in X;
+        then consider R being RelStr, xi,yi being Element of R such that
+A26:      R = tXL.i & xi = f.i & yi = g.i & xi <= yi by A23;
+A27:      the carrier of R = the carrier of S &
+           the InternalRel of R = the InternalRel of L by A1,A25,A26,FUNCOP_1:
+13;
+        take R1=S;
+        reconsider xi1=xi,yi1=yi as Element of R1 by A27;
+        take xi1,yi1;
+        thus R1=tXS.i by A25,FUNCOP_1:13;
+        thus xi1 = f.i & yi1 = g.i by A26;
+          [xi1,yi1] in the InternalRel of R1 by A1,A26,A27,ORDERS_1:def 9;
+        hence xi1 <= yi1 by ORDERS_1:def 9;
+       end;
+A28:   S|^X = product tXS by YELLOW_1:def 5;
+      then the carrier of S|^X=product Carrier tXS by YELLOW_1:def 4;
+      then a1 <= b1 by A24,A28,YELLOW_1:def 4;
+      hence x in the InternalRel of S|^X by A20,ORDERS_1:def 9;
+     end;
+  hence thesis by A7,A8,XBOOLE_0:def 10;
+ end;
+
+theorem
+   for S1,S2,T1,T2 being non empty TopSpace
+  st the TopStruct of S1 = the TopStruct of S2 &
+     the TopStruct of T1 = the TopStruct of T2
+  holds oContMaps(S1, T1) = oContMaps(S2, T2)
+   proof
+    let S1,S2,T1,T2 be non empty TopSpace;
+    assume
+A1:  the TopStruct of S1 = the TopStruct of S2 &
+    the TopStruct of T1 = the TopStruct of T2;
+    then A2:  Omega T1 = Omega T2 by WAYBEL25:13;
+      oContMaps(S1, T1) = ContMaps(S1, Omega T1) by WAYBEL26:def 1;
+    then reconsider oCM1 = oContMaps(S1, T1) as full SubRelStr of
+    (Omega T1) |^ the carrier of S1 by WAYBEL24:def 3;
+      oContMaps(S2, T2) = ContMaps(S2, Omega T2) by WAYBEL26:def 1;
+    then reconsider oCM2 = oContMaps(S2, T2) as full SubRelStr of
+    (Omega T1) |^ the carrier of S1 by A1,A2,WAYBEL24:def 3;
+      the carrier of oCM1 = the carrier of oCM2
+     proof
+      thus the carrier of oCM1 c= the carrier of oCM2
+       proof
+        let x be set;
+        assume x in the carrier of oCM1;
+        then x in the carrier of ContMaps(S1, Omega T1) by WAYBEL26:def 1;
+        then consider f being map of S1, Omega T1 such that
+A3:      x = f & f is continuous by WAYBEL24:def 3;
+A4:      the TopStruct of Omega T1 = the TopStruct of T1 &
+        the TopStruct of Omega T2 = the TopStruct of T2 by WAYBEL25:def 2;
+        then reconsider f1=f as map of S2, Omega T2 by A1;
+          for P1 being Subset of Omega T2 st P1 is closed holds f1" P1 is
+closed
+         proof
+          let P1 be Subset of Omega T2;
+          assume A5: P1 is closed;
+          reconsider P = P1 as Subset of (Omega T1) by A1,A4;
+            P is closed by A1,A4,A5,TOPS_3:79;
+          then f"P is closed by A3,PRE_TOPC:def 12;
+          hence f1" P1 is closed by A1,TOPS_3:79;
+         end;
+        then f1 is continuous by PRE_TOPC:def 12;
+        then x in the carrier of ContMaps(S2, Omega T2) by A3,WAYBEL24:def 3;
+        hence x in the carrier of oCM2 by WAYBEL26:def 1;
+       end;
+      let x be set;
+      assume x in the carrier of oCM2;
+      then x in the carrier of ContMaps(S2, Omega T2) by WAYBEL26:def 1;
+      then consider f being map of S2, Omega T2 such that
+A6:    x = f & f is continuous by WAYBEL24:def 3;
+A7:    the TopStruct of Omega T2 = the TopStruct of T2 &
+      the TopStruct of Omega T1 = the TopStruct of T1 by WAYBEL25:def 2;
+      then reconsider f1=f as map of S1, Omega T1 by A1;
+        for P1 being Subset of Omega T1 st P1 is closed holds f1" P1 is closed
+       proof
+        let P1 be Subset of Omega T1;
+        assume A8: P1 is closed;
+        reconsider P = P1 as Subset of (Omega T2) by A1,A7;
+          P is closed by A1,A7,A8,TOPS_3:79;
+        then f"P is closed by A6,PRE_TOPC:def 12;
+        hence f1" P1 is closed by A1,TOPS_3:79;
+       end;
+      then f1 is continuous by PRE_TOPC:def 12;
+      then x in the carrier of ContMaps(S1, Omega T1) by A6,WAYBEL24:def 3;
+      hence x in the carrier of oCM1 by WAYBEL26:def 1;
+     end;
+    hence thesis by YELLOW_0:58;
+   end;
+
+theorem Th17:
+ for X being set
+ ex f being map of BoolePoset X, (BoolePoset 1)|^X
+  st f is isomorphic &
+   for Y being Subset of X holds f.Y = chi(Y,X)
+  proof let Z be set;
+   per cases; suppose
+A1:   Z = {};
+then A2:   BoolePoset Z = InclPoset bool {} &
+     InclPoset bool {} = RelStr(#bool {}, RelIncl bool {}#) &
+     (BoolePoset 1)|^Z = RelStr(#{{}}, id {{}}#) by YELLOW_1:4,27,def 1;
+A3:   dom id {{}} = {{}} & rng id {{}} = {{}} by RELAT_1:71;
+    reconsider f = id {{}} as map of BoolePoset Z, (BoolePoset 1)|^Z
+      by A2,ZFMISC_1:1;
+    take f;
+       now let x,y be Element of BoolePoset Z;
+         x = {} & y = {} & f.x = {} & f.y = {} by A2,TARSKI:def 1,ZFMISC_1:1;
+      hence x <= y iff f.x <= f.y;
+     end;
+    hence f is isomorphic by A2,A3,WAYBEL_0:66;
+    let Y be Subset of Z;
+A4:   Y = {} by A1,XBOOLE_1:3;
+     then Y in {{}} by TARSKI:def 1;
+     then f.Y = {} & dom chi(Y,Z) = {} by A1,A4,FUNCT_1:35,FUNCT_3:def 3;
+    hence thesis by RELAT_1:64;
+   suppose Z <> {}; then reconsider Z' = Z as non empty set;
+      (BoolePoset 1)|^Z = product (Z' --> BoolePoset 1) by YELLOW_1:def 5;
+   hence thesis by WAYBEL18:15;
+  end;
+
+theorem Th18:
+ for X being set
+  holds BoolePoset X, (BoolePoset 1)|^X are_isomorphic
+  proof let X be set;
+   consider f being map of BoolePoset X, (BoolePoset 1)|^X such that
+A1:  f is isomorphic and
+      for Y being Subset of X holds f.Y = chi(Y,X) by Th17;
+   take f; thus thesis by A1;
+  end;
+
+theorem Th19:
+ for X,Y being non empty set, T being non empty Poset
+ for S1 being full non empty SubRelStr of (T|^X)|^Y
+ for S2 being full non empty SubRelStr of (T|^Y)|^X
+ for F being map of S1, S2 st F is commuting holds F is monotone
+  proof let X,Y be non empty set, T be non empty Poset;
+   let S1 be full non empty SubRelStr of (T|^X)|^Y;
+   let S2 be full non empty SubRelStr of (T|^Y)|^X;
+   let F be map of S1, S2 such that
+      for x being set st x in dom F holds x is Function-yielding Function and
+A1:  for f being Function st f in dom F holds F.f = commute f;
+   let f,g be Element of S1;
+   reconsider a = f, b = g as Element of (T|^X)|^Y by YELLOW_0:59;
+   reconsider Fa = F.f, Fb = F.g as Element of (T|^Y)|^X by YELLOW_0:59;
+   assume f <= g;
+then A2:  a <= b by YELLOW_0:60;
+A3:  the carrier of (T|^X)|^Y
+      = Funcs(Y, the carrier of T|^X) by YELLOW_1:28
+     .= Funcs(Y, Funcs(X, the carrier of T)) by YELLOW_1:28;
+      dom F = the carrier of S1 by FUNCT_2:def 1;
+then A4:  F.f = commute a & F.g = commute g by A1;
+      now let x be Element of X;
+        now let y be Element of Y;
+A5:      a.y <= b.y by A2,Th14;
+          Fa.x.y = a.y.x & Fb.x.y = b.y.x by A3,A4,PRALG_2:5;
+       hence Fa.x.y <= Fb.x.y by A5,Th14;
+      end;
+     hence Fa.x <= Fb.x by Th14;
+    end;
+    then Fa <= Fb & F.f in the carrier of S2 by Th14;
+   hence thesis by YELLOW_0:61;
+  end;
+
+theorem Th20:
+ for X,Y being non empty set, T being non empty Poset
+ for S1 being full non empty SubRelStr of (T|^Y)|^X
+ for S2 being full non empty SubRelStr of T|^[:X,Y:]
+ for F being map of S1, S2 st F is uncurrying holds F is monotone
+  proof let X,Y be non empty set, T be non empty Poset;
+   let S1 be full non empty SubRelStr of (T|^Y)|^X;
+   let S2 be full non empty SubRelStr of T|^[:X,Y:];
+   let F be map of S1, S2 such that
+      for x being set st x in dom F holds x is Function-yielding Function and
+A1:  for f being Function st f in dom F holds F.f = uncurry f;
+   let f,g be Element of S1;
+   reconsider a = f, b = g as Element of (T|^Y)|^X by YELLOW_0:59;
+   reconsider Fa = F.f, Fb = F.g as Element of T|^[:X,Y:] by YELLOW_0:59;
+   assume f <= g;
+then A2:  a <= b by YELLOW_0:60;
+A3:  the carrier of T|^Y = Funcs(Y, the carrier of T) by YELLOW_1:28;
+then A4:  the carrier of (T|^Y)|^X
+      = Funcs(X, Funcs(Y, the carrier of T)) by YELLOW_1:28;
+      dom F = the carrier of S1 by FUNCT_2:def 1;
+then A5:  F.f = uncurry a & F.g = uncurry b by A1;
+      now let xy be Element of [:X,Y:];
+     consider x,y being set such that
+A6:    x in X & y in Y & xy = [x,y] by ZFMISC_1:def 2;
+     reconsider x as Element of X by A6;
+     reconsider y as Element of Y by A6;
+        a.x is Function of Y, the carrier of T &
+      b.x is Function of Y, the carrier of T &
+      a is Function of X, Funcs(Y, the carrier of T) &
+      b is Function of X, Funcs(Y, the carrier of T) by A3,A4,FUNCT_2:121;
+      then dom (a.x) = Y & dom (b.x) = Y & x in X & y in Y &
+      dom a = X & dom b = X by FUNCT_2:def 1;
+      then Fa.xy = a.x.y & Fb.xy = b.x.y & a.x <= b.x by A2,A5,A6,Th14,FUNCT_5:
+45;
+     hence Fa.xy <= Fb.xy by Th14;
+    end;
+    then Fa <= Fb & F.f in the carrier of S2 by Th14;
+   hence thesis by YELLOW_0:61;
+  end;
+
+theorem Th21:
+ for X,Y being non empty set, T being non empty Poset
+ for S1 being full non empty SubRelStr of (T|^Y)|^X
+ for S2 being full non empty SubRelStr of T|^[:X,Y:]
+ for F being map of S2, S1 st F is currying holds F is monotone
+  proof let X,Y be non empty set, T be non empty Poset;
+   let S1 be full non empty SubRelStr of (T|^Y)|^X;
+   let S2 be full non empty SubRelStr of T|^[:X,Y:];
+   let F be map of S2, S1 such that
+      for x being set st x in dom F holds x is Function & proj1 x is Relation
+and
+A1:  for f being Function st f in dom F holds F.f = curry f;
+   let f,g be Element of S2;
+   reconsider a = f, b = g as Element of T|^[:X,Y:] by YELLOW_0:59;
+   reconsider Fa = F.f, Fb = F.g as Element of (T|^Y)|^X by YELLOW_0:59;
+   assume f <= g;
+then A2:  a <= b by YELLOW_0:60;
+A3:  the carrier of T|^Y = Funcs(Y, the carrier of T) by YELLOW_1:28;
+then A4:  the carrier of (T|^Y)|^X
+      = Funcs(X, Funcs(Y, the carrier of T)) by YELLOW_1:28;
+      dom F = the carrier of S2 by FUNCT_2:def 1;
+then A5:  F.f = curry a & F.g = curry b by A1;
+      now let x be Element of X;
+        now let y be Element of Y;
+       reconsider xy = [x,y] as Element of [:X,Y:] by ZFMISC_1:def 2;
+          Fa is Function of X, Funcs(Y, the carrier of T) &
+        Fb is Function of X, Funcs(Y, the carrier of T) &
+        Fa.x is Function of Y, the carrier of T &
+        Fb.x is Function of Y, the carrier of T by A3,A4,FUNCT_2:121;
+        then dom Fa = X & dom Fb = X & dom (Fa.x) = Y & dom (Fb.x) = Y
+         by FUNCT_2:def 1;
+        then Fa.x.y = a.xy & Fb.x.y = b.xy by A5,FUNCT_5:38;
+       hence Fa.x.y <= Fb.x.y by A2,Th14;
+      end;
+     hence Fa.x <= Fb.x by Th14;
+    end;
+    then Fa <= Fb & F.f in the carrier of S1 by Th14;
+   hence thesis by YELLOW_0:61;
+  end;
+
+begin :: Again poset of continuous maps
+
+definition :: To moze byc rewizja w WAYBEL17 na SCMaps
+ let S be non empty RelStr;
+ let T be non empty reflexive antisymmetric RelStr;
+ func UPS(S, T) -> strict RelStr means:
+Def4:
+   it is full SubRelStr of T |^ the carrier of S &
+   for x being set holds
+    x in the carrier of it iff x is directed-sups-preserving map of S, T;
+  existence
+   proof
+     defpred P[set] means $1 is directed-sups-preserving map of S, T;
+    consider X be set such that
+A1: for a be set holds a in X iff a in the carrier of (T |^ the carrier of S) &
+    P[a] from Separation;
+      X c= the carrier of T |^ the carrier of S
+     proof
+      let a be set;
+      assume a in X;
+      hence thesis by A1;
+     end;
+    then reconsider X as Subset of (T |^ the carrier of S);
+    take SX = subrelstr X;
+    thus SX is full SubRelStr of T |^ the carrier of S;
+    let f be set;
+    thus
+      f in the carrier of SX implies f is directed-sups-preserving map of S,T
+     proof
+      assume f in the carrier of SX;
+      then f in X by YELLOW_0:def 15;
+      hence thesis by A1;
+     end;
+    assume A2: f is directed-sups-preserving map of S,T;
+    then f is Element of T |^ the carrier of S by WAYBEL24:19;
+    then f in X by A1,A2;
+    hence f in the carrier of SX by YELLOW_0:def 15;
+  end;
+  uniqueness
+   proof
+    let U1,U2 be strict RelStr;
+    assume that
+A3: U1 is full SubRelStr of T |^ the carrier of S &
+    for x being set holds
+    x in the carrier of U1 iff x is directed-sups-preserving map of S, T and
+A4: U2 is full SubRelStr of T |^ the carrier of S &
+    for x being set holds
+    x in the carrier of U2 iff x is directed-sups-preserving map of S, T;
+      the carrier of U1 = the carrier of U2
+     proof
+      hereby let x be set;
+       assume x in the carrier of U1;
+       then x is directed-sups-preserving map of S, T by A3;
+       hence x in the carrier of U2 by A4;
+      end;
+      let x be set;
+       assume x in the carrier of U2;
+       then x is directed-sups-preserving map of S, T by A4;
+       hence x in the carrier of U1 by A3;
+     end;
+    hence thesis by A3,A4,YELLOW_0:58;
+   end;
+end;
+
+definition
+ let S be non empty RelStr;
+ let T be non empty reflexive antisymmetric RelStr;
+ cluster UPS(S, T) -> non empty reflexive antisymmetric constituted-Functions;
+ coherence
+  proof consider f being directed-sups-preserving map of S, T;
+      f in the carrier of UPS(S, T) by Def4;
+    then UPS(S, T) is full non empty SubRelStr of T |^ the carrier of S
+     by Def4,STRUCT_0:def 1;
+   hence thesis;
+  end;
+end;
+
+definition
+ let S be non empty RelStr;
+ let T be non empty Poset;
+ cluster UPS(S,T) -> transitive;
+ coherence
+  proof
+      UPS(S,T) is full SubRelStr of T |^ the carrier of S by Def4;
+   hence thesis;
+  end;
+end;
+
+theorem Th22:
+ for S being non empty RelStr
+ for T being non empty reflexive antisymmetric RelStr
+  holds the carrier of UPS(S, T) c= Funcs(the carrier of S, the carrier of T)
+  proof let S be non empty RelStr;
+   let T be non empty reflexive antisymmetric RelStr;
+      UPS(S, T) is SubRelStr of T|^the carrier of S by Def4;
+    then the carrier of UPS(S, T) c= the carrier of T|^the carrier of S
+     by YELLOW_0:def 13;
+   hence thesis by YELLOW_1:28;
+  end;
+
+definition
+ let S be non empty RelStr;
+ let T be non empty reflexive antisymmetric RelStr;
+ let f be Element of UPS(S, T);
+ let s be Element of S;
+ redefine func f.s -> Element of T;
+ coherence
+  proof UPS(S, T) is SubRelStr of T|^the carrier of S by Def4;
+   then reconsider p = f as Element of T|^the carrier of S by YELLOW_0:59;
+      p.s = p.s;
+   hence thesis;
+  end;
+end;
+
+theorem Th23:
+ for S being non empty RelStr
+ for T being non empty reflexive antisymmetric RelStr
+ for f,g being Element of UPS(S, T)
+  holds f <= g iff for s being Element of S holds f.s <= g.s
+  proof let S be non empty RelStr;
+   let T be non empty reflexive antisymmetric RelStr;
+   let f,g be Element of UPS(S, T);
+A1:  UPS(S, T) is full SubRelStr of T|^the carrier of S by Def4;
+   then reconsider a = f, b = g as Element of T|^the carrier of S by YELLOW_0:
+59;
+A2:  f <= g iff a <= b by A1,YELLOW_0:60,61;
+   hence f <= g implies for s being Element of S holds f.s <= g.s by Th14;
+   assume
+A3:  for s being Element of S holds f.s <= g.s;
+     for s be Element of S
+     holds a.s <= b.s by A3;
+   hence thesis by A2,Th14;
+  end;
+
+theorem Th24:
+ for S,T being complete Scott TopLattice holds UPS(S,T) = SCMaps(S,T)
+  proof
+   let S,T be complete Scott TopLattice;
+A1: the carrier of UPS(S,T) = the carrier of SCMaps(S,T)
+    proof
+     thus the carrier of UPS(S,T) c= the carrier of SCMaps(S,T)
+      proof
+       let x be set;
+       assume x in the carrier of UPS(S,T);
+       then reconsider f=x as directed-sups-preserving map of S,T by Def4;
+         f is continuous;
+       hence x in the carrier of SCMaps(S,T) by WAYBEL17:def 2;
+      end;
+     let x be set;
+     assume A2: x in the carrier of SCMaps(S,T);
+       the carrier of SCMaps(S,T) c= the carrier of MonMaps(S,T)
+     by YELLOW_0:def 13;
+     then x is Element of MonMaps(S,T) by A2;
+     then reconsider f=x as map of S,T by WAYBEL10:10;
+       f is continuous by A2,WAYBEL17:def 2;
+     then f is directed-sups-preserving by WAYBEL17:22;
+     hence x in the carrier of UPS(S,T) by Def4;
+    end;
+   then A3: the carrier of UPS(S,T) c= the carrier of MonMaps(S,T) by YELLOW_0:
+def 13;
+     UPS(S,T) is full SubRelStr of T |^ the carrier of S by Def4;
+   then the InternalRel of UPS(S,T) =
+   (the InternalRel of (T |^ the carrier of S)) |_2 the carrier of UPS(S,T)
+         by YELLOW_0:def 14
+.=((the InternalRel of (T |^ the carrier of S)) |_2
+ the carrier of MonMaps(S,T))
+    |_2 the carrier of UPS(S,T) by A3,WELLORD1:29
+   .=(the InternalRel of MonMaps(S,T)) |_2 the carrier of SCMaps(S,T) by A1,
+YELLOW_0:def 14
+   .= the InternalRel of SCMaps(S,T) by YELLOW_0:def 14;
+   hence thesis by A1;
+  end;
+
+theorem Th25:
+for S,S' being non empty RelStr
+for T,T' being non empty reflexive antisymmetric RelStr st
+the RelStr of S = the RelStr of S' & the RelStr of T = the RelStr of T' holds
+UPS(S,T) = UPS(S',T')
+ proof
+  let S,S' be non empty RelStr;
+  let T,T' be non empty reflexive antisymmetric RelStr;
+  assume
+A1: the RelStr of S = the RelStr of S' & the RelStr of T = the RelStr of T';
+A2: the carrier of UPS(S,T) = the carrier of UPS(S',T')
+    proof
+     thus the carrier of UPS(S,T) c= the carrier of UPS(S',T')
+      proof
+       let x be set;
+       assume x in the carrier of UPS(S,T);
+       then reconsider x1=x as directed-sups-preserving map of S,T by Def4;
+       reconsider y=x1 as map of S',T' by A1;
+         y is directed-sups-preserving
+        proof
+         let X be Subset of S';
+         assume
+A3:       X is non empty directed;
+         reconsider Y=X as Subset of S by A1;
+           Y is non empty directed by A1,A3,WAYBEL_0:3;
+         then x1 preserves_sup_of Y by WAYBEL_0:def 37;
+         hence y preserves_sup_of X by A1,WAYBEL_0:65;
+        end;
+       hence x in the carrier of UPS(S',T') by Def4;
+      end;
+     let x be set;
+     assume x in the carrier of UPS(S',T');
+     then reconsider x1=x as directed-sups-preserving map of S',T' by Def4;
+     reconsider y=x1 as map of S,T by A1;
+       y is directed-sups-preserving
+      proof
+       let X be Subset of S;
+       assume
+A4:     X is non empty directed;
+       reconsider Y=X as Subset of S' by A1;
+         Y is non empty directed by A1,A4,WAYBEL_0:3;
+       then x1 preserves_sup_of Y by WAYBEL_0:def 37;
+       hence y preserves_sup_of X by A1,WAYBEL_0:65;
+      end;
+     hence x in the carrier of UPS(S,T) by Def4;
+    end;
+A5: UPS(S,T) is full SubRelStr of T |^ the carrier of S by Def4;
+  T |^ the carrier of S = T' |^ the carrier of S' by A1,Th15;
+   then UPS(S',T') is full SubRelStr of T |^ the carrier of S by Def4;
+  hence UPS(S,T) = UPS(S',T') by A2,A5,YELLOW_0:58;
+ end;
+
+definition
+ let S, T be complete LATTICE;
+ cluster UPS(S, T) -> complete;
+ coherence
+  proof
+   consider S' being Scott TopAugmentation of S;
+   consider T' being Scott TopAugmentation of T;
+   reconsider S',T' as complete Scott TopLattice;
+     the RelStr of S = the RelStr of S' & the RelStr of T = the RelStr of T'
+                                              by YELLOW_9:def 4;
+   then UPS(S,T) = UPS(S',T') by Th25
+           .= SCMaps(S',T') by Th24
+           .= ContMaps(S',T') by WAYBEL24:38;
+   hence thesis;
+  end;
+end;
+
+theorem Th26:
+ for S,T being complete LATTICE holds
+   UPS(S, T) is sups-inheriting SubRelStr of T|^the carrier of S
+  proof let S,T be complete LATTICE;
+   consider S' being Scott TopAugmentation of S;
+   consider T' being Scott TopAugmentation of T;
+A1:  the RelStr of S = the RelStr of S' & the RelStr of T = the RelStr of T'
+     by YELLOW_9:def 4;
+    then A2: UPS(S,T) = UPS(S',T') by Th25
+            .= SCMaps(S',T') by Th24
+            .= ContMaps(S',T') by WAYBEL24:38;
+      T'|^the carrier of S = T|^the carrier of S by A1,Th15;
+   hence thesis by A1,A2,WAYBEL24:35;
+  end;
+
+theorem Th27:
+ for S,T being complete LATTICE
+ for A being Subset of UPS(S, T) holds sup A = "\/"(A, T|^the carrier of S)
+  proof let S,T be complete LATTICE;
+   let A be Subset of UPS(S, T);
+A1: UPS(S, T) is sups-inheriting full SubRelStr of T|^the carrier of S
+     by Def4,Th26;
+     ex_sup_of A,T|^the carrier of S by YELLOW_0:17;
+  then "\/"(A,T|^the carrier of S) in the carrier of UPS(S,T) by A1,YELLOW_0:
+def 19;
+   hence sup A = "\/"(A, T|^the carrier of S) by A1,YELLOW_0:69;
+  end;
+
+definition
+ let S1,S2,T1,T2 be non empty reflexive antisymmetric RelStr;
+ let f be map of S1, S2 such that
+A1:    f is directed-sups-preserving;
+ let g be map of T1, T2 such that
+A2:    g is directed-sups-preserving;
+ func UPS(f,g) -> map of UPS(S2, T1), UPS(S1, T2) means:
+Def5:
+  for h being directed-sups-preserving map of S2, T1 holds it.h = g*h*f;
+ existence
+  proof
+    defpred P[set,set] means
+   for h being Function st h = $1 holds $2 = g*h*f;
+A3: for x being Element of UPS(S2, T1)
+   ex y being Element of UPS(S1, T2) st P[x,y]
+    proof
+     let x be Element of UPS(S2, T1);
+     reconsider h=x as directed-sups-preserving map of S2, T1 by Def4;
+       h*f is directed-sups-preserving map of S1, T1 by A1,WAYBEL20:29;
+     then g*(h*f) is directed-sups-preserving map of S1, T2 by A2,WAYBEL20:29;
+     then g*h*f is directed-sups-preserving map of S1, T2 by RELAT_1:55;
+     then reconsider y = g*h*f as Element of UPS(S1, T2) by Def4
+;
+     take y;
+     thus thesis;
+    end;
+   consider j being Function of
+   the carrier of UPS(S2, T1), the carrier of UPS(S1, T2) such that
+A4: for x being Element of UPS(S2, T1) holds P[x,j.x]
+    from FuncExD(A3);
+   reconsider F=j as map of UPS(S2, T1), UPS(S1, T2) ;
+   take F;
+   let h be directed-sups-preserving map of S2, T1;
+     h is Element of UPS(S2, T1) by Def4;
+   hence F.h = g*h*f by A4;
+  end;
+ uniqueness
+  proof
+   let U1,U2 be map of UPS(S2, T1), UPS(S1, T2);
+   assume that
+A5: for h being directed-sups-preserving map of S2, T1 holds U1.h = g*h*f and
+A6: for h being directed-sups-preserving map of S2, T1 holds U2.h = g*h*f;
+     for x being set st x in the carrier of UPS(S2, T1) holds U1.x = U2.x
+    proof
+     let x be set;
+     assume x in the carrier of UPS(S2, T1);
+     then reconsider h=x as directed-sups-preserving map of S2, T1 by Def4;
+     thus U1.x = g*h*f by A5
+              .= U2.x by A6;
+    end;
+   hence U1=U2 by FUNCT_2:18;
+  end;
+end;
+
+:: 2.6. PROPOSITOION, p. 115
+::   preservation of composition
+
+theorem Th28:
+ for S1,S2,S3, T1,T2,T3 being non empty Poset
+ for f1 being directed-sups-preserving map of S2, S3
+ for f2 being directed-sups-preserving map of S1, S2
+ for g1 being directed-sups-preserving map of T1, T2
+ for g2 being directed-sups-preserving map of T2, T3
+ holds UPS(f2, g2) * UPS(f1, g1) = UPS(f1*f2, g2*g1)
+  proof
+   let S1,S2,S3,T1,T2,T3 be non empty Poset;
+   let f1 be directed-sups-preserving map of S2, S3;
+   let f2 be directed-sups-preserving map of S1, S2;
+   let g1 be directed-sups-preserving map of T1, T2;
+   let g2 be directed-sups-preserving map of T2, T3;
+   reconsider F = f1*f2 as directed-sups-preserving map of S1, S3
+   by WAYBEL20:29;
+   reconsider G = g2*g1 as directed-sups-preserving map of T1, T3
+   by WAYBEL20:29;
+     for h being directed-sups-preserving map of S3, T1
+   holds (UPS(f2, g2)*UPS(f1, g1)).h = G*h*F
+    proof
+     let h be directed-sups-preserving map of S3, T1;
+       dom UPS(f1, g1) = the carrier of UPS(S3, T1) by FUNCT_2:def 1;
+     then h in dom UPS(f1, g1) by Def4;
+     then A1:   (UPS(f2, g2)*UPS(f1, g1)).h = UPS(f2, g2).(UPS(f1, g1).h) by
+FUNCT_1:23
+         .= UPS(f2, g2).(g1*h*f1) by Def5;
+       g1*h is directed-sups-preserving map of S3,T2 by WAYBEL20:29;
+     then reconsider ghf=g1*h*f1 as directed-sups-preserving map of S2, T2
+     by WAYBEL20:29;
+     thus (UPS(f2, g2)*UPS(f1, g1)).h = g2*(ghf)*f2 by A1,Def5
+       .= g2*((g1*h*f1)*f2) by RELAT_1:55
+       .= g2*((g1*(h*f1))*f2) by RELAT_1:55
+       .= g2*(g1*((h*f1)*f2)) by RELAT_1:55
+       .= g2*(g1*(h*(f1*f2))) by RELAT_1:55
+       .= g2*((g1*h)*(f1*f2)) by RELAT_1:55
+       .= (g2*(g1*h))*(f1*f2) by RELAT_1:55
+       .= G*h*F by RELAT_1:55;
+    end;
+   hence thesis by Def5;
+  end;
+
+:: 2.6. PROPOSITOION, p. 115
+::   preservation of identities
+
+theorem Th29:
+ for S,T being non empty reflexive antisymmetric RelStr
+  holds UPS(id S, id T) = id UPS(S, T)
+  proof
+   let S,T be non empty reflexive antisymmetric RelStr;
+A1: dom UPS(id S, id T) = the carrier of UPS(S, T) by FUNCT_2:def 1;
+     for x being set st x in the carrier of UPS(S, T) holds UPS(id S, id T).x=x
+    proof
+     let x be set;
+     assume x in the carrier of UPS(S, T);
+     then reconsider f=x as directed-sups-preserving map of S, T by Def4;
+       UPS(id S, id T).f = (id T)*f*(id S) by Def5
+                      .= f*(id S) by GRCAT_1:12;
+     hence UPS(id S, id T).x=x by GRCAT_1:12;
+    end;
+   then UPS(id S, id T) = id the carrier of UPS(S, T) by A1,FUNCT_1:34;
+   hence UPS(id S, id T) = id UPS(S, T) by GRCAT_1:def 11;
+  end;
+
+:: 2.6. PROPOSITOION, p. 115
+::   preservation of directed-sups
+
+theorem Th30:
+ for S1,S2, T1,T2 being complete LATTICE
+ for f being directed-sups-preserving map of S1, S2
+ for g being directed-sups-preserving map of T1, T2
+  holds UPS(f, g) is directed-sups-preserving
+  proof
+   let S1,S2, T1,T2 be complete LATTICE;
+   let f be directed-sups-preserving map of S1, S2;
+   let g be directed-sups-preserving map of T1, T2;
+   let A be Subset of UPS(S2, T1); assume
+      A is non empty directed;
+   then reconsider H = A as directed non empty Subset of UPS(S2, T1);
+      UPS(S2, T1) is full SubRelStr of T1|^the carrier of S2 by Def4;
+   then reconsider B = H as directed non empty Subset of T1|^the carrier of S2
+     by YELLOW_2:7;
+A1: ex_sup_of B,T1|^the carrier of S2 by YELLOW_0:17;
+   assume ex_sup_of A, UPS(S2, T1);
+   thus ex_sup_of UPS(f, g).:A, UPS(S1, T2) by YELLOW_0:17;
+A2:  UPS(S1, T2) is full SubRelStr of T2|^the carrier of S1 by Def4;
+    then the carrier of UPS(S1, T2) c= the carrier of T2|^the carrier of S1
+     by YELLOW_0:def 13;
+    then UPS(f, g).:H c= the carrier of T2|^the carrier of S1 by XBOOLE_1:1;
+   then reconsider fgA = UPS(f, g).:H as non empty Subset of T2|^the carrier of
+S1
+    ;
+   reconsider fgsA = UPS(f, g).sup H as Element of T2|^the carrier of S1
+     by A2,YELLOW_0:59;
+A3: T1|^the carrier of S2 = product ((the carrier of S2) --> T1)
+     by YELLOW_1:def 5;
+A4:  T2|^the carrier of S1 = product ((the carrier of S1) --> T2)
+     by YELLOW_1:def 5;
+then A5:  dom sup fgA = the carrier of S1 & dom fgsA = the carrier of S1
+     by WAYBEL_3:27;
+A6:  now let s be set; assume s in the carrier of S1;
+     then reconsider x = s as Element of S1;
+A7:    pi(fgA, x) = g.:pi(A, f.x)
+       proof
+        thus pi(fgA, x) c= g.:pi(A, f.x)
+         proof
+          let a be set;
+          assume a in pi(fgA, x); then consider F being Function such that
+A8:        F in fgA & a = F.x by CARD_3:def 6;
+          consider G being set such that
+A9:        G in dom UPS(f, g) & G in H & F = UPS(f, g).G by A8,FUNCT_1:def 12;
+          reconsider G as directed-sups-preserving map of S2, T1 by A9,Def4;
+A10:       dom g = the carrier of T1 by FUNCT_2:def 1;
+A11:       G.(f.x) in pi(A, f.x) by A9,CARD_3:def 6;
+          A12: dom f = the carrier of S1 by FUNCT_2:def 1;
+            dom G = the carrier of S2 by FUNCT_2:def 1;
+          then f.x in dom G;
+          then A13:       x in dom (G*f) by A12,FUNCT_1:21;
+            a = (g*G*f).x by A8,A9,Def5
+           .= (g*(G*f)).x by RELAT_1:55
+           .= g.((G*f).x) by A13,FUNCT_1:23
+           .= g.(G.(f.x)) by A12,FUNCT_1:23;
+          hence a in g.:pi(A, f.x) by A10,A11,FUNCT_1:def 12;
+         end;
+        let a be set;
+        assume a in g.:pi(A, f.x); then consider F being set such that
+A14:      F in dom g & F in pi(A, f.x) & a = g.F by FUNCT_1:def 12;
+        consider G being Function such that
+A15:      G in A & F = G.(f.x) by A14,CARD_3:def 6;
+        reconsider G as directed-sups-preserving map of S2, T1 by A15,Def4;
+        A16: dom UPS(f, g) = the carrier of UPS(S2, T1) by FUNCT_2:def 1;
+          g*G*f = UPS(f, g).G by Def5;
+then A17:    g*G*f in fgA by A15,A16,FUNCT_1:def 12;
+        A18: dom f = the carrier of S1 by FUNCT_2:def 1;
+          dom G = the carrier of S2 by FUNCT_2:def 1;
+        then f.x in dom G;
+        then A19:     x in dom (G*f) by A18,FUNCT_1:21;
+          a = g.((G*f).x) by A14,A15,A18,FUNCT_1:23
+         .= (g*(G*f)).x by A19,FUNCT_1:23
+         .= (g*G*f).x by RELAT_1:55;
+        hence a in pi(fgA, x) by A17,CARD_3:def 6;
+       end;
+A20:    ((the carrier of S1) --> T2).x = T2 by FUNCOP_1:13;
+A21:   ((the carrier of S2) --> T1).(f.x) = T1 by FUNCOP_1:13;
+      reconsider BB=B as directed Subset of product
+      ((the carrier of S2) --> T1) by A3;
+A22:   ((the carrier of S2) --> T1).(f.x) = T1 by FUNCOP_1:13;
+        pi(BB, f.x) is directed by YELLOW16:37;
+then A23:    g preserves_sup_of pi(B, f.x) & ex_sup_of pi(B, f.x), T1
+       by A22,WAYBEL_0:def 37,YELLOW_0:17;
+      reconsider sH = sup H as directed-sups-preserving map of S2,T1 by Def4;
+      A24: dom f = the carrier of S1 by FUNCT_2:def 1;
+        dom sH = the carrier of S2 by FUNCT_2:def 1;
+      then f.x in dom sH;
+      then A25:   x in dom (sH*f) by A24,FUNCT_1:21;
+        ex_sup_of fgA, product ((the carrier of S1) --> T2) by YELLOW_0:17;
+     hence (sup fgA).s = sup pi(fgA, x) by A4,A20,YELLOW16:35
+        .= g.sup pi(B, f.x) by A7,A23,WAYBEL_0:def 31
+        .= g.((sup B).(f.x)) by A1,A3,A21,YELLOW16:35
+        .= g.(sH.(f.x)) by Th27
+        .= g.((sH*f).x) by A24,FUNCT_1:23
+        .= (g*(sH*f)).x by A25,FUNCT_1:23
+        .= (g*sH*f).s by RELAT_1:55
+        .= fgsA.s by Def5;
+    end;
+   thus sup (UPS(f, g).:A)
+      = sup fgA by Th27
+     .= UPS(f, g).sup A by A5,A6,FUNCT_1:9;
+  end;
+
+theorem Th31:
+ Omega Sierpinski_Space is Scott
+  proof
+      BoolePoset 1 = InclPoset bool 1 by YELLOW_1:4;
+then A1:  the carrier of BoolePoset 1 = {0,1} by YELLOW14:1,YELLOW_1:1;
+A2:  the carrier of Sierpinski_Space = {0,1} by WAYBEL18:def 9;
+   consider S being strict Scott TopAugmentation of BoolePoset 1;
+      the topology of S = the topology of Sierpinski_Space &
+    the RelStr of S = BoolePoset 1 by WAYBEL18:13,YELLOW_9:def 4;
+    then Omega Sierpinski_Space = Omega S by A1,A2,WAYBEL25:13 .= S by WAYBEL25
+:15;
+   hence thesis;
+  end;
+
+theorem
+   for S being complete Scott TopLattice
+  holds oContMaps(S, Sierpinski_Space) = UPS(S, BoolePoset 1)
+  proof
+   let S be complete Scott TopLattice;
+   reconsider B1 = BoolePoset 1 as complete LATTICE;
+   reconsider OSS = Omega Sierpinski_Space as Scott complete TopAugmentation
+   of B1 by Th31,WAYBEL26:4;
+     the TopStruct of OSS = the TopStruct of Sierpinski_Space by WAYBEL25:def 2
+;
+   then Omega OSS = OSS by WAYBEL25:13;
+then A1: the RelStr of S = the RelStr of S &
+   the RelStr of OSS = the RelStr of B1 by WAYBEL25:16;
+   thus oContMaps(S, Sierpinski_Space)
+        = ContMaps(S, Omega Sierpinski_Space) by WAYBEL26:def 1
+       .= SCMaps(S, OSS) by WAYBEL24:38
+       .= UPS(S, OSS) by Th24
+       .= UPS(S,BoolePoset 1) by A1,Th25;
+  end;
+
+:: 2.7. LEMMA, p. 116
+theorem Th33:
+ for S being complete LATTICE
+ ex F being map of UPS(S, BoolePoset 1), InclPoset sigma S st
+  F is isomorphic &
+  for f being directed-sups-preserving map of S, BoolePoset 1
+    holds F.f = f"{1}
+  proof let S be complete LATTICE;
+   set T = BoolePoset 1;
+   consider S' being Scott TopAugmentation of S;
+   reconsider T' = Omega Sierpinski_Space as Scott TopAugmentation of T
+     by Th31,WAYBEL26:4;
+      the RelStr of S = the RelStr of S' & T = the RelStr of T'
+     by YELLOW_9:def 4;
+then A1:  UPS(S, T) = UPS(S', T') by Th25 .= SCMaps(S', T') by Th24
+             .= ContMaps(S', T') by WAYBEL24:38
+             .= oContMaps(S', Sierpinski_Space) by WAYBEL26:def 1;
+A2:  the topology of S' = sigma S by YELLOW_9:51;
+   then consider G being map of InclPoset sigma S, UPS(S, T) such that
+A3:  G is isomorphic and
+A4:  for V being open Subset of S' holds G.V = chi(V, the carrier of S')
+     by A1,WAYBEL26:5;
+   take F = G";
+A5: [#]UPS(S, T) = the carrier of UPS(S, T) by PRE_TOPC:12;
+then A6: G is one-to-one & rng G = [#]UPS(S,T) by A3,WAYBEL_0:66;
+then A7: F = G qua Function" by TOPS_2:def 4;
+   hence F is isomorphic by A3,WAYBEL_0:68;
+   let f be directed-sups-preserving map of S, T;
+      f in the carrier of UPS(S, T) by Def4;
+   then consider V being set such that
+A8:  V in dom G & f = G.V by A5,A6,FUNCT_1:def 5;
+      dom G = the carrier of InclPoset sigma S by FUNCT_2:def 1
+         .= sigma S by YELLOW_1:1;
+   then reconsider V as open Subset of S' by A2,A8,PRE_TOPC:def 5
+;
+   thus F.f = V by A6,A7,A8,FUNCT_1:56
+           .= chi(V, the carrier of S')"{1} by Th13
+           .= f"{1} by A4,A8;
+  end;
+
+theorem Th34:
+ for S being complete LATTICE
+  holds UPS(S, BoolePoset 1), InclPoset sigma S are_isomorphic
+  proof let S be complete LATTICE;
+   consider F being map of UPS(S, BoolePoset 1), InclPoset sigma S such that
+A1:  F is isomorphic and
+      for f being directed-sups-preserving map of S, BoolePoset 1
+     holds F.f = f"{1} by Th33;
+   take F; thus thesis by A1;
+  end;
+
+theorem Th35:
+ for S1, S2, T1, T2 being complete LATTICE
+ for f being map of S1, S2, g being map of T1, T2
+  st f is isomorphic & g is isomorphic
+  holds UPS(f, g) is isomorphic
+  proof let S1, S2, T1, T2 be complete LATTICE;
+   let f be map of S1, S2, g be map of T1, T2; assume
+A1:  f is isomorphic & g is isomorphic;
+then A2:  f is sups-preserving map of S1, S2 & g is sups-preserving map of T1,
+T2
+    by WAYBEL13:20;
+    consider f' being monotone map of S2,S1 such that
+A3:  f*f' = id S2 & f'*f = id S1 by A1,YELLOW16:17;
+    consider g' being monotone map of T2,T1 such that
+A4:  g*g' = id T2 & g'*g = id T1 by A1,YELLOW16:17;
+A5:  UPS(f,g) is directed-sups-preserving map of UPS(S2, T1), UPS(S1, T2)
+     by A2,Th30;
+      f' is isomorphic & g' is isomorphic by A2,A3,A4,YELLOW16:17;
+then A6: f' is sups-preserving map of S2, S1 & g' is sups-preserving map of T2,
+T1
+    by WAYBEL13:20;
+then A7:  UPS(f',g') is directed-sups-preserving map of UPS(S1, T2), UPS(S2, T1
+)
+     by Th30;
+A8:  UPS(f,g)*UPS(f',g') = UPS(id S1, id T2) by A2,A3,A4,A6,Th28
+      .= id UPS(S1,T2) by Th29;
+      UPS(f',g')*UPS(f,g) = UPS(id S2, id T1) by A2,A3,A4,A6,Th28
+      .= id UPS(S2,T1) by Th29;
+   hence thesis by A5,A7,A8,YELLOW16:17;
+  end;
+
+theorem Th36:
+ for S1, S2, T1, T2 being complete LATTICE
+  st S1, S2 are_isomorphic & T1, T2 are_isomorphic
+  holds UPS(S2, T1), UPS(S1, T2) are_isomorphic
+  proof let S1, S2, T1, T2 be complete LATTICE;
+   given f being map of S1, S2 such that
+A1:  f is isomorphic;
+   given g being map of T1, T2 such that
+A2:  g is isomorphic;
+   take UPS(f, g); thus thesis by A1,A2,Th35;
+  end;
+
+theorem Th37:
+ for S,T being complete LATTICE
+ for f being directed-sups-preserving projection map of T,T
+  holds Image UPS(id S, f) = UPS(S, Image f)
+  proof
+   let S,T be complete LATTICE;
+   let f be directed-sups-preserving projection map of T,T;
+     UPS(S, T) is full SubRelStr of T |^ the carrier of S by Def4;
+   then reconsider IUPS=Image UPS(id S,f) as full SubRelStr of T|^the carrier
+of S
+   by WAYBEL15:1;
+   reconsider If = Image f as complete LATTICE by YELLOW_2:37;
+A1: UPS(S, If) is full SubRelStr of (Image f)|^ the carrier of S by Def4;
+     (If)|^ the carrier of S is full SubRelStr of T |^ the carrier of S
+   by YELLOW16:41;
+   then reconsider UPSIf=UPS(S, If) as full SubRelStr of T |^ the carrier of S
+   by A1,WAYBEL15:1;
+     the carrier of UPSIf = the carrier of IUPS
+    proof
+     thus the carrier of UPSIf c= the carrier of IUPS
+      proof
+       let x be set;
+       assume x in the carrier of UPSIf;
+       then reconsider h=x as directed-sups-preserving map of S, If by Def4;
+A2:     the carrier of If c= the carrier of T by YELLOW_0:def 13;
+A3:  dom h = the carrier of S & rng h c= the carrier of If by FUNCT_2:def 1;
+         dom h = the carrier of S & rng h c= the carrier of T by A2,FUNCT_2:def
+1,XBOOLE_1:1;
+       then h is Function of the carrier of S, the carrier of T
+         by FUNCT_2:def 1,RELSET_1:11;
+       then reconsider g=h as map of S, T ;
+A4:   g is directed-sups-preserving
+        proof
+         let X be Subset of S;
+         assume A5: X is non empty directed;
+         thus g preserves_sup_of X
+          proof
+           assume A6: ex_sup_of X,S;
+           reconsider hX = h.:X as non empty directed Subset of If
+           by A3,A5,RELAT_1:152,YELLOW_2:17;
+             h preserves_sup_of X by A5,WAYBEL_0:def 37;
+           then A7:       ex_sup_of h.:X,If & sup (hX) = h.sup X by A6,WAYBEL_0
+:def 31;
+           thus A8: ex_sup_of g.:X,T by YELLOW_0:17;
+             If is directed-sups-inheriting non empty full SubRelStr of T
+           by YELLOW_2:37;
+           hence sup (g.:X) = g.sup X by A7,A8,WAYBEL_0:7;
+          end;
+        end;
+       then A9:     g in the carrier of UPS(S, T) by Def4;
+       A10: dom UPS(id S, f) = the carrier of UPS(S, T) by FUNCT_2:def 1;
+         UPS(id S, f).g = f*g*(id S) by A4,Def5
+                     .= h*(id S) by Th10
+                     .= g by GRCAT_1:12;
+       then x in rng UPS(id S, f) by A9,A10,FUNCT_1:def 5;
+       then x in the carrier of subrelstr rng UPS(id S, f) by YELLOW_0:def 15;
+       hence x in the carrier of IUPS by YELLOW_2:def 2;
+      end;
+     let x be set;
+     assume x in the carrier of IUPS;
+     then x in the carrier of subrelstr rng UPS(id S, f) by YELLOW_2:def 2;
+     then x in rng UPS(id S, f) by YELLOW_0:def 15;
+     then consider a being set such that
+A11:   a in dom UPS(id S, f) & x = UPS(id S, f).a by FUNCT_1:def 5;
+       dom UPS(id S, f) = the carrier of UPS(S, T) by FUNCT_2:def 1;
+     then reconsider a as directed-sups-preserving map of S, T by A11,Def4;
+A12:  x = f*a*(id S) by A11,Def5
+      .= f*a by GRCAT_1:12;
+     then reconsider x0=x as directed-sups-preserving map of S,T by WAYBEL15:13
+;
+A13:  dom x0 = the carrier of S & rng x0 c= the carrier of T by FUNCT_2:def 1;
+       rng f = the carrier of subrelstr rng f by YELLOW_0:def 15;
+     then rng f = the carrier of If by YELLOW_2:def 2;
+     then rng x0 c= the carrier of If by A12,RELAT_1:45;
+     then x is Function of the carrier of S, the carrier of If by A13,FUNCT_2:4
+;
+     then reconsider x1 = x0 as map of S, If ;
+       x1 is directed-sups-preserving
+        proof
+         let X be Subset of S;
+         assume A14: X is non empty directed;
+         thus x1 preserves_sup_of X
+          proof
+           assume A15: ex_sup_of X,S;
+           reconsider hX = x0.:X as non empty directed Subset of T
+           by A13,A14,RELAT_1:152,YELLOW_2:17;
+           A16: x0 preserves_sup_of X by A14,WAYBEL_0:def 37;
+           then A17:       ex_sup_of x0.:X,T & sup (hX) = x0.sup X by A15,
+WAYBEL_0:def 31;
+           thus ex_sup_of x1.:X,If by YELLOW_0:17;
+             x1 is monotone by Th12;
+           then reconsider gX = x1.:X as non empty directed Subset of If
+           by A13,A14,RELAT_1:152,YELLOW_2:17;
+             If is directed-sups-inheriting non empty full SubRelStr of T
+           by YELLOW_2:37;
+           then sup (gX) = sup (hX) by A17,WAYBEL_0:7;
+           hence sup (x1.:X) = x1.sup X by A15,A16,WAYBEL_0:def 31;
+          end;
+        end;
+     hence x in the carrier of UPSIf by Def4;
+    end;
+   hence Image UPS(id S, f) = UPS(S, Image f) by YELLOW_0:58;
+  end;
+
+Lm1:
+  now let M be non empty set, X,Y be non empty Poset;
+   let f be directed-sups-preserving map of X, Y|^M;
+      the carrier of Y|^M = Funcs(M, the carrier of Y) by YELLOW_1:28;
+    then dom f = the carrier of X & rng f c= Funcs(M, the carrier of Y)
+     by FUNCT_2:def 1;
+   hence f in Funcs(the carrier of X, Funcs(M, the carrier of Y))
+     by FUNCT_2:def 2;
+    then commute f in Funcs(M, Funcs(the carrier of X, the carrier of Y))
+     by PRALG_2:4;
+    then ex g being Function st commute f = g & dom g = M &
+    rng g c= Funcs(the carrier of X, the carrier of Y) by FUNCT_2:def 2;
+  hence rng commute f c= Funcs(the carrier of X, the carrier of Y) &
+    dom commute f = M;
+  end;
+
+theorem Th38:
+ for X being non empty set, S,T being non empty Poset
+ for f being directed-sups-preserving map of S, T|^X
+ for i being Element of X
+  holds (commute f).i is directed-sups-preserving map of S, T
+  proof let M be non empty set, X,Y be non empty Poset;
+   let f be directed-sups-preserving map of X, Y|^M;
+   let i be Element of M;
+A1:  f in Funcs(the carrier of X, Funcs(M, the carrier of Y)) by Lm1;
+    then f is Function of the carrier of X, Funcs(M, the carrier of Y)
+     by FUNCT_2:121;
+then A2:  rng f c= Funcs(M, the carrier of Y) by RELSET_1:12;
+A3:  rng commute f c= Funcs(the carrier of X, the carrier of Y) by Lm1;
+      dom commute f = M by Lm1;
+    then (commute f).i in rng commute f by FUNCT_1:def 5;
+   then consider g being Function such that
+A4:  (commute f).i = g & dom g = the carrier of X & rng g c= the carrier of Y
+     by A3,FUNCT_2:def 2;
+      g is Function of the carrier of X, the carrier of Y by A4,FUNCT_2:4;
+   then reconsider g as map of X,Y ;
+A5:  Y|^M = product (M --> Y) by YELLOW_1:def 5;
+A6:  (M --> Y).i = Y by FUNCOP_1:13;
+      g is directed-sups-preserving
+     proof let A be Subset of X; assume A is non empty directed;
+      then reconsider B = A as non empty directed Subset of X;
+A7:     f preserves_sup_of B by WAYBEL_0:def 37;
+      assume ex_sup_of A, X;
+       then ex_sup_of f.:B, Y|^M & sup (f.:B) = f.sup B by A7,WAYBEL_0:def 31;
+then A8:     ex_sup_of pi(f.:A, i), Y & sup pi(f.:A, i) = (f.sup A).i
+        by A5,A6,YELLOW16:33,35;
+A9:     pi(f.:A, i) = g.:A by A2,A4,Th8;
+      thus ex_sup_of g.:A, Y by A2,A4,A8,Th8;
+      thus sup (g.:A) = g.sup A by A1,A4,A8,A9,PRALG_2:5;
+     end;
+   hence thesis by A4;
+  end;
+
+theorem Th39:
+ for X being non empty set, S,T being non empty Poset
+ for f being directed-sups-preserving map of S, T|^X
+  holds commute f is Function of X, the carrier of UPS(S, T)
+  proof let M be non empty set, X,Y be non empty Poset;
+   let f be directed-sups-preserving map of X, Y|^M;
+A1:  rng commute f c= Funcs(the carrier of X, the carrier of Y) &
+    dom commute f = M by Lm1;
+      rng commute f c= the carrier of UPS(X, Y)
+     proof let g be set; assume g in rng commute f;
+      then consider i being set such that
+A2:     i in dom commute f & g = (commute f).i by FUNCT_1:def 5;
+      reconsider i as Element of M by A2,Lm1;
+         (commute f).i is directed-sups-preserving map of X, Y by Th38;
+      hence thesis by A2,Def4;
+     end;
+   hence thesis by A1,FUNCT_2:4;
+  end;
+
+theorem Th40:
+ for X being non empty set, S,T being non empty Poset
+ for f being Function of X, the carrier of UPS(S, T)
+  holds commute f is directed-sups-preserving map of S, T|^X
+  proof let X be non empty set, S,T be non empty Poset;
+   let f be Function of X, the carrier of UPS(S, T);
+      the carrier of UPS(S, T) c= Funcs(the carrier of S, the carrier of T)
+     by Th22;
+then A1:  Funcs(X, the carrier of UPS(S, T)) c= Funcs(X,
+      Funcs(the carrier of S, the carrier of T)) by FUNCT_5:63;
+A2:  the carrier of T|^X = Funcs(X, the carrier of T) by YELLOW_1:28;
+    A3: f in Funcs(X, the carrier of UPS(S, T)) by FUNCT_2:11;
+    then commute f in Funcs(the carrier of S, Funcs(X, the carrier of T))
+     by A1,PRALG_2:4;
+    then commute f is Function of the carrier of S, the carrier of T|^X
+     by A2,FUNCT_2:121;
+   then reconsider g = commute f as map of S, T|^X ;
+A4:  rng g c= Funcs(X, the carrier of T) by A2;
+      g is directed-sups-preserving
+     proof let A be Subset of S; assume A is non empty directed;
+      then reconsider B = A as directed non empty Subset of S;
+      assume
+A5:     ex_sup_of A, S;
+A6:     T|^X = product (X --> T) by YELLOW_1:def 5;
+         now let x be Element of X;
+        reconsider fx = f.x as directed-sups-preserving map of S, T by Def4;
+A7:       (X --> T).x = T by FUNCOP_1:13;
+           commute g = f & dom f = X by A1,A3,FUNCT_2:def 1,PRALG_2:6;
+         then fx.:A = pi(g.:A, x) & fx preserves_sup_of B
+          by A4,Th8,WAYBEL_0:def 37;
+        hence ex_sup_of pi(g.:A, x), (X --> T).x by A5,A7,WAYBEL_0:def 31;
+       end;
+      hence
+A8:     ex_sup_of g.:A, T|^X by A6,YELLOW16:33;
+A9:     dom sup (g.:A) = X & dom (g.sup A) = X by A6,WAYBEL_3:27;
+         now let x be set; assume x in X;
+        then reconsider a = x as Element of X;
+        reconsider fx = f.a as directed-sups-preserving map of S, T by Def4;
+A10:       (X --> T).a = T by FUNCOP_1:13;
+        commute g = f & dom f = X by A1,A3,FUNCT_2:def 1,PRALG_2:6;
+         then fx.:A = pi(g.:A, a) & fx preserves_sup_of B
+          by A4,Th8,WAYBEL_0:def 37;
+         then sup pi(g.:B, a) = fx.sup A by A5,WAYBEL_0:def 31;
+         then fx.sup A = (sup (g.:B)).a by A6,A8,A10,YELLOW16:35;
+        hence (sup (g.:A)).x = (g.sup A).x by A1,A3,PRALG_2:5;
+       end;
+      hence sup (g.:A) = g.sup A by A9,FUNCT_1:9;
+     end;
+   hence thesis;
+  end;
+
+theorem Th41:
+ for X being non empty set, S,T being non empty Poset
+ ex F being map of UPS(S, T|^X), UPS(S, T)|^X
+  st F is commuting isomorphic
+  proof let X be non empty set, S, T be non empty Poset;
+    deffunc F(Function) = commute $1;
+   consider F being ManySortedSet of the carrier of UPS(S, T|^X) such that
+A1:  for f being Element of UPS(S, T|^X) holds
+       F.f = F(f) from LambdaDMS;
+A2:  dom F = the carrier of UPS(S, T|^X) by PBOOLE:def 3;
+A3:  rng F c= the carrier of UPS(S, T)|^X
+     proof let g be set; assume g in rng F;
+      then consider f being set such that
+A4:     f in dom F & g = F.f by FUNCT_1:def 5;
+      reconsider f as directed-sups-preserving map of S, T|^X by A2,A4,Def4;
+         g = commute f by A1,A2,A4;
+      then reconsider g as Function of X, the carrier of UPS(S, T) by Th39;
+         dom g = X & rng g c= the carrier of UPS(S, T) by FUNCT_2:def 1;
+       then g in Funcs(X, the carrier of UPS(S, T)) by FUNCT_2:def 2;
+      hence thesis by YELLOW_1:28;
+     end;
+    then F is Function of the carrier of UPS(S, T|^X), the carrier of UPS(S, T
+)|^X
+     by A2,FUNCT_2:4;
+   then reconsider F as map of UPS(S, T|^X), UPS(S, T)|^X ;
+   consider G being ManySortedSet of the carrier of UPS(S, T)|^X such that
+A5:  for f being Element of UPS(S, T)|^X holds
+       G.f = F(f) from LambdaDMS;
+A6:  dom G = the carrier of UPS(S, T)|^X by PBOOLE:def 3;
+A7:  rng G c= the carrier of UPS(S, T|^X)
+     proof let g be set; assume g in rng G;
+      then consider f being set such that
+A8:     f in dom G & g = G.f by FUNCT_1:def 5;
+         the carrier of UPS(S, T)|^X = Funcs(X, the carrier of UPS(S, T))
+        by YELLOW_1:28;
+      then reconsider f as Function of X, the carrier of UPS(S, T)
+        by A6,A8,FUNCT_2:121;
+         g = commute f by A5,A6,A8;
+       then g is directed-sups-preserving map of S, T|^X by Th40;
+      hence thesis by Def4;
+     end;
+    then G is Function of the carrier of UPS(S, T)|^X, the carrier of UPS(S, T
+|^X)
+     by A6,FUNCT_2:4;
+   then reconsider G as map of UPS(S, T)|^X, UPS(S, T|^X) ;
+   take F;
+   thus
+A9:  F is commuting
+     proof
+      hereby let x be set; assume x in dom F;
+        then x is map of S, T|^X by A2,Def4;
+       hence x is Function-yielding Function;
+      end;
+      thus thesis by A1,A2;
+     end;
+A10:  G is commuting
+     proof
+      hereby let x be set; assume x in dom G;
+        then x in Funcs(X, the carrier of UPS(S, T)) by A6,YELLOW_1:28;
+        then x is Function of X, the carrier of UPS(S, T) by FUNCT_2:121;
+       hence x is Function-yielding Function;
+      end;
+      thus thesis by A5,A6;
+     end;
+      UPS(S, T) is full SubRelStr of T|^the carrier of S by Def4;
+then A11:  UPS(S, T)|^X is full SubRelStr of (T|^the carrier of S)|^X by
+YELLOW16:41;
+A12:  UPS(S, T|^X) is full SubRelStr of (T|^X)|^the carrier of S by Def4;
+then A13: F is monotone by A9,A11,Th19;
+A14: G is monotone by A10,A11,A12,Th19;
+A15:  the carrier of T|^X = Funcs(X, the carrier of T) by YELLOW_1:28;
+A16:  the carrier of UPS(S, T) c= Funcs(the carrier of S, the carrier of T)
+     by Th22;
+      the carrier of UPS(S, T)|^X = Funcs(X, the carrier of UPS(S, T))
+      by YELLOW_1:28;
+then A17:  the carrier of UPS(S, T)|^X c=
+         Funcs(X, Funcs(the carrier of S, the carrier of T)) by A16,FUNCT_5:63;
+      the carrier of UPS(S, T|^X) c=
+      Funcs(the carrier of S, the carrier of T|^X) by Th22;
+    then F*G = id the carrier of UPS(S, T)|^X &
+    G*F = id the carrier of UPS(S, T|^X) by A2,A3,A6,A7,A9,A10,A15,A17,Th3
+;
+    then F*G = id (UPS(S, T)|^X) & G*F = id UPS(S, T|^X) by GRCAT_1:def 11;
+   hence F is isomorphic by A13,A14,YELLOW16:17;
+  end;
+
+theorem Th42:
+ for X being non empty set, S,T being non empty Poset
+  holds UPS(S, T|^X), UPS(S, T)|^X are_isomorphic
+  proof let X be non empty set, S, T be non empty Poset;
+   consider F being map of UPS(S, T|^X), UPS(S, T)|^X such that
+A1:  F is commuting isomorphic by Th41;
+   take F; thus thesis by A1;
+  end;
+
+
+:: 2.8. THEOREM, p. 116
+:: [CONT -> CONT] is into CONT (so [CONT -> CONT] is functor)
+theorem
+   for S,T being continuous complete LATTICE
+  holds UPS(S,T) is continuous
+  proof let S, T be continuous complete LATTICE;
+   consider X being non empty set,
+            p being projection map of BoolePoset X, BoolePoset X such that
+A1:  p is directed-sups-preserving & T, Image p are_isomorphic by WAYBEL15:20;
+      p*p = p & (id S)*id S = id S by QUANTAL1:def 9;
+    then UPS(id S, p) * UPS(id S, p) = UPS(id S, p) by A1,Th28;
+    then UPS(id S, p) is directed-sups-preserving idempotent
+      map of UPS(S, BoolePoset X), UPS(S, BoolePoset X)
+       by A1,Th30,QUANTAL1:def 9;
+then A2:  UPS(id S, p) is directed-sups-preserving projection
+      map of UPS(S, BoolePoset X), UPS(S, BoolePoset X)
+       by WAYBEL_1:def 13;
+      BoolePoset X, (BoolePoset 1)|^X are_isomorphic by Th18;
+    then UPS(S, BoolePoset X), UPS(S, (BoolePoset 1)|^X) are_isomorphic &
+    UPS(S, (BoolePoset 1)|^X), UPS(S, BoolePoset 1)|^X are_isomorphic
+     by Th36,Th42;
+    then UPS(S, BoolePoset X), UPS(S, BoolePoset 1)|^X are_isomorphic
+     by WAYBEL_1:8;
+then A3:  UPS(S, BoolePoset 1)|^X, UPS(S, BoolePoset X) are_isomorphic by
+WAYBEL_1:7;
+:::::::: do rewizji w WAYBEL14:36  (L nie musi by Scott Top..)
+   consider L being Scott TopAugmentation of S;
+      the RelStr of L = the RelStr of S &
+    InclPoset sigma L is continuous by WAYBEL14:36,YELLOW_9:def 4;
+then A4:  InclPoset sigma S is continuous by YELLOW_9:52;
+::::::::
+      UPS(S, BoolePoset 1), InclPoset sigma S are_isomorphic by Th34;
+    then InclPoset sigma S, UPS(S, BoolePoset 1) are_isomorphic by WAYBEL_1:7;
+    then UPS(S, BoolePoset 1) is continuous complete by A4,WAYBEL15:11;
+    then for x being Element of X
+     holds (X --> UPS(S, BoolePoset 1)).x is continuous complete LATTICE
+      by FUNCOP_1:13;
+    then X-POS_prod(X --> UPS(S, BoolePoset 1)) is continuous by WAYBEL20:34;
+    then UPS(S, BoolePoset 1)|^X is continuous by YELLOW_1:def 5;
+    then UPS(S, BoolePoset X) is continuous LATTICE by A3,WAYBEL15:11;
+then A5:  Image UPS(id S, p) is continuous by A2,WAYBEL15:17;
+      Image p is complete (non empty Poset) by A1,WAYBEL20:18;
+    then UPS(S, T), UPS(S, Image p) are_isomorphic by A1,Th36;
+    then UPS(S, T), Image UPS(id S, p) are_isomorphic by A1,Th37;
+    then Image UPS(id S, p), UPS(S, T) are_isomorphic by WAYBEL_1:7;
+   hence thesis by A5,WAYBEL15:11;
+  end;
+
+:: 2.8. THEOREM, p. 116
+:: [ALG -> ALG] is into ALG (so [ALG -> ALG] is functor)
+theorem
+   for S,T being algebraic complete LATTICE
+  holds UPS(S,T) is algebraic
+  proof let S, T be algebraic complete LATTICE;
+   consider X being non empty set,
+            p being closure map of BoolePoset X, BoolePoset X such that
+A1:  p is directed-sups-preserving & T, Image p are_isomorphic by WAYBEL13:35;
+      p*p = p & (id S)*id S = id S by QUANTAL1:def 9;
+    then UPS(id S, p) * UPS(id S, p) = UPS(id S, p) by A1,Th28;
+    then A2: UPS(id S, p) is directed-sups-preserving idempotent
+      map of UPS(S, BoolePoset X), UPS(S, BoolePoset X)
+       by A1,Th30,QUANTAL1:def 9;
+      UPS(id S, p) is closure
+     proof thus UPS(id S, p) is projection by A2,WAYBEL_1:def 13;
+         now let i be Element of UPS(S, BoolePoset X);
+A3:      (id UPS(S, BoolePoset X)).i = i by GRCAT_1:11;
+        reconsider f = i as directed-sups-preserving map of S, BoolePoset X
+          by Def4;
+A4:      UPS(id S, p).f = p*f*(id S) by A1,Def5
+          .= p*f*(id the carrier of S) by GRCAT_1:def 11
+          .= p*f by FUNCT_2:23;
+           now let s be Element of S;
+             (p*f).s = p.(f.s) & id BoolePoset X <= p &
+           (id BoolePoset X).(i.s) = i.s
+             by FUNCT_2:21,GRCAT_1:11,WAYBEL_1:def 14;
+          hence i.s <= UPS(id S, p).i.s by A4,YELLOW_2:10;
+         end;
+        hence (id UPS(S, BoolePoset X)).i <= UPS(id S, p).i by A3,Th23;
+       end;
+      hence id UPS(S, BoolePoset X) <= UPS(id S, p) by YELLOW_2:10;
+     end;
+   then reconsider Sp = UPS(id S, p) as directed-sups-preserving closure
+      map of UPS(S, BoolePoset X), UPS(S, BoolePoset X) by A1,Th30;
+A5:  Image Sp is complete LATTICE by YELLOW_2:32;
+      BoolePoset X, (BoolePoset 1)|^X are_isomorphic by Th18;
+    then UPS(S, BoolePoset X), UPS(S, (BoolePoset 1)|^X) are_isomorphic &
+    UPS(S, (BoolePoset 1)|^X), UPS(S, BoolePoset 1)|^X are_isomorphic
+     by Th36,Th42;
+    then UPS(S, BoolePoset X), UPS(S, BoolePoset 1)|^X are_isomorphic
+     by WAYBEL_1:8;
+then A6:UPS(S, BoolePoset 1)|^X, UPS(S, BoolePoset X) are_isomorphic by
+WAYBEL_1:7;
+:::::::: do rewizji w WAYBEL14:42 i 43  niepotrzebne przechodzenie przez baze
+::::::::                   (bez bazy L nie musi by Scott Top..)
+   consider L being Scott TopAugmentation of S;
+A7:  the RelStr of L = the RelStr of S by YELLOW_9:def 4;
+    then S, L are_isomorphic by WAYBEL13:26;
+    then L is algebraic by WAYBEL13:32;
+    then ex B being Basis of L st
+     B = {uparrow x where x is Element of L:
+           x in the carrier of CompactSublatt L} by WAYBEL14:42;
+    then InclPoset sigma L is algebraic by WAYBEL14:43;
+then A8:  InclPoset sigma S is algebraic &
+    InclPoset sigma S = InclPoset the topology of L by A7,YELLOW_9:51,52;
+::::::::
+      UPS(S, BoolePoset 1), InclPoset sigma S are_isomorphic by Th34;
+    then InclPoset sigma S, UPS(S, BoolePoset 1) are_isomorphic by WAYBEL_1:7;
+    then UPS(S, BoolePoset 1) is algebraic lower-bounded by A8,WAYBEL13:32;
+    then for x being Element of X
+     holds (X --> UPS(S, BoolePoset 1)).x is algebraic lower-bounded LATTICE
+      by FUNCOP_1:13;
+    then X-POS_prod(X --> UPS(S, BoolePoset 1)) is lower-bounded algebraic
+     by WAYBEL13:25;
+    then UPS(S, BoolePoset 1)|^X is algebraic lower-bounded by YELLOW_1:def 5;
+    then UPS(S, BoolePoset X) is algebraic lower-bounded LATTICE
+     by A6,WAYBEL13:32;
+then A9:  Image Sp is algebraic by WAYBEL_8:26;
+      Image p is complete (non empty Poset) by A1,WAYBEL20:18;
+    then UPS(S, T), UPS(S, Image p) are_isomorphic by A1,Th36;
+    then UPS(S, T), Image Sp are_isomorphic by A1,Th37;
+    then Image Sp, UPS(S, T) are_isomorphic by WAYBEL_1:7;
+   hence UPS(S, T) is algebraic by A5,A9,WAYBEL13:32;
+  end;
+
+theorem Th45:
+ for R,S,T being complete LATTICE
+ for f being directed-sups-preserving map of R, UPS(S, T)
+  holds uncurry f is directed-sups-preserving map of [:R,S:], T
+  proof let R,S,T be complete LATTICE;
+   let f be directed-sups-preserving map of R, UPS(S, T);
+A1:  the carrier of UPS(S, T) c= Funcs(the carrier of S, the carrier of T)
+     by Th22;
+    then f in Funcs(the carrier of R, the carrier of UPS(S, T)) &
+    Funcs(the carrier of R, the carrier of UPS(S, T))
+      c= Funcs(the carrier of R, Funcs(the carrier of S, the carrier of T))
+       by FUNCT_2:11,FUNCT_5:63;
+   then uncurry f in Funcs([:the carrier of R, the carrier of S:],
+                  the carrier of T) by FUNCT_6:20;
+    then uncurry f in Funcs(the carrier of [:R, S:], the carrier of T)
+     by YELLOW_3:def 2;
+    then uncurry f is Function of the carrier of [:R, S:], the carrier of T
+     by FUNCT_2:121;
+   then reconsider g = uncurry f as map of [:R, S:], T ;
+      now let a be Element of R, b be Element of S;
+        rng f c= Funcs(the carrier of S, the carrier of T) by A1,XBOOLE_1:1;
+      then curry g = f by FUNCT_5:55;
+      then Proj(g,a) = f.a by WAYBEL24:def 1;
+     hence Proj (g, a) is directed-sups-preserving by Def4;
+     reconsider ST = UPS(S, T) as
+        full sups-inheriting non empty SubRelStr of T|^the carrier of S
+       by Def4,Th26;
+     reconsider f' = f as directed-sups-preserving map of R, ST;
+        the carrier of ST c= the carrier of T|^the carrier of S
+       by YELLOW_0:def 13;
+then A2:    incl(ST, T|^the carrier of S) = id the carrier of ST by YELLOW_9:
+def 1;
+        incl(ST, T|^the carrier of S) is directed-sups-preserving
+       by WAYBEL21:10;
+      then incl(ST, T|^the carrier of S)*f' is directed-sups-preserving
+       by WAYBEL20:29;
+      then f is directed-sups-preserving map of R, T|^the carrier of S
+       by A2,FUNCT_2:23;
+then A3:    (commute f).b is directed-sups-preserving map of R, T by Th38;
+        Proj (g, b) = (curry' g).b by WAYBEL24:def 2;
+     hence Proj (g, b) is directed-sups-preserving by A3,PRALG_2:def 5;
+    end;
+   hence thesis by WAYBEL24:18;
+  end;
+
+theorem Th46:
+ for R,S,T being complete LATTICE
+ for f being directed-sups-preserving map of [:R,S:], T
+  holds curry f is directed-sups-preserving map of R, UPS(S, T)
+  proof let R,S,T be complete LATTICE;
+A1:  UPS(S, T) is full SubRelStr of T|^the carrier of S by Def4;
+A2:  [:the carrier of R, the carrier of S:] = the carrier of [:R,S:]
+     by YELLOW_3:def 2;
+   let f be directed-sups-preserving map of [:R,S:], T;
+A3:  dom f = the carrier of [:R,S:] by FUNCT_2:def 1;
+      f in the carrier of UPS([:R,S:], T) &
+    the carrier of UPS([:R,S:], T) c=
+      Funcs(the carrier of [:R,S:], the carrier of T) by Def4,Th22;
+    then curry f in Funcs(the carrier of R,
+       Funcs(the carrier of S, the carrier of T)) by A2,FUNCT_6:19;
+    then curry f is Function of the carrier of R,
+       Funcs(the carrier of S, the carrier of T) by FUNCT_2:121;
+then A4:  dom curry f = the carrier of R by FUNCT_2:def 1;
+      rng curry f c= the carrier of UPS(S, T)
+     proof let y be set; assume y in rng curry f;
+      then consider x being set such that
+A5:     x in dom curry f & y = (curry f).x by FUNCT_1:def 5;
+      reconsider x as Element of R by A4,A5;
+         Proj(f, x) is directed-sups-preserving by WAYBEL24:16;
+       then y is directed-sups-preserving map of S, T by A5,WAYBEL24:def 1;
+      hence thesis by Def4;
+     end;
+    then curry f is Function of the carrier of R, the carrier of UPS(S, T)
+     by A4,FUNCT_2:4;
+   then reconsider g = curry f as map of R, UPS(S, T) ;
+      g is directed-sups-preserving
+     proof let A be Subset of R; assume A is non empty directed;
+      then reconsider B = A as directed non empty Subset of R;
+      assume ex_sup_of A, R; thus ex_sup_of g.:A, UPS(S, T) by YELLOW_0:17;
+         the carrier of UPS(S, T) c= the carrier of T|^the carrier of S
+        by A1,YELLOW_0:def 13;
+       then g.:B c= the carrier of T|^the carrier of S by XBOOLE_1:1;
+      then reconsider gA = g.:A as non empty Subset of T|^the carrier of S
+       ;
+      reconsider gsA = g.sup A as Element of T|^the carrier of S
+        by A1,YELLOW_0:59;
+A6:     for s be Element of S holds
+        ((the carrier of S) --> T).s is complete LATTICE by FUNCOP_1:13;
+A7:     T|^the carrier of S = product ((the carrier of S) --> T)
+        by YELLOW_1:def 5;
+then A8:     dom gsA = the carrier of S by WAYBEL_3:27;
+A9:     dom sup gA = the carrier of S & dom gsA = the carrier of S
+        by A7,WAYBEL_3:27;
+         now let x be set; assume x in the carrier of S;
+        then reconsider s = x as Element of S;
+        reconsider s1 = {s} as directed non empty Subset of S by WAYBEL_0:5;
+        reconsider As = [:B,s1:] as non empty directed Subset of [:R,S:];
+A10:       f preserves_sup_of As & ex_sup_of As, [:R,S:]
+          by WAYBEL_0:def 37,YELLOW_0:17;
+           ((the carrier of S) --> T).s = T by FUNCOP_1:13;
+        hence (sup gA).x = sup pi(gA, s) by A6,A7,WAYBEL_3:32
+          .= sup (f.:As) by A3,Th9
+          .= f.sup As by A10,WAYBEL_0:def 31
+          .= f. [sup proj1 As, sup proj2 As] by YELLOW_3:46
+          .= f. [sup A, sup proj2 As] by FUNCT_5:11
+          .= f. [sup A, sup {s}] by FUNCT_5:11
+          .= f. [sup A, s] by YELLOW_0:39
+          .= gsA.x by A4,A8,FUNCT_5:38;
+       end;
+       then sup gA = gsA by A9,FUNCT_1:9;
+      hence sup (g.:A) = g.sup A by Th27;
+     end;
+   hence thesis;
+  end;
+
+:: 2.10. THEOREM, p. 117
+theorem
+   for R,S,T being complete LATTICE
+ ex f being map of UPS(R, UPS(S, T)), UPS([:R,S:], T)
+  st f is uncurrying isomorphic
+  proof let R,S,T be complete LATTICE;
+    deffunc F(Function) = uncurry $1;
+   consider F being ManySortedSet of the carrier of UPS(R, UPS(S, T)) such that
+A1:  for f being Element of UPS(R, UPS(S, T))
+      holds F.f = F(f) from LambdaDMS;
+A2:  dom F = the carrier of UPS(R, UPS(S, T)) by PBOOLE:def 3;
+A3:  rng F c= the carrier of UPS([:R,S:], T)
+     proof let g be set; assume g in rng F;
+      then consider f being set such that
+A4:     f in dom F & g = F.f by FUNCT_1:def 5;
+      reconsider f as directed-sups-preserving map of R, UPS(S, T)
+       by A2,A4,Def4;
+         g = uncurry f by A1,A2,A4;
+       then g is directed-sups-preserving map of [:R, S:], T by Th45;
+      hence thesis by Def4;
+     end;
+    then F is Function of the carrier of UPS(R, UPS(S, T)),
+                     the carrier of UPS([:R,S:], T) by A2,FUNCT_2:4;
+   then reconsider F as map of UPS(R, UPS(S, T)), UPS([:R,S:], T)
+     ;
+   deffunc F(Function) = curry $1;
+   consider G being ManySortedSet of the carrier of UPS([:R,S:], T) such that
+A5:  for f being Element of UPS([:R,S:], T) holds
+       G.f = F(f) from LambdaDMS;
+A6:  dom G = the carrier of UPS([:R,S:], T) by PBOOLE:def 3;
+A7:  rng G c= the carrier of UPS(R, UPS(S, T))
+     proof let g be set; assume g in rng G;
+      then consider f being set such that
+A8:     f in dom G & g = G.f by FUNCT_1:def 5;
+      reconsider f as directed-sups-preserving map of [:R,S:], T by A6,A8,Def4;
+         g = curry f by A5,A6,A8;
+       then g is directed-sups-preserving map of R, UPS(S,T) by Th46;
+      hence thesis by Def4;
+     end;
+    then G is Function of the carrier of UPS([:R,S:], T),
+                     the carrier of UPS(R, UPS(S, T)) by A6,FUNCT_2:4;
+   then reconsider G as map of UPS([:R,S:], T), UPS(R, UPS(S, T));
+   take F;
+   thus
+A9:  F is uncurrying
+     proof
+      hereby let x be set; assume x in dom F;
+        then x is map of R, UPS(S, T) by A2,Def4;
+       hence x is Function-yielding Function;
+      end;
+      thus thesis by A1,A2;
+     end;
+A10:  G is currying
+     proof
+      hereby let x be set; assume x in dom G;
+       then reconsider f = x as map of [:R, S:], T by A6,Def4;
+          the carrier of T <> {} & proj1 f = dom f by FUNCT_5:21;
+        then proj1 f = the carrier of [:R, S:] by FUNCT_2:def 1
+           .= [:the carrier of R, the carrier of S:] by YELLOW_3:def 2;
+       hence x is Function & proj1 x is Relation by RELAT_1:6;
+      end;
+      thus thesis by A5,A6;
+     end;
+      UPS(S, T) is full SubRelStr of T|^the carrier of S by Def4;
+    then UPS(R, UPS(S, T)) is full SubRelStr of UPS(S, T)|^the carrier of R &
+    UPS(S, T)|^the carrier of R is full SubRelStr of
+      (T|^the carrier of S)|^the carrier of R by Def4,YELLOW16:41;
+then A11:  UPS(R, UPS(S, T)) is full non empty SubRelStr of
+      (T|^the carrier of S)|^the carrier of R by YELLOW16:28;
+      the carrier of [:R,S:] = [:the carrier of R, the carrier of S:]
+     by YELLOW_3:def 2;
+then A12:  UPS([:R,S:], T) is full non empty SubRelStr of
+      T|^[:the carrier of R, the carrier of S:] by Def4;
+then A13: F is monotone by A9,A11,Th20;
+A14: G is monotone by A10,A11,A12,Th21;
+      the carrier of (T|^the carrier of S)|^the carrier of R
+      = Funcs(the carrier of R, the carrier of T|^the carrier of S)
+       by YELLOW_1:28
+     .= Funcs(the carrier of R, Funcs(the carrier of S, the carrier of T))
+       by YELLOW_1:28;
+then A15:  the carrier of UPS(R, UPS(S, T)) c=
+      Funcs(the carrier of R, Funcs(the carrier of S, the carrier of T))
+       by A11,YELLOW_0:def 13;
+      the carrier of T|^[:the carrier of R, the carrier of S:]
+      = Funcs([:the carrier of R, the carrier of S:], the carrier of T)
+       by YELLOW_1:28;
+    then the carrier of UPS([:R,S:], T) c=
+      Funcs([:the carrier of R, the carrier of S:], the carrier of T)
+       by A12,YELLOW_0:def 13;
+    then F*G = id the carrier of UPS([:R,S:], T) &
+    G*F = id the carrier of UPS(R, UPS(S, T)) by A2,A3,A6,A7,A9,A10,A15,Th4,Th5
+;
+    then F*G = id UPS([:R,S:], T) & G*F = id UPS(R, UPS(S, T)) by GRCAT_1:def
+11;
+   hence F is isomorphic by A13,A14,YELLOW16:17;
+  end;
+

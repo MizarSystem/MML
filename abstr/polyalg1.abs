@@ -1,0 +1,356 @@
+:: The Algebra of Polynomials
+::  by Ewa Gr\c{a}dzka
+::
+:: Received February 24, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FUNCSDOM, RLVECT_1, BINOP_1, FUNCT_1, FUNCOP_1, VECTSP_2,
+      LATTICES, RELAT_1, NORMSP_1, ARYTM_3, POLYNOM3, ARYTM_1, GROUP_1,
+      ALGSTR_1, ALGSTR_2, FINSEQ_1, RFINSEQ, MATRIX_2, FINSEQ_4, BOOLE,
+      UNIALG_2, RLSUB_1, SETFAM_1, POLYNOM1, ALGSEQ_1, POLYALG1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
+      STRUCT_0, PRE_TOPC, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_4,
+      FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1, VECTSP_1,
+      VECTSP_2, NORMSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3, POLYNOM5,
+      VECTSP_4;
+ constructors REAL_1, MONOID_0, DOMAIN_1, ALGSTR_2, FINSOP_1, RFINSEQ,
+      BINARITH, POLYNOM1, GOBOARD1, POLYNOM3, POLYNOM5, VECTSP_4, MEMBERED;
+ clusters SUBSET_1, FUNCT_1, STRUCT_0, RELSET_1, VECTSP_1, VECTSP_2, ALGSTR_2,
+      FINSEQ_5, ARYTM_3, BINOM, POLYNOM3, POLYNOM5, MEMBERED;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Preliminaries
+
+definition let F be 1-sorted;
+ struct ( doubleLoopStr,VectSpStr over F ) AlgebraStr over F (#
+         carrier -> set,
+         add, mult -> BinOp of the carrier,
+         Zero, unity -> Element of the carrier,
+         lmult -> Function of [:the carrier of F,the carrier:],
+                                      the carrier #);
+end;
+
+definition let L be non empty doubleLoopStr;
+cluster strict non empty AlgebraStr over L;
+end;
+
+definition
+let L be non empty doubleLoopStr, A be non empty AlgebraStr over L;
+attr A is mix-associative means
+:: POLYALG1:def 1
+   for a being Element of L, x,y being Element of A holds
+ a*(x*y) = (a*x)*y;
+end;
+
+definition let L be non empty doubleLoopStr;
+  cluster well-unital distributive VectSp-like mix-associative
+    (non empty AlgebraStr over L);
+end;
+
+definition let L be non empty doubleLoopStr;
+  mode Algebra of L is well-unital distributive VectSp-like mix-associative
+    (non empty AlgebraStr over L);
+end;
+
+theorem :: POLYALG1:1
+for X,Y being set
+for f being Function of [:X,Y:],X holds dom f = [:X,Y:];
+
+theorem :: POLYALG1:2
+for X,Y being set
+for f being Function of [:X,Y:],Y holds dom f = [:X,Y:];
+
+begin :: The Algebra of Formal Power Series
+
+definition
+ let L be non empty doubleLoopStr;
+ func Formal-Series L -> strict non empty AlgebraStr over L means
+:: POLYALG1:def 2
+    (for x be set holds x in the carrier of it iff x is sequence of L) &
+    (for x,y be Element of it, p,q be sequence of L st
+      x = p & y = q holds x+y = p+q) &
+    (for x,y be Element of it, p,q be sequence of L st
+      x = p & y = q holds x*y = p*'q) &
+    (for a be Element of L, x be Element of it,
+    p be sequence of L st x = p holds a*x = a*p) &
+    0.it = 0_.(L) &
+    1_(it) = 1_.(L);
+  end;
+
+  definition
+   let L be Abelian (non empty doubleLoopStr);
+   cluster Formal-Series L -> Abelian;
+  end;
+
+  definition
+   let L be add-associative (non empty doubleLoopStr);
+   cluster Formal-Series L -> add-associative;
+  end;
+
+  definition
+   let L be right_zeroed (non empty doubleLoopStr);
+   cluster Formal-Series L -> right_zeroed;
+  end;
+
+  definition
+   let L be add-associative right_zeroed right_complementable
+    (non empty doubleLoopStr);
+   cluster Formal-Series L -> right_complementable;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed commutative
+                     (non empty doubleLoopStr);
+   cluster Formal-Series L -> commutative;
+  end;
+
+  definition
+   let L be Abelian add-associative right_zeroed right_complementable
+   unital associative distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> associative;
+  end;
+
+definition
+   let L be add-associative right_zeroed right_complementable right_unital
+        right-distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> right_unital;
+end;
+
+definition
+  cluster add-associative associative right_zeroed left_zeroed
+    right_unital left_unital
+    right_complementable distributive (non empty doubleLoopStr);
+end;
+
+  theorem :: POLYALG1:3
+   for D be non empty set
+   for f being non empty FinSequence of D holds
+    f/^1 = Del(f,1);
+
+  theorem :: POLYALG1:4
+   for D be non empty set
+   for f being non empty FinSequence of D holds
+   f = <*f.1*>^Del(f,1);
+
+  theorem :: POLYALG1:5
+   for L be add-associative right_zeroed left_unital right_complementable
+    left-distributive (non empty doubleLoopStr)
+   for p be sequence of L holds
+   (1_.(L))*'p = p;
+
+definition
+   let L be add-associative right_zeroed right_complementable left_unital
+    left-distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> left_unital;
+end;
+
+definition
+   let L be Abelian add-associative right_zeroed right_complementable
+           distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> right-distributive;
+
+   cluster Formal-Series L -> left-distributive;
+end;
+
+theorem :: POLYALG1:6
+   for L be Abelian add-associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr)
+   for a being Element of L, p,q being sequence of L holds
+   a*(p+q)=a*p + a*q;
+
+theorem :: POLYALG1:7
+   for L be Abelian add-associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr)
+   for a,b being Element of L, p being sequence of L holds
+   (a+b)*p = a*p + b*p;
+
+theorem :: POLYALG1:8
+   for L be associative (non empty doubleLoopStr)
+   for a,b being Element of L, p being sequence of L holds
+   (a*b)*p = a*(b*p);
+
+theorem :: POLYALG1:9
+   for L be associative left_unital (non empty doubleLoopStr)
+   for p being sequence of L holds
+   (the unity of L)*p = p;
+
+definition
+   let L be Abelian add-associative associative right_zeroed
+   right_complementable left_unital distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> VectSp-like;
+end;
+
+theorem :: POLYALG1:10
+  for L be Abelian left_zeroed add-associative associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr)
+   for a being Element of L, p,q being sequence of L holds
+   a*(p*'q)=(a*p)*'q;
+
+definition
+   let L be Abelian left_zeroed add-associative associative right_zeroed
+   right_complementable distributive (non empty doubleLoopStr);
+   cluster Formal-Series L -> mix-associative;
+end;
+
+definition
+  let L be left_zeroed right_zeroed add-associative left_unital right_unital
+   right_complementable distributive (non empty doubleLoopStr);
+  cluster Formal-Series L -> well-unital;
+end;
+
+definition
+  let L be 1-sorted;
+  let A be AlgebraStr over L;
+ mode Subalgebra of A -> AlgebraStr over L means
+:: POLYALG1:def 3
+  the carrier of it c= the carrier of A & 1_(it) = 1_(A) & 0.it = 0.A &
+  the add of it = (the add of A)|[:the carrier of it,the carrier of it:] &
+  the mult of it = (the mult of A)|[:the carrier of it,the carrier of it:] &
+  the lmult of it = (the lmult of A)|[:the carrier of L,the carrier of it:];
+end;
+
+theorem :: POLYALG1:11
+ for L being 1-sorted
+ for A being AlgebraStr over L holds A is Subalgebra of A;
+
+theorem :: POLYALG1:12
+   for L being 1-sorted
+ for A,B,C being AlgebraStr over L st A is Subalgebra of B &
+  B is Subalgebra of C holds A is Subalgebra of C;
+
+theorem :: POLYALG1:13
+   for L being 1-sorted
+ for A,B being AlgebraStr over L st A is Subalgebra of B &
+  B is Subalgebra of A holds the AlgebraStr of A = the AlgebraStr of B;
+
+theorem :: POLYALG1:14
+for L being 1-sorted
+for A,B being AlgebraStr over L st the AlgebraStr of A = the AlgebraStr of B
+ holds A is Subalgebra of B & B is Subalgebra of A;
+
+definition
+  let L be non empty 1-sorted;
+  cluster non empty strict AlgebraStr over L;
+end;
+
+definition
+  let L be 1-sorted;
+  let B be AlgebraStr over L;
+  cluster strict Subalgebra of B;
+end;
+
+definition
+  let L be non empty 1-sorted;
+  let B be non empty AlgebraStr over L;
+  cluster strict non empty Subalgebra of B;
+end;
+
+definition
+  let L be non empty HGrStr;
+  let B be non empty AlgebraStr over L;
+  let A be Subset of B;
+  attr A is opers_closed means
+:: POLYALG1:def 4
+    A is lineary-closed &
+    (for x,y being Element of B st x in A & y in A holds x*y in A) &
+    1_(B) in A &
+    0.B in A;
+end;
+
+theorem :: POLYALG1:15
+for L being non empty HGrStr
+for B being non empty AlgebraStr over L
+for A being non empty Subalgebra of B holds
+for x,y being Element of B,
+x',y' being Element of A st x = x' & y = y' holds
+x+y = x'+ y';
+
+theorem :: POLYALG1:16
+for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be non empty Subalgebra of B holds
+for x,y being Element of B,
+x',y' being Element of A st x = x' & y = y' holds
+ x*y = x'* y';
+
+theorem :: POLYALG1:17
+for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be non empty Subalgebra of B holds
+for a being Element of L
+for x being Element of B,
+x' being Element of A st x = x' holds
+ a * x = a * x';
+
+canceled;
+
+theorem :: POLYALG1:19
+  for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be non empty Subalgebra of B ex C being Subset of B st
+the carrier of A = C & C is opers_closed;
+
+theorem :: POLYALG1:20
+for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be Subset of B st A is opers_closed ex C being strict Subalgebra of B
+st the carrier of C = A;
+
+theorem :: POLYALG1:21
+for L being non empty HGrStr
+for B being non empty AlgebraStr over L
+for A being non empty Subset of B
+for X being Subset-Family of B st
+(for Y be set holds Y in X iff Y c= the carrier of B &
+   ex C being Subalgebra of B st Y = the carrier of C & A c= Y) holds
+     meet X is opers_closed;
+
+definition
+let L be non empty HGrStr;
+let B be non empty AlgebraStr over L;
+let A be non empty Subset of B;
+ func GenAlg A -> strict non empty Subalgebra of B means
+:: POLYALG1:def 5
+ A c= the carrier of it &
+  for C being Subalgebra of B st A c= the carrier of C holds
+   the carrier of it c= the carrier of C;
+end;
+
+theorem :: POLYALG1:22
+for L be non empty HGrStr
+for B be non empty AlgebraStr over L
+for A be non empty Subset of B st A is opers_closed holds
+the carrier of GenAlg A = A;
+
+begin ::The Algebra of Polynomials
+
+definition
+let L be add-associative right_zeroed right_complementable distributive
+ (non empty doubleLoopStr);
+func Polynom-Algebra L -> strict non empty AlgebraStr over L means
+:: POLYALG1:def 6
+
+ ex A being non empty Subset of Formal-Series L st
+  A = the carrier of Polynom-Ring L & it = GenAlg A;
+end;
+
+definition
+let L be add-associative right_zeroed right_complementable
+ distributive (non empty doubleLoopStr);
+cluster Polynom-Ring L -> Loop-like;
+end;
+
+theorem :: POLYALG1:23
+for L being add-associative right_zeroed right_complementable
+  distributive (non empty doubleLoopStr)
+for A being non empty Subset of Formal-Series L st
+   A = the carrier of Polynom-Ring L holds A is opers_closed;
+
+theorem :: POLYALG1:24
+  for L be add-associative right_zeroed right_complementable
+ distributive (non empty doubleLoopStr) holds
+the doubleLoopStr of Polynom-Algebra L = Polynom-Ring L;
+

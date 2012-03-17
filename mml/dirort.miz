@@ -1,0 +1,874 @@
+:: Oriented Metric-Affine Plane - Part II
+::  by Jaros{\l}aw Zajkowski
+::
+:: Received June 19, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, ANALOAF, ANALMETR, ANALORT, SYMSP_1, DIRORT;
+ notation STRUCT_0, RLVECT_1, ANALOAF, ANALMETR, ANALORT;
+ constructors ANALMETR, ANALORT, XBOOLE_0;
+ clusters ANALOAF, ANALORT, ZFMISC_1, XBOOLE_0;
+ theorems ANALMETR, ANALORT;
+
+begin
+
+ reserve V for RealLinearSpace;
+
+ reserve x,y for VECTOR of V;
+
+definition let AS be non empty AffinStruct;
+           let a,b,c,d be Element of AS;
+  redefine pred a,b // c,d;
+  synonym a,b '//' c,d;
+end;
+
+theorem
+Th1:Gen x,y implies (for u,u1,v,v1,w,w1,w2 being
+  Element of CESpace(V,x,y) holds
+  ((u,u '//' v,w) & (u,v '//' w,w) &
+  (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+  (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+  (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+  (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+  (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u))) &
+  (for u,v,w being Element of CESpace(V,x,y) holds
+  ex u1 being Element of CESpace(V,x,y) st
+  w<>u1 & w,u1 '//' u,v ) &
+  (for u,v,w being Element of CESpace(V,x,y) holds
+  ex u1 being Element of CESpace(V,x,y) st
+  w<>u1 & u,v '//' w,u1 )
+proof
+  assume A1:Gen x,y;
+  set S=CESpace(V,x,y);
+A2:  S=AffinStruct (# the carrier of V,CORTE(V,x,y) #) by ANALORT:def 7;
+  thus (for u,u1,v,v1,w,w1,w2 being Element of S holds
+  ((u,u '//' v,w) & (u,v '//' w,w) &
+  (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+  (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+  (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+  (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+  (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u)))
+  proof
+    let u,u1,v,v1,w,w1,w2 be Element of S;
+    reconsider u'=u,v'=v,w'=w,u1'=u1,v1'=v1 as
+    Element of V by A2;
+    thus u,u '//' v,w
+    proof
+      u',u',v',w' are_COrte_wrt x,y by ANALORT:20;
+    hence thesis by ANALORT:56;
+    end;
+ thus u,v '//' w,w
+ proof
+     u',v',w',w' are_COrte_wrt x,y by ANALORT:22;
+   hence thesis by ANALORT:56;
+ end;
+ thus (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1)
+ proof
+     (u',v',u1',v1' are_COrte_wrt x,y & u',v',v1',u1' are_COrte_wrt x,y
+   implies u'=v' or u1'=v1') by A1,ANALORT:30;
+   hence thesis by ANALORT:56;
+ end;
+ thus (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1)
+ proof
+     (u',v',u1',v1' are_COrte_wrt x,y & u',v',u1',w' are_COrte_wrt x,y
+   implies u',v',v1',w' are_COrte_wrt x,y or u',v',w',v1' are_COrte_wrt x,y)
+   by A1,ANALORT:32;
+   hence thesis by ANALORT:56;
+ end;
+ thus (u,v '//' u1,v1 implies v,u '//' v1,u1)
+ proof
+     (u',v',u1',v1' are_COrte_wrt x,y implies v',u',v1',u1' are_COrte_wrt x,y)
+   by ANALORT:34;
+   hence thesis by ANALORT:56;
+ end;
+ thus (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w)
+ proof
+     (u',v',u1',v1' are_COrte_wrt x,y & u',v',v1',w' are_COrte_wrt x,y
+   implies u',v',u1',w' are_COrte_wrt x,y) by A1,ANALORT:36;
+   hence thesis by ANALORT:56;
+ end;
+ thus (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u)
+ proof
+     (u',u1',v',v1' are_COrte_wrt x,y implies v',v1',u',u1' are_COrte_wrt x,y
+   or v',v1',u1',u' are_COrte_wrt x,y) by A1,ANALORT:18;
+   hence thesis by ANALORT:56;
+ end;
+ thus thesis;
+ end;
+ thus (for u,v,w being Element of S holds
+      ex u1 being Element of S st
+      w<>u1 & w,u1 '//' u,v )
+ proof
+   let u,v,w be Element of S;
+   reconsider u'=u,v'=v,w'=w as Element of V by A2;
+   consider u1' being Element of V such that
+   A3: w'<>u1' & w',u1',u',v' are_COrte_wrt x,y by A1,ANALORT:38;
+   reconsider u1=u1' as Element of S by A2;
+     w<>u1 & w,u1 '//' u,v by A3,ANALORT:56;
+   hence thesis;
+ end;
+   let u,v,w be Element of S;
+   reconsider u'=u,v'=v,w'=w as Element of V by A2;
+   consider u1' being Element of V such that
+   A4: w'<>u1' & u',v',w',u1' are_COrte_wrt x,y by A1,ANALORT:40;
+   reconsider u1=u1' as Element of S by A2;
+     w<>u1 & u,v '//' w,u1 by A4,ANALORT:56;
+   hence thesis;
+end;
+
+theorem
+Th2:    Gen x,y implies
+(for u,u1,v,v1,w,w1,w2 being Element of CMSpace(V,x,y) holds
+((u,u '//' v,w) & (u,v '//' w,w) &
+ (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+ (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+ (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+ (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+ (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u))) &
+(for u,v,w being Element of CMSpace(V,x,y) holds
+  ex u1 being Element of CMSpace(V,x,y) st
+   w<>u1 & w,u1 '//' u,v ) &
+(for u,v,w being Element of CMSpace(V,x,y) holds
+  ex u1 being Element of CMSpace(V,x,y) st
+   w<>u1 & u,v '//' w,u1 )
+proof
+  assume A1:Gen x,y;
+  set S=CMSpace(V,x,y);
+A2:  S=AffinStruct (# the carrier of V,CORTM(V,x,y) #) by ANALORT:def 8;
+  thus
+    (for u,u1,v,v1,w,w1,w2 being Element of S holds
+  ((u,u '//' v,w) & (u,v '//' w,w) &
+  (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+  (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+  (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+  (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+  (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u)))
+  proof
+    let u,u1,v,v1,w,w1,w2 be Element of S;
+    reconsider u'=u,v'=v,w'=w,u1'=u1,v1'=v1 as
+    Element of V by A2;
+    thus u,u '//' v,w proof u',u',v',w' are_COrtm_wrt x,y by ANALORT:21;
+    hence thesis by ANALORT:57;
+  end;
+  thus u,v '//' w,w
+  proof
+      u',v',w',w' are_COrtm_wrt x,y by ANALORT:23;
+    hence thesis by ANALORT:57;
+  end;
+  thus (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1)
+  proof
+      (u',v',u1',v1' are_COrtm_wrt x,y & u',v',v1',u1' are_COrtm_wrt x,y
+    implies u'=v' or u1'=v1') by A1,ANALORT:31;
+    hence thesis by ANALORT:57;
+  end;
+  thus (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1)
+  proof
+      (u',v',u1',v1' are_COrtm_wrt x,y & u',v',u1',w' are_COrtm_wrt x,y
+    implies u',v',v1',w' are_COrtm_wrt x,y or u',v',w',v1' are_COrtm_wrt x,y)
+    by A1,ANALORT:33;
+    hence thesis by ANALORT:57;
+  end;
+  thus (u,v '//' u1,v1 implies v,u '//' v1,u1)
+  proof
+      (u',v',u1',v1' are_COrtm_wrt x,y implies v',u',v1',u1' are_COrtm_wrt x,y)
+    by ANALORT:35;
+    hence thesis by ANALORT:57;
+  end;
+  thus (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w)
+  proof
+      (u',v',u1',v1' are_COrtm_wrt x,y & u',v',v1',w' are_COrtm_wrt x,y
+    implies u',v',u1',w' are_COrtm_wrt x,y) by A1,ANALORT:37;
+    hence thesis by ANALORT:57;
+  end;
+  thus (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u)
+  proof
+      (u',u1',v',v1' are_COrtm_wrt x,y implies v',v1',u',u1' are_COrtm_wrt x,y
+    or v',v1',u1',u' are_COrtm_wrt x,y) by A1,ANALORT:19;
+    hence thesis by ANALORT:57;
+  end;
+  thus thesis;
+ end;
+  thus (for u,v,w being Element of S holds
+       ex u1 being Element of S st
+      w<>u1 & w,u1 '//' u,v )
+  proof
+    let u,v,w be Element of S;
+    reconsider u'=u,v'=v,w'=w as Element of V by A2;
+    consider u1' being Element of V such that
+    A3: w'<>u1' & w',u1',u',v' are_COrtm_wrt x,y by A1,ANALORT:39;
+    reconsider u1=u1' as Element of S by A2;
+      w<>u1 & w,u1 '//' u,v by A3,ANALORT:57;
+    hence thesis;
+  end;
+    let u,v,w be Element of S;
+    reconsider u'=u,v'=v,w'=w as Element of V by A2;
+    consider u1' being Element of V such that
+    A4: w'<>u1' & u',v',w',u1' are_COrtm_wrt x,y by A1,ANALORT:41;
+    reconsider u1=u1' as Element of S by A2;
+      w<>u1 & u,v '//' w,u1 by A4,ANALORT:57;
+    hence thesis;
+end;
+
+definition let IT be non empty AffinStruct;
+  attr IT is Oriented_Orthogonality_Space-like means
+  :Def1: (for u,u1,v,v1,w,w1,w2 being Element of IT holds
+  ((u,u '//' v,w) & (u,v '//' w,w) &
+  (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+  (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+  (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+  (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+  (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u))) &
+  (for u,v,w being Element of IT holds
+  ex u1 being Element of IT st
+  w<>u1 & w,u1 '//' u,v ) &
+  (for u,v,w being Element of IT holds
+  ex u1 being Element of IT st
+  w<>u1 & u,v '//' w,u1 );
+end;
+
+definition
+  cluster Oriented_Orthogonality_Space-like (non empty AffinStruct);
+  existence
+   proof
+     consider V,x,y such that A1:Gen x,y by ANALMETR:7;
+     take C = CESpace(V,x,y);
+     thus (for u,u1,v,v1,w,w1,w2 being Element of C holds
+  ((u,u '//' v,w) & (u,v '//' w,w) &
+  (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+  (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+  (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+  (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+  (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u))) &
+  (for u,v,w being Element of C holds
+  ex u1 being Element of C st
+  w<>u1 & w,u1 '//' u,v ) &
+  (for u,v,w being Element of C holds
+  ex u1 being Element of C st
+  w<>u1 & u,v '//' w,u1 ) by A1,Th1;
+   end;
+ end;
+
+definition
+  mode Oriented_Orthogonality_Space is Oriented_Orthogonality_Space-like
+   (non empty AffinStruct);
+end;
+
+canceled;
+
+theorem
+Th4:Gen x,y implies CMSpace(V,x,y) is Oriented_Orthogonality_Space
+proof
+assume Gen x,y;
+then (for u,u1,v,v1,w,w1,w2 being Element of CMSpace(V,x,y)
+holds
+((u,u '//' v,w) & (u,v '//' w,w) &
+ (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+ (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+ (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+ (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+ (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u))) &
+(for u,v,w being Element of CMSpace(V,x,y) holds
+  ex u1 being Element of CMSpace(V,x,y) st
+   w<>u1 & w,u1 '//' u,v ) &
+(for u,v,w being Element of CMSpace(V,x,y) holds
+  ex u1 being Element of CMSpace(V,x,y) st
+   w<>u1 & u,v '//' w,u1 ) by Th2;
+  hence thesis by Def1;
+end;
+
+theorem
+Th5:Gen x,y implies CESpace(V,x,y) is Oriented_Orthogonality_Space
+proof
+assume Gen x,y;
+then (for u,u1,v,v1,w,w1,w2 being Element of CESpace(V,x,y)
+holds
+((u,u '//' v,w) & (u,v '//' w,w) &
+ (u,v '//' u1,v1 & u,v '//' v1,u1 implies u=v or u1=v1) &
+ (u,v '//' u1,v1 & u,v '//' u1,w implies u,v '//' v1,w or u,v '//' w,v1) &
+ (u,v '//' u1,v1 implies v,u '//' v1,u1) &
+ (u,v '//' u1,v1 & u,v '//' v1,w implies u,v '//' u1,w) &
+ (u,u1 '//' v,v1 implies v,v1 '//' u,u1 or v,v1 '//' u1,u))) &
+(for u,v,w being Element of CESpace(V,x,y) holds
+  ex u1 being Element of CESpace(V,x,y) st
+   w<>u1 & w,u1 '//' u,v ) &
+(for u,v,w being Element of CESpace(V,x,y) holds
+  ex u1 being Element of CESpace(V,x,y) st
+   w<>u1 & u,v '//' w,u1 ) by Th1;
+  hence thesis by Def1;
+end;
+
+reserve AS for Oriented_Orthogonality_Space;
+reserve u,u1,u2,u3,v,v1,v2,v3,w,w1 for Element of AS;
+
+
+theorem
+  for u,v,w being Element of AS holds
+  ex u1 being Element of AS st
+    u1,w '//' u,v & u1<>w
+proof
+let u,v,w;
+consider u1 such that A1:u1<>w & w,u1 '//' v,u by Def1;
+  u1,w '//' u,v by A1,Def1;
+hence thesis by A1;
+end;
+
+canceled;
+
+theorem
+  for u,v,w being Element of AS holds
+  ex u1 being Element of AS st
+   u<>u1 & (v,w '//' u,u1 or v,w '//' u1,u)
+proof
+let u,v,w;
+consider u1 such that A1:u<>u1 & u,u1 '//' v,w by Def1;
+     u<>u1 & (v,w '//' u,u1 or v,w '//' u1,u) by A1,Def1;
+   hence thesis;
+   end;
+
+definition
+  let AS be Oriented_Orthogonality_Space;
+  let a,b,c,d be Element of AS;
+  pred a,b _|_ c,d means a,b '//' c,d or a,b '//' d,c;
+end;
+
+definition
+  let AS be Oriented_Orthogonality_Space;
+  let a,b,c,d be Element of AS;
+  pred a,b // c,d means
+  :Def3:ex e,f being Element of AS
+  st ( e<>f & e,f '//' a,b & e,f '//' c,d);
+end;
+
+definition let IT be Oriented_Orthogonality_Space;
+  attr IT is bach_transitive means
+  :Def4: for u,u1,u2,v,v1,v2,w,w1 being Element of IT holds
+     ( (u,u1 '//' v,v1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2 )
+        implies (w=w1 or v=v1 or u,u1 '//' u2,v2) );
+end;
+
+definition let IT be Oriented_Orthogonality_Space;
+  attr IT is right_transitive means
+  :Def5: for u,u1,u2,v,v1,v2,w,w1 being Element of IT holds
+   ( (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 )
+       implies (w=w1 or v=v1 or u,u1 '//' u2,v2) );
+end;
+
+definition let IT be Oriented_Orthogonality_Space;
+  attr IT is left_transitive means
+  :Def6: for u,u1,u2,v,v1,v2,w,w1 being Element of IT holds
+   ( (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1) );
+end;
+
+definition let IT be Oriented_Orthogonality_Space;
+  attr IT is Euclidean_like means
+  :Def7:for u,u1,v,v1 being Element of IT holds
+  (u,u1 '//' v,v1 implies v,v1 '//' u1,u );
+end;
+
+definition let IT be Oriented_Orthogonality_Space;
+  attr IT is Minkowskian_like means
+  :Def8:for u,u1,v,v1 being Element of IT
+      holds (u,u1 '//' v,v1 implies v,v1 '//' u,u1 );
+end;
+
+theorem
+  u,u1 // w,w & w,w // u,u1
+proof consider v; consider v1 such that A1: v1<>v & v,v1 '//' u,u1 by Def1;
+  v,v1 '//' w,w by Def1;
+hence thesis by A1,Def3;
+end;
+
+theorem
+  u,u1 // v,v1 implies v,v1 // u,u1
+proof
+assume u,u1 // v,v1;
+then ex w,w1 st w<>w1 &
+w,w1 '//' u,u1 & w,w1 '//' v,v1 by Def3;
+hence thesis by Def3;
+end;
+
+theorem
+  u,u1 // v,v1 implies u1,u // v1,v
+proof assume u,u1 // v,v1;
+then consider w,w1 such that
+A1:w<>w1 & w,w1 '//' u,u1 & w,w1 '//' v,v1 by Def3;
+  w1<>w & w1,w '//' u1,u & w1,w '//' v1,v by A1,Def1;
+hence thesis by Def3;end;
+
+theorem
+  AS is left_transitive iff (for v,v1,w,w1,u2,v2 holds
+ (v,v1 // u2,v2 & v,v1 '//' w,w1 & v<>v1 implies u2,v2 '//' w,w1))
+proof
+A1:AS is left_transitive implies (for v,v1,w,w1,u2,v2 holds
+ (v,v1 // u2,v2 & v,v1 '//' w,w1 & v<>v1 implies u2,v2 '//' w,w1))
+ proof
+assume A2: AS is left_transitive;
+
+let v,v1,w,w1,u2,v2;
+assume A3:v,v1 // u2,v2 & v,v1 '//' w,w1 & v<>v1;
+then ex u,u1 st u<>u1 &
+u,u1 '//' v,v1 & u,u1 '//' u2,v2 by Def3;
+hence thesis by A2,A3,Def6;
+end;
+   (for v,v1,w,w1,u2,v2 holds
+ (v,v1 // u2,v2 & v,v1 '//' w,w1 & v<>v1 implies u2,v2 '//' w,w1))
+implies AS is left_transitive
+proof
+   (for v,v1,w,w1,u2,v2 holds
+ (v,v1 // u2,v2 & v,v1 '//' w,w1 & v<>v1 implies u2,v2 '//' w,w1))
+implies (for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+   ( (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1) ) )
+  proof
+assume A4: (for v,v1,w,w1,u2,v2 holds
+ (v,v1 // u2,v2 & v,v1 '//' w,w1 & v<>v1 implies u2,v2 '//' w,w1));
+ let u,u1,u2,v,v1,v2,w,w1;
+  assume A5: (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 );
+    now assume u<>u1 & v<>v1;
+  then v,v1 // u2,v2 by A5,Def3;
+  hence thesis by A4,A5;
+  end;
+ hence thesis;
+end;
+hence thesis by Def6;
+end;
+hence thesis by A1;
+end;
+
+theorem
+Th13: AS is bach_transitive iff (for u,u1,u2,v,v1,v2 holds
+  (u,u1 '//' v,v1 & v,v1 // u2,v2 & v<>v1 implies u,u1 '//' u2,v2))
+proof
+A1:AS is bach_transitive implies (for u,u1,u2,v,v1,v2 holds
+  (u,u1 '//' v,v1 & v,v1 // u2,v2 & v<>v1 implies u,u1 '//' u2,v2))
+proof
+assume A2: AS is bach_transitive;
+let u,u1,u2,v,v1,v2;
+assume A3:u,u1 '//' v,v1 & v,v1 // u2,v2 & v<>v1;
+ then ex w,w1 st w<>w1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2 by Def3;
+hence thesis by A2,A3,Def4;
+end;
+   (for u,u1,u2,v,v1,v2 holds
+  (u,u1 '//' v,v1 & v,v1 // u2,v2 & v<>v1 implies u,u1 '//' u2,v2))
+implies AS is bach_transitive
+proof
+   (for u,u1,u2,v,v1,v2 holds
+  (u,u1 '//' v,v1 & v,v1 // u2,v2 & v<>v1 implies u,u1 '//' u2,v2))
+implies
+   for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+     ( (u,u1 '//' v,v1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2 )
+        implies (w=w1 or v=v1 or u,u1 '//' u2,v2) )
+proof
+assume A4: (for u,u1,u2,v,v1,v2 holds
+  (u,u1 '//' v,v1 & v,v1 // u2,v2 & v<>v1 implies u,u1 '//' u2,v2));
+let u,u1,u2,v,v1,v2,w,w1;
+assume A5:u,u1 '//' v,v1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2;
+  now assume w<>w1 & v<>v1;
+ then v,v1 // u2,v2 by A5,Def3;
+ hence thesis by A4,A5;
+end;
+hence thesis;
+end;
+hence thesis by Def4;
+end;
+hence thesis by A1;
+end;
+
+theorem
+  AS is bach_transitive implies for u,u1,v,v1,w,w1 holds (u,u1 // v,v1 &
+v,v1 // w,w1 & v<>v1 implies u,u1 // w,w1)
+proof assume A1:AS is bach_transitive;
+let u,u1,v,v1,w,w1;
+assume that A2: u,u1 // v,v1 and A3: v,v1 // w,w1 and A4: v<>v1;
+consider v2,v3 such that
+A5: v2<>v3 and A6: v2,v3 '//' u,u1 and A7: v2,v3 '//' v,v1 by A2,Def3;
+  v2,v3 '//' w,w1 by A1,A3,A4,A7,Th13;
+hence thesis by A5,A6,Def3;
+end;
+
+theorem
+Th15: Gen x,y & AS=CESpace(V,x,y) implies AS is
+Euclidean_like left_transitive right_transitive bach_transitive
+proof
+assume A1:Gen x,y & AS=CESpace(V,x,y);
+  A2: CESpace(V,x,y)=AffinStruct (# the carrier of V,CORTE(V,x,y) #)
+  by ANALORT:def 7;
+
+A3: now let
+ u,u1,u2,v,v1,v2,w,w1 be Element of AS;
+ thus
+   ((u,u1 '//' v,v1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 ))
+  proof
+reconsider u'=u,v'=v,w'=w,u1'=u1,v1'=v1,w1'=w1,u2'=u2,v2'=v2 as
+Element of V by A1,A2;
+  (u',u1',v',v1' are_COrte_wrt x,y & w',w1',v',v1' are_COrte_wrt x,y &
+w',w1',u2',v2' are_COrte_wrt x,y) implies (w'=w1' or v'=v1' or
+u',u1',u2',v2' are_COrte_wrt x,y) by A1,ANALORT:42;
+hence thesis by A1,ANALORT:56;
+  end;
+ end;
+A4: now let u,u1,u2,v,v1,v2,w,w1 be Element of AS;
+  thus ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 ))
+  proof
+reconsider u'=u,v'=v,w'=w,u1'=u1,v1'=v1,w1'=w1,u2'=u2,v2'=v2 as
+Element of V by A1,A2;
+  (u',u1',v',v1' are_COrte_wrt x,y & v',v1',w',w1' are_COrte_wrt x,y &
+u2',v2',w',w1' are_COrte_wrt x,y) implies (w'=w1' or v'=v1' or
+u',u1',u2',v2' are_COrte_wrt x,y) by A1,ANALORT:46;
+hence thesis by A1,ANALORT:56;
+  end;
+  end;
+A5: now let u,u1,u2,v,v1,v2,w,w1 be Element of AS;
+  thus ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1 ))
+  proof
+reconsider u'=u,v'=v,w'=w,u1'=u1,v1'=v1,w1'=w1,u2'=u2,v2'=v2 as
+Element of V by A1,A2;
+  (u',u1',v',v1' are_COrte_wrt x,y & v',v1',w',w1' are_COrte_wrt x,y &
+u',u1',u2',v2' are_COrte_wrt x,y) implies (u'=u1' or v'=v1' or
+u2',v2',w',w1' are_COrte_wrt x,y) by A1,ANALORT:48;
+hence thesis by A1,ANALORT:56;
+  end;
+  end;
+   now let u,u1,v,v1 be Element of AS;
+  thus (u,u1 '//' v,v1 implies v,v1 '//' u1,u )
+  proof
+reconsider u'=u,v'=v,u1'=u1,v1'=v1 as
+Element of V by A1,A2;
+  u',u1',v',v1' are_COrte_wrt x,y implies
+v',v1',u1',u' are_COrte_wrt x,y by A1,ANALORT:18;
+hence thesis by A1,ANALORT:56;
+  end;
+  end;
+hence thesis by A3,A4,A5,Def4,Def5,Def6,Def7;
+end;
+
+definition
+  cluster Euclidean_like left_transitive right_transitive bach_transitive
+          Oriented_Orthogonality_Space;
+existence
+proof consider V,x,y such that A1:Gen x,y by ANALMETR:7;
+reconsider AS=CESpace(V,x,y) as Oriented_Orthogonality_Space by A1,Th5;
+take AS; thus thesis by A1,Th15;
+end; end;
+
+theorem
+Th16:Gen x,y & AS=CMSpace(V,x,y) implies AS is Minkowskian_like
+left_transitive right_transitive bach_transitive
+proof
+assume A1:Gen x,y & AS=CMSpace(V,x,y);
+  A2: CMSpace(V,x,y)=AffinStruct (# the carrier of V,CORTM(V,x,y) #)
+  by ANALORT:def 8;
+
+A3: now let
+ u,u1,u2,v,v1,v2,w,w1 be Element of AS;
+ thus
+   ((u,u1 '//' v,v1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 ))
+  proof
+reconsider u'=u,v'=v,w'=w,u1'=u1,v1'=v1,w1'=w1,u2'=u2,v2'=v2 as
+Element of V by A1,A2;
+  (u',u1',v',v1' are_COrtm_wrt x,y & w',w1',v',v1' are_COrtm_wrt x,y &
+w',w1',u2',v2' are_COrtm_wrt x,y) implies (w'=w1' or v'=v1' or
+u',u1',u2',v2' are_COrtm_wrt x,y) by A1,ANALORT:43;
+hence thesis by A1,ANALORT:57;
+  end;
+ end;
+A4: now let u,u1,u2,v,v1,v2,w,w1 be Element of AS;
+  thus ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 ))
+  proof
+reconsider u'=u,v'=v,w'=w,u1'=u1,v1'=v1,w1'=w1,u2'=u2,v2'=v2 as
+Element of V by A1,A2;
+  (u',u1',v',v1' are_COrtm_wrt x,y & v',v1',w',w1' are_COrtm_wrt x,y &
+u2',v2',w',w1' are_COrtm_wrt x,y) implies (w'=w1' or v'=v1' or
+u',u1',u2',v2' are_COrtm_wrt x,y) by A1,ANALORT:47;
+hence thesis by A1,ANALORT:57;
+  end;
+  end;
+A5: now let u,u1,u2,v,v1,v2,w,w1 be Element of AS;
+  thus ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1 ))
+  proof
+reconsider u'=u,v'=v,w'=w,u1'=u1,v1'=v1,w1'=w1,u2'=u2,v2'=v2 as
+Element of V by A1,A2;
+  (u',u1',v',v1' are_COrtm_wrt x,y & v',v1',w',w1' are_COrtm_wrt x,y &
+u',u1',u2',v2' are_COrtm_wrt x,y) implies (u'=u1' or v'=v1' or
+u2',v2',w',w1' are_COrtm_wrt x,y) by A1,ANALORT:49;
+hence thesis by A1,ANALORT:57;
+  end;
+  end;
+   now let u,u1,v,v1 be Element of AS;
+  thus (u,u1 '//' v,v1 implies v,v1 '//' u,u1 )
+  proof
+reconsider u'=u,v'=v,u1'=u1,v1'=v1 as Element of V by A1,A2;
+  u',u1',v',v1' are_COrtm_wrt x,y implies
+v',v1',u',u1' are_COrtm_wrt x,y by A1,ANALORT:19;
+hence thesis by A1,ANALORT:57;
+  end;
+  end;
+hence thesis by A3,A4,A5,Def4,Def5,Def6,Def8;
+end;
+
+definition
+  cluster Minkowskian_like left_transitive right_transitive bach_transitive
+          Oriented_Orthogonality_Space;
+existence
+proof consider V,x,y such that A1:Gen x,y by ANALMETR:7;
+reconsider AS=CMSpace(V,x,y) as Oriented_Orthogonality_Space by A1,Th4;
+take AS; thus thesis by A1,Th16;
+end;
+end;
+
+theorem
+Th17:AS is left_transitive implies AS is right_transitive
+proof
+  (for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+( (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1 )))implies
+(for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+  ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 )))
+  proof
+  assume A1:for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+( (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1 ));
+let u,u1,u2,v,v1,v2,w,w1;
+  assume A2:
+  (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 );
+
+A3:( w=w1 or v=v1 or u,u1 '//' u2,v2 or u,u1 '//' v2,u2 ) implies
+ (w=w1 or v=v1 or u,u1 '//' u2,v2 )
+proof
+    now
+   A4: u=u1 implies thesis by Def1;
+       now assume v2,u2 '//' w,w1;
+         then u2,v2 '//' w1,w by Def1;
+         then u2=v2 or w=w1 by A2,Def1;
+         hence thesis;
+         end;
+     hence thesis by A1,A2,A4;
+     end;
+  hence thesis;
+end;
+ A5:now assume w,w1 '//' v,v1 & v,v1 '//' u,u1 & w,w1 '//' u2,v2;
+ then w=w1 or v=v1 or u2,v2 '//' u,u1 by A1;
+ hence thesis by A3,Def1;
+ end;
+ A6:now assume w,w1 '//' v,v1 & v,v1 '//' u,u1 & w,w1 '//' v2,u2;
+ then w=w1 or v=v1 or v2,u2 '//' u,u1 by A1;
+ hence thesis by A3,Def1;
+ end;
+ A7:now assume w,w1 '//' v,v1 & v,v1 '//' u1,u & w,w1 '//' u2,v2;
+ then w=w1 or v=v1 or u2,v2 '//' u1,u by A1;
+ then w=w1 or v=v1 or u1,u '//' u2,v2 or u1,u '//' v2,u2 by Def1;
+ hence thesis by A3,Def1;
+ end;
+ A8:now assume w,w1 '//' v,v1 & v,v1 '//' u1,u & w,w1 '//' v2,u2;
+ then w=w1 or v=v1 or v2,u2 '//' u1,u by A1;
+ then w=w1 or v=v1 or u1,u '//' u2,v2 or u1,u '//' v2,u2 by Def1;
+ hence thesis by A3,Def1;
+ end;
+ A9:now assume w,w1 '//' v1,v & v,v1 '//' u,u1 & w,w1 '//' u2,v2;
+ then w,w1 '//' v1,v & v1,v '//' u1,u & w,w1 '//' u2,v2 by Def1;
+ then w=w1 or v=v1 or u2,v2 '//' u1,u by A1;
+ then w=w1 or v=v1 or v2,u2 '//' u,u1 by Def1;
+ hence thesis by A3,Def1;
+ end;
+ A10:now assume w,w1 '//' v1,v & v,v1 '//' u,u1 & w,w1 '//' v2,u2;
+ then w,w1 '//' v1,v & v1,v '//' u1,u & w,w1 '//' v2,u2 by Def1;
+ then w=w1 or v=v1 or v2,u2 '//' u1,u by A1;
+ then w=w1 or v=v1 or u2,v2 '//' u,u1 by Def1;
+ hence thesis by A3,Def1;
+ end;
+ A11:now assume w,w1 '//' v1,v & v,v1 '//' u1,u & w,w1 '//' u2,v2;
+ then w,w1 '//' v1,v & v1,v '//' u,u1 & w,w1 '//' u2,v2 by Def1;
+ then w=w1 or v1=v or u2,v2 '//' u,u1 by A1;
+ hence thesis by A3,Def1;
+ end;
+   now assume w,w1 '//' v1,v & v,v1 '//' u1,u & w,w1 '//' v2,u2;
+ then w,w1 '//' v1,v & v1,v '//' u,u1 & w,w1 '//' v2,u2 by Def1;
+ then w=w1 or v=v1 or v2,u2 '//' u,u1 by A1;
+ hence thesis by A3,Def1;
+ end;
+ hence thesis by A2,A5,A6,A7,A8,A9,A10,A11,Def1;
+ end;
+ hence thesis by Def5,Def6;
+end;
+
+theorem
+  AS is left_transitive implies AS is bach_transitive
+proof
+  (for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+( (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1 ))) implies
+(for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+  ((u,u1 '//' v,v1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2)))
+proof
+A1:AS is left_transitive implies AS is right_transitive by Th17;
+
+assume A2:for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+( (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1 ));
+let u,u1,u2,v,v1,v2,w,w1;
+  assume A3:
+  u,u1 '//' v,v1 & w,w1 '//' v,v1 & w,w1 '//' u2,v2;
+
+A4:( v=v1 or w=w1 or u,u1 '//' u2,v2 or u,u1 '//' v2,u2)
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2)
+  proof
+  assume A5: v=v1 or w=w1 or u,u1 '//' u2,v2 or u,u1 '//' v2,u2;
+    now assume A6:u,u1 '//' v2,u2 & u<>u1 & v<>v1 & w<>w1;
+      then A7: v2,u2 '//' u,u1 or v2,u2 '//' u1,u by Def1;
+     A8:now assume A9:u2,v2 '//' u1,u;
+        then u2,v2 '//' u1,u & u1,u '//' v1,v & w1,w '//' v1,v by A3,Def1;
+        then A10:u2,v2 '//' w1,w by A1,A2,A6,Def5,Def6;
+          u2,v2 '//' u1,u & u1,u '//' u2,v2 & w,w1 '//' u2,v2 by A3,A6,A9,Def1;
+        then A11:u2,v2 '//' w,w1 or u2=v2 by A1,A2,A6,Def5,Def6;
+          now assume u2,v2 '//' w,w1;
+        then w=w1 or u2=v2 by A10,Def1;
+        hence thesis by A6;
+        end;
+        hence thesis by A11,Def1;
+        end;
+       now assume A12:u2,v2 '//' u,u1;
+        then A13:u2,v2 '//' w,w1 by A1,A2,A3,A6,Def5,Def6;
+          u2,v2 '//' u,u1 & u,u1 '//' v2,u2 & w1,w '//' v2,u2 by A3,A6,A12,Def1
+;
+        then A14:u2,v2 '//' w1,w or u2=v2 by A1,A2,A6,Def5,Def6;
+          now assume u2,v2 '//' w1,w;
+        then w=w1 or u2=v2 by A13,Def1;
+        hence thesis by A6;
+        end;
+        hence thesis by A14,Def1;
+        end;
+      hence thesis by A7,A8,Def1;
+      end;
+ hence thesis by A5,Def1;
+ end;
+ A15: u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 implies thesis
+   by A1,A2,Def5,Def6;
+  A16:now assume u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w1,w;
+     then u,u1 '//' v,v1 & v,v1 '//' w,w1 & v2,u2 '//' w,w1 by Def1;
+     hence thesis by A1,A2,A4,Def5,Def6;
+     end;
+ A17: u,u1 '//' v,v1 & v,v1 '//' w1,w & u2,v2 '//' w1,w implies thesis
+  by A1,A2,Def5,Def6;
+    now assume u,u1 '//' v,v1 & v,v1 '//' w1,w & u2,v2 '//' w,w1;
+     then u,u1 '//' v,v1 & v,v1 '//' w1,w & v2,u2 '//' w1,w by Def1;
+     hence thesis by A1,A2,A4,Def5,Def6;
+     end;
+  hence thesis by A3,A15,A16,A17,Def1;
+  end;
+hence thesis by Def4,Def6;
+end;
+
+theorem
+  AS is bach_transitive implies (AS is right_transitive iff
+  (for u,u1,v,v1,u2,v2 holds
+  ((u,u1 '//' u2,v2 & v,v1 '//' u2,v2 & u2<>v2) implies u,u1 // v,v1)))
+  proof
+  assume A1:AS is bach_transitive;
+    (for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+  ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 ))) iff
+  ((for u,u1,v,v1,u2,v2 holds
+  ((u,u1 '//' u2,v2 & v,v1 '//' u2,v2 & u2<>v2) implies u,u1 // v,v1)))
+  proof
+  A2:(for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+  ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 ))) implies
+  (for u,u1,v,v1,u2,v2 holds
+  ((u,u1 '//' u2,v2 & v,v1 '//' u2,v2 & u2<>v2 ) implies u,u1 // v,v1))
+  proof
+  assume A3:for u,u1,u2,v,v1,v2,w,w1 being Element of AS
+   holds (u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 );
+  let u,u1,v,v1,u2,v2;
+  assume A4:u,u1 '//' u2,v2 & v,v1 '//' u2,v2 & u2<>v2;
+  consider w being Element of AS;
+  consider w1 such that A5:w<>w1 & w,w1 '//' u,u1 by Def1;
+  A6:now assume u<>u1;
+  then w,w1 '//' v,v1 by A3,A4,A5;
+  hence thesis by A5,Def3;
+  end;
+    now assume A7:u=u1;
+  consider w being Element of AS;
+  consider w1 such that A8:w<>w1 & w,w1 '//' v,v1 by Def1;
+    w<>w1 & w,w1 '//' v,v1 & w,w1 '//' u,u by A8,Def1;
+  hence thesis by A7,Def3;
+  end;
+  hence thesis by A6;
+  end;
+    (for u,u1,v,v1,u2,v2 holds
+  ((u,u1 '//' u2,v2 & v,v1 '//' u2,v2 & u2<>v2) implies u,u1 // v,v1))
+  implies (for u,u1,u2,v,v1,v2,w,w1 being Element of AS
+  holds ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1 )
+  implies (w=w1 or v=v1 or u,u1 '//' u2,v2 )))
+  proof
+  assume A9:  for u,u1,v,v1,u2,v2 holds
+  (u,u1 '//' u2,v2 & v,v1 '//' u2,v2 & u2<>v2) implies u,u1 // v,v1;
+  let u,u1,u2,v,v1,v2,w,w1;
+  assume A10:u,u1 '//' v,v1 & v,v1 '//' w,w1 & u2,v2 '//' w,w1;
+    now assume w<>w1 & v<>v1;
+  then v,v1 // u2,v2 by A9,A10;
+  then ex u3,v3 st u3<>v3 & u3,v3 '//' v,v1 & u3,v3 '//' u2,v2 by Def3;
+  hence thesis by A1,A10,Def4;
+  end;
+  hence thesis;
+  end;
+  hence thesis by A2;
+  end;
+hence thesis by Def5;
+end;
+
+theorem
+  AS is right_transitive & (AS is Euclidean_like or AS is Minkowskian_like)
+implies AS is left_transitive
+proof assume A1:AS is right_transitive;
+   (for u,u1,v,v1 being Element of AS
+ holds (u,u1 '//' v,v1 implies v,v1 '//' u,u1 ) or
+ for u,u1,v,v1 being Element of AS
+  holds (u,u1 '//' v,v1 implies v,v1 '//' u1,u )) implies
+  (for u,u1,u2,v,v1,v2,w,w1 being Element of AS holds
+  ((u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2 )
+  implies (u=u1 or v=v1 or u2,v2 '//' w,w1 )))
+  proof
+   assume A2:
+ for u,u1,v,v1 being Element of AS
+   holds (u,u1 '//' v,v1 implies v,v1 '//' u,u1 ) or
+ for u,u1,v,v1 being Element of AS
+   holds (u,u1 '//' v,v1 implies v,v1 '//' u1,u );
+let u,u1,u2,v,v1,v2,w,w1;
+assume A3:u,u1 '//' v,v1 & v,v1 '//' w,w1 & u,u1 '//' u2,v2;
+  A4:now assume A5:
+ for u,u1,v,v1 being Element of AS
+  holds (u,u1 '//' v,v1 implies v,v1 '//' u,u1 );
+      now assume A6:u<>u1 & v<>v1;
+          v,v1 '//' u,u1 & w,w1 '//' v,v1 & u2,v2 '//' u,u1 by A3,A5;
+        then w,w1 '//' u2,v2 by A1,A6,Def5;
+        hence thesis by A5;
+        end;
+  hence thesis;
+  end;
+    now assume A7:
+ for u,u1,v,v1 being Element of AS
+  holds (u,u1 '//' v,v1 implies v,v1 '//' u1,u );
+      now assume A8:u<>u1 & v<>v1;
+          v,v1 '//' u1,u & w,w1 '//' v1,v & u2,v2 '//' u1,u by A3,A7;
+        then v,v1 '//' u1,u & w1,w '//' v,v1 & u2,v2 '//' u1,u by Def1;
+        then w1,w '//' u2,v2 by A1,A8,Def5;
+        hence thesis by A7;
+        end;
+  hence thesis;
+  end;
+hence thesis by A2,A4;
+end;
+hence thesis by Def6,Def7,Def8;
+end;

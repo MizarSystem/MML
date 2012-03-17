@@ -1,0 +1,219 @@
+:: On the Lattice of Subalgebras of a Universal Algebra
+::  by Miros{\l}aw Jan Paszek
+::
+:: Received May 23, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary UNIALG_1, UNIALG_2, BOOLE, BINOP_1, GROUP_2, FUNCT_1, FINSEQ_1,
+      FINSEQ_4, RELAT_1, FINSEQ_2, CQC_SIM1, SETFAM_1, LATTICES, SUBSET_1,
+      BHSP_3, LATTICE3, VECTSP_8, UNIALG_3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, SETFAM_1, RELAT_1,
+      FUNCT_1, STRUCT_0, FUNCT_2, FINSEQ_1, FINSEQ_2, BINOP_1, LATTICES,
+      LATTICE3, UNIALG_1, RLVECT_1, UNIALG_2;
+ constructors DOMAIN_1, BINOP_1, LATTICE3, RLVECT_1, UNIALG_2;
+ clusters SUBSET_1, UNIALG_2, RELSET_1, STRUCT_0, ARYTM_3, LATTICES, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin
+
+reserve U0 for Universal_Algebra,
+        U1 for SubAlgebra of U0,
+        o for operation of U0;
+
+definition let U0;
+ mode SubAlgebra-Family of U0 means
+:: UNIALG_3:def 1
+     for U1 be set st U1 in it holds U1 is SubAlgebra of U0;
+end;
+
+definition let U0;
+ cluster non empty SubAlgebra-Family of U0;
+end;
+
+definition let U0;
+  redefine func Sub(U0) -> non empty SubAlgebra-Family of U0;
+
+let U00 be non empty SubAlgebra-Family of U0;
+  mode Element of U00 -> SubAlgebra of U0;
+end;
+
+definition let U0;
+ redefine func UniAlg_join(U0) -> BinOp of Sub(U0);
+  func UniAlg_meet(U0) -> BinOp of Sub(U0);
+end;
+
+definition let U0;
+ let u be Element of Sub(U0);
+ func carr u -> Subset of U0 means
+:: UNIALG_3:def 2
+                 ex U1 being SubAlgebra of U0 st
+                                        u = U1 & it = the carrier of U1;
+end;
+
+definition let U0;
+ func Carr U0 -> Function of Sub(U0), bool the carrier of U0 means
+:: UNIALG_3:def 3
+  for u being Element of Sub(U0) holds it.u = carr u;
+end;
+
+theorem :: UNIALG_3:1
+ for u being set holds
+     u in Sub(U0) iff ex U1 be strict SubAlgebra of U0 st u = U1;
+
+theorem :: UNIALG_3:2
+   for H being non empty Subset of U0
+  for o holds arity o = 0 implies (H is_closed_on o iff o.{} in H);
+
+theorem :: UNIALG_3:3
+  for U1 be SubAlgebra of U0 holds the carrier of U1 c= the carrier of U0;
+
+theorem :: UNIALG_3:4
+   for H being non empty Subset of U0
+  for o holds
+       (H is_closed_on o & (arity o = 0)) implies ((o/.H) = o);
+
+theorem :: UNIALG_3:5
+         Constants(U0) = { o.{} where o is operation of U0: arity o = 0 };
+
+theorem :: UNIALG_3:6
+ for U0 be with_const_op Universal_Algebra
+  for U1 be SubAlgebra of U0 holds Constants(U0) = Constants(U1);
+
+definition
+ let U0 be with_const_op Universal_Algebra;
+ cluster -> with_const_op SubAlgebra of U0;
+  end;
+
+theorem :: UNIALG_3:7
+   for U0 be with_const_op Universal_Algebra
+  for U1,U2 be SubAlgebra of U0 holds Constants(U1) = Constants(U2);
+
+definition let U0;
+ redefine func Carr U0 -> Function of Sub(U0), bool the carrier of U0 means
+:: UNIALG_3:def 4
+  for u being Element of Sub(U0),
+     U1 being SubAlgebra of U0 st u = U1 holds it.u = the carrier of U1;
+end;
+
+theorem :: UNIALG_3:8
+   for H being strict SubAlgebra of U0
+  for u being Element of U0 holds u in (Carr U0).H iff u in H;
+
+theorem :: UNIALG_3:9
+ for H be non empty Subset of Sub(U0) holds ((Carr U0).:H) is non empty;
+
+theorem :: UNIALG_3:10
+   for U0 being with_const_op Universal_Algebra
+  for U1 being strict SubAlgebra of U0 holds Constants(U0) c= (Carr U0).U1;
+
+theorem :: UNIALG_3:11
+ for U0 being with_const_op Universal_Algebra
+  for U1 be SubAlgebra of U0
+   for a be set holds
+                a is Element of Constants(U0) implies a in the carrier of U1;
+
+theorem :: UNIALG_3:12
+ for U0 being with_const_op Universal_Algebra
+  for H be non empty Subset of Sub(U0) holds
+     meet ((Carr U0).:H) is non empty Subset of U0;
+
+theorem :: UNIALG_3:13
+ for U0 being with_const_op Universal_Algebra holds
+     the carrier of UnSubAlLattice(U0) = Sub(U0);
+
+theorem :: UNIALG_3:14
+ for U0 being with_const_op Universal_Algebra
+  for H be non empty Subset of Sub(U0)
+   for S being non empty Subset of U0 st
+       S = meet ((Carr U0).:H) holds S is opers_closed;
+
+definition
+ let U0 be with_const_op strict Universal_Algebra;
+  let H be non empty Subset of Sub(U0);
+  func meet H -> strict SubAlgebra of U0 means
+:: UNIALG_3:def 5
+                                the carrier of it = meet ((Carr U0).:H);
+end;
+
+theorem :: UNIALG_3:15
+ for U0 being with_const_op Universal_Algebra
+  for l1,l2 being Element of UnSubAlLattice(U0),
+   U1,U2 being strict SubAlgebra of U0 st l1 = U1 & l2 = U2 holds
+                      l1 "\/" l2 = U1 "\/" U2;
+
+theorem :: UNIALG_3:16
+   for U0 being with_const_op Universal_Algebra
+  for l1,l2 being Element of UnSubAlLattice(U0),
+      U1,U2 being strict SubAlgebra of U0 st l1 = U1 & l2 = U2 holds
+                         l1 "/\" l2 = U1 /\ U2;
+
+theorem :: UNIALG_3:17
+ for U0 being with_const_op Universal_Algebra
+  for l1,l2 being Element of UnSubAlLattice(U0),
+      U1,U2 being strict SubAlgebra of U0 st l1 = U1 & l2 = U2 holds
+                         l1 [= l2 iff the carrier of U1 c= the carrier of U2;
+
+theorem :: UNIALG_3:18
+   for U0 being with_const_op Universal_Algebra
+  for l1,l2 being Element of UnSubAlLattice(U0),
+      U1,U2 being strict SubAlgebra of U0 st l1 = U1 & l2 = U2 holds
+                         l1 [= l2 iff U1 is SubAlgebra of U2;
+
+theorem :: UNIALG_3:19
+ for U0 being with_const_op strict Universal_Algebra holds
+                                   UnSubAlLattice(U0) is bounded;
+
+definition
+  let U0 be with_const_op strict Universal_Algebra;
+  cluster UnSubAlLattice U0 -> bounded;
+end;
+
+theorem :: UNIALG_3:20
+ for U0 being with_const_op strict Universal_Algebra
+  for U1 be strict SubAlgebra of U0 holds
+      GenUnivAlg(Constants(U0)) /\ U1 = GenUnivAlg(Constants(U0));
+
+theorem :: UNIALG_3:21
+   for U0 being with_const_op strict Universal_Algebra holds
+                          Bottom
+(UnSubAlLattice(U0)) = GenUnivAlg(Constants(U0));
+
+theorem :: UNIALG_3:22
+ for U0 being with_const_op strict Universal_Algebra
+  for U1 be SubAlgebra of U0
+   for H be Subset of U0 st H = the carrier of U0 holds
+                                    GenUnivAlg(H) "\/" U1 = GenUnivAlg(H);
+
+theorem :: UNIALG_3:23
+ for U0 being with_const_op strict Universal_Algebra
+  for H be Subset of U0 st H = the carrier of U0 holds
+                           Top (UnSubAlLattice(U0)) = GenUnivAlg(H);
+
+theorem :: UNIALG_3:24
+   for U0 being with_const_op strict Universal_Algebra holds
+                            Top (UnSubAlLattice(U0)) = U0;
+
+theorem :: UNIALG_3:25
+   for U0 being with_const_op strict Universal_Algebra holds
+                                   UnSubAlLattice(U0) is complete;
+
+definition
+  let U01,U02 be with_const_op Universal_Algebra;
+   let F be Function of the carrier of U01, the carrier of U02;
+    func FuncLatt F -> Function of the carrier of UnSubAlLattice(U01),
+                                   the carrier of UnSubAlLattice(U02) means
+:: UNIALG_3:def 6
+            for U1 being strict SubAlgebra of U01,
+                      H being Subset of U02 st
+                      H = F.: the carrier of U1 holds
+                                               it.U1 = GenUnivAlg(H);
+  end;
+
+theorem :: UNIALG_3:26
+   for U0 being with_const_op strict Universal_Algebra
+  for F being Function of the carrier of U0, the carrier of U0
+      st F = id the carrier of U0 holds
+                    FuncLatt F = id the carrier of UnSubAlLattice(U0);

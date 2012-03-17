@@ -1,0 +1,170 @@
+:: Extensions of Mappings on Generator Set
+::  by Artur Korni{\l}owicz
+::
+:: Received March 23, 1995
+:: Copyright (c) 1995 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, MSUALG_1, ZF_REFLE, PBOOLE, PRALG_1, MSUALG_3, RELAT_1,
+      BOOLE, FUNCT_1, FUNCT_6, MSUALG_2, REALSET1, NATTRA_1, MSAFREE, LANG1,
+      MCART_1, TREES_4, CQC_LANG, ALG_1, GROUP_6, FREEALG, PRELAMB, UNIALG_2,
+      QC_LANG1, TDGROUP, CARD_3, FINSEQ_4;
+ notation TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1, MCART_1,
+      STRUCT_0, LANG1, FUNCT_2, CARD_3, FINSEQ_4, FUNCT_6, TREES_4, DTCONSTR,
+      PBOOLE, CQC_LANG, PRALG_1, MSUALG_1, MSUALG_2, MSUALG_3, AUTALG_1,
+      MSAFREE;
+ constructors CQC_LANG, MSUALG_3, AUTALG_1, MSAFREE, FINSEQ_4, MEMBERED,
+      XBOOLE_0;
+ clusters FUNCT_1, MSAFREE, MSUALG_1, MSUALG_2, MSUALG_3, PBOOLE, PRALG_1,
+      RELSET_1, STRUCT_0, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin :: Preliminaries
+
+reserve S for non void non empty ManySortedSign,
+        U1, U2, U3 for non-empty MSAlgebra over S,
+        I for set,
+        A for ManySortedSet of I,
+        B, C for non-empty ManySortedSet of I;
+
+theorem :: EXTENS_1:1
+for R be Relation, X, Y be set st X c= Y holds (R|Y).:X = R.:X;
+
+canceled;
+
+theorem :: EXTENS_1:3
+for f be Function-yielding Function holds dom doms f = dom f;
+
+theorem :: EXTENS_1:4
+for f be Function-yielding Function holds dom rngs f = dom f;
+
+begin :: Facts about Many Sorted Functions
+
+theorem :: EXTENS_1:5
+  for F be ManySortedFunction of A, B
+ for X be ManySortedSubset of A st A c= X
+  holds F || X = F;
+
+theorem :: EXTENS_1:6
+  for A, B be ManySortedSet of I
+ for M be ManySortedSubset of A
+  for F be ManySortedFunction of A, B
+ holds F.:.:M c= F.:.:A;
+
+theorem :: EXTENS_1:7
+  for F be ManySortedFunction of A, B
+ for M1, M2 be ManySortedSubset of A st M1 c= M2
+  holds (F||M2).:.:M1 = F.:.:M1;
+
+theorem :: EXTENS_1:8
+for F be ManySortedFunction of A, B
+ for G be ManySortedFunction of B, C
+  for X be ManySortedSubset of A
+ holds (G ** F) || X = G ** (F || X);
+
+theorem :: EXTENS_1:9
+  for A, B be ManySortedSet of I st A is_transformable_to B
+ for F be ManySortedFunction of A, B
+  for C be ManySortedSet of I st B is ManySortedSubset of C
+ holds F is ManySortedFunction of A, C;
+
+theorem :: EXTENS_1:10
+  for F be ManySortedFunction of A, B
+ for X be ManySortedSubset of A
+  holds F is "1-1" implies F || X is "1-1";
+
+begin :: doms & rngs of Many Sorted Function
+
+definition let I; let F be ManySortedFunction of I;
+ redefine func doms F -> ManySortedSet of I;
+ redefine func rngs F -> ManySortedSet of I;
+end;
+
+theorem :: EXTENS_1:11
+  for F be ManySortedFunction of A, B
+ for X be ManySortedSubset of A
+  holds doms (F || X) c= doms F;
+
+theorem :: EXTENS_1:12
+  for F be ManySortedFunction of A, B
+ for X be ManySortedSubset of A
+  holds rngs (F || X) c= rngs F;
+
+theorem :: EXTENS_1:13
+  for A, B be ManySortedSet of I
+ for F be ManySortedFunction of A, B
+  holds F is "onto" iff rngs F = B;
+
+theorem :: EXTENS_1:14
+  for X be non-empty ManySortedSet of the carrier of S
+ holds rngs Reverse X = X;
+
+theorem :: EXTENS_1:15
+  for F be ManySortedFunction of A, B
+ for G be ManySortedFunction of B, C
+  for X be non-empty ManySortedSubset of B st rngs F c= X
+ holds (G || X) ** F = G ** F;
+
+begin :: Other properties of "onto" & "1-1"
+
+theorem :: EXTENS_1:16
+for F be ManySortedFunction of A, B
+ holds F is "onto" iff
+  for C for G, H be ManySortedFunction of B, C st G**F = H**F holds G = H;
+
+theorem :: EXTENS_1:17
+for F be ManySortedFunction of A, B st A is non-empty & B is non-empty
+ holds F is "1-1" iff
+  for C be ManySortedSet of I
+   for G, H be ManySortedFunction of C, A st F**G = F**H holds G = H;
+
+begin :: Extensions of Mappings on Generator Set
+
+theorem :: EXTENS_1:18
+for X be non-empty ManySortedSet of the carrier of S
+ for h1, h2 be ManySortedFunction of FreeMSA X, U1 st
+  h1 is_homomorphism FreeMSA X, U1 &
+   h2 is_homomorphism FreeMSA X, U1 &
+    h1 || FreeGen (X) = h2 || FreeGen (X)
+ holds h1 = h2;
+
+theorem :: EXTENS_1:19
+  for F be ManySortedFunction of U1, U2 st F is_homomorphism U1, U2
+ holds F is_epimorphism U1, U2 implies
+  for U3 be non-empty MSAlgebra over S
+   for h1, h2 be ManySortedFunction of U2, U3 st
+    h1 is_homomorphism U2, U3 & h2 is_homomorphism U2, U3
+     holds (h1**F = h2**F implies h1 = h2);
+
+theorem :: EXTENS_1:20
+  for F be ManySortedFunction of U2, U3 st F is_homomorphism U2, U3
+ holds F is_monomorphism U2, U3 iff
+  for U1 be non-empty MSAlgebra over S
+   for h1, h2 be ManySortedFunction of U1, U2 st
+    h1 is_homomorphism U1, U2 & h2 is_homomorphism U1, U2
+     holds (F**h1 = F**h2 implies h1 = h2);
+
+definition let S, U1;
+ cluster non-empty GeneratorSet of U1;
+end;
+
+theorem :: EXTENS_1:21
+  for U1 being MSAlgebra over S
+ for A, B being MSSubset of U1 st A is ManySortedSubset of B
+ holds GenMSAlg A is MSSubAlgebra of GenMSAlg B;
+
+theorem :: EXTENS_1:22
+  for U1 being MSAlgebra over S, U2 being MSSubAlgebra of U1
+  for B1 being MSSubset of U1, B2 being MSSubset of U2 st B1 = B2
+ holds GenMSAlg B1 = GenMSAlg B2;
+
+theorem :: EXTENS_1:23
+  for U1 being strict non-empty MSAlgebra over S
+ for U2 being non-empty MSAlgebra over S
+  for Gen being GeneratorSet of U1
+   for h1, h2 being ManySortedFunction of U1, U2 st
+    h1 is_homomorphism U1, U2 & h2 is_homomorphism U1, U2 &
+     h1 || Gen = h2 || Gen
+ holds h1 = h2;

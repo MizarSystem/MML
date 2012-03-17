@@ -1,0 +1,1530 @@
+:: Recursive Definitions
+::  by Krzysztof Hryniewiecki
+::
+:: Received September 4, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, RELAT_1, PARTFUN1, TARSKI, ARYTM_1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, REAL_1,
+      NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FUNCT_2, DOMAIN_1;
+ constructors REAL_1, NAT_1, FINSEQ_1, FUNCT_2, DOMAIN_1, XREAL_0, MEMBERED,
+      XBOOLE_0;
+ clusters FUNCT_1, RELSET_1, FINSEQ_1, SUBSET_1, ARYTM_3, MEMBERED, ZFMISC_1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems AXIOMS, TARSKI, REAL_1, NAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, RELAT_1,
+      PARTFUN1, CARD_1, XBOOLE_1, XCMPLX_1;
+ schemes NAT_1, FUNCT_1, FUNCT_2, FINSEQ_1;
+
+begin
+
+reserve n,m,k for Nat,
+        D for non empty set,
+        Z,x,y,z,y1,y2 for set,
+        p,q for FinSequence;
+
+Lm1: for p being FinSequence of D st 1 <= n & n <= len p holds
+            p.n is Element of D
+  proof let p be FinSequence of D;
+    assume 1 <= n & n <= len p;
+    then n in Seg len p by FINSEQ_1:3;
+    then n in dom p by FINSEQ_1:def 3;
+    then A1: p.n in rng p by FUNCT_1:def 5;
+      rng p c= D by FINSEQ_1:def 4;
+   hence p.n is Element of D by A1;
+  end;
+
+definition let D be set, p be PartFunc of D,NAT; let n be Element of D;
+ redefine func p.n -> Nat;
+  coherence
+    proof
+      per cases;
+      suppose n in dom p;
+      hence p.n is Nat by PARTFUN1:27;
+      suppose not n in dom p;
+      hence p.n is Nat by CARD_1:51,FUNCT_1:def 4;
+    end;
+end;
+
+::::::::::::::::::::::::::::::::::::::::
+::       Schemes of existence         ::
+::::::::::::::::::::::::::::::::::::::::
+
+scheme RecEx{A() -> set,P[set,set,set]}:
+   ex f being Function st dom f = NAT & f.0 = A() &
+     for n being Element of NAT holds P[n,f.n,f.(n+1)]
+ provided
+  A1: for n being Nat for x being set
+       ex y being set st P[n,x,y] and
+  A2: for n being Nat for x,y1,y2 being set
+         st P[n,x,y1] & P[n,x,y2] holds y1=y2
+proof
+   deffunc S(Nat) = {k : k <= $1};
+  A3: for p,q being Function,k st dom p = S(k) & dom q = S(k) & p.0 = q.0 &
+            for n st n < k holds P[n,p.n,p.(n+1)] & P[n,q.n,q.(n+1)]
+          holds p = q
+          proof let p,q be Function;let k;
+            defpred Z[Nat] means $1 <= k implies p.$1 = q.$1;
+            assume A4: dom p = S(k) & dom q = S(k) & p.0 = q.0 &
+            for n st n < k holds P[n,p.n,p.(n+1)] & P[n,q.n,q.(n+1)];
+            then A5: Z[0];
+            A6: for n be Nat st Z[n] holds Z[n+1]
+               proof let n; assume A7: n <= k implies p.n = q.n;
+                  assume n+1 <= k;
+                   then n < k by NAT_1:38;
+                   then P[n,p.n,p.(n+1)] & P[n,p.n,q.(n+1)] by A4,A7;
+                  hence p.(n+1) = q.(n+1) by A2;
+               end;
+            A8: for n holds Z[n] from Ind(A5,A6);
+              for x st x in S(k) holds p.x = q.x
+              proof let x; assume x in S(k);
+                 then ex m st m=x & m <= k;
+               hence p.x = q.x by A8;
+              end;
+            hence p = q by A4,FUNCT_1:9;
+          end;
+  A9: for n ex p being Function st dom p = S(n) & p.0 = A() &
+              for k st k < n holds P[k,p.k,p.(k+1)]
+       proof
+       defpred Z[Nat] means ex p being Function st dom p = S($1) & p.0 = A() &
+              for k st k < $1 holds P[k,p.k,p.(k+1)];
+       A10: Z[0]
+           proof
+             deffunc F(set)= A();
+             consider s being Function such that A11:
+               dom s = S(0) & for x st x in S(0) holds s.x = F(x) from Lambda;
+             take s;
+             thus dom s = S(0) by A11;
+                   0 in S(0);
+            hence s.0 = A() by A11;
+            thus thesis by NAT_1:18;
+           end;
+       A12: for n st Z[n] holds Z[n+1]
+           proof let n;
+             given p being Function such that A13:
+               dom p = S(n) & p.0 = A() &
+              for k st k < n holds P[k,p.k,p.(k+1)];
+              consider z such that A14: P[n,p.n,z] by A1;
+               defpred ST[set,set] means (for k st k=$1 holds
+                      (k <= n implies $2 = p.k) &
+                      (k=n+1 implies $2 = z ));
+              A15: for x,y1,y2 being set st x in S(n+1) &
+              ST[x,y1] & ST[x,y2] holds y1 = y2
+                 proof let x,y1,y2 be set;
+                  assume A16: x in S(n+1) &
+                    (for k st k=x holds
+                      (k <= n implies y1 = p.k) &
+                      (k=n+1 implies y1 = z )) &
+                    (for k st k=x holds
+                      (k <= n implies y2 = p.k) &
+                      (k=n+1 implies y2 = z ));
+ then A17:                    ex m st m=x & m <= n+1;
+                    then reconsider x as Nat;
+                     A18: now assume A19: x = n+1;
+                          hence y1 = z by A16 .= y2 by A16,A19;
+                         end;
+                           now assume A20: x <= n;
+                           hence y1 = p.x by A16 .= y2 by A16,A20;
+                         end;
+                      hence thesis by A17,A18,NAT_1:26;
+                 end;
+
+              A21: for x st x in S(n+1) ex y st ST[x,y]
+                   proof let x; assume x in S(n+1);
+ then A22:                     ex m st m=x & m <= n+1;
+                     then reconsider t=x as Nat;
+
+                     A23: t = n+1 implies thesis
+                          proof assume A24: t=n+1;
+                            take z;
+                            let k such that A25: k=x;
+                            thus k <= n implies z=p.k
+                              proof assume k <= n;
+                                then n+1 <= n+0 by A24,A25;
+                               hence thesis by REAL_1:53;
+                              end;
+                            thus thesis;
+                          end;
+
+                           t <= n implies thesis
+                           proof assume A26: t <= n;
+                             take p.x; let k; assume A27: k=x;
+                             hence k <= n implies p.x = p.k;
+
+                             assume k=n+1;
+                             then n+1 <= n+0 by A26,A27;
+                            hence thesis by REAL_1:53;
+                           end;
+                      hence thesis by A22,A23,NAT_1:26;
+                   end;
+
+               consider q being Function such that A28: dom q = S(n+1) &
+                  for x st x in S(n+1) holds ST[x,q.x] from FuncEx(A15,A21);
+               take q;
+               thus dom q = S(n+1) by A28;
+               thus q.0 = A()
+                 proof
+                     0 <= n+1 by NAT_1:18;
+                   then A29: 0 in S(n+1);
+                     0 <= n by NAT_1:18;
+                  hence q.0 = A() by A13,A28,A29;
+                 end;
+               let k such that
+A30:             k < n+1;
+             A31: now assume A32: k = n;
+                   then k+1 in S(n+1);
+                   then A33: P[k,p.k,q.(k+1)] by A14,A28,A32;
+                      k <= n+1 by A32,NAT_1:29;
+                    then k in S(n+1);
+                  hence P[k,q.k,q.(k+1)] by A28,A32,A33;
+                end;
+                  now assume k <> n;
+                    then A34: k+1 <> n+1 by XCMPLX_1:2;
+A35:                    k+1 <= n+1 by A30,NAT_1:38;
+                    then A36: k+1 <= n by A34,NAT_1:26;
+                    A37: k+1 in S(n+1) by A35;
+
+A38:                 k < n by A36,NAT_1:38;
+                        then P[k,p.k,p.(k+1)] by A13;
+                    then A39: P[k,p.k,q.(k+1)] by A28,A36,A37;
+                          k in S(n+1) by A30;
+                  hence P[k,q.k,q.(k+1)] by A28,A38,A39;
+                end;
+              hence thesis by A31;
+           end;
+         thus for n holds Z[n] from Ind(A10,A12);
+       end;
+  A40: for p,q being Function,k st dom p = S(k) &
+               dom q = S(k+1) & p.0 = q.0 &
+            for n st n < k holds P[n,p.n,p.(n+1)] & P[n,q.n,q.(n+1)]
+          holds p.k = q.k
+       proof let p,q be Function;let k;
+         defpred Z[Nat] means $1 <= k implies p.$1 = q.$1;
+         assume A41: dom p = S(k) &
+               dom q = S(k+1) & p.0 = q.0 &
+            for n st n < k holds P[n,p.n,p.(n+1)] & P[n,q.n,q.(n+1)];
+         then A42: Z[0];
+         A43: for n st Z[n] holds Z[n+1]
+                proof let n; assume A44: n <= k implies p.n = q.n;
+                  assume n+1 <= k;
+                   then n < k by NAT_1:38;
+                      then P[n,p.n,p.(n+1)] & P[n,p.n,q.(n+1)] by A41,A44;
+                    hence p.(n+1) = q.(n+1) by A2;
+                end;
+
+             for n holds Z[n] from Ind(A42,A43);
+          hence p.k = q.k;
+       end;
+
+     ex f being Function st dom f = NAT &
+     for n ex p being Function st dom p = S(n) & p.0 = A() &
+              (for k st k < n holds P[k,p.k,p.(k+1)]) &
+               f.n = p.n
+    proof
+      defpred Z[set,set] means
+          for n st n=$1 ex p being Function st dom p = S(n) & p.0 = A() &
+              (for k st k < n holds P[k,p.k,p.(k+1)]) & $2 = p.n;
+      A45: for x,y1,y2 being set st x in NAT & Z[x,y1] & Z[x,y2]
+          holds y1 = y2
+          proof let x,y1,y2 be set; assume A46: x in NAT &
+          (for n st n=x ex p being Function st dom p = S(n) & p.0 = A() &
+              (for k st k < n holds P[k,p.k,p.(k+1)]) & y1 = p.n) &
+          (for n st n=x ex p being Function st dom p = S(n) & p.0 = A() &
+              (for k st k < n holds P[k,p.k,p.(k+1)]) & y2 = p.n);
+
+            then reconsider n=x as Nat;
+            consider p1 being Function such that A47:
+              dom p1 = S(n) & p1.0 = A() &
+              (for k st k < n holds P[k,p1.k,p1.(k+1)]) & y1 = p1.n
+                by A46;
+            consider p2 being Function such that A48:
+              dom p2 = S(n) & p2.0 = A() &
+              (for k st k < n holds P[k,p2.k,p2.(k+1)]) & y2 = p2.n
+                by A46;
+               for k st k < n holds
+                  P[k,p1.k,p1.(k+1)] & P[k,p2.k,p2.(k+1)] by A47,A48;
+            hence y1 = y2 by A3,A47,A48;
+          end;
+      A49: for x st x in NAT ex y st Z[x,y]
+          proof let x; assume x in NAT;
+            then reconsider n=x as Nat;
+            consider p being Function such that A50: dom p = S(n) & p.0 = A() &
+                for k st k < n holds P[k,p.k,p.(k+1)] by A9;
+            take p.n;
+            let k such that A51: k = x;
+            take p;
+            thus thesis by A50,A51;
+          end;
+      consider f being Function such that A52:
+          dom f = NAT & for x st x in NAT holds Z[x,f.x] from FuncEx(A45,A49);
+      take f;
+      thus dom f = NAT by A52;
+      let n;
+      consider p being Function such that A53:
+        dom p = S(n) & p.0 = A() &
+          (for k st k < n holds P[k,p.k,p.(k+1)])
+           & f.n = p.n by A52;
+      take p;
+      thus dom p = S(n) & p.0 = A() by A53;
+      thus for k st k < n holds P[k,p.k,p.(k+1)] by A53;
+      thus f.n = p.n by A53;
+    end;
+   then consider f being Function such that A54: dom f = NAT &
+     for n ex p being Function st dom p = S(n) & p.0 = A() &
+              (for k st k < n holds P[k,p.k,p.(k+1)]) &
+               f.n = p.n;
+   take f;
+   thus dom f = NAT by A54;
+   thus f.0 = A()
+      proof
+           ex p being Function st dom p = S(0) & p.0 = A() &
+         (for k st k < 0 holds P[k,p.k,p.(k+1)]) &
+               f.0 = p.0 by A54;
+        hence f.0 = A();
+      end;
+
+   let d be Element of NAT;
+   consider p being Function such that A55: dom p = S(d+1) & p.0 = A() &
+     (for k st k < d+1 holds P[k,p.k,p.(k+1)]) &
+               f.(d+1) = p.(d+1) by A54;
+   consider q being Function such that A56: dom q = S(d) & q.0 = A() &
+     (for k st k < d holds P[k,q.k,q.(k+1)]) &
+               f.d = q.d by A54;
+   A57: p.d = q.d
+      proof
+          dom p = S(d+1) & dom q = S(d) & p.0 = q.0 &
+            for k st k < d holds
+              P[k,q.k,q.(k+1)] & P[k,p.k,p.(k+1)]
+         proof
+           thus dom p = S(d+1) by A55;
+           thus dom q = S(d) by A56;
+           thus p.0 = q.0 by A55,A56;
+           let k; assume A58: k < d;
+             hence P[k,q.k,q.(k+1)] by A56;
+               d <= d+1 by NAT_1:29;
+             then k < d+1 by A58,AXIOMS:22;
+           hence thesis by A55;
+         end;
+        hence thesis by A40;
+      end;
+     d < d+1 by REAL_1:69;
+  hence thesis by A55,A56,A57;
+end;
+
+scheme RecExD{D()->non empty set,A() -> Element of D(),
+                  P[set,set,set]}:
+   ex f being Function of NAT,D() st
+     f.0 = A() &
+     for n being Element of NAT holds P[n,f.n,f.(n+1)]
+ provided
+  A1: for n being Nat for x being Element of D()
+       ex y being Element of D() st P[n,x,y]
+proof
+  defpred Q[Element of NAT qua non empty set,set,set] means
+           P[$1,$2,$3];
+A2: for x being Element of NAT qua non empty set for y being Element of D()
+      ex z being Element of D() st Q[x,y,z] by A1;
+
+  consider f being Function of [:(NAT qua non empty set),D():],D()
+   such that A3:
+   for x being Element of NAT qua non empty set for y being Element of D()
+    holds Q[x,y,f.[x qua set,y]] from FuncEx2D(A2);
+  defpred P[FinSequence] means
+     ($1.1=A() & for n st n+2 <= len $1 holds $1.(n+2) = f.[n,$1.(n+1)]);
+  consider X being set such that A4:
+     for x holds x in X iff ex p st p in D()* &
+       P[p] &
+       x=p from SepSeq;
+ A5: x in X implies x in D()*
+    proof assume x in X;
+       then ex p st p in D()* &
+        (p.1=A() & for n st n + 2 <= len p holds p.(n+2) = f.[n,p.(n+1)]) &
+          x=p by A4;
+       hence thesis;
+    end;
+
+A6:  for p,q st p in X & q in X & len p <= len q holds p c= q
+     proof let p,q;
+       assume A7: p in X & q in X & len p <= len q;
+       A8: (p in D()* & p.1 = A() &
+            for n st n + 2 <= len p holds p.(n+2) = f.[n,p.(n+1)]) &
+           (q in D()* & q.1 = A() &
+            for n st n + 2 <= len q holds q.(n+2) = f.[n,q.(n+1)])
+            proof
+             A9: ex p' being FinSequence st
+                  p' in D()* & (p'.1 = A() &
+                   for n st n+2<=len p' holds p'.(n+2) = f.[n,p'.(n+1)]) &
+                    p=p' by A4,A7;
+                  ex q' being FinSequence st
+                  q' in D()* & (q'.1 = A() &
+                   for n st n+2<=len q' holds q'.(n+2) = f.[n,q'.(n+1)]) &
+                    q=q' by A4,A7;
+                 hence thesis by A9;
+            end;
+
+       A10: for n st 1 <= n & n <= len p holds p.n = q.n
+            proof
+              defpred P[Nat] means 1 <= $1 & $1 <= len p & p.$1 <> q.$1;
+              assume A11: ex n st P[n];
+              consider k such that A12: P[k] &
+                  for n st P[n] holds k <= n from Min(A11);
+                    k = 1
+                  proof assume A13: k <> 1;
+                      0 <> k by A12;
+                    then consider n such that A14: k = n+1 by NAT_1:22;
+                      1 < n+1 by A12,A13,A14,REAL_1:def 5;
+                    then A15: 1 <= n by NAT_1:38;
+                    A16: n <> 0 by A13,A14;
+                      n+0 <= n+1 by REAL_1:55;
+                    then A17: n <= len p by A12,A14,AXIOMS:22;
+A18:                n+0 < n+1 by REAL_1:53;
+                    consider m such that A19: n=m+1 by A16,NAT_1:22;
+A20:                    m+(1+1) <= len p by A12,A14,A19,XCMPLX_1:1;
+                    then A21: m+2 <= len q by A7,AXIOMS:22;
+                      p.k = p.(m+(1+1)) by A14,A19,XCMPLX_1:1
+                      .=f.[m,p.n] by A8,A19,A20
+                      .=f.[m,q.(m+1)] by A12,A14,A15,A17,A18,A19
+                      .=q.(m+(1+1)) by A8,A21
+                      .=q.k by A14,A19,XCMPLX_1:1;
+                   hence thesis by A12;
+                  end;
+                hence contradiction by A8,A12;
+            end;
+          now let x;
+          assume x in p;
+            then consider n such that A22: n in dom p & x = [n,p.n] by FINSEQ_1
+:16;
+              n in Seg len p by A22,FINSEQ_1:def 3;
+            then A23: 1 <= n & n <= len p by FINSEQ_1:3;
+            then A24: x = [n,q.n] by A10,A22;
+              1 <= n & n <= len q by A7,A23,AXIOMS:22;
+            then n in Seg len q by FINSEQ_1:3;
+            then n in dom q by FINSEQ_1:def 3;
+          hence x in q by A24,FUNCT_1:8;
+        end;
+      hence thesis by TARSKI:def 3;
+     end;
+
+  set Y = union X;
+    ex f being Function st f = Y
+  proof
+   defpred Z[set,set] means [$1,$2] in Y;
+   A25: for x,y,z st Z[x,y] & Z[x,z] holds y=z
+        proof let x,y,z;
+          assume A26: [x,y] in Y & [x,z] in Y;
+          then consider Z1 being set such that A27:
+             [x,y] in Z1 & Z1 in X by TARSKI:def 4;
+            Z1 in D()* by A5,A27;
+          then reconsider p=Z1 as FinSequence of D() by FINSEQ_1:def 11;
+          consider Z2 being set such that A28:
+             [x,z] in Z2 & Z2 in X by A26,TARSKI:def 4;
+            Z2 in D()* by A5,A28;
+          then reconsider q=Z2 as FinSequence of D() by FINSEQ_1:def 11;
+
+          A29: now assume len p <= len q;
+                 then p c= Z2 by A6,A27,A28;
+                 then [x,y] in q & [x,z] in q by A27,A28;
+                hence y=z by FUNCT_1:def 1;
+              end;
+                now assume len q <= len p;
+                 then q c= Z1 by A6,A27,A28;
+                 then [x,y] in p & [x,z] in p by A27,A28;
+                hence y=z by FUNCT_1:def 1;
+              end;
+            hence thesis by A29;
+        end;
+
+   consider h being Function such that A30:
+     for x,y holds [x,y] in h iff x in NAT & Z[x,y] from GraphFunc(A25);
+    take h;
+  A31: for x,y holds [x,y] in h iff [x,y] in Y
+     proof let x,y;
+      thus
+          [x,y] in h implies [x,y] in Y by A30;
+      thus
+          [x,y] in Y implies [x,y] in h
+         proof
+           assume A32: [x,y] in Y;
+           then consider Z such that A33: [x,y] in Z & Z in X by TARSKI:def 4;
+             Z in D()* by A5,A33;
+           then reconsider p=Z as FinSequence of D() by FINSEQ_1:def 11;
+             x in dom p by A33,RELAT_1:def 4;
+          hence thesis by A30,A32;
+         end;
+     end;
+     for x holds x in h iff x in Y
+    proof let x;
+      thus x in h implies x in Y
+        proof
+          assume A34: x in h;
+           then ex y,z st [y,z] = x by RELAT_1:def 1;
+         hence thesis by A31,A34;
+        end;
+       assume A35: x in Y;
+       then consider Z such that A36: x in Z & Z in X by TARSKI:def 4;
+         Z in D()* by A5,A36;
+       then reconsider p=Z as FinSequence of D() by FINSEQ_1:def 11;
+         x in p by A36;
+        then ex y,z st [y,z] = x by RELAT_1:def 1;
+      hence thesis by A31,A35;
+    end;
+    hence h = Y by TARSKI:2;
+  end;
+  then consider g being Function such that A37: g = Y;
+
+A38:  rng g c= D()
+  proof
+      for x st x in rng g holds x in D()
+     proof let x; assume x in rng g;
+        then consider y such that A39: y in dom g & x = g.y by FUNCT_1:def 5;
+          [y,x] in Y by A37,A39,FUNCT_1:8;
+        then consider Z such that A40: [y,x] in Z & Z in X by TARSKI:def 4;
+          Z in D()* by A5,A40;
+        then reconsider p=Z as FinSequence of D() by FINSEQ_1:def 11;
+        A41: y in dom p by A40,FUNCT_1:8;
+          x = p.y by A40,FUNCT_1:8;
+        then A42: x in rng p by A41,FUNCT_1:def 5;
+          rng p c= D() by FINSEQ_1:def 4;
+      hence x in D() by A42;
+     end;
+   hence thesis by TARSKI:def 3;
+  end;
+  then reconsider h = g as Function of dom g,D() by FUNCT_2:4;
+
+    A43: for n holds (n+1) in dom h
+        proof
+          defpred P[Nat] means $1+1 in dom h;
+           A44: P[0]
+             proof
+               A45: <*A()*>.1 = A() by FINSEQ_1:def 8;
+               A46: <*A()*> in D()* by FINSEQ_1:def 11;
+                    for n st n+2 <= len <*A()*> holds
+                      <*A()*>.(n+2) = f.[n,<*A()*>.(n+1)]
+                  proof let n; assume n+2 <= len <*A()*>;
+                  then n+2 <= 1 by FINSEQ_1:56;
+                  then n+(1+1) <= n+1 by NAT_1:37;
+                  hence thesis by REAL_1:53;
+                  end;
+              then <*A()*> in X by A4,A45,A46;
+              then A47: {[1,A()]} in X by FINSEQ_1:52;
+                    [1,A()] in {[1,A()]} by TARSKI:def 1;
+                 then [1,A()] in h by A37,A47,TARSKI:def 4;
+                hence 0+1 in dom h by FUNCT_1:8;
+             end;
+
+           A48: for k st P[k] holds P[k+1]
+                 proof let k; assume k+1 in dom h;
+                   then [k+1,h.(k+1)] in Y by A37,FUNCT_1:8;
+                   then consider Z such that A49:
+                     [k+1,h.(k+1)] in Z & Z in X by TARSKI:def 4;
+                     Z in D()* by A5,A49;
+                   then reconsider Z as FinSequence of D() by FINSEQ_1:def 11;
+                   A50: k+1 = len Z implies thesis
+                         proof assume A51: k+1 = len Z;
+                           set p=Z^<*f.[k,Z.(k+1)]*>;
+                              len p = len Z + len <*f.[k,Z.(k+1)]*>
+                                  by FINSEQ_1:35
+                             .=k+1+1 by A51,FINSEQ_1:56;
+                          then 1 <= k+1+1 & k+1+1 <= len p by NAT_1:37;
+                          then k+1+1 in Seg len p by FINSEQ_1:3;
+                          then k+1+1 in dom p by FINSEQ_1:def 3;
+                          then A52: [k+1+1,p.(k+1+1)] in p by FUNCT_1:8;
+
+                       p in X
+                       proof
+                           1 <= 1 & 1 <= len Z by A51,NAT_1:37;
+                         then 1 in Seg len Z by FINSEQ_1:3;
+                         then A53: 1 in dom Z by FINSEQ_1:def 3;
+                            Z.1 = A()
+                            proof
+                                 ex p being FinSequence st
+                                p in D()* & p.1 = A() &
+                               (for n st n+2 <= len p holds
+                                   p.(n+2) = f.[n,p.(n+1)]) & Z=p by A4,A49;
+                              hence thesis;
+                            end;
+                         then A54: p.1 = A() by A53,FINSEQ_1:def 7;
+                         A55: p in D()*
+                             proof
+                               reconsider n=k as Element of (NAT qua
+                                          non empty set);
+                                 Z.(k+1) is Element of D()
+                                proof
+                                    1 <= k + 1 by NAT_1:37;
+                                  then k+1 in Seg len Z by A51,FINSEQ_1:3;
+                                  then k+1 in dom Z by FINSEQ_1:def 3;
+                                  then A56: Z.(k+1) in rng Z by FUNCT_1:def 5;
+                                     rng Z c= D() by FINSEQ_1:def 4;
+                                 hence Z.(k+1) is Element of D() by A56;
+                                end;
+                               then reconsider z=Z.(k+1) as Element of D();
+                                 p= Z^<*f.[n,z]*>;
+                              hence thesis by FINSEQ_1:def 11;
+                             end;
+                           for n st n+2 <= len p holds
+                              p.(n+2) = f.[n,p.(n+1)]
+                         proof let n;assume n+2 <= len p;
+                   then A57: n+2 <=
+ len Z + len <*f.[k,Z.(k+1)]*> by FINSEQ_1:35;
+                           then A58: n+2 <= len Z + 1 by FINSEQ_1:57;
+                           A59: n+2 = len Z + 1 implies thesis
+                              proof assume A60: n+2 = len Z + 1;
+                                then n+2 = k+(1+1) by A51,XCMPLX_1:1;
+                             then A61: n=k by XCMPLX_1:2;
+                              A62:  p.(n+2) =
+                                <*f.[k,Z.(k+1)]*>.(n+2-len Z) by A57,A60,
+FINSEQ_1:36
+                                .=<*f.[k,Z.(k+1)]*>.(n+2-(n+2-1)) by A60,
+XCMPLX_1:26
+                                .=<*f.[k,Z.(k+1)]*>.(n+2-(n+2)+1) by XCMPLX_1:
+37
+                                .=<*f.[k,Z.(k+1)]*>.(0+1) by XCMPLX_1:14
+                                .=f.[n,Z.(n+1)] by A61,FINSEQ_1:57;
+                                 A63: 1 <= n + 1 by NAT_1:37;
+                                   n+(1+1) <= len Z + 1 by A57,FINSEQ_1:57;
+                                 then n+1+1 <= len Z + 1 by XCMPLX_1:1;
+                                 then n+1 <= len Z by REAL_1:53;
+                                 then n+1 in Seg len Z by A63,FINSEQ_1:3;
+                                 then n+1 in dom Z by FINSEQ_1:def 3;
+                               hence thesis by A62,FINSEQ_1:def 7;
+                              end;
+                                 n+2 <> len Z + 1 implies thesis
+                                proof assume A64: n+2 <> len Z + 1;
+                                   then A65: n+2 <= len Z by A58,NAT_1:26;
+                                     1 <= n+(1+1) by NAT_1:37;
+                                   then n+2 in Seg len Z by A65,FINSEQ_1:3;
+then A66:                                   n+2 in dom Z by FINSEQ_1:def 3;
+                                      ex q st
+                                     q in D()* & q.1 = A() &
+                                    (for n st n+2 <= len q holds
+                                       q.(n+2) = f.[n,q.(n+1)]) &
+                                            Z = q by A4,A49;
+                                 then Z.(n+2) = f.[n,Z.(n+1)] by A65;
+                                 then A67: p.(n+2) = f.[n,Z.(n+1)] by A66,
+FINSEQ_1:def 7;
+                                 A68: 1 <= n + 1 by NAT_1:37;
+                                   n+(1+1) <= len Z by A58,A64,NAT_1:26;
+                                 then n+1+1 <= len Z by XCMPLX_1:1;
+                                 then n+1+1 <= len Z + 1 by NAT_1:37;
+                                 then n+1 <= len Z by REAL_1:53;
+                                 then n+1 in Seg len Z by A68,FINSEQ_1:3;
+                                 then n+1 in dom Z by FINSEQ_1:def 3;
+                                hence thesis by A67,FINSEQ_1:def 7;
+                               end;
+                            hence thesis by A59;
+                         end;
+                        hence thesis by A4,A54,A55;
+                       end;
+                          then [k+1+1,p.(k+1+1)] in h by A37,A52,TARSKI:def 4;
+                         hence k+1+1 in dom h by FUNCT_1:8;
+                     end;
+
+                        k+1 <> len Z implies thesis
+                        proof assume A69: k+1 <> len Z;
+                           k+1 in dom Z by A49,FUNCT_1:8;
+                         then k+1 in Seg len Z by FINSEQ_1:def 3;
+                          then 1 <= k+1 & k+1 <= len Z by FINSEQ_1:3;
+                         then k+1 < len Z by A69,REAL_1:def 5;
+                         then A70: k+1+1 <= len Z by NAT_1:38;
+                           1 <= k+1+1 by NAT_1:37;
+                         then k+1+1 in Seg len Z by A70,FINSEQ_1:3;
+                         then k+1+1 in dom Z by FINSEQ_1:def 3;
+                          then [k+1+1,Z.(k+1+1)] in Z by FUNCT_1:8;
+                         then [k+1+1,Z.(k+1+1)] in h by A37,A49,TARSKI:def 4;
+                        hence k+1+1 in dom h by FUNCT_1:8;
+                       end;
+                     hence thesis by A50;
+                 end;
+          thus for k holds P[k] from Ind(A44,A48);
+        end;
+
+    ex g being Function of NAT,D() st for n holds g.n = h.(n+1)
+    proof
+        ex g being Function st dom g = NAT & for n holds g.n = h.(n+1)
+      proof
+        defpred P[set,set] means ex n st n = $1 & $2=h.(n+1);
+        A71: for x,y1,y2 st x in NAT & P[x,y1] & P[x,y2] holds y1=y2;
+        A72: for x st x in NAT ex y st P[x,y]
+            proof let x; assume x in NAT;
+               then reconsider n=x as Nat;
+               take h.(n+1);take n;thus thesis;
+            end;
+        consider g being Function such that A73:
+          dom g = NAT & for x st x in NAT holds P[x,g.x] from FuncEx(A71,A72);
+        take g;
+        thus dom g = NAT by A73;
+        thus for n holds g.n = h.(n+1)
+           proof let n;
+                 ex m st m=n & g.n = h.(m+1) by A73;
+              hence thesis;
+           end;
+      end;
+      then consider g being Function such that
+      A74: dom g = NAT & for n holds g.n = h.(n+1);
+       rng g c= D()
+       proof let x; assume x in rng g;
+         then consider y such that A75: y in dom g & x = g.y by FUNCT_1:def 5;
+         reconsider k=y as Nat by A74,A75;
+           k+1 in dom h by A43;
+         then A76: h.(k+1) in rng h by FUNCT_1:def 5;
+           x=h.(k+1) by A74,A75;
+        hence x in D() by A38,A76;
+       end;
+     then reconsider g as Function of NAT,D() by A74,FUNCT_2:4;
+     take g;
+     thus thesis by A74;
+   end;
+  then consider g being Function of NAT,D() such that A77:
+     for n holds g.n = h.(n+1);
+  take g;
+
+ A78: for n holds h.(n+2) = f.[n,h.(n+1)]
+     proof let n;
+         (n+1)+1 in dom h by A43;
+       then n+(1+1) in dom h by XCMPLX_1:1;
+       then [n+2,h.(n+2)] in h by FUNCT_1:def 4;
+       then consider Z being set such that A79:
+         [n+2,h.(n+2)] in Z & Z in X by A37,TARSKI:def 4;
+ A80:       ex p st p in D()* &
+        (p.1=A() & for n st n+2 <= len p holds p.(n+2) = f.[n,p.(n+1)]) &
+          Z=p by A4,A79;
+
+         Z in D()* by A5,A79;
+       then reconsider Z as FinSequence of D() by FINSEQ_1:def 11;
+          n+2 in dom Z & h.(n+2) = Z.(n+2) by A79,FUNCT_1:8;
+       then n+2 in Seg len Z by FINSEQ_1:def 3;
+       then A81: n+2 <= len Z by FINSEQ_1:3;
+      A82: 1 <= n+1 by NAT_1:37;
+        n+1 <= n+2 by REAL_1:55;
+      then n+1 <= len Z by A81,AXIOMS:22;
+      then n+1 in Seg len Z by A82,FINSEQ_1:3;
+      then n+1 in dom Z by FINSEQ_1:def 3;
+       then [n+1,Z.(n+1)] in Z by FUNCT_1:8;
+then A83:      [n+1,Z.(n+1)] in h by A37,A79,TARSKI:def 4;
+     thus h.(n+2) = Z.(n+2) by A79,FUNCT_1:8
+      .= f.[n,Z.(n+1)] by A80,A81
+      .= f.[n,h.(n+1)] by A83,FUNCT_1:8;
+    end;
+
+  thus g.0 = A()
+    proof
+      A84: <*A()*> in D()* by FINSEQ_1:def 11;
+      A85: <*A()*>.1 = A() by FINSEQ_1:def 8;
+         for n st n + 2 <= len <*A()*>
+           holds <*A()*>.(n+2) = f.[n,<*A()*>.(n+1)]
+          proof let n; assume n + 2 <= len <*A()*>;
+              then n +(1+1) <= 0 + 1 by FINSEQ_1:56;
+              then n +1+1 <= 0 + 1 by XCMPLX_1:1;
+              then n + 1 <= 0 by REAL_1:53;
+              then n + 1 <= 0 + n by NAT_1:37;
+            hence thesis by REAL_1:53;
+          end;
+     then <*A()*> in X by A4,A84,A85;
+     then A86: {[1,A()]} in X by FINSEQ_1:52;
+       [1,A()] in {[1,A()]} by TARSKI:def 1;
+     then [1,A()] in h by A37,A86,TARSKI:def 4;
+     then A() = h.(0+1) by FUNCT_1:8
+      .= g.0 by A77;
+    hence thesis;
+   end;
+
+      let n be Element of NAT;
+           P[n,g.n,f.[n,g.n]] by A3;
+        then A87: P[n,g.n,f.[n,h.(n+1)]] by A77;
+            h.(n+(1+1)) =f.[n,h.(n+1)] by A78;
+         then P[n,g.n,h.(n+1+1)] by A87,XCMPLX_1:1;
+        hence P[n,g.n,g.(n+1)] by A77;
+end;
+
+scheme LambdaRecEx{A() -> set,G(set,set) -> set}:
+  ex f being Function st dom f = NAT &
+      f.0 = A() & for n being Element of NAT holds f.(n+1) = G(n,f.n)
+proof
+  defpred P[set,set,set] means $3 = G($1,$2);
+  A1: for n being Nat for x being set
+        ex y being set st P[n,x,y];
+  A2: for n being Nat for x,y1,y2 being set
+        st P[n,x,y1] & P[n,x,y2] holds y1=y2;
+
+  consider f being Function such that A3: dom f = NAT & f.0 = A() &
+   for n being Element of NAT holds P[n,f.n,f.(n+1)] from RecEx(A1,A2);
+  take f;
+  thus dom f = NAT & f.0 = A() by A3;
+  thus thesis by A3;
+end;
+
+scheme LambdaRecExD{D() -> non empty set, A() -> Element of D(),
+                 G(set,set) -> Element of D()}:
+  ex f being Function of NAT,D() st
+      f.0 = A() & for n being Element of NAT holds f.(n+1) = G(n,f.n)
+proof
+  defpred P[set,set,set] means $3=G($1,$2);
+  A1: for n being Nat for x being Element of D()
+        ex y being Element of D() st P[n,x,y];
+  consider f being Function of NAT,D() such that A2: f.0 = A() &
+   for n being Element of NAT holds P[n,f.n,f.(n+1)] from RecExD(A1);
+  take f;
+  thus f.0 = A() by A2;
+  thus for n being (Element of NAT) holds f.(n+1) = G(n,f.n) by A2;
+end;
+
+scheme FinRecEx{A() -> set,N() -> Nat,P[set,set,set]}:
+  ex p being FinSequence st len p = N() & (p.1 = A() or N() = 0) &
+    for n st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
+ provided
+   A1: for n being Nat st 1 <= n & n < N()
+          for x being set ex y being set st P[n,x,y] and
+   A2: for n being Nat st 1 <= n & n < N()
+         for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2
+proof
+  defpred Q[Nat,set,set] means ($1 < N()-1 implies P[$1+1,$2,$3]) &
+       (not $1 < N()-1 implies $3=0);
+
+  A3: for n being Nat for x being set ex y being set st Q[n,x,y]
+      proof let n be Nat,x be set;
+           n < N()-1 implies thesis
+              proof assume A4: n < N()-1;
+                then A5:             n+1 < N() by REAL_1:86;
+                  1 <= n+1 by NAT_1:29;
+                then consider y such that A6: P[n+1,x,y] by A1,A5;
+                take y;
+                thus n < N()-1 implies P[n+1,x,y] by A6;
+                thus thesis by A4;
+              end;
+          hence thesis;
+      end;
+  A7: for n being Nat for x,y1,y2 being set st Q[n,x,y1] & Q[n,x,y2]
+      holds y1 = y2
+      proof let n be Nat,x,y1,y2 be set;
+        assume A8: (n < N()-1 implies P[n+1,x,y1]) &
+       (not n < N()-1 implies y1=0) &
+       (n < N()-1 implies P[n+1,x,y2]) &
+       (not n < N()-1 implies y2=0);
+
+          n < N()-1 implies thesis
+            proof assume n < N()-1;
+              then A9:            n+1 < N() by REAL_1:86;
+                 1 <= n+1 by NAT_1:29;
+              hence y1 = y2 by A2,A8,A9;
+            end;
+         hence thesis by A8;
+      end;
+    consider f being Function such that A10: dom f = NAT & f.0 = A() &
+       for n being Element of NAT holds Q[n,f.n,f.(n+1)] from RecEx(A3,A7);
+    defpred Q[set,set] means for r being Real st r=$1 holds $2=f.(r-1);
+    A11: for x st x in REAL ex y st Q[x,y]
+      proof let x; assume x in REAL;
+        then reconsider r=x as Real;
+        take f.(r-1);
+        thus thesis;
+      end;
+    A12: for x,y1,y2 st x in REAL & Q[x,y1] & Q[x,y2]
+         holds y1 = y2
+       proof let x,y1,y2; assume A13: x in REAL &
+             (for r being Real st r=x holds y1=f.(r-1)) &
+             (for r being Real st r=x holds y2=f.(r-1));
+           then reconsider r = x as Real;
+           thus y1 = f.(r-1) by A13 .= y2 by A13;
+       end;
+
+    consider g being Function such that A14: dom g = REAL &
+       for x st x in REAL  holds Q[x,g.x] from FuncEx(A12,A11);
+      Seg N() c= REAL by XBOOLE_1:1;
+   then A15: dom (g|Seg N()) = Seg N() by A14,RELAT_1:91;
+   then reconsider p = g|Seg N() as FinSequence by FINSEQ_1:def 2;
+   take p;
+
+   A16: for n being Nat st n < N() holds p.(n+1) = f.n
+     proof let n be Nat such that A17: n < N();
+       A18: 1 <= n+1 by NAT_1:29;
+          n+1 <= N() by A17,NAT_1:38;
+then A19:        n+1 in Seg N() by A18,FINSEQ_1:3;
+
+          g.(n+1) = f.(n+1-1) by A14
+        .= f.(n+(1-1)) by XCMPLX_1:29
+        .= f.n;
+       hence thesis by A19,FUNCT_1:72;
+     end;
+
+   thus len p = N() by A15,FINSEQ_1:def 3;
+   thus p.1 = A() or N() = 0
+      proof
+              N() <> 0 implies thesis
+              proof assume N() <> 0;
+                 then consider k such that A20: N() = k+1 by NAT_1:22;
+                   0 <= k by NAT_1:18;
+                 then 0 + 1 <= k +1 by REAL_1:55;
+                 then 1 in Seg N() by A20,FINSEQ_1:3;
+                then p.1 = g.1 by FUNCT_1:72
+                  .= f.(1-1) by A14
+                  .= A() by A10;
+                hence thesis;
+              end;
+           hence thesis;
+      end;
+
+   let n; assume A21: 1 <= n & n < N();
+    then 0 <> n;
+    then consider k such that A22: n = k+1 by NAT_1:22;
+      k < N()-1 by A21,A22,REAL_1:86;
+    then P[k+1,f.k,f.(k+1)] by A10;
+  then A23: P[k+1,f.k,p.(k+1+1)] by A16,A21,A22;
+      k <= k+1 by NAT_1:29;
+    then k < N() by A21,A22,AXIOMS:22;
+   hence P[n,p.n,p.(n+1)] by A16,A22,A23;
+end;
+
+scheme FinRecExD{D() -> non empty set,A() -> Element of D(),
+                  N() -> Nat, P[set,set,set]}:
+ ex p being FinSequence of D() st len p = N() & (p.1 = A() or N() = 0) &
+    for n st 1 <= n & n < N() holds P[n,p.n,p.(n+1)]
+provided
+A1: for n being Nat st 1 <= n & n < N() holds for x being Element of D()
+      ex y being Element of D() st P[n,x,y]
+proof
+  consider 00 being Element of D();
+  defpred Z[Nat,set,set] means ($1 < N()-1 implies P[$1+1,$2,$3]) &
+       (not $1 < N()-1 implies $3=00);
+  A2: for n being Nat for x being Element of D() ex y being Element of D() st
+            Z[n,x,y]
+      proof let n be Nat,x be Element of D();
+            n < N()-1 implies thesis
+              proof assume A3: n < N()-1;
+                then 1 <= n+1 & n+1 < N() by NAT_1:29,REAL_1:86;
+                then consider y being Element of D() such that A4: P[n+1,x,y]
+by A1;
+                take y;
+                thus n < N()-1 implies P[n+1,x,y] by A4;
+                thus thesis by A3;
+              end;
+          hence thesis;
+      end;
+    consider f being Function of NAT,D() such that A5: f.0 = A() &
+       for n being Element of NAT holds Z[n,f.n,f.(n+1)] from RecExD(A2);
+    defpred P[set,set] means for r being Real st r = $1
+            holds $2 = f.(r-1);
+    A6: for x st x in REAL ex y st P[x,y]
+      proof let x; assume x in REAL;
+        then reconsider r=x as Real;
+        take f.(r-1);
+        thus thesis;
+      end;
+    A7: for x,y1,y2 st x in REAL & P[x,y1] & P[x,y2] holds y1 = y2
+       proof let x,y1,y2; assume A8: x in REAL &
+             (for r being Real st r=x holds y1=f.(r-1)) &
+             (for r being Real st r=x holds y2=f.(r-1));
+           then reconsider r = x as Real;
+           thus y1 = f.(r-1) by A8 .= y2 by A8;
+       end;
+    consider g being Function such that A9: dom g = REAL &
+       for x st x in REAL holds P[x,g.x] from FuncEx(A7,A6);
+      Seg N() c= REAL by XBOOLE_1:1;
+   then A10: dom (g|Seg N()) = Seg N() by A9,RELAT_1:91;
+   then reconsider p = g|Seg N() as FinSequence by FINSEQ_1:def 2;
+     rng p c= D()
+     proof let x; assume x in rng p;
+       then consider y such that A11: y in dom p & x = p.y by FUNCT_1:def 5;
+       reconsider y as Nat by A11;
+    A12: f.(y-1) in D()
+          proof
+               y <> 0 by A10,A11,FINSEQ_1:3;
+             then consider k such that A13: y = k+1 by NAT_1:22;
+                f.k in D();
+           hence f.(y-1) in D() by A13,XCMPLX_1:26;
+          end;
+
+       p.y = g.y by A11,FUNCT_1:70;
+      hence thesis by A9,A11,A12;
+     end;
+   then reconsider p as FinSequence of D() by FINSEQ_1:def 4;
+   take p;
+
+   A14: for n being Nat st n < N() holds p.(n+1) = f.n
+     proof let n be Nat such that A15: n < N();
+       A16: 1 <= n+1 by NAT_1:29;
+          n+1 <= N() by A15,NAT_1:38;
+then A17:        n+1 in Seg N() by A16,FINSEQ_1:3;
+
+          g.(n+1) = f.(n+1-1) by A9
+        .= f.(n+(1-1)) by XCMPLX_1:29
+        .= f.n;
+       hence thesis by A17,FUNCT_1:72;
+     end;
+
+   thus len p = N() by A10,FINSEQ_1:def 3;
+   thus p.1 = A() or N() = 0
+      proof
+              N() <> 0 implies thesis
+              proof assume N() <> 0;
+                 then consider k such that A18: N() = k+1 by NAT_1:22;
+                   0 <= k by NAT_1:18;
+                 then 0 + 1 <= k +1 by REAL_1:55;
+                 then 1 in Seg N() by A18,FINSEQ_1:3;
+                then p.1 = g.1 by FUNCT_1:72
+                  .= f.(1-1) by A9
+                  .= A() by A5;
+                hence thesis;
+              end;
+           hence thesis;
+      end;
+
+   let n; assume A19: 1 <= n & n < N();
+    then 0 <> n;
+    then consider k such that A20: n = k+1 by NAT_1:22;
+      k < N() - 1 by A19,A20,REAL_1:86;
+    then P[k+1,f.k,f.(k+1)] by A5;
+  then A21: P[k+1,f.k,p.(k+1+1)] by A14,A19,A20;
+      k <= k+1 by NAT_1:29;
+    then k < N() by A19,A20,AXIOMS:22;
+   hence P[n,p.n,p.(n+1)] by A14,A20,A21;
+end;
+
+scheme SeqBinOpEx{S() -> FinSequence,P[set,set,set]}:
+  ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
+     p.1 = S().1 & for k st 1 <= k & k < len S() holds
+         P[S().(k+1),p.k,p.(k+1)]
+provided
+A1: for k,x st 1 <= k & k < len S() ex y st P[S().(k+1),x,y] and
+A2: for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
+      P[z,x,y1] & P[z,x,y2] holds y1 = y2
+proof
+  defpred Q[Nat,set,set] means P[S().($1+1),$2,$3];
+  A3: for k st 1 <= k & k < len S()
+           for x ex y st Q[k,x,y] by A1;
+  A4: for k st 1 <= k & k < len S() for x,y1,y2 st
+           Q[k,x,y1] & Q[k,x,y2] holds y1 = y2 by A2;
+  consider p such that A5: len p = len S() & (p.1 = S().1 or len S() = 0) &
+     for k st 1 <= k & k < len S() holds Q[k,p.k,p.(k+1)]
+       from FinRecEx(A3,A4);
+
+  A6: len S() <> 0 implies thesis
+       proof assume A7: len S() <> 0;
+          take p.(len p),p;
+          thus p.(len p) = p.(len p) & len p = len S() & p.1 = S().1 by A5,A7;
+          let k;
+          assume 1 <= k & k < len S();
+         hence thesis by A5;
+       end;
+    len S() = 0 implies thesis
+      proof assume A8: len S() = 0;
+       take S().0,S();
+       thus S().0 = S().(len S()) & len S() = len S() & S().1 = S(). 1 by A8;
+       thus thesis by A8,AXIOMS:22;
+      end;
+  hence thesis by A6;
+end;
+
+scheme LambdaSeqBinOpEx{S() -> FinSequence,F(set,set) -> set}:
+  ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
+   p.1 = S().1 & for k st 1 <= k & k < len S()
+     holds p.(k+1) = F(S().(k+1),p.k)
+proof
+  defpred P[set,set,set] means $3 = F($1,$2);
+  A1: for k,x st 1 <= k & k < len S() ex y st P[S().(k+1),x,y];
+  A2: for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
+        P[z,x,y1] & P[z,x,y2] holds y1 = y2;
+
+  consider x such that A3: ex p st x = p.(len p) & len p = len S() &
+      p.1 = S().1 & for k st 1 <= k & k < len S()
+         holds P[S().(k+1),p.k,p.(k+1)] from SeqBinOpEx(A1,A2);
+  take x;
+  consider p such that A4: x = p.(len p) & len p = len S() &
+      p.1 = S().1 & for k st 1 <= k & k < len S()
+         holds p.(k+1) = F(S().(k+1),p.k) by A3;
+  take p;
+  thus x = p.(len p) & len p = len S() & p.1 = S().1 by A4;
+  let k; assume 1 <= k & k < len S();
+  hence p.(k+1) = F(S().(k+1),p.k) by A4;
+end;
+
+::::::::::::::::::::::::::::::::::::::
+::     Schemes of uniqueness        ::
+::::::::::::::::::::::::::::::::::::::
+
+scheme RecUn{A() -> set, F, G() -> Function, P[set,set,set]}:
+  F() = G()
+provided
+A1: dom F() = NAT & F().0 = A() & for n holds P[n,F().n,F().(n+1)] and
+A2: dom G() = NAT & G().0 = A() & for n holds P[n,G().n,G().(n+1)] and
+A3: for n for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2
+proof
+  defpred P[Nat] means F().$1 = G().$1;
+  A4: P[0] by A1,A2;
+  A5: for n st P[n] holds P[n+1]
+      proof let n; assume F().n = G().n;
+         then P[n,F().n,F().(n+1)] & P[n,F().n,G().(n+1)] by A1,A2;
+        hence F().(n+1) = G().(n+1) by A3;
+      end;
+     for n holds P[n] from Ind(A4,A5);
+  then for x st x in NAT holds F().x = G().x;
+ hence F() = G() by A1,A2,FUNCT_1:9;
+end;
+
+scheme RecUnD{D() -> non empty set,A() -> Element of D(),
+        P[set,set,set], F, G() -> Function of NAT,D()} : F() = G()
+ provided
+  A1: F().0 = A() & (for n holds P[n,F().n,F().(n+1)]) and
+  A2: G().0 = A() & (for n holds P[n,G().n,G().(n+1)]) and
+  A3: for n being Nat,x,y1,y2 being Element of D()
+         st P[n,x,y1] & P[n,x,y2] holds y1=y2
+proof
+  assume A4: F() <> G();
+  A5: dom F() = NAT by FUNCT_2:def 1;
+     dom G() = NAT by FUNCT_2:def 1;
+  then consider x such that A6: x in NAT & F().x <> G().x by A4,A5,FUNCT_1:9;
+  defpred Q[Nat] means F().$1 <> G().$1;
+  A7: ex k st Q[k] by A6;
+  consider m such that A8: Q[m] &
+      for n st Q[n] holds m <= n from Min(A7);
+
+    now assume m<>0;
+     then consider k such that A9: m=k+1 by NAT_1:22;
+       k < m by A9,NAT_1:38;
+     then A10: F().k = G().k by A8;
+       P[k,F().k,F().(k+1)] & P[k,G().k,G().(k+1)] by A1,A2;
+   hence contradiction by A3,A8,A9,A10;
+  end;
+ hence contradiction by A1,A2,A8;
+end;
+
+scheme LambdaRecUn{A() -> set, RecFun(set,set) -> set,
+        F, G() -> Function}:
+  F() = G()
+  provided
+  A1: dom F() = NAT & F().0 = A() &
+        for n holds F().(n+1) = RecFun(n,F().n) and
+  A2: dom G() = NAT & G().0 = A() &
+        for n holds G().(n+1) = RecFun(n,G().n)
+proof
+  defpred P[Nat,set,set] means $3=RecFun($1,$2);
+  A3: dom F() = NAT & F().0 = A() & for n holds P[n,F().n,F().(n+1)]
+ by A1;
+  A4: dom G() = NAT & G().0 = A() & for n holds P[n,G().n,G().(n+1)]
+ by A2;
+  A5: for n being Nat,x,y1,y2 being set
+        st P[n,x,y1] & P[n,x,y2] holds y1=y2;
+  thus F() = G() from RecUn(A3,A4,A5);
+end;
+
+scheme LambdaRecUnD{D() -> non empty set,A() -> Element of D(),
+         RecFun(set,set) -> Element of D(),
+        F, G() -> Function of NAT,D()}:
+  F() = G()
+  provided
+  A1: F().0 = A() & for n holds F().(n+1) = RecFun(n,F().n) and
+  A2: G().0 = A() & for n holds G().(n+1) = RecFun(n,G().n)
+proof
+  defpred P[Nat,set,set] means $3=RecFun($1,$2);
+  A3: F().0 = A() & for n holds P[n,F().n,F().(n+1)] by A1;
+  A4: G().0 = A() & for n holds P[n,G().n,G().(n+1)] by A2;
+  A5: for n being Nat,x,y1,y2 being Element of D()
+        st P[n,x,y1] & P[n,x,y2] holds y1=y2;
+  thus F() = G() from RecUnD(A3,A4,A5);
+end;
+
+scheme LambdaRecUnR{A() -> Real, RecFun(set,set) -> set,
+   F, G() -> Function of NAT,REAL}:
+ F() = G()
+ provided
+A1: F().0 = A() & for n holds F().(n+1) = RecFun(n,F().n) and
+A2: G().0 = A() & for n holds G().(n+1) = RecFun(n,G().n)
+proof
+  defpred P[Nat,set,set] means $3=RecFun($1,$2);
+  A3: F().0 = A() & for n holds P[n,F().n,F().(n+1)] by A1;
+  A4: G().0 = A() & for n holds P[n,G().n,G().(n+1)] by A2;
+  A5: for n being Nat,x,y1,y2 being Element of REAL
+        st P[n,x,y1] & P[n,x,y2] holds y1=y2;
+  thus F() = G() from RecUnD(A3,A4,A5);
+end;
+
+scheme FinRecUn{A() -> set,N() -> Nat,
+       F, G() -> FinSequence, P[set,set,set]}:
+  F() = G()
+provided
+A1: for n st 1 <= n & n < N()
+       for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2 and
+A2: len F() = N() & (F().1 = A() or N() = 0) &
+    for n st 1 <= n & n < N() holds P[n,F().n,F().(n+1)] and
+A3: len G() = N() & (G().1 = A() or N() = 0) &
+    for n st 1 <= n & n < N() holds P[n,G().n,G().(n+1)]
+proof
+   A4: dom F() = Seg len G() by A2,A3,FINSEQ_1:def 3
+              .= dom G() by FINSEQ_1:def 3;
+   assume F() <> G();
+   then consider x such that A5: x in dom F() & F().x <> G().x by A4,FUNCT_1:9;
+   A6: x in Seg len F() by A5,FINSEQ_1:def 3;
+   reconsider x as Nat by A5;
+   defpred P[Nat] means 1 <= $1 & $1 <= N() & F().$1 <> G().$1;
+   1 <= x & x <= N() by A2,A6,FINSEQ_1:3;
+   then A7: ex n st P[n] by A5;
+   consider n such that A8: P[n]&
+       for k st P[k] holds n <= k from Min(A7);
+       n <> 1 by A2,A3,A8;
+then A9:    1 < n by A8,REAL_1:def 5;
+     0 <> n by A8;
+   then consider k such that A10: n = k+1 by NAT_1:22;
+   A11: 1 <= k by A9,A10,NAT_1:38;
+       k < n by A10,REAL_1:69;
+   then A12: k < N() by A8,AXIOMS:22;
+         n > k by A10,NAT_1:38;
+    then F().k = G().k by A8,A11,A12;
+    then P[k,F().k,F().(k+1)] & P[k,F().k,G().(k+1)] by A2,A3,A11,A12;
+   hence contradiction by A1,A8,A10,A11,A12;
+end;
+
+scheme FinRecUnD{D() -> non empty set, A() -> Element of D(), N() -> Nat,
+    F, G() -> FinSequence of D(), P[set,set,set]}:
+  F() = G()
+provided
+A1: for n st 1 <= n & n < N()
+       for x,y1,y2 being Element of D()
+         st P[n,x,y1] & P[n,x,y2] holds y1 = y2 and
+A2: len F() = N() & (F().1 = A() or N() = 0) &
+    for n st 1 <= n & n < N() holds P[n,F().n,F().(n+1)] and
+A3: len G() = N() & (G().1 = A() or N() = 0) &
+    for n st 1 <= n & n < N() holds P[n,G().n,G().(n+1)]
+proof
+   A4: dom F() = Seg len G() by A2,A3,FINSEQ_1:def 3
+      .= dom G() by FINSEQ_1:def 3;
+   assume F() <> G();
+   then consider x such that A5: x in dom F() & F().x <> G().x by A4,FUNCT_1:9;
+   A6: x in Seg len F() by A5,FINSEQ_1:def 3;
+   reconsider x as Nat by A5;
+   defpred P[Nat] means 1 <= $1 & $1 <= N() & F().$1 <> G().$1;
+   1 <= x & x <= N() by A2,A6,FINSEQ_1:3;
+   then A7: ex n st P[n] by A5;
+   consider n such that A8: P[n] &
+       for k st P[k] holds n <= k from Min(A7);
+       n <> 1 by A2,A3,A8;
+then A9:    1 < n by A8,REAL_1:def 5;
+     0 <> n by A8;
+   then consider k such that A10: n = k+1 by NAT_1:22;
+   A11: 1 <= k by A9,A10,NAT_1:38;
+       k < n by A10,REAL_1:69;
+   then A12: k < N() by A8,AXIOMS:22;
+         n > k by A10,NAT_1:38;
+   then A13: F().k = G().k by A8,A11,A12;
+    reconsider Fk = F().k as Element of D() by A2,A11,A12,Lm1;
+    reconsider Fk1 = F().(k+1) as Element of D() by A2,A8,A10,Lm1;
+    reconsider Gk1 = G().(k+1) as Element of D() by A3,A8,A10,Lm1;
+      P[k,Fk,Fk1] & P[k,Fk,Gk1] by A2,A3,A11,A12,A13;
+   hence contradiction by A1,A8,A10,A11,A12;
+end;
+
+scheme SeqBinOpUn{S() -> FinSequence,P[set,set,set],x, y() -> set}:
+  x() = y()
+provided
+A1: for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
+        P[z,x,y1] & P[z,x,y2] holds y1 = y2 and
+A2: ex p being FinSequence st x() = p.(len p) & len p = len S() & p.1 = S().1 &
+      for k st 1 <= k & k < len S() holds P[S().(k+1),p.k,p.(k+1)] and
+A3: ex p being FinSequence st y() = p.(len p) & len p = len S() & p.1 = S().1 &
+      for k st 1 <= k & k < len S() holds P[S().(k+1),p.k,p.(k+1)]
+proof
+ defpred Q[Nat,set,set] means P[S().($1+1),$2,$3];
+ A4: for k st 1 <= k & k < len S() for x,y1,y2 st
+         Q[k,x,y1] & Q[k,x,y2] holds y1 = y2 by A1;
+ consider p such that A5: x() = p.(len p) & len p = len S() & p.1 = S().1 &
+      for k st 1 <= k & k < len S() holds Q[k,p.k,p.(k+1)] by A2;
+ consider q such that A6: y() = q.(len q) & len q = len S() & q.1 = S().1 &
+      for k st 1 <= k & k < len S() holds Q[k,q.k,q.(k+1)] by A3;
+ A7: len p = len S() & (p.1 = S().1 or len S() = 0) &
+      for k st 1 <= k & k < len S() holds Q[k,p.k,p.(k+1)] by A5;
+ A8: len q = len S() & (q.1 = S().1 or len S() = 0) &
+      for k st 1 <= k & k < len S() holds Q[k,q.k,q.(k+1)] by A6;
+    p = q from FinRecUn(A4,A7,A8);
+   hence x() = y() by A5,A6;
+end;
+
+scheme LambdaSeqBinOpUn{S() -> FinSequence, F(set,set) -> set,
+                          x, y() -> set}:
+  x() = y()
+provided
+A1: ex p being FinSequence st x() = p.(len p) & len p = len S() & p.1 = S().1 &
+    for k st 1 <= k & k < len S() holds p.(k+1) = F(S().(k+1),p.k)
+  and
+A2: ex p being FinSequence st y() = p.(len p) & len p = len S() & p.1 = S().1 &
+    for k st 1 <= k & k < len S() holds p.(k+1) = F(S().(k+1),p.k)
+proof
+  defpred P[set,set,set] means $3 = F($1,$2);
+  A3: for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
+         P[z,x,y1] & P[z,x,y2] holds y1 = y2;
+  A4: ex p st x() = p.(len p) & len p = len S() & p.1 = S().1 &
+       for k st 1 <= k & k < len S() holds P[S().(k+1),p.k,p.(k+1)] by A1;
+  A6: ex p st y() = p.(len p) & len p = len S() & p.1 = S().1 &
+       for k st 1 <= k & k < len S() holds P[S().(k+1),p.k,p.(k+1)] by A2;
+  thus x() = y() from SeqBinOpUn(A3,A4,A6);
+end;
+           :::::::::::::::::::::::::::::::
+::   Schemes of definitness  ::
+:::::::::::::::::::::::::::::::
+
+scheme DefRec{A() -> set,n() -> Nat,P[set,set,set]}:
+   (ex y being set st ex f being Function st
+     y = f.n() & dom f = NAT & f.0 = A() &
+       for n holds P[n,f.n,f.(n+1)]) &
+     for y1,y2 being set st
+        (ex f being Function st
+     y1 = f.n() & dom f = NAT & f.0 = A() & for n holds P[n,f.n,f.(n+1)]) &
+        (ex f being Function st
+     y2 = f.n() & dom f = NAT & f.0 = A() & for n holds P[n,f.n,f.(n+1)])
+    holds y1 = y2
+provided
+
+A1: for n,x ex y st P[n,x,y] and
+A2: for n,x,y1,y2 st P[n,x,y1] & P[n,x,y2] holds y1 = y2
+proof
+  defpred Q[set,set,set] means P[$1,$2,$3];
+  A3: for n,x ex y st Q[n,x,y] by A1;
+  A4: for n,x,y1,y2 st Q[n,x,y1] & Q[n,x,y2] holds y1 = y2 by A2;
+  consider f being Function such that A5: dom f = NAT & f.0 = A() &
+    for n being Element of NAT holds Q[n,f.n,f.(n+1)] from RecEx(A3,A4);
+ thus
+     (ex y being set st ex f being Function st
+     y = f.n() & dom f = NAT & f.0 = A() &
+       for n holds P[n,f.n,f.(n+1)])
+ proof
+  take f.n(),f;
+  thus f.n() = f.n() & dom f = NAT & f.0 = A() &
+         for n holds P[n,f.n,f.(n+1)] by A5;
+ end;
+  let y1,y2 be set;
+  given f1 being Function such that A6: y1 = f1.n() & dom f1 = NAT &
+    f1.0 = A() & for n holds Q[n,f1.n,f1.(n+1)];
+  given f2 being Function such that A7: y2 = f2.n() & dom f2 = NAT &
+    f2.0 = A() & for n holds Q[n,f2.n,f2.(n+1)];
+  A8: dom f1 = NAT & f1.0 = A() & for n holds Q[n,f1.n,f1.(n+1)] by A6;
+  A9: dom f2 = NAT & f2.0 = A() & for n holds Q[n,f2.n,f2.(n+1)] by A7;
+     f1 = f2 from RecUn(A8,A9,A4);
+  hence y1 = y2 by A6,A7;
+end;
+
+scheme LambdaDefRec{A() -> set,n() -> Nat,RecFun(set,set) -> set}:
+   (ex y being set st ex f being Function st
+     y = f.n() & dom f = NAT & f.0 = A() &
+       for n holds f.(n+1) = RecFun(n,f.n)) &
+     for y1,y2 being set st
+     (ex f being Function st
+     y1 = f.n() & dom f = NAT & f.0 = A() &
+       for n holds f.(n+1) = RecFun(n,f.n)) &
+     (ex f being Function st
+     y2 = f.n() & dom f = NAT & f.0 = A() &
+       for n holds f.(n+1) = RecFun(n,f.n))
+    holds y1 = y2
+proof
+  defpred P[set,set,set] means for z st z = $2 holds $3 = RecFun($1,z);
+  A1: for n,x ex y st P[n,x,y]
+      proof let n,x; take RecFun(n,x);let z; assume z = x;
+        hence thesis;
+      end;
+  A2: for n,x,y1,y2 st P[n,x,y1] & P[n,x,y2] holds y1 = y2
+       proof let n,x,y1,y2; assume A3:
+         (for z st z = x holds y1 = RecFun(n,z)) &
+          for z st z = x holds y2 = RecFun(n,z);
+         hence y1 = RecFun(n,x) .= y2 by A3;
+       end;
+X:   (ex y being set st ex f being Function st
+     y = f.n() & dom f = NAT & f.0 = A() &
+       for n holds  P[n,f.n,f.(n+1)] ) &
+     for y1,y2 being set st
+     (ex f being Function st
+     y1 = f.n() & dom f = NAT & f.0 = A() &
+       for n holds P[n,f.n,f.(n+1)] ) &
+     (ex f being Function st
+     y2 = f.n() & dom f = NAT & f.0 = A() &
+       for n holds P[n,f.n,f.(n+1)] )
+    holds y1 = y2 from DefRec(A1,A2);
+   then consider y being set, f being Function such that
+W1:  y = f.n() & dom f = NAT & f.0 = A() and
+W2:  for n holds  P[n,f.n,f.(n+1)];
+  thus ex y being set st ex f being Function st
+     y = f.n() & dom f = NAT & f.0 = A() &
+       for n holds f.(n+1) = RecFun(n,f.n)
+  proof take y,f;
+   thus thesis by W1,W2;
+  end;
+   let y1,y2 being set;
+   given f1 being Function such that
+G1:     y1 = f1.n() & dom f1 = NAT & f1.0 = A() &
+       for n holds f1.(n+1) = RecFun(n,f1.n);
+   given f2 being Function such that
+G2:     y2 = f2.n() & dom f2 = NAT & f2.0 = A() &
+       for n holds f2.(n+1) = RecFun(n,f2.n);
+A: for n holds P[n,f1.n,f1.(n+1)] by G1;
+   for n holds P[n,f2.n,f2.(n+1)] by G2;
+  hence y1 = y2 by X,G1,G2,A;
+end;
+
+scheme DefRecD{D() -> non empty set,A() -> (Element of D()),
+           n() -> Nat,P[set,set,set]}:
+   (ex y being Element of D() st ex f being Function of NAT,D() st
+     y = f.n() & f.0 = A() &
+       for n holds P[n,f.n,f.(n+1)]) &
+     for y1,y2 being Element of D() st
+        (ex f being Function of NAT,D() st
+     y1 = f.n() & f.0 = A() & for n holds P[n,f.n,f.(n+1)]) &
+        (ex f being Function of NAT,D() st
+     y2 = f.n() & f.0 = A() & for n holds P[n,f.n,f.(n+1)])
+    holds y1 = y2
+provided
+A1: for n being Nat,x being Element of D()
+      ex y being Element of D() st P[n,x,y] and
+A2: for n being Nat, x,y1,y2 being Element of D()
+      st P[n,x,y1] & P[n,x,y2] holds y1 = y2
+proof
+  defpred Q[set,set,set] means P[$1,$2,$3];
+  A3: for n being Nat,x being Element of D()
+      ex y being Element of D() st Q[n,x,y] by A1;
+  consider f being Function of NAT,D() such that A4: f.0 = A() &
+    for n being Element of NAT holds Q[n,f.n,f.(n+1)] from RecExD(A3);
+thus
+     (ex y being Element of D() st ex f being Function of NAT,D() st
+     y = f.n() & f.0 = A() &
+       for n holds P[n,f.n,f.(n+1)])
+ proof
+  take f.n(),f;
+  thus f.n() = f.n() & f.0 = A() &
+         for n holds P[n,f.n,f.(n+1)] by A4;
+ end;
+A5: for n being Nat, x,y1,y2 being Element of D()
+      st Q[n,x,y1] & Q[n,x,y2] holds y1 = y2 by A2;
+  let y1,y2 be Element of D();
+  given f1 being Function of NAT,D() such that A6: y1 = f1.n() &
+    f1.0 = A() & for n holds Q[n,f1.n,f1.(n+1)];
+  given f2 being Function of NAT,D() such that A7: y2 = f2.n() &
+    f2.0 = A() & for n holds Q[n,f2.n,f2.(n+1)];
+  A8: f1.0 = A() & for n holds Q[n,f1.n,f1.(n+1)] by A6;
+  A9: f2.0 = A() & for n holds Q[n,f2.n,f2.(n+1)] by A7;
+     f1 = f2 from RecUnD(A8,A9,A5);
+  hence y1 = y2 by A6,A7;
+end;
+
+scheme LambdaDefRecD{D() -> non empty set, A() -> Element of D(),
+       n() -> Nat, RecFun(set,set) -> Element of D()}:
+   (ex y being Element of D() st ex f being Function of NAT,D() st
+     y = f.n() & f.0 = A() &
+       for n being Nat holds f.(n+1) = RecFun(n,f.n)) &
+     for y1,y2 being Element of D() st
+     (ex f being Function of NAT,D() st
+     y1 = f.n() & f.0 = A() &
+       for n being Nat holds f.(n+1) = RecFun(n,f.n)) &
+     (ex f being Function of NAT,D() st
+     y2 = f.n() & f.0 = A() &
+       for n being Nat holds f.(n+1) = RecFun(n,f.n))
+    holds y1 = y2
+proof
+  defpred Q[set,set,set] means for z being Element of D() st
+       z=$2 holds $3 = RecFun($1,z);
+  A1: for n being Nat,x being Element of D()
+        ex y being Element of D() st Q[n,x,y]
+       proof let n be Nat,x be Element of D();take RecFun(n,x);
+          let z be Element of D();
+         assume z = x; hence thesis;
+       end;
+  A2: for n being Nat,x,y1,y2 being Element of D()
+        st Q[n,x,y1] & Q[n,x,y2]
+       holds y1 = y2
+      proof let n be Nat,x,y1,y2 be Element of D();assume A3:
+        (for z being Element of D() st z = x holds y1 = RecFun(n,z)) &
+         for z being Element of D() st z = x holds y2 = RecFun(n,z);
+        hence y1 = RecFun(n,x) .= y2 by A3;
+      end;
+X:   (ex y being Element of D() st ex f being Function of NAT,D() st
+     y = f.n() & f.0 = A() &
+       for n being Nat holds Q[n,f.n,f.(n+1)]) &
+     for y1,y2 being Element of D() st
+     (ex f being Function of NAT,D() st
+     y1 = f.n() & f.0 = A() &
+       for n being Nat holds Q[n,f.n,f.(n+1)]) &
+     (ex f being Function of NAT,D() st
+     y2 = f.n() & f.0 = A() &
+       for n being Nat holds Q[n,f.n,f.(n+1)])
+    holds y1 = y2 from DefRecD(A1,A2);
+     then
+      consider y being Element of D(), f being Function of NAT,D() such that
+W1:    y = f.n() & f.0 = A() and
+W2:    for n being Nat holds Q[n,f.n,f.(n+1)];
+    thus ex y being Element of D() st ex f being Function of NAT,D() st
+     y = f.n() & f.0 = A() &
+       for n being Nat holds f.(n+1) = RecFun(n,f.n)
+     proof
+      take y,f;
+      thus thesis by W1,W2;
+     end;
+    let y1,y2 being Element of D();
+    given f being Function of NAT,D() such that
+G1:  y1 = f.n() & f.0 = A() &
+       for n being Nat holds f.(n+1) = RecFun(n,f.n);
+    given f2 being Function of NAT,D() such that
+G2:   y2 = f2.n() & f2.0 = A() &
+       for n being Nat holds f2.(n+1) = RecFun(n,f2.n);
+A: for n being Nat holds Q[n,f.n,f.(n+1)] by G1;
+   for n being Nat holds Q[n,f2.n,f2.(n+1)] by G2;
+  hence y1 = y2 by X,A,G1,G2;
+end;
+
+scheme SeqBinOpDef{S() -> FinSequence,P[set,set,set]}:
+  (ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
+     p.1 = S().1 & for k st 1 <= k & k < len S() holds
+        P[S().(k+1),p.k,p.(k+1)]) &
+  for x,y st
+     (ex p being FinSequence st x = p.(len p) & len p = len S() &
+     p.1 = S().1 & for k st 1 <= k & k < len S() holds
+        P[S().(k+1),p.k,p.(k+1)]) &
+     (ex p being FinSequence st y = p.(len p) & len p = len S() &
+     p.1 = S().1 & for k st 1 <= k & k < len S() holds
+        P[S().(k+1),p.k,p.(k+1)])
+   holds x = y
+provided
+A1: for k,y st 1 <= k & k < len S() ex z st P[S().(k+1),y,z] and
+A2: for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
+          P[z,x,y1] & P[z,x,y2] holds y1 = y2
+proof
+  defpred Q[set,set,set] means P[$1,$2,$3];
+A3: for k,y st 1 <= k & k < len S() ex z st Q[S().(k+1),y,z] by A1;
+A4: for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
+          Q[z,x,y1] & Q[z,x,y2] holds y1 = y2 by A2;
+  thus
+    (ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
+     p.1 = S().1 & for k st 1 <= k & k < len S() holds
+        Q[S().(k+1),p.k,p.(k+1)]) from SeqBinOpEx(A3,A4);
+  let x,y;
+  assume A5: ex p being FinSequence st x = p.(len p) & len p = len S() &
+     p.1 = S().1 & for k st 1 <= k & k < len S() holds
+        Q[S().(k+1),p.k,p.(k+1)];
+  assume A6: ex p being FinSequence st y = p.(len p) & len p = len S() &
+     p.1 = S().1 & for k st 1 <= k & k < len S() holds
+        Q[S().(k+1),p.k,p.(k+1)];
+  thus x = y from SeqBinOpUn(A4,A5,A6);
+end;
+
+scheme LambdaSeqBinOpDef{S() -> FinSequence,F(set,set) -> set}:
+  (ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
+    p.1 = S().1 & for k st 1 <= k & k < len S()
+      holds p.(k+1) = F(S().(k+1),p.k)) &
+  for x,y st
+    (ex p being FinSequence st x = p.(len p) & len p = len S() &
+    p.1 = S().1 & for k st 1 <= k & k < len S()
+        holds p.(k+1) = F(S().(k+1),p.k)) &
+    (ex p being FinSequence st y = p.(len p) & len p = len S() &
+    p.1 = S().1 & for k st 1 <= k & k < len S()
+       holds p.(k+1) = F(S().(k+1),p.k))
+   holds x = y
+proof
+  deffunc G(set,set)= F($1,$2);
+  thus
+     (ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
+       p.1 = S().1 & for k st 1 <= k & k < len S()
+      holds p.(k+1) = G(S().(k+1),p.k)) from LambdaSeqBinOpEx;
+  let x,y;
+  assume A1: ex p being FinSequence st x = p.(len p) & len p = len S() &
+    p.1 = S().1 & for k st 1 <= k & k < len S()
+       holds p.(k+1) = G(S().(k+1),p.k);
+  assume A2: ex p being FinSequence st y = p.(len p) & len p = len S() &
+    p.1 = S().1 & for k st 1 <= k & k < len S()
+      holds p.(k+1) = G(S().(k+1),p.k);
+  thus x = y from LambdaSeqBinOpUn(A1,A2);
+end;

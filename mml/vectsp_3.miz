@@ -1,0 +1,319 @@
+:: Finite Sums of Vectors in Vector Space
+::  by Wojciech A. Trybulec
+::
+:: Received July 12, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, FINSEQ_1, RELAT_1, FUNCT_1, FINSEQ_4, BINOP_1, VECTSP_1,
+      LATTICES, ARYTM_1;
+ notation TARSKI, XREAL_0, FINSEQ_1, RELAT_1, FUNCT_1, STRUCT_0, RLVECT_1,
+      VECTSP_1, FINSEQ_4, NAT_1;
+ constructors VECTSP_1, FINSEQ_4, NAT_1, XREAL_0, MEMBERED, XBOOLE_0;
+ clusters VECTSP_1, RELSET_1, STRUCT_0, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE;
+ definitions TARSKI;
+ theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, NAT_1, RLVECT_1,
+      RLVECT_2, VECTSP_1;
+ schemes FINSEQ_1, NAT_1;
+
+begin
+
+reserve x,y for set,
+        k,n for Nat;
+
+canceled 8;
+
+theorem Th9:
+ for R being add-associative right_zeroed right_complementable Abelian
+   associative left_unital distributive (non empty doubleLoopStr),
+     a being Element of R
+ for V being Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R),
+     F,G being FinSequence of the carrier of V
+  st len F = len G &
+     for k for v being Element of V
+       st k in dom F & v = G.k holds F.k = a * v
+   holds Sum(F) = a * Sum(G)
+    proof let R be add-associative right_zeroed right_complementable Abelian
+            associative left_unital distributive (non empty doubleLoopStr),
+              a be Element of R;
+     let V be Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R),
+         F,G be FinSequence of the carrier of V;
+     defpred P[Nat] means
+         for H,I being FinSequence of the carrier of V
+        st len H = len I & len H = $1 &
+          (for k for v be Element of V
+           st k in dom H & v = I.k holds H.k = a * v) holds
+            Sum(H) = a * Sum(I);
+     A1: P[0] proof let H,I be FinSequence of the carrier of V;
+       assume that A2: len H = len I & len H = 0 and
+                        for k for v being Element of V
+                       st k in dom H & v = I.k holds H.k = a * v;
+          H = <*>(the carrier of V) &
+        I = <*>(the carrier of V) by A2,FINSEQ_1:32;
+        then Sum(H) = 0.V & Sum(I) = 0.V by RLVECT_1:60;
+      hence Sum(H) = a * Sum(I) by VECTSP_1:59;
+     end;
+      A3: P[n] implies P[n+1]
+       proof
+        assume A4: for H,I being FinSequence of the carrier of V
+         st len H = len I & len H = n &
+          for k for v being Element of V
+           st k in dom H & v = I.k holds H.k = a * v holds
+                    Sum(H) = a * Sum(I);
+       let H,I be FinSequence of the carrier of V;
+        assume that A5: len H = len I and A6: len H = n + 1 and
+                    A7: for k for v being Element of V
+                     st k in dom H & v = I.k holds H.k = a * v;
+         reconsider p = H | (Seg n),q = I | (Seg n)
+           as FinSequence of the carrier of V by FINSEQ_1:23;
+A8:          n <= n + 1 by NAT_1:37;
+          then A9: len p = n & len q = n by A5,A6,FINSEQ_1:21;
+A10:          now let k; let v be Element of V;
+            assume that A11: k in dom p and A12: v = q.k;
+A13:           dom p c= dom H by A6,A8,A9,FINSEQ_3:32;
+               dom q = dom p by A9,FINSEQ_3:31;
+             then I.k = q.k by A11,FUNCT_1:70;
+             then H.k = a * v by A7,A11,A12,A13;
+           hence p.k = a * v by A11,FUNCT_1:70;
+          end;
+             n + 1 in Seg(n + 1) by FINSEQ_1:6;
+then A14:       n + 1 in dom H & dom H = dom I by A5,A6,FINSEQ_1:def 3,FINSEQ_3
+:31;
+         then reconsider v1 = H.(n + 1),v2 = I.(n + 1)
+          as Element of V by FINSEQ_2:13;
+          A15: v1 = a * v2 by A7,A14;
+A16:       p = H | (dom p) & q = I | (dom q) by A5,A6,A8,FINSEQ_1:21;
+       hence Sum(H) = Sum(p) + v1 by A6,A9,RLVECT_1:55
+                .= a * Sum(q) + a * v2 by A4,A9,A10,A15
+                .= a * (Sum(q) + v2) by VECTSP_1:def 26
+                .= a * Sum(I) by A5,A6,A9,A16,RLVECT_1:55;
+      end;
+         for n holds P[n] from Ind(A1,A3);
+     hence thesis;
+    end;
+
+theorem
+   for R being add-associative right_zeroed right_complementable Abelian
+   associative left_unital distributive (non empty doubleLoopStr),
+     a being Element of R
+ for V being Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R),
+     F,G being FinSequence of the carrier of V
+  st len F = len G & for k st k in dom F holds G.k = a * F/.k
+  holds Sum(G) = a * Sum(F)
+ proof
+  let R be add-associative right_zeroed right_complementable Abelian
+    associative left_unital distributive (non empty doubleLoopStr),
+      a be Element of R;
+  let V be Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R),
+     F,G be FinSequence of the carrier of V;
+  assume that A1: len F = len G and
+                   A2: for k st k in dom F holds G.k = a * F/.k;
+     now let k; let v be Element of V;
+     assume that A3: k in dom G and A4: v = F.k;
+A5:   k in dom F by A1,A3,FINSEQ_3:31;
+      then v = F/.k by A4,FINSEQ_4:def 4;
+    hence G.k = a * v by A2,A5;
+   end;
+  hence thesis by A1,Th9;
+ end;
+
+canceled 2;
+
+theorem
+   for R being add-associative right_zeroed right_complementable Abelian
+   associative left_unital distributive (non empty doubleLoopStr)
+ for V being Abelian add-associative right_zeroed
+         right_complementable (non empty VectSpStr over R),
+     F,G,H being FinSequence of the carrier of V
+  st len F = len G & len F = len H &
+     for k st k in dom F holds H.k = F/.k - G/.k
+  holds Sum(H) = Sum(F) - Sum(G)
+proof
+  let R be add-associative right_zeroed right_complementable Abelian
+    associative left_unital distributive (non empty doubleLoopStr);
+  let V be Abelian add-associative right_zeroed
+         right_complementable (non empty VectSpStr over R),
+     F,G,H be FinSequence of the carrier of V;
+  assume that A1: len F = len G & len F = len H and
+                   A2: for k st k in dom F holds H.k = F/.k - G/.k;
+   deffunc F(Nat) = - G/.$1;
+   consider I being FinSequence such that A3: len I = len G and
+    A4: for k st k in Seg(len G) holds I.k = F(k) from SeqLambda;
+A5: Seg len G = dom G by FINSEQ_1:def 3;
+      rng I c= the carrier of V
+     proof let x;
+       assume x in rng I;
+        then consider y such that A6: y in dom I & I.y = x by FUNCT_1:def 5;
+        reconsider y as Nat by A6,FINSEQ_3:25;
+           y in Seg(len G) by A3,A6,FINSEQ_1:def 3;
+         then x = - G/.y by A4,A6;
+        then reconsider v = x as Element of V;
+           v in V by RLVECT_1:3;
+      hence thesis;
+     end;
+   then reconsider I as FinSequence of the carrier of V by FINSEQ_1:def 4;
+    A7: Sum(I) = - Sum(G) by A3,A4,A5,RLVECT_2:6;
+      now let k;
+      assume A8: k in dom F;
+       then k in dom I by A1,A3,FINSEQ_3:31;
+       then A9: I.k = I/.k by FINSEQ_4:def 4;
+A10:    dom F = dom G by A1,FINSEQ_3:31;
+     thus H.k = F/.k - G/.k by A2,A8
+             .= F/.k + - G/.k by RLVECT_1:def 11
+             .= F/.k + I/.k by A4,A5,A8,A9,A10;
+    end;
+    then Sum(H) = Sum(F) + Sum(I) by A1,A3,RLVECT_2:4;
+  hence thesis by A7,RLVECT_1:def 11;
+ end;
+
+canceled 7;
+
+theorem
+   for R being add-associative right_zeroed right_complementable Abelian
+   associative left_unital distributive (non empty doubleLoopStr),
+     a being Element of R
+ for V being Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R)
+ holds a * Sum(<*>(the carrier of V)) = 0.V
+  proof
+  let R be add-associative right_zeroed right_complementable Abelian
+    associative left_unital distributive (non empty doubleLoopStr),
+      a be Element of R;
+  let V be Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R);
+   thus a * Sum(<*>(the carrier of V)) = a * 0.V by RLVECT_1:60
+                                    .= 0.V by VECTSP_1:59;
+  end;
+
+canceled;
+
+theorem
+   for R being add-associative right_zeroed right_complementable Abelian
+   associative left_unital distributive (non empty doubleLoopStr),
+     a being Element of R
+ for V being Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R),
+     v,u being Element of V
+ holds a * Sum<* v,u *> = a * v + a * u
+  proof
+  let R be add-associative right_zeroed right_complementable Abelian
+    associative left_unital distributive (non empty doubleLoopStr),
+      a be Element of R;
+  let V be Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R),
+      v,u be Element of V;
+   thus a * Sum<* v,u *> = a * (v + u) by RLVECT_1:62
+                      .= a * v + a * u by VECTSP_1:def 26;
+  end;
+
+theorem
+   for R being add-associative right_zeroed right_complementable Abelian
+   associative left_unital distributive (non empty doubleLoopStr),
+     a being Element of R
+ for V being Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R),
+     v,u,w being Element of V
+ holds a * Sum<* v,u,w *> = a * v + a * u + a * w
+  proof
+  let R be add-associative right_zeroed right_complementable Abelian
+    associative left_unital distributive (non empty doubleLoopStr),
+      a be Element of R;
+  let V be Abelian add-associative right_zeroed
+         right_complementable VectSp-like (non empty VectSpStr over R),
+      v,u,w be Element of V;
+   thus a * Sum<* v,u,w *> = a * (v + u + w) by RLVECT_1:63
+                        .= a * (v + u) + a * w by VECTSP_1:def 26
+                        .= a * v + a * u + a * w by VECTSP_1:def 26;
+  end;
+
+theorem
+   for V being Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr)
+ holds - Sum(<*>(the carrier of V)) = 0.V
+  proof
+  let V be Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr);
+   thus - Sum(<*>(the carrier of V)) = - 0.V by RLVECT_1:60
+                                    .= 0.V by RLVECT_1:25;
+  end;
+
+canceled;
+
+theorem
+   for V being Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+     v,u being Element of V
+ holds - Sum<* v,u *> = (- v) - u
+  proof
+  let V be Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+      v,u be Element of V;
+   thus - Sum<* v,u *> = - (v + u) by RLVECT_1:62
+                    .= (- v) - u by VECTSP_1:64;
+  end;
+
+theorem
+   for V being Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+     v,u,w being Element of V
+ holds - Sum<* v,u,w *> = ((- v) - u) - w
+  proof
+  let V be Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+      v,u,w be Element of V;
+   thus - Sum<* v,u,w *> = - (v + u + w) by RLVECT_1:63
+                      .= (- (v + u)) - w by VECTSP_1:64
+                      .= ((- v) - u) - w by VECTSP_1:64;
+  end;
+
+canceled 4;
+
+theorem
+   for V being Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+     v being Element of V
+ holds Sum<* v,- v *> = 0.V & Sum<* - v,v *> = 0.V
+  proof
+  let V be Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+      v be Element of V;
+   thus Sum<* v,- v *> = v + (- v) by RLVECT_1:62
+                    .= 0.V by VECTSP_1:66;
+   hence thesis by RLVECT_1:72;
+  end;
+
+theorem
+   for V being Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+     v,w being Element of V
+ holds Sum<* v,- w *> = v - w & Sum<* - w,v *> = v - w
+  proof
+  let V be Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+      v,w be Element of V;
+   thus Sum<* v,- w *> = v + (- w) by RLVECT_1:62
+                    .= v - w by RLVECT_1:def 11;
+   hence thesis by RLVECT_1:72;
+  end;
+
+theorem
+   for V being Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+     v,w being Element of V
+ holds Sum<* - v,- w *> = - (v + w) & Sum<* - w,- v *> = - (v + w)
+  proof
+  let V be Abelian add-associative right_zeroed
+         right_complementable (non empty LoopStr),
+      v,w be Element of V;
+   thus Sum<* - v,- w *> = (- v) + (- w) by RLVECT_1:62
+                      .= - (v + w) by RLVECT_1:45;
+   hence thesis by RLVECT_1:72;
+  end;
+
+

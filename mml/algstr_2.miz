@@ -1,0 +1,816 @@
+:: From Double Loops to Fields
+::  by Wojciech Skaba and Micha{\l} Muzalewski
+::
+:: Received September 27, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary VECTSP_1, FUNCT_1, RLVECT_1, ALGSTR_1, VECTSP_2, ARYTM_1, LATTICES,
+      BINOP_1, ALGSTR_2;
+ notation REAL_1, BINOP_1, STRUCT_0, RLVECT_1, VECTSP_1, VECTSP_2, ALGSTR_1;
+ constructors BINOP_1, ALGSTR_1, VECTSP_2, REAL_1, MEMBERED, XBOOLE_0;
+ clusters VECTSP_1, ALGSTR_1, VECTSP_2, MEMBERED, ZFMISC_1, XBOOLE_0;
+ theorems VECTSP_1, ALGSTR_1, RLVECT_1, VECTSP_2;
+
+begin :: DOUBLE LOOPS
+
+ reserve L for non empty doubleLoopStr;
+
+Lm1: for a,b being Element of F_Real
+          for x,y being Real
+          holds a = x & b = y implies a * b = x * y
+    proof
+       let a,b be Element of F_Real;
+       let x,y be Real;
+       assume a=x & b=y;
+       hence a * b = multreal.(x,y) by VECTSP_1:def 10,def 15
+                 .= x * y by VECTSP_1:def 14;
+    end;
+
+Lm2: 0 = 0.F_Real by RLVECT_1:def 2,VECTSP_1:def 15;
+
+Lm3: for a,b being Element of F_Real st a<>0.F_Real
+         ex x being Element of F_Real st a*x=b
+     proof
+       let a,b be Element of F_Real such that
+       A1: a<>0.F_Real;
+       reconsider p=a, q=b as Real by VECTSP_1:def 15;
+       consider r be Real such that A2: p*r = q by A1,Lm2,ALGSTR_1:32;
+       reconsider x=r as Element of F_Real by VECTSP_1:def 15;
+         a*x = b by A2,Lm1;
+       hence thesis;
+     end;
+
+Lm4: for a,b being Element of F_Real st a<>0.F_Real
+             ex x being Element of F_Real st x*a=b
+proof
+  let a,b be Element of F_Real; assume a<>0.F_Real;
+  then consider x being Element of F_Real such that
+A1: a*x=b by Lm3;
+  thus thesis by A1;
+end;
+
+Lm5: for a,x,y being Element of F_Real st a<>0.F_Real
+            holds a*x=a*y implies x=y by VECTSP_1:33;
+
+Lm6: for a,x,y being Element of F_Real st a<>0.F_Real
+            holds x*a=y*a implies x=y by VECTSP_1:33;
+
+Lm7: for a being Element of F_Real
+   holds a*0.F_Real = 0.F_Real by VECTSP_1:44;
+
+Lm8: for a being Element of F_Real
+   holds 0.F_Real*a = 0.F_Real by VECTSP_1:44;
+
+:: Below is the basic definition of the mode of DOUBLE LOOP.
+:: The F_Real example in accordance with the many theorems proved above
+:: is used to prove the existence.
+
+definition
+  cluster F_Real -> multLoop_0-like;
+  coherence by Lm3,Lm4,Lm5,Lm6,Lm7,Lm8,ALGSTR_1:34;
+end;
+
+:: In the following part of this article the negation and minus functions
+:: are defined. This is the only definition of both functions in this article
+:: while some of their features are independently proved
+:: for various structures.
+
+definition
+  let L be add-left-cancelable add-right-invertible (non empty LoopStr);
+  let a be Element of L;
+ canceled 6;
+
+  func -a -> Element of L means :Def7:
+    a+it = 0.L;
+  existence by ALGSTR_1:def 9;
+  uniqueness by ALGSTR_1:def 6;
+end;
+
+definition
+  let L be add-left-cancelable add-right-invertible (non empty LoopStr);
+  let a,b be Element of L;
+  func a-b -> Element of L equals :Def8:
+    a+ -b;
+  correctness;
+end;
+
+definition
+ cluster strict Abelian add-associative commutative associative distributive
+   non degenerated left_zeroed right_zeroed Loop-like well-unital
+    multLoop_0-like (non empty doubleLoopStr);
+  existence
+  proof
+    take F_Real;
+    thus thesis;
+   end;
+end;
+
+definition
+  mode doubleLoop is left_zeroed right_zeroed Loop-like
+     well-unital multLoop_0-like (non empty doubleLoopStr);
+end;
+
+definition
+  mode leftQuasi-Field is Abelian add-associative
+    right-distributive non degenerated doubleLoop;
+end;
+
+ reserve a,b,c,x,y,z for Element of L;
+
+:: The following theorem shows that the basic set of axioms of the
+:: left quasi-field may be replaced with the following one,
+:: by just removing a few and adding some other axioms.
+
+canceled 11;
+
+theorem
+     L is leftQuasi-Field iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a holds 1_ L * a = a)
+   & (for a,b st a<>0.L ex x st a*x=b)
+   & (for a,b st a<>0.L ex x st x*a=b)
+   & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+   & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+   & (for a holds a*0.L = 0.L)
+   & (for a holds 0.L*a = 0.L)
+   & (for a,b,c holds a*(b+c) = a*b + a*c)
+  proof
+   thus L is leftQuasi-Field implies
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a holds 1_ L * a = a)
+   & (for a,b st a<>0.L ex x st a*x=b)
+   & (for a,b st a<>0.L ex x st x*a=b)
+   & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+   & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+   & (for a holds a*0.L = 0.L)
+   & (for a holds 0.L*a = 0.L)
+   & (for a,b,c holds a*(b+c) = a*b + a*c)
+   by ALGSTR_1:7,34,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 11,def 21,VECTSP_2:
+def 2;
+     assume A1: (for a holds a + 0.L = a)
+               & (for a ex x st a+x = 0.L)
+               & (for a,b,c holds (a+b)+c = a+(b+c))
+               & (for a,b holds a+b = b+a)
+               & 0.L <> 1_ L
+               & (for a holds a * 1_ L = a)
+               & (for a holds 1_ L * a = a)
+               & (for a,b st a<>0.L ex x st a*x=b)
+               & (for a,b st a<>0.L ex x st x*a=b)
+               & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+               & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+               & (for a holds a*0.L = 0.L)
+               & (for a holds 0.L*a = 0.L)
+               & (for a,b,c holds a*(b+c) = a*b + a*c);
+          now thus
+    A2:for a holds 0.L + a = a
+           proof
+            let a;
+            thus 0.L + a = a + 0.L by A1 .= a by A1;
+           end;
+         thus A3: for a,b ex x st a+x=b
+           proof
+             let a,b;
+             consider y such that A4: a+y = 0.L by A1;
+             take x = y+b;
+             thus a+x = 0.L + b by A1,A4
+                     .= b by A2;
+           end;
+         thus for a,b ex x st x+a=b
+           proof
+             let a,b; consider x such that A5: a+x=b by A3;
+             take x;
+             thus thesis by A1,A5;
+           end;
+
+         thus A6: for a,x,y holds a+x=a+y implies x=y
+             proof
+               let a,x,y;
+               consider z such that A7: z+a = 0.L by A1,ALGSTR_1:3;
+               assume a+x = a+y;
+               then (z+a)+x = z+(a+y) by A1 .= (z+a)+y by A1;
+               hence x = 0.L + y by A2,A7 .= y by A2;
+             end;
+
+         thus for a,x,y holds x+a=y+a implies x=y
+             proof
+               let a,x,y;
+               assume x+a = y+a;
+               then a+x= y+a by A1 .= a+y by A1;
+               hence thesis by A6;
+             end;
+        end;
+       hence thesis by A1,ALGSTR_1:7,34,def 5,RLVECT_1:def 5,def 6,def 7,
+VECTSP_1:def 11,def 21,VECTSP_2:def 2;
+  end;
+
+canceled;
+
+theorem Th14:
+  for G being Abelian right-distributive doubleLoop,
+      a,b being Element of G holds a*(-b) = -(a*b)
+proof
+  let G be Abelian right-distributive doubleLoop,
+  a,b be Element of G;
+    a*b + a*(-b) = a*(b+ -b) by VECTSP_1:def 11
+              .= a*0.G by Def7
+              .= 0.G by ALGSTR_1:34;
+  hence thesis by Def7;
+end;
+
+theorem Th15:
+  for G being Abelian add-left-cancelable add-right-invertible
+          (non empty LoopStr),
+      a being Element of G holds -(-a) = a
+proof
+  let G be Abelian add-left-cancelable add-right-invertible
+          (non empty LoopStr),
+      a be Element of G;
+    -a+a = 0.G by Def7;
+  hence thesis by Def7;
+end;
+
+theorem
+    for G being Abelian right-distributive doubleLoop holds
+   (-1_ G)*(-1_ G) = 1_ G
+proof
+  let G be Abelian right-distributive doubleLoop;
+  thus (-1_ G)*(-1_ G) = -((-1_ G)*1_ G) by Th14
+                      .= -(-1_ G) by VECTSP_2:def 2
+                      .= 1_ G by Th15;
+end;
+
+theorem
+    for G being Abelian right-distributive doubleLoop,
+      a,x,y being Element of G holds
+  a*(x-y) = a*x - a*y
+proof
+  let G be Abelian right-distributive doubleLoop,
+      a,x,y be Element of G;
+  thus a*(x-y) = a*(x+ -y) by Def8
+              .= a*x + a*(-y) by VECTSP_1:def 11
+              .= a*x + -(a*y) by Th14
+              .= a*x - a*y by Def8;
+end;
+
+:: RIGHT QUASI-FIELD
+
+:: The next contemplated algebraic structure is so called right quasi-field.
+:: This structure is defined as a DOUBLE LOOP augmented with three axioms.
+:: The reasoning is similar to that of left quasi-field.
+
+definition
+  mode rightQuasi-Field is Abelian add-associative left-distributive
+       non degenerated doubleLoop;
+end;
+
+canceled;
+
+theorem
+     L is rightQuasi-Field iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a holds 1_ L * a = a)
+   & (for a,b st a<>0.L ex x st a*x=b)
+   & (for a,b st a<>0.L ex x st x*a=b)
+   & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+   & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+   & (for a holds a*0.L = 0.L)
+   & (for a holds 0.L*a = 0.L)
+   & (for a,b,c holds (b+c)*a = b*a + c*a)
+  proof
+   thus L is rightQuasi-Field implies
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a holds 1_ L * a = a)
+   & (for a,b st a<>0.L ex x st a*x=b)
+   & (for a,b st a<>0.L ex x st x*a=b)
+   & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+   & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+   & (for a holds a*0.L = 0.L)
+   & (for a holds 0.L*a = 0.L)
+   & (for a,b,c holds (b+c)*a = b*a + c*a) by ALGSTR_1:7,34,RLVECT_1:def 5,def
+6,def 7,VECTSP_1:def 12,def 21,VECTSP_2:def 2;
+     assume A1: (for a holds a + 0.L = a)
+              & (for a ex x st a+x = 0.L)
+              & (for a,b,c holds (a+b)+c = a+(b+c))
+              & (for a,b holds a+b = b+a)
+              & 0.L <> 1_ L
+              & (for a holds a * 1_ L = a)
+              & (for a holds 1_ L * a = a)
+              & (for a,b st a<>0.L ex x st a*x=b)
+              & (for a,b st a<>0.L ex x st x*a=b)
+              & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+              & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+              & (for a holds a*0.L = 0.L)
+              & (for a holds 0.L*a = 0.L)
+              & (for a,b,c holds (b+c)*a = b*a + c*a);
+
+       now thus
+    A2:for a holds 0.L + a = a
+           proof
+            let a;
+            thus 0.L + a = a + 0.L by A1 .= a by A1;
+           end;
+
+         thus for a,b ex x st a+x=b
+           proof
+             let a,b;
+             consider y such that A3: a+y = 0.L by A1;
+             take x = y+b;
+             thus a+x = 0.L + b by A1,A3
+                     .= b by A2;
+           end;
+
+         thus for a,b ex x st x+a=b
+           proof
+             let a,b;
+             consider y such that A4: y+a = 0.L by A1,ALGSTR_1:3;
+             take x = b+y;
+             thus x+a = b + 0.L by A1,A4
+                     .= b by A1;
+           end;
+
+         thus for a,x,y holds a+x=a+y implies x=y
+             proof
+               let a,x,y;
+               consider z such that A5: z+a = 0.L by A1,ALGSTR_1:3;
+               assume a+x = a+y;
+               then (z+a)+x = z+(a+y) by A1 .= (z+a)+y by A1;
+               hence x = 0.L + y by A2,A5 .= y by A2;
+             end;
+
+         thus for a,x,y holds x+a=y+a implies x=y
+             proof
+               let a,x,y;
+               consider z such that A6: a+z = 0.L by A1;
+               assume x+a = y+a;
+               then x+(a+z) = (y+a)+z by A1 .= y+(a+z) by A1;
+               hence x = y + 0.L by A1,A6 .= y by A1;
+             end;
+        end;
+        hence thesis by A1,ALGSTR_1:7,34,def 5,RLVECT_1:def 5,def 6,def 7,
+VECTSP_1:def 12,def 21,VECTSP_2:def 2;
+  end;
+
+:: Below, the three features concerned with the - function,
+:: numbered 20..22 are proved. Where necessary, a few additional
+:: facts are included. They are independent of the similar proofs
+:: performed for the left quasi-field.
+
+ reserve G for left-distributive doubleLoop,
+         a,b,x,y for Element of G;
+
+canceled;
+
+theorem
+  Th21: (-b)*a = -(b*a)
+    proof
+        b*a + (-b)*a = (b+(-b))*a by VECTSP_1:def 12
+                  .= 0.G*a by Def7
+                  .= 0.G by ALGSTR_1:34;
+      hence thesis by Def7;
+    end;
+
+canceled;
+
+theorem
+    for G being Abelian left-distributive doubleLoop holds
+    (-1_ G)*(-1_ G) = 1_ G
+proof
+   let G be Abelian left-distributive doubleLoop;
+   thus (-1_ G)*(-1_ G) = -(1_ G*(-1_ G)) by Th21
+                       .= -(-1_ G) by VECTSP_2:def 2
+                       .= 1_ G by Th15;
+end;
+
+theorem
+     (x-y)*a = x*a - y*a
+    proof
+      thus (x-y)*a = (x+(-y))*a by Def8
+                  .= x*a + (-y)*a by VECTSP_1:def 12
+                  .= x*a + (-(y*a)) by Th21
+                  .= x*a - y*a by Def8;
+    end;
+
+:: DOUBLE SIDED QUASI-FIELD
+
+:: The next contemplated algebraic structure is so called double sided
+:: quasi-field. This structure is also defined as a DOUBLE LOOP augmented
+:: with four axioms, while its relevance to left/right quasi-field is
+:: independently contemplated.
+:: The reasoning is similar to that of left/right quasi-field.
+
+definition
+  mode doublesidedQuasi-Field is Abelian add-associative distributive
+     non degenerated doubleLoop;
+end;
+
+ reserve a,b,c,x,y,z for Element of L;
+
+canceled;
+
+theorem
+     L is doublesidedQuasi-Field iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a holds 1_ L * a = a)
+   & (for a,b st a<>0.L ex x st a*x=b)
+   & (for a,b st a<>0.L ex x st x*a=b)
+   & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+   & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+   & (for a holds a*0.L = 0.L)
+   & (for a holds 0.L*a = 0.L)
+   & (for a,b,c holds a*(b+c) = a*b + a*c)
+   & (for a,b,c holds (b+c)*a = b*a + c*a)
+  proof
+   thus L is doublesidedQuasi-Field implies
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a holds 1_ L * a = a)
+   & (for a,b st a<>0.L ex x st a*x=b)
+   & (for a,b st a<>0.L ex x st x*a=b)
+   & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+   & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+   & (for a holds a*0.L = 0.L)
+   & (for a holds 0.L*a = 0.L)
+   & (for a,b,c holds a*(b+c) = a*b + a*c)
+   & (for a,b,c holds (b+c)*a = b*a + c*a)
+    by ALGSTR_1:7,34,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 18,def 21,VECTSP_2
+:def 2;
+
+     assume A1: (for a holds a + 0.L = a)
+               & (for a ex x st a+x = 0.L)
+               & (for a,b,c holds (a+b)+c = a+(b+c))
+               & (for a,b holds a+b = b+a)
+               & 0.L <> 1_ L
+               & (for a holds a * 1_ L = a)
+               & (for a holds 1_ L * a = a)
+               & (for a,b st a<>0.L ex x st a*x=b)
+               & (for a,b st a<>0.L ex x st x*a=b)
+               & (for a,x,y st a<>0.L holds a*x=a*y implies x=y)
+               & (for a,x,y st a<>0.L holds x*a=y*a implies x=y)
+               & (for a holds a*0.L = 0.L)
+               & (for a holds 0.L*a = 0.L)
+               & (for a,b,c holds a*(b+c) = a*b + a*c)
+               & (for a,b,c holds (b+c)*a = b*a + c*a);
+
+       now thus
+    A2:for a holds 0.L + a = a
+           proof
+            let a;
+            thus 0.L + a = a + 0.L by A1 .= a by A1;
+           end;
+         thus for a,b ex x st a+x=b
+           proof
+             let a,b;
+             consider y such that A3: a+y = 0.L by A1;
+             take x = y+b;
+             thus a+x = 0.L + b by A1,A3
+                     .= b by A2;
+           end;
+         thus for a,b ex x st x+a=b
+           proof
+             let a,b;
+             consider y such that A4: y+a = 0.L by A1,ALGSTR_1:3;
+             take x = b+y;
+             thus x+a = b + 0.L by A1,A4
+                     .= b by A1;
+           end;
+
+         thus for a,x,y holds a+x=a+y implies x=y
+             proof
+               let a,x,y;
+               consider z such that A5: z+a = 0.L by A1,ALGSTR_1:3;
+               assume a+x = a+y;
+               then (z+a)+x = z+(a+y) by A1 .= (z+a)+y by A1;
+               hence x = 0.L + y by A2,A5 .= y by A2;
+             end;
+
+         thus for a,x,y holds x+a=y+a implies x=y
+             proof
+               let a,x,y;
+               consider z such that A6: a+z = 0.L by A1;
+               assume x+a = y+a;
+               then x+(a+z) = (y+a)+z by A1 .= y+(a+z) by A1;
+               hence x = y + 0.L by A1,A6 .= y by A1;
+             end;
+        end;
+       hence thesis by A1,ALGSTR_1:7,34,def 5,RLVECT_1:def 5,def 6,def 7,
+VECTSP_1:def 18,def 21,VECTSP_2:def 2;
+  end;
+
+:: SKEW FIELD
+:: A Skew-Field is defined as a double sided quasi-field extended
+:: with the associativity of multiplication.
+
+definition
+  mode _Skew-Field is associative doublesidedQuasi-Field;
+end;
+
+Lm9: 0.L <> 1_ L & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+     & (for a holds 0.L*a = 0.L)
+   implies (a*b = 1_ L implies b*a = 1_ L)
+  proof
+     assume A1: 0.L <> 1_ L &
+               (for a holds a * 1_ L = a)
+               & (for a st a<>0.L ex x st a*x = 1_ L)
+               & (for a,b,c holds (a*b)*c = a*(b*c))
+               & (for a holds a*0.L = 0.L)
+               & (for a holds 0.L*a = 0.L);
+    thus a*b = 1_ L implies b*a = 1_ L
+      proof
+        assume A2: a*b = 1_ L;
+        then b<>0.L by A1;
+        then consider x such that A3: b * x = 1_ L by A1;
+        thus b*a = (b*a) * (b*x) by A1,A3
+                .= ((b*a) * b) * x by A1
+                .= (b * 1_ L) * x by A1,A2
+                .= 1_ L by A1,A3;
+      end;
+  end;
+
+Lm10: 0.L <> 1_ L & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+     & (for a holds 0.L*a = 0.L)
+   implies 1_ L*a = a*1_ L
+   proof
+   assume A1: 0.L <> 1_ L & (for a holds a * 1_ L = a)
+               & (for a st a<>0.L ex x st a*x = 1_ L)
+               & (for a,b,c holds (a*b)*c = a*(b*c))
+               & (for a holds a*0.L = 0.L)
+               & (for a holds 0.L*a = 0.L);
+    A2: a<>0.L implies 1_ L*a = a*1_ L
+      proof
+        assume a<>0.L;
+        then consider x such that A3: a * x = 1_ L by A1;
+        thus 1_ L*a = a * (x*a) by A1,A3
+                  .= a*1_ L by A1,A3,Lm9;
+      end;
+      a=0.L implies 1_ L*a = a*1_ L
+      proof
+        assume A4: a=0.L;
+        hence 1_ L*a = 0.L by A1
+                  .= a*1_ L by A1,A4;
+      end;
+    hence thesis by A2;
+  end;
+
+Lm11: 0.L <> 1_ L
+     & (for a holds a * 1_ L = a)
+     & (for a st a<>0.L ex x st a*x = 1_ L)
+     & (for a,b,c holds (a*b)*c = a*(b*c))
+     & (for a holds a*0.L = 0.L)
+     & (for a holds 0.L*a = 0.L)
+   implies for a st a<>0.L ex x st x*a = 1_ L
+  proof
+    assume A1: 0.L <> 1_ L & (for a holds a * 1_ L = a)
+               & (for a st a<>0.L ex x st a*x = 1_ L)
+               & (for a,b,c holds (a*b)*c = a*(b*c))
+               & (for a holds a*0.L = 0.L)
+               & (for a holds 0.L*a = 0.L);
+    let a;
+    assume a<>0.L;
+    then consider x such that A2: a * x = 1_ L by A1;
+      x*a=1_ L by A1,A2,Lm9;
+    hence thesis;
+  end;
+
+:: The following theorem shows that the basic set of axioms of the
+:: skew field may be replaced with the following one,
+:: by just removing a few and adding some other axioms.
+:: A few theorems proved earlier are highly utilized.
+
+canceled 5;
+
+theorem Th32:
+   L is _Skew-Field iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a st a<>0.L ex x st a*x = 1_ L)
+   & (for a holds a*0.L = 0.L)
+   & (for a holds 0.L*a = 0.L)
+   & (for a,b,c holds (a*b)*c = a*(b*c))
+   & (for a,b,c holds a*(b+c) = a*b + a*c)
+   & (for a,b,c holds (b+c)*a = b*a + c*a)
+  proof
+   thus L is _Skew-Field implies
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a st a<>0.L ex x st a*x = 1_ L)
+   & (for a holds a*0.L = 0.L)
+   & (for a holds 0.L*a = 0.L)
+   & (for a,b,c holds (a*b)*c = a*(b*c))
+   & (for a,b,c holds a*(b+c) = a*b + a*c)
+   & (for a,b,c holds (b+c)*a = b*a + c*a) by ALGSTR_1:7,34,RLVECT_1:def 5,def
+6,def 7,VECTSP_1:def 16,def 18,def 21,VECTSP_2:def 2;
+     assume A1: (for a holds a + 0.L = a)
+               & (for a ex x st a+x = 0.L)
+               & (for a,b,c holds (a+b)+c = a+(b+c))
+               & (for a,b holds a+b = b+a)
+               & 0.L <> 1_ L
+               & (for a holds a * 1_ L = a)
+               & (for a st a<>0.L ex x st a*x = 1_ L)
+               & (for a holds a*0.L = 0.L)
+               & (for a holds 0.L*a = 0.L)
+               & (for a,b,c holds (a*b)*c = a*(b*c))
+               & (for a,b,c holds a*(b+c) = a*b + a*c)
+               & (for a,b,c holds (b+c)*a = b*a + c*a);
+
+       now thus
+    A2:for a holds 0.L + a = a
+           proof
+            let a;
+            thus 0.L + a = a + 0.L by A1 .= a by A1;
+           end;
+
+         thus for a,b ex x st a+x=b
+           proof
+             let a,b;
+             consider y such that A3: a+y = 0.L by A1;
+             take x = y+b;
+             thus a+x = 0.L + b by A1,A3
+                     .= b by A2;
+           end;
+
+         thus for a,b ex x st x+a=b
+           proof
+             let a,b;
+             consider y such that A4: y+a = 0.L by A1,ALGSTR_1:3;
+             take x = b+y;
+             thus x+a = b + 0.L by A1,A4
+                     .= b by A1;
+           end;
+
+         thus for a,x,y holds a+x=a+y implies x=y
+             proof
+               let a,x,y;
+               consider z such that A5: z+a = 0.L by A1,ALGSTR_1:3;
+               assume a+x = a+y;
+               then (z+a)+x = z+(a+y) by A1 .= (z+a)+y by A1;
+               hence x = 0.L + y by A2,A5 .= y by A2;
+             end;
+
+         thus for a,x,y holds x+a=y+a implies x=y
+             proof
+               let a,x,y;
+               consider z such that A6: a+z = 0.L by A1;
+               assume x+a = y+a;
+               then x+(a+z) = (y+a)+z by A1 .= y+(a+z) by A1;
+               hence x = y + 0.L by A1,A6 .= y by A1;
+             end;
+
+         thus
+         A7: for a holds 1_ L * a = a
+             proof
+               let a;
+               thus 1_ L*a = a*1_ L by A1,Lm10 .= a by A1;
+             end;
+
+         thus for a,b st a<>0.L ex x st a*x=b
+           proof
+               let a,b;
+               assume a<>0.L;
+               then consider y such that A8: a*y = 1_ L by A1;
+               take x = y*b;
+               thus a*x = 1_ L * b by A1,A8
+                       .= b by A7;
+           end;
+
+         thus for a,b st a<>0.L ex x st x*a=b
+           proof
+               let a,b;
+               assume a<>0.L;
+               then consider y such that A9: y*a = 1_ L by A1,Lm11;
+               take x = b*y;
+               thus x*a = b * 1_ L by A1,A9
+                       .= b by A1;
+           end;
+
+         thus for a,x,y st a<>0.L holds a*x=a*y implies x=y
+           proof
+               let a,x,y;
+               assume a<>0.L;
+               then consider z such that A10: z*a = 1_ L by A1,Lm11;
+               assume a*x = a*y;
+               then (z*a)*x = z*(a*y) by A1 .= (z*a)*y by A1;
+               hence x = 1_ L * y by A7,A10 .= y by A7;
+           end;
+
+         thus for a,x,y st a<>0.L holds x*a=y*a implies x=y
+           proof
+               let a,x,y;
+               assume a<>0.L;
+               then consider z such that A11: a*z = 1_ L by A1;
+               assume x*a = y*a;
+               then x*(a*z) = (y*a)*z by A1 .= y*(a*z) by A1;
+               hence x = y * 1_ L by A1,A11 .= y by A1;
+           end;
+        end;
+       hence thesis by A1,ALGSTR_1:7,34,def 5,RLVECT_1:def 5,def 6,def 7,
+VECTSP_1:def 16,def 18,def 21,VECTSP_2:def 2;
+  end;
+
+:: FIELD
+
+:: A _Field is defined as a Skew-Field with the axiom of the commutativity
+:: of multiplication.
+
+definition
+  mode _Field is commutative _Skew-Field;
+end;
+
+canceled;
+
+theorem
+     L is _Field iff
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a st a<>0.L ex x st a*x = 1_ L)
+   & (for a holds a*0.L = 0.L)
+   & (for a,b,c holds (a*b)*c = a*(b*c))
+   & (for a,b,c holds a*(b+c) = a*b + a*c)
+   & (for a,b holds a*b = b*a)
+  proof
+   thus L is _Field implies
+     (for a holds a + 0.L = a)
+   & (for a ex x st a+x = 0.L)
+   & (for a,b,c holds (a+b)+c = a+(b+c))
+   & (for a,b holds a+b = b+a)
+   & 0.L <> 1_ L
+   & (for a holds a * 1_ L = a)
+   & (for a st a<>0.L ex x st a*x = 1_ L)
+   & (for a holds a*0.L = 0.L)
+   & (for a,b,c holds (a*b)*c = a*(b*c))
+   & (for a,b,c holds a*(b+c) = a*b + a*c)
+   & (for a,b holds a*b = b*a) by Th32,VECTSP_1:def 17;
+    assume A1: (for a holds a + 0.L = a)
+                & (for a ex x st a+x = 0.L)
+                & (for a,b,c holds (a+b)+c = a+(b+c))
+                & (for a,b holds a+b = b+a)
+                & 0.L <> 1_ L
+                & (for a holds a * 1_ L = a)
+                & (for a st a<>0.L ex x st a*x = 1_ L)
+                & (for a holds a*0.L = 0.L)
+                & (for a,b,c holds (a*b)*c = a*(b*c))
+                & (for a,b,c holds a*(b+c) = a*b + a*c)
+                & (for a,b holds a*b = b*a);
+      A2: for a holds 0.L*a = 0.L
+            proof
+              let a;
+              thus 0.L*a = a*0.L by A1 .= 0.L by A1;
+            end;
+         for a,b,c holds (b+c)*a = b*a + c*a
+            proof
+              let a,b,c;
+              thus (b+c)*a = a*(b+c) by A1
+                          .= a*b + a*c by A1
+                          .= b*a + a*c by A1
+                          .= b*a + c*a by A1;
+            end;
+      hence thesis by A1,A2,Th32,VECTSP_1:def 17;
+  end;

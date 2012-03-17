@@ -1,0 +1,518 @@
+:: More on External Approximation of a Continuum
+::  by Andrzej Trybulec
+::
+:: Received October 7, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary COMPTS_1, SPPOL_1, EUCLID, FINSEQ_1, GOBOARD1, PRE_TOPC, BOOLE,
+      ARYTM_3, RELAT_1, RELAT_2, TRIANG_1, ZF_REFLE, AMI_1, PRALG_1, FUNCT_1,
+      FUNCT_6, ORDINAL2, TOPREAL1, JORDAN1, PCOMPS_1, METRIC_1, SQUARE_1,
+      ARYTM_1, FINSEQ_2, COMPLEX1, ABSVALUE, ORDERS_1, ORDERS_2, FINSET_1,
+      FINSEQ_4, GOBOARD2, CARD_1, FUNCT_5, MCART_1, GOBRD13, TARSKI, PROB_1,
+      MATRIX_1, TREES_1, INCSP_1, GOBOARD5, SEQM_3, CONNSP_1, SUBSET_1,
+      GOBOARD9, TOPS_1, JORDAN3, RFINSEQ, FINSEQ_5, JORDAN8, INT_1, GROUP_1,
+      PSCOMP_1, JORDAN2C, FINSEQ_6, SPRECT_2, JORDAN9, JORDAN1A, JORDAN1H,
+      ARYTM, PARTFUN1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_6, RVSUM_1, GOBOARD5,
+      STRUCT_0, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, NAT_1,
+      INT_1, BINARITH, ABSVALUE, RELAT_1, RELAT_2, RELSET_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, CARD_1, CARD_4, FINSET_1, FINSEQ_1, FUNCT_6, PROB_1, PRALG_1,
+      FINSEQ_2, FINSEQ_4, FINSEQ_5, RFINSEQ, MATRIX_1, METRIC_1, ORDERS_1,
+      ORDERS_2, TRIANG_1, PRE_TOPC, TOPS_1, COMPTS_1, CONNSP_1, PCOMPS_1,
+      EUCLID, JORDAN1, SPRECT_2, TOPREAL1, GOBOARD1, GOBOARD2, JORDAN3,
+      JORDAN2C, SPPOL_1, PSCOMP_1, GOBOARD9, JORDAN8, GOBRD13, JORDAN9,
+      JORDAN1A;
+ constructors REAL_1, CARD_4, RFINSEQ, BINARITH, TOPS_1, CONNSP_1, PSCOMP_1,
+      GOBOARD9, JORDAN8, GOBRD13, GROUP_1, JORDAN9, GOBOARD2, TRIANG_1,
+      ORDERS_2, AMI_1, JORDAN1, PRALG_1, MATRLIN, JORDAN3, JORDAN2C, SQUARE_1,
+      WSIERP_1, JORDAN1A, TOPREAL4, SPRECT_1, PROB_1;
+ clusters PSCOMP_1, RELSET_1, FINSEQ_1, FINSEQ_5, REVROT_1, XREAL_0, GOBOARD9,
+      JORDAN8, GOBRD13, EUCLID, FINSET_1, POLYNOM1, WAYBEL_2, GOBOARD1,
+      PRELAMB, TRIANG_1, PUA2MSS1, MSAFREE1, FUNCT_7, PRALG_1, GENEALG1,
+      GOBOARD2, SPRECT_3, TOPREAL6, INT_1, BORSUK_2, SPRECT_4, SPRECT_1,
+      MEMBERED, RELAT_1;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve m,k,j,j1,i,i1,i2,n for Nat,
+     r,s for Real,
+     C for compact non vertical non horizontal Subset of TOP-REAL 2,
+
+     G for Go-board,
+
+     p for Point of TOP-REAL 2;
+
+definition
+ cluster with_non-empty_element set;
+end;
+
+definition let D be non empty with_non-empty_element set;
+ cluster non empty non-empty FinSequence of D*;
+end;
+
+definition let D be non empty with_non-empty_elements set;
+ cluster non empty non-empty FinSequence of D*;
+end;
+
+definition let F be non-empty Function-yielding Function;
+ cluster rngs F -> non-empty;
+end;
+
+definition
+ cluster increasing -> one-to-one FinSequence of REAL;
+end;
+
+canceled 3;
+
+theorem :: JORDAN1H:4
+ for p,q being Point of TOP-REAL 2
+  holds LSeg(p,q) \ {p,q} is convex;
+
+theorem :: JORDAN1H:5
+   for p,q being Point of TOP-REAL 2
+  holds LSeg(p,q) \ {p,q} is connected;
+
+theorem :: JORDAN1H:6
+ for p,q being Point of TOP-REAL 2 st p <> q
+  holds p in Cl(LSeg(p,q) \ {p,q});
+
+theorem :: JORDAN1H:7
+ for p,q being Point of TOP-REAL 2 st p <> q
+  holds Cl(LSeg(p,q) \ {p,q}) = LSeg(p,q);
+
+theorem :: JORDAN1H:8
+   for S being Subset of TOP-REAL 2,
+     p,q be Point of TOP-REAL 2
+    st p <> q & LSeg(p,q) \ {p,q} c= S
+ holds LSeg(p,q) c= Cl S;
+
+begin :: Transforming Finite Sets to Finite Sequences
+
+definition
+ func RealOrd -> Relation of REAL equals
+:: JORDAN1H:def 1
+ {[r,s] : r <= s };
+end;
+
+theorem :: JORDAN1H:9
+ [r,s] in RealOrd implies r <= s;
+
+theorem :: JORDAN1H:10
+ field RealOrd = REAL;
+
+definition
+ cluster RealOrd
+    -> total reflexive antisymmetric transitive being_linear-order;
+end;
+
+theorem :: JORDAN1H:11
+ RealOrd linearly_orders REAL;
+
+theorem :: JORDAN1H:12
+ for A being finite Subset of REAL
+  holds SgmX(RealOrd,A) is increasing;
+
+theorem :: JORDAN1H:13
+ for f being FinSequence of REAL,
+     A being finite Subset of REAL st A = rng f
+  holds SgmX(RealOrd,A) = Incr f;
+
+definition let A be finite Subset of REAL;
+ cluster SgmX(RealOrd,A) -> increasing;
+end;
+
+canceled;
+
+theorem :: JORDAN1H:15
+for X being non empty set,
+    A being finite Subset of X,
+    R be being_linear-order Order of X
+ holds len SgmX(R,A) = card A;
+
+begin :: On the construction of go boards
+
+theorem :: JORDAN1H:16
+ for f being FinSequence of TOP-REAL 2
+  holds X_axis f = proj1*f;
+
+theorem :: JORDAN1H:17
+ for f being FinSequence of TOP-REAL 2
+  holds Y_axis f = proj2*f;
+
+definition let D be non empty set; let M be FinSequence of D*;
+ redefine func Values M -> Subset of D;
+end;
+
+definition let D be non empty with_non-empty_elements set;
+ let M be non empty non-empty FinSequence of D*;
+ cluster Values M -> non empty;
+end;
+
+theorem :: JORDAN1H:18
+ for D being non empty set, M being (Matrix of D), i st i in Seg width M
+  holds rng Col(M,i) c= Values M;
+
+theorem :: JORDAN1H:19
+ for D being non empty set, M being (Matrix of D), i st i in dom M
+  holds rng Line(M,i) c= Values M;
+
+theorem :: JORDAN1H:20
+ for G being X_increasing-in-column non empty-yielding Matrix of TOP-REAL 2
+  holds len G <= card(proj1.:Values G);
+
+theorem :: JORDAN1H:21
+ for G being X_equal-in-line Matrix of TOP-REAL 2
+  holds card(proj1.:Values G) <= len G;
+
+theorem :: JORDAN1H:22
+ for G being X_equal-in-line X_increasing-in-column
+   non empty-yielding Matrix of TOP-REAL 2
+  holds len G = card(proj1.:Values G);
+
+theorem :: JORDAN1H:23
+ for G being Y_increasing-in-line non empty-yielding Matrix of TOP-REAL 2
+  holds width G <= card(proj2.:Values G);
+
+theorem :: JORDAN1H:24
+ for G being Y_equal-in-column non empty-yielding Matrix of TOP-REAL 2
+  holds card(proj2.:Values G) <= width G;
+
+theorem :: JORDAN1H:25
+ for G being Y_equal-in-column Y_increasing-in-line non empty-yielding
+  Matrix of TOP-REAL 2
+  holds width G = card(proj2.:Values G);
+
+begin :: On go boards
+
+theorem :: JORDAN1H:26
+   for G be Go-board
+ for f be FinSequence of TOP-REAL 2 st f is_sequence_on G
+ for k be Nat st 1 <= k & k+1 <= len f holds
+  LSeg(f,k) c= left_cell(f,k,G);
+
+theorem :: JORDAN1H:27
+   for f being standard special_circular_sequence st 1 <= k & k+1 <= len f
+  holds left_cell(f,k,GoB f) = left_cell(f,k);
+
+theorem :: JORDAN1H:28
+ for G be Go-board
+ for f be FinSequence of TOP-REAL 2 st f is_sequence_on G
+ for k be Nat st 1 <= k & k+1 <= len f holds
+  LSeg(f,k) c= right_cell(f,k,G);
+
+theorem :: JORDAN1H:29
+ for f being standard special_circular_sequence st 1 <= k & k+1 <= len f
+  holds right_cell(f,k,GoB f) = right_cell(f,k);
+
+theorem :: JORDAN1H:30
+   for P being Subset of TOP-REAL 2,
+     f being non constant standard special_circular_sequence st
+  P is_a_component_of (L~f)` holds
+ P = RightComp f or P = LeftComp f;
+
+theorem :: JORDAN1H:31
+    for f being non constant standard special_circular_sequence st
+    f is_sequence_on G
+  for k st 1 <= k & k+1 <= len f
+    holds
+   Int right_cell(f,k,G) c= RightComp f & Int left_cell(f,k,G) c= LeftComp f;
+
+theorem :: JORDAN1H:32
+ for i1,j1,i2,j2 being Nat, G being Go-board
+   st [i1,j1] in Indices G & [i2,j2] in Indices G & G*(i1,j1) = G*(i2,j2)
+  holds i1 = i2 & j1 = j2;
+
+theorem :: JORDAN1H:33
+ for f being FinSequence of TOP-REAL 2, M being Go-board
+   holds f is_sequence_on M implies mid(f,i1,i2) is_sequence_on M;
+
+definition
+ cluster -> non empty non-empty Go-board;
+end;
+
+theorem :: JORDAN1H:34
+ for G being Go-board st 1 <= i & i <= len G holds
+  SgmX(RealOrd, proj1.:Values G).i = G*(i,1)`1;
+
+theorem :: JORDAN1H:35
+ for G being Go-board st 1 <= j & j <= width G holds
+  SgmX(RealOrd, proj2.:Values G).j = G*(1,j)`2;
+
+theorem :: JORDAN1H:36
+ for f being non empty FinSequence of TOP-REAL 2, G being Go-board
+  st f is_sequence_on G &
+   (ex i st [1,i] in Indices G & G*(1,i) in rng f) &
+   (ex i st [len G,i] in Indices G & G*(len G,i) in rng f)
+  holds proj1.:rng f = proj1.:Values G;
+
+theorem :: JORDAN1H:37
+ for f being non empty FinSequence of TOP-REAL 2, G being Go-board
+  st f is_sequence_on G &
+   (ex i st [i,1] in Indices G & G*(i,1) in rng f) &
+   (ex i st [i,width G] in Indices G & G*(i,width G) in rng f)
+  holds proj2.:rng f = proj2.:Values G;
+
+definition let G be Go-board;
+ cluster Values G -> non empty;
+end;
+
+theorem :: JORDAN1H:38
+ for G being Go-board holds
+  G = GoB(SgmX(RealOrd, proj1.:Values G), SgmX(RealOrd,proj2.:Values G));
+
+theorem :: JORDAN1H:39
+ for f being non empty FinSequence of TOP-REAL 2, G being Go-board
+  st proj1.:rng f = proj1.:Values G & proj2.:rng f = proj2.:Values G
+  holds G = GoB f;
+
+theorem :: JORDAN1H:40
+ for f being non empty FinSequence of TOP-REAL 2, G being Go-board
+  st f is_sequence_on G &
+   (ex i st [1,i] in Indices G & G*(1,i) in rng f) &
+   (ex i st [i,1] in Indices G & G*(i,1) in rng f) &
+   (ex i st [len G,i] in Indices G & G*(len G,i) in rng f) &
+   (ex i st [i,width G] in Indices G & G*(i,width G) in rng f)
+  holds G = GoB f;
+
+begin :: More about gauges
+
+theorem :: JORDAN1H:41
+ m <= n & 1 <= i & i+1 <= len Gauge(C,n)
+  implies [\ (i-2)/2|^(n-'m)+2 /] is Nat;
+
+theorem :: JORDAN1H:42
+ m <= n & 1 <= i & i+1 <= len Gauge(C,n)
+ implies
+  1 <= [\ (i-2)/2|^(n-'m)+2 /] & [\ (i-2)/2|^(n-'m)+2 /]+1 <= len Gauge(C,m);
+
+theorem :: JORDAN1H:43
+ m <= n & 1 <= i & i+1 <= len Gauge(C,n) & 1 <= j & j+1 <= width Gauge(C,n)
+ implies
+  ex i1,j1 st
+   i1 = [\ (i-2)/2|^(n-'m)+2 /] & j1 = [\ (j-2)/2|^(n-'m)+2 /] &
+   cell(Gauge(C,n),i,j) c= cell(Gauge(C,m),i1,j1);
+
+theorem :: JORDAN1H:44
+ m <= n & 1 <= i & i+1 <= len Gauge(C,n) & 1 <= j & j+1 <= width Gauge(C,n)
+ implies
+  ex i1,j1 st
+   1 <= i1 & i1+1 <= len Gauge(C,m) & 1 <= j1 & j1+1 <= width Gauge(C,m) &
+   cell(Gauge(C,n),i,j) c= cell(Gauge(C,m),i1,j1);
+
+canceled 2;
+
+theorem :: JORDAN1H:47
+   for P being Subset of TOP-REAL2 st P is Bounded
+  holds UBD P is not Bounded;
+
+theorem :: JORDAN1H:48
+ for f being non constant standard special_circular_sequence
+  st Rotate(f,p) is clockwise_oriented
+ holds f is clockwise_oriented;
+
+theorem :: JORDAN1H:49
+   for f being non constant standard special_circular_sequence
+  st LeftComp f = UBD L~f
+ holds f is clockwise_oriented;
+
+begin :: More about cages
+
+theorem :: JORDAN1H:50
+  for f being non constant standard special_circular_sequence
+   holds (Cl LeftComp(f))` = RightComp f;
+
+theorem :: JORDAN1H:51
+    for f being non constant standard special_circular_sequence
+   holds (Cl RightComp(f))` = LeftComp f;
+
+theorem :: JORDAN1H:52
+ C is connected implies GoB Cage(C,n) = Gauge(C,n);
+
+theorem :: JORDAN1H:53
+   C is connected implies N-min C in right_cell(Cage(C,n),1);
+
+theorem :: JORDAN1H:54
+ C is connected & i <= j implies L~Cage(C,j) c= Cl RightComp(Cage(C,i));
+
+theorem :: JORDAN1H:55
+ C is connected & i <= j implies LeftComp(Cage(C,i)) c= LeftComp(Cage(C,j));
+
+theorem :: JORDAN1H:56
+   C is connected & i <= j implies RightComp(Cage(C,j)) c= RightComp(Cage(C,i))
+;
+
+begin :: Preparing the Internal Approximation
+
+definition let C,n;
+ func X-SpanStart(C,n) -> Nat equals
+:: JORDAN1H:def 2
+ 2|^(n-'1) + 2;
+end;
+
+theorem :: JORDAN1H:57
+   X-SpanStart(C,n) = Center Gauge(C,n);
+
+theorem :: JORDAN1H:58
+ 2 < X-SpanStart(C,n) & X-SpanStart(C,n) < len Gauge(C,n);
+
+theorem :: JORDAN1H:59
+ 1 <= X-SpanStart(C,n)-'1 & X-SpanStart(C,n)-'1 < len Gauge(C,n);
+
+definition let C,n;
+ pred n is_sufficiently_large_for C means
+:: JORDAN1H:def 3
+ ex j st j < width Gauge(C,n) &
+   cell(Gauge(C,n),X-SpanStart(C,n)-'1,j) c= BDD C;
+end;
+
+theorem :: JORDAN1H:60
+   n is_sufficiently_large_for C implies n >= 1;
+
+theorem :: JORDAN1H:61
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j1 being Nat st
+   left_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j1) &
+   [i1,j1+1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1,j1+1)
+  holds [i1-'1,j1+1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:62
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j1 being Nat st
+   left_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j1) &
+   [i1+1,j1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1+1,j1)
+  holds [i1+1,j1+1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:63
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for j1,i2 being Nat st
+   left_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i2+1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i2+1,j1) &
+   [i2,j1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i2,j1)
+  holds [i2,j1-'1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:64
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j2 being Nat st
+   left_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j2+1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j2+1) &
+   [i1,j2] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1,j2)
+  holds [i1+1,j2] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:65
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j1 being Nat st
+   front_left_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j1) &
+   [i1,j1+1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1,j1+1)
+  holds [i1,j1+2] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:66
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j1 being Nat st
+   front_left_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j1) &
+   [i1+1,j1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1+1,j1)
+  holds [i1+2,j1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:67
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for j1,i2 being Nat st
+   front_left_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i2+1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i2+1,j1) &
+   [i2,j1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i2,j1)
+  holds [i2-'1,j1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:68
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j2 being Nat st
+   front_left_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j2+1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j2+1) &
+   [i1,j2] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1,j2)
+  holds [i1,j2-'1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:69
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j1 being Nat st
+    front_right_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j1) &
+   [i1,j1+1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1,j1+1)
+  holds [i1+1,j1+1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:70
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j1 being Nat st
+   front_right_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j1) &
+   [i1+1,j1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1+1,j1)
+  holds [i1+1,j1-'1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:71
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for j1,i2 being Nat st
+   front_right_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i2+1,j1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i2+1,j1) &
+   [i2,j1] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i2,j1)
+  holds [i2,j1+1] in Indices Gauge(C,n);
+
+theorem :: JORDAN1H:72
+    for C being compact non vertical non horizontal non empty
+                   Subset of TOP-REAL 2
+  for n
+  for f being FinSequence of TOP-REAL 2 st f is_sequence_on Gauge(C,n) &
+   len f > 1
+  for i1,j2 being Nat st
+   front_right_cell(f,(len f)-'1,Gauge(C,n)) meets C &
+   [i1,j2+1] in Indices Gauge(C,n) & f/.((len f) -'1) = Gauge(C,n)*(i1,j2+1) &
+   [i1,j2] in Indices Gauge(C,n) & f/.len f = Gauge(C,n)*(i1,j2)
+  holds [i1-'1,j2] in Indices Gauge(C,n);
+

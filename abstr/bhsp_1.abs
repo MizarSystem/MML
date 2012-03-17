@@ -1,0 +1,346 @@
+:: Introduction to Banach and Hilbert spaces - Part I
+::  by Jan Popio{\l}ek
+::
+:: Received July 19, 1991
+:: Copyright (c) 1991 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, PROB_2, RLSUB_1, ARYTM_1,
+      ABSVALUE, SQUARE_1, FUNCT_3, ARYTM_3, NORMSP_1, METRIC_1, RELAT_1,
+      SEQM_3, BHSP_1, ARYTM;
+ notation XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      NAT_1, REAL_1, FUNCT_1, FUNCT_2, BINOP_1, STRUCT_0, RELAT_1, DOMAIN_1,
+      PRE_TOPC, ABSVALUE, RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1, QUIN_1;
+ constructors REAL_1, NAT_1, DOMAIN_1, ABSVALUE, RLSUB_1, SQUARE_1, NORMSP_1,
+      QUIN_1, MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, STRUCT_0, XREAL_0, RELSET_1, SQUARE_1, MEMBERED, ZFMISC_1,
+      XBOOLE_0, NUMBERS, ORDINAL2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+definition
+ struct(RLSStruct) UNITSTR (# carrier -> set,
+         Zero -> Element of the carrier,
+          add -> BinOp of the carrier,
+         Mult -> Function of [:REAL, the carrier:], the carrier,
+       scalar -> Function of [: the carrier, the carrier :], REAL #);
+end;
+
+definition
+ cluster non empty strict UNITSTR;
+end;
+
+definition
+  let D be non empty set, Z be Element of D,
+      a be BinOp of D,m be Function of [:REAL, D:], D,
+      s be Function of [: D,D:],REAL;
+  cluster UNITSTR (#D,Z,a,m,s#) -> non empty;
+end;
+
+ reserve X for non empty UNITSTR;
+ reserve a, b for Real;
+ reserve x, y for Point of X;
+
+definition let X; let x, y;
+  func x .|. y -> Real equals
+:: BHSP_1:def 1
+   (the scalar of X).[x,y];
+end;
+
+definition let IT be non empty UNITSTR;
+  attr IT is RealUnitarySpace-like means
+:: BHSP_1:def 2
+  for x , y , z being Point of IT , a holds
+    ( x .|. x = 0 iff x = 0.IT ) &
+    0 <= x .|. x &
+    x .|. y = y .|. x &
+    (x+y) .|. z = x .|. z + y .|. z &
+    (a*x) .|. y = a * ( x .|. y );
+end;
+
+definition
+ cluster RealUnitarySpace-like RealLinearSpace-like Abelian add-associative
+   right_zeroed right_complementable strict (non empty UNITSTR);
+end;
+
+definition
+ mode RealUnitarySpace is RealUnitarySpace-like RealLinearSpace-like
+  Abelian add-associative right_zeroed right_complementable
+   (non empty UNITSTR);
+end;
+
+reserve X for RealUnitarySpace;
+reserve x , y , z , u , v for Point of X;
+
+definition let X; let x, y;
+  redefine func x .|. y;
+  commutativity;
+end;
+
+canceled 5;
+
+theorem :: BHSP_1:6
+    (0.X) .|. (0.X) = 0;
+
+theorem :: BHSP_1:7
+   x .|. (y+z) = x .|. y + x .|. z;
+
+theorem :: BHSP_1:8
+   x .|. (a*y) = a * x .|. y;
+
+theorem :: BHSP_1:9
+    (a*x) .|. y = x .|. (a*y);
+
+theorem :: BHSP_1:10
+  (a*x+b*y) .|. z = a * x .|. z + b * y .|. z;
+
+theorem :: BHSP_1:11
+    x .|. (a*y + b*z) = a * x .|. y + b * x .|. z;
+
+theorem :: BHSP_1:12
+    (-x) .|. y = x .|. (-y);
+
+theorem :: BHSP_1:13
+  (-x) .|. y = - x .|. y;
+
+theorem :: BHSP_1:14
+   x .|. (-y) = - x .|. y;
+
+theorem :: BHSP_1:15
+  (-x) .|. (-y) = x .|. y;
+
+theorem :: BHSP_1:16
+  (x - y) .|. z = x .|. z - y .|. z;
+
+theorem :: BHSP_1:17
+  x .|. (y - z) = x .|. y - x .|. z;
+
+theorem :: BHSP_1:18
+    (x - y) .|. (u - v) = x .|. u - x .|. v - y .|. u + y .|. v;
+
+theorem :: BHSP_1:19
+  (0.X) .|. x = 0;
+
+theorem :: BHSP_1:20
+   x .|. 0.X = 0;
+
+theorem :: BHSP_1:21
+  (x + y) .|. (x + y) = x .|. x + 2 * x .|. y + y .|. y;
+
+theorem :: BHSP_1:22
+    (x + y) .|. (x - y) = x .|. x - y .|. y;
+
+theorem :: BHSP_1:23
+  (x - y) .|. (x - y) = x .|. x - 2 * x .|. y + y .|. y;
+
+theorem :: BHSP_1:24
+  abs(x .|. y) <= sqrt (x .|. x) * sqrt (y .|. y);
+
+definition let X; let x, y;
+  pred x, y are_orthogonal means
+:: BHSP_1:def 3
+   x .|. y = 0;
+  symmetry;
+end;
+
+canceled;
+
+theorem :: BHSP_1:26
+    x, y are_orthogonal implies x, - y are_orthogonal;
+
+theorem :: BHSP_1:27
+    x, y are_orthogonal implies -x, y are_orthogonal;
+
+theorem :: BHSP_1:28
+    x, y are_orthogonal implies -x, -y are_orthogonal;
+
+theorem :: BHSP_1:29
+    x, 0.X are_orthogonal;
+
+theorem :: BHSP_1:30
+    x, y are_orthogonal implies (x + y) .|. (x + y) = x .|. x + y .|. y;
+
+theorem :: BHSP_1:31
+    x, y are_orthogonal implies (x - y) .|. (x - y) = x .|. x + y .|. y;
+
+definition let X, x;
+  func ||.x.|| -> Real equals
+:: BHSP_1:def 4
+  sqrt (x .|. x);
+end;
+
+theorem :: BHSP_1:32
+  ||.x.|| = 0 iff x = 0.X;
+
+theorem :: BHSP_1:33
+  ||.a * x.|| = abs(a) * ||.x.||;
+
+theorem :: BHSP_1:34
+  0 <= ||.x.||;
+
+theorem :: BHSP_1:35
+  abs(x .|. y) <= ||.x.|| * ||.y.||;
+
+theorem :: BHSP_1:36
+  ||.x + y.|| <= ||.x.|| + ||.y.||;
+
+theorem :: BHSP_1:37
+  ||.-x.|| = ||.x.||;
+
+theorem :: BHSP_1:38
+  ||.x.|| - ||.y.|| <= ||.x - y.||;
+
+theorem :: BHSP_1:39
+    abs(||.x.|| - ||.y.||) <= ||.x - y.||;
+
+definition let X, x, y;
+ func dist(x,y) -> Real equals
+:: BHSP_1:def 5
+  ||.x - y.||;
+end;
+
+theorem :: BHSP_1:40
+  dist(x,y) = dist(y,x);
+
+definition let X, x, y;
+  redefine func dist(x,y);
+  commutativity;
+end;
+
+theorem :: BHSP_1:41
+  dist(x,x) = 0;
+
+theorem :: BHSP_1:42
+    dist(x,z) <= dist(x,y) + dist(y,z);
+
+theorem :: BHSP_1:43
+  x <> y iff dist(x,y) <> 0;
+
+theorem :: BHSP_1:44
+  dist(x,y) >= 0;
+
+theorem :: BHSP_1:45
+    x <> y iff dist(x,y) > 0;
+
+theorem :: BHSP_1:46
+    dist(x,y) = sqrt ((x-y) .|. (x-y));
+
+theorem :: BHSP_1:47
+    dist(x + y,u + v) <= dist(x,u) + dist(y,v);
+
+theorem :: BHSP_1:48
+    dist(x - y,u - v) <= dist(x,u) + dist(y,v);
+
+theorem :: BHSP_1:49
+    dist(x - z, y - z) = dist(x,y);
+
+theorem :: BHSP_1:50
+    dist(x - z,y - z) <= dist(z,x) + dist(z,y);
+
+reserve seq, seq1, seq2, seq3 for sequence of X;
+reserve k, n, m for Nat;
+reserve f for Function;
+reserve d, s, t for set;
+
+scheme Ex_Seq_in_RUS { X() -> non empty UNITSTR, F(Nat) -> Point of X() } :
+       ex seq be sequence of X() st for n holds seq.n = F(n);
+
+definition let X; let seq;
+ canceled 4;
+
+  func - seq -> sequence of X means
+:: BHSP_1:def 10
+ for n holds it.n = - seq.n;
+end;
+
+definition let X; let seq; let x;
+ canceled;
+
+ func seq + x -> sequence of X means
+:: BHSP_1:def 12
+     for n holds it.n = seq.n + x;
+end;
+
+canceled 4;
+
+theorem :: BHSP_1:55
+  seq1 + seq2 = seq2 + seq1;
+
+definition let X, seq1, seq2;
+ redefine func seq1 + seq2;
+ commutativity;
+end;
+
+theorem :: BHSP_1:56
+    seq1 + (seq2 + seq3) = (seq1 + seq2) + seq3;
+
+theorem :: BHSP_1:57
+    seq1 is constant & seq2 is constant & seq = seq1 + seq2
+    implies seq is constant;
+
+theorem :: BHSP_1:58
+    seq1 is constant & seq2 is constant & seq = seq1 - seq2
+    implies seq is constant;
+
+theorem :: BHSP_1:59
+    seq1 is constant & seq = a * seq1
+    implies seq is constant;
+
+canceled 8;
+
+theorem :: BHSP_1:68
+  seq is constant iff for n holds seq.n = seq.(n + 1);
+
+theorem :: BHSP_1:69
+  seq is constant iff for n , k holds seq.n = seq.(n + k);
+
+theorem :: BHSP_1:70
+    seq is constant iff for n, m holds seq.n = seq.m;
+
+theorem :: BHSP_1:71
+    seq1 - seq2 = seq1 + -seq2;
+
+theorem :: BHSP_1:72
+    seq = seq + 0.X;
+
+theorem :: BHSP_1:73
+    a * (seq1 + seq2) = a * seq1 + a * seq2;
+
+theorem :: BHSP_1:74
+    (a + b) * seq = a * seq + b * seq;
+
+theorem :: BHSP_1:75
+    (a * b) * seq = a * (b * seq);
+
+theorem :: BHSP_1:76
+    1 * seq = seq;
+
+theorem :: BHSP_1:77
+    (-1) * seq = - seq;
+
+theorem :: BHSP_1:78
+    seq - x = seq + -x;
+
+theorem :: BHSP_1:79
+    seq1 - seq2 = - (seq2 - seq1);
+
+theorem :: BHSP_1:80
+    seq = seq - 0.X;
+
+theorem :: BHSP_1:81
+    seq = - ( - seq );
+
+theorem :: BHSP_1:82
+    seq1 - (seq2 + seq3) = (seq1 - seq2) - seq3;
+
+theorem :: BHSP_1:83
+    (seq1 + seq2) - seq3 = seq1 + (seq2 - seq3);
+
+theorem :: BHSP_1:84
+    seq1 - (seq2 - seq3) = (seq1 - seq2) + seq3;
+
+theorem :: BHSP_1:85
+    a * (seq1 - seq2) = a * seq1 - a * seq2;

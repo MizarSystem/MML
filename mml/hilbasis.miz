@@ -1,0 +1,2657 @@
+:: Hilbert Basis Theorem
+::  by Jonathan Backer and Piotr Rudnicki
+::
+:: Received November 27, 2000
+:: Copyright (c) 2000 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, FUNCT_1, RELAT_1, BOOLE, POLYNOM1, FUNCOP_1, FINSEQ_4,
+      SEQM_3, PBOOLE, ARYTM_3, ARYTM_1, FUNCT_4, CAT_1, ORDINAL1, FINSET_1,
+      TRIANG_1, ORDERS_2, ALGSEQ_1, GROUP_1, REALSET1, VECTSP_1, POLYNOM2,
+      RLVECT_1, LATTICES, NORMSP_1, POLYNOM3, SQUARE_1, FILTER_2, PRE_TOPC,
+      QUOFIELD, GRCAT_1, IDEAL_1, COHSP_1, PRELAMB, MCART_1, ENDALG, SUBSET_1,
+      BINOP_1, VECTSP_2, CARD_1, TARSKI, DTCONSTR, FUNCT_2, GR_CY_1, HILBASIS;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CQC_SIM1, SEQM_3, PBOOLE,
+      CQC_LANG, RELAT_1, FINSET_1, FUNCT_1, FINSEQ_1, VECTSP_1, DTCONSTR,
+      NORMSP_1, NUMBERS, XCMPLX_0, XREAL_0, NAT_1, RELSET_1, RLVECT_1, FUNCT_2,
+      FUNCT_4, BINOP_1, GR_CY_1, PRE_CIRC, MCART_1, FINSEQOP, FINSEQ_2,
+      FINSEQ_4, CARD_1, POLYNOM1, POLYNOM2, POLYNOM3, STRUCT_0, PRE_TOPC,
+      GROUP_1, ALGSEQ_1, BINARITH, BORSUK_1, VECTSP_2, IDEAL_1, TOPS_2, ENDALG,
+      GRCAT_1, REALSET1, ORDINAL1, MATRLIN, WSIERP_1, TOPREAL1, TRIANG_1,
+      ORDERS_2, QUOFIELD;
+ constructors ORDERS_2, TRIANG_1, WAYBEL_1, TOPREAL1, CQC_SIM1, MONOID_0,
+      PRE_CIRC, FINSEQOP, POLYNOM3, REAL_1, BINARITH, POLYNOM2, ALGSEQ_1,
+      FINSOP_1, GRCAT_1, BORSUK_1, IDEAL_1, TOPS_2, ENDALG, QUOFIELD, RFUNCT_3,
+      WSIERP_1;
+ clusters CARD_5, RELSET_1, FINSET_1, SUBSET_1, VECTSP_2, STRUCT_0, FUNCT_1,
+      XBOOLE_0, FINSEQ_5, POLYNOM1, POLYNOM2, POLYNOM3, FUNCT_7, INT_1,
+      WAYBEL_2, BINOM, ORDINAL1, CARD_1, IDEAL_1, GOBRD13, GCD_1, MONOID_0,
+      VECTSP_1, XREAL_0, MEMBERED, RELAT_1, PRE_CIRC, NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI, IDEAL_1, ENDALG, GRCAT_1;
+ theorems CQC_SIM1, TARSKI, ZFMISC_1, RLVECT_1, FUNCT_1, FUNCT_2, POLYNOM1,
+      NAT_1, GR_CY_1, REAL_1, AXIOMS, FVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      POLYNOM3, BINARITH, JORDAN3, FUNCOP_1, ALGSEQ_1, REAL_2, INT_1, FUNCT_7,
+      IDEAL_1, FINSEQ_4, POLYNOM4, GRCAT_1, QUOFIELD, ENDALG, FUNCT_4, RELAT_1,
+      CARD_1, CARD_2, PRE_CIRC, PRE_TOPC, MATRLIN, ALG_1, GROUP_7, JORDAN4,
+      CARD_3, ORDINAL1, PBOOLE, WAYBEL_1, TRIANG_1, ORDERS_2, FINSET_1,
+      FINSEQOP, CQC_LANG, SEQM_3, POLYNOM2, TOPS_2, FINSEQ_5, GROUP_1, CARD_4,
+      FRECHET2, NORMSP_1, SCMFSA_7, AMI_5, XBOOLE_0, XBOOLE_1, RLVECT_2,
+      SQUARE_1, VECTSP_1, XCMPLX_0, XCMPLX_1, ORDINAL2;
+ schemes NAT_1, RECDEF_1, FUNCT_1, FUNCT_2, FINSEQ_2, FUNCT_7;
+
+begin :: Preliminaries
+
+theorem Th1:
+for A,B being FinSequence, f being Function
+ st rng A \/ rng B c= dom f
+  ex fA, fB being FinSequence st fA = f*A & fB = f*B & f*(A^B) = fA^fB
+proof let A,B being FinSequence, f being Function; assume
+A1: rng A \/ rng B c= dom f;
+     rng A c= rng A \/ rng B by XBOOLE_1:7;
+then A2: rng A c= dom f by A1,XBOOLE_1:1;
+   then reconsider fA = f*A as FinSequence by FINSEQ_1:20;
+A3: dom (f*A) = dom A by A2,RELAT_1:46;
+then A4: len fA = len A by FINSEQ_3:31; rng B c= rng A \/ rng B by XBOOLE_1:7
+;
+then A5: rng B c= dom f by A1,XBOOLE_1:1;
+   then reconsider fB = f*B as FinSequence by FINSEQ_1:20;
+A6: dom (f*B) = dom B by A5,RELAT_1:46;
+then A7: len fB = len B by FINSEQ_3:31;
+A8: rng (A^B) c= dom f by A1,FINSEQ_1:44;
+   then reconsider fAB = f*(A^B) as FinSequence by FINSEQ_1:20;
+A9: dom (f*(A^B)) = dom (A^B) by A8,RELAT_1:46;
+then A10: len fAB = len (A^B) by FINSEQ_3:31 .= len fA + len fB by A4,A7,
+FINSEQ_1:35
+          .= len (fA^fB) by FINSEQ_1:35;
+   take fA, fB;
+     now let k be Nat; assume 1 <=k & k <= len fAB;
+   then A11: k in dom fAB by FINSEQ_3:27;
+       per cases; suppose A12: k in dom fA;
+       hence (fA^fB).k = fA.k by FINSEQ_1:def 7
+          .= f.(A.k) by A12,FUNCT_1:22 .= f.((A^B).k) by A3,A12,FINSEQ_1:def 7
+          .= fAB.k by A11,FUNCT_1:22;
+       suppose not k in dom fA; then consider n being Nat such that
+   A13: n in dom B & k=len A + n by A3,A9,A11,FINSEQ_1:38;
+       thus fAB.k = f.((A^B).k) by A11,FUNCT_1:22
+         .= f.(B.n) by A13,FINSEQ_1:def 7 .= fB.n by A6,A13,FUNCT_1:22
+         .= (fA^fB).k by A4,A6,A13,FINSEQ_1:def 7;
+   end;
+   hence thesis by A10,FINSEQ_1:18;
+end;
+
+theorem Th2:
+for b being bag of 0 holds decomp b = <* <* {}, {} *> *>
+proof let b be bag of 0; b in Bags {} by POLYNOM1:def 14;
+then A1: b = {} by POLYNOM1:55,TARSKI:def 1;
+      EmptyBag {} = {} --> 0 by POLYNOM1:def 15;
+    then dom EmptyBag {} = {} by FUNCOP_1:16;
+then A2: EmptyBag 0 = {} by RELAT_1:64;
+    then divisors b = <* {} *> by A1,POLYNOM1:71;
+then A3: len divisors b = 1 by FINSEQ_1:56;
+    A4: dom divisors b = dom decomp b by POLYNOM1:def 19;
+then A5: len decomp b = 1 by A3,FINSEQ_3:31;
+      1 in dom decomp b by A3,A4,FINSEQ_3:27;
+    then (decomp b).1=(decomp b)/.1 by FINSEQ_4:def 4.=<* {},{}
+*>by A1,A2,POLYNOM1:75;
+    hence decomp b = <* <* {}, {} *> *> by A5,FINSEQ_1:57;
+end;
+
+theorem Th3:
+for i,j being Nat, b being bag of j st i <= j holds (b|i) is Element of Bags i
+proof let i,j being Nat, b being bag of j; assume
+A1: i <= j;
+A2: rng b c= NAT by SEQM_3:def 8; rng (b|i) c= rng b by FUNCT_1:76;
+     then rng (b|i) c= NAT by A2,XBOOLE_1:1;
+then A3: (b|i) is natural-yielding by SEQM_3:def 8;
+       i c= j proof let x be set; assume
+            x in i; then x in {y where y is Nat : y < i } by AXIOMS:30;
+          then consider x' being Nat such that
+     A4: x'=x & x' < i;
+            x' < j by A1,A4,AXIOMS:22; then x' in {y where y is Nat : y < j };
+          hence x in j by A4,AXIOMS:30;
+     end; then i c= dom b by PBOOLE:def 3; then dom (b|i)=i by RELAT_1:91;
+     then (b|i) is ManySortedSet of i by PBOOLE:def 3;
+ hence (b|i) is Element of Bags i by A3,POLYNOM1:def 14;
+end;
+
+theorem Th4:
+for i, j being set, b1, b2 being bag of j, b1',b2' being bag of i
+ st b1' = (b1|i) & b2' = (b2|i) & b1 divides b2 holds b1' divides b2'
+proof let i,j be set, b1,b2 be bag of j, b1',b2' be bag of i; assume
+A1: b1'=(b1|i) & b2'=(b2|i) & b1 divides b2;
+       now let k be set;
+     A2: dom b1' = i by PBOOLE:def 3 .= dom b2' by PBOOLE:def 3;
+          per cases; suppose
+     A3: not k in dom b1';
+          then b1'.k = {} by FUNCT_1:def 4 .= b2'.k by A2,A3,FUNCT_1:def 4;
+          hence b1'.k <= b2'.k;
+          suppose
+     A4: k in dom b1';
+     then A5: b1'.k = b1.k by A1,FUNCT_1:70;
+       b2'.k = b2.k by A1,A2,A4,FUNCT_1:70;
+          hence b1'.k <= b2'.k by A1,A5,POLYNOM1:def 13;
+     end;
+     hence b1' divides b2' by POLYNOM1:def 13;
+end;
+
+theorem Th5:
+for i,j be set, b1, b2 being bag of j, b1', b2' being bag of i
+ st b1'=(b1|i) & b2'=(b2|i) holds (b1-' b2)|i = b1'-' b2' & (b1+b2)|i = b1'+b2'
+proof let i,j be set, b1, b2 being bag of j, b1', b2' being bag of i; assume
+A1: b1'=(b1|i) & b2'=(b2|i); dom (b1 -' b2) = j by PBOOLE:def 3;
+then A2: dom ((b1 -' b2)|i) = j /\ i by RELAT_1:90; dom b1 = j by PBOOLE:def 3
+;
+then A3: dom (b1|i) = j /\ i by RELAT_1:90; dom b2 = j by PBOOLE:def 3;
+then A4: dom (b2|i) = j /\ i by RELAT_1:90;
+A5: dom (b1' -' b2') = i by PBOOLE:def 3 .= j /\ i by A1,A3,PBOOLE:def 3;
+       now let x be set; assume
+     A6: x in j /\ i;
+      hence ((b1 -' b2)|i).x = (b1 -' b2).x by A2,FUNCT_1:70
+        .= b1.x -' b2.x by POLYNOM1:def 6
+        .= b1'.x -' b2.x by A1,A3,A6,FUNCT_1:70
+        .= b1'.x -' b2'.x by A1,A4,A6,FUNCT_1:70
+        .= (b1' -' b2').x by POLYNOM1:def 6;
+     end;
+     hence (b1 -' b2)|i = b1' -' b2' by A2,A5,FUNCT_1:9;
+       dom (b1 + b2) = j by PBOOLE:def 3;
+then A7: dom ((b1 + b2)|i) = j /\ i by RELAT_1:90;
+A8: dom (b1' + b2') = i by PBOOLE:def 3 .= j /\ i by A1,A3,PBOOLE:def 3;
+       now let x be set; assume
+     A9: x in j /\ i;
+      hence ((b1 + b2)|i).x = (b1 + b2).x by A7,FUNCT_1:70
+                               .= b1.x + b2.x by POLYNOM1:def 5
+                               .= b1'.x + b2.x by A1,A3,A9,FUNCT_1:70
+                               .= b1'.x + b2'.x by A1,A4,A9,FUNCT_1:70
+                               .= (b1' + b2').x by POLYNOM1:def 5;
+     end;
+     hence (b1 + b2)|i = b1'+b2' by A7,A8,FUNCT_1:9;
+end;
+
+definition
+let n,k be Nat, b be bag of n;
+func b bag_extend k -> Element of Bags (n+1) means :Def1:
+     it|n = b & it.n = k;
+existence proof set b1 = b +* (n .--> k);
+  rng b1 c= NAT proof let y be set; assume y in rng b1;
+            then consider x being set such that
+A1: x in dom b1 & y = b1.x by FUNCT_1:def 5;
+A2: x in dom b \/ dom (n .--> k) by A1,FUNCT_4:def 1;
+            per cases; suppose
+A3: x in dom (n .--> k);
+    then x in {n} by CQC_LANG:5; then x=n by TARSKI:def 1;
+    then y = (n .--> k).n by A1,A2,A3,FUNCT_4:def 1 .= k by CQC_LANG:6;
+ hence y in NAT; suppose
+  not x in dom (n .--> k); then y = b.x by A1,A2,FUNCT_4:def 1;
+ hence y in NAT;
+end;
+then A4: b1 is natural-yielding by SEQM_3:def 8;
+A5: dom b1 = dom b \/ dom (n .--> k) by FUNCT_4:def 1
+     .= dom b \/ {n} by CQC_LANG:5 .= n \/ {n} by PBOOLE:def 3
+     .= succ n by ORDINAL1:def 1 .= n+1 by CARD_1:52;
+then b1 is ManySortedSet of n+1 by PBOOLE:def 3;
+    then reconsider b1 as Element of Bags (n+1) by A4,POLYNOM1:def 14;
+  take b1;
+A6: dom (b1|n) = (n+1) /\ n by A5,FUNCT_1:68 .= succ n /\ n by CARD_1:52
+                  .= (n \/ {n}) /\ n by ORDINAL1:def 1 .= n by XBOOLE_1:21;
+A7: dom b = n by PBOOLE:def 3;
+      now let x be set; assume
+    A8: x in n;
+    then A9: x in dom b \/ dom (n .--> k) by A7,XBOOLE_0:def 2;
+        A10: now assume x in dom (n .--> k); then x in {n} by CQC_LANG:5;
+             then x = n by TARSKI:def 1;
+         hence contradiction by A8;
+        end;
+     thus (b1|n).x=b1.x by A6,A8,FUNCT_1:68 .= b.x by A9,A10,FUNCT_4:def 1;
+    end;
+  hence b1|n = b by A6,A7,FUNCT_1:9; n in {n} by TARSKI:def 1;
+ then A11: n in dom (n .--> k) by CQC_LANG:5;
+     then n in dom b \/ dom (n .--> k) by XBOOLE_0:def 2;
+ hence b1.n = (n .--> k).n by A11,FUNCT_4:def 1 .= k by CQC_LANG:6;
+end;
+uniqueness proof let b1,b2 be Element of Bags (n+1); assume
+A12: b1|n = b & b1.n = k & b2|n = b & b2.n = k;
+A13: dom b1 = n+1 by PBOOLE:def 3;
+A14: dom b2 = n+1 by PBOOLE:def 3;
+      now let x be set; assume
+    A15: x in n+1; then x in succ n by CARD_1:52;
+    then A16: x in n \/ {n} by ORDINAL1:def 1;
+     per cases; suppose x in {n}; then x = n by TARSKI:def 1;
+       hence b1.x = b2.x by A12; suppose
+          not x in {n}; then x in n by A16,XBOOLE_0:def 2;
+         then x in (n+1) /\ n by A15,XBOOLE_0:def 3;
+     then A17: x in dom b by A12,A13,FUNCT_1:68;
+       hence b1.x = b.x by A12,FUNCT_1:70 .= b2.x by A12,A17,FUNCT_1:70;
+     end;
+ hence b1 = b2 by A13,A14,FUNCT_1:9;
+end;
+end;
+
+theorem Th6:
+for n being Nat holds EmptyBag (n+1) = (EmptyBag n) bag_extend 0
+proof let n being Nat;
+A1: dom (EmptyBag (n+1)) = n+1 by PBOOLE:def 3;
+A2: dom ((EmptyBag n) bag_extend 0) = n+1 by PBOOLE:def 3;
+       now let x be set; assume x in n+1; then x in succ n by CARD_1:52;
+     then A3: x in n \/ {n} by ORDINAL1:def 1;
+          per cases by A3,XBOOLE_0:def 2; suppose
+     A4: x in n;
+          thus (EmptyBag(n+1)).x = 0 by POLYNOM1:56
+            .= (EmptyBag n).x by POLYNOM1:56
+            .= (((EmptyBag n) bag_extend 0)|n).x by Def1
+            .= ((EmptyBag n) bag_extend 0).x by A4,FUNCT_1:72;
+          suppose
+     A5: x in {n};
+          thus (EmptyBag(n+1)).x = 0 by POLYNOM1:56
+            .= ((EmptyBag n) bag_extend 0).n by Def1
+            .= ((EmptyBag n) bag_extend 0).x by A5,TARSKI:def 1;
+     end;
+     hence EmptyBag (n+1) = (EmptyBag n) bag_extend 0 by A1,A2,FUNCT_1:9;
+end;
+
+theorem Th7:
+for n be Ordinal, b, b1 be bag of n holds b1 in rng divisors b iff b1 divides b
+proof let n be Ordinal, b, b1 be bag of n;
+     consider S being non empty finite Subset of Bags n such that
+A1: divisors b = SgmX(BagOrder n, S) &
+     for p being bag of n holds p in S iff p divides b by POLYNOM1:def 18;
+       field (BagOrder n) = Bags n by ORDERS_2:2;
+     then BagOrder n linearly_orders Bags n by ORDERS_2:35;
+then A2: BagOrder n linearly_orders S by ORDERS_2:36;
+     hereby assume b1 in rng divisors b; then b1 in S by A1,A2,TRIANG_1:def 2
+;
+      hence b1 divides b by A1;
+     end;
+     assume b1 divides b; then b1 in S by A1;
+     hence b1 in rng divisors b by A1,A2,TRIANG_1:def 2;
+end;
+
+definition
+let X be set, x be Element of X;
+func UnitBag x -> Element of Bags X equals :Def2:
+ (EmptyBag X)+*(x, 1);
+ coherence by POLYNOM1:def 14;
+end;
+
+theorem Th8:
+for X being non empty set, x being Element of X holds support UnitBag x = {x}
+proof let X be non empty set, x be Element of X;
+     now let a be set;
+    hereby assume a in support UnitBag x;
+     then A1: a in support ((EmptyBag X)+*(x, 1)) by Def2;
+         now assume a <> x;
+   then ((EmptyBag X)+*(x, 1)).a = (EmptyBag X).a by FUNCT_7:34 .= 0 by
+POLYNOM1:56;
+        hence contradiction by A1,POLYNOM1:def 7;
+       end;
+     hence a in {x} by TARSKI:def 1;
+    end;
+     assume a in {x};
+    then A2: a = x by TARSKI:def 1; EmptyBag X = X --> 0 by POLYNOM1:def 15
+;
+    then A3: dom (EmptyBag X) = X by FUNCOP_1:19;
+   (UnitBag x).a = ((EmptyBag X)+*(x, 1)).a by Def2 .= 1 by A2,A3,FUNCT_7:33;
+     hence a in support UnitBag x by POLYNOM1:def 7;
+   end;
+ hence support UnitBag x = {x} by TARSKI:2;
+end;
+
+theorem Th9:
+for X being non empty set, x being Element of X
+ holds (UnitBag x).x = 1 &
+       for y being Element of X st x <> y holds (UnitBag x).y = 0
+proof let X be non empty set, x be Element of X;
+A1: dom (X -->0) = X by FUNCOP_1:19;
+ thus (UnitBag x).x = ((EmptyBag X)+*(x, 1)).x by Def2
+  .= ((X --> 0)+*(x, 1)).x by POLYNOM1:def 15 .= 1 by A1,FUNCT_7:33;
+ let y be Element of X such that
+A2: x <> y;
+ thus (UnitBag x).y = ((EmptyBag X)+*(x, 1)).y by Def2
+      .= (EmptyBag X).y by A2,FUNCT_7:34 .= 0 by POLYNOM1:56;
+end;
+
+theorem Th10:
+for X being non empty set, x1, x2 being Element of X
+ st UnitBag x1 = UnitBag x2 holds x1 = x2
+proof let X be non empty set, x1, x2 be Element of X such that
+A1: UnitBag x1 = UnitBag x2 and
+A2: x1 <> x2; 1 = (UnitBag x2).x1 by A1,Th9 .= 0 by A2,Th9;
+ hence contradiction;
+end;
+
+theorem Th11:
+for X being non empty Ordinal, x be Element of X,
+    L being unital non trivial (non empty doubleLoopStr),
+    e being Function of X, L
+holds eval(UnitBag x, e) = e.x
+proof let X be non empty Ordinal, x be Element of X,
+    L be unital non trivial (non empty doubleLoopStr),
+    e be Function of X, L; reconsider edx = e.x as Element of L;
+     support UnitBag x = {x} by Th8;
+ hence eval(UnitBag x, e) = power(L).(e.x, (UnitBag x).x) by POLYNOM2:17
+   .= power(L).(e.x, 0+1) by Th9 .= power(L).(edx, 0) * (edx) by GROUP_1:def 7
+   .= 1.L * (edx) by GROUP_1:def 7 .= e.x by GROUP_1:def 4;
+end;
+
+definition
+let X be set, x be Element of X, L be unital (non empty multLoopStr_0);
+func 1_1(x,L) -> Series of X, L equals :Def3:
+  0_(X,L)+*(UnitBag x,1.L);
+ coherence;
+end;
+
+theorem Th12:
+for X being set, L being unital non trivial (non empty doubleLoopStr),
+    x be Element of X
+ holds 1_1(x,L).UnitBag x = 1.L &
+       for b being bag of X st b <> UnitBag x holds 1_1(x,L).b = 0.L
+proof let X be set, L be unital non trivial (non empty doubleLoopStr),
+         x be Element of X;
+A1: dom (0_(X,L)) = dom ((Bags X) --> 0.L) by POLYNOM1:def 24
+                .= Bags X by FUNCOP_1:19;
+ thus 1_1(x,L).UnitBag x = (0_(X,L)+*(UnitBag x,1.L)).UnitBag x by Def3
+   .= 1.L by A1,FUNCT_7:33;
+ let b be bag of X; assume A2: b <> UnitBag x;
+  thus 1_1(x,L).b = (0_(X,L)+*(UnitBag x,1.L)).b by Def3
+        .= (0_(X,L)).b by A2,FUNCT_7:34 .= 0.L by POLYNOM1:81;
+end;
+
+theorem Th13:
+for X being set, x being Element of X,
+    L being add-associative right_zeroed right_complementable
+            unital right-distributive non trivial (non empty doubleLoopStr)
+ holds Support 1_1(x,L) = {UnitBag x}
+proof let X be set, x be Element of X,
+          L be add-associative right_zeroed right_complementable
+               unital right-distributive non trivial (non empty doubleLoopStr);
+    now let a be set;
+   hereby assume
+   A1: a in Support 1_1(x,L); then reconsider b = a as Element of Bags X;
+        now assume A2: a <> UnitBag x;
+            1_1(x,L).b = (0_(X,L)+*(UnitBag x,1.L)).b by Def3
+           .= (0_(X,L)).b by A2,FUNCT_7:34 .= 0.L by POLYNOM1:81;
+       hence contradiction by A1,POLYNOM1:def 9;
+      end;
+    hence a in {UnitBag x} by TARSKI:def 1;
+   end;
+   assume a in {UnitBag x};
+   then A3: a = UnitBag x by TARSKI:def 1; then 1_1(x,L).a = 1.L by Th12;
+      then 1_1(x,L).a <> 0.L by POLYNOM1:27;
+   hence a in Support 1_1(x,L) by A3,POLYNOM1:def 9;
+  end;
+ hence Support 1_1(x,L) = {UnitBag x} by TARSKI:2;
+end;
+
+definition
+let X be Ordinal, x be Element of X,
+    L be add-associative right_zeroed right_complementable
+         unital right-distributive non trivial (non empty doubleLoopStr);
+cluster 1_1(x,L) -> finite-Support;
+ coherence proof Support 1_1(x,L) = {UnitBag x} by Th13;
+   hence thesis by POLYNOM1:def 10;
+ end;
+end;
+
+theorem Th14:
+for L being add-associative right_zeroed right_complementable
+            unital right-distributive non trivial (non empty doubleLoopStr),
+    X being non empty set, x1, x2 being Element of X
+  st 1_1(x1,L) = 1_1(x2,L) holds x1 = x2
+proof let L be add-associative right_zeroed right_complementable
+              unital right-distributive non trivial (non empty doubleLoopStr),
+          X be non empty set, x1, x2 be Element of X such that
+A1: 1_1(x1,L) = 1_1(x2,L) and
+A2: x1 <> x2;
+A3: UnitBag x1 <> UnitBag x2 by A2,Th10; 1.L = 1_1(x2,L).UnitBag x1 by A1,Th12
+.= 0.L by A3,Th12;
+ hence contradiction by POLYNOM1:27;
+end;
+
+theorem Th15:
+for L being add-associative right_zeroed right_complementable distributive
+            (non empty doubleLoopStr),
+    x being Element of Polynom-Ring L, p be sequence of L
+ st x = p holds -x = -p
+proof let L be add-associative right_zeroed right_complementable distributive
+               (non empty doubleLoopStr),
+  x being Element of Polynom-Ring L, p be sequence of L; assume
+A1: x = p; reconsider x'=x as Polynomial of L by POLYNOM3:def 12;
+A2: dom 0_.L = NAT by FUNCT_2:def 1;
+A3: dom (p-p) = NAT by FUNCT_2:def 1;
+     now let i be set; assume A4: i in NAT; then reconsider i'=i as Nat;
+      thus (p-p).i = p.i' - p.i' by POLYNOM3:27 .= 0.L by RLVECT_1:28
+                  .= (0_.L).i by A4,POLYNOM3:28;
+   end; then p-p = 0_.L by A2,A3,FUNCT_1:9;
+then A5: x'+-x' = 0_.L by A1,POLYNOM3:def 8;
+   reconsider mx=-x' as Element of Polynom-Ring L
+      by POLYNOM3:def 12;
+     x+mx = x'+-x' by POLYNOM3:def 12 .=0.(Polynom-Ring L) by A5,POLYNOM3:def
+12
+;
+   then x = -mx by RLVECT_1:19;
+   hence thesis by A1,RLVECT_1:30;
+end;
+
+theorem Th16:
+for L being add-associative right_zeroed right_complementable distributive
+            (non empty doubleLoopStr),
+    x, y being Element of Polynom-Ring L, p, q be sequence of L
+ st x = p & y = q holds x-y = p-q
+proof let L being add-associative right_zeroed right_complementable
+                  distributive (non empty doubleLoopStr),
+          x,y being Element of Polynom-Ring L,
+          p,q be sequence of L; assume
+A1: x = p & y = q;
+then A2: -y = -q by Th15;
+   thus x - y = x + (-y) by RLVECT_1:def 11 .= p + (-q) by A1,A2,POLYNOM3:def
+12
+             .= p - q by POLYNOM3:def 8;
+end;
+
+definition
+let L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr);
+let I be non empty Subset of Polynom-Ring L;
+func minlen(I) -> non empty Subset of I equals :Def4:
+{ x where x is Element of I : for x',y' being Polynomial of L
+                               st x'=x & y' in I holds len x' <= len y' };
+  coherence proof
+      set u = { x where x is Element of I : for x',y' being Polynomial of L st
+                x'=x & y' in I holds len x' <= len y' };
+  A1: u c= I proof let x be set; assume x in u;
+          then consider x'' being Element of I such that
+      A2: x''=x & for x',y' being Polynomial of L st
+          x'=x'' & y' in I holds len x' <= len y';
+          thus x in I by A2;
+      end;
+      defpred P[Element of I,Nat] means
+         for p being Polynomial of L st $1=p holds $2 = len p;
+  A3: now let x be Element of I;
+          reconsider x'=x as Polynomial of L by POLYNOM3:def 12;
+            for p be Polynomial of L st x=p holds len x' = len p;
+          hence ex y being Nat st P[x,y];
+      end;
+      consider f being Function of I,NAT such that
+  A4: for x being Element of I holds P[x,f.x] from FuncExD(A3);
+        I c= I; then reconsider I'=I as non empty Subset of I;
+        min (f.:I') in f.:I by CQC_SIM1:def 8;
+      then consider x being set such that
+  A5: x in dom f & x in I & min (f.:I') = f.x by FUNCT_1:def 12;
+      reconsider x as Element of I by A5;
+        now let x',y' being Polynomial of L; assume
+      A6: x'=x & y' in I;
+            dom f = I by FUNCT_2:def 1; then f.y' in f.:I by A6,FUNCT_1:def 12
+;
+          then f.x <= f.y' by A5,CQC_SIM1:def 8; then len x' <= f.y' by A4,A6
+;
+          hence len x' <= len y' by A4,A6;
+      end; then x in u;
+      hence u is non empty Subset of I by A1;
+  end;
+end;
+
+theorem Th17:
+for L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr),
+    I be non empty Subset of Polynom-Ring L,
+    i1, i2 be Polynomial of L
+ st i1 in minlen(I) & i2 in I holds i1 in I & len i1 <= len i2
+proof let L be right_zeroed add-associative right_complementable
+             unital distributive (non empty doubleLoopStr),
+        I be non empty Subset of Polynom-Ring L,
+        i1, i2 be Polynomial of L; assume
+A1: i1 in minlen(I) & i2 in I;
+    then i1 in { x where x is Element of I : for x',y' being Polynomial of L
+st
+           x'=x & y' in I holds len x' <= len y' } by Def4;
+    then consider i1' being Element of I such that
+A2: i1'=i1 & for x',y' being Polynomial of L st
+               x'=i1' & y' in I holds len x' <= len y';
+    thus i1 in I & len i1 <= len i2 by A1,A2;
+end;
+
+definition
+let L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr),
+    n be Nat, a be Element of L;
+func monomial(a,n) -> Polynomial of L means :Def5:
+for x being Nat holds (x = n implies it.x = a) & (x <> n implies it.x = 0.L);
+  existence proof
+      reconsider x = 0_.(L)+*(n,a) as sequence of L by NORMSP_1:def 3;
+        now let i be Nat; assume i >= n+1;
+         then i > n by NAT_1:38;
+         hence x.i = (0_.(L)).i by FUNCT_7:34
+                 .= (NAT --> 0.L).i by POLYNOM3:def 9 .= 0.L by FUNCOP_1:13;
+      end; then reconsider x as Polynomial of L by ALGSEQ_1:def 2;
+        now let i be Nat;
+         thus i = n implies x.i = a proof assume
+         A1: i = n; dom 0_.(L) = NAT by FUNCT_2:def 1;
+            hence x.i = a by A1,FUNCT_7:33;
+         end;
+         thus i <> n implies x.i = 0.L proof assume i <> n;
+            hence x.i = (0_.L).i by FUNCT_7:34
+                    .= (NAT --> 0.L).i by POLYNOM3:def 9 .= 0.L by FUNCOP_1:13;
+         end;
+      end;
+      hence thesis;
+  end;
+  uniqueness proof let u,v be Polynomial of L such that
+  A2: for x being Nat holds (x=n implies u.x=a) & (x<>n implies u.x = 0.L) and
+  A3: for x being Nat holds (x=n implies v.x=a) & (x<>n implies v.x = 0.L);
+  A4: dom u = NAT by FUNCT_2:def 1; A5: dom v = NAT by FUNCT_2:def 1;
+       now let x be set; assume A6: x in NAT;
+        per cases;
+        suppose A7: x = n; hence u.x = a by A2 .= v.x by A3,A7;
+        suppose A8: x <> n; hence u.x = 0.L by A2,A6 .= v.x by A3,A6,A8;
+     end;
+     hence u = v by A4,A5,FUNCT_1:9;
+  end;
+end;
+
+theorem Th18:
+for L be right_zeroed add-associative right_complementable
+           unital distributive (non empty doubleLoopStr),
+    n be Nat, a be Element of L
+holds (a <> 0.L implies len monomial(a,n) = n+1) &
+      (a = 0.L implies len monomial(a,n) = 0) & len monomial (a,n) <= n+1
+proof let L be right_zeroed add-associative right_complementable
+           unital distributive (non empty doubleLoopStr),
+       n be Nat, a be Element of L;
+A1: now assume a <> 0.L; then monomial(a,n).n <> 0.L by Def5;
+      then len monomial(a,n) > n by ALGSEQ_1:22;
+   then A2: len monomial(a,n) >= n+1 by NAT_1:38;
+        now let i be Nat; assume i >= n+1; then i > n by NAT_1:38;
+         hence monomial(a,n).i = 0.L by Def5;
+      end; then n+1 is_at_least_length_of monomial(a,n) by ALGSEQ_1:def 3;
+      then len monomial(a,n) <= n+1 by ALGSEQ_1:def 4;
+      hence len monomial(a,n) = n+1 by A2,AXIOMS:21;
+   end;
+  now assume
+   A3:    a = 0.L;
+        now let i be Nat; assume i >= 0;
+         per cases;
+         suppose i = n; hence monomial(a,n).i = 0.L by A3,Def5;
+         suppose i<>n; hence monomial(a,n).i = 0.L by Def5;
+      end; then 0 is_at_least_length_of monomial(a,n) by ALGSEQ_1:def 3;
+   then len monomial(a,n)<=0 by ALGSEQ_1:def 4;
+      hence len monomial(a,n) = 0 by NAT_1:18;
+   end;
+   hence thesis by A1,NAT_1:18;
+end;
+
+theorem Th19:
+for L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr),
+    n, x be Nat, a be Element of L, p be Polynomial of L
+  holds (monomial(a,n)*'p).(x+n) = a * (p.x)
+proof let L be right_zeroed add-associative right_complementable
+             unital distributive (non empty doubleLoopStr),
+        n,x be Nat, a be Element of L, p be Polynomial of L;
+    consider r being FinSequence of the carrier of L such that
+A1:  len r = x+n+1 & (monomial(a,n)*'p).(x+n) = Sum r &
+     for k be Nat st k in dom r
+         holds r.k = monomial(a,n).(k-'1) * p.(x+n+1-'k) by POLYNOM3:def 11;
+      len r = n+(1+x) by A1,XCMPLX_1:1;
+    then consider b,c being FinSequence of the carrier of L such that
+A2:   len b = n & len c = 1+x & r = b^c by FINSEQ_2:26;
+    consider d,e being FinSequence of the carrier of L such that
+A3:   len d = 1 & len e = x & c = d^e by A2,FINSEQ_2:26;
+      now let i be Nat; assume
+    A4: i in dom b;
+    then A5: 1 <= i & i <= n by A2,FINSEQ_3:27;
+    then A6: i-'1 = i-1 by SCMFSA_7:3; A7: i - 1 < i by INT_1:26;
+        A8: dom b c= dom r by A2,FINSEQ_1:39;
+        thus b.i = r.i by A2,A4,FINSEQ_1:def 7
+                .= monomial(a,n).(i-'1)*p.(x+n+1-'i) by A1,A4,A8
+                .= 0.L * p.(x+n+1-'i) by A5,A6,A7,Def5 .= 0.L by VECTSP_1:39;
+    end;
+then A9: Sum b = 0.L by POLYNOM3:1;
+A10: 1 in dom d by A3,FINSEQ_3:27; A11: dom d c= dom c by A3,FINSEQ_1:39;
+then A12: n+1 in dom r by A2,A10,FINSEQ_1:41;
+      d.1 = c.1 by A3,A10,FINSEQ_1:def 7 .= r.(n+1) by A2,A10,A11,FINSEQ_1:def
+7
+       .= monomial(a,n).(n+1-'1)*p.(x+n+1-'(n+1)) by A1,A12
+       .= monomial(a,n).n*p.(x+n+1-'(n+1)) by BINARITH:39
+       .= monomial(a,n).n*p.(x+(n+1)-'(n+1)) by XCMPLX_1:1
+       .= monomial(a,n).n*p.x by BINARITH:39
+       .= a*p.x by Def5; then d = <* a*p.x *> by A3,FINSEQ_1:57;
+then A13: Sum d = a * (p.x) by RLVECT_1:61;
+      now let i be Nat; assume
+    A14: i in dom e;
+    then A15: 1+i in dom c by A3,FINSEQ_1:41;
+    then A16: n+(1+i) in dom r by A2,FINSEQ_1:41; i >= 1 by A14,FINSEQ_3:27
+;
+        then n+i >= n+1 by AXIOMS:24; then A17: n+i > n by NAT_1:38;
+    A18: n+(1+i) -' 1 = n+i+1 -' 1 by XCMPLX_1:1 .= n+i by BINARITH:39;
+        thus e.i = c.(1+i) by A3,A14,FINSEQ_1:def 7
+          .= r.(n+(1+i)) by A2,A15,FINSEQ_1:def 7
+          .= monomial(a,n).(n+(1+i)-'1)*p.(x+n+1-'(n+(1+i))) by A1,A16
+        .= 0.L * p.(x+n+1-'(n+(1+i))) by A17,A18,Def5 .= 0.L by VECTSP_1:39;
+    end; then Sum e = 0.L by POLYNOM3:1;
+    then Sum c = a * (p.x) + 0.L by A3,A13,RLVECT_1:58 .= a * (p.x) by RLVECT_1
+:10;
+    hence (monomial(a,n)*'p).(x+n) = 0.L + a * (p.x) by A1,A2,A9,RLVECT_1:58
+                                 .= a * (p.x) by RLVECT_1:10;
+end;
+
+theorem Th20:
+for L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr),
+    n, x be Nat, a be Element of L, p be Polynomial of L
+  holds (p*'monomial(a,n)).(x+n) = (p.x) * a
+proof let L be right_zeroed add-associative right_complementable
+             unital distributive (non empty doubleLoopStr),
+        n,x be Nat, a be Element of L, p be Polynomial of L;
+    consider r being FinSequence of the carrier of L such that
+A1:  len r = x+n+1 & (p*'monomial(a,n)).(x+n) = Sum r &
+     for k be Nat st k in dom r
+         holds r.k = p.(k-'1) * monomial(a,n).(x+n+1-'k) by POLYNOM3:def 11;
+      len r = x+(n+1) by A1,XCMPLX_1:1;
+    then consider b,c being FinSequence of the carrier of L such that
+A2:   len b = x & len c = n+1 & r = b^c by FINSEQ_2:26;
+    consider d,e being FinSequence of the carrier of L such that
+A3:   len d = 1 & len e = n & c = d^e by A2,FINSEQ_2:26;
+      now let i be Nat; assume
+    A4: i in dom b; then 1 <= i & i <= x by A2,FINSEQ_3:27;
+        then i+n <= x+n by AXIOMS:24; then i+n < x+n+1 by NAT_1:38;
+    then A5: n < x+n+1-i by REAL_1:86; then x+n+1-i > 0 by NAT_1:18;
+    then A6: x+n+1-i = x+n+1-'i by BINARITH:def 3;
+        A7: dom b c= dom r by A2,FINSEQ_1:39;
+        thus b.i = r.i by A2,A4,FINSEQ_1:def 7
+                .= p.(i-'1)*monomial(a,n).(x+n+1-'i) by A1,A4,A7
+                .= p.(i-'1)*0.L by A5,A6,Def5 .= 0.L by VECTSP_1:36;
+    end;
+then A8: Sum b = 0.L by POLYNOM3:1;
+A9: 1 in dom d by A3,FINSEQ_3:27; A10: dom d c= dom c by A3,FINSEQ_1:39;
+then A11: x+1 in dom r by A2,A9,FINSEQ_1:41;
+      d.1 = c.1 by A3,A9,FINSEQ_1:def 7 .= r.(x+1) by A2,A9,A10,FINSEQ_1:def 7
+       .= p.(x+1-'1)*monomial(a,n).(x+n+1-'(x+1)) by A1,A11
+       .= p.x*monomial(a,n).(x+n+1-'(x+1)) by BINARITH:39
+       .= p.x*monomial(a,n).(n+(x+1)-'(x+1)) by XCMPLX_1:1
+       .= p.x*monomial(a,n).n by BINARITH:39
+       .= p.x*a by Def5; then d = <* p.x*a *> by A3,FINSEQ_1:57;
+then A12: Sum d = p.x*a by RLVECT_1:61;
+      now let i be Nat; assume
+    A13: i in dom e;
+    then A14: 1+i in dom c by A3,FINSEQ_1:41;
+    then A15: x+(1+i) in dom r by A2,FINSEQ_1:41;
+    A16: 1 <= i & i <= n by A3,A13,FINSEQ_3:27; then x+i <= x+n by AXIOMS:24;
+        then x+i+1<=x+n+1 by AXIOMS:24; then x+(i+1)<=x+n+1 by XCMPLX_1:1;
+    then A17: x+n+1 -' (x+(1+i)) = x+n+1 - (x+(1+i)) by SCMFSA_7:3;
+    A18: x+n+1 - (x+(1+i)) = x+n+1 - x - (1+i) by XCMPLX_1:36
+         .= x+(n+1)-x - (1+i) by XCMPLX_1:1 .= x-x+(n+1)-(1+i) by XCMPLX_1:29
+
+         .= 0+(n+1)-(1+i) by XCMPLX_1:14 .= n-i by XCMPLX_1:32;
+    A19: n-i <= n-1 by A16,REAL_1:92; A20: n > n-1 by INT_1:26;
+        thus e.i = c.(1+i) by A3,A13,FINSEQ_1:def 7
+                .= r.(x+(1+i)) by A2,A14,FINSEQ_1:def 7
+                .= p.(x+(1+i)-'1)*monomial(a,n).(x+n+1-'(x+(1+i))) by A1,A15
+                .= p.(x+(1+i)-'1)*0.L by A17,A18,A19,A20,Def5 .= 0.L by
+VECTSP_1:36;
+    end; then Sum e = 0.L by POLYNOM3:1;
+    then Sum c = (p.x)*a + 0.L by A3,A12,RLVECT_1:58 .= (p.x)*a by RLVECT_1:10
+;
+    hence (p*'monomial(a,n)).(x+n) = 0.L + (p.x)*a by A1,A2,A8,RLVECT_1:58
+                                 .= (p.x)*a by RLVECT_1:10;
+end;
+
+theorem Th21:
+for L be right_zeroed add-associative right_complementable
+         unital distributive (non empty doubleLoopStr), p, q be Polynomial of L
+  holds len (p*'q) <= (len p)+(len q)-'1
+proof let L be right_zeroed add-associative right_complementable
+        unital distributive (non empty doubleLoopStr), p,q be Polynomial of L;
+      now let i be Nat; consider r be FinSequence of the carrier of L such that
+      A1: len r = i+1 and
+      A2: (p*'q).i = Sum r and
+A3: for k be Nat st k in dom r holds r.k=p.(k-'1) * q.(i+1-'k)
+      by POLYNOM3:def 11;
+     assume A4: i >= len p + len q -' 1;
+       len p + len q -' 1 >= len p + len q - 1 by JORDAN3:3;
+     then i >= len p + len q - 1 by A4,AXIOMS:22;
+     then i >= len p + (len q - 1) by XCMPLX_1:29;
+     then len p <= i - (len q - 1) by REAL_1:84;
+     then len p <= i - len q + 1 by XCMPLX_1:37;
+     then -len p >= -(i - len q + 1) by REAL_1:50;
+     then -len p >= -(i - (len q -1)) by XCMPLX_1:37;
+     then A5: -len p >= len q -1 -i by XCMPLX_1:143;
+       now let k be Nat; assume A6: k in dom r;
+      then A7: r.k = p.(k-'1) * q.(i+1-'k) by A3;
+        k in Seg len r by A6,FINSEQ_1:def 3;
+      then A8: 1 <= k & k <= i+1 by A1,FINSEQ_1:3;
+      then A9: i+1-k >= 0 by SQUARE_1:12;
+      A10: k-1 >= 0 by A8,SQUARE_1:12;
+      per cases;
+       suppose k-'1 < len p; then k-1 < len p by A10,BINARITH:def 3;
+        then -(k-1) > -len p by REAL_1:50; then 1-k > -len p by XCMPLX_1:143;
+        then 1-k > len q - 1 - i by A5,AXIOMS:22;
+        then i+(1-k)>len q - 1 by REAL_1:84; then i+1-k>len q - 1 by XCMPLX_1:
+29;
+        then i+1-'k > len q -1 by A9,BINARITH:def 3;
+        then i+1-'k >= len q -1 +1 by INT_1:20;
+        then i+1-'k >= len q +1 -1 by XCMPLX_1:29; then i+1-'k >= len q by
+XCMPLX_1:26;
+        then q.(i+1-'k) = 0.L by ALGSEQ_1:22;
+        hence r.k = 0.L by A7,VECTSP_1:36;
+       suppose k-'1 >= len p; then p.(k-'1) = 0.L by ALGSEQ_1:22;
+        hence r.k = 0.L by A7,VECTSP_1:39;
+     end;
+     hence (p*'q).i = 0.L by A2,POLYNOM3:1;
+   end; then len p + len q -' 1 is_at_least_length_of p*'q by ALGSEQ_1:def 3;
+   hence thesis by ALGSEQ_1:def 4;
+end;
+
+begin :: On Ring isomorphism
+
+theorem Th22:
+for R,S being non empty doubleLoopStr, I being Ideal of R, P being map of R,S
+  st P is RingIsomorphism holds P.:I is Ideal of S
+proof let R,S being non empty doubleLoopStr, I being Ideal of R,
+        P being map of R,S; assume
+A1: P is RingIsomorphism; set Q = P.:I;
+    A2: now let x, y be Element of S; assume
+    A3: x in Q & y in Q; then consider x' being set such that
+    A4: x' in the carrier of R & x' in I & x = P.x' by FUNCT_2:115;
+        consider y' being set such that
+    A5: y' in the carrier of R & y' in I & y = P.y' by A3,FUNCT_2:115;
+        reconsider x',y' as Element of R by A4,A5;
+    A6: x'+y' in I by A4,A5,IDEAL_1:def 1;
+          P is RingMonomorphism RingEpimorphism by A1,QUOFIELD:def 24;
+        then P is RingHomomorphism by QUOFIELD:def 22;
+        then P is additive by QUOFIELD:def 21;
+          then x+y = P.(x'+y') by A4,A5,GRCAT_1:def 13;
+        hence x+y in Q by A6,FUNCT_2:43;
+    end;
+    A7: now let p, x be Element of S; assume
+      x in Q; then consider x' being set such that
+    A8: x' in the carrier of R & x' in I & x = P.x' by FUNCT_2:115;
+        reconsider x' as Element of R by A8;
+    A9: P is RingMonomorphism RingEpimorphism by A1,QUOFIELD:def 24;
+        then rng P = the carrier of S by QUOFIELD:def 22;
+        then consider p' being set such that
+    A10: p' in dom P & p = P.p' by FUNCT_1:def 5;
+        reconsider p' as Element of R by A10;
+    A11: p'*x' in I by A8,IDEAL_1:def 2;
+          P is RingHomomorphism by A9,QUOFIELD:def 22;
+        then P is multiplicative by QUOFIELD:def 21;
+        then p*x = P.(p'*x') by A8,A10,ENDALG:def 7;
+        hence p*x in Q by A11,FUNCT_2:43;
+    end;
+      now let p, x be Element of S; assume
+      x in Q; then consider x' being set such that
+    A12: x' in the carrier of R & x' in I & x = P.x' by FUNCT_2:115;
+        reconsider x' as Element of R by A12;
+    A13: P is RingMonomorphism RingEpimorphism by A1,QUOFIELD:def 24;
+        then rng P = the carrier of S by QUOFIELD:def 22;
+        then consider p' being set such that
+    A14: p' in dom P & p = P.p' by FUNCT_1:def 5;
+        reconsider p' as Element of R by A14;
+    A15: x'*p' in I by A12,IDEAL_1:def 3;
+          P is RingHomomorphism by A13,QUOFIELD:def 22;
+        then P is multiplicative by QUOFIELD:def 21;
+        then x*p = P.(x'*p') by A12,A14,ENDALG:def 7;
+        hence x*p in Q by A15,FUNCT_2:43;
+    end;
+    hence Q is Ideal of S by A2,A7,IDEAL_1:def 1,def 2,def 3;
+end;
+
+theorem Th23:  :: from quofield
+for R,S being add-associative right_zeroed right_complementable
+              (non empty doubleLoopStr), f being map of R, S
+  st f is RingHomomorphism holds f.(0.R) = 0.S
+proof let R,S be add-associative
+      right_zeroed right_complementable (non empty doubleLoopStr);
+let f be map of R, S; assume f is RingHomomorphism;
+then A1: f is additive by QUOFIELD:def 21;
+  f.(0.R)=f.(0.R+0.R) by RLVECT_1:10 .= f.(0.R)+f.(0.R) by A1,GRCAT_1:def 13;
+    then 0.S = (f.(0.R)+f.(0.R))+(-f.(0.R)) by RLVECT_1:def 10
+       .= f.(0.R) + (f.(0.R) + (-f.(0.R))) by RLVECT_1:def 6
+       .= f.(0.R) + 0.S by RLVECT_1:def 10 .= f.(0.R) by RLVECT_1:10;
+hence thesis;
+end;
+
+theorem Th24:
+for R, S being add-associative right_zeroed right_complementable
+                 (non empty doubleLoopStr),
+    F being non empty Subset of R,
+    G being non empty Subset of S, P being map of R, S,
+    lc being LinearCombination of F, LC being LinearCombination of G,
+    E being FinSequence of
+                       [:the carrier of R, the carrier of R, the carrier of R:]
+   st P is RingHomomorphism & len lc = len LC & E represents lc &
+       (for i being set st i in dom LC
+          holds LC.i = (P.(E/.i)`1)*(P.(E/.i)`2)*(P.(E/.i)`3))
+    holds P.(Sum lc) = Sum LC
+proof let R, S be add-associative right_zeroed right_complementable
+                (non empty doubleLoopStr),
+        F be non empty Subset of R,
+        G be non empty Subset of S,
+        P be map of R,S, lc be LinearCombination of F,
+        LC be LinearCombination of G, E be FinSequence of
+          [:the carrier of R, the carrier of R, the carrier of R:] such that
+A1: P is RingHomomorphism and A2: len lc = len LC and A3: E represents lc and
+A4: for i being set st i in dom LC
+      holds LC.i = (P.(E/.i)`1)*(P.(E/.i)`2)*(P.(E/.i)`3);
+A5: dom lc = dom LC by A2,FINSEQ_3:31;
+A6: P is additive multiplicative by A1,QUOFIELD:def 21;
+    defpred P[Nat] means
+     for lc' being LinearCombination of F,
+         LC' being LinearCombination of G
+       st lc' = lc|Seg $1 & LC' = LC|Seg $1 holds P.(Sum lc') = Sum LC';
+A7: P[0] proof let lc' be LinearCombination of F,
+                   LC' be LinearCombination of G such that
+    A8: lc' = lc|Seg 0 & LC' = LC|Seg 0;
+        thus P.(Sum lc') = P.(Sum
+ <*>the carrier of R) by A8,FINSEQ_1:4,RELAT_1:110
+        .= P.(0.R) by RLVECT_1:60 .= 0.S by A1,Th23
+        .= Sum <*>the carrier of S by RLVECT_1:60
+        .= Sum LC' by A8,FINSEQ_1:4,RELAT_1:110;
+    end;
+A9: for k being Nat st P[k] holds P[k+1] proof let k be Nat; assume
+    A10: P[k];
+        thus P[k+1] proof let lc' be LinearCombination of F,
+                              LC' be LinearCombination of G; assume
+        A11: lc' = lc| Seg (k+1) & LC' = LC|Seg (k+1);
+            per cases;
+            suppose A12: len lc < k+1;
+            then A13: len lc <= k by NAT_1:38;
+            A14: lc' = lc by A11,A12,FINSEQ_3:55 .= lc|Seg k by A13,FINSEQ_3:55
+;
+        LC' = LC by A2,A11,A12,FINSEQ_3:55 .= LC|Seg k by A2,A13,FINSEQ_3:55;
+             hence P.(Sum lc') = Sum LC' by A10,A14;
+            suppose
+        A15: len lc >= k+1; 1 <= k+1 by NAT_1:29;
+        then A16: k+1 in dom lc by A15,FINSEQ_3:27;
+            reconsider lck = lc|Seg k as LinearCombination of F by IDEAL_1:41;
+            reconsider LCk = LC|Seg k as LinearCombination of G by IDEAL_1:41;
+            set i = k+1;
+        A17: lc|Seg (k+1) = lck^<*lc.(k+1)*> by A16,FINSEQ_5:11;
+        A18: LC.(k+1) = LC/.(k+1) by A5,A16,FINSEQ_4:def 4;
+        A19: lc.(k+1) = lc/.(k+1) by A16,FINSEQ_4:def 4;
+            hence P.(Sum lc') = P.((Sum lck)+lc/.(k+1)) by A11,A17,FVSUM_1:87
+            .= P.(Sum lck)+P.(lc/.(k+1)) by A6,GRCAT_1:def 13
+            .= (Sum LCk)+P.(lc/.(k+1)) by A10
+            .= (Sum LCk)+P.(((E/.i)`1)*((E/.i)`2)*((E/.i)`3)) by A3,A16,A19,
+IDEAL_1:def 12
+          .= (Sum
+ LCk)+P.(((E/.i)`1)*((E/.i)`2))*P.((E/.i)`3) by A6,ENDALG:def 7
+         .= (Sum LCk)+P.((E/.i)`1)*P.((E/.i)`2)*P.((E/.i)`3) by A6,ENDALG:def 7
+            .= (Sum LCk)+LC/.(k+1) by A4,A5,A16,A18
+            .= Sum (LCk^<*LC/.(k+1)*>) by FVSUM_1:87
+            .= Sum LC' by A5,A11,A16,A18,FINSEQ_5:11;
+        end;
+    end;
+A20: for k being Nat holds P[k] from Ind(A7,A9);
+      lc = lc|Seg len lc & LC = LC|Seg len LC by FINSEQ_3:55;
+    hence P.(Sum lc) = Sum LC by A2,A20;
+end;
+
+theorem Th25:  :: reformulated QUOFIELD:def 26 proof of symmetry
+for R, S be non empty doubleLoopStr, P be map of R, S
+ st P is RingIsomorphism
+  holds ex P1 being map of S,R st P1 is RingIsomorphism & P1=P"
+proof let R, S be non empty doubleLoopStr, P be map of R, S; assume
+  P is RingIsomorphism;
+    then P is RingMonomorphism & P is RingEpimorphism by QUOFIELD:def 24;
+then A1: P is RingHomomorphism & P is one-to-one & rng P = the carrier of S
+        by QUOFIELD:def 22,def 23;
+then A2: P is additive multiplicative unity-preserving by QUOFIELD:def 21;
+A3: rng P = [#]S by A1,PRE_TOPC:12;
+    set P1 = P";
+A4: P1 is RingHomomorphism proof
+      for x,y being Element of S
+        holds (P1.(x+y) = P1.x + P1.y &
+               P1.(x*y) = P1.x * P1.y & P1.(1_ S) = 1_ R) proof
+            let x,y be Element of S;
+            consider x' being set such that
+        A5: x' in the carrier of R & P.(x') = x by A1,FUNCT_2:17;
+            reconsider x' as Element of R by A5;
+            consider y' being set such that
+        A6: y' in the carrier of R & P.(y') = y by A1,FUNCT_2:17;
+            reconsider y' as Element of R by A6;
+        A7: x' = ((P qua Function)").(P.(x')) by A1,FUNCT_2:32
+              .= P1.x by A1,A3,A5,TOPS_2:def 4;
+        A8: y' = ((P qua Function)").(P.(y')) by A1,FUNCT_2:32
+              .= P1.y by A1,A3,A6,TOPS_2:def 4;
+        A9: P1.(x+y) = P1.(P.(x'+y')) by A2,A5,A6,GRCAT_1:def 13
+                   .= ((P qua Function)").(P.(x'+y')) by A1,A3,TOPS_2:def 4
+                   .= P1.x + P1.y by A1,A7,A8,FUNCT_2:32;
+        A10: P1.(x*y) = P1.(P.(x'*y')) by A2,A5,A6,ENDALG:def 7
+                   .= ((P qua Function)").(P.(x'*y')) by A1,A3,TOPS_2:def 4
+                   .= P1.x * P1.y by A1,A7,A8,FUNCT_2:32;
+              P1.(1_ S) = P1.(P.(1_ R)) by A2,ENDALG:def 8
+                     .= ((P qua Function)").(P.(1_ R)) by A1,A3,TOPS_2:def 4
+                     .= 1_ R by A1,FUNCT_2:32;
+            hence thesis by A9,A10;
+        end;
+        then P1 is additive multiplicative unity-preserving
+            by ENDALG:def 7,def 8,GRCAT_1:def 13;
+        hence thesis by QUOFIELD:def 21;
+    end; P1 is one-to-one by A1,A3,TOPS_2:63;
+then A11: P1 is RingMonomorphism by A4,QUOFIELD:def 23;
+      rng P1 = [#]R by A1,A3,TOPS_2:62 .= the carrier of R by PRE_TOPC:12;
+    then P1 is RingEpimorphism by A4,QUOFIELD:def 22;
+    then P1 is RingIsomorphism by A11,QUOFIELD:def 24;
+    hence ex P1 being map of S,R st P1 is RingIsomorphism & P1=P";
+end;
+
+theorem Th26:
+for R,S being Abelian add-associative right_zeroed right_complementable
+              associative distributive well-unital (non empty doubleLoopStr),
+    F being non empty Subset of R, P being map of R,S
+ st P is RingIsomorphism holds P.:(F-Ideal) = (P.:F)-Ideal
+proof let R,S being Abelian add-associative right_zeroed right_complementable
+         associative distributive well-unital (non empty doubleLoopStr),
+        F being non empty Subset of R, P being map of R,S;assume
+A1: P is RingIsomorphism;
+      now let x be set; assume
+      x in P.:(F-Ideal); then consider x' being set such that
+    A2: x' in the carrier of R & x' in F-Ideal & x = P.x' by FUNCT_2:115;
+        consider lc' being LinearCombination of F such that
+    A3: x' = Sum lc' by A2,IDEAL_1:60; consider E being FinSequence of
+           [:the carrier of R, the carrier of R, the carrier of R:] such that
+    A4: E represents lc' by IDEAL_1:35;
+        consider lc being LinearCombination of P.:F such that
+    A5: len lc' = len lc & for i being set st i in dom lc
+        holds lc.i = (P.(E/.i)`1)*(P.(E/.i)`2)*(P.(E/.i)`3) by A4,IDEAL_1:36;
+          P is RingMonomorphism by A1,QUOFIELD:def 24;
+    then P is RingHomomorphism by QUOFIELD:def 23;
+        then x = Sum lc by A2,A3,A4,A5,Th24;
+        hence x in (P.:F)-Ideal by IDEAL_1:60;
+    end;
+then A6: P.:(F-Ideal) c= (P.:F)-Ideal by TARSKI:def 3;
+      now let x be set; assume
+    A7: x in (P.:F)-Ideal; then consider lc being LinearCombination of P.:
+F such that
+    A8: x = Sum lc by IDEAL_1:60;
+          P is RingMonomorphism & P is RingEpimorphism by A1,QUOFIELD:def 24;
+       then A9: P is one-to-one & rng P=the carrier of S
+        by QUOFIELD:def 22,def 23;
+    then A10: P is one-to-one & rng P = [#] S by PRE_TOPC:def 3;
+          (P qua Function)" .: (P.:F) = (P qua Function)"(P.:F)
+         by A9,FUNCT_1:155;
+    then A11: (P qua Function)" .: (P.:F) c= F by A9,FUNCT_1:152;
+    A12: (P qua Function)" = P" by A10,TOPS_2:def 4;
+        consider PInv being map of S,R such that
+    A13: PInv is RingIsomorphism & PInv=P" by A1,Th25;
+        consider E be FinSequence of
+         [:the carrier of S, the carrier of S, the carrier of S:] such that
+    A14: E represents lc by IDEAL_1:35;
+        consider lc' being LinearCombination of F such that
+    A15: len lc = len lc' &
+        for i being set st i in dom lc'
+         holds lc'.i = (PInv.(E/.i)`1)*(PInv.(E/.i)`2)*(PInv.(E/.i)`3)
+              by A11,A12,A13,A14,IDEAL_1:36;
+          PInv is RingMonomorphism by A13,QUOFIELD:def 24;
+    then PInv is RingHomomorphism by QUOFIELD:def 23;
+        then PInv.x = Sum lc' by A8,A14,A15,Th24;
+    then A16: PInv.x in F-Ideal by IDEAL_1:60;
+          dom P = the carrier of R by FUNCT_2:def 1;
+    then P.(PInv.x) in P.:(F-Ideal) by A16,FUNCT_1:def 12;
+        hence x in P.:(F-Ideal) by A7,A9,A12,A13,FUNCT_1:57;
+    end; then (P.:F)-Ideal c= P.:(F-Ideal) by TARSKI:def 3;
+    hence P.:(F-Ideal) = (P.:F)-Ideal by A6,XBOOLE_0:def 10;
+end;
+
+theorem Th27:
+for R,S being Abelian add-associative right_zeroed right_complementable
+              associative distributive well-unital (non empty doubleLoopStr),
+    P being map of R,S
+st P is RingIsomorphism & R is Noetherian holds S is Noetherian
+proof let R,S be Abelian add-associative right_zeroed right_complementable
+            associative distributive well-unital (non empty doubleLoopStr),
+        P be map of R,S; assume
+A1: P is RingIsomorphism & R is Noetherian;
+      now let I be Ideal of S;
+        consider PInv being map of S,R such that
+    A2: PInv is RingIsomorphism & PInv=P" by A1,Th25;
+        reconsider PI=PInv.:I as Ideal of R by A2,Th22;
+          PI is finitely_generated by A1,IDEAL_1:def 27;
+        then consider F being non empty finite Subset of R such
+that
+    A3: PInv.:I = F-Ideal by IDEAL_1:def 26;
+          P is RingMonomorphism & P is RingEpimorphism by A1,QUOFIELD:def 24;
+        then A4: P is one-to-one & rng P = the carrier of S by QUOFIELD:def 22,
+def 23;
+    then P is one-to-one & rng P = [#] S by PRE_TOPC:def 3;
+        then P" = (P qua Function)" by TOPS_2:def 4;
+    then A5: P.:(PInv.:I) = P.:(P"I) by A2,A4,FUNCT_1:155;
+          P is RingEpimorphism by A1,QUOFIELD:def 24;
+        then rng P = the carrier of S by QUOFIELD:def 22;
+        then P.:(PInv.:I) = I by A5,FUNCT_1:147;
+        then I = (P.:F)-Ideal by A1,A3,Th26;
+        hence I is finitely_generated;
+    end;
+    hence S is Noetherian by IDEAL_1:def 27;
+end;
+
+theorem Th28:
+for R being add-associative right_zeroed right_complementable associative
+            distributive well-unital non trivial (non empty doubleLoopStr)
+  holds ex P being map of R, Polynom-Ring (0,R) st P is RingIsomorphism
+proof let R be add-associative right_zeroed right_complementable associative
+               distributive well-unital non trivial (non empty doubleLoopStr);
+deffunc F(set)=Bags {}--> $1;
+    consider P being Function such that
+A1: dom P = the carrier of R and
+A2: for x being set st x in the carrier of R holds P.x=F(x) from Lambda;
+      now let y be set;
+        hereby assume
+      y in rng P; then consider x being set such that
+    A3: x in the carrier of R & y = P.x by A1,FUNCT_1:def 5;
+        reconsider x as Element of R by A3;
+     reconsider y' = Bags {} --> x as Function of (Bags {}
+), R ;
+          Support y' is finite by FINSET_1:13,POLYNOM1:55;
+        then y' is finite-Support Series of 0, R by POLYNOM1:def 10;
+        then y' in the carrier of Polynom-Ring (0,R) by POLYNOM1:def 27;
+        hence y in the carrier of Polynom-Ring (0,R) by A2,A3;
+        end; assume y in the carrier of Polynom-Ring (0,R);
+      then reconsider y'=y as Function of (Bags {}), R by POLYNOM1:def 27;
+    A4: dom y' = Bags {} by FUNCT_2:def 1;
+    then A5: rng y' = {y'.{}} by FUNCT_1:14,POLYNOM1:55;
+    then A6: y' = Bags {} --> y'.{} by A4,FUNCOP_1:15;
+          y'.{} in rng y' by A5,TARSKI:def 1;
+    then reconsider x = y'.{} as Element of R; y = P.x by A2,A6
+;
+        hence y in rng P by A1,FUNCT_1:def 5;
+    end;
+then A7: rng P = the carrier of Polynom-Ring (0,R) by TARSKI:2;
+    then P is Function of the carrier of R, the carrier of Polynom-Ring (0,R)
+        by A1,FUNCT_2:3;
+    then reconsider P as map of R, Polynom-Ring (0,R);
+    take P;
+      now let x,y be Element of R;
+        reconsider Px = P.x, Py = P.y, Pxy = P.(x+y) as Polynomial of 0, R
+            by POLYNOM1:def 27;
+          now let z be bag of 0;
+        A8: z in Bags {} by POLYNOM1:def 14;
+        A9: Pxy.z = (Bags {} --> x+y).z by A2 .= x+y by A8,FUNCOP_1:13;
+        A10: Px.z = (Bags {} --> x).z by A2 .= x by A8,FUNCOP_1:13;
+          Py.z = (Bags {} --> y).z by A2 .= y by A8,FUNCOP_1:13;
+         hence Pxy.z = Px.z + Py.z by A9,A10;
+        end; then Pxy = Px + Py by POLYNOM1:def 21;
+        hence P.x+P.y = P.(x+y) by POLYNOM1:def 27;
+    end;
+then A11: P is additive by GRCAT_1:def 13;
+      now let x,y be Element of R;
+        reconsider Px = P.x, Py = P.y, Pxy = P.(x*y) as Polynomial of 0, R
+            by POLYNOM1:def 27;
+          now let b be bag of 0;
+            reconsider s = <* x*y *> as FinSequence of the carrier of R;
+            take s;
+        A12: b in Bags {} by POLYNOM1:def 14;
+            thus Pxy.b = (Bags {} --> x*y).b by A2 .= x*y by A12,FUNCOP_1:13
+                      .= Sum s by RLVECT_1:61;
+        A13: decomp b = <* <* {}, {} *> *> by Th2;
+        A14: len s = 1 by FINSEQ_1:56;
+        A15: len decomp b = 1 by A13,FINSEQ_1:56;
+            thus len s = len decomp b by A13,A14,FINSEQ_1:56;
+              now let k be Nat; assume
+            A16: k in dom s;
+            then A17: 1 <= k & k <= 1 by A14,FINSEQ_3:27;
+            then A18: k = 1 by AXIOMS:21; set b1 = {}, b2 = {};
+            A19: b1 in Bags {} & b2 in
+ Bags {} by POLYNOM1:55,TARSKI:def 1;
+                then reconsider b1, b2 as bag of 0 by POLYNOM1:def 14;
+                take b1, b2; k in dom decomp b by A15,A17,FINSEQ_3:27
+;
+                hence (decomp b)/.k = (decomp b).1 by A18,FINSEQ_4:def 4
+                                   .= <*b1, b2*> by A13,FINSEQ_1:57;
+            A20: Px.b1 = (Bags {} --> x).b1 by A2 .= x by A19,FUNCOP_1:13;
+            A21: Py.b2 = (Bags {} --> y).b2 by A2 .= y by A19,FUNCOP_1:13;
+                thus s/.k = s.1 by A16,A18,FINSEQ_4:def 4 .= Px.b1*Py.b2 by A20
+,A21,FINSEQ_1:57;
+            end;
+            hence for k being Nat st k in dom s
+                   ex b1, b2 being bag of 0 st (decomp b)/.k = <*b1, b2*> &
+                                   s/.k = Px.b1*Py.b2;
+        end;
+    then Pxy = Px *' Py by POLYNOM1:def 26;
+        hence P.x*P.y = P.(x*y) by POLYNOM1:def 27;
+    end;
+then A22: P is multiplicative by ENDALG:def 7;
+      EmptyBag {} = {} --> 0 by POLYNOM1:def 15;
+    then dom EmptyBag {} = {} by FUNCOP_1:16;
+then A23: EmptyBag 0 = {} by RELAT_1:64;
+A24: dom ({{}} --> 0.R) = {{}} by FUNCT_2:def 1;
+then A25: {} in dom ({{}} --> 0.R) by TARSKI:def 1;
+A26: dom ({{}} --> 1.R) = {{}} by FUNCT_2:def 1;
+      1_ Polynom-Ring (0, R) = 1_ (0,R) by POLYNOM1:def 27
+ .= 0_ (0,R)+*({},1.R) by A23,POLYNOM1:def 25 .= ({{}} --> 0.R)+*({},1.R)
+                                  by POLYNOM1:55,def 24
+  .= ({{}} --> 0.R)+*({} .--> 1.R) by A25,FUNCT_7:def 3
+  .= ({{}} --> 0.R)+*({{}} --> 1.R) by CQC_LANG:def 2
+  .= ({{}} --> 1.R) by A24,A26,FUNCT_4:20 .= ({{}} --> 1_ R) by POLYNOM2:3
+  .= P.(1_ R)by A2,POLYNOM1:55; then P is unity-preserving by ENDALG:def 8;
+then A27: P is RingHomomorphism by A11,A22,QUOFIELD:def 21;
+      now let x1,x2 be set; assume
+    A28: x1 in dom P & x2 in dom P; assume
+      P.x1 = P.x2; then (Bags {} --> x1) = P.x2 by A2,A28;
+        then (Bags {} --> x1) = (Bags {} --> x2) by A2,A28;
+        hence x1 = x2 by FUNCT_4:7;
+    end; then P is one-to-one by FUNCT_1:def 8;
+then A29: P is RingMonomorphism by A27,QUOFIELD:def 23;
+      P is RingEpimorphism by A7,A27,QUOFIELD:def 22;
+    hence P is RingIsomorphism by A29,QUOFIELD:def 24;
+end;
+
+theorem Th29:
+for R being right_zeroed add-associative right_complementable
+            unital distributive non trivial (non empty doubleLoopStr),
+    n being Nat, b being bag of n, p1 being Polynomial of n, R,
+    F being FinSequence of the carrier of Polynom-Ring (n,R)
+ st p1 = Sum F
+   ex g being Function of the carrier of Polynom-Ring (n, R), the carrier of R
+    st (for p being Polynomial of n, R holds g.p = p.b) & p1.b = Sum (g*F)
+proof let R be right_zeroed add-associative right_complementable
+              unital distributive non trivial (non empty doubleLoopStr),
+        n be Nat, b be bag of n,p1 be Polynomial of n, R,
+        F be FinSequence of the carrier of Polynom-Ring (n,R); assume
+A1: p1 = Sum F; set PNR = Polynom-Ring (n,R); set CPNR = the carrier of PNR;
+  set CR = the carrier of R;
+    defpred P1[Element of CPNR, Element of CR] means
+        for p being Polynomial of n, R st p = $1 holds $2 = p.b;
+A2: now let x be Element of CPNR;
+        reconsider x'=x as Polynomial of n, R by POLYNOM1:def 27;
+          P1[x,x'.b];
+        hence ex y being Element of CR st P1[x,y];
+    end;
+    consider g be Function of CPNR,CR such that
+A3: for x being Element of CPNR holds P1[x,g.x] from FuncExD(A2);
+    take g;
+      now let p be Polynomial of n,R;
+      reconsider p'=p as Element of CPNR by POLYNOM1:def 27; P1[p',g.p'] by A3
+;
+        hence g.p = p.b; end;
+    hence for p being Polynomial of n, R holds g.p = p.b;
+    defpred P2[Nat] means
+        for F' being FinSequence of CPNR, p1' being Polynomial of n, R
+        st len F' <= $1 & p1' = Sum F' holds p1'.b = Sum (g * F');
+A4: P2[0] proof
+        let F' being FinSequence of CPNR, p1' be Polynomial of n, R; assume
+    A5: len F' <= 0 & p1' = Sum F';
+        then len F' = 0 by NAT_1:18;
+    then A6: F' = <*> (CPNR) by FINSEQ_1:25;
+    then A7: p1' = 0.PNR by A5,RLVECT_1:60 .= 0_(n, R) by POLYNOM1:def 27;
+          rng F' c= CPNR; then rng F' c= dom g by FUNCT_2:def 1;
+        then dom (g * F') = dom F' by RELAT_1:46;
+        then g * F' = <*> (CR) by A6,RELAT_1:60,64; then Sum
+ (g * F') = 0.R by RLVECT_1:60;
+        hence p1'.b = Sum (g * F') by A7,POLYNOM1:81;
+    end;
+A8: for k being Nat st P2[k] holds P2[k+1] proof let k be Nat; assume
+    A9: P2[k];
+           now let F' be FinSequence of CPNR, p1' be Polynomial of n, R; assume
+         A10: len F' <= k+1 & p1' = Sum F';
+              per cases; suppose
+           len F' < k+1; then len F' <= k by NAT_1:38;
+              hence p1'.b = Sum (g * F') by A9,A10;
+              suppose
+           len F' >= k+1; then len F' = k+1 by A10,AXIOMS:21;
+              then consider p,q being FinSequence such that
+         A11: len p = k & len q = 1 & F' = p^q by FINSEQ_2:25;
+                rng p c= rng F' by A11,FINSEQ_1:42;
+              then rng p c= CPNR by XBOOLE_1:1;
+              then reconsider p as FinSequence of CPNR by FINSEQ_1:def 4;
+              reconsider p' = Sum p as Polynomial of n, R by POLYNOM1:def 27;
+         A12: p'.b = Sum (g * p) by A9,A11; rng q c= rng F' by A11,FINSEQ_1:43
+;
+              then rng q c= CPNR by XBOOLE_1:1;
+              then reconsider q as FinSequence of CPNR by FINSEQ_1:def 4;
+                1 in dom q by A11,FINSEQ_3:27; then q.1 in
+ rng q by FUNCT_1:def 5;
+              then reconsider q'=q.1 as Element of CPNR;
+         A13: q = <* q' *> by A11,FINSEQ_1:57;
+         then A14: q' = Sum q by RLVECT_1:61;
+              reconsider q''=q' as Polynomial of n, R by POLYNOM1:def 27;
+                g * q = <* g.q' *> by A13,FINSEQ_2:39 .= <* q''.b *> by A3;
+         then A15: Sum (g * q) = q''.b by RLVECT_1:61;
+         A16: Sum F' = Sum p + Sum q by A11,RLVECT_1:58;
+         A17: g * F' = (g * p)^(g* q) by A11,FINSEQOP:10;
+                p1' = p' + q'' by A10,A14,A16,POLYNOM1:def 27;
+              hence p1'.b = Sum (g * p) + Sum (g * q) by A12,A15,POLYNOM1:def
+21 .= Sum (g * F') by A17,RLVECT_1:58;
+         end;
+         hence P2[k+1];
+    end;
+      for k being Nat holds P2[k] from Ind(A4,A8); then P2[len F];
+    hence thesis by A1;
+end;
+
+definition
+let R be Abelian add-associative right_zeroed right_complementable
+         associative distributive well-unital commutative non trivial
+         (non empty doubleLoopStr), n be Nat;
+func upm (n,R) -> map of Polynom-Ring (Polynom-Ring(n,R)), Polynom-Ring(n+1,R)
+     means :Def6:
+for p1 being (Polynomial of Polynom-Ring (n,R)), p2 being (Polynomial of n, R),
+    p3 being (Polynomial of (n+1), R), b being bag of n+1
+  st p3 = it.p1 & p2 = p1.(b.n) holds p3.b = p2.(b|n);
+existence proof
+ set PRPNR = Polynom-Ring (Polynom-Ring(n,R)); set PN1R = Polynom-Ring(n+1,R);
+ set PNR = Polynom-Ring(n,R); set CPRPNR = the carrier of PRPNR;
+ set CPN1R = the carrier of PN1R;
+  set CR = the carrier of R;
+defpred P1[Element of CPRPNR, Element of CPN1R] means
+ for p1 being (Polynomial of PNR), p2 being (Polynomial of n, R),
+     p3 being (Polynomial of (n+1), R), b being bag of n+1
+   st p1 = $1 & p3 = $2 & p2 = p1.(b.n) holds p3.b = p2.(b|n);
+A1: now let x being Element of CPRPNR;
+        reconsider p1=x as Polynomial of PNR by POLYNOM3:def 12;
+    defpred P2[Element of Bags (n+1), Element of CR] means
+    for p2 being (Polynomial of n, R) st p2 = p1.($1.n) holds $2 = p2.($1|n);
+    A2: now let b be Element of Bags (n+1);
+            reconsider p2 = p1.(b.n) as Polynomial of n, R by POLYNOM1:def 27;
+              n < n+1 by REAL_1:69; then reconsider bn = b|n as bag of n by Th3
+;
+              P2[b,p2.bn];
+            hence ex r being Element of CR st P2[b,r];
+        end;
+        consider y being Function of Bags (n+1), CR such that
+    A3: for b being Element of Bags (n+1) holds P2[b,y.b] from FuncExD(A2);
+        reconsider y as Function of Bags (n+1), R ;
+        reconsider y as Series of (n+1), R ;
+        deffunc F(set)={ b where b is Element of Bags (n+1) :
+             b.n = $1 & for p2 being Polynomial of n, R
+                       st p2 = p1.$1 holds b|n in Support p2 };
+    A4: now let k be set; assume k in NAT;
+             set Ak = F(k);
+               Ak c= Bags (n+1) proof let b be set; assume b in Ak;
+                 then consider b' being Element of Bags (n+1) such that
+             A5: b'=b & b'.n = k & for p2 being Polynomial of n, R
+                                   st p2 = p1.k holds b'|n in Support p2;
+                 thus thesis by A5;
+             end;
+             hence Ak in bool Bags (n+1);
+        end;
+        consider A being Function of NAT,bool Bags (n+1) such that
+    A6: for k being set st k in NAT holds A.k =F(k) from Lambda1(A4);
+      now let X be set; assume X in A .: len p1;
+            then consider k being Nat such that
+        A7: k in len p1 & X = A.k by FUNCT_2:116;
+        A8: A.k = { b where b is Element of Bags (n+1) :
+                    b.n = k & for p2 being Polynomial of n, R
+                              st p2 = p1.k holds b|n in Support p2 } by A6;
+            reconsider p2 = p1.k as Polynomial of n, R by POLYNOM1:def 27;
+            per cases; suppose
+        A9: Support p2 = {};
+              now assume A.k <> {}; then consider b being set such that
+            A10: b in A.k by XBOOLE_0:def 1;
+                consider b' being Element of Bags (n+1) such that
+            A11: b'=b & b'.n = k & for p2 being Polynomial of n, R
+                                st p2 = p1.k holds b'|n in
+ Support p2 by A8,A10
+;
+                thus contradiction by A9,A11;
+            end;
+            hence X is finite by A7;
+            suppose
+        A12: Support p2 <> {}; then consider b2 being set such that
+        A13: b2 in Support p2 by XBOOLE_0:def 1;
+            reconsider b2 as Element of Bags n by A13;
+        A14: (b2 bag_extend k).n = k by Def1;
+              for p2 being Polynomial of n, R st p2 = p1.k
+            holds (b2 bag_extend k)|n in Support p2 by A13,Def1;
+            then (b2 bag_extend k) in A.k by A8,A14;
+            then reconsider Ak = A.k as non empty set;
+            reconsider Support_p2 = Support p2 as non empty set by A12;
+            defpred P3[Element of Ak, Element of Support_p2] means
+                for b being Element of Bags (n+1) st $1 = b holds $2 = b|n;
+        A15: now let x be Element of Ak; x in A.k;
+                then consider b being Element of Bags (n+1) such that
+            A16: b=x & b.n = k & for p2 being Polynomial of n, R
+                                st p2 = p1.k holds b|n in Support p2 by A8;
+                reconsider bn = b|n as Element of Support_p2 by A16;
+                  P3[x,bn] by A16;
+                hence ex y being Element of Support_p2 st P3[x,y];
+            end; consider f being Function of Ak,Support_p2 such that
+        A17: for x being Element of Ak holds P3[x,f.x] from FuncExD(A15);
+       A18: dom f = Ak by FUNCT_2:def 1;
+              now let x1,x2 be set; assume
+            A19: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+                then consider b1 being Element of Bags (n+1) such that
+            A20: b1=x1 & b1.n = k & for p2 being Polynomial of n, R
+                            st p2 = p1.k holds b1|n in
+ Support p2 by A8,A18
+;
+                  f.x1 in Support_p2 by A19,FUNCT_2:7;
+                then reconsider fx1 = f.x1 as Element of Bags n;
+                  b1|n = f.x1 by A17,A19,A20;
+            then A21: b1 = fx1 bag_extend k by A20,Def1;
+                consider b2 being Element of Bags (n+1) such that
+            A22: b2=x2 & b2.n = k & for p2 being Polynomial of n, R
+                            st p2 = p1.k holds b2|n in
+ Support p2 by A8,A18,A19
+;
+                  b2|n = f.x1 by A17,A19,A22;
+                hence x1 = x2 by A20,A21,A22,Def1;
+            end;
+        then A23: f is one-to-one by FUNCT_1:def 8; rng f c= Support_p2
+;
+            then Card Ak <=` Card Support_p2 by A18,A23,CARD_1:26;
+            hence X is finite by A7,CARD_2:68;
+        end;
+    then A24: union (A .: len p1) is finite by FINSET_1:25;
+          Support y c= union (A .: len p1) proof
+            let x be set; assume
+        A25: x in Support y; then reconsider x'=x as Element of Bags (n+1);
+        A26: y.x' <> 0.R by A25,POLYNOM1:def 9;
+            reconsider p2 = p1.(x'.n) as Polynomial of n, R by POLYNOM1:def 27;
+              n < n+1 by REAL_1:69;
+            then reconsider xn = x'|n as Element of Bags n by Th3;
+        A27: p2.(xn) <> 0.R by A3,A26;
+        then A28: for p2 being Polynomial of n, R st p2 = p1.(x'.n)
+            holds xn in Support p2 by POLYNOM1:def 9;
+          A.(x'.n) = { b where b is Element of Bags (n+1) :
+                         b.n = x'.n & for p2 being Polynomial of n, R
+                              st p2 = p1.(x'.n) holds b|n in
+ Support p2 } by A6;
+        then A29: x in A.(x'.n) by A28;
+              p2 <> 0_ (n, R) by A27,POLYNOM1:81;
+            then p2 <> 0.PNR by POLYNOM1:def 27;
+        then A30: x'.n < len p1 by ALGSEQ_1:22;
+              len p1 = { i where i is Nat : i < len p1 } by AXIOMS:30;
+        then A31: x'.n in len p1 by A30
+; dom A = NAT by FUNCT_2:def 1;
+            then A.(x'.n) in A .: len p1 by A31,FUNCT_1:def 12;
+            hence x in union (A .: len p1) by A29,TARSKI:def 4;
+        end; then Support y is finite by A24,FINSET_1:13;
+        then y is finite-Support by POLYNOM1:def 10;
+        then reconsider y'=y as Element of CPN1R by POLYNOM1:def 27;
+          now let p1 be (Polynomial of PNR), p2 be (Polynomial of n, R),
+                p3 be (Polynomial of (n+1), R), b be bag of n+1; assume
+        A32: p1 = x & p3 = y' & p2 = p1.(b.n);
+              b is Element of Bags (n+1) by POLYNOM1:def 14;
+            hence p3.b = p2.(b|n) by A3,A32;
+        end;
+        hence ex y being Element of CPN1R st P1[x,y];
+    end;
+    consider P being Function of CPRPNR,CPN1R such that
+A33: for x being Element of CPRPNR holds P1[x,P.x] from FuncExD (A1);
+    reconsider P as map of PRPNR, PN1R;
+    take P;
+      now let p1 being (Polynomial of Polynom-Ring (n,R)),
+            p2 being (Polynomial of n, R), p3 being (Polynomial of (n+1), R),
+            b being bag of n+1; assume
+    A34: p3 = P.p1 & p2 = p1.(b.n); p1 in CPRPNR by POLYNOM3:def 12;
+        hence p3.b = p2.(b|n) by A33,A34;
+    end;
+    hence thesis;
+end;
+uniqueness proof
+  set PNR = Polynom-Ring(n,R);
+  set CPRPNR = the carrier of Polynom-Ring (Polynom-Ring(n,R));
+  set CPN1R = the carrier of Polynom-Ring(n+1,R);
+let A, B be map of Polynom-Ring (Polynom-Ring(n,R)), Polynom-Ring(n+1,R);assume
+A35: for p1 being (Polynomial of Polynom-Ring (n,R)),
+        p2 being (Polynomial of n, R), p3 being (Polynomial of (n+1), R),
+ b being bag of n+1 st p3 = A.p1 & p2 = p1.(b.n) holds p3.b = p2.(b|n); assume
+A36: for p1 being (Polynomial of Polynom-Ring (n,R)),
+        p2 being (Polynomial of n, R), p3 being (Polynomial of (n+1), R),
+        b being bag of n+1 st p3 = B.p1 & p2 = p1.(b.n) holds p3.b = p2.(b|n);
+      now let x be set; assume
+    A37: x in CPRPNR; then reconsider x'=x as Polynomial of PNR by POLYNOM3:def
+12;
+          A.x in CPN1R & B.x in CPN1R by A37,FUNCT_2:7;
+      then reconsider Ax=A.x, Bx=B.x as (Polynomial of n+1,R) by POLYNOM1:def
+27;
+          now let b be set; assume
+          b in Bags (n+1); then reconsider b'=b as Element of Bags (n+1);
+              n < n+1 by NAT_1:38;
+            then reconsider bn = (b'|n) as Element of Bags n by Th3;
+            reconsider p2 = x'.(b'.n) as Polynomial of n, R by POLYNOM1:def 27;
+            thus Ax.b = p2.bn by A35 .= Bx.b by A36;
+        end;
+        hence A.x = B.x by FUNCT_2:18;
+    end;
+    hence A=B by FUNCT_2:18;
+end;
+end;
+
+definition
+  let R be Abelian add-associative right_zeroed right_complementable
+           associative distributive well-unital commutative non trivial
+           (non empty doubleLoopStr), n be Nat;
+  cluster upm (n,R) -> additive;
+coherence proof
+ set PNR = Polynom-Ring(n,R);
+ set P = upm (n,R);
+    thus P is additive proof let x,y be Element of
+     Polynom-Ring (Polynom-Ring(n,R));
+        reconsider x'=x, y'=y, xy'=x+y as Polynomial of PNR by POLYNOM3:def 12;
+    A1: xy' = x'+y' by POLYNOM3:def 12;
+        reconsider Pxy = P.(x+y), Px = P.x, Py = P.y
+                   as (Polynomial of n+1, R) by POLYNOM1:def 27;
+          now let b be set; assume
+         b in
+ Bags (n+1); then reconsider b'=b as bag of n+1 by POLYNOM1:def 14;
+            reconsider xbn=x'.(b'.n), ybn = y'.(b'.n) as Polynomial of n, R
+                by POLYNOM1:def 27;
+              n < n+1 by REAL_1:69; then reconsider bn = b'|n as bag of n by
+Th3
+;
+      reconsider xybn = (x'+y').(b'.n) as Polynomial of n,R by POLYNOM1:def 27;
+              (x'+y').(b'.n) = x'.(b'.n)+y'.(b'.n) by POLYNOM3:def 6;
+        then A2: xybn = xbn + ybn by POLYNOM1:def 27;
+        A3: xbn.bn = Px.b' & ybn.bn = Py.b' by Def6;
+            thus Pxy.b = (xbn + ybn).bn by A1,A2,Def6 .= Px.b' + Py.b' by A3,
+POLYNOM1:def 21 .= (Px + Py).b by POLYNOM1:def 21;
+        end;
+        hence P.(x+y) = Px+Py by FUNCT_2:18 .= P.x + P.y by POLYNOM1:def 27
+;
+    end;:: TRIANG_1:def 2
+end;
+  cluster upm (n,R) -> multiplicative;
+coherence proof
+ set PNR = Polynom-Ring(n,R);
+ set CPNR = the carrier of PNR;
+ set CR = the carrier of R;
+ set P = upm (n,R);
+    thus P is multiplicative proof let x',y' be Element of
+     the carrier of Polynom-Ring (Polynom-Ring(n,R));
+     reconsider x=x', y=y', xy = x'*y' as Polynomial of PNR by POLYNOM3:def 12;
+     reconsider Pxy = P.(x'*y'), PxPy = (P.x')*(P.y'), Px=P.x', Py=P.y'
+            as Polynomial of n+1,R by POLYNOM1:def 27;
+    A4: PxPy = Px*'Py by POLYNOM1:def 27;
+    A5: xy = x*'y by POLYNOM3:def 12;
+          now let b' be set; assume
+          b' in
+ Bags (n+1); then reconsider b=b' as Element of Bags (n+1);
+            consider r be FinSequence of CPNR such that
+        A6: len r = (b.n)+1 & (xy).(b.n) = Sum r &
+            for k be Nat st k in dom r holds r.k = x.(k-'1)*y.((b.n)+1-'k)
+            by A5,POLYNOM3:def 11; n < n+1 by NAT_1:38;
+            then reconsider bn=b|n as Element of Bags n by Th3;
+            reconsider xybn=xy.(b.n) as Polynomial of n,R by POLYNOM1:def 27;
+            consider g being Function of CPNR, CR such that
+        A7:  (for p being Polynomial of n, R holds g.p = p.bn) &
+             xybn.bn = Sum (g * r) by A6,Th29;
+        A8: Sum (g * r) = Pxy.b by A7,Def6;
+            defpred P3[set, set] means
+             for p,q being Polynomial of n,R, fcr being FinSequence of CR,
+                 i being Nat
+             st i = $1 & p = x.(i-'1) & q = y.((b.n)+1-'i) & fcr = $2
+             holds (p*'q).bn = Sum fcr & len fcr = len decomp bn &
+               for k being Nat st k in dom fcr
+               holds ex b1, b2 being bag of n st (decomp bn)/.k = <*b1, b2*> &
+                                                 fcr/.k = p.b1*q.b2;
+        A9: now let e' be set; assume e' in
+ dom r; then reconsider e=e' as Nat;
+                reconsider p = x.(e-'1), q = y.((b.n)+1-'e) as
+                             Polynomial of n, R by POLYNOM1:def 27;
+                consider fcr being FinSequence of CR such that
+            A10: (p*'q).bn = Sum fcr & len fcr = len decomp bn &
+                for k being Nat st k in dom fcr
+                holds ex b1, b2 being bag of n st
+(decomp bn)/.k = <*b1, b2*> &
+               fcr/.k = p.b1*q.b2 by POLYNOM1:def 26;
+            A11: P3[e,fcr] by A10; fcr in
+ CR* by FINSEQ_1:def 11;
+                hence ex u being set st u in CR* & P3[e',u] by A11;
+            end; consider s being Function of dom r, CR* such that
+        A12: for e being set st e in
+ dom r holds P3[e,s.e] from FuncEx1(A9);
+        A13: dom s = dom r by FUNCT_2:def 1;
+            then ex n being Nat st dom s = Seg n by FINSEQ_1:def 2;
+        then A14: s is FinSequence-like by FINSEQ_1:def 2;
+              rng s c= CR*; then reconsider s as FinSequence of CR*
+            by A14,FINSEQ_1:def 4; len (Sum s) = len s by MATRLIN:def 8;
+        then A15: dom (Sum s) = dom r by A13,FINSEQ_3:31;
+        A16: dom r = dom (g * r) by ALG_1:1;
+              now let k be Nat; assume
+            A17: k in dom r;
+            then A18: (Sum s)/.k = (Sum s).k by A15,FINSEQ_4:def 4;
+            A19: s/.k = s.k by A13,A17,FINSEQ_4:def 4;
+                reconsider sk=s.k as Element of CR* by A17,FUNCT_2:7;
+                reconsider sk as FinSequence of CR;
+                reconsider p = x.(k-'1), q = y.((b.n)+1-'k) as
+                    Polynomial of n, R by POLYNOM1:def 27;
+                reconsider pq' = p *' q as Element of CPNR by POLYNOM1:def 27;
+            A20: r.k = x.(k-'1)*y.((b.n)+1-'k) by A6,A17
+                   .= pq' by POLYNOM1:def 27;
+                thus (Sum s).k = Sum sk by A15,A17,A18,A19,MATRLIN:def 8
+                  .= (p*'q).bn by A12,A17 .= g.(r.k) by A7,A20
+                  .= (g * r).k by A17,FUNCT_1:23;
+            end; then A21: Sum s = g * r by A15,A16,FINSEQ_1:17; set
+t = FlattenSeq s;
+        A22: Sum t = Pxy.b by A8,A21,POLYNOM1:34;
+            consider u being FinSequence of CR such that
+        A23: PxPy.b = Sum u & len u = len decomp b &
+            for k being Nat st k in dom u
+                ex b1, b2 being bag of n+1 st (decomp b)/.k = <*b1, b2*> &
+                                 u/.k = Px.b1*Py.b2 by A4,POLYNOM1:def 26;
+            defpred P1[set, set] means
+              for i,n1 being Nat, b1 being bag of n+1
+              st n1=$1 & b1 = (divisors b).n1 &
+                 i in dom (divisors bn) & (divisors bn).i = b1|n
+              holds b1.n+1 in dom s & i in dom (s.(b1.n+1)) &
+                    $2 = (Sum Card (s|(b1.n+1-'1))) + i;
+       A24: now let n1' be set; assume
+            A25: n1' in dom u;
+                then reconsider n1=n1' as Nat;
+                  dom u = dom decomp b by A23,FINSEQ_3:31
+                     .= dom divisors b by POLYNOM1:def 19;
+            then A26: (divisors b).n1 in rng divisors b by A25,FUNCT_1:def 5;
+                then reconsider b1=(divisors b).n1 as bag of n+1 by POLYNOM1:
+def 14;
+                  n < n+1 by NAT_1:38;
+                then reconsider b1n=b1|n as Element of Bags n by Th3;
+            A27: b1 divides b by A26,Th7; then b1n divides bn by Th4;
+                then b1n in rng divisors bn by Th7;
+                then consider i being set such that
+            A28: i in dom divisors bn & b1n = (divisors bn).i by FUNCT_1:def 5;
+                reconsider i as Nat by A28;
+                set n2 = (Sum Card (s|(b1.n+1-'1))) + i;
+                  b1.n <= b.n by A27,POLYNOM1:def 13;
+            then A29: b1.n +1 <= b.n+1 by AXIOMS:24;
+                  b1.n >= 0 by NAT_1:18;
+                then A30: b1.n +1 >= 1+0 by AXIOMS:24;
+            then A31: b1.n+1 in dom s by A6,A13,A29,FINSEQ_3:27;
+                reconsider p=x.((b1.n+1)-'1), q=y.((b.n)+1-'(b1.n+1))
+                   as Polynomial of n,R by POLYNOM1:def 27;
+                  s.(b1.n+1) is Element of CR* by A13,A31,FUNCT_2:7;
+                then p = x.((b1.n+1)-'1) & q = y.((b.n)+1-'(b1.n+1)) &
+                    s.(b1.n+1) is FinSequence of CR;
+                then len (s.(b1.n+1)) = len decomp bn by A12,A13,A31;
+                then A32: dom (s.(b1.n+1)) = dom decomp bn by FINSEQ_3:31
+                             .= dom divisors bn by POLYNOM1:def 19;
+            then A33: n2 in dom t by A28,A31,POLYNOM1:33;
+                  for i',n1' being Nat, b1' being bag of n+1 st
+                n1'=n1 & b1' = (divisors b).n1' & i' in dom (divisors bn) &
+                    (divisors bn).i' = b1'|n
+                holds b1'.n+1 in dom s & i' in dom (s.(b1'.n+1)) &
+                 n2 = (Sum Card (s|(b1'.n+1-'1))) + i' by A6,A13,A28,A29,A30,
+A32,FINSEQ_3:27,FUNCT_1:def 8;
+                hence ex n2' being set st n2' in dom t & P1[n1',n2'] by A33;
+            end; consider p being Function of dom u, dom t such that
+       A34: for x being set st x in
+ dom u holds P1[x,p.x] from FuncEx1(A24);
+        A35: now let n1 be Nat; assume
+            A36: n1 in dom u; then consider b1, b2 being bag of n+1 such
+that
+            A37: (decomp b)/.n1 = <*b1, b2*> & u/.n1 = Px.b1*Py.b2 by A23;
+                reconsider xb1n = x.(b1.n), yb2n=y.(b2.n) as Polynomial of n,R
+                    by POLYNOM1:def 27;
+                  n < n+1 by NAT_1:38;
+                then reconsider b1n = b1|n, b2n=b2|n as Element of Bags n by
+Th3;
+            A38: u.n1 = Px.b1*Py.b2 by A36,A37,FINSEQ_4:def 4
+                   .= xb1n.b1n * Py.b2 by Def6 .= xb1n.b1n * yb2n.b2n by Def6;
+                  (divisors b)/.n1 is Element of Bags (n+1);
+                then reconsider b1' = (divisors b)/.n1 as bag of n+1;
+            A39: dom u = dom decomp b by A23,FINSEQ_3:31;
+                then <* b1,b2 *> = <* b1',b-' b1' *> by A36,A37,POLYNOM1:def 19
+;
+            then A40: b1 = b1' & b2 = b -' b1' by GROUP_7:2;
+           A41: n1 in dom divisors b by A36,A39,POLYNOM1:def 19;
+           then A42: b1 = (divisors b).n1 by A40,FINSEQ_4:def 4;
+                then b1 in rng divisors b by A41,FUNCT_1:def 5;
+            then A43: b1 divides b by Th7; then b1n divides bn by Th4;
+                then b1n in rng divisors bn by Th7;
+                then consider i being set such that
+            A44: i in dom divisors bn & b1n = (divisors bn).i by FUNCT_1:def 5;
+                reconsider i as Nat by A44;
+            A45: b1.n+1 in dom s & i in dom (s.(b1.n+1)) &
+                    p.n1 = (Sum Card (s|(b1.n+1-'1))) + i by A34,A36,A42,A44
+;
+           then A46: t.(p.n1) = (s.(b1.n+1)).i by POLYNOM1:33;
+           A47: b1.n+1-'1 = b1.n+1-1 by JORDAN4:2 .= b1.n by XCMPLX_1:26;
+           A48: b1.n <= b.n by A43,POLYNOM1:def 13;
+                then b1.n + 1 <= b.n + 1 by AXIOMS:24;
+           then A49: b.n+1 -' (b1.n+1) = b.n+1-(b1.n+1) by SCMFSA_7:3
+             .= b.n+1-b1.n-1 by XCMPLX_1:36 .= b.n-b1.n+1-1 by XCMPLX_1:29
+             .= b.n-b1.n by XCMPLX_1:26 .= b.n -' b1.n by A48,SCMFSA_7:3
+             .= b2.n by A40,POLYNOM1:def 6;
+                  s.(b1.n+1) is Element of CR* by A13,A45,FUNCT_2:7;
+                then reconsider sb1n1=s.(b1.n+1) as FinSequence of CR;
+                  xb1n = x.((b1.n+1)-'1) & yb2n = y.((b.n)+1-'(b1.n+1)) &
+                s.(b1.n+1)=sb1n1 by A47,A49;
+           then A50: (xb1n*'yb2n).bn = Sum sb1n1 & len sb1n1 = len decomp bn &
+                for k being Nat st k in dom sb1n1
+                holds ex b1, b2 being bag of n st (decomp bn)/.k = <*b1, b2*> &
+                  sb1n1/.k = xb1n.b1*yb2n.b2 by A12,A13,A45;
+                consider B1, B2 being bag of n such that
+           A51: (decomp bn)/.i=<*B1,B2*> & sb1n1/.i=xb1n.B1*yb2n.B2 by A12,A13,
+A45,A47,A49;
+                  (divisors bn)/.i is Element of Bags n;
+                then reconsider B1' = (divisors bn)/.i as bag of n;
+           A52: dom divisors bn = dom decomp bn by POLYNOM1:def 19;
+                then <*B1,B2*> = <* B1',bn -' B1' *> by A44,A51,POLYNOM1:def 19
+;
+           then A53: B1 = B1' & B2 = bn -' B1' by GROUP_7:2;
+           then A54: B1 = b1n by A44,FINSEQ_4:def 4;
+           then A55: B2 = b2n by A40,A53,Th5;
+                  dom sb1n1 = dom divisors bn by A50,A52,FINSEQ_3:31;
+                hence u.n1 = t.(p.n1) by A38,A44,A46,A51,A54,A55,FINSEQ_4:def 4
+;
+            end; A56: dom decomp b <> {}; b.n >= 0 by NAT_1:18;
+            then 1 <= 1 & 0+1 <= len r by A6,AXIOMS:24;
+       then A57: 1 in dom s by A13,FINSEQ_3:27;
+            then 1 in dom Card s by CARD_3:def 2;
+            then Sum Card s >= (Card s).1 by POLYNOM3:4;
+       then A58: Sum Card s >= len (s.1) by A57,CARD_3:def 2;
+              now reconsider p'=x.(1-'1), q'=y.((b.n)+1-'1) as Polynomial of n,
+R
+                                                        by POLYNOM1:def 27;
+                  s/.1 is FinSequence of CR;
+            then A59: s.1 is FinSequence of CR by A57,FINSEQ_4:def 4; p'=x.(1
+-'1) & q'=y.((b.n)+1-'1);
+                then len (s.1) = len decomp bn by A12,A13,A57,A59;
+                hence len (s.1) <> 0 by FINSEQ_1:25;
+            end;
+            then Sum
+ Card s > 0 by A58,NAT_1:19; then len t > 0 by POLYNOM1:30;
+            then t <> {} by FINSEQ_1:25;
+       then A60: dom u <> {} & dom t <> {} by A23,A56,FINSEQ_3:31,RELAT_1:64;
+              now let n1',n2' be set; assume
+            A61: n1' in dom p & n2' in dom p & p.n1' = p.n2';
+                  dom p = dom u by A60,FUNCT_2:def 1;
+                then reconsider n1=n1', n2=n2' as Nat by A61;
+            A62: dom u = dom decomp b by A23,FINSEQ_3:31
+                     .= dom divisors b by POLYNOM1:def 19;
+            then A63: (divisors b).n1 in rng divisors b by A61,FUNCT_1:def 5;
+                then reconsider b1=(divisors b).n1 as bag of n+1 by POLYNOM1:
+def 14;
+            A64: (divisors b).n2 in rng divisors b by A61,A62,FUNCT_1:def 5
+;
+                then reconsider b2=(divisors b).n2 as bag of n+1 by POLYNOM1:
+def 14;
+                  n < n+1 by NAT_1:38;
+                then reconsider b1n=b1|n, b2n=b2|n as Element of Bags n by Th3;
+                  b1 divides b by A63,Th7; then b1n divides bn by Th4;
+                then b1n in rng divisors bn by Th7;
+                then consider i1 being set such that
+            A65: i1 in dom divisors bn & b1n = (divisors bn).i1 by FUNCT_1:def
+5;
+                reconsider i1 as Nat by A65;
+                  b2 divides b by A64,Th7; then b2n divides bn by Th4;
+                then b2n in rng divisors bn by Th7;
+                then consider i2 being set such that
+            A66: i2 in dom divisors bn & b2n = (divisors bn).i2 by FUNCT_1:def
+5;
+                reconsider i2 as Nat by A66;
+           A67: b1.n+1 in dom s & i1 in dom (s.(b1.n+1)) &
+                p.n1 = (Sum Card (s|(b1.n+1-'1))) + i1 by A34,A61,A65;
+           A68: b2.n+1 in dom s & i2 in dom (s.(b2.n+1)) &
+                p.n2 = (Sum Card (s|(b2.n+1-'1))) + i2 by A34,A61,A66;
+                  (Card s)|(b1.n+1-'1) = Card (s|(b1.n+1-'1)) &
+                (Card s)|(b2.n+1-'1) = Card (s|(b2.n+1-'1)) by POLYNOM3:16;
+           then A69: b1.n+1 = b2.n+1 & i1=i2 by A61,A67,A68,POLYNOM3:22;
+           then A70: b1.n = b2.n by XCMPLX_1:2;
+           A71: b1 is Element of Bags (n+1) & b2 is Element of Bags (n+1)
+                by POLYNOM1:def 14;
+                then b1 = b1n bag_extend b1.n by Def1 .= b2 by A65,A66,A69,A70,
+A71,Def1;
+                hence n1' = n2' by A61,A62,FUNCT_1:def 8;
+            end;
+       then A72: p is one-to-one by FUNCT_1:def 8;
+              dom t c= rng p proof let n1' be set; assume
+            A73: n1' in dom t; then reconsider n1=n1' as Nat;
+                consider i, j being Nat such that
+            A74: i in dom s & j in dom (s.i) & n1 = (Sum Card (s|(i-'1))) + j &
+                (s.i).j = t.n1 by A73,POLYNOM1:32;
+                reconsider p' = x.(i-'1), q' = y.((b.n)+1-'i) as
+                Polynomial of n,R by POLYNOM1:def 27;
+                reconsider bj=(divisors bn)/.j as bag of n by POLYNOM1:def 14;
+                  s.i in CR* by A13,A74,FUNCT_2:7;
+            then i is Nat & p' = x.(i-'1) & q' = y.((b.n)+1-'i) &
+                s.i is FinSequence of CR by FINSEQ_1:def 11;
+                then len (s.i) = len decomp bn by A12,A13,A74;
+            then A75: dom (s.i) = dom decomp bn by FINSEQ_3:31
+                         .= dom divisors bn by POLYNOM1:def 19;
+           then A76: bj = (divisors bn).j by A74,FINSEQ_4:def 4;
+                then bj in rng divisors bn by A74,A75,FUNCT_1:def 5;
+            then A77: bj divides bn by Th7;
+                set bij = bj bag_extend (i -' 1);
+                  now let k be set;
+                    per cases; suppose
+                A78: k in n+1;
+                      now per cases; suppose A79: k in n;
+                    then A80: bij.k = (bij|n).k by FUNCT_1:72 .= bj.k by Def1;
+                          b.k = bn.k by A79,FUNCT_1:72;
+                        hence bij.k <= b.k by A77,A80,POLYNOM1:def 13;
+                        suppose A81: not k in n;
+                          n+1 = succ n by CARD_1:52 .= n \/
+ {n} by ORDINAL1:def 1;
+                        then k in {n} by A78,A81,XBOOLE_0:def 2;
+                    then A82: k = n by TARSKI:def 1;
+                    then A83: bij.k = i -' 1 by Def1;
+                    A84: 1 <= i & i <= b.n+1 by A6,A13,A74,FINSEQ_3:27;
+                        then i - 1 <= b.n + 1 - 1 by REAL_1:49;
+                        then i - 1 <= b.n + (1-1) by XCMPLX_1:29;
+                        hence bij.k <= b.k by A82,A83,A84,SCMFSA_7:3;
+                    end;
+                    hence bij.k <= b.k;
+                    suppose
+                A85: not k in n+1; dom bij = n+1 by PBOOLE:def 3;
+                then A86: bij.k = 0 by A85,FUNCT_1:def 4;
+                      dom b = n+1 by PBOOLE:def 3;
+                    hence bij.k <= b.k by A85,A86,FUNCT_1:def 4;
+                end; then bij divides b by POLYNOM1:def 13;
+                then bij in rng divisors b by Th7;
+                then consider k being set such that
+            A87: k in dom divisors b & bij = (divisors b).k by FUNCT_1:def 5;
+            A88: dom p = dom u by A60,FUNCT_2:def 1;
+            A89: dom u = dom decomp b by A23,FINSEQ_3:31
+                     .= dom divisors b by POLYNOM1:def 19;
+                  k is Nat & bij = (divisors b).k & j in dom (divisors bn) &
+                (divisors bn).j = bij|n by A74,A75,A76,A87,Def1;
+           then A90: bij.n+1 in dom s & j in dom (s.(bij.n+1)) &
+                    p.k = (Sum Card (s|(bij.n+1-'1))) + j by A34,A87,A89;
+           A91: 1 <= i & i <= b.n+1 by A6,A13,A74,FINSEQ_3:27;
+                  bij.n = i-'1 by Def1;
+                then bij.n+1= i by A91,AMI_5:4;
+                hence n1' in rng p by A74,A87,A88,A89,A90,FUNCT_1:def 5;
+            end;
+       then A92: rng p = dom t by XBOOLE_0:def 10;
+       A93: dom p = dom u by A60,FUNCT_2:def 1;
+       A94: len u = Card dom u by PRE_CIRC:21
+     .= Card (p qua set) by A93,PRE_CIRC:21 .= Card dom t by A72,A92,POLYNOM1:7
+                 .= len t by PRE_CIRC:21;
+       then A95: dom u = dom t by FINSEQ_3:31;
+            then p is Permutation of dom u by A72,A92,FUNCT_2:83;
+            hence Pxy.b' = PxPy.b' by A22,A23,A35,A94,A95,RLVECT_2:8;
+       end;
+       hence P.(x'*y') = (P.x')*(P.y') by FUNCT_2:18;
+    end;
+end;
+  cluster upm (n,R) -> unity-preserving;
+coherence proof
+ set PRPNR = Polynom-Ring (Polynom-Ring(n,R)); set PN1R = Polynom-Ring(n+1,R);
+ set PNR = Polynom-Ring(n,R);
+ set CPN1R = the carrier of PN1R;
+ set P = upm (n,R);
+    reconsider p1 = 1_ PRPNR as Polynomial of PNR by POLYNOM3:def 12;
+    reconsider p1' = 1_ PN1R as (Polynomial of n+1, R) by POLYNOM1:def 27;
+      P.(1_ PRPNR) in CPN1R;
+    then reconsider p3 = P.p1 as (Polynomial of n+1, R) by POLYNOM1:def 27;
+      now let x be set; assume x in Bags (n+1);
+         then reconsider b = x as Element of Bags (n+1);
+         reconsider p2 = p1.(b.n) as Polynomial of n, R by POLYNOM1:def 27;
+    A96: p3.b = p2.(b|n) by Def6;
+           now
+              per cases; suppose A97: b|n = EmptyBag(n) & b.n = 0;
+         then A98: b = (EmptyBag n) bag_extend 0 by Def1.=EmptyBag (n+1) by Th6
+;
+                p2 = (1_. (PNR)).0 by A97,POLYNOM3:def 12
+                .= 1_ (PNR) by POLYNOM3:31 .= 1_ (n,R) by POLYNOM1:def 27;
+              hence p3.b = 1.R by A96,A97,POLYNOM1:84
+              .= 1_ (n+1,R).b by A98,POLYNOM1:84 .= p1'.b by POLYNOM1:def 27;
+              suppose A99: b|n <> EmptyBag(n) or b.n <> 0;
+              then b <> (EmptyBag n) bag_extend 0 by Def1;
+         then A100: b <> EmptyBag (n+1) by Th6;
+                now
+              A101: p2 = (1_. (PNR)).(b.n) by POLYNOM3:def 12;
+                     n < n+1 by NAT_1:38;
+              then A102: b|n is bag of n by Th3;
+                   per cases; suppose A103: b.n = 0;
+                   then p2 = 1_ (PNR) by A101,POLYNOM3:31
+                     .= 1_ (n,R) by POLYNOM1:def 27;
+                   hence p3.b = 0.R by A96,A99,A102,A103,POLYNOM1:84;
+                   suppose b.n <> 0;
+                   then p2 = 0.(PNR) by A101,POLYNOM3:31
+                     .= 0_ (n, R) by POLYNOM1:def 27;
+                   hence p3.b = 0.R by A96,A102,POLYNOM1:81;
+              end;
+              hence p3.b = 1_ (n+1,R).b by A100,POLYNOM1:84
+                        .= p1'.b by POLYNOM1:def 27;
+         end;
+         hence p3.x = p1'.x;
+    end; then p1' = p3 by FUNCT_2:18;
+    hence P is unity-preserving by ENDALG:def 8;
+end;
+  cluster upm (n,R) -> one-to-one;
+coherence proof
+ set PRPNR = Polynom-Ring (Polynom-Ring(n,R));
+ set PNR = Polynom-Ring(n,R);
+ set P = upm (n,R);
+      now let x',y' being Element of PRPNR; assume
+    A104: P.x' = P.y';
+       reconsider x=x', y=y' as Polynomial of PNR by POLYNOM3:def 12;
+       reconsider Py = P.y' as Polynomial of n+1,R by POLYNOM1:def 27;
+           now let bn' be set; assume bn' in
+ NAT; then reconsider bn = bn' as Nat;
+       reconsider xbn=x.bn, ybn = y.bn as Polynomial of n,R by POLYNOM1:def 27;
+                now let b' be set; assume
+                b' in Bags n;
+                   then reconsider b = b' as bag of n by POLYNOM1:def 14;
+                   set bn1 = b bag_extend bn;
+              A105: bn1|n = b & bn1.n = bn by Def1;
+                   then (xbn).b = Py.bn1 by A104,Def6
+                          .= (ybn).b by A105,Def6;
+                   hence (xbn).b' = (ybn).b';
+              end;
+              hence x.bn' = y.bn' by FUNCT_2:18;
+         end;
+         hence x'=y' by FUNCT_2:18;
+    end;
+    hence P is one-to-one by WAYBEL_1:def 1;
+end;
+end;
+
+definition
+let R be Abelian add-associative right_zeroed right_complementable
+         associative distributive well-unital commutative non trivial
+         (non empty doubleLoopStr), n be Nat;
+func mpu (n,R) -> map of Polynom-Ring (n+1,R), Polynom-Ring Polynom-Ring(n,R)
+     means :Def7:
+for p1 being (Polynomial of n+1,R), p2 being (Polynomial of n, R),
+    p3 being (Polynomial of Polynom-Ring (n, R)), i being Nat, b being bag of n
+ st p3 = it.p1 & p2 = p3.i holds p2.b = p1.(b bag_extend i);
+existence proof
+ set PRPNR = Polynom-Ring (Polynom-Ring(n,R)); set PN1R = Polynom-Ring(n+1,R);
+ set PNR = Polynom-Ring(n,R); set CPRPNR = the carrier of PRPNR;
+ set CPN1R = the carrier of PN1R; set CPNR = the carrier of PNR;
+ set CR = the carrier of R;
+    defpred P1[Element of CPN1R, Element of CPRPNR] means
+         for p1 being (Polynomial of n+1,R), p2 being (Polynomial of n, R),
+             p3 being (Polynomial of Polynom-Ring (n, R)),
+             i being Nat, b being bag of n st p1 = $1 & p3 = $2 & p2 = p3.i
+          holds p2.b = p1.(b bag_extend i);
+A1: now let x being Element of CPN1R;
+         reconsider p1=x as Polynomial of n+1,R by POLYNOM1:def 27;
+          defpred P2[Nat, Element of CPNR] means
+               for p2 being (Polynomial of n, R), b being bag of n
+                st p2 = $2 holds p2.b = p1.(b bag_extend $1);
+     A2: now let i being Nat;
+     deffunc F(Element of Bags n)=p1.($1 bag_extend i);
+               consider p2 being Function of Bags n,CR such that
+          A3: for b being Element of Bags n
+               holds p2.b = F(b) from LambdaD;
+               reconsider p2 as Function of Bags n, R ;
+               reconsider p2 as Series of n, R ;
+                 now
+                    per cases; suppose A4: Support p1 = {};
+                      now assume
+                      Support p2 <> {};
+                         then consider b being set such that
+                    A5: b in Support p2 by XBOOLE_0:def 1;
+                         reconsider b as Element of Bags n by A5;
+                           p2.b <> 0.R by A5,POLYNOM1:def 9;
+                         then p1.(b bag_extend i) <> 0.R by A3;
+                         hence Support p1 <> {} by POLYNOM1:def 9;
+                    end;
+                    hence Support p2 is finite by A4;
+                    suppose Support p2 = {}; hence Support p2 is finite;
+                    suppose A6: Support p1 <> {} & Support p2 <> {};
+                    then reconsider Support_p1 = Support p1 as non empty Subset
+of
+                    Bags (n+1);
+                    reconsider Support_p2 = Support p2 as non empty Subset of
+                    Bags n by A6;
+            defpred P[Element of Support_p2,set] means $2 = $1 bag_extend i;
+               A7: now let x being Element of Support_p2;
+                    A8: x is Element of Bags n by POLYNOM1:def 14;
+                           x in Support p2;
+                         then p2.x <> 0.R by POLYNOM1:def 9;
+                         then p1.(x bag_extend i) <> 0.R by A3,A8;
+                         then x bag_extend i in Support p1 by POLYNOM1:def 9;
+                         hence ex y being Element of Support_p1
+                               st P[x,y];
+                    end;
+                   consider f being Function of Support_p2,Support_p1 such that
+               A9: for x being Element of Support_p2
+                    holds P[x,f.x] from FuncExD(A7);
+               A10: dom f = Support_p2 by FUNCT_2:def 1;
+                      now let x1,x2 be set; assume
+                    A11: x1 in dom f & x2 in dom f & f.x1 = f.x2;
+                     then reconsider x1'=x1, x2'=x2 as Element of Bags n by A10
+;
+                    A12: x1' bag_extend i = f.x1 by A9,A11
+                                      .= x2' bag_extend i by A9,A11;
+                           x1' = (x1' bag_extend i)|n by Def1 .= x2' by A12,
+Def1
+;
+                      hence x1 = x2;
+                    end;
+               then A13: f is one-to-one by FUNCT_1:def 8; rng f c=
+Support_p1
+;
+                    then Card Support_p2 <=` Card Support_p1 by A10,A13,CARD_1:
+26;
+                    hence Support p2 is finite by CARD_2:68;
+               end;
+               then p2 is finite-Support by POLYNOM1:def 10;
+               then reconsider p2'=p2 as Element of CPNR by POLYNOM1:def 27;
+               take p2';
+                 now let p2'' being (Polynomial of n, R),
+                        b being bag of n; assume
+               A14: p2'' = p2'; b is Element of Bags n by POLYNOM1:def 14
+;
+                    hence p2''.b = p1.(b bag_extend i) by A3,A14;
+               end;
+               hence P2[i,p2'];
+          end;
+          consider p3 being Function of NAT,CPNR such that
+     A15: for x being Nat holds P2[x,p3.x] from FuncExD(A2);
+          reconsider p3 as sequence of PNR by NORMSP_1:def 3;
+            now
+               per cases; suppose A16: Support p1 = {};
+                 now let i being Nat; assume i >= 0;
+                reconsider p2 = p3.i as Polynomial of n, R by POLYNOM1:def 27;
+               A17: dom ((Bags n) --> 0.R) = Bags n by FUNCOP_1:19;
+               A18: dom (p2) = Bags n by FUNCT_2:def 1;
+                      now let x be set; assume
+                      x in Bags n;
+                         then reconsider x'=x as Element of Bags n;
+                           p1.(x' bag_extend i) = 0.R by A16,POLYNOM1:def 9;
+                         then p2.x' = 0.R by A15;
+                         hence p2.x = ((Bags n) --> 0.R).x by FUNCOP_1:13;
+                    end; then p2 = (Bags n) --> 0.R by A17,A18,FUNCT_1:9;
+           hence p3.i = 0_(n,R) by POLYNOM1:def 24 .= 0.PNR by POLYNOM1:def 27
+;
+               end;
+               hence p3 is finite-Support by ALGSEQ_1:def 2;
+               suppose Support p1 <> {};
+               then reconsider Support_p1 = Support p1 as finite non empty
+Subset of
+               Bags (n+1);
+               deffunc F(Element of Bags (n+1))=$1.n;
+               consider f being Function of Bags (n+1), NAT such that
+          A19: for x being Element of Bags (n+1) holds f.x = F(x) from LambdaD;
+               reconsider j = max (f .: Support_p1) as Nat by ORDINAL2:def 21;
+                 now let i being Nat; assume
+               A20: i >= j+1;
+                 reconsider p2 = p3.i as Polynomial of n, R by POLYNOM1:def 27;
+               A21: dom ((Bags n) --> 0.R) = Bags n by FUNCOP_1:19;
+               A22: dom (p2) = Bags n by FUNCT_2:def 1;
+                      now let x be set; assume
+                      x in Bags n;
+                         then reconsider x'=x as Element of Bags n;
+                           i > j by A20,NAT_1:38;
+                    then A23: not i in f.:Support_p1 by PRE_CIRC:def 1;
+                           f.(x' bag_extend i) = (x' bag_extend i).n by A19
+                                            .= i by Def1;
+                        then not x' bag_extend i in
+                          Support_p1 by A23,FUNCT_2:43;
+                         then p1.(x' bag_extend i) = 0.R by POLYNOM1:def 9;
+                         then p2.x' = 0.R by A15;
+                         hence p2.x = ((Bags n) --> 0.R).x by FUNCOP_1:13;
+                    end; then p2 = (Bags n) --> 0.R by A21,A22,FUNCT_1:9;
+           hence p3.i = 0_(n,R) by POLYNOM1:def 24 .= 0.PNR by POLYNOM1:def 27
+;
+               end;
+               hence p3 is finite-Support by ALGSEQ_1:def 2;
+          end;
+          then reconsider y=p3 as Element of CPRPNR by POLYNOM3:def 12;
+          take y;
+          thus P1[x,y] by A15;
+     end;
+     consider P being Function of CPN1R,CPRPNR such that
+A24: for x being Element of CPN1R holds P1[x,P.x] from FuncExD(A1);
+     reconsider P as map of PN1R,PRPNR;
+     take P;
+       now let p1 being (Polynomial of n+1,R), p2 being (Polynomial of n, R),
+             p3 being (Polynomial of Polynom-Ring (n, R)),
+             i being Nat, b being bag of n; assume
+     A25: p3 = P.p1 & p2 = p3.i; p1 in CPN1R by POLYNOM1:def 27;
+          hence p2.b = p1.(b bag_extend i) by A24,A25;
+     end;
+     hence thesis;
+end;
+uniqueness proof
+ set PRPNR = Polynom-Ring (Polynom-Ring(n,R)); set PN1R = Polynom-Ring(n+1,R);
+ set PNR = Polynom-Ring(n,R);
+ set CPN1R = the carrier of PN1R;
+ let A,B be map of PN1R,PRPNR; assume
+A26: for p1 being (Polynomial of n+1,R), p2 being (Polynomial of n, R),
+         p3 being (Polynomial of Polynom-Ring (n, R)),
+         i being Nat, b being bag of n
+     st p3 = A.p1 & p2 = p3.i holds p2.b = p1.(b bag_extend i); assume
+A27: for p1 being (Polynomial of n+1,R), p2 being (Polynomial of n, R),
+         p3 being (Polynomial of Polynom-Ring (n, R)),
+         i being Nat, b being bag of n
+     st p3 = B.p1 & p2 = p3.i holds p2.b = p1.(b bag_extend i);
+       now let x be set; assume
+     A28: x in CPN1R; then reconsider x''=x as Element of CPN1R;
+          reconsider x'=x as Polynomial of n+1, R by A28,POLYNOM1:def 27;
+          reconsider Ax=A.x'',Bx=B.x'' as Polynomial of PNR by POLYNOM3:def 12;
+            now let i be set; assume i in NAT; then reconsider i'=i as Nat;
+               reconsider Axi=Ax.i', Bxi=Bx.i' as Polynomial of n, R
+                   by POLYNOM1:def 27;
+                 now let b be set; assume b in Bags n;
+                    then reconsider b'=b as bag of n by POLYNOM1:def 14;
+                    thus Axi.b = x'.(b' bag_extend i') by A26 .= Bxi.b by A27;
+               end; hence Ax.i = Bx.i by FUNCT_2:18;
+          end; hence A.x=B.x by FUNCT_2:18;
+     end; hence A=B by FUNCT_2:18;
+end; end;
+
+theorem Th30:
+for R being Abelian add-associative right_zeroed right_complementable
+            associative distributive well-unital commutative non trivial
+            (non empty doubleLoopStr),
+    n being Nat, p being Element of Polynom-Ring (n+1,R)
+  holds upm(n,R).(mpu(n,R).p) = p
+proof let R being Abelian add-associative right_zeroed right_complementable
+                 associative distributive well-unital commutative non trivial
+                 (non empty doubleLoopStr),
+         n being Nat, p being Element of Polynom-Ring (n+1,R);
+ set PNR = Polynom-Ring(n,R);
+     reconsider p'=p as Polynomial of (n+1), R by POLYNOM1:def 27;
+     reconsider upm_mpu_p = upm(n,R).(mpu(n,R).p) as Polynomial of (n+1), R
+         by POLYNOM1:def 27;
+     reconsider mpu_p = (mpu(n,R).p) as Polynomial of PNR by POLYNOM3:def 12;
+       now let b' be set; assume
+       b' in Bags (n+1); then reconsider b=b' as Element of Bags (n+1);
+    reconsider mpu_p_bn = mpu_p.(b.n) as Polynomial of n, R by POLYNOM1:def 27;
+            n < n+1 by NAT_1:38; then reconsider bn = (b|n) as bag of n by Th3;
+     A1: b = bn bag_extend b.n by Def1;
+          thus upm_mpu_p.b' = mpu_p_bn.bn by Def6
+               .= p'.b' by A1,Def7;
+     end; hence upm(n,R).(mpu(n,R).p) = p by FUNCT_2:18;
+end;
+
+theorem Th31:
+for R being Abelian add-associative right_zeroed right_complementable
+            associative distributive well-unital commutative non trivial
+            (non empty doubleLoopStr), n being Nat
+  ex P being map of Polynom-Ring (Polynom-Ring(n,R)),Polynom-Ring(n+1,R)
+   st P is RingIsomorphism
+proof let R be Abelian add-associative right_zeroed right_complementable
+             associative distributive well-unital commutative non trivial
+             (non empty doubleLoopStr), n being Nat;
+ set PN1R = Polynom-Ring(n+1,R);
+ set CPRPNR = the carrier of Polynom-Ring (Polynom-Ring(n,R));
+ set CPN1R = the carrier of PN1R;
+ set P = upm (n,R);
+A1: P is RingHomomorphism by QUOFIELD:def 21;
+      now let p be set; assume
+      p in CPN1R; then reconsider p' = p as Element of CPN1R;
+    A2: dom P = CPRPNR by FUNCT_2:def 1; P.(mpu(n,R).p') = p' by Th30;
+         hence p in rng P by A2,FUNCT_1:def 5;
+    end; then CPN1R c= rng P by TARSKI:def 3;
+    then rng P = CPN1R by XBOOLE_0:def 10;
+then A3: P is RingEpimorphism by A1,QUOFIELD:def 22;
+      P is RingMonomorphism by A1,QUOFIELD:def 23;
+    then P is RingIsomorphism by A3,QUOFIELD:def 24;
+    hence thesis;
+end;
+
+begin :: Hilbert basis theorem
+
+definition :: Hilbert Basis Theorem
+let R be Noetherian Abelian add-associative right_zeroed right_complementable
+         associative distributive well-unital commutative
+         (non empty doubleLoopStr);
+ cluster Polynom-Ring R -> Noetherian;
+  coherence proof set PR = Polynom-Ring R; set cPR = the carrier of PR;
+set cR = the carrier of R;
+     now assume PR is non Noetherian; then consider I being Ideal of PR such
+that
+    A1: I is non finitely_generated by IDEAL_1:def 27;
+       defpred P1[set,set,set] means
+          ($2 is non empty finite Subset of I)
+            implies (ex A,B being non empty Subset of cPR
+             st A = $2 & B = I\(A-Ideal) & ex r being Element of cPR st
+                                            r in minlen(B) & $3 = $2 \/ {r});
+    A2: now let n be Nat, x be Element of bool cPR;
+           per cases; suppose not (x is non empty finite Subset of I);
+           hence ex y be Element of bool cPR st P1[n,x,y];
+           suppose A3: x is non empty finite Subset of I;
+           then reconsider x'=x as non empty Subset of cPR; set B = I\(x'
+-Ideal);
+             now assume B = {}; then A4: I c= x'-Ideal by XBOOLE_1:37;
+               x'-Ideal c= I-Ideal by A3,IDEAL_1:57;
+             then x'-Ideal c= I by IDEAL_1:44; then x'-Ideal = I by A4,XBOOLE_0
+:def 10;
+             hence contradiction by A1,A3,IDEAL_1:def 26;
+           end; then reconsider B as non empty Subset of cPR;
+       A5: minlen(B) c= cPR by XBOOLE_1:1; consider r being set such that
+       A6: r in minlen (B) by XBOOLE_0:def 1;
+           reconsider r as Element of cPR by A5,A6; P1[n,x,x' \/ {r}] by A6;
+           hence ex y be Element of bool cPR st P1[n,x,y];
+       end; consider F be Function of NAT,bool cPR such that
+    A7: F.0 = {0.PR} & for n be Element of NAT holds P1[n,F.n,F.(n+1)]
+                                   from RecExD(A2);
+    defpred P[Nat] means F.$1 is non empty finite Subset of I;
+         F.0 c= I
+          proof let x be set; assume x in F.0;
+           then x = 0.PR by A7,TARSKI:def 1; hence x in I by IDEAL_1:2;
+          end;
+    then A8: P[0] by A7;
+    A9: now let n be Nat; assume P[n];
+           then reconsider Fn=F.n as non empty finite Subset of I;
+           consider A,B being non empty Subset of cPR such that
+       A10: A = Fn & B = I\(A-Ideal) and
+       A11: ex r being Element of cPR st r in minlen(B) & F.(n+1)= Fn \/
+ {r} by A7;
+           consider r being Element of cPR such that
+       A12: r in minlen(B) & F.(n+1) = Fn \/ {r} by A11; r in I by A10,A12,
+XBOOLE_0:def 4;
+           then {r} c= I by ZFMISC_1:37;
+           hence P[n+1] by A12,XBOOLE_1:8;
+       end;
+    A13: for n being Nat holds P[n] from Ind(A8,A9);
+    A14: for i,j being Nat st i <= j holds F.i c= F.j proof
+           let i,j be Nat; assume i<=j; then consider m being Nat such that
+        A15: j = i+m by NAT_1:28;
+        defpred P[Nat] means F.i c= F.(i+$1);
+        A16: P[0];
+        A17: for m being Nat st P[m] holds P[m+1] proof
+             let m be Nat; assume
+            A18:    F.i c= F.(i+m);
+                  F.(i+m) is non empty finite Subset of I by A13;
+                then consider A,B being non empty Subset of cPR such that
+                  A = F.(i+m) & B = I\(A-Ideal) and
+            A19: ex r being Element of cPR st
+                        r in minlen(B) & F.((i+m)+1) = F.(i+m) \/ {r} by A7;
+                consider r being Element of cPR such that
+            A20: r in minlen(B) & F.((i+m)+1) = F.(i+m) \/ {r} by A19;
+                  F.(i+m) c= F.((i+m)+1) by A20,XBOOLE_1:7;
+                then F.(i+m) c= F.(i+(m+1)) by XCMPLX_1:1;
+             hence F.i c= F.(i+(m+1)) by A18,XBOOLE_1:1;
+            end; for m being Nat holds P[m] from Ind(A16,A17);
+           hence F.i c= F.j by A15;
+        end;
+       defpred P2[set,set] means
+          ex n being Nat, A,B being non empty Subset of cPR
+            st A = F.n & B = I\(A-Ideal) & n = $1 & F.(n+1) = F.n \/ {$2} &
+               $2 in minlen(B);
+    A21: now let x be Nat;
+         F.x is non empty finite Subset of I by A13;
+           then consider A,B being non empty Subset of cPR such that
+       A22: A = F.x & B = I\(A-Ideal) and
+       A23: ex r being Element of cPR st r in minlen(B)&F.(x+1)=F.x \/ {r}
+         by A7;
+           thus ex y being Element of cPR st P2[x,y] by A22,A23;
+       end; consider f being Function of NAT, cPR such that
+    A24:    for x being Nat holds P2[x,f.x] from FuncExD(A21);
+    A25: for i being Nat holds f.i <> 0.PR proof
+            let i be Nat; consider n being Nat, A,B being non empty Subset of
+            cPR such that
+        A26:      A = F.n & B = I\(A-Ideal) & n = i & F.(n+1) = F.n \/ {f.i} &
+                 f.i in minlen(B) by A24;
+              F.n c= A-Ideal by A26,IDEAL_1:def 15;
+        then A27: not f.i in F.n by A26,XBOOLE_0:def 4; 0 <= n by NAT_1:18;
+        then A28: F.0 c=F.n by A14; 0.PR in F.0 by A7,TARSKI:def 1;
+            hence thesis by A27,A28;
+        end;
+    A29: for i,j being Nat, fi, fj being Polynomial of R
+         st i <= j & fi = f.i & fj = f.j holds len fi <= len fj proof
+            let i,j be Nat, fi, fj be Polynomial of R; assume
+        A30:     i <= j & fi = f.i & fj = f.j;
+            then consider k being Nat such that
+ A31:     j = i + k by NAT_1:28;
+ defpred P[Nat] means for fk being Polynomial of R st fk=f.(i+$1)
+                    holds len fi <= len fk;
+        A32: P[0] by A30;
+        A33: now let k be Nat; assume
+            A34:     P[k];
+                  now let fk1 be Polynomial of R; assume
+                A35:     fk1=f.(i+(k+1));
+                reconsider fk = f.(i+k) as Polynomial of R by POLYNOM3:def 12;
+                A36: len fi <= len fk by A34;
+             consider n being Nat, A,B being non empty Subset of cPR such that
+                A37:     A = F.n & B = I\(A-Ideal) & n = i+k &
+                        F.(n+1) = F.n \/ {f.(i+k)} & f.(i+k) in
+ minlen(B) by A24;
+          consider n' being Nat, A',B' being non empty Subset of cPR such that
+                A38:     A' = F.n' & B' = I\(A'-Ideal) & n' = i+(k+1) &
+               F.(n'+1) = F.n' \/ {f.(i+(k+1))} & f.(i+(k+1)) in minlen(B') by
+A24;
+                      i+(k+1) = (i+k)+1 by XCMPLX_1:1;
+                    then i+k < i+(k+1) by NAT_1:38;
+                    then F.(i+k) c= F.(i+(k+1)) by A14;
+                    then A-Ideal c= A'-Ideal by A37,A38,IDEAL_1:57;
+                then A39: not f.(i+(k+1)) in A-Ideal by A38,XBOOLE_0:def 4;
+                      f.(i+(k+1)) in I by A38,XBOOLE_0:def 4;
+                    then f.(i+(k+1)) in B by A37,A39,XBOOLE_0:def 4;
+                    then len fk <= len fk1 by A35,A37,Th17;
+                    hence len fi <= len fk1 by A36,AXIOMS:22;
+                end;
+                hence P[k+1];
+            end;
+              for k being Nat holds P[k] from Ind(A32,A33);
+            hence len fi <= len fj by A30,A31;
+        end;
+       defpred P3[set,set] means
+          ex n being Nat, A being Polynomial of R st n = $1 & A = f.n &
+             $2 = A.(len A -' 1);
+    A40: now let x be Nat;
+          reconsider fx=f.x as Polynomial of R by POLYNOM3:def 12;
+            fx.(len fx -' 1) is Element of cR;
+          hence ex y being Element of cR st P3[x,y];
+       end; consider a being Function of NAT, cR such that
+    A41:    for x being Nat holds P3[x,a.x] from FuncExD(A40);
+       reconsider a as sequence of R by NORMSP_1:def 3;
+         for B being non empty Subset of cR
+          ex C being non empty finite Subset of cR
+            st C c= B & C-Ideal = B-Ideal by IDEAL_1:99;
+       then consider m being Nat such that
+    A42:    a.(m+1) in (rng (a|Segm(m+1)))-Ideal by IDEAL_1:100;
+       consider lc being LinearCombination of (rng (a|Segm(m+1))) such that
+    A43:    a.(m+1) = Sum lc by A42,IDEAL_1:60;
+       reconsider fm1 = f.(m+1) as Polynomial of R by POLYNOM3:def 12;
+   A44: now let i be Nat, fi be Polynomial of R; assume fi = f.i;
+           then fi <> 0.PR by A25; then fi <> 0_.R by POLYNOM3:def 12;
+           then len fi <> 0 by POLYNOM4:8; then len fi > 0 by NAT_1:19;
+           then len fi >= 0+1 by NAT_1:38;
+           hence len fi-1 >= 0 by REAL_1:84;
+       end;
+       defpred P4[set,set] means
+       (ex u,v,w being Element of cR st $1 = u*v*w & v in rng (a|Segm(m+1)))
+        implies
+         ex x,y,z being Element of cPR, p being Polynomial of R
+             st $2 = p & p = (x*y)*z & $1 = p.(len fm1 -' 1) &
+                len p <= len fm1 & y in F.(m+1);
+    A45: for e being set st e in cR ex d being set st d in cPR & P4[e,d] proof
+         let e be set; assume e in cR;
+           per cases; suppose
+             ex u,v,w being Element of cR st e= u*v*w & v in rng (a|Segm(m+1));
+           then consider u,b',w being Element of cR such that
+       A46: e = u*b'*w and
+       A47: b' in rng (a|Segm(m+1)); set a' = u; set c' = w;
+           consider n being set such that
+       A48:     n in
+ dom (a|Segm(m+1)) & b' = (a|Segm(m+1)).n by A47,FUNCT_1:def 5;
+       A49: dom (a|Segm(m+1)) = dom a /\ Segm(m+1) by FUNCT_1:68
+            .= NAT /\ Segm(m+1) by FUNCT_2:def 1 .= Segm(m+1) by XBOOLE_1:28;
+           reconsider n as Nat by A48; m >= 0 by NAT_1:18; then m+1 >
+0 by NAT_1:38;
+       then A50: n < m+1 by A48,A49,GR_CY_1:10; set y = f.n;
+           reconsider y'=y as Polynomial of R by POLYNOM3:def 12;
+           set x' = monomial(a',len fm1 -' len y'); set z' = monomial(c',0);
+           reconsider x=x',z=z' as Element of cPR by POLYNOM3:def 12;
+           set p = (x*y)*z; A51: x*y = x'*'y' by POLYNOM3:def 12;
+       then A52: p = (x'*'y')*'z' by POLYNOM3:def 12;
+       A53: b' = a.n by A48,FUNCT_1:70;
+           consider n' being Nat, A being Polynomial of R such that
+       A54:     n' = n & A = f.n' & a.n = A.(len A -' 1) by A41;
+           reconsider p as Polynomial of R by POLYNOM3:def 12;
+             len y' <= len fm1 by A29,A50;
+           then len y' - len y' <= len fm1 - len y' by REAL_1:49;
+           then 0 <= len fm1 - len y' by XCMPLX_1:14;
+       then A55: len fm1 -' len y' = len fm1 - len y' by BINARITH:def 3;
+       A56: len y' -1 >= 0 by A44; len fm1 - 1 >= 0 by A44;
+           then len fm1 -' 1 = len fm1 + 0 - 1 by BINARITH:def 3
+ .= len fm1 + (len y' - len y') - 1 by XCMPLX_1:14
+        .= len fm1 + (len y' + -len y') -1 by XCMPLX_0:def 8
+        .= len fm1 + - len y' + len y' - 1 by XCMPLX_1:1
+        .= len fm1 - len y' + len y' - 1 by XCMPLX_0:def 8
+        .= (len fm1 - len y') + (len y' -1) by XCMPLX_1:29
+        .= (len y' -' 1) + (len fm1 -' len y') by A55,A56,BINARITH:def 3;
+       then A57: (x'*'y').(len fm1 -'1) = a' * b' by A53,A54,Th19;
+             len fm1 -' 1 = (len fm1 -' 1) + 0;
+       then A58: (a'*b')*c' = p.(len fm1 -' 1) by A52,A57,Th20;
+             len x' <= len fm1 - len y' +1 by A55,Th18;
+           then len x' <= len fm1 - (len y' -1 ) by XCMPLX_1:37;
+           then len x' + (len y'-1) <= len fm1-(len y'-1)+(len y'-1) by AXIOMS:
+24;
+           then len x' + (len y'-1) <= len fm1-((len y'-1)-(len y'-1))
+                by XCMPLX_1:37;
+           then len x' + (len y'-1) <= len fm1-0 by XCMPLX_1:14;
+       then A59: len x' + len y' -1 <= len fm1 by XCMPLX_1:29;
+             len x' >= 0 by NAT_1:18;
+           then 0+0 <= (len y' - 1)+len x' by A56,REAL_1:55;
+           then 0 <= len y' + -1 + len x' by XCMPLX_0:def 8;
+           then 0 <= len y' + len x' + -1 by XCMPLX_1:1;
+       then A60: 0 <= len x' + len y' -1 by XCMPLX_0:def 8;
+             len (x'*'y') <= len x' + len y' -' 1 by Th21;
+           then len (x'*'y') <= len x' + len y' - 1 by A60,BINARITH:def 3;
+       then A61: len (x'*'y') <= len fm1 by A59,AXIOMS:22;
+             len z' <= 0+1 by Th18;
+           then len (x'*'y') + len z' <= len fm1 + 1 by A61,REAL_1:55;
+       then A62: len(x'*'y')+len z'-'1 <= len fm1+1-'1 by JORDAN3:5;
+             len fm1+(1-1) >= 0+(1-1) by NAT_1:18;
+           then A63: len fm1+1-1 >= (1-1) by XCMPLX_1:29;
+             len ((x'*'y')*'z') <= len (x'*'y') + len z' -' 1 by Th21;
+           then len ((x'*'y')*'z') <= len fm1 +1 -' 1 by A62,AXIOMS:22;
+           then len ((x'*'y')*'z') <= len fm1 +1 -1 by A63,BINARITH:def 3;
+           then len ((x'*'y')*'z') <= len fm1+(1-1) by XCMPLX_1:29;
+       then A64: len p <= len fm1+0 by A51,POLYNOM3:def 12;
+             n+1 <= m+1 by A50,NAT_1:38;
+       then A65: F.(n+1) c= F.(m+1) by A14;
+           consider n' being Nat, A,B being non empty Subset of cPR such that
+       A66:     A = F.n' & B = I\(A-Ideal) & n' = n & F.(n'+1) = F.n' \/
+ {f.n} &
+               f.n in minlen(B) by A24;
+             {y} c= F.(n+1) by A66,XBOOLE_1:7; then y in F.(n+1) by ZFMISC_1:37
+;
+           hence ex u being set st u in cPR & P4[e,u] by A46,A58,A64,A65;
+           suppose
+            not ex u,v,w being Element of cR st e= u*v*w & v in
+ rng (a|Segm(m+1));
+           hence ex u being set st u in cPR & P4[e,u];
+       end; consider LCT being Function of cR, cPR such that
+    A67:   for e being set st e in cR holds P4[e,LCT.e] from FuncEx1(A45);
+    reconsider FM1 = F.(m+1) as non empty Subset of cPR by A13;
+set raSm1 = rng(a|Segm(m+1));
+    A68: for lc being LinearCombination of raSm1
+        ex LC being LinearCombination of FM1 st LC = LCT * lc & len lc = len LC
+         proof let lc be LinearCombination of raSm1;
+             dom LCT = cR by FUNCT_2:def 1; then rng lc c= dom LCT;
+       then A69: dom lc = dom (LCT*lc) by RELAT_1:46; set LC = LCT * lc;
+       A70: len lc = len LC by A69,FINSEQ_3:31;
+          LC is LinearCombination of FM1 proof let i be set such that
+           A71: i in dom LC;
+            consider u,v being Element of R, a being Element of raSm1 such that
+           A72: lc/.i = u*a*v by A69,A71,IDEAL_1:def 9;
+           A73: lc/.i = lc.i by A69,A71,FINSEQ_4:def 4;
+         consider x,y,z being Element of cPR, p being Polynomial of R such that
+           A74: LCT.(lc/.i) = p & p = (x*y)*z & (u*a)*v = p.(len fm1 -' 1) &
+                len p <= len fm1 & y in F.(m+1) by A67,A72;
+                reconsider x, z as Element of PR;
+                reconsider y as Element of FM1 by A74;
+                 LC/.i = (LCT*lc).i by A71,FINSEQ_4:def 4
+               .= x*y*z by A69,A71,A73,A74,FUNCT_1:23;
+            hence ex x,z being Element of PR, y being Element of FM1
+                  st LC/.i = x*y*z;
+           end; then reconsider LC as LinearCombination of FM1;
+             LC = LC;
+           hence ex LC being LinearCombination of FM1
+                 st LC = LCT * lc & len lc = len LC by A70;
+       end;
+         for lc being LinearCombination of raSm1
+         ex LC being LinearCombination of FM1, sLC being Polynomial of R
+          st LC = LCT*lc & sLC = Sum LC &
+                sLC.(len fm1 -' 1) = Sum lc & len sLC <= len fm1 proof
+        defpred P5[Nat] means
+             for lc being LinearCombination of raSm1 st len lc <= $1
+             holds ex LC being LinearCombination of FM1,
+                      sLC being Polynomial of R
+                   st LC = LCT*lc & sLC = Sum LC &
+                      sLC.(len fm1 -' 1) = Sum lc & len sLC <= len fm1;
+       A75: P5[0] proof let lc be LinearCombination of (raSm1); assume
+            len lc <= 0;
+               then A76: len lc = 0 by NAT_1:18;
+               consider LC being LinearCombination of FM1 such that
+           A77: LC = LCT * lc & len lc = len LC by A68;
+               take LC, p = 0_.(R); thus LC = LCT * lc by A77;
+           A78: lc = <*>cR by A76,FINSEQ_1:25; LC = <*>cPR by A76,A77,FINSEQ_1:
+25;
+               then Sum LC = 0.PR by RLVECT_1:60 .= p by POLYNOM3:def 12;
+               hence p = Sum LC;
+               thus p.(len fm1 -' 1) = 0.R by POLYNOM3:28
+                     .= Sum
+ lc by A78,RLVECT_1:60; len p = 0 by POLYNOM4:6;
+               hence len p <= len fm1 by NAT_1:18;
+           end;
+       A79: for k being Nat st P5[k] holds P5[k+1] proof let k be Nat; assume
+           A80: P5[k];
+               thus P5[k+1] proof
+                 let lc be LinearCombination of (raSm1); assume
+               A81: len lc <= k+1;
+                   per cases; suppose len lc <= k; hence thesis by A80;
+                   suppose len lc > k; then len lc >= k+1 by NAT_1:38;
+               then A82: len lc = k+1 by A81,AXIOMS:21;
+                   thus thesis proof per cases by NAT_1:19;
+                        suppose A83: k = 0;
+                        then dom lc = {1} by A82,FINSEQ_1:4,def 3;
+                   then A84: 1 in dom lc by TARSKI:def 1;
+                   A85: lc = <*lc.1*> by A82,A83,FINSEQ_1:57;
+                        consider u,w being Element of R,
+                               v being Element of raSm1 such that
+                   A86:  lc/.1 = u*v*w by A84,IDEAL_1:def 9;
+                   A87: lc.1 = lc/.1 by A84,FINSEQ_4:def 4;
+                        then consider x,y,z being Element of cPR,
+                            p being Polynomial of R such that
+                   A88: LCT.(lc.1) = p & p = (x*y)*z &
+                            (u*v)*w = p.(len fm1 -' 1) &
+                            len p <= len fm1 & y in F.(m+1) by A67,A86;
+                        consider LC being LinearCombination of FM1 such that
+                   A89:  LC = LCT*lc & len LC = len lc by A68;
+                   A90:  LC = <* LCT.(u*v*w) *> by A85,A86,A87,A89,FINSEQ_2:39;
+                   A91:  Sum lc = p.(len fm1 -' 1) by A85,A86,A87,A88,RLVECT_1:
+61;
+                           Sum LC = p by A86,A87,A88,A90,RLVECT_1:61;
+                        hence thesis by A88,A89,A91;
+                        suppose
+                   A92:  k > 0; then len lc > 0+1 by A82,REAL_1:53
+;
+                        then len lc <> 0; then lc is non empty by FINSEQ_1:25
+;
+               then consider p being LinearCombination of raSm1,
+                        e being Element of cR such that
+                   A93:  lc = p^<*e*> and
+                   A94: <*e*> is LinearCombination of raSm1 by IDEAL_1:32;
+                          len lc = len p + len <* e *> by A93,FINSEQ_1:35
+                              .= len p + 1 by FINSEQ_1:56;
+                        then len p = k by A82,XCMPLX_1:2;
+                        then consider LCp being LinearCombination of FM1,
+                                 sLCp being Polynomial of R such that
+                   A95:  LCp = LCT*p & sLCp = Sum LCp &
+                        sLCp.(len fm1 -' 1) = Sum
+ p & len sLCp <= len fm1 by A80;
+                          len <* e *> = 0+1 by FINSEQ_1:56;
+                        then len <*e*> <= k by A92,NAT_1:38;
+                        then consider LCe being LinearCombination of FM1,
+                                 sLCe being Polynomial of R such that
+                   A96:  LCe = LCT*<*e*> & sLCe = Sum LCe &
+                        sLCe.(len fm1 -' 1) = Sum <* e *> &
+                        len sLCe <= len fm1 by A80,A94;
+                        consider LC being LinearCombination of FM1 such that
+                   A97:  LC = LCT*lc & len LC = len lc by A68;
+                          dom LCT = cR by FUNCT_2:def 1;
+                        then rng p \/ rng <* e *> c= dom LCT;
+                        then consider LCTp, LCTe being FinSequence such that
+                   A98:  LCTp = LCT*p & LCTe = LCT*<*e*> &
+                        LCT*(p^<*e*>) = LCTp^LCTe by Th1;
+                        set sLC = sLCp + sLCe;
+                   A99:  Sum LC = Sum LCp + Sum LCe by A93,A95,A96,A97,A98,
+RLVECT_1:58
+                            .= sLC by A95,A96,POLYNOM3:def 12;
+                   A100:  Sum lc = Sum p + e by A93,FVSUM_1:87
+                            .= sLCp.(len fm1 -' 1) + sLCe.(len fm1 -' 1)
+                               by A95,A96,RLVECT_1:61
+                            .= sLC.(len fm1 -' 1) by POLYNOM3:def 6;
+                          now
+                           per cases;
+                           suppose len sLCp < len sLCe;
+                               then len sLC <= len sLCe by POLYNOM4:9;
+                           hence len sLC <= len fm1 by A96,AXIOMS:22;
+                           suppose len sLCp >= len sLCe;
+                               then len sLC <= len sLCp by POLYNOM4:9;
+                           hence len sLC <= len fm1 by A95,AXIOMS:22;
+                        end;
+                       hence thesis by A97,A99,A100;
+                   end;
+               end;
+           end;
+       A101: for k being Nat holds P5[k] from Ind(A75,A79);
+       let lc be LinearCombination of (raSm1);
+           consider n being Nat such that
+       A102:  n = len lc;
+           thus thesis by A101,A102;
+       end; then consider LC being LinearCombination of FM1,
+                         sLC being Polynomial of R such that
+   A103:   LC = LCT*lc & sLC = Sum LC &
+         sLC.(len fm1 -' 1) = Sum
+ lc & len sLC <= len fm1; set f'=fm1-sLC;
+   A104: f' = fm1+(-sLC) by POLYNOM3:def 8;
+    then A105: f'+sLC = fm1+(sLC+(-sLC)) by POLYNOM3:26
+       .= fm1+(sLC-sLC) by POLYNOM3:def 8 .= fm1+0_.R by POLYNOM3:30
+       .= fm1 by POLYNOM3:29; len (-sLC) <= len fm1 by A103,POLYNOM4:11;
+   then A106: len f' <= len fm1 by A104,POLYNOM4:9;
+         now assume
+       A107: len f' = len fm1; len fm1 - 1 >= 0 by A44;
+           then A108: (len fm1 -' 1) + 1 = (len fm1 - 1) + 1 by BINARITH:def 3
+              .= len fm1 - (1 - 1) by XCMPLX_1:37 .= len fm1;
+           consider n being Nat, A being Polynomial of R such that
+       A109: n = m+1 & A = f.n & a.(m+1) = A.(len A -' 1) by A41;
+             f'.(len fm1 -' 1)= fm1.(len fm1 -' 1) - fm1.(len fm1 -' 1) by A43,
+A103,A109,POLYNOM3:27
+              .= 0.R by RLVECT_1:28;
+           hence contradiction by A107,A108,ALGSEQ_1:25;
+       end;
+    then A110: len f' < len fm1 by A106,AXIOMS:21;
+    A111: sLC in FM1-Ideal by A103,IDEAL_1:60;
+       consider n being Nat, A,B being non empty Subset of cPR such that
+    A112:     A = F.n & B = I\(A-Ideal) & n = m+1 &
+           F.(n+1) = F.n \/ {f.(m+1)} & f.(m+1) in minlen(B) by A24;
+    A113: now assume A114:     f' in FM1-Ideal;
+           reconsider sLC as Element of cPR by POLYNOM3:def 12;
+           reconsider f' as Element of cPR by POLYNOM3:def 12;
+             f.(m+1) = f'+sLC by A105,POLYNOM3:def 12;
+       then fm1 in FM1-Ideal by A111,A114,IDEAL_1:def 1;
+           hence contradiction by A112,XBOOLE_0:def 4;
+       end;
+         f' in I proof FM1 is Subset of I by A13;
+           then FM1-Ideal c= I-Ideal by IDEAL_1:57;
+           then A115: FM1-Ideal c= I by IDEAL_1:44; reconsider sLC as Element
+of cPR by POLYNOM3:def 12;
+           reconsider f' as Element of cPR by POLYNOM3:def 12;
+       A116: f.(m+1) in I by A112,XBOOLE_0:def 4; f'=f.(m+1)-sLC by Th16;
+           hence thesis by A111,A115,A116,IDEAL_1:15;
+       end; then f' in I\(FM1-Ideal) by A113,XBOOLE_0:def 4;
+       hence contradiction by A110,A112,Th17;
+    end;
+    hence PR is Noetherian;
+  end;
+end;
+
+ Lm1:
+for R being Noetherian Abelian add-associative right_zeroed
+          right_complementable associative distributive well-unital commutative
+            (non empty doubleLoopStr)
+  holds Polynom-Ring R is Noetherian;
+
+canceled;
+
+theorem Th33:
+for R being Abelian add-associative right_zeroed right_complementable
+            associative distributive well-unital non trivial commutative
+            (non empty doubleLoopStr)
+ st R is Noetherian
+  for n being Nat holds Polynom-Ring (n,R) is Noetherian
+proof let R be Abelian add-associative right_zeroed right_complementable
+              associative distributive well-unital non trivial commutative
+              (non empty doubleLoopStr); assume
+A1: R is Noetherian;
+   consider P being map of R, Polynom-Ring (0,R) such that
+A2: P is RingIsomorphism by Th28;
+defpred P[Nat] means Polynom-Ring($1,R) is Noetherian;
+A3:  P[0] by A1,A2,Th27;
+A4: now let k be Nat such that
+      A5: P[k];
+         consider P being map of Polynom-Ring(Polynom-Ring(k,R)),
+                              Polynom-Ring(k+1,R) such that
+      A6: P is RingIsomorphism by Th31;
+           Polynom-Ring (Polynom-Ring(k,R)) is Noetherian by A5,Lm1;
+       hence P[k+1] by A6,Th27;
+      end;
+ thus for n being Nat holds P[n] from Ind(A3, A4);
+end;
+
+theorem Th34:
+for F being Field holds F is Noetherian
+proof let F be Field; let I be Ideal of F;
+   per cases by IDEAL_1:22;
+   suppose A1: I = {0.F};
+    reconsider s0F = {0.F} as finite non empty Subset of F;
+       {0.F} = s0F-Ideal by IDEAL_1:47;
+    hence I is finitely_generated by A1;
+   suppose A2: I = the carrier of F;
+    reconsider s1F = {1_ F} as finite non empty Subset of F;
+       the carrier of F = s1F-Ideal by IDEAL_1:51;
+    hence I is finitely_generated by A2;
+end;
+
+theorem
+    for F being Field, n being Nat holds Polynom-Ring (n,F) is Noetherian
+proof let F be Field, n be Nat; F is Noetherian by Th34;
+ hence Polynom-Ring (n,F) is Noetherian by Th33;
+end;
+
+theorem
+  for R being Abelian right_zeroed add-associative right_complementable
+            well-unital distributive associative commutative
+            non trivial (non empty doubleLoopStr),
+    X be infinite Ordinal
+  holds Polynom-Ring (X,R) is non Noetherian
+proof let R be Abelian right_zeroed add-associative right_complementable
+         well-unital distributive associative commutative
+         non trivial (non empty doubleLoopStr), X be infinite Ordinal such that
+A1: Polynom-Ring (X,R) is Noetherian;
+set tcR = the carrier of R; set tcPR = the carrier of Polynom-Ring(X,R);
+A2: NAT c= X by CARD_4:8; set S = {1_1(n, R) where n is Element of X : n in NAT
+};
+A3: S c= tcPR proof let x be set; assume x in S;
+     then consider n being Element of X such that
+    A4: x = 1_1(n,R) & n in NAT;
+    thus x in tcPR by A4,POLYNOM1:def 27;
+   end; 0 in NAT; then reconsider 0X = 0 as Element of X by A2;
+     1_1(0X,R) in S; then reconsider S as non empty Subset of tcPR by A3;
+   consider C being non empty finite Subset of tcPR such that
+A5: C c= S and
+A6: C-Ideal = S-Ideal by A1,IDEAL_1:99;
+deffunc F(set)=$1;
+deffunc G(Element of X)=1_1($1,R);
+   set CN = { F(n) where n is Element of X : G(n) in C };
+A7: C is finite;
+A8: for d1,d2 being Element of X st G(d1)=G(d2) holds d1=d2 by Th14;
+A9: CN is finite from FinMono(A7,A8);
+consider c being Element of C;
+      c in C; then c in S by A5; then consider cn being Element of X such that
+A10: c = 1_1(cn,R) & cn in NAT; reconsider cn as Nat by A10;
+A11: cn in CN by A10;
+     CN c= NAT proof let x be set; assume x in CN;
+       then consider n being Element of X such that
+   A12: x = n & 1_1(n,R) in C; 1_1(n,R) in S by A5,A12;
+       then consider m being Element of X such that
+   A13: 1_1(n,R) = 1_1(m,R) & m in NAT;
+    thus x in NAT by A12,A13,Th14;
+   end; then reconsider CN as non empty finite Subset of NAT by A9,A11;
+   reconsider mm = max CN as Nat by ORDINAL2:def 21;
+   reconsider m1 = mm+1 as Nat;
+     m1 in NAT; then reconsider m2 = m1 as Element of X by A2;
+  1_1(m2,R) in S & S c= S-Ideal by IDEAL_1:def 15;
+   then consider lc being LinearCombination of C such that
+A14: 1_1(m2,R) = Sum lc by A6,IDEAL_1:60;
+A15: 1.R = 1_ R by POLYNOM2:3;
+   reconsider ev = (X --> 0.R)+*(m2,1_ R) as Function of X, R;
+     dom (X --> 0.R) = X by FUNCOP_1:19;
+then A16: ev.m2 = 1_ R by FUNCT_7:33;
+A17: Support(1_1(m2,R)) = {UnitBag m2} by Th13;
+A18: Polynom-Evaluation(X, R, ev).1_1(m2,R)
+    = eval(1_1(m2,R), ev) by POLYNOM2:def 5
+   .= (1_1(m2,R).UnitBag m2)*eval(UnitBag m2,ev) by A17,POLYNOM2:21
+   .= 1.R *eval(UnitBag m2,ev) by Th12 .= 1.R * ev.m2 by Th11
+   .= 1_ R by A16,GROUP_1:def 4;
+    tcR c= tcR; then reconsider cR = the carrier of R as non empty Subset of
+tcR;
+    consider E be FinSequence of [:tcPR, tcPR, tcPR:] such that
+A19: E represents lc by IDEAL_1:35; set P = Polynom-Evaluation(X, R, ev);
+deffunc F(Nat)=(P.(E/.$1)`1)*(P.(E/.$1)`2)*(P.(E/.$1)`3);
+    consider LC being FinSequence of the carrier of R such that
+A20: len LC = len lc and
+A21: for k being Nat st k in Seg len lc holds
+      LC.k = F(k) from SeqLambdaD;
+      now let i being set; assume
+    A22: i in dom LC; then reconsider k = i as Nat;
+    A23: k in Seg len lc by A20,A22,FINSEQ_1:def 3;
+   reconsider u=(P.(E/.k)`1), v=(P.(E/.k)`3) as Element of R;
+        reconsider a = (P.(E/.k)`2) as Element of cR;
+        take u, v, a;
+     thus LC/.i = LC.k by A22,FINSEQ_4:def 4 .= u*a*v by A21,A23;
+    end; then reconsider LC as LinearCombination of cR by IDEAL_1:def 9;
+A24: now let i be Nat; assume
+    A25: i in dom LC;
+    then A26: i in dom lc by A20,FINSEQ_3:31;
+    A27: i in Seg len lc by A20,A25,FINSEQ_1:def 3;
+        reconsider y = (E/.i)`2 as Element of C by A19,A26,IDEAL_1:def 12;
+          y in C; then y in S by A5; then consider n being Element of X such
+that
+    A28: y = 1_1(n, R) & n in NAT;
+    A29: n in CN by A28;
+      now assume m2 in CN; then (max CN)+1 <= max CN by FRECHET2:51;
+           hence contradiction by REAL_2:174; end;
+    then A30: ev.n = (X --> 0.R).n by A29,FUNCT_7:34 .= 0.R by FUNCOP_1:13;
+    A31: Support(1_1(n,R)) = {UnitBag n} by Th13;
+    A32:  P.1_1(n,R) = eval(1_1(n,R), ev) by POLYNOM2:def 5
+     .= (1_1(n,R).UnitBag n)*eval(UnitBag n,ev) by A31,POLYNOM2:21
+     .= 1.R *eval(UnitBag n,ev) by Th12 .= 1.R * ev.n by Th11
+     .= 0.R by A30,VECTSP_1:36;
+     thus LC.i = (P.(E/.i)`1)*(P.(E/.i)`2)*(P.(E/.i)`3) by A21,A27
+               .= 0.R*(P.(E/.i)`3) by A28,A32,VECTSP_1:36 .= 0.R by VECTSP_1:36
+;
+    end;
+      now let k be set; assume A33: k in dom LC; then reconsider i = k as Nat;
+          i in Seg len lc by A20,A33,FINSEQ_1:def 3;
+     hence LC.k = (P.(E/.k)`1)*(P.(E/.k)`2)*(P.(E/.k)`3) by A21;
+    end; then P.(Sum lc) = Sum LC by A19,A20,Th24 .=0.R by A24,POLYNOM3:1;
+ hence contradiction by A14,A15,A18,POLYNOM1:27;
+end;
+

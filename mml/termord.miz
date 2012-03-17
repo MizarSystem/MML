@@ -1,0 +1,2298 @@
+:: Term Orders
+::  by Christoph Schwarzweller
+::
+:: Received December 20, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary POLYNOM1, POLYNOM7, BOOLE, FUNCT_1, TRIANG_1, FINSEQ_1, VECTSP_1,
+      RLVECT_1, ORDINAL1, LATTICES, ALGSEQ_1, ANPROJ_1, CAT_3, GROUP_1,
+      VECTSP_2, RELAT_1, RELAT_2, REALSET1, ALGSTR_1, CARD_1, ARYTM_1, MCART_1,
+      FINSEQ_4, ARYTM_3, SQUARE_1, PBOOLE, ORDERS_1, ORDERS_2, FINSET_1,
+      BAGORDER, WELLORD1, DICKSON, TERMORD;
+ notation NUMBERS, XCMPLX_0, XREAL_0, TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0,
+      RELAT_1, MONOID_0, CARD_1, BAGORDER, RELSET_1, FUNCT_1, FINSET_1,
+      ORDINAL1, NAT_1, ALGSTR_1, RLVECT_1, PBOOLE, FINSEQ_1, MCART_1, TRIANG_1,
+      REALSET1, VECTSP_1, VECTSP_2, RELAT_2, POLYNOM1, BINARITH, ORDERS_1,
+      ORDERS_2, FINSEQ_4, WELLORD1, POLYNOM7;
+ constructors ALGSTR_2, POLYNOM7, MONOID_0, BINOM, BAGORDER, MCART_1, TRIANG_1,
+      ORDERS_2, MEMBERED;
+ clusters XREAL_0, STRUCT_0, FINSET_1, RELSET_1, FINSEQ_1, CARD_1, ALGSTR_1,
+      POLYNOM1, POLYNOM2, POLYNOM7, BAGORDER, VECTSP_1, NAT_1, MEMBERED,
+      NUMBERS, ORDINAL2;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ theorems TARSKI, FINSEQ_1, FUNCT_1, FUNCT_2, RELAT_1, POLYNOM1, PBOOLE, NAT_1,
+      REAL_1, FINSEQ_4, BINOM, TRIANG_1, RLVECT_1, VECTSP_2, FINSET_1,
+      POLYNOM7, POLYNOM2, NAT_2, RELAT_2, CARD_1, CARD_2, ORDERS_1, MATRLIN,
+      SEQM_3, XBOOLE_0, XBOOLE_1, BINARITH, ORDERS_2, MCART_1, BAGORDER,
+      WELLORD1, VECTSP_1, XCMPLX_0, XCMPLX_1;
+ schemes BINOM;
+
+begin :: Preliminaries
+
+definition
+cluster non trivial LoopStr;
+existence
+ proof
+ consider R being Field;
+ take R;
+ thus thesis;
+ end;
+end;
+
+definition
+cluster add-associative right_complementable right_zeroed
+        (non trivial LoopStr);
+existence
+ proof
+ consider F being Field;
+ take F;
+ thus thesis;
+ end;
+end;
+
+definition
+let X be set,
+    b be bag of X;
+attr b is non-zero means
+    b <> EmptyBag X;
+end;
+
+theorem Th1:
+for X being set,
+    b1,b2 being bag of X
+holds b1 divides b2 iff ex b being bag of X st b2 = b1 + b
+proof
+let n be set,
+    b1,b2 be bag of n;
+  now assume A1: b1 divides b2;
+   A2: now let k be set;
+        b1.k <= b2.k by A1,POLYNOM1:def 13;
+      then b1.k - b1.k <= b2.k - b1.k by REAL_1:49;
+      hence 0 <= b2.k - b1.k by XCMPLX_1:14;
+      end;
+     now per cases;
+   case A3: n = {};
+     then b1 + EmptyBag n = EmptyBag n by POLYNOM7:3 .= b2 by A3,POLYNOM7:3;
+     hence ex b being bag of n st b2 = b1 + b;
+   case n <> {};
+     then reconsider n' = n as non empty set;
+     set b = { [k,b2.k -' b1.k] where k is Element of n' : not contradiction};
+     A4: now let x be set;
+        assume x in b;
+        then consider k being Element of n' such that
+        A5: x = [k,b2.k -' b1.k];
+        thus ex y,z being set st x = [y,z] by A5;
+        end;
+       now let x,y1,y2 be set;
+        assume A6: [x,y1] in b & [x,y2] in b;
+        then consider k being Element of n' such that
+        A7: [x,y1] = [k,b2.k -' b1.k];
+        consider k' being Element of n' such that
+        A8: [x,y2] = [k',b2.k' -' b1.k'] by A6;
+          k = [x,y1]`1 by A7,MCART_1:def 1
+             .= x by MCART_1:def 1
+             .= [x,y2]`1 by MCART_1:def 1
+             .= k' by A8,MCART_1:def 1;
+        hence y1 = [x,y2]`2 by A7,A8,MCART_1:def 2
+               .= y2 by MCART_1:def 2;
+        end;
+     then reconsider b as Function by A4,FUNCT_1:def 1,RELAT_1:def 1;
+     A9: now let x be set;
+         assume x in dom b;
+         then consider y being set such that
+         A10: [x,y] in b by RELAT_1:def 4;
+         consider k being Element of n' such that
+         A11: [x,y] = [k,b2.k -' b1.k] by A10;
+           x = [k,b2.k -' b1.k]`1 by A11,MCART_1:def 1 .= k by MCART_1:def 1;
+         hence x in n';
+         end;
+       now let x be set;
+         assume x in n';
+         then reconsider k = x as Element of n';
+           [k,b2.k -' b1.k] in b;
+         hence x in dom b by RELAT_1:def 4;
+         end;
+     then A12: dom b = n' by A9,TARSKI:2;
+     then reconsider b as ManySortedSet of n' by PBOOLE:def 3;
+       now let x be set;
+        assume x in rng b;
+        then consider y be set such that
+        A13: [y,x] in b by RELAT_1:def 5;
+        consider k being Element of n' such that
+        A14: [y,x] = [k,b2.k -' b1.k] by A13;
+          x = [k,b2.k -' b1.k]`2 by A14,MCART_1:def 2
+         .= b2.k -' b1.k by MCART_1:def 2;
+        hence x in NAT;
+        end;
+     then A15: rng b c= NAT by TARSKI:def 3;
+     A16: now let k be set;
+        assume k in n;
+        then consider u being set such that
+        A17: [k,u] in b by A12,RELAT_1:def 4;
+        consider k' being Element of n' such that
+        A18: [k,u] = [k',b2.k' -' b1.k'] by A17;
+        A19: k = [k',b2.k' -' b1.k']`1 by A18,MCART_1:def 1
+             .= k' by MCART_1:def 1;
+          u = [k',b2.k' -' b1.k']`2 by A18,MCART_1:def 2
+         .= b2.k' -' b1.k' by MCART_1:def 2;
+        hence b.k = b2.k -' b1.k by A17,A19,FUNCT_1:8;
+        end;
+       now let x be set;
+        assume A20: x in support b;
+        then A21: b.x <> 0 by POLYNOM1:def 7;
+        A22: support b c= dom b by POLYNOM1:41;
+          now assume not(x in support b2);
+          then A23: b2.x = 0 by POLYNOM1:def 7;
+            0 <= b1.x by NAT_1:18;
+          then 0 = b2.x-'b1.x by A23,NAT_2:10;
+          hence contradiction by A12,A16,A20,A21,A22;
+          end;
+        hence x in support b2;
+        end;
+     then support b c= support b2 by TARSKI:def 3;
+     then support b is finite by FINSET_1:13;
+     then reconsider b as bag of n by A15,POLYNOM1:def 8,SEQM_3:def 8;
+     take b;
+       now let k be set;
+       assume A24: k in n;
+       A25: 0 <= b2.k - b1.k by A2;
+       thus b1.k + b.k
+               = b1.k + (b2.k -' b1.k) by A16,A24
+              .= b1.k + (b2.k - b1.k) by A25,BINARITH:def 3
+              .= b1.k + (b2.k + -b1.k) by XCMPLX_0:def 8
+              .= (b1.k + - b1.k) + b2.k by XCMPLX_1:1
+              .= (b1.k - b1.k) + b2.k by XCMPLX_0:def 8
+              .= 0 + b2.k by XCMPLX_1:14
+              .= b2.k;
+       end;
+     then b2 = b1 + b by POLYNOM1:37;
+     hence ex b being bag of n st b2 = b1 + b;
+     end;
+   hence ex b being bag of n st b2 = b1 + b;
+   end;
+hence thesis by POLYNOM1:54;
+end;
+
+theorem Th2:
+for n being Ordinal,
+    L being add-associative right_complementable right_zeroed
+            unital distributive (non empty doubleLoopStr),
+    p being Series of n, L
+ holds 0_(n,L) *' p = 0_(n,L)
+proof
+let n be Ordinal,
+    L be add-associative right_complementable right_zeroed
+         unital distributive (non empty doubleLoopStr),
+    p be Series of n, L;
+set Z = 0_(n,L);
+  now let b be Element of Bags n;
+  consider s being FinSequence of the carrier of L such that
+  A1: (Z*'p).b = Sum s and len s = len decomp b and
+  A2: for k being Nat st k in dom s
+      ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*>
+                         & s/.k = Z.b1*p.b2 by POLYNOM1:def 26;
+    now let k be Nat;
+    assume k in dom s;
+    then consider b1, b2 being bag of n such that
+          (decomp b)/.k = <*b1, b2*> and
+    A3: s/.k = Z.b1*p.b2 by A2;
+    thus s/.k = 0.L*p.b2 by A3,POLYNOM1:81 .= 0.L by VECTSP_1:39;
+    end;
+  then Sum s = 0.L by MATRLIN:15;
+  hence (Z*'p).b = Z.b by A1,POLYNOM1:81;
+  end;
+hence 0_(n,L)*'p = 0_(n,L) by FUNCT_2:113;
+end;
+
+definition
+let n be Ordinal,
+    L be add-associative right_complementable right_zeroed
+         unital distributive (non empty doubleLoopStr),
+    m1,m2 be Monomial of n,L;
+cluster m1 *' m2 -> monomial-like;
+coherence
+ proof
+ per cases;
+ suppose Support(m1*'m2) = {};
+   hence thesis by POLYNOM7:6;
+ suppose A1: Support(m1*'m2) <> {};
+     now per cases;
+   case A2: Support(m1) <> {} & Support(m2) <> {};
+   then consider mb1 being bag of n such that
+   A3: Support(m1) = {mb1} by POLYNOM7:6;
+     mb1 in Support m1 by A3,TARSKI:def 1;
+   then A4: m1.mb1 <> 0.L by POLYNOM1:def 9;
+   A5: now let b be bag of n;
+        assume A6: b <> mb1;
+        consider b' being bag of n such that
+        A7: for b being bag of n st b <> b' holds m1.b = 0.L
+            by POLYNOM7:def 4;
+          b' = mb1 by A4,A7;
+        hence m1.b = 0.L by A6,A7;
+        end;
+   consider mb2 being bag of n such that
+   A8: Support(m2) = {mb2} by A2,POLYNOM7:6;
+     mb2 in Support m2 by A8,TARSKI:def 1;
+   then A9: m2.mb2 <> 0.L by POLYNOM1:def 9;
+   A10: now let b be bag of n;
+        assume A11: b <> mb2;
+        consider b' being bag of n such that
+        A12: for b being bag of n st b <> b' holds m2.b = 0.L
+            by POLYNOM7:def 4;
+          b' = mb2 by A9,A12;
+        hence m2.b = 0.L by A11,A12;
+        end;
+   consider b being Element of Support(m1*'m2);
+   A13: b in Support(m1*'m2) by A1;
+   then b is Element of Bags n;
+   then reconsider b as bag of n;
+   consider s being FinSequence of the carrier of L such that
+   A14: (m1*'m2).b = Sum s &
+       len s = len decomp b &
+       for k being Nat st k in dom s
+       ex b1,b2 being bag of n st (decomp b)/.k = <*b1, b2*> &
+                                  s/.k = m1.b1*m2.b2 by POLYNOM1:def 26;
+   A15: dom s = Seg(len decomp b) by A14,FINSEQ_1:def 3
+            .= dom(decomp b) by FINSEQ_1:def 3;
+   A16: now assume A17: b <> mb1 + mb2;
+       A18: now let k be Nat;
+            assume A19: k in dom s;
+            then consider b1,b2 being bag of n such that
+            A20: (decomp b)/.k = <*b1, b2*> & s/.k = m1.b1*m2.b2 by A14;
+            consider b1',b2' being bag of n such that
+            A21: (decomp b)/.k = <*b1',b2'*> & b = b1'+b2'
+                by A15,A19,POLYNOM1:72;
+            A22: b1 = <*b1', b2'*>.1 by A20,A21,FINSEQ_1:61
+               .= b1' by FINSEQ_1:61;
+            A23: b2 = <*b1', b2'*>.2 by A20,A21,FINSEQ_1:61
+              .= b2' by FINSEQ_1:61;
+              now per cases by A17,A21,A22,A23;
+            case b1 <> mb1;
+              then m1.b1 = 0.L by A5;
+              hence m1.b1*m2.b2 = 0.L by BINOM:1;
+            case b2 <> mb2;
+              then m2.b2 = 0.L by A10;
+              hence m1.b1*m2.b2 = 0.L by BINOM:2;
+            end;
+            hence s/.k = 0.L by A20;
+            end;
+         now per cases;
+       case dom s = {};
+         then s = <*>(the carrier of L) by FINSEQ_1:26;
+         hence (m1*'m2).b = 0.L by A14,RLVECT_1:60;
+       case A24: dom s <> {};
+         consider k being Element of dom s;
+         A25: k in dom s by A24;
+           for k' being Nat st k' in dom s & k' <> k holds s/.k' = 0.L by A18;
+         then s/.k = (m1*'m2).b by A14,A25,POLYNOM2:5;
+         hence (m1*'m2).b = 0.L by A18,A25;
+       end;
+       hence contradiction by A13,POLYNOM1:def 9;
+       end;
+     now let b' be bag of n;
+     assume A26: b' <> b;
+     consider s being FinSequence of the carrier of L such that
+     A27: (m1*'m2).b' = Sum s &
+         len s = len decomp b' &
+         for k being Nat st k in dom s
+         ex b1, b2 being bag of n st (decomp b')/.k = <*b1, b2*> &
+                                     s/.k = m1.b1*m2.b2 by POLYNOM1:def 26;
+     A28: dom s = Seg(len decomp b') by A27,FINSEQ_1:def 3
+              .= dom(decomp b') by FINSEQ_1:def 3;
+     A29: now let k be Nat;
+         assume A30: k in dom s;
+         then consider b1, b2 being bag of n such that
+         A31: (decomp b')/.k = <*b1,b2*> & s/.k = m1.b1*m2.b2 by A27;
+         consider b1',b2' being bag of n such that
+         A32: (decomp b')/.k = <*b1',b2'*> & b' = b1'+b2' by A28,A30,POLYNOM1:
+72;
+         A33: b1 = <*b1', b2'*>.1 by A31,A32,FINSEQ_1:61
+               .= b1' by FINSEQ_1:61;
+         A34: b2 = <*b1', b2'*>.2 by A31,A32,FINSEQ_1:61
+               .= b2' by FINSEQ_1:61;
+           now per cases by A16,A26,A32,A33,A34;
+         case b1 <> mb1;
+           then m1.b1 = 0.L by A5;
+           hence m1.b1*m2.b2 = 0.L by BINOM:1;
+         case b2 <> mb2;
+           then m2.b2 = 0.L by A10;
+           hence m1.b1*m2.b2 = 0.L by BINOM:2;
+         end;
+         hence s/.k = 0.L by A31;
+         end;
+       now per cases;
+     case dom s = {};
+       then s = <*>(the carrier of L) by FINSEQ_1:26;
+       hence (m1*'m2).b' = 0.L by A27,RLVECT_1:60;
+     case A35: dom s <> {};
+       consider k being Element of dom s;
+       A36: k in dom s by A35;
+         for k' being Nat st k' in dom s & k' <> k holds s/.k' = 0.L by A29;
+       then s/.k = (m1*'m2).b' by A27,A36,POLYNOM2:5;
+       hence (m1*'m2).b' = 0.L by A29,A36;
+      end;
+     hence (m1*'m2).b' = 0.L;
+     end;
+   hence thesis by POLYNOM7:def 4;
+   case A37: Support(m1) = {} or Support(m2) = {};
+     now per cases by A37;
+   case Support(m1) = {};
+     then m1 = 0_(n,L) by POLYNOM7:1;
+     hence thesis by Th2;
+   case Support(m2) = {};
+     then m2 = 0_(n,L) by POLYNOM7:1;
+     hence thesis by POLYNOM1:87;
+   end;
+   hence thesis;
+   end;
+ hence thesis;
+ end;
+end;
+
+definition
+let n be Ordinal,
+    L be add-associative right_complementable
+         right_zeroed distributive (non empty doubleLoopStr),
+    c1,c2 be ConstPoly of n,L;
+cluster c1 *' c2 -> Constant;
+coherence
+ proof
+ set p = c1 *' c2;
+   now let b be bag of n;
+   assume A1: b <> EmptyBag n;
+   consider s being FinSequence of the carrier of L such that
+   A2: p.b = Sum s &
+      len s = len decomp b &
+      for k being Nat st k in dom s
+      ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*> &
+                                  s/.k = c1.b1*c2.b2 by POLYNOM1:def 26;
+
+   A3: dom s = Seg(len decomp b) by A2,FINSEQ_1:def 3
+            .= dom(decomp b) by FINSEQ_1:def 3;
+   A4: now let k be Nat;
+       assume A5: k in dom s;
+       then consider b1, b2 being bag of n such that
+       A6: (decomp b)/.k = <*b1,b2*> & s/.k = c1.b1*c2.b2 by A2;
+       consider b1',b2' being bag of n such that
+       A7: (decomp b)/.k = <*b1',b2'*> & b = b1'+b2' by A3,A5,POLYNOM1:72;
+       A8: b1 = <*b1', b2'*>.1 by A6,A7,FINSEQ_1:61
+             .= b1' by FINSEQ_1:61;
+         b2 = <*b1', b2'*>.2 by A6,A7,FINSEQ_1:61
+         .= b2' by FINSEQ_1:61;
+       then A9: b1 <> EmptyBag n or b2 <> EmptyBag n by A1,A7,A8,POLYNOM1:57;
+         now per cases by A9,POLYNOM7:def 8;
+       case c1.b1 = 0.L;
+         hence s/.k = 0.L by A6,BINOM:1;
+       case c2.b2 = 0.L;
+         hence s/.k = 0.L by A6,BINOM:2;
+       end;
+       hence s/.k = 0.L;
+       end;
+     now per cases;
+   case dom s = {};
+     then s = <*>(the carrier of L) by FINSEQ_1:26;
+     hence p.b = 0.L by A2,RLVECT_1:60;
+   case A10: dom s <> {};
+     consider k being Element of dom s;
+     A11: k in dom s by A10;
+       for k' being Nat st k' in dom s & k' <> k holds s/.k' = 0.L by A4;
+     then Sum s = s/.k by A11,POLYNOM2:5;
+     hence p.b = 0.L by A2,A4,A11;
+   end;
+   hence p.b = 0.L;
+   end;
+ hence thesis by POLYNOM7:def 8;
+ end;
+end;
+
+theorem Th3:
+for n being Ordinal,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    b,b' being bag of n,
+    a,a' being non-zero Element of L
+holds Monom(a * a',b + b') = Monom(a,b) *' Monom(a',b')
+proof
+let n be Ordinal,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    b,b' be bag of n,
+    a,a' be non-zero Element of L;
+set m1 = Monom(a,b), m2 = Monom(a',b');
+set m = Monom(a * a',b + b');
+set m3 = m1 *' m2;
+A1: a <> 0.L & a' <> 0.L by RLVECT_1:def 13;
+then a * a' <> 0.L by VECTSP_2:def 5;
+then A2: a * a' is non-zero by RLVECT_1:def 13;
+A3: m1.b = m1.(term(m1)) by POLYNOM7:10
+        .= coefficient(m1) by POLYNOM7:def 7
+        .= a by POLYNOM7:9;
+A4: m2.b' = m2.(term(m2)) by POLYNOM7:10
+          .= coefficient(m2) by POLYNOM7:def 7
+          .= a' by POLYNOM7:9;
+A5: now let u be bag of n;
+   assume A6: u <> b;
+   consider v being bag of n such that A7:
+   for b' being bag of n st b' <> v holds m1.b' = 0.L by POLYNOM7:def 4;
+   assume m1.u <> 0.L;
+   then A8: u = v by A7;
+     m1.b <> 0.L by A3,RLVECT_1:def 13;
+   hence contradiction by A6,A7,A8;
+   end;
+A9: now let u be bag of n;
+    assume A10: u <> b';
+    consider v being bag of n such that A11:
+    for b' being bag of n st b' <> v holds m2.b' = 0.L by POLYNOM7:def 4;
+    assume m2.u <> 0.L;
+    then A12: u = v by A11;
+      m2.b' <> 0.L by A4,RLVECT_1:def 13;
+    hence contradiction by A10,A11,A12;
+    end;
+consider s being FinSequence of the carrier of L such that
+A13: m3.(b+b') = Sum s &
+   len s = len decomp(b+b') &
+   for k being Nat st k in dom s
+    ex b1, b2 being bag of n st (decomp(b+b'))/.k = <*b1, b2*> &
+                                s/.k = m1.b1*m2.b2 by POLYNOM1:def 26;
+A14: dom s = Seg(len decomp(b+b')) by A13,FINSEQ_1:def 3
+        .= dom(decomp(b+b')) by FINSEQ_1:def 3;
+set u = b+b';
+consider k' being Nat such that
+A15: k' in dom decomp u & (decomp u)/.k' = <*b,b'*> by POLYNOM1:73;
+consider b1,b2 being bag of n such that
+A16: (decomp u)/.k' = <*b1, b2*> & s/.k' = m1.b1*m2.b2 by A13,A14,A15;
+A17: b1 = <*b,b'*>.1 by A15,A16,FINSEQ_1:61
+      .= b by FINSEQ_1:61;
+A18: b2 = <*b,b'*>.2 by A15,A16,FINSEQ_1:61
+      .= b' by FINSEQ_1:61;
+A19:now let k be Nat;
+   assume A20: k in dom s & k <> k';
+   then consider b1,b2 being bag of n such that
+   A21: (decomp u)/.k = <*b1, b2*> & s/.k = m1.b1*m2.b2 by A13;
+   A22: now assume A23: b1 = b & b2 = b';
+         (decomp u).k = (decomp u)/.k by A14,A20,FINSEQ_4:def 4
+                   .= (decomp u).k' by A15,A21,A23,FINSEQ_4:def 4;
+       hence contradiction by A14,A15,A20,FUNCT_1:def 8;
+       end;
+     now per cases by A22;
+   case b1 <> b;
+     then m1.b1 = 0.L by A5;
+     hence m1.b1 * m2.b2 = 0.L by BINOM:1;
+   case b2 <> b';
+     then m2.b2 = 0.L by A9;
+     hence m1.b1*m2.b2 = 0.L by BINOM:2;
+   end;
+   hence s/.k = 0.L by A21;
+   end;
+then Sum s = s/.k' by A14,A15,POLYNOM2:5;
+then A24: m3.(b+b') <> 0.L by A1,A3,A4,A13,A16,A17,A18,VECTSP_2:def 5;
+then A25: term(m3) = b + b' by POLYNOM7:def 6
+           .= term(m) by A2,POLYNOM7:10;
+A26: coefficient(m3) = m3.(term(m3)) by POLYNOM7:def 7
+                  .= m3.(b+b') by A24,POLYNOM7:def 6
+                  .= a * a' by A3,A4,A13,A14,A15,A16,A17,A18,A19,POLYNOM2:5
+                  .= coefficient(m) by POLYNOM7:9;
+thus m = Monom(coefficient(m),term(m)) by POLYNOM7:11
+      .= m3 by A25,A26,POLYNOM7:11;
+end;
+
+theorem
+  for n being Ordinal,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    a,a' being Element of L
+holds (a * a') _(n,L) = (a _(n,L)) *' (a' _(n,L))
+proof
+let n be Ordinal,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    a,a' be Element of L;
+per cases;
+suppose A1: a is non-zero & a' is non-zero;
+    term((a*a') _(n,L)) = EmptyBag n & coefficient((a*a') _(n,L)) = a*a'
+     by POLYNOM7:23;
+  then A2: (a * a') _(n,L) = Monom(a*a',EmptyBag n) by POLYNOM7:11;
+    term(a _(n,L)) = EmptyBag n & coefficient(a _(n,L)) = a
+     by POLYNOM7:23;
+  then A3: a _(n,L) = Monom(a,EmptyBag n) by POLYNOM7:11;
+    term(a' _(n,L)) = EmptyBag n & coefficient(a' _(n,L)) = a'
+     by POLYNOM7:23;
+  then A4: a' _(n,L) = Monom(a',EmptyBag n) by POLYNOM7:11;
+    EmptyBag n + EmptyBag n = EmptyBag n by POLYNOM1:57;
+  hence thesis by A1,A2,A3,A4,Th3;
+suppose A5: not(a is non-zero & a' is non-zero);
+    now per cases by A5,RLVECT_1:def 13;
+  case A6: a = 0.L;
+    then a * a' = 0.L by BINOM:1;
+    then A7: (a * a') _(n,L) = 0_(n,L) by POLYNOM7:19;
+      a _(n,L) = 0_(n,L) by A6,POLYNOM7:19;
+    hence thesis by A7,Th2;
+  case A8: a' = 0.L;
+    then a * a' = 0.L by BINOM:2;
+    then A9: (a * a') _(n,L) = 0_(n,L) by POLYNOM7:19;
+      a' _(n,L) = 0_(n,L) by A8,POLYNOM7:19;
+    hence thesis by A9,POLYNOM1:87;
+  end;
+  hence thesis;
+end;
+
+begin :: Term Orders
+
+Lm1:
+for n being Ordinal,
+    T being TermOrder of n,
+    b being set st b in field T
+holds b is bag of n
+proof
+let n be Ordinal,
+    T be TermOrder of n,
+    b be set;
+assume b in field T;
+then A1: b in dom T \/ rng T by RELAT_1:def 6;
+per cases by A1,XBOOLE_0:def 2;
+suppose b in dom T;
+  then b is Element of Bags n;
+  hence thesis;
+suppose b in rng T;
+  then b is Element of Bags n;
+  hence thesis;
+end;
+
+definition
+let n be Ordinal;
+cluster admissible connected TermOrder of n;
+existence
+ proof
+ set T = LexOrder n;
+ take T;
+   now let x,y be set;
+   assume x in field T & y in field T & x <> y;
+   then reconsider b1 = x, b2 = y as bag of n by Lm1;
+     b1 <=' b2 or b2 <=' b1 by POLYNOM1:49;
+   then [b1,b2] in BagOrder n or [b2,b1] in BagOrder n by POLYNOM1:def 16;
+   hence [x,y] in T or [y,x] in T;
+   end;
+ then T is_connected_in field T by RELAT_2:def 6;
+ hence thesis by RELAT_2:def 14;
+ end;
+end;
+
+definition
+::: theorem 5.5 (ii), p. 190
+let n be Nat;
+cluster -> well_founded (admissible TermOrder of n);
+coherence
+ proof
+ let T be admissible TermOrder of n;
+   T is well-ordering by BAGORDER:35;
+ hence thesis by WELLORD1:def 4;
+ end;
+end;
+
+definition
+let n be Ordinal,
+    T be TermOrder of n,
+    b,b' be bag of n;
+pred b <= b',T means :Def2:
+  [b,b'] in T;
+end;
+
+definition
+let n be Ordinal,
+    T be TermOrder of n,
+    b,b' be bag of n;
+pred b < b',T means :Def3:
+  b <= b',T & b <> b';
+end;
+
+definition
+let n be Ordinal,
+    T be TermOrder of n,
+    b1,b2 be bag of n;
+func min(b1,b2,T) -> bag of n equals :Def4:
+ b1 if b1 <= b2,T otherwise b2;
+correctness;
+func max(b1,b2,T) -> bag of n equals :Def5:
+ b1 if b2 <= b1,T otherwise b2;
+correctness;
+end;
+
+Lm2:
+for n being Ordinal,
+    T being TermOrder of n,
+    b being bag of n
+holds b <= b,T
+proof
+let n be Ordinal,
+    T be TermOrder of n,
+    b be bag of n;
+  field T = Bags n by ORDERS_1:97;
+  then
+A1: T is_reflexive_in Bags n by RELAT_2:def 9;
+  b is Element of Bags n by POLYNOM1:def 14;
+then [b,b] in T by A1,RELAT_2:def 1;
+hence thesis by Def2;
+end;
+
+Lm3:
+for n being Ordinal,
+    T being TermOrder of n,
+    b1,b2 being bag of n
+st b1 <= b2,T & b2 <= b1,T holds b1 = b2
+proof
+let n be Ordinal,
+    T be TermOrder of n,
+    b1,b2 be bag of n;
+assume b1 <= b2,T & b2 <= b1,T;
+then A1: [b1,b2] in T & [b2,b1] in T by Def2;
+  field T = Bags n by ORDERS_1:97;
+  then
+A2: T is_antisymmetric_in Bags n by RELAT_2:def 12;
+  b1 is Element of Bags n & b2 is Element of Bags n by POLYNOM1:def 14;
+hence thesis by A1,A2,RELAT_2:def 4;
+end;
+
+Lm4:
+for n being Ordinal,
+    T being TermOrder of n,
+    b being bag of n
+holds b in field T
+proof
+let n be Ordinal,
+    T be TermOrder of n,
+    b be bag of n;
+  field T = Bags n by ORDERS_1:97;
+  then
+A1: T is_reflexive_in Bags n by RELAT_2:def 9;
+  b is Element of Bags n by POLYNOM1:def 14;
+then [b,b] in T by A1,RELAT_2:def 1;
+hence thesis by RELAT_1:30;
+end;
+
+theorem Th5:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    b1,b2 being bag of n
+holds b1 <= b2,T iff not(b2 < b1,T)
+proof
+let n be Ordinal,
+    T be connected TermOrder of n,
+    b1,b2 be bag of n;
+A1: T is_connected_in field T by RELAT_2:def 14;
+per cases;
+suppose b1 = b2;
+hence thesis by Def3,Lm2;
+suppose A2: b1 <> b2;
+A3: b1 <= b2,T implies not(b2 < b1,T)
+   proof
+   assume A4: b1 <= b2,T;
+   assume b2 < b1,T;
+   then b2 <= b1,T & b1 <> b2 by Def3;
+   hence thesis by A4,Lm3;
+   end;
+  not(b2 < b1,T) implies b1 <= b2,T
+   proof
+   assume A5: not(b2 < b1,T);
+     now per cases by A5,Def3;
+   case not(b2 <= b1,T);
+     then A6: not([b2,b1] in T) by Def2;
+       b1 in field T & b2 in field T by Lm4;
+     then [b1,b2] in T by A1,A2,A6,RELAT_2:def 6;
+     hence thesis by Def2;
+   case b1 = b2;
+     hence thesis by A2;
+   end;
+   hence thesis;
+   end;
+hence thesis by A3;
+end;
+
+Lm5:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    b1,b2 being bag of n
+holds b1 <= b2,T or b2 <= b1,T
+proof
+let n be Ordinal,
+    T be connected TermOrder of n,
+    b1,b2 be bag of n;
+A1: T is_connected_in field T by RELAT_2:def 14;
+per cases;
+suppose A2: b1 = b2;
+  field T = Bags n by ORDERS_1:97;
+  then
+   A3: T is_reflexive_in Bags n by RELAT_2:def 9;
+     b1 is Element of Bags n & b2 is Element of Bags n by POLYNOM1:def 14;
+   then [b1,b2] in T by A2,A3,RELAT_2:def 1;
+   hence thesis by Def2;
+suppose A4: b1 <> b2;
+   assume not(b1 <= b2,T);
+   then A5: not([b1,b2] in T) by Def2;
+     b1 in field T & b2 in field T by Lm4;
+   then [b2,b1] in T by A1,A4,A5,RELAT_2:def 6;
+   hence thesis by Def2;
+end;
+
+theorem
+  for n being Ordinal,
+    T being TermOrder of n,
+    b being bag of n
+holds b <= b,T by Lm2;
+
+theorem
+  for n being Ordinal,
+    T being TermOrder of n,
+    b1,b2 being bag of n
+st b1 <= b2,T & b2 <= b1,T holds b1 = b2 by Lm3;
+
+theorem Th8:
+for n being Ordinal,
+    T being TermOrder of n,
+    b1,b2,b3 being bag of n
+st b1 <= b2,T & b2 <= b3,T holds b1 <= b3,T
+proof
+let n be Ordinal,
+    T be TermOrder of n,
+    b1,b2,b3 be bag of n;
+assume b1 <= b2,T & b2 <= b3,T;
+then A1: [b1,b2] in T & [b2,b3] in T by Def2;
+  field T = Bags n by ORDERS_1:97;
+  then
+A2: T is_transitive_in Bags n by RELAT_2:def 16;
+  b1 is Element of Bags n & b2 is Element of Bags n &
+b3 is Element of Bags n by POLYNOM1:def 14;
+then [b1,b3] in T by A1,A2,RELAT_2:def 8;
+hence thesis by Def2;
+end;
+
+theorem Th9:
+for n being Ordinal,
+    T being admissible TermOrder of n,
+    b being bag of n
+holds EmptyBag n <= b,T
+proof
+let n be Ordinal,
+    T be admissible TermOrder of n,
+    b be bag of n;
+  [EmptyBag n,b] in T by BAGORDER:def 7;
+hence thesis by Def2;
+end;
+
+theorem
+  for n being Ordinal,
+    T being admissible TermOrder of n,
+    b1,b2 being bag of n
+holds b1 divides b2 implies b1 <= b2,T
+proof
+let n be Ordinal,
+    T be admissible TermOrder of n,
+    b1,b2 be bag of n;
+assume b1 divides b2;
+then consider b3 being bag of n such that
+A1: b2 = b1 + b3 by Th1;
+  EmptyBag n <= b3,T by Th9;
+then [EmptyBag n,b3] in T by Def2;
+then [EmptyBag n + b1,b2] in T by A1,BAGORDER:def 7;
+then [b1,b2] in T by POLYNOM1:57;
+hence thesis by Def2;
+end;
+
+theorem Th11:
+for n being Ordinal,
+    T being TermOrder of n,
+    b1,b2 being bag of n
+holds min(b1,b2,T) = b1 or min(b1,b2,T) = b2
+proof
+let n be Ordinal,
+    T be TermOrder of n,
+    b1,b2 be bag of n;
+assume A1: min(b1,b2,T) <> b1;
+  now per cases by A1,Def4;
+case not(b1 <= b2,T);
+  hence min(b1,b2,T) = b2 by Def4;
+case b1 = b2;
+  then b1 <= b2,T by Lm2;
+  hence contradiction by A1,Def4;
+end;
+hence thesis;
+end;
+
+theorem Th12:
+for n being Ordinal,
+    T being TermOrder of n,
+    b1,b2 being bag of n
+holds max(b1,b2,T) = b1 or max(b1,b2,T) = b2
+proof
+let n be Ordinal,
+    T be TermOrder of n,
+    b1,b2 be bag of n;
+assume A1: max(b1,b2,T) <> b1;
+  now per cases by A1,Def5;
+case not(b2 <= b1,T);
+  hence max(b1,b2,T) = b2 by Def5;
+case b1 = b2;
+  then b2 <= b1,T by Lm2;
+  hence contradiction by A1,Def5;
+end;
+hence thesis;
+end;
+
+Lm6:
+for n being Ordinal,
+    T being TermOrder of n,
+    b being bag of n
+holds min(b,b,T) = b & max(b,b,T) = b
+proof
+let n being Ordinal,
+    T being TermOrder of n,
+    b being bag of n;
+A1: b <= b,T by Lm2;
+hence min(b,b,T) = b by Def4;
+thus max(b,b,T) = b by A1,Def5;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    b1,b2 being bag of n
+holds min(b1,b2,T) <= b1,T & min(b1,b2,T) <= b2,T
+proof
+let n be Ordinal,
+    T be connected TermOrder of n,
+    b1,b2 be bag of n;
+per cases by Lm5;
+suppose A1: b1 <= b2,T;
+  then min(b1,b2,T) = b1 by Def4;
+  hence thesis by A1,Lm2;
+suppose A2: b2 <= b1,T;
+    now per cases;
+  case A3: b1 = b2;
+    then min(b1,b2,T) = b1 by Lm6;
+    hence thesis by A3,Lm2;
+  case b1 <> b2;
+    then b2 < b1,T by A2,Def3;
+    then not(b1 <= b2,T) by Th5;
+    then min(b1,b2,T) = b2 by Def4;
+    hence thesis by A2,Lm2;
+  end;
+  hence thesis;
+end;
+
+theorem Th14:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    b1,b2 being bag of n
+holds b1 <= max(b1,b2,T),T & b2 <= max(b1,b2,T),T
+proof
+let n be Ordinal,
+    T be connected TermOrder of n,
+    b1,b2 be bag of n;
+per cases by Lm5;
+suppose A1: b2 <= b1,T;
+  then max(b1,b2,T) = b1 by Def5;
+  hence thesis by A1,Lm2;
+suppose A2: b1 <= b2,T;
+    now per cases;
+  case A3: b1 = b2;
+    then max(b1,b2,T) = b1 by Lm6;
+    hence thesis by A3,Lm2;
+  case b1 <> b2;
+    then b1 < b2,T by A2,Def3;
+    then not(b2 <= b1,T) by Th5;
+    then max(b1,b2,T) = b2 by Def5;
+    hence thesis by A2,Lm2;
+  end;
+  hence thesis;
+end;
+
+theorem Th15:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    b1,b2 being bag of n
+holds min(b1,b2,T) = min(b2,b1,T) & max(b1,b2,T) = max(b2,b1,T)
+proof
+let n being Ordinal,
+    T being connected TermOrder of n,
+    b1,b2 being bag of n;
+  now per cases;
+case A1: min(b1,b2,T) = b1;
+    now per cases by A1,Def4;
+  case A2: b1 <= b2,T;
+      now per cases;
+    case b1 = b2;
+      hence min(b2,b1,T) = min(b1,b2,T);
+    case b1 <> b2;
+      then not(b2 <= b1,T) by A2,Lm3;
+      hence min(b2,b1,T) = min(b1,b2,T) by A1,Def4;
+    end;
+    hence min(b1,b2,T) = min(b2,b1,T);
+  case b1 = b2;
+    hence min(b2,b1,T) = min(b1,b2,T);
+  end;
+  hence min(b1,b2,T) = min(b2,b1,T);
+case A3: min(b1,b2,T) <> b1;
+  A4: now assume not(b2 <= b1,T);
+     then b1 <= b2,T by Lm5;
+     hence contradiction by A3,Def4;
+     end;
+  thus min(b1,b2,T) = b2 by A3,Th11 .= min(b2,b1,T) by A4,Def4;
+  end;
+hence min(b1,b2,T) = min(b2,b1,T);
+  now per cases;
+case A5: max(b1,b2,T) = b1;
+    now per cases by A5,Def5;
+  case A6: b2 <= b1,T;
+      now per cases;
+    case b1 = b2;
+      hence max(b2,b1,T) = max(b1,b2,T);
+    case b1 <> b2;
+      then not(b1 <= b2,T) by A6,Lm3;
+      hence max(b2,b1,T) = max(b1,b2,T) by A5,Def5;
+    end;
+    hence max(b1,b2,T) = max(b2,b1,T);
+  case b1 = b2;
+    hence max(b2,b1,T) = max(b1,b2,T);
+  end;
+  hence max(b1,b2,T) = max(b2,b1,T);
+case A7: max(b1,b2,T) <> b1;
+    now
+      now per cases by Lm5;
+    case b1 <= b2,T;
+      hence max(b2,b1,T) = b2 by Def5 .= max(b1,b2,T) by A7,Th12;
+    case b2 <= b1,T;
+      hence max(b2,b1,T) = max(b1,b2,T) by A7,Def5;
+    end;
+    hence max(b2,b1,T) = max(b1,b2,T);
+  end;
+  hence max(b2,b1,T) = max(b1,b2,T);
+  end;
+hence max(b1,b2,T) = max(b2,b1,T);
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    b1,b2 being bag of n
+holds min(b1,b2,T) = b1 iff max(b1,b2,T) = b2
+proof
+let n being Ordinal,
+    T being connected TermOrder of n,
+    b1,b2 being bag of n;
+A1: now assume A2: min(b1,b2,T) = b1;
+     now per cases by A2,Def4;
+   case b1 <= b2,T;
+     then max(b2,b1,T) = b2 by Def5;
+     hence max(b1,b2,T) = b2 by Th15;
+   case b1 = b2;
+     hence max(b1,b2,T) = b2 by Th12;
+   end;
+   hence max(b1,b2,T) = b2;
+   end;
+  now assume A3: max(b1,b2,T) = b2;
+     now per cases by A3,Def5;
+   case not(b2 <= b1,T);
+     then b1 <= b2,T by Lm5;
+     hence min(b1,b2,T) = b1 by Def4;
+   case b1 = b2;
+     hence min(b1,b2,T) = b1 by Th11;
+   end;
+   hence min(b1,b2,T) = b1;
+   end;
+hence thesis by A1;
+end;
+
+begin :: Headterms, Headmonomials and Headcoefficients
+
+definition
+::: definition 5.15, p. 194
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be non empty ZeroStr,
+    p be Polynomial of n,L;
+func HT(p,T) -> Element of Bags n means :Def6:
+  (Support p = {} & it = EmptyBag n) or
+  (it in Support p &
+   for b being bag of n st b in Support p holds b <= it,T);
+existence
+proof
+set O = T;
+per cases;
+suppose Support p = {};
+  hence thesis;
+suppose A1: Support p <> {};
+defpred P[Nat] means
+  for B being finite Subset of Bags n st card B = $1 holds
+  ex b' being bag of n st
+  b' in B &
+  for b being bag of n st b in B holds [b,b'] in O;
+A2: P[1]
+   proof let B be finite Subset of Bags n;
+    assume A3: card B = 1;
+    consider x being set;
+      card {x} = card B by A3,CARD_1:79;
+    then consider b being set such that
+    A4: B = {b} by CARD_1:49;
+    A5: b in B by A4,TARSKI:def 1;
+    then reconsider b as Element of Bags n;
+    reconsider b as bag of n;
+      now let b' be bag of n;
+      assume b' in B;
+      then b' = b by A4,TARSKI:def 1;
+      hence [b',b] in O by ORDERS_1:12;
+      end;
+    hence ex b' being bag of n st
+          b' in B &
+          for b being bag of n st b in B holds [b,b'] in O
+      by A5;
+    end;
+A6: for k being Nat st 1 <= k holds P[k] implies P[k+1]
+    proof
+    let k be Nat;
+    assume A7: 1 <= k;
+    thus P[k] implies P[k+1]
+       proof
+       assume A8: P[k];
+       thus P[k+1]
+         proof
+         let B be finite Subset of Bags n;
+         assume A9: card B = k+1;
+         then reconsider B as non empty finite Subset of Bags n by CARD_1:47;
+         consider x being Element of B;
+           x in B & B c= Bags n;
+         then reconsider x as Element of Bags n;
+         reconsider x as bag of n;
+         set X = B \ {x};
+         A10: x in X iff x in B & not x in {x} by XBOOLE_0:def 4;
+           now let u be set;
+             assume u in {x};
+             then u = x by TARSKI:def 1;
+             hence u in B;
+            end;
+         then {x} c= B by TARSKI:def 3;
+         then A11: B = {x} \/ B by XBOOLE_1:12 .= {x} \/ X by XBOOLE_1:39;
+         then card(X) + 1 = k + 1 by A9,A10,CARD_2:54,TARSKI:def 1;
+         then A12: card(X) = k by XCMPLX_1:2;
+           now assume X = {};
+             hence contradiction by A7,A12,CARD_1:47,51;
+             end;
+         then reconsider X as non empty set;
+         reconsider X as non empty finite set;
+           now let u be set;
+           assume u in X;
+           then u in B by XBOOLE_0:def 4;
+           hence u in Bags n;
+           end;
+         then reconsider X as non empty finite Subset of Bags n
+           by TARSKI:def 3;
+         consider b' being bag of n such that
+         A13: b' in X &
+             for b being bag of n st b in X holds [b,b'] in O by A8,A12;
+         A14: O is_connected_in field O by RELAT_2:def 14;
+           now per cases;
+         case A15: x = b';
+           take b';
+           A16: X c= B by XBOOLE_1:36;
+             now let b be bag of n;
+             assume A17: b in B;
+               now per cases;
+             case b in X;
+               hence [b,b'] in O by A13;
+             case not(b in X);
+               then b in {x} by A11,A17,XBOOLE_0:def 2;
+               then b = x by TARSKI:def 1;
+               hence [b,b'] in O by A15,ORDERS_1:12;
+             end;
+             hence [b,b'] in O;
+             end;
+           hence thesis by A13,A16;
+         case A18: x <> b';
+           A19: [x,x] in O by ORDERS_1:12;
+             b' is Element of Bags n by POLYNOM1:def 14;
+           then [b',b'] in O by ORDERS_1:12;
+           then A20: x in field O & b' in field O by A19,RELAT_1:30;
+             now per cases by A14,A18,A20,RELAT_2:def 6;
+           case A21: [x,b'] in O;
+             thus ex b' being bag of n st
+                  b' in B &
+                  for b being bag of n st b in B holds [b,b'] in O
+             proof
+             take b';
+               for b being bag of n st b in B holds [b,b'] in O
+               proof
+               let b be bag of n;
+               assume A22: b in B;
+                 now per cases;
+               case b <> x;
+                 then not(b in {x}) by TARSKI:def 1;
+                 then b in X by A22,XBOOLE_0:def 4;
+                 hence thesis by A13;
+               case b = x;
+                 hence thesis by A21;
+               end;
+               hence thesis;
+               end;
+             hence thesis by A13,XBOOLE_0:def 4;
+             end;
+           case A23: [b',x] in O;
+             thus ex b' being bag of n st
+                  b' in B &
+                  for b being bag of n st b in B holds [b,b'] in O
+             proof
+             take x;
+               for b being bag of n st b in B holds [b,x] in O
+               proof
+               let b be bag of n;
+               assume A24: b in B;
+                 now per cases;
+               case b <> x;
+                 then not(b in {x}) by TARSKI:def 1;
+                 then b in X by A24,XBOOLE_0:def 4;
+                 then A25: [b,b'] in O by A13;
+                   b is Element of Bags n & b' is Element of Bags n
+                   by POLYNOM1:def 14;
+                 hence thesis by A23,A25,ORDERS_1:14;
+               case b = x;
+                 hence thesis by ORDERS_1:12;
+               end;
+               hence thesis;
+               end;
+             hence thesis;
+             end;
+           end;
+           hence thesis;
+           end;
+        hence thesis;
+        end;
+       thus thesis;
+       end;
+    end;
+A26: for k being Nat st 1 <= k holds P[k] from Ind2(A2,A6);
+reconsider sp = Support p as finite set by POLYNOM1:def 10;
+  Card sp is finite;
+then consider m being Nat such that
+A27: Card(Support p) = Card m by CARD_1:86;
+A28: Card(Support p) = m by A27,CARD_1:66;
+  now assume m = 0;
+  then card sp = 0 by A27,CARD_1:66;
+  hence contradiction by A1,CARD_2:59;
+  end;
+then A29: 1 <= m by RLVECT_1:99;
+reconsider sp = Support p as finite Subset of Bags n
+  by POLYNOM1:def 10;
+consider b' being bag of n such that
+A30: b' in sp &
+   for b being bag of n st b in sp holds [b,b'] in O by A26,A28,A29;
+take b';
+  now let b be bag of n;
+  assume b in sp;
+  then [b,b'] in O by A30;
+  hence b <= b',O by Def2;
+  end;
+hence thesis by A30;
+end;
+uniqueness
+proof
+set O = T;
+let b1,b2 be Element of Bags n;
+assume A31: (Support p = {} & b1 = EmptyBag n) or
+           (b1 in Support p &
+            for b being bag of n st b in Support p holds b <= b1,O);
+assume A32: (Support p = {} & b2 = EmptyBag n) or
+           (b2 in Support p &
+            for b being bag of n st b in Support p holds b <= b2,O);
+per cases;
+suppose Support p = {};
+  hence b1 = b2 by A31,A32;
+suppose Support p <> {};
+  then b2 <= b1,O & b1 <= b2,O by A31,A32;
+  then [b1,b2] in O & [b2,b1] in O by Def2;
+  hence b1 = b2 by ORDERS_1:13;
+end;
+end;
+
+definition
+::: definition 5.15, p. 194
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be non empty ZeroStr,
+    p be Polynomial of n,L;
+func HC(p,T) -> Element of L equals :Def7:
+  p.(HT(p,T));
+correctness;
+end;
+
+definition
+::: definition 5.15, p. 194
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be non empty ZeroStr,
+    p be Polynomial of n,L;
+func HM(p,T) -> Monomial of n,L equals :Def8:
+  Monom(HC(p,T),HT(p,T));
+correctness;
+end;
+
+Lm7:
+for n being Ordinal,
+    O be connected TermOrder of n,
+    L be non empty ZeroStr,
+    p be Polynomial of n,L
+holds HC(p,O) = 0.L iff p = 0_(n,L)
+proof
+let n be Ordinal,
+    O be connected TermOrder of n,
+    L be non empty ZeroStr,
+    p be Polynomial of n,L;
+A1: now assume HC(p,O) = 0.L;
+   then p.(HT(p,O)) = 0.L by Def7;
+   then not(HT(p,O) in Support p) by POLYNOM1:def 9;
+   then Support p = {} by Def6;
+   hence p = 0_(n,L) by POLYNOM7:1;
+   end;
+  now assume p = 0_(n,L);
+   then p.(HT(p,O)) = 0.L by POLYNOM1:81;
+   hence HC(p,O) = 0.L by Def7;
+   end;
+hence thesis by A1;
+end;
+
+Lm8:
+for n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L
+holds (HM(p,O)).(HT(p,O)) = p.(HT(p,O))
+proof
+let n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L;
+A1: HM(p,O) = Monom(HC(p,O),HT(p,O)) by Def8;
+A2: p.(HT(p,O)) = HC(p,O) by Def7
+              .= coefficient(HM(p,O)) by A1,POLYNOM7:9
+              .= (HM(p,O)).term(HM(p,O)) by POLYNOM7:def 7;
+  now per cases;
+case HC(p,O) <> 0.L;
+  then HC(p,O) is non-zero by RLVECT_1:def 13;
+  hence term(HM(p,O)) = HT(p,O) by A1,POLYNOM7:10;
+case A3: HC(p,O) = 0.L;
+  then p = 0_(n,L) by Lm7;
+  then Support p = {} by POLYNOM7:1;
+  then HT(p,O) = EmptyBag n by Def6;
+  hence term(HM(p,O)) = HT(p,O) by A1,A3,POLYNOM7:8;
+end;
+hence thesis by A2;
+end;
+
+Lm9:
+for n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L
+st HC(p,O) <> 0.L holds HT(p,O) in Support(HM(p,O))
+proof
+let n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L;
+assume HC(p,O) <> 0.L;
+then p.(HT(p,O)) <> 0.L by Def7;
+then (HM(p,O)).(HT(p,O)) <> 0.L by Lm8;
+hence thesis by POLYNOM1:def 9;
+end;
+
+Lm10:
+for n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L
+st HC(p,O) = 0.L holds Support(HM(p,O)) = {}
+proof
+let n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L;
+assume A1: HC(p,O) = 0.L;
+then A2: p = 0_(n,L) by Lm7;
+then Support p = {} by POLYNOM7:1;
+then A3: HT(p,O) = EmptyBag n by Def6;
+then HM(p,O) = Monom(0.L,EmptyBag n) by A1,Def8;
+then A4: term(HM(p,O)) = EmptyBag n by POLYNOM7:8;
+  now assume Support(HM(p,O)) <> {};
+  then Support(HM(p,O)) = {term(HM(p,O))} by POLYNOM7:7;
+  then term(HM(p,O)) in Support(HM(p,O)) by TARSKI:def 1;
+  then (HM(p,O)).EmptyBag n <> 0.L by A4,POLYNOM1:def 9;
+  then p.(HT(p,O)) <> 0.L by A3,Lm8;
+  hence contradiction by A2,POLYNOM1:81;
+  end;
+hence thesis;
+end;
+
+definition
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be non-zero Polynomial of n,L;
+cluster HM(p,T) -> non-zero;
+coherence
+ proof
+ set O = T;
+   now per cases;
+ case HC(p,O) <> 0.L;
+   then HT(p,O) in Support(HM(p,O)) by Lm9;
+   then HM(p,O) <> 0_(n,L) by POLYNOM7:1;
+   hence thesis by POLYNOM7:def 2;
+ case HC(p,O) = 0.L;
+   then p = 0_(n,L) by Lm7;
+   hence thesis by POLYNOM7:def 2;
+ end;
+ hence thesis;
+ end;
+cluster HC(p,T) -> non-zero;
+coherence
+ proof
+ set O = T, a = HC(p,O);
+   now assume a = 0.L;
+   then p.(HT(p,O)) = 0.L by Def7;
+   then not(HT(p,O)) in Support p by POLYNOM1:def 9;
+   then Support p = {} by Def6;
+   then p = 0_(n,L) by POLYNOM7:1;
+   hence contradiction by POLYNOM7:def 2;
+ end;
+ hence thesis by RLVECT_1:def 13;
+ end;
+end;
+
+Lm11:
+for n being Ordinal,
+    O be connected TermOrder of n,
+    L be non empty ZeroStr,
+    m being Monomial of n,L
+holds HT(m,O) = term(m) & HC(m,O) = coefficient(m) & HM(m,O) = m
+proof
+let n be Ordinal,
+    O be connected TermOrder of n,
+    L be non empty ZeroStr,
+    m be Monomial of n,L;
+per cases by POLYNOM7:6;
+suppose A1: Support m = {};
+  hence A2: term(m) = EmptyBag n by POLYNOM7:def 6
+                  .= HT(m,O) by A1,Def6;
+  hence HC(m,O) = m.(term(m)) by Def7 .= coefficient(m)
+     by POLYNOM7:def 7;
+  hence HM(m,O) = Monom(coefficient(m),term(m)) by A2,Def8
+              .= m by POLYNOM7:11;
+suppose A3: ex b being bag of n st Support m = {b};
+  then consider b being bag of n such that
+  A4: Support m = {b};
+    b in Support m by A4,TARSKI:def 1;
+  then A5: m.b <> 0.L by POLYNOM1:def 9;
+    HT(m,O) in Support m by A3,Def6;
+  hence A6: HT(m,O) = b by A4,TARSKI:def 1 .= term(m) by A5,POLYNOM7:def 6;
+  hence HC(m,O) = m.(term(m)) by Def7 .= coefficient(m)
+    by POLYNOM7:def 7;
+  hence HM(m,O) = Monom(coefficient(m),term(m)) by A6,Def8
+              .= m by POLYNOM7:11;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non empty ZeroStr,
+    p being Polynomial of n,L
+holds HC(p,T) = 0.L iff p = 0_(n,L) by Lm7;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non trivial ZeroStr,
+    p being Polynomial of n,L
+holds (HM(p,T)).(HT(p,T)) = p.(HT(p,T)) by Lm8;
+
+theorem Th19:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non trivial ZeroStr,
+    p being Polynomial of n,L,
+    b being bag of n st b <> HT(p,T)
+holds HM(p,T).b = 0.L
+proof
+let n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L,
+    b being bag of n;
+assume A1: b <> HT(p,O);
+per cases by POLYNOM7:6;
+suppose Support HM(p,O) = {};
+  then HM(p,O) = 0_(n,L) by POLYNOM7:1;
+  hence thesis by POLYNOM1:81;
+suppose ex b being bag of n st Support HM(p,O) = {b};
+  then consider b1 being bag of n such that
+  A2: Support HM(p,O) = {b1};
+  A3: b1 is Element of Bags n & b is Element of Bags n
+     by POLYNOM1:def 14;
+    now per cases;
+  case HC(p,O) <> 0.L;
+    then HT(p,O) in {b1} by A2,Lm9;
+    then b1 <> b by A1,TARSKI:def 1;
+    then not(b in {b1}) by TARSKI:def 1;
+    hence HM(p,O).b = 0.L by A2,A3,POLYNOM1:def 9;
+  case HC(p,O) = 0.L;
+    then Support(HM(p,O)) = {} by Lm10;
+    then HM(p,O) = 0_(n,L) by POLYNOM7:1;
+    hence HM(p,O).b = 0.L by POLYNOM1:81;
+  end;
+  hence thesis;
+end;
+
+Lm12:
+for n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L
+holds Support(HM(p,O)) = {} or Support(HM(p,O)) = {HT(p,O)}
+proof
+let n be Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L;
+assume A1: not(Support(HM(p,O)) = {});
+then consider b being bag of n such that
+A2: Support(HM(p,O)) = {b} by POLYNOM7:6;
+  now per cases;
+case HC(p,O) = 0.L;
+  hence thesis by A1,Lm10;
+case HC(p,O) <> 0.L;
+  then HT(p,O) in Support HM(p,O) by Lm9;
+  hence thesis by A2,TARSKI:def 1;
+end;
+hence thesis;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non trivial ZeroStr,
+    p being Polynomial of n,L
+holds Support(HM(p,T)) c= Support(p)
+proof
+let n be Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L;
+  now let u be set;
+  assume A1: u in Support(HM(p,O));
+    now per cases by A1,Lm12;
+  case u in {};
+    hence u in Support p;
+  case u in {HT(p,O)};
+    then A2: u = HT(p,O) by TARSKI:def 1;
+      now per cases;
+    case HC(p,O) = 0.L;
+      then p = 0_(n,L) by Lm7;
+      then p.(HT(p,O)) = 0.L by POLYNOM1:81;
+      then (HM(p,O)).(HT(p,O)) = 0.L by Lm8;
+      hence contradiction by A1,A2,POLYNOM1:def 9;
+    case HC(p,O) <> 0.L;
+      then p.(HT(p,O)) <> 0.L by Def7;
+      hence u in Support p by A2,POLYNOM1:def 9;
+    end;
+    hence u in Support p;
+  end;
+  hence u in Support p;
+  end;
+hence thesis by TARSKI:def 3;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non trivial ZeroStr,
+    p being Polynomial of n,L
+holds Support(HM(p,T)) = {} or Support(HM(p,T)) = {HT(p,T)} by Lm12;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non trivial ZeroStr,
+    p being Polynomial of n,L
+holds term(HM(p,T)) = HT(p,T) & coefficient(HM(p,T)) = HC(p,T)
+proof
+let n be Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L;
+A1: HM(p,O) = Monom(HC(p,O),HT(p,O)) by Def8;
+per cases;
+suppose HC(p,O) is non-zero;
+  then reconsider a = HC(p,O) as non-zero Element of L;
+    term(Monom(a,HT(p,O))) = HT(p,O) by POLYNOM7:10;
+  hence thesis by A1,POLYNOM7:9;
+suppose A2: not(HC(p,O) is non-zero);
+    now per cases;
+  case not(p is non-zero);
+    then p = 0_(n,L) by POLYNOM7:def 2;
+    then Support p = {} by POLYNOM7:1;
+    then HT(p,O) = EmptyBag n by Def6
+                .= term(Monom(0.L,HT(p,O))) by POLYNOM7:8
+                .= term(Monom(HC(p,O),HT(p,O))) by A2,RLVECT_1:def 13
+                .= term(HM(p,O)) by Def8;
+    hence thesis by A1,POLYNOM7:9;
+  case p is non-zero;
+    then reconsider p as non-zero Polynomial of n,L;
+      HC(p,O) is non-zero;
+    hence thesis by A2;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non empty ZeroStr,
+    m being Monomial of n,L
+holds HT(m,T) = term(m) & HC(m,T) = coefficient(m) & HM(m,T) = m by Lm11;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non empty ZeroStr,
+    c being ConstPoly of n,L
+holds HT(c,T) = EmptyBag n & HC(c,T) = c.(EmptyBag n)
+proof
+let n be Ordinal,
+    O be connected TermOrder of n,
+    L be non empty ZeroStr,
+    c be ConstPoly of n,L;
+thus HT(c,O) = term(c) by Lm11 .= EmptyBag n by POLYNOM7:16;
+thus HC(c,O) = coefficient(c) by Lm11 .= c.(EmptyBag n) by POLYNOM7:16;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non empty ZeroStr,
+    a being Element of L
+holds HT(a _(n,L),T) = EmptyBag n & HC(a _(n,L),T) = a
+proof
+let n be Ordinal,
+    O be connected TermOrder of n,
+    L be non empty ZeroStr,
+    a be Element of L;
+set p = a _(n,L);
+thus HT(p,O) = term(p) by Lm11 .= EmptyBag n by POLYNOM7:23;
+thus HC(p,O) = coefficient(p) by Lm11 .= a by POLYNOM7:23;
+end;
+
+theorem Th26:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non trivial ZeroStr,
+    p being Polynomial of n,L
+holds HT(HM(p,T),T) = HT(p,T)
+proof
+let n be Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p be Polynomial of n,L;
+per cases;
+suppose HC(p,O) is non-zero;
+  then reconsider a = HC(p,O) as non-zero Element of L;
+  thus HT(HM(p,O),O)
+     = HT(Monom(HC(p,O),HT(p,O)),O) by Def8
+    .= term(Monom(a,HT(p,O))) by Lm11
+    .= HT(p,O) by POLYNOM7:10;
+suppose A1: not(HC(p,O) is non-zero);
+    now per cases;
+  case not(p is non-zero);
+    then p = 0_(n,L) by POLYNOM7:def 2;
+    then Support p = {} by POLYNOM7:1;
+    then HT(p,O) = EmptyBag n by Def6
+                .= term(Monom(0.L,HT(p,O))) by POLYNOM7:8
+                .= term(Monom(HC(p,O),HT(p,O))) by A1,RLVECT_1:def 13
+                .= term(HM(p,O)) by Def8;
+    hence thesis by Lm11;
+  case p is non-zero;
+    then reconsider p as non-zero Polynomial of n,L;
+      HC(p,O) is non-zero;
+    hence thesis by A1;
+  end;
+  hence thesis;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non trivial ZeroStr,
+    p being Polynomial of n,L
+holds HC(HM(p,T),T) = HC(p,T)
+proof
+let n being Ordinal,
+    O be connected TermOrder of n,
+    L be non trivial ZeroStr,
+    p being Polynomial of n,L;
+thus HC(HM(p,O),O) = (HM(p,O)).(HT(HM(p,O),O)) by Def7
+                  .= (HM(p,O)).(HT(p,O)) by Th26
+                  .= p.(HT(p,O)) by Lm8
+                  .= HC(p,O) by Def7;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being non empty ZeroStr,
+    p being Polynomial of n,L
+holds HM(HM(p,T),T) = HM(p,T) by Lm11;
+
+Lm13:
+for X being set, S being Subset of X,
+    R being Order of X st R is_linear-order
+holds R linearly_orders S
+proof
+  let X be set, S be Subset of X, R be Order of X;
+  assume R is_linear-order;
+then A1: R linearly_orders field R by ORDERS_2:35;
+    S c= X;
+  then S c= field R by ORDERS_2:2;
+  hence thesis by A1,ORDERS_2:36;
+end;
+
+Lm14:
+for n being Ordinal,
+    O be admissible connected TermOrder of n,
+    L being add-associative right_complementable left_zeroed right_zeroed
+            unital distributive (non trivial doubleLoopStr),
+    p,q being non-zero Polynomial of n,L
+holds (p*'q).(HT(p,O) + HT(q,O)) = p.(HT(p,O)) * q.(HT(q,O))
+proof
+let n be Ordinal,
+    O be admissible connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed left_zeroed
+         unital distributive (non trivial doubleLoopStr),
+    p,q be non-zero Polynomial of n,L;
+set b = HT(p,O) + HT(q,O);
+consider s being FinSequence of the carrier of L such that
+A1: (p*'q).b = Sum s &
+   len s = len decomp b &
+   for k being Nat st k in dom s
+   ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*> &
+                               s/.k = p.b1*q.b2 by POLYNOM1:def 26;
+consider S being non empty finite Subset of Bags n such that
+A2: divisors b = SgmX(BagOrder n, S) &
+   for p being bag of n holds p in S iff p divides b by POLYNOM1:def 18;
+  HT(p,O) divides b by POLYNOM1:54;
+then A3: HT(p,O) in S by A2;
+set sgm = SgmX(BagOrder n, S);
+  BagOrder n linearly_orders S by Lm13;
+then HT(p,O) in rng(sgm) by A3,TRIANG_1:def 2;
+then consider i being set such that
+A4: i in dom sgm & sgm.i = HT(p,O) by FUNCT_1:def 5;
+A5: i in dom decomp b by A2,A4,POLYNOM1:def 19;
+  (divisors b)/.i = HT(p,O) by A2,A4,FINSEQ_4:def 4;
+then A6: (decomp b)/.i = <*HT(p,O), b-'HT(p,O)*> by A5,POLYNOM1:def 19;
+then A7: (decomp b)/.i = <*HT(p,O), HT(q,O)*> by POLYNOM1:52;
+A8: dom s = Seg(len decomp b) by A1,FINSEQ_1:def 3
+         .= dom(decomp b) by FINSEQ_1:def 3;
+then A9: i in dom s by A2,A4,POLYNOM1:def 19;
+reconsider i as Nat by A4;
+A10:now let k be Nat;
+  assume A11: k in dom s & k <> i;
+  then consider b1', b2' being bag of n such that
+  A12: (decomp b)/.k = <*b1', b2'*> & b = b1'+b2' by A8,POLYNOM1:72;
+  consider b1,b2 being bag of n such that
+  A13: (decomp b)/.k = <*b1, b2*> & s/.k = p.b1*q.b2 by A1,A11;
+  A14: b1 = <*b1', b2'*>.1 by A12,A13,FINSEQ_1:61
+        .= b1' by FINSEQ_1:61;
+  A15: b2 = <*b1', b2'*>.2 by A12,A13,FINSEQ_1:61
+        .= b2' by FINSEQ_1:61;
+  A16: now assume A17: p.b1 <> 0.L & q.b2 <> 0.L;
+        b1 is Element of Bags n & b2 is Element of Bags n by POLYNOM1:def 14;
+      then b1 in Support p & b2 in Support q by A17,POLYNOM1:def 9;
+      then b1 <= HT(p,O),O & b2 <= HT(q,O),O by Def6;
+      then A18: [b1,HT(p,O)] in O & [b2,HT(q,O)] in O by Def2;
+      A19: now assume b1 = HT(p,O) & b2 = HT(q,O);
+          then (decomp b).k
+               = <*HT(p,O), HT(q,O)*> by A8,A11,A13,FINSEQ_4:def 4
+              .= (decomp b)/.i by A6,POLYNOM1:52
+              .= (decomp b).i by A5,FINSEQ_4:def 4;
+          hence contradiction by A5,A8,A11,FUNCT_1:def 8;
+          end;
+        now per cases by A19;
+      case A20: b1 <> HT(p,O);
+        A21: now assume b1+b2 = HT(p,O)+b2;
+            then b1 = (HT(p,O)+b2)-'b2 by POLYNOM1:52;
+            hence contradiction by A20,POLYNOM1:52;
+            end;
+        A22: [HT(p,O)+HT(q,O), HT(p,O)+b2] in O by A12,A14,A15,A18,BAGORDER:def
+7;
+        A23: [HT(p,O)+b2, HT(p,O)+HT(q,O)] in O by A18,BAGORDER:def 7;
+          HT(p,O)+b2 is Element of Bags n &
+        HT(p,O)+HT(q,O) is Element of Bags n by POLYNOM1:def 14;
+        hence contradiction by A12,A14,A15,A21,A22,A23,ORDERS_1:13;
+      case A24: b2 <> HT(q,O);
+        A25: now assume b2+b1 = HT(q,O)+b1;
+            then b2 = (HT(q,O)+b1)-'b1 by POLYNOM1:52;
+            hence contradiction by A24,POLYNOM1:52;
+            end;
+        A26: [HT(p,O)+HT(q,O), HT(q,O)+b1] in O by A12,A14,A15,A18,BAGORDER:def
+7;
+        A27: [HT(q,O)+b1, HT(p,O)+HT(q,O)] in O by A18,BAGORDER:def 7;
+          HT(q,O)+b1 is Element of Bags n &
+        HT(p,O)+HT(q,O) is Element of Bags n by POLYNOM1:def 14;
+        hence contradiction by A12,A14,A15,A25,A26,A27,ORDERS_1:13;
+      end;
+      hence contradiction;
+      end;
+    now per cases by A16;
+  case p.b1 = 0.L;
+    hence p.b1*q.b2 = 0.L by BINOM:1;
+  case q.b2 = 0.L;
+    hence p.b1*q.b2 = 0.L by BINOM:2;
+  end;
+  hence s/.k = 0.L by A13;
+  end;
+consider b1,b2 being bag of n such that
+A28: (decomp b)/.i = <*b1, b2*> & s/.i = p.b1*q.b2
+   by A1,A9;
+A29: b1 = <*HT(p,O), HT(q,O)*>.1 by A7,A28,FINSEQ_1:61
+     .= HT(p,O) by FINSEQ_1:61;
+  b2 = <*HT(p,O), HT(q,O)*>.2 by A7,A28,FINSEQ_1:61
+  .= HT(q,O) by FINSEQ_1:61;
+hence thesis by A1,A9,A10,A28,A29,POLYNOM2:5;
+end;
+
+theorem Th29:
+for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable left_zeroed right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p,q being non-zero Polynomial of n,L
+holds HT(p,T) + HT(q,T) in Support(p*'q)
+proof
+let n be Ordinal,
+    O be admissible connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed left_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    p,q be non-zero Polynomial of n,L;
+  p <> 0_(n,L) & q <> 0_(n,L) by POLYNOM7:def 2;
+then Support p <> {} & Support q <> {} by POLYNOM7:1;
+then HT(p,O) in Support p & HT(q,O) in Support q by Def6;
+then A1: p.(HT(p,O)) <> 0.L & q.(HT(q,O)) <> 0.L by POLYNOM1:def 9;
+set b = HT(p,O) + HT(q,O);
+A2: b is Element of Bags n by POLYNOM1:def 14;
+assume not(HT(p,O) + HT(q,O) in Support(p*'q));
+then (p*'q).(HT(p,O) + HT(q,O)) = 0.L by A2,POLYNOM1:def 9;
+then p.(HT(p,O)) * q.(HT(q,O)) = 0.L by Lm14;
+hence thesis by A1,VECTSP_2:def 5;
+end;
+
+theorem Th30:
+for n being Ordinal,
+    L being add-associative right_complementable right_zeroed
+            unital distributive (non empty doubleLoopStr),
+    p,q being Polynomial of n,L
+holds Support(p*'q) c= {s + t where s,t is Element of Bags n :
+                                  s in Support p & t in Support q}
+proof
+let n be Ordinal,
+    L be add-associative right_complementable right_zeroed
+         unital distributive (non empty doubleLoopStr),
+    p,q be Polynomial of n,L;
+A1: now let b be bag of n;
+    assume A2: b in Support(p*'q);
+    then A3: (p*'q).b <> 0.L by POLYNOM1:def 9;
+    consider s being FinSequence of the carrier of L such that A4:
+    (p*'q).b = Sum s &
+    len s = len decomp b &
+    for k being Nat st k in dom s
+    ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*> &
+                                s/.k = p.b1*q.b2 by POLYNOM1:def 26;
+    A5: dom s = Seg(len decomp b) by A4,FINSEQ_1:def 3
+             .= dom(decomp b) by FINSEQ_1:def 3;
+      now per cases;
+    case dom s = {};
+      then len s = 0 by FINSEQ_1:4,def 3;
+      then s = <*>(the carrier of L) by FINSEQ_1:32;
+      hence contradiction by A3,A4,RLVECT_1:60;
+    case A6: dom s <> {};
+      consider k being Element of dom s;
+        k in dom s by A6;
+      then reconsider k as Nat;
+        now assume A7: not(
+          ex k being Element of dom(decomp b), b1,b2 being bag of n st
+          (decomp b)/.k = <*b1, b2*> & p.b1 <> 0.L & q.b2 <> 0.L);
+          A8: for k being Nat st k in dom s holds s/.k = 0.L
+              proof
+              let k be Nat;
+              assume A9: k in dom s;
+              then consider b1, b2 being bag of n such that
+              A10: (decomp b)/.k = <*b1, b2*> & s/.k = p.b1*q.b2 by A4;
+                now per cases by A5,A7,A9,A10;
+              case p.b1 = 0.L;
+                hence 0.L = s/.k by A10,BINOM:1;
+              case q.b2 = 0.L;
+                hence 0.L = s/.k by A10,BINOM:2;
+              end;
+              hence thesis;
+              end;
+          then for k' being Nat st k' in dom s & k' <> k holds s/.k' = 0.L;
+          then Sum s = s/.k by A6,POLYNOM2:5
+                    .= 0.L by A6,A8;
+          hence contradiction by A2,A4,POLYNOM1:def 9;
+          end;
+      then consider k being Element of dom(decomp b),
+                      b1,b2 being bag of n such that
+      A11: (decomp b)/.k = <*b1, b2*> & p.b1 <> 0.L & q.b2 <> 0.L;
+        k in dom(decomp b) by A5,A6;
+      then reconsider k as Nat;
+        b1 is Element of Bags n & b2 is Element of Bags n by POLYNOM1:def 14;
+      then A12: b1 in Support p & b2 in Support q by A11,POLYNOM1:def 9;
+      consider b1', b2' being bag of n such that
+      A13: (decomp b)/.k = <*b1', b2'*> & b = b1'+b2' by A5,A6,POLYNOM1:72;
+      A14: b1' = <*b1, b2*>.1 by A11,A13,FINSEQ_1:61
+              .= b1 by FINSEQ_1:61;
+        b2' = <*b1, b2*>.2 by A11,A13,FINSEQ_1:61
+         .= b2 by FINSEQ_1:61;
+      hence ex s,t being bag of n
+        st s in Support p & t in Support q & b = s+t by A12,A13,A14;
+      end;
+    hence ex s,t being bag of n
+          st s in Support p & t in Support q & b = s+t;
+    end;
+  now let u be set;
+  assume A15: u in Support(p*'q);
+  then reconsider u' = u as Element of Bags n;
+  consider s,t being bag of n such that
+  A16: s in Support p & t in Support q & u' = s+t by A1,A15;
+  thus u in {s' + t' where s',t' is Element of Bags n :
+                        s' in Support p & t' in Support q} by A16;
+  end;
+hence thesis by TARSKI:def 3;
+end;
+
+theorem Th31:
+::: lemma 5.17 (i), p. 195
+for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p,q being non-zero Polynomial of n,L
+holds HT(p*'q,T) = HT(p,T) + HT(q,T)
+proof
+let n be Ordinal,
+    O be admissible connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    p,q be non-zero Polynomial of n,L;
+  Support p*'q <> {} by Th29;
+then A1: HT(p*'q,O) in Support(p*'q) by Def6;
+  HT(p,O) + HT(q,O) in Support(p*'q) by Th29;
+then HT(p,O) + HT(q,O) <= HT(p*'q,O),O by Def6;
+then A2: [HT(p,O) + HT(q,O),HT(p*'q,O)] in O by Def2;
+  Support(p*'q) c=
+    {s + t where s,t is Element of Bags n :
+                          s in Support p & t in Support q} by Th30;
+then HT(p*'q,O) in {s + t where s,t is Element of Bags n :
+                               s in Support p & t in Support q} by A1;
+then consider s,t being Element of Bags n such that
+A3: HT(p*'q,O) = s + t & s in Support p & t in Support q;
+  s <= HT(p,O),O & t <= HT(q,O),O by A3,Def6;
+then A4: [s,HT(p,O)] in O & [t,HT(q,O)] in O by Def2;
+A5: s + t is Element of Bags n &
+    HT(p,O) + t is Element of Bags n &
+    HT(p*'q,O) is Element of Bags n &
+    HT(p,O)+HT(q,O) is Element of Bags n by POLYNOM1:def 14;
+A6: [s + t,HT(p,O) + t] in O by A4,BAGORDER:def 7;
+  [t + HT(p,O), HT(p,O)+HT(q,O)] in O by A4,BAGORDER:def 7;
+then [s + t,HT(p,O)+HT(q,O)] in O by A5,A6,ORDERS_1:14;
+hence thesis by A2,A3,A5,ORDERS_1:13;
+end;
+
+theorem Th32:
+::: lemma 5.17 (iii), p. 195
+for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p,q being non-zero Polynomial of n,L
+holds HC(p*'q,T) = HC(p,T) * HC(q,T)
+proof
+let n be Ordinal,
+    O being admissible connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    p,q be non-zero Polynomial of n,L;
+thus HC(p*'q,O) = (p*'q).(HT(p*'q,O)) by Def7
+          .= (p*'q).(HT(p,O) + HT(q,O)) by Th31
+          .= p.(HT(p,O)) * q.(HT(q,O)) by Lm14
+          .= HC(p,O) * q.(HT(q,O)) by Def7
+          .= HC(p,O) * HC(q,O) by Def7;
+end;
+
+theorem
+::: lemma 5.17 (ii), p. 195
+  for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            unital distributive domRing-like (non trivial doubleLoopStr),
+    p,q being non-zero Polynomial of n,L
+holds HM(p*'q,T) = HM(p,T) *' HM(q,T)
+proof
+let n be Ordinal,
+    O being admissible connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         unital distributive domRing-like (non trivial doubleLoopStr),
+    p,q be non-zero Polynomial of n,L;
+  thus HM(p*'q,O) = Monom(HC(p*'q,O),HT(p*'q,O)) by Def8
+                 .= Monom(HC(p,O) * HC(q,O),HT(p*'q,O)) by Th32
+                 .= Monom(HC(p,O) * HC(q,O),HT(p,O) + HT(q,O)) by Th31
+                 .= Monom(HC(p,O),HT(p,O)) *' Monom(HC(q,O),HT(q,O)) by Th3
+                 .= HM(p,O) *' Monom(HC(q,O),HT(q,O)) by Def8
+                 .= HM(p,O) *' HM(q,O) by Def8;
+end;
+
+theorem
+::: lemma 5.17 (iv), p. 195
+  for n being Ordinal,
+    T being admissible connected TermOrder of n,
+    L being right_zeroed (non empty LoopStr),
+    p,q being Polynomial of n,L
+holds HT(p+q,T) <= max(HT(p,T),HT(q,T),T), T
+proof
+let n be Ordinal,
+    O being admissible connected TermOrder of n,
+    L be right_zeroed (non empty LoopStr),
+    p,q be Polynomial of n,L;
+per cases;
+suppose A1: HT(p+q,O) in Support(p+q);
+  A2: Support(p+q) c= Support p \/ Support q by POLYNOM1:79;
+    now per cases by A1,A2,XBOOLE_0:def 2;
+  case A3: HT(p+q,O) in Support(p);
+    then A4: HT(p+q,O) <= HT(p,O),O by Def6;
+      now per cases by Th12;
+    case max(HT(p,O),HT(q,O),O) = HT(p,O);
+      hence thesis by A3,Def6;
+    case A5: max(HT(p,O),HT(q,O),O) = HT(q,O);
+      then HT(p,O) <= HT(q,O),O by Th14;
+      hence thesis by A4,A5,Th8;
+    end;
+    hence thesis;
+  case A6: HT(p+q,O) in Support(q);
+    then A7: HT(p+q,O) <= HT(q,O),O by Def6;
+      now per cases by Th12;
+    case max(HT(p,O),HT(q,O),O) = HT(q,O);
+      hence thesis by A6,Def6;
+    case A8: max(HT(p,O),HT(q,O),O) = HT(p,O);
+      then HT(q,O) <= HT(p,O),O by Th14;
+      hence thesis by A7,A8,Th8;
+    end;
+    hence thesis;
+  end;
+  hence thesis;
+suppose not(HT(p+q,O) in Support(p+q));
+  then Support(p+q) = {} & HT(p+q,O) = EmptyBag n by Def6;
+  then [HT(p+q,O),max(HT(p,O),HT(q,O),O)] in O by BAGORDER:def 7;
+  hence thesis by Def2;
+end;
+
+begin :: Reductum
+
+definition
+::: definition 5.15, p. 194
+let n be Ordinal,
+    T be connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         (non empty LoopStr),
+    p be Polynomial of n,L;
+func Red(p,T) -> Polynomial of n,L equals :Def9:
+  p - HM(p,T);
+coherence;
+end;
+
+Lm15:
+for n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L
+holds not(HT(p,O) in Support(Red(p,O)))
+proof
+let n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L;
+assume HT(p,O) in Support(Red(p,O));
+then (Red(p,O)).(HT(p,O)) <> 0.L by POLYNOM1:def 9;
+then (p - HM(p,O)).(HT(p,O)) <> 0.L by Def9;
+then (p + -HM(p,O)).(HT(p,O)) <> 0.L by POLYNOM1:def 23;
+then p.(HT(p,O)) + (-HM(p,O)).(HT(p,O)) <> 0.L by POLYNOM1:def 21;
+then A1: p.(HT(p,O)) + -HM(p,O).(HT(p,O)) <> 0.L by POLYNOM1:def 22;
+  HM(p,O).(HT(p,O)) = p.(HT(p,O)) by Lm8;
+hence thesis by A1,RLVECT_1:def 10;
+end;
+
+Lm16:
+for n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L,
+    b being bag of n
+st b in Support p & b <> HT(p,O) holds b in Support(Red(p,O))
+proof
+let n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L,
+    b being bag of n;
+assume A1: b in Support p & b <> HT(p,O);
+A2: b is Element of Bags n by POLYNOM1:def 14;
+  (Red(p,O)).b = (p - HM(p,O)).b by Def9
+            .= (p + -HM(p,O)).b by POLYNOM1:def 23
+            .= p.b + (-HM(p,O)).b by POLYNOM1:def 21
+            .= p.b + -HM(p,O).b by POLYNOM1:def 22
+            .= p.b + - 0.L by A1,Th19
+            .= p.b + 0.L by RLVECT_1:25
+            .= p.b by RLVECT_1:10;
+then (Red(p,O)).b <> 0.L by A1,POLYNOM1:def 9;
+hence thesis by A2,POLYNOM1:def 9;
+end;
+
+Lm17:
+for n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L
+holds Support(Red(p,O)) = Support(p) \ {HT(p,O)}
+proof
+let n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L;
+A1: now let u be set;
+   assume u in Support(p) \ {HT(p,O)};
+   then A2: u in Support p & not(u in {HT(p,O)}) by XBOOLE_0:def 4;
+   then reconsider u' = u as Element of Bags n;
+   reconsider u' as bag of n;
+     u' <> HT(p,O) by A2,TARSKI:def 1;
+   hence u in Support(Red(p,O)) by A2,Lm16;
+   end;
+  now let u be set;
+   assume A3: u in Support(Red(p,O));
+   then A4: u in Support(p - HM(p,O)) by Def9;
+   reconsider u' = u as Element of Bags n by A3;
+   reconsider u' as bag of n;
+   A5: (p - HM(p,O)).u' <> 0.L by A4,POLYNOM1:def 9;
+   A6: (p + -HM(p,O)).u' = p.u' + (-HM(p,O)).u' by POLYNOM1:def 21
+                       .= p.u' + -HM(p,O).u' by POLYNOM1:def 22;
+   A7: not(u' = HT(p,O)) by A3,Lm15;
+   then (p + -HM(p,O)).u' = p.u' + - 0.L by A6,Th19
+                         .= p.u' + 0.L by RLVECT_1:25
+                         .= p.u' by RLVECT_1:10;
+   then p.u' <> 0.L by A5,POLYNOM1:def 23;
+   then A8: u' in Support p by POLYNOM1:def 9;
+     not(u' in {HT(p,O)}) by A7,TARSKI:def 1;
+   hence u in Support(p) \ {HT(p,O)} by A8,XBOOLE_0:def 4;
+   end;
+hence thesis by A1,TARSKI:2;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L
+holds Support(Red(p,T)) c= Support(p)
+proof
+let n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L;
+  Support(Red(p,O)) = Support(p) \ {HT(p,O)} by Lm17;
+hence thesis by XBOOLE_1:36;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L
+holds Support(Red(p,T)) = Support(p) \ {HT(p,T)} by Lm17;
+
+Lm18:
+for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L
+holds (Red(p,T)).(HT(p,T)) = 0.L
+proof
+let n be Ordinal,
+    O being connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+          (non trivial LoopStr),
+    p be Polynomial of n,L;
+A1: HT(p,O) in {HT(p,O)} by TARSKI:def 1;
+  Support(Red(p,O)) = Support(p) \ {HT(p,O)} by Lm17;
+then not(HT(p,O) in Support(Red(p,O))) by A1,XBOOLE_0:def 4;
+hence thesis by POLYNOM1:def 9;
+end;
+
+Lm19:
+for n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L,
+    b being bag of n st b <> HT(p,O)
+holds (Red(p,O)).b = p.b
+proof
+let n be Ordinal,
+    O being connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         (non trivial LoopStr),
+    p be Polynomial of n,L,
+    b be bag of n;
+assume b <> HT(p,O);
+then not(b in {HT(p,O)}) by TARSKI:def 1;
+then A1: not(b in Support(HM(p,O))) by Lm12;
+A2: b is Element of Bags n by POLYNOM1:def 14;
+thus (Red(p,O)).b = (p - HM(p,O)).b by Def9
+          .= (p + -HM(p,O)).b by POLYNOM1:def 23
+          .= p.b + (-HM(p,O)).b by POLYNOM1:def 21
+          .= p.b + -(HM(p,O)).b by POLYNOM1:def 22
+          .= p.b + -0.L by A1,A2,POLYNOM1:def 9
+          .= p.b + 0.L by RLVECT_1:25
+          .= p.b by RLVECT_1:10;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L
+holds Support(HM(p,T) + Red(p,T)) = Support p
+proof
+let n being Ordinal,
+    O being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L;
+A1: now let u be set;
+   assume A2: u in Support p;
+   then reconsider u' = u as Element of Bags n;
+   reconsider u' as bag of n;
+   A3: p.u' <> 0.L by A2,POLYNOM1:def 9;
+     now per cases;
+   case A4: u' = HT(p,O);
+     then p.(HT(p,O)) <> 0.L by A2,POLYNOM1:def 9;
+     then A5: HC(p,O) <> 0.L by Def7;
+       (HM(p,O) + Red(p,O)).u'
+        = HM(p,O).u' + Red(p,O).u' by POLYNOM1:def 21
+       .= HM(p,O).u' + 0.L by A4,Lm18
+       .= HM(p,O).u' by RLVECT_1:10
+       .= p.(HT(p,O)) by A4,Lm8
+       .= HC(p,O) by Def7;
+     hence u' in Support(HM(p,O) + Red(p,O)) by A5,POLYNOM1:def 9;
+   case A6: u' <> HT(p,O);
+       (HM(p,O) + Red(p,O)).u'
+        = HM(p,O).u' + Red(p,O).u' by POLYNOM1:def 21
+       .= HM(p,O).u' + p.u' by A6,Lm19
+       .= 0.L + p.u' by A6,Th19
+       .= p.u' by RLVECT_1:10;
+     hence u' in Support(HM(p,O) + Red(p,O)) by A3,POLYNOM1:def 9;
+   end;
+   hence u in Support(HM(p,O) + Red(p,O));
+   end;
+  now let u be set;
+   assume A7: u in Support(HM(p,O) + Red(p,O));
+   then reconsider u' = u as Element of Bags n;
+   reconsider u' as bag of n;
+   A8: (HM(p,O) + Red(p,O)).u' <> 0.L by A7,POLYNOM1:def 9;
+     now per cases;
+   case A9: u' = HT(p,O);
+       (HM(p,O) + Red(p,O)).u'
+         = HM(p,O).u' + Red(p,O).u' by POLYNOM1:def 21
+        .= HM(p,O).HT(p,O) + 0.L by A9,Lm18
+        .= HM(p,O).HT(p,O) by RLVECT_1:10
+        .= p.u' by A9,Lm8;
+     hence u' in Support p by A8,POLYNOM1:def 9;
+   case A10: u' <> HT(p,O);
+       (HM(p,O) + Red(p,O)).u'
+         = HM(p,O).u' + Red(p,O).u' by POLYNOM1:def 21
+        .= 0.L + Red(p,O).u' by A10,Th19
+        .= Red(p,O).u' by RLVECT_1:10
+        .= p.u by A10,Lm19;
+     hence u' in Support p by A8,POLYNOM1:def 9;
+   end;
+   hence u in Support p;
+   end;
+hence thesis by A1,TARSKI:2;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L
+holds HM(p,T) + Red(p,T) = p
+proof
+let n be Ordinal,
+    O being connected TermOrder of n,
+    L be add-associative right_complementable right_zeroed
+         (non trivial LoopStr),
+    p be Polynomial of n,L;
+A1: dom p = Bags n & dom(HM(p,O) + Red(p,O)) = Bags n by FUNCT_2:def 1;
+  now let x be set;
+  assume x in Bags n;
+  then reconsider x' = x as Element of Bags n;
+    now per cases;
+  case A2: x = HT(p,O);
+    hence (HM(p,O) + Red(p,O)).x
+         = HM(p,O).HT(p,O) + Red(p,O).HT(p,O) by POLYNOM1:def 21
+        .= HM(p,O).HT(p,O) + 0.L by Lm18
+        .= HM(p,O).HT(p,O) by RLVECT_1:10
+        .= p.x by A2,Lm8;
+  case A3: x <> HT(p,O);
+      now
+      thus (HM(p,O) + Red(p,O)).x'
+          = HM(p,O).x' + Red(p,O).x' by POLYNOM1:def 21
+         .= HM(p,O).x' + p.x' by A3,Lm19
+         .= 0.L + p.x' by A3,Th19
+         .= p.x' by RLVECT_1:10;
+    end;
+    hence p.x = (HM(p,O) + Red(p,O)).x;
+  end;
+  hence p.x = (HM(p,O) + Red(p,O)).x;
+  end;
+hence thesis by A1,FUNCT_1:9;
+end;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L
+holds (Red(p,T)).(HT(p,T)) = 0.L by Lm18;
+
+theorem
+  for n being Ordinal,
+    T being connected TermOrder of n,
+    L being add-associative right_complementable right_zeroed
+            (non trivial LoopStr),
+    p being Polynomial of n,L,
+    b being bag of n st b in Support p & b <> HT(p,T)
+holds (Red(p,T)).b = p.b by Lm19;

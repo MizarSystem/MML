@@ -1,0 +1,1657 @@
+:: On Cosets in Segre's Product of Partial Linear Spaces
+::  by Adam Naumowicz
+::
+:: Received August 14, 2001
+:: Copyright (c) 2001 Association of Mizar Users
+
+environ
+
+ vocabulary FINSEQ_1, MATRIX_2, RELAT_1, ARYTM_1, RFINSEQ, BOOLE, FUNCT_1,
+      FINSEQ_4, PRALG_1, PBOOLE, MSUALG_2, RLVECT_2, FUNCT_4, PENCIL_1, CARD_3,
+      INTEGRA1, SUBSET_1, PRE_TOPC, REALSET1, CARD_1, SGRAPH1, CAT_1, AMI_1,
+      RELAT_2, TARSKI, PENCIL_2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      RELAT_1, BINARITH, STRUCT_0, FUNCT_1, PARTFUN1, FUNCT_2, REALSET1,
+      RFINSEQ, CARD_1, FINSEQ_1, CARD_3, PRE_TOPC, PBOOLE, MSUALG_1, MSUALG_2,
+      PZFMISC1, TOPS_2, T_0TOPSP, GRCAT_1, PRALG_1, POLYNOM1, TOPREAL1,
+      FINSEQ_4, PENCIL_1;
+ constructors BINARITH, REAL_1, MSUALG_2, POLYNOM1, PZFMISC1, TOPS_2, T_0TOPSP,
+      TOPGRP_1, RFINSEQ, TOPREAL1, PENCIL_1, MEMBERED;
+ clusters STRUCT_0, RELSET_1, SUBSET_1, PRALG_1, FINSEQ_5, REALSET1, BORSUK_2,
+      PENCIL_1, XREAL_0, ARYTM_3, TREES_9, FUNCT_2, PARTFUN1, XBOOLE_0;
+ requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
+ definitions TARSKI, PBOOLE, PENCIL_1, XBOOLE_0;
+ theorems TARSKI, FUNCT_1, PBOOLE, CARD_3, CARD_1, FINSEQ_1, ZFMISC_1, NAT_1,
+      REAL_1, REAL_2, AXIOMS, MSUALG_1, FUNCT_7, YELLOW_6, REALSET1, PZFMISC1,
+      MSUALG_2, PUA2MSS1, PRE_TOPC, FINSEQ_3, FUNCT_2, GRCAT_1, TOPGRP_1,
+      TOPS_2, T_0TOPSP, RELAT_1, PENCIL_1, TOPREAL1, RFINSEQ, GOBOARD9,
+      BINARITH, FINSEQ_4, JORDAN3, AMI_5, SCMFSA_7, FINSEQ_5, XBOOLE_0,
+      XBOOLE_1, SQUARE_1, XCMPLX_0, XCMPLX_1;
+ schemes FINSEQ_1, POLYNOM2, NAT_1;
+
+begin :: Preliminaries on finite sequences
+
+definition
+ let D be set;
+ let p be FinSequence of D;
+ let i,j be Nat;
+func Del(p,i,j) -> FinSequence of D equals :Def1:
+ (p|(i -' 1))^(p/^j);
+coherence;
+end;
+
+theorem Th1:
+for D being set,p being FinSequence of D,i,j being Nat
+holds rng Del(p,i,j) c= rng p
+ proof
+  let D be set,p be FinSequence of D,i,j be Nat;
+    rng (p|(i -' 1)) = rng (p|Seg(i -' 1)) by TOPREAL1:def 1;
+then A1: rng (p|(i -' 1)) c= rng p by RELAT_1:99;
+A2: rng (p/^j) c= rng p
+   proof
+    per cases;
+    suppose D is empty;
+    then rng p c= {} by FINSEQ_1:def 4;
+    then A3: rng p = {} by XBOOLE_1:3;
+then A4:  p = {} by RELAT_1:64;
+A5:  now assume A6: j<=len p;
+then j <= 0 by A4,FINSEQ_1:25;
+     then j=0 by NAT_1:18;
+     then len (p/^j) = len p - 0 by A6,RFINSEQ:def 2;
+     then len (p/^j) = 0 - 0 by A4,FINSEQ_1:25;
+     hence thesis by A4,FINSEQ_1:25;
+    end;
+      now assume j>len p;
+     then p/^j = <*>D by RFINSEQ:def 2;
+     hence thesis by A3,RELAT_1:64;
+    end;
+    hence thesis by A5;
+    suppose D is non empty;
+    then reconsider E=D as non empty set;
+    reconsider r=p as FinSequence of E;
+      rng (r/^j) c= rng r by FINSEQ_5:36;
+    hence thesis;
+   end;
+    rng ((p|(i -' 1))^(p/^j)) = (rng (p|(i -' 1))) \/ rng (p/^j) by FINSEQ_1:44
+;
+  then rng Del(p,i,j) = (rng (p|(i -' 1))) \/ rng (p/^j) by Def1;
+  hence rng Del(p,i,j) c= rng p by A1,A2,XBOOLE_1:8;
+ end;
+
+theorem Th2:
+for D being set,p being FinSequence of D,i,j being Nat st
+i in dom p & j in dom p holds len Del(p,i,j) = len p - j + i - 1
+ proof
+  let D be set;
+  let p be FinSequence of D;
+  let i,j be Nat;
+  assume
+A1: i in dom p & j in dom p;
+then A2: 1 <= i & i <= len p by FINSEQ_3:27;
+then A3: i - 1 >= 1-1 by REAL_1:49;
+     i -' 1 <= i by GOBOARD9:2;
+then A4: i -' 1 <= len p by A2,AXIOMS:22;
+A5: j <= len p by A1,FINSEQ_3:27;
+    Del(p,i,j) = (p|(i -' 1))^(p/^j) by Def1;
+  hence len Del(p,i,j) = len (p|(i -' 1)) + len (p/^j) by FINSEQ_1:35
+  .= i -' 1 + len (p/^j) by A4,TOPREAL1:3
+  .= i -' 1 + (len p - j) by A5,RFINSEQ:def 2
+  .= (i - 1) + (len p - j) by A3,BINARITH:def 3
+  .=len p - j + i - 1 by XCMPLX_1:29;
+ end;
+
+theorem Th3:
+for D being set,p being FinSequence of D,i,j being Nat st
+i in dom p & j in dom p holds len Del(p,i,j) = 0 implies i=1 & j=len p
+ proof
+  let D be set;
+  let p be FinSequence of D;
+  let i,j be Nat;
+  assume
+A1: i in dom p & j in dom p & len Del(p,i,j) = 0;
+  then len p - j + i - 1 = 0 by Th2;
+  then len p - j + i = 0+1 by XCMPLX_1:27;
+then A2: len p - j = 1 - i by XCMPLX_1:26;
+    j <= len p by A1,FINSEQ_3:27;
+  then len p - j >= 0 by SQUARE_1:12;
+then A3: 1 >= i by A2,REAL_2:105;
+    1 <= i by A1,FINSEQ_3:27;
+  hence i=1 by A3,AXIOMS:21;
+  hence j=len p by A2,XCMPLX_1:15;
+ end;
+
+theorem Th4:
+for D being set,p being FinSequence of D,i,j,k being Nat st
+i in dom p & 1 <= k & k <= i-1 holds Del(p,i,j).k = p.k
+ proof
+  let D be set;
+  let p be FinSequence of D;
+  let i,j,k be Nat;
+  assume
+A1: i in dom p & 1 <= k & k <= i-1;
+then A2: i <= len p by FINSEQ_3:27;
+     i -' 1 <= i by GOBOARD9:2;
+then A3: i -' 1 <= len p by A2,AXIOMS:22;
+     i-1 <= i -' 1 by JORDAN3:3;
+then A4: k <= i -' 1 by A1,AXIOMS:22;
+     len (p|(i -' 1)) = i -' 1 by A3,TOPREAL1:3;
+then A5: k in dom (p|(i -' 1)) by A1,A4,FINSEQ_3:27;
+     k <= len p by A3,A4,AXIOMS:22;
+then A6: k in dom p by A1,FINSEQ_3:27;
+  thus Del(p,i,j).k = ((p|(i -' 1))^(p/^j)).k by Def1
+  .= (p|(i -' 1)).k by A5,FINSEQ_1:def 7
+  .= (p|(i -' 1))/.k by A5,FINSEQ_4:def 4
+  .= p/.k by A5,TOPREAL1:1
+  .= p.k by A6,FINSEQ_4:def 4;
+ end;
+
+theorem Th5:
+for p,q being FinSequence, k being Nat holds
+len p + 1 <= k implies (p^q).k=q.(k-len p)
+ proof
+  let p,q be FinSequence;
+  let k be Nat;
+  assume A1: len p + 1 <= k;
+  per cases;
+  suppose k <= len p + len q;
+  hence thesis by A1,FINSEQ_1:36;
+  suppose A2: not k <= len p + len q;
+  then not k <= len (p^q) by FINSEQ_1:35;
+then A3: not k in dom (p^q) by FINSEQ_3:27;
+    k-len p > len q by A2,REAL_1:86;
+then A4: not k-len p in dom q by FINSEQ_3:27;
+  thus (p^q).k= {} by A3,FUNCT_1:def 4
+  .= q.(k-len p) by A4,FUNCT_1:def 4;
+ end;
+
+theorem Th6:
+for D being set,p being FinSequence of D,i,j,k being Nat st
+i in dom p & j in dom p & i <= j & i <= k & k <= len p - j + i - 1
+holds Del(p,i,j).k = p.(j -'i + k + 1)
+ proof
+  let D be set;
+  let p be FinSequence of D;
+  let i,j,k be Nat;
+  assume
+A1: i in dom p & j in dom p & i <= j & i <= k & k <= len p - j + i - 1;
+then A2: 1 <=i & i <= len p by FINSEQ_3:27;
+     i -' 1 <= i by GOBOARD9:2;
+then i -' 1 <= len p by A2,AXIOMS:22;
+then A3: len (p|(i -' 1)) = i -' 1 by TOPREAL1:3;
+A4: i -' 1 + 1 <= k by A1,A2,AMI_5:4;
+    i -' 1 <= i by GOBOARD9:2;
+  then k >= i -' 1 by A1,AXIOMS:22;
+  then k - (i -' 1) >= (i -' 1) - (i -' 1) by REAL_1:49;
+  then k - (i -' 1) >= 0 by XCMPLX_1:14;
+then A5: k - (i -' 1) = k -' (i -' 1) by BINARITH:def 3;
+A6: 1 <= k - (i -' 1) by A4,REAL_1:84;
+A7: 1 <=j & j <= len p by A1,FINSEQ_3:27;
+then A8: len (p/^j) = len p - j by RFINSEQ:def 2;
+  i-1 >= 1-1 by A2,REAL_1:49;
+then A9: i -' 1 = i-1 by BINARITH:def 3;
+  k <= len p - j + (i - 1) by A1,XCMPLX_1:29;
+then k - (i -' 1) <= len p - j by A9,REAL_1:86;
+then A10: k - (i -' 1) in dom (p/^j) by A5,A6,A8,FINSEQ_3:27;
+  j-i >= i-i by A1,REAL_1:49;
+then j-i >= 0 by XCMPLX_1:14;
+then A11: j -' i = j-i by BINARITH:def 3;
+  thus Del(p,i,j).k = ((p|(i -' 1))^(p/^j)).k by Def1
+  .= (p/^j).(k - (i -' 1)) by A3,A4,Th5
+  .= p.(j + (k - (i -' 1))) by A7,A10,RFINSEQ:def 2
+  .= p.(j + (k + (1 - i))) by A9,XCMPLX_1:38
+  .= p.(j + (k + 1 - i)) by XCMPLX_1:29
+  .= p.(j + (k + 1) - i) by XCMPLX_1:29
+  .= p.(j - i + (k + 1)) by XCMPLX_1:29
+  .= p.(j -'i + k + 1) by A11,XCMPLX_1:1;
+ end;
+
+scheme FinSeqOneToOne{X,Y,D()->set,f()-> FinSequence of D(),P[set,set]}:
+ ex g being one-to-one FinSequence of D() st
+ X() = g.1 & Y()=g.len g & rng g c= rng f() &
+ for j being Nat st 1 <= j & j < len g holds P[g.j,g.(j+1)]
+provided
+ A1: X() = f().1 & Y()=f().len f() and
+ A2: for i being Nat, d1,d2 being set
+ st 1 <= i & i < len f() & d1 =f().i & d2 = f().(i+1) holds P[d1,d2]
+proof
+    defpred Q[Nat] means
+    ex f being FinSequence of D() st
+    len f = $1 &
+    X() = f.1 & Y() = f.(len f) &
+    rng f c= rng f() &
+    for i being Nat st 1 <= i & i < len f holds P[f.i,f.(i+1)];
+      for i being Nat st 1 <= i & i < len f() holds P[f().i,f().(i+1)] by A2;
+    then A3: ex k being Nat st Q[k] by A1;
+    consider k being Nat such that
+   A4: Q[k] & for n being Nat st Q[n] holds k <= n from Min(A3);
+    consider g being FinSequence of D() such that
+   A5: len g = k &
+    X() = g.1 & Y() = g.(len g) &
+    rng g c= rng f() &
+    for i being Nat st 1 <= i & i < len g holds P[g.i,g.(i+1)] by A4;
+      now assume not g is one-to-one; then consider x,y being set such that
+   A6: x in dom g & y in dom g & g.x = g.y & x <> y by FUNCT_1:def 8;
+    reconsider x,y as Nat by A6;
+    per cases by A6,AXIOMS:21;
+    suppose A7: x < y;
+then A8:  x+1 <= y by NAT_1:38;
+then A9: y - (x+1) >= 0 by SQUARE_1:12;
+    set d = Del(g,x+1,y);
+   A10: x+1 >= 1 by NAT_1:29;
+A11: 1 <= y & y <= len g by A6,FINSEQ_3:27;
+then A12: x < len g by A7,AXIOMS:22;
+    then x+1 <= len g by NAT_1:38;
+then A13: x+1 in dom g by A10,FINSEQ_3:27;
+      1 <= x + (1-1) by A6,FINSEQ_3:27;
+    then 1 <= (x+1)-1 by XCMPLX_1:29;
+   then A14: X() = d.1 by A5,A13,Th4;
+   A15: Y() = d.(len d)
+    proof
+     per cases;
+     suppose A16: len d <= x;
+     then len g - y + (x+1) - 1 <= x by A6,A13,Th2;
+     then len g - y + x + 1 - 1 <= x by XCMPLX_1:1;
+     then len g - y + x <= x by XCMPLX_1:26;
+     then len g - y <= 0 by REAL_2:174;
+     then len g <= y by SQUARE_1:11;
+then A17: len g = y by A11,AXIOMS:21;
+       now assume len d = 0;
+      then x+1 = 0+1 by A6,A13,Th3;
+      then x = 0 by XCMPLX_1:2;
+      hence contradiction by A6,FINSEQ_3:26;
+     end;
+     then 0 < len d by NAT_1:19;
+then A18:  0+1 <= len d by NAT_1:38;
+       len d <= x+(1-1) by A16;
+then len d <= (x+1)-1 by XCMPLX_1:29;
+then A19:  d.len d = g.len d by A13,A18,Th4;
+       x <= 0 + (x+1) - 1 by XCMPLX_1:26;
+     then x <= len g - y + (x+1) - 1 by A17,XCMPLX_1:14;
+     then x <= len d by A6,A13,Th2;
+     hence thesis by A5,A6,A16,A17,A19,AXIOMS:21;
+     suppose A20: len d > x;
+A21: len d = len g - y + (x+1) - 1 by A6,A13,Th2;
+       x+1 <= len d by A20,NAT_1:38;
+     hence d.len d = g.(y -'(x+1) + (len g - y + (x+1) - 1) + 1)
+                     by A6,A8,A13,A21,Th6
+            .= g.(y - (x+1) + (len g - y + (x+1) - 1) + 1) by A8,SCMFSA_7:3
+            .= g.(y - (x+1) + ((x+1) + ((len g - y) - 1)) + 1) by XCMPLX_1:29
+            .= g.(y - (x+1) + ((x+1) + (((len g - y) - 1)) + 1)) by XCMPLX_1:1
+            .= g.( ((x+1) + ((((len g - y) - 1)) + 1)) + (y - (x+1)))
+            by XCMPLX_1:1
+            .= g.( (((len g - y) - 1) + 1) + y ) by XCMPLX_1:28
+            .= g.( ((len g - y) - (1 - 1)) + y ) by XCMPLX_1:37
+            .= g.( len g - (y - y) ) by XCMPLX_1:37
+            .= g.( len g - 0 ) by XCMPLX_1:14
+            .= Y() by A5;
+    end;
+    A22: rng d c= rng f() &
+    for i being Nat st 1 <= i & i < len d holds P[d.i,d.(i+1)]
+     proof
+        rng d c= rng g by Th1;
+      hence rng d c= rng f() by A5,XBOOLE_1:1;
+      let i be Nat;
+      assume A23: 1 <= i & i < len d;
+A24:  1<=i+1 by NAT_1:29;
+      per cases by REAL_1:def 5;
+      suppose A25: i < x;
+      then i <= (x+1)-1 by XCMPLX_1:26;
+then A26:   d.i = g.i by A13,A23,Th4;
+        i+1 <= x by A25,NAT_1:38;
+      then i+1 <= (x+1)-1 by XCMPLX_1:26;
+then A27:  d.(i+1) = g.(i+1) by A13,A24,Th4;
+        i < len g by A12,A25,AXIOMS:22;
+      hence P[d.i,d.(i+1)] by A5,A23,A26,A27;
+      suppose A28: i = x;
+      then i <= (x+1)-1 by XCMPLX_1:26;
+then A29:   d.i = g.y by A6,A13,A23,A28,Th4;
+        now assume y=len g;
+       then x < len g - len g + (x+1) - 1 by A6,A13,A23,A28,Th2;
+       then x < len g - len g + ((x+1) - 1) by XCMPLX_1:29;
+       then x < 0 + ((x+1) - 1) by XCMPLX_1:14;
+       hence contradiction by XCMPLX_1:26;
+      end;
+then A30:  y < len g by A11,REAL_1:def 5;
+then A31:   0 < len g - y by SQUARE_1:11;
+      then 0 < len g -' y by BINARITH:def 3;
+      then 0+1 <= len g -' y by NAT_1:38;
+      then 1-1 <= (len g -' y) - 1 by REAL_1:49;
+      then 0 <= (len g - y) - 1 by A31,BINARITH:def 3;
+      then (i+1) + 0 <= (i+1) + ((len g - y) - 1) by REAL_1:55;
+      then (i+1) + 0 <= (i+1) + (len g - y) - 1 by XCMPLX_1:29;
+then d.(i+1) = g.(y -'(x+1) + (i+1) + 1) by A6,A8,A13,A28,Th6
+             .= g.(y+1) by A8,A28,AMI_5:4;
+      hence P[d.i,d.(i+1)] by A5,A11,A29,A30;
+      suppose i > x;
+then A32:   x+1 <= i by NAT_1:38;
+        i <= len g - y + (x+1) - 1 by A6,A13,A23,Th2;
+then A33:   d.i = g.(y -'(x+1) + i + 1) by A6,A8,A13,A32,Th6;
+        i <= i+1 by NAT_1:29;
+then A34:  x+1 <= i+1 by A32,AXIOMS:22;
+A35:   len g - y >= 0 by A11,SQUARE_1:12;
+        i < len g - y + (x+1) - 1 by A6,A13,A23,Th2;
+      then i < len g -' y + (x+1) - 1 by A35,BINARITH:def 3;
+      then i < len g -' y + x + 1 - 1 by XCMPLX_1:1;
+then A36:   i < len g -' y + x by XCMPLX_1:26;
+      then i+1 <= len g -' y + x by NAT_1:38;
+      then i+1 <= len g -' y + x + 1 - 1 by XCMPLX_1:26;
+      then i+1 <= len g - y + x + 1 - 1 by A35,BINARITH:def 3;
+      then i+1 <= len g - y + (x+1) - 1 by XCMPLX_1:1;
+then A37:   d.(i+1) = g.(y -'(x+1) + (i+1) + 1) by A6,A8,A13,A34,Th6
+             .= g.(y -'(x+1) + i + 1 + 1) by XCMPLX_1:1;
+A38:   1 <= y -'(x+1) + i + 1 by NAT_1:29;
+        i < len g - y + x by A35,A36,BINARITH:def 3;
+      then i - x < len g - y + x - x by REAL_1:54;
+      then i - x < len g - y by XCMPLX_1:26;
+      then i - x + y < len g - y + y by REAL_1:67;
+      then y + (i - x) < len g - (y - y) by XCMPLX_1:37;
+      then y + (i - x) < len g - 0 by XCMPLX_1:14;
+      then y + i - x < len g by XCMPLX_1:29;
+      then y - x - (1 - 1) + i < len g by XCMPLX_1:29;
+      then y - x - 1 + 1 + i < len g by XCMPLX_1:37;
+      then y - x - 1 + i + 1 < len g by XCMPLX_1:1;
+      then y - (x+1) + i + 1 < len g by XCMPLX_1:36;
+      then y -'(x+1) + i + 1 < len g by A9,BINARITH:def 3;
+      hence P[d.i,d.(i+1)] by A5,A33,A37,A38;
+     end;
+      0 < --(y - x) by A7,SQUARE_1:11;
+    then -(y - x) < 0 by REAL_1:66;
+    then len g + - (y - x) < len g + 0 by REAL_1:67;
+    then len g - (y - x) < len g by XCMPLX_0:def 8;
+    then len g - y + x < len g by XCMPLX_1:37;
+    then (len g - y + x) + 1 - 1 < len g by XCMPLX_1:26;
+    then len g - y + (x+1) - 1 < len g by XCMPLX_1:1;
+    then len d < len g by A6,A13,Th2;
+    hence contradiction by A4,A5,A14,A15,A22;
+    suppose A39: y < x;
+then A40:  y+1 <= x by NAT_1:38;
+then A41: x - (y+1) >= 0 by SQUARE_1:12;
+    set d = Del(g,y+1,x);
+   A42: y+1 >= 1 by NAT_1:29;
+A43: 1 <= x & x <= len g by A6,FINSEQ_3:27;
+then A44: y < len g by A39,AXIOMS:22;
+    then y+1 <= len g by NAT_1:38;
+then A45: y+1 in dom g by A42,FINSEQ_3:27;
+      1 <= y + (1-1) by A6,FINSEQ_3:27;
+    then 1 <= (y+1)-1 by XCMPLX_1:29;
+   then A46: X() = d.1 by A5,A45,Th4;
+   A47: Y() = d.(len d)
+    proof
+     per cases;
+     suppose A48: len d <= y;
+     then len g - x + (y+1) - 1 <= y by A6,A45,Th2;
+     then len g - x + y + 1 - 1 <= y by XCMPLX_1:1;
+     then len g - x + y <= y by XCMPLX_1:26;
+     then len g - x <= 0 by REAL_2:174;
+     then len g <= x by SQUARE_1:11;
+then A49: len g = x by A43,AXIOMS:21;
+       now assume len d = 0;
+      then y+1 = 0+1 by A6,A45,Th3;
+      then y = 0 by XCMPLX_1:2;
+      hence contradiction by A6,FINSEQ_3:26;
+     end;
+     then 0 < len d by NAT_1:19;
+then A50:  0+1 <= len d by NAT_1:38;
+       len d <= y+(1-1) by A48;
+then len d <= (y+1)-1 by XCMPLX_1:29;
+then A51:  d.len d = g.len d by A45,A50,Th4;
+       y <= 0 + (y+1) - 1 by XCMPLX_1:26;
+     then y <= len g - x + (y+1) - 1 by A49,XCMPLX_1:14;
+     then y <= len d by A6,A45,Th2;
+     hence thesis by A5,A6,A48,A49,A51,AXIOMS:21;
+     suppose A52: len d > y;
+A53: len d = len g - x + (y+1) - 1 by A6,A45,Th2;
+       y+1 <= len d by A52,NAT_1:38;
+     hence d.len d = g.(x -'(y+1) + (len g - x + (y+1) - 1) + 1)
+                 by A6,A40,A45,A53,Th6
+            .= g.(x - (y+1) + (len g - x + (y+1) - 1) + 1) by A40,SCMFSA_7:3
+            .= g.(x - (y+1) + ((y+1) + ((len g - x) - 1)) + 1) by XCMPLX_1:29
+            .= g.(x - (y+1) + ((y+1) + (((len g - x) - 1)) + 1)) by XCMPLX_1:1
+            .= g.( ((y+1) + ((((len g - x) - 1)) + 1)) + (x - (y+1)))
+            by XCMPLX_1:1
+            .= g.( (((len g - x) - 1) + 1) + x ) by XCMPLX_1:28
+            .= g.( ((len g - x) - (1 - 1)) + x ) by XCMPLX_1:37
+            .= g.( len g - (x - x) ) by XCMPLX_1:37
+            .= g.( len g - 0 ) by XCMPLX_1:14
+            .= Y() by A5;
+    end;
+    A54: rng d c= rng f() &
+    for i being Nat st 1 <= i & i < len d holds P[d.i,d.(i+1)]
+     proof
+        rng d c= rng g by Th1;
+      hence rng d c= rng f() by A5,XBOOLE_1:1;
+      let i be Nat;
+      assume A55: 1 <= i & i < len d;
+A56:  1<=i+1 by NAT_1:29;
+      per cases by REAL_1:def 5;
+      suppose A57: i < y;
+      then i <= (y+1)-1 by XCMPLX_1:26;
+then A58:   d.i = g.i by A45,A55,Th4;
+        i+1 <= y by A57,NAT_1:38;
+      then i+1 <= (y+1)-1 by XCMPLX_1:26;
+then A59:  d.(i+1) = g.(i+1) by A45,A56,Th4;
+        i < len g by A44,A57,AXIOMS:22;
+      hence P[d.i,d.(i+1)] by A5,A55,A58,A59;
+      suppose A60: i = y;
+      then i <= (y+1)-1 by XCMPLX_1:26;
+then A61:   d.i = g.x by A6,A45,A55,A60,Th4;
+        now assume x=len g;
+       then y < len g - len g + (y+1) - 1 by A6,A45,A55,A60,Th2;
+       then y < len g - len g + ((y+1) - 1) by XCMPLX_1:29;
+       then y < 0 + ((y+1) - 1) by XCMPLX_1:14;
+       hence contradiction by XCMPLX_1:26;
+      end;
+then A62:  x < len g by A43,REAL_1:def 5;
+then A63:   0 < len g - x by SQUARE_1:11;
+      then 0 < len g -' x by BINARITH:def 3;
+      then 0+1 <= len g -' x by NAT_1:38;
+      then 1-1 <= (len g -' x) - 1 by REAL_1:49;
+      then 0 <= (len g - x) - 1 by A63,BINARITH:def 3;
+      then (i+1) + 0 <= (i+1) + ((len g - x) - 1) by REAL_1:55;
+      then (i+1) + 0 <= (i+1) + (len g - x) - 1 by XCMPLX_1:29;
+then d.(i+1) = g.(x -'(y+1) + (i+1) + 1) by A6,A40,A45,A60,Th6
+             .= g.(x+1) by A40,A60,AMI_5:4;
+      hence P[d.i,d.(i+1)] by A5,A43,A61,A62;
+      suppose i > y;
+then A64:   y+1 <= i by NAT_1:38;
+        i <= len g - x + (y+1) - 1 by A6,A45,A55,Th2;
+then A65:   d.i = g.(x -'(y+1) + i + 1) by A6,A40,A45,A64,Th6;
+        i <= i+1 by NAT_1:29;
+then A66:  y+1 <= i+1 by A64,AXIOMS:22;
+A67:   len g - x >= 0 by A43,SQUARE_1:12;
+        i < len g - x + (y+1) - 1 by A6,A45,A55,Th2;
+      then i < len g -' x + (y+1) - 1 by A67,BINARITH:def 3;
+      then i < len g -' x + y + 1 - 1 by XCMPLX_1:1;
+then A68:   i < len g -' x + y by XCMPLX_1:26;
+      then i+1 <= len g -' x + y by NAT_1:38;
+      then i+1 <= len g -' x + y + 1 - 1 by XCMPLX_1:26;
+      then i+1 <= len g - x + y + 1 - 1 by A67,BINARITH:def 3;
+      then i+1 <= len g - x + (y+1) - 1 by XCMPLX_1:1;
+then A69:   d.(i+1) = g.(x -'(y+1) + (i+1) + 1) by A6,A40,A45,A66,Th6
+             .= g.(x -'(y+1) + i + 1 + 1) by XCMPLX_1:1;
+A70:   1 <= x -'(y+1) + i + 1 by NAT_1:29;
+        i < len g - x + y by A67,A68,BINARITH:def 3;
+      then i - y < len g - x + y - y by REAL_1:54;
+      then i - y < len g - x by XCMPLX_1:26;
+      then i - y + x < len g - x + x by REAL_1:67;
+      then x + (i - y) < len g - (x - x) by XCMPLX_1:37;
+      then x + (i - y) < len g - 0 by XCMPLX_1:14;
+      then x + i - y < len g by XCMPLX_1:29;
+      then x - y - (1 - 1) + i < len g by XCMPLX_1:29;
+      then x - y - 1 + 1 + i < len g by XCMPLX_1:37;
+      then x - y - 1 + i + 1 < len g by XCMPLX_1:1;
+      then x - (y+1) + i + 1 < len g by XCMPLX_1:36;
+      then x -'(y+1) + i + 1 < len g by A41,BINARITH:def 3;
+      hence P[d.i,d.(i+1)] by A5,A65,A69,A70;
+     end;
+      0 < --(x - y) by A39,SQUARE_1:11;
+    then -(x - y) < 0 by REAL_1:66;
+    then len g + - (x - y) < len g + 0 by REAL_1:67;
+    then len g - (x - y) < len g by XCMPLX_0:def 8;
+    then len g - x + y < len g by XCMPLX_1:37;
+    then (len g - x + y) + 1 - 1 < len g by XCMPLX_1:26;
+    then len g - x + (y+1) - 1 < len g by XCMPLX_1:1;
+    then len d < len g by A6,A45,Th2;
+    hence contradiction by A4,A5,A46,A47,A54;
+    end;
+    hence ex f being one-to-one FinSequence of D() st
+    X() = f.1 & Y() = f.(len f) &
+    rng f c= rng f() &
+    for i being Nat st 1 <= i & i < len f holds P[f.i,f.(i+1)] by A5;
+end;
+
+begin :: Segre cosets
+
+theorem Th7:
+for I being non empty set
+for A being 1-sorted-yielding ManySortedSet of I
+for L being ManySortedSubset of Carrier A
+for i being Element of I
+for S being Subset of A.i holds
+L+*(i,S) is ManySortedSubset of Carrier A
+ proof
+  let I be non empty set;
+  let A be 1-sorted-yielding ManySortedSet of I;
+  let L be ManySortedSubset of Carrier A;
+  let i be Element of I;
+  let S be Subset of A.i;
+A1: dom L = I by PBOOLE:def 3;
+A2: L c= Carrier A by MSUALG_2:def 1;
+    L+*(i,S) c= Carrier A
+   proof
+    let a be set;
+    assume a in I; then reconsider b=a as Element of I;
+    per cases; suppose A3: a = i;
+    then L+*(i,S).b = S by A1,FUNCT_7:33;
+    then L+*(i,S).b c= the carrier of A.b by A3;
+    hence L+*(i,S).a c= (Carrier A).a by YELLOW_6:9;
+    suppose a <> i;
+    then L+*(i,S).a = L.b by FUNCT_7:34;
+    hence L+*(i,S).a c= (Carrier A).a by A2,PBOOLE:def 5;
+   end;
+  hence L+*(i,S) is ManySortedSubset of Carrier A by MSUALG_2:def 1;
+ end;
+
+definition
+ let I be non empty set;
+ let A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I);
+mode Segre-Coset of A -> Subset of Segre_Product A means :Def2:
+ ex L being Segre-like non trivial-yielding ManySortedSubset of Carrier A st
+ it = product L & L.indx(L) = [#](A.indx(L));
+existence
+ proof
+A1: Segre_Product A = TopStruct(#product Carrier A, Segre_Blocks A#)
+  by PENCIL_1:def 23;
+  consider L being Segre-like non trivial-yielding ManySortedSubset
+  of Carrier A;
+  reconsider C=L+*(indx(L),[#](A.indx(L))) as
+  ManySortedSubset of Carrier A by Th7;
+    dom A = I by PBOOLE:def 3;
+  then A.indx(L) in rng A by FUNCT_1:12;
+  then A.indx(L) is non trivial by PENCIL_1:def 17;
+  then the carrier of A.indx(L) is non trivial by REALSET1:def 13;
+then A2: [#]((A.indx(L))) is non trivial by PRE_TOPC:12;
+  then reconsider C as Segre-like non trivial-yielding
+  ManySortedSubset of Carrier A by PENCIL_1:27;
+A3: dom C = I & dom Carrier A = I by PBOOLE:def 3;
+    C c= Carrier A by MSUALG_2:def 1;
+  then for a being set st a in I holds C.a c= (Carrier A).a by PBOOLE:def 5;
+  then product C c= product Carrier A by A3,CARD_3:38;
+  then reconsider P = product C as Subset of Segre_Product A by A1;
+  take P;
+    dom L = I by PBOOLE:def 3;
+then A4: C.indx(L) = [#](A.indx(L)) by FUNCT_7:33;
+  then indx(C) = indx(L) by A2,PENCIL_1:def 21;
+  hence thesis by A4;
+ end;
+end;
+
+theorem Th8:
+for I being non empty set
+for A being non-Trivial-yielding (TopStruct-yielding ManySortedSet of I)
+for B1,B2 being Segre-Coset of A st 2 c= Card(B1 /\ B2) holds B1 = B2
+ proof
+  let I be non empty set;
+  let A be non-Trivial-yielding (TopStruct-yielding ManySortedSet of I);
+  let B1,B2 be Segre-Coset of A;
+  assume A1: 2 c= Card(B1 /\ B2);
+  consider L1 being Segre-like non trivial-yielding
+  ManySortedSubset of Carrier A such that
+A2: B1 = product L1 & L1.indx(L1) = [#](A.indx(L1)) by Def2;
+  consider L2 being Segre-like non trivial-yielding
+  ManySortedSubset of Carrier A such that
+A3: B2 = product L2 & L2.indx(L2) = [#](A.indx(L2)) by Def2;
+A4: indx L1 = indx L2 & for i being set st i <> indx L1 holds L1.i = L2.i
+  by A1,A2,A3,PENCIL_1:26;
+A5: dom L1 = I & dom L2 = I by PBOOLE:def 3;
+    now let i be set; assume i in I; per cases;
+  suppose i <> indx L1; hence L1.i = L2.i by A1,A2,A3,PENCIL_1:26;
+  suppose i = indx(L1); hence L1.i = L2.i by A2,A3,A4;
+  end;
+  hence B1 = B2 by A2,A3,A5,FUNCT_1:9;
+ end;
+
+definition
+ let S be TopStruct;
+ let X,Y be Subset of S;
+pred X,Y are_joinable means :Def3:
+ ex f being FinSequence of bool the carrier of S st
+ X = f.1 & Y = f.(len f) &
+ (for W being Subset of S st W in rng f holds
+ W is closed_under_lines strong) &
+ for i being Nat st 1 <= i & i < len f holds
+ 2 c= Card((f.i) /\ (f.(i+1)));
+end;
+
+theorem
+  for S being TopStruct
+for X,Y being Subset of S st
+X,Y are_joinable
+ex f being one-to-one FinSequence of bool the carrier of S st
+(X = f.1 & Y = f.(len f) &
+(for W being Subset of S st W in rng f holds
+W is closed_under_lines strong) &
+for i being Nat st 1 <= i & i < len f holds 2 c= Card((f.i) /\ (f.(i+1))))
+proof
+ let S be TopStruct;
+ let X,Y be Subset of S;
+ assume X,Y are_joinable;
+ then consider f being FinSequence of bool the carrier of S such that
+A1: X = f.1 & Y = f.(len f) and
+A2: (for W being Subset of S st W in rng f holds
+ W is closed_under_lines strong) &
+ for i being Nat st 1 <= i & i < len f holds
+ 2 c= Card((f.i) /\ (f.(i+1))) by Def3;
+defpred P[set,set] means 2 c= Card($1 /\ $2);
+A3: for i being Nat, d1,d2 being set st
+ 1 <= i & i < len f & d1 =f.i & d2 = f.(i+1) holds P[d1,d2] by A2;
+consider g being one-to-one FinSequence of bool the carrier of S such that
+A4: X = g.1 & Y = g.(len g) and
+A5: rng g c= rng f and
+A6: for i being Nat st 1 <= i & i < len g holds P[g.i,g.(i+1)]
+ from FinSeqOneToOne(A1,A3);
+take g;
+thus thesis by A2,A4,A5,A6;
+end;
+
+theorem Th10:
+for S being TopStruct
+for X being Subset of S st X is closed_under_lines strong
+holds X,X are_joinable
+ proof
+  let S be TopStruct;
+  let X be Subset of S;
+  assume A1: X is closed_under_lines strong;
+  reconsider f = <*X*> as FinSequence of bool the carrier of S;
+  take f;
+  thus X = f.1 by FINSEQ_1:57;
+    len f = 1 by FINSEQ_1:57;
+  hence X = f.(len f) by FINSEQ_1:57;
+  thus for W being Subset of S st W in rng f holds
+  W is closed_under_lines strong
+   proof
+    let W be Subset of S;
+    assume W in rng f;
+    then W in {X} by FINSEQ_1:55;
+    hence W is closed_under_lines strong by A1,TARSKI:def 1;
+   end;
+  let i be Nat;
+  assume 1 <= i & i < len f;
+  hence 2 c= Card((f.i) /\ (f.(i+1))) by FINSEQ_1:57;
+end;
+
+theorem Th11:
+for I being non empty set
+for A being PLS-yielding ManySortedSet of I
+for X,Y being Subset of Segre_Product A st
+X is non trivial closed_under_lines strong &
+Y is non trivial closed_under_lines strong & X,Y are_joinable
+for X1,Y1 being Segre-like non trivial-yielding ManySortedSubset
+of Carrier A st X = product X1 & Y = product Y1 holds
+indx(X1) = indx(Y1) & for i being set st i <> indx(X1) holds X1.i = Y1.i
+ proof
+  let I be non empty set;
+  let A be PLS-yielding ManySortedSet of I;
+  let X,Y be Subset of Segre_Product A;
+  assume that
+A1: X is non trivial closed_under_lines strong and
+A2: Y is non trivial closed_under_lines strong and
+A3: X,Y are_joinable;
+   let X1,Y1 be Segre-like non trivial-yielding ManySortedSubset
+   of Carrier A such that
+A4: X = product X1 & Y = product Y1;
+   consider B0 being Segre-like non trivial-yielding
+   ManySortedSubset of Carrier A such that
+A5: X = product B0 & for C being Subset of A.indx(B0)
+  st C=B0.indx(B0) holds C is strong closed_under_lines by A1,PENCIL_1:29;
+A6: B0=X1 by A4,A5,PUA2MSS1:2;
+  set B=bool the carrier of Segre_Product A;
+  consider f being FinSequence of B
+  such that
+A7: X = f.1 & Y = f.(len f) &
+  (for W being Subset of Segre_Product A st W in rng f holds
+  W is closed_under_lines strong) &
+  for i being Nat st 1 <= i & i < len f holds
+  2 c= Card((f.i) /\ (f.(i+1))) by A3,Def3;
+
+  defpred P[Nat] means
+  for H being Segre-like non trivial-yielding ManySortedSubset
+  of Carrier A st f.$1 = product H holds
+  indx(X1) = indx(H) & for i being set st i <> indx(X1) holds X1.i = H.i;
+
+A8: P[1] by A4,A7,PUA2MSS1:2;
+A9: for j being Nat st 1 <= j & j < len f holds P[j] implies P[j+1]
+     proof
+      let j be Nat; assume
+A10:    1 <= j & j < len f;
+then A11:   j in dom f by FINSEQ_3:27;
+A12:   1 <= j+1 by NAT_1:29;
+        j+1 <= len f by A10,NAT_1:38;
+      then j+1 in dom f by A12,FINSEQ_3:27;
+then A13:    f.j in rng f & f.(j+1) in rng f by A11,FUNCT_1:12;
+        rng f c= B by FINSEQ_1:def 4;
+      then reconsider fj = f.j, fj1 = f.(j+1)
+        as Subset of Segre_Product A by A13;
+        fj /\ fj1 c= fj by XBOOLE_1:17;
+then A14:  Card (fj /\ fj1) c= Card fj by CARD_1:27;
+      assume
+A15:   P[j];
+        2 c= Card(fj /\ fj1) by A7,A10;
+      then 2 c= Card fj by A14,XBOOLE_1:1;
+      then fj is non trivial closed_under_lines strong by A7,A13,PENCIL_1:4;
+      then consider B1 being Segre-like non trivial-yielding
+      ManySortedSubset of Carrier A such that
+A16:   fj = product B1 & for C being Subset of A.indx(B1)
+      st C=B1.indx(B1) holds C is strong closed_under_lines by PENCIL_1:29;
+A17:   indx(B0) = indx(B1) & for i being set st i <> indx(B0)
+      holds B0.i = B1.i by A6,A15,A16;
+A18:   2 c= Card (fj /\ fj1) by A7,A10;
+        now
+       let H be Segre-like non trivial-yielding ManySortedSubset of Carrier A;
+       assume A19: f.(j+1) = product H;
+       hence indx(X1) = indx(H) by A6,A16,A17,A18,PENCIL_1:26;
+       thus for i being set st i <> indx(X1) holds X1.i = H.i
+        proof let i be set; assume A20: i <> indx(X1);
+then A21:      i <> indx(B1) by A15,A16;
+         thus X1.i = B1.i by A15,A16,A20
+         .= H.i by A16,A18,A19,A21,PENCIL_1:26;
+        end;
+      end;
+      hence P[j+1];
+     end;
+A22: for i being Nat st 1 <= i & i <= len f holds P[i] from FinInd(A8,A9);
+    len f in dom f by A2,A7,FUNCT_1:def 4;
+  then 1 <= len f by FINSEQ_3:27;
+  hence indx(X1) = indx(Y1) & for i being set st i <> indx(X1)
+  holds X1.i = Y1.i by A4,A7,A22;
+ end;
+
+begin :: Collineations of Segre product
+
+theorem
+  for S being 1-sorted
+for T being non empty 1-sorted
+for f being map of S,T st f is bijective holds f" is bijective
+ proof
+  let S be 1-sorted;
+  let T be non empty 1-sorted;
+  let f be map of S,T;
+  assume f is bijective;
+then A1: f is one-to-one onto by FUNCT_2:def 4;
+  then rng f = the carrier of T by FUNCT_2:def 3;
+then A2: rng f = [#]T by PRE_TOPC:12;
+  then A3: f" is one-to-one by A1,TOPS_2:63;
+    rng (f") = [#]S by A1,A2,TOPS_2:62;
+  then rng (f") = the carrier of S by PRE_TOPC:12;
+  then f" is onto by FUNCT_2:def 3;
+  hence f" is bijective by A3,FUNCT_2:def 4;
+ end;
+
+definition
+ let S,T be TopStruct;
+ let f be map of S,T;
+attr f is isomorphic means :Def4:
+ f is bijective open & f" is bijective open;
+end;
+
+definition
+ let S be non empty TopStruct;
+cluster isomorphic map of S,S;
+existence
+ proof
+  take f = id S;
+  thus f is isomorphic
+   proof
+    A1: f = id the carrier of S by GRCAT_1:def 11;
+    hence f is bijective;
+    thus f is open;
+    thus f" is bijective open by A1,TOPGRP_1:2;
+   end;
+ end;
+end;
+
+definition
+ let S be non empty TopStruct;
+mode Collineation of S is isomorphic map of S,S;
+end;
+
+definition
+ let S be non empty non void TopStruct;
+ let f be Collineation of S;
+ let l be Block of S;
+redefine func f.:l -> Block of S;
+coherence
+ proof
+A1: f is open by Def4;
+    l in the topology of S;
+  then reconsider L=l as Subset of S;
+    L is open by PRE_TOPC:def 5;
+  then f.:L is open by A1,T_0TOPSP:def 2;
+  hence thesis by PRE_TOPC:def 5;
+ end;
+end;
+
+definition
+ let S be non empty non void TopStruct;
+ let f be Collineation of S;
+ let l be Block of S;
+redefine func f"l -> Block of S;
+coherence
+ proof
+A1: f" is open & f is bijective by Def4;
+then A2: f is one-to-one onto by FUNCT_2:def 4;
+    l in the topology of S;
+  then reconsider L=l as Subset of S;
+    rng f = the carrier of S by A2,FUNCT_2:def 3;
+  then rng f = [#]S by PRE_TOPC:12;
+  then f" = (f qua Function)" by A2,TOPS_2:def 4;
+then A3: (f").:L = f"L by A2,FUNCT_1:155;
+    L is open by PRE_TOPC:def 5;
+  then (f").:L is open by A1,T_0TOPSP:def 2;
+  hence thesis by A3,PRE_TOPC:def 5;
+ end;
+end;
+
+theorem Th13:
+for S being non empty TopStruct
+for f being Collineation of S holds f" is Collineation of S
+ proof
+  let S be non empty TopStruct;
+  let f be Collineation of S;
+    f is bijective by Def4;
+then A1: f is one-to-one onto by FUNCT_2:def 4;
+  then rng f = the carrier of S by FUNCT_2:def 3;
+then A2: rng f = [#]S by PRE_TOPC:12;
+    f" is isomorphic
+   proof
+    thus f" is bijective open by Def4;
+      f"" = f by A1,A2,TOPS_2:64;
+    hence f"" is bijective open by Def4;
+   end;
+  hence f" is Collineation of S;
+ end;
+
+theorem Th14:
+for S being non empty TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is non trivial holds f.:X is non trivial
+ proof
+  let S be non empty TopStruct;
+  let f be Collineation of S;
+  let X be Subset of S;
+    f is bijective by Def4;
+then A1: f is one-to-one by FUNCT_2:def 4;
+A2: dom f = the carrier of S by FUNCT_2:def 1;
+  assume X is non trivial;
+  then 2 c= Card X by PENCIL_1:4; then consider x,y being set such that
+A3: x in X & y in X & x<>y by PENCIL_1:2;
+A4: f.x in f.:X & f.y in f.:X by A2,A3,FUNCT_1:def 12;
+    f.x <> f.y by A1,A2,A3,FUNCT_1:def 8;
+  then 2 c= Card(f.:X) by A4,PENCIL_1:2;
+  hence f.:X is non trivial by PENCIL_1:4;
+ end;
+
+theorem
+  for S being non empty TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is non trivial holds f"X is non trivial
+ proof
+  let S be non empty TopStruct;
+  let f be Collineation of S;
+  let X be Subset of S;
+    f is bijective by Def4;
+  then f is one-to-one onto by FUNCT_2:def 4;
+then A1: rng f = the carrier of S by FUNCT_2:def 3;
+  assume X is non trivial;
+  then 2 c= Card X by PENCIL_1:4; then consider x,y being set such that
+A2: x in X & y in X & x<>y by PENCIL_1:2;
+  consider fx being set such that
+A3: fx in dom f & f.fx = x by A1,A2,FUNCT_1:def 5;
+  consider fy being set such that
+A4: fy in dom f & f.fy = y by A1,A2,FUNCT_1:def 5;
+    fx in f"X & fy in f"X by A2,A3,A4,FUNCT_1:def 13;
+  then 2 c= Card(f"X) by A2,A3,A4,PENCIL_1:2;
+  hence f"X is non trivial by PENCIL_1:4;
+ end;
+
+theorem Th16:
+for S being non empty non void TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is strong holds f.:X is strong
+ proof
+  let S be non empty non void TopStruct;
+  let f be Collineation of S;
+  let X be Subset of S;
+  assume A1: X is strong;
+  thus f.:X is strong
+   proof
+    let a,b be Point of S;
+    assume A2: a in f.:X & b in f.:X;
+    thus a,b are_collinear
+     proof
+      per cases; suppose a=b; hence thesis by PENCIL_1:def 1;
+      suppose A3: a<>b;
+      consider A being set such that
+A4:    A in dom f & A in X & a = f.A by A2,FUNCT_1:def 12;
+      consider B being set such that
+A5:    B in dom f & B in X & b = f.B by A2,FUNCT_1:def 12;
+      reconsider A,B as Point of S by A4,A5;
+     A,B are_collinear by A1,A4,A5,PENCIL_1:def 3;
+      then consider l being Block of S such that
+A6:    {A,B} c= l by A3,A4,A5,PENCIL_1:def 1;
+        A in l by A6,ZFMISC_1:38;
+then A7:   a in f.:l by A4,FUNCT_1:def 12;
+        B in l by A6,ZFMISC_1:38;
+      then b in f.:l by A5,FUNCT_1:def 12;
+      then {a,b} c= f.:l by A7,ZFMISC_1:38;
+      hence thesis by PENCIL_1:def 1;
+     end;
+   end;
+ end;
+
+theorem
+  for S being non empty non void TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is strong holds f"X is strong
+ proof
+  let S be non empty non void TopStruct;
+  let f be Collineation of S;
+    f is bijective by Def4;
+then A1: f is one-to-one onto by FUNCT_2:def 4;
+  then rng f = the carrier of S by FUNCT_2:def 3;
+then A2: rng f = [#]S by PRE_TOPC:12;
+  reconsider g=f" as Collineation of S by Th13;
+  let X be Subset of S;
+  assume X is strong;
+  then g.:X is strong by Th16;
+  hence f"X is strong by A1,A2,TOPS_2:68;
+ end;
+
+theorem Th18:
+for S being non empty non void TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is closed_under_lines holds
+f.:X is closed_under_lines
+ proof
+  let S be non empty non void TopStruct;
+  let f be Collineation of S;
+  let X be Subset of S;
+  assume A1: X is closed_under_lines;
+  thus f.:X is closed_under_lines
+   proof
+    let l be Block of S;
+A2:  l in the topology of S;
+      f is bijective by Def4;
+    then f is onto by FUNCT_2:def 4;
+    then A3: rng f = the carrier of S by FUNCT_2:def 3;
+    assume 2 c= Card(l /\ (f.:X)); then consider a,b being set such that
+A4: a in l /\ (f.:X) & b in l /\ (f.:X) & a<>b by PENCIL_1:2;
+A5: a in l & a in f.:X by A4,XBOOLE_0:def 3;
+    then consider A being set such that
+A6:  A in dom f & A in X & a=f.A by FUNCT_1:def 12;
+A7: b in l & b in f.:X by A4,XBOOLE_0:def 3;
+    then consider B being set such that
+A8:  B in dom f & B in X & b=f.B by FUNCT_1:def 12;
+      A in (f"l) by A5,A6,FUNCT_1:def 13;
+then A9: A in (f"l) /\ X by A6,XBOOLE_0:def 3;
+      B in (f"l) by A7,A8,FUNCT_1:def 13;
+then B in (f"l) /\ X by A8,XBOOLE_0:def 3;
+    then 2 c= Card ((f"l) /\ X) by A4,A6,A8,A9,PENCIL_1:2;
+    then f"l c= X by A1,PENCIL_1:def 2;
+    then f.:(f"l) c= f.:X by RELAT_1:156;
+    hence l c= f.:X by A2,A3,FUNCT_1:147;
+   end;
+ end;
+
+theorem
+  for S being non empty non void TopStruct
+for f being Collineation of S
+for X being Subset of S st
+X is closed_under_lines holds f"X is closed_under_lines
+ proof
+  let S be non empty non void TopStruct;
+  let f be Collineation of S;
+    f is bijective by Def4;
+then A1: f is one-to-one onto by FUNCT_2:def 4;
+  then rng f = the carrier of S by FUNCT_2:def 3;
+then A2: rng f = [#]S by PRE_TOPC:12;
+  reconsider g=f" as Collineation of S by Th13;
+  let X be Subset of S;
+  assume X is closed_under_lines;
+  then g.:X is closed_under_lines by Th18;
+  hence f"X is closed_under_lines by A1,A2,TOPS_2:68;
+ end;
+
+theorem Th20:
+for S being non empty non void TopStruct
+for f being Collineation of S
+for X,Y being Subset of S st
+X is non trivial & Y is non trivial & X,Y are_joinable holds
+f.:X,f.:Y are_joinable
+ proof
+  let S be non empty non void TopStruct;
+  let f be Collineation of S;
+    f is bijective by Def4;
+then A1: f is one-to-one by FUNCT_2:def 4;
+  let X,Y be Subset of S;
+  assume A2: X is non trivial & Y is non trivial & X,Y are_joinable;
+  then consider g being FinSequence of bool the carrier of S such that
+A3: X = g.1 & Y = g.(len g) &
+  (for W being Subset of S st W in rng g holds
+  W is closed_under_lines strong) &
+  for i being Nat st 1 <= i & i < len g holds
+  2 c= Card((g.i) /\ (g.(i+1))) by Def3;
+  deffunc F(set) = f.:(g.$1);
+  consider p being FinSequence such that
+A4: len p = len g & for k being Nat st k in Seg len g holds p.k=F(k)
+  from SeqLambda;
+A5: dom p = Seg len p & dom g = Seg len g by FINSEQ_1:def 3;
+A6: rng g c= bool the carrier of S by FINSEQ_1:def 4;
+    rng p c= bool the carrier of S
+   proof
+    let o be set; assume o in rng p; then consider i being set such that
+A7:  i in dom p & o=p.i by FUNCT_1:def 5;
+    reconsider i as Nat by A7;
+      g.i in rng g by A4,A5,A7,FUNCT_1:12;
+    then reconsider gi = g.i as Subset of S by A6;
+      p.i = f.:(gi) by A4,A5,A7;
+    hence thesis by A7;
+   end;
+  then reconsider p as FinSequence of bool the carrier of S by FINSEQ_1:def 4;
+  take p;
+    1 in dom g by A2,A3,FUNCT_1:def 4;
+  hence f.:X = p.1 by A3,A4,A5;
+    len g in dom g by A2,A3,FUNCT_1:def 4;
+  hence f.:Y = p.(len p) by A3,A4,A5;
+  thus for W being Subset of S st W in rng p holds
+  W is closed_under_lines strong
+   proof
+    let W be Subset of S;
+    assume W in rng p; then consider i being set such that
+A8:  i in dom p & W=p.i by FUNCT_1:def 5;
+    reconsider i as Nat by A8;
+      g.i in rng g by A4,A5,A8,FUNCT_1:12;
+    then reconsider gi = g.i as Subset of S by A6;
+      gi in rng g by A4,A5,A8,FUNCT_1:12;
+then A9: gi is strong closed_under_lines by A3;
+      p.i = f.:(gi) by A4,A5,A8;
+    hence W is closed_under_lines strong by A8,A9,Th16,Th18;
+   end;
+  thus for i being Nat st 1 <= i & i < len p holds
+  2 c= Card((p.i) /\ (p.(i+1)))
+   proof
+    let i be Nat;
+    assume A10: 1 <= i & i < len p;
+then A11: 2 c= Card((g.i) /\ (g.(i+1))) by A3,A4;
+      i in dom g by A4,A10,FINSEQ_3:27;
+    then A12: g.i in rng g by FUNCT_1:12;
+      (g.i) /\ (g.(i+1)) c= g.i by XBOOLE_1:17;
+    then reconsider gg=(g.i) /\
+ g.(i+1) as Subset of S by A6,A12,XBOOLE_1:1;
+      i in dom g by A4,A10,FINSEQ_3:27;
+then A13: p.i = f.:(g.i) by A4,A5;
+A14: 1 <= i+1 by A10,NAT_1:38;
+      i+1 <= len p by A10,NAT_1:38;
+    then i+1 in dom p by A14,FINSEQ_3:27;
+then A15: p.(i+1) = f.:(g.(i+1)) by A4,A5;
+      gg is non trivial by A11,PENCIL_1:4;
+    then f.:gg is non trivial by Th14;
+    then f.:(g.i) /\ f.:(g.(i+1)) is non trivial by A1,FUNCT_1:121;
+    hence 2 c= Card((p.i) /\ (p.(i+1))) by A13,A15,PENCIL_1:4;
+   end;
+ end;
+
+theorem
+  for S being non empty non void TopStruct
+for f being Collineation of S
+for X,Y being Subset of S st
+X is non trivial & Y is non trivial & X,Y are_joinable holds
+f"X,f"Y are_joinable
+ proof
+  let S be non empty non void TopStruct;
+  let f be Collineation of S;
+    f is bijective by Def4;
+then A1: f is one-to-one onto by FUNCT_2:def 4;
+  then rng f = the carrier of S by FUNCT_2:def 3;
+then A2: rng f = [#]S by PRE_TOPC:12;
+  reconsider g=f" as Collineation of S by Th13;
+  let X,Y be Subset of S;
+A3: f"X = g.:X by A1,A2,TOPS_2:68;
+A4: f"Y = g.:Y by A1,A2,TOPS_2:68;
+  assume X is non trivial & Y is non trivial & X,Y are_joinable;
+  hence f"X,f"Y are_joinable by A3,A4,Th20;
+ end;
+
+theorem Th22:
+for I being non empty set
+for A being PLS-yielding ManySortedSet of I st
+for i being Element of I holds A.i is strongly_connected
+for W being Subset of Segre_Product A st
+W is non trivial strong closed_under_lines holds
+union {Y where Y is Subset of Segre_Product A :
+Y is non trivial strong closed_under_lines & W,Y are_joinable}
+is Segre-Coset of A
+ proof
+  let I be non empty set;
+  let A be PLS-yielding ManySortedSet of I;
+  assume A1: for i being Element of I holds A.i is strongly_connected;
+  let W be Subset of Segre_Product A such that
+A2: W is non trivial strong closed_under_lines;
+A3: Segre_Product A = TopStruct (# product Carrier A, Segre_Blocks A #)
+  by PENCIL_1:def 23;
+  set B = union {Y where Y is Subset of Segre_Product A :
+             Y is non trivial strong closed_under_lines & W,Y are_joinable};
+  consider K being Segre-like non trivial-yielding
+  ManySortedSubset of Carrier A such that
+A4: W = product K & for S being Subset of A.indx(K)
+  st S=K.indx(K) holds S is strong closed_under_lines by A2,PENCIL_1:29;
+    B c= the carrier of Segre_Product A
+   proof
+    let a be set; assume a in B; then consider y being set such that
+A5:  a in y & y in {Y where Y is Subset of Segre_Product A :
+    Y is non trivial strong closed_under_lines & W,Y are_joinable}
+    by TARSKI:def 4;
+    consider Y being Subset of Segre_Product A such that
+A6:  y=Y & Y is non trivial strong closed_under_lines & W,Y are_joinable by A5;
+    thus thesis by A5,A6;
+   end;
+  then reconsider C = B as Subset of Segre_Product A;
+  set O = [#](A.indx(K));
+    dom A = I by PBOOLE:def 3;
+  then A.indx(K) in rng A by FUNCT_1:12;
+  then A.indx(K) is non trivial by PENCIL_1:def 17;
+  then the carrier of A.indx(K) is non trivial by REALSET1:def 13;
+then A7: O is non trivial by PRE_TOPC:12;
+  then reconsider L = K+*(indx(K),O) as
+  Segre-like non trivial-yielding ManySortedSubset of Carrier A by Th7,PENCIL_1
+:27;
+A8: C = product L
+    proof
+     thus C c= product L
+      proof
+       let c be set; assume c in C; then consider y being set such that
+A9:     c in y & y in {Y where Y is Subset of Segre_Product A :
+       Y is non trivial strong closed_under_lines & W,Y are_joinable}
+       by TARSKI:def 4;
+       consider Y being Subset of Segre_Product A such that
+A10:    y=Y & Y is non trivial strong closed_under_lines & W,Y are_joinable by
+A9;
+       consider M being Segre-like non trivial-yielding
+       ManySortedSubset of Carrier A such that
+A11:     Y = product M & for S being Subset of A.indx(M)
+       st S=M.indx(M) holds S is strong closed_under_lines by A10,PENCIL_1:29;
+       reconsider c1 = c as ManySortedSet of I by A9,A10,PENCIL_1:14;
+A12:     dom c1 = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
+A13:    dom M = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
+A14:    dom K = I by PBOOLE:def 3 .= dom L by PBOOLE:def 3;
+         for a being set st a in dom L holds c1.a in L.a
+        proof
+         let a be set; assume A15: a in dom L;
+         then reconsider a1=a as Element of I by PBOOLE:def 3;
+         per cases; suppose A16: a = indx(K);
+A17:      c1.a in M.a by A9,A10,A11,A13,A15,CARD_3:18;
+           M c= Carrier A by MSUALG_2:def 1;
+         then M.a1 c= (Carrier A).a1 by PBOOLE:def 5;
+         then M.a1 c= the carrier of (A.a1) by YELLOW_6:9;
+         then M.a c= O by A16,PRE_TOPC:12;
+         then c1.a in O by A17;
+         hence c1.a in L.a by A14,A15,A16,FUNCT_7:33;
+         suppose A18: a <> indx(K);
+           c1.a in M.a by A9,A10,A11,A13,A15,CARD_3:18;
+         then c1.a in K.a by A2,A4,A10,A11,A18,Th11;
+         hence c1.a in L.a by A18,FUNCT_7:34;
+        end;
+       hence c in product L by A12,CARD_3:18;
+      end;
+     thus product L c= C
+      proof
+       let y be set; assume y in product L;
+       then consider z being Function such that
+A19:     z=y & dom z = dom L & for a being set st a in dom L holds
+       z.a in L.a by CARD_3:def 5;
+A20:    dom L = I & dom K = I by PBOOLE:def 3;
+       then reconsider z as ManySortedSet of I by A19,PBOOLE:def 3;
+         z.indx(K) in L.indx(K) by A19,A20;
+       then z.indx(K) in O by A20,FUNCT_7:33;
+       then reconsider zi = z.indx(K) as Point of A.indx(K);
+         K c= Carrier A by MSUALG_2:def 1;
+       then K.indx(K) c= (Carrier A).indx(K) by PBOOLE:def 5;
+       then reconsider S=K.indx(K) as Subset of A.indx(K)
+       by YELLOW_6:9;
+A21:    S is non trivial strong closed_under_lines by A4,PENCIL_1:def 21;
+         A.indx(K) is strongly_connected by A1; then consider
+       f being FinSequence of bool the carrier of (A.indx(K)) such that
+A22:     S = f.1 & zi in f.(len f) &
+       (for Z being Subset of (A.indx(K)) st Z in rng f holds
+       Z is closed_under_lines strong) &
+       for i being Nat st 1 <= i & i < len f holds
+       2 c= Card((f.i) /\ (f.(i+1))) by A21,PENCIL_1:def 11;
+A23:    len f in dom f by A22,FUNCT_1:def 4;
+A24:    1 in dom f by A22,FUNCT_1:def 4;
+       deffunc F(set) = product (L+*(indx(K),f.$1));
+       consider g being FinSequence such that
+A25:     len g = len f & for k being Nat st k in Seg (len f) holds g.k = F(k)
+          from SeqLambda;
+         rng g c= bool the carrier of Segre_Product A
+        proof
+         let a be set; assume a in rng g;
+         then consider k being set such that
+A26:       k in dom g & a=g.k by FUNCT_1:def 5;
+         reconsider k as Nat by A26;
+A27:      k in Seg (len f) by A25,A26,FINSEQ_1:def 3;
+A28:      dom (L+*(indx(K),f.k)) = I & dom Carrier A = I by PBOOLE:def 3;
+           now let o be set;
+         assume A29: o in I;
+A30:      k in dom f by A27,FINSEQ_1:def 3;
+         per cases; suppose A31: o <> indx(K);
+         then L+*(indx(K),f.k).o = L.o by FUNCT_7:34;
+then A32:      L+*(indx(K),f.k).o = K.o by A31,FUNCT_7:34;
+           K c= Carrier A by MSUALG_2:def 1;
+         hence L+*(indx(K),f.k).o c= (Carrier A).o by A29,A32,PBOOLE:def 5;
+         suppose A33: o = indx(K);
+         then L+*(indx(K),f.k).o = f.k by A20,FUNCT_7:33;
+then A34:      L+*(indx(K),f.k).o in rng f by A30,FUNCT_1:12;
+           rng f c= bool the carrier of (A.indx(K)) by FINSEQ_1:def 4;
+         then L+*(indx(K),f.k).o c= the carrier of (A.indx(K)) by A34;
+         hence L+*(indx(K),f.k).o c= (Carrier A).o by A33,YELLOW_6:9;
+         end;
+         then product (L+*(indx(K),f.k)) c= product Carrier A by A28,CARD_3:38
+;
+         then a c= product Carrier A by A25,A26,A27;
+         hence a in bool the carrier of Segre_Product A by A3;
+        end;
+       then reconsider g as FinSequence of bool the carrier of Segre_Product A
+       by FINSEQ_1:def 4;
+         len f in dom g by A23,A25,FINSEQ_3:31;
+then A35:    g.(len f) in rng g by FUNCT_1:12;
+         rng g c= bool the carrier of Segre_Product A by FINSEQ_1:def 4;
+       then reconsider Yb = g.(len f) as Subset of Segre_Product
+A
+         by A35;
+       A36: len f in Seg len f by A23,FINSEQ_1:def 3;
+then A37:    Yb = product (L+*(indx(K),f.(len f))) by A25;
+A38:    dom z = dom (L+*(indx(K),f.(len f))) by A19,FUNCT_7:32;
+         now let o be set;
+       assume o in dom (L+*(indx(K),f.(len f)));
+       then A39: o in I by PBOOLE:def 3;
+       per cases; suppose o = indx(K);
+       hence z.o in (L+*(indx(K),f.(len f))).o by A20,A22,FUNCT_7:33;
+       suppose A40: o <> indx(K);
+         z.o in L.o by A19,A20,A39;
+       hence z.o in (L+*(indx(K),f.(len f))).o by A40,FUNCT_7:34;
+       end;
+then A41:     y in Yb by A19,A37,A38,CARD_3:18;
+A42:    dom (L+*(indx(K),f.1)) = I & dom Carrier A = I by PBOOLE:def 3;
+         now let o be set; assume o in I;
+       per cases; suppose A43: o <> indx(K);
+       then L+*(indx(K),f.1).o = L.o by FUNCT_7:34;
+       hence L+*(indx(K),f.1).o = K.o by A43,FUNCT_7:34;
+       suppose o = indx(K);
+       hence L+*(indx(K),f.1).o = K.o by A20,A22,FUNCT_7:33;
+       end;
+then A44:    L+*(indx(K),f.1) = K by A20,A42,FUNCT_1:9;
+         1 in Seg len f by A24,FINSEQ_1:def 3;
+then A45:    W = g.1 by A4,A25,A44;
+A46:    f.len f is non trivial
+        proof
+         A47: 1 <= len f by A23,FINSEQ_3:27;
+         reconsider l1 = (len f) - 1 as Nat by A23,FINSEQ_3:28;
+A48:      l1 + 1 = len f - (1-1) by XCMPLX_1:37 .= len f;
+         per cases by A47,AXIOMS:21; suppose len f = 1; hence thesis by A22,
+PENCIL_1:def 21;
+         suppose len f > 1;
+         then 1+1 <= len f by NAT_1:38;
+then A49:      2-1 <= l1 by REAL_1:49;
+           l1 < len f - 0 by REAL_1:92;
+then A50:     2 c= Card((f.l1) /\ (f.(l1+1))) by A22,A49;
+           (f.l1) /\ (f.(l1+1)) c= f.(l1+1) by XBOOLE_1:17;
+         then Card((f.l1) /\ (f.(l1+1))) c= Card (f.(l1+1)) by CARD_1:27;
+         then 2 c= Card (f.(l1+1)) by A50,XBOOLE_1:1;
+         hence thesis by A48,PENCIL_1:4;
+        end;
+       then reconsider ff=f.len f as non trivial set;
+         L.indx(K) = O by A20,FUNCT_7:33;
+       then indx K = indx L by A7,PENCIL_1:def 21;
+       then reconsider EL=L+*(indx(K),ff) as
+       Segre-like non trivial-yielding ManySortedSet of I by PENCIL_1:27;
+       A51: Yb = product EL by A25,A36;
+A52:    for V being Subset of Segre_Product A st V in rng g
+holds
+       V is closed_under_lines strong
+        proof
+         let V be Subset of Segre_Product A;
+         assume V in rng g; then consider n1 being set such that
+A53:       n1 in dom g & V=g.n1 by FUNCT_1:def 5;
+         reconsider n=n1 as Nat by A53;
+A54:      n in Seg len f by A25,A53,FINSEQ_1:def 3;
+then A55:      g.n = product (L+*(indx(K),f.n)) by A25;
+A56:      n in dom f by A54,FINSEQ_1:def 3;
+           f.n is non trivial
+          proof
+           A57: 1 <= n & n <= len f by A56,FINSEQ_3:27;
+           per cases by A57,AXIOMS:21;
+           suppose 1<=n & n=len f; hence thesis by A46;
+           suppose 1 <= n & n < len f;
+then A58:       2 c= Card((f.n) /\ (f.(n+1))) by A22;
+             (f.n) /\ (f.(n+1)) c= f.n by XBOOLE_1:17;
+           then Card((f.n) /\ (f.(n+1))) c= Card (f.n) by CARD_1:27;
+           then 2 c= Card (f.n) by A58,XBOOLE_1:1;
+           hence thesis by PENCIL_1:4;
+          end;
+         then reconsider fn=f.n as non trivial set;
+           L.indx(K) = O by A20,FUNCT_7:33;
+then A59:      indx K = indx L by A7,PENCIL_1:def 21;
+           L+*(indx(K),f.n) c= Carrier A
+          proof
+           let o be set; assume A60: o in I;
+           per cases; suppose o <> indx(K);
+then A61:        L+*(indx(K),f.n).o = L.o by FUNCT_7:34;
+             L c= Carrier A by MSUALG_2:def 1;
+           hence L+*(indx(K),f.n).o c= (Carrier A).o by A60,A61,PBOOLE:def 5;
+           suppose A62: o=indx(K);
+           then L+*(indx(K),f.n).o = f.n by A20,FUNCT_7:33;
+then A63:        L+*(indx(K),f.n).o in rng f by A56,FUNCT_1:12;
+             rng f c= bool the carrier of (A.indx(K)) by FINSEQ_1:def 4;
+           then L+*(indx(K),f.n).o c= the carrier of (A.indx(K)) by A63;
+           hence L+*(indx(K),f.n).o c= (Carrier A).o by A62,YELLOW_6:9;
+          end;
+         then reconsider LI = L+*(indx(K),fn) as Segre-like non
+trivial-yielding
+         ManySortedSubset of Carrier A by A59,MSUALG_2:def 1,PENCIL_1:27;
+         reconsider LI as Segre-like non trivial-yielding
+                  ManySortedSubset of Carrier A;
+A64:      LI.indx(K) = fn by A20,FUNCT_7:33;
+then A65:      indx(LI) = indx(K) by PENCIL_1:def 21;
+           now let D be Subset of A.indx(LI);
+         assume D=LI.indx(LI);
+         then D in rng f by A56,A64,A65,FUNCT_1:12;
+         hence D is strong closed_under_lines by A22,A65;
+         end;
+         hence V is closed_under_lines strong by A53,A55,PENCIL_1:29;
+        end;
+then A66:    Yb is non trivial strong closed_under_lines by A35,A51;
+         for i being Nat st 1 <= i & i < len g holds
+       2 c= Card((g.i) /\ (g.(i+1)))
+        proof
+         let i be Nat; assume A67: 1 <= i & i < len g;
+         then i in Seg (len f) by A25,FINSEQ_1:3;
+then A68:      g.i = product (L+*(indx(K),f.i)) by A25;
+           1 <= i+1 & i+1 <= len g by A67,NAT_1:38;
+         then i+1 in Seg (len f) by A25,FINSEQ_1:3;
+then A69:     g.(i+1) = product (L+*(indx(K),f.(i+1))) by A25;
+           2 c= Card ((f.i) /\ (f.(i+1))) by A22,A25,A67; then consider
+         a,b being set such that
+A70:      a in (f.i) /\ (f.(i+1)) & b in (f.i) /\ (f.(i+1)) & a <> b
+         by PENCIL_1:2;
+         consider l1 being set such that
+A71:      l1 in product L by XBOOLE_0:def 1;
+         consider l being Function such that
+A72:       l = l1 & dom l = dom L &
+         for o being set st o in dom L holds l.o in L.o by A71,CARD_3:def 5;
+         reconsider l as ManySortedSet of I by A20,A72,PBOOLE:def 3;
+         set l1=l+*(indx(K),a),l2=l+*(indx(K),b);
+       l1.indx(K) = a by A20,A72,FUNCT_7:33;
+then A73:      l1 <> l2 by A20,A70,A72,FUNCT_7:33;
+A74:      dom l1 = I by PBOOLE:def 3 .= dom(L+*(indx(K),f.i)) by PBOOLE:def 3;
+           now let o be set; assume o in dom (L+*(indx(K),f.i));
+then A75:      o in I by PBOOLE:def 3;
+then A76:      o in dom l by PBOOLE:def 3;
+         per cases;
+         suppose A77: o = indx(K);
+         then l1.o = a by A76,FUNCT_7:33;
+         then l1.o in f.i by A70,XBOOLE_0:def 3;
+         hence l1.o in L+*(indx(K),f.i).o by A20,A77,FUNCT_7:33;
+         suppose A78: o <> indx(K);
+then A79:      l1.o = l.o by FUNCT_7:34;
+           l.o in L.o by A20,A72,A75;
+         hence l1.o in L+*(indx(K),f.i).o by A78,A79,FUNCT_7:34;
+         end;
+then A80:     l1 in product (L+*(indx(K),f.i)) by A74,CARD_3:18;
+A81:      dom l1 = I by PBOOLE:def 3
+         .= dom(L+*(indx(K),f.(i+1))) by PBOOLE:def 3;
+           now let o be set; assume o in dom (L+*(indx(K),f.(i+1)));
+then A82:      o in I by PBOOLE:def 3;
+then A83:      o in dom l by PBOOLE:def 3;
+         per cases;
+         suppose A84: o = indx(K);
+         then l1.o = a by A83,FUNCT_7:33;
+         then l1.o in f.(i+1) by A70,XBOOLE_0:def 3;
+         hence l1.o in L+*(indx(K),f.(i+1)).o by A20,A84,FUNCT_7:33;
+         suppose A85: o <> indx(K);
+then A86:      l1.o = l.o by FUNCT_7:34;
+           l.o in L.o by A20,A72,A82;
+         hence l1.o in L+*(indx(K),f.(i+1)).o by A85,A86,FUNCT_7:34;
+         end;
+         then l1 in product (L+*(indx(K),f.(i+1))) by A81,CARD_3:18;
+then A87:      l1 in (g.i) /\ (g.(i+1)) by A68,A69,A80,XBOOLE_0:def 3;
+A88:      dom l2 = I by PBOOLE:def 3 .= dom(L+*(indx(K),f.i)) by PBOOLE:def 3;
+           now let o be set; assume o in dom (L+*(indx(K),f.i));
+then A89:      o in I by PBOOLE:def 3;
+then A90:      o in dom l by PBOOLE:def 3;
+         per cases;
+         suppose A91: o = indx(K);
+         then l2.o = b by A90,FUNCT_7:33;
+         then l2.o in f.i by A70,XBOOLE_0:def 3;
+         hence l2.o in L+*(indx(K),f.i).o by A20,A91,FUNCT_7:33;
+         suppose A92: o <> indx(K);
+then A93:      l2.o = l.o by FUNCT_7:34;
+           l.o in L.o by A20,A72,A89;
+         hence l2.o in L+*(indx(K),f.i).o by A92,A93,FUNCT_7:34;
+         end;
+then A94:     l2 in product (L+*(indx(K),f.i)) by A88,CARD_3:18;
+A95:      dom l2 = I by PBOOLE:def 3
+         .= dom(L+*(indx(K),f.(i+1))) by PBOOLE:def 3;
+           now let o be set; assume o in dom (L+*(indx(K),f.(i+1)));
+then A96:      o in I by PBOOLE:def 3;
+then A97:      o in dom l by PBOOLE:def 3;
+         per cases;
+         suppose A98: o = indx(K);
+         then l2.o = b by A97,FUNCT_7:33;
+         then l2.o in f.(i+1) by A70,XBOOLE_0:def 3;
+         hence l2.o in L+*(indx(K),f.(i+1)).o by A20,A98,FUNCT_7:33;
+         suppose A99: o <> indx(K);
+then A100:      l2.o = l.o by FUNCT_7:34;
+           l.o in L.o by A20,A72,A96;
+         hence l2.o in L+*(indx(K),f.(i+1)).o by A99,A100,FUNCT_7:34;
+         end;
+         then l2 in product (L+*(indx(K),f.(i+1))) by A95,CARD_3:18;
+         then l2 in (g.i) /\ (g.(i+1)) by A68,A69,A94,XBOOLE_0:def 3;
+         hence 2 c= Card((g.i) /\ (g.(i+1))) by A73,A87,PENCIL_1:2;
+        end;
+       then W,Yb are_joinable by A25,A45,A52,Def3;
+       then Yb in {Y where Y is Subset of Segre_Product A :
+       Y is non trivial strong closed_under_lines & W,Y are_joinable} by A66;
+       hence y in C by A41,TARSKI:def 4;
+      end;
+    end;
+    dom K = I by PBOOLE:def 3;
+  then L.indx(K) = O by FUNCT_7:33;
+then A101: indx(K)=indx(L) by A7,PENCIL_1:def 21;
+    dom K = I by PBOOLE:def 3;
+  then L.indx(L) = [#](A.indx(L)) by A101,FUNCT_7:33;
+  hence B is Segre-Coset of A by A8,Def2;
+ end;
+
+theorem Th23:
+for I being non empty set
+for A being PLS-yielding ManySortedSet of I st
+for i being Element of I holds A.i is strongly_connected
+for B being set holds B is Segre-Coset of A iff
+ex W being Subset of Segre_Product A st
+W is non trivial strong closed_under_lines &
+B = union {Y where Y is Subset of Segre_Product A :
+           Y is non trivial strong closed_under_lines & W,Y are_joinable}
+ proof
+  let I be non empty set;
+  let A be PLS-yielding ManySortedSet of I;
+  assume A1: for i being Element of I holds A.i is strongly_connected;
+  let B be set;
+  thus B is Segre-Coset of A implies
+  ex W being Subset of Segre_Product A st
+  W is non trivial strong closed_under_lines &
+  B = union {Y where Y is Subset of Segre_Product A :
+             Y is non trivial strong closed_under_lines & W,Y are_joinable}
+   proof
+    assume B is Segre-Coset of A; then reconsider BB=B as Segre-Coset of A;
+    consider L being
+    Segre-like non trivial-yielding ManySortedSubset of Carrier A such that
+A2:  BB = product L & L.indx(L) = [#](A.indx(L)) by Def2;
+A3: dom L = I by PBOOLE:def 3;
+    consider V being set such that
+A4:  V in product L by XBOOLE_0:def 1;
+    consider g being Function such that
+A5:  g = V & dom g = dom L & for i being set st i in dom L holds g.i in L.i
+    by A4,CARD_3:def 5;
+    reconsider V as ManySortedSet of I by A3,A5,PBOOLE:def 3;
+      for i being set st i in I holds V.i is Element of (Carrier A).i
+     proof
+      let i be set; assume A6: i in I;
+        L c= Carrier A by MSUALG_2:def 1;
+then A7:   L.i c= (Carrier A).i by A6,PBOOLE:def 5;
+        V.i in L.i by A3,A5,A6;
+      hence V.i is Element of (Carrier A).i by A7;
+     end;
+    then reconsider V as Element of Carrier A by MSUALG_1:def 1;
+    consider K1 being Block of A.indx(L);
+      K1 in the topology of A.indx(L);
+    then reconsider K = K1 as Subset of A.indx(L);
+    reconsider VV={V} as ManySortedSubset of Carrier A by PENCIL_1:11;
+    reconsider X=VV+*(indx(L),K) as ManySortedSubset of Carrier A by Th7;
+      2 c= Card K by PENCIL_1:def 6;
+then A8: K is non trivial by PENCIL_1:4;
+    then reconsider X as Segre-like non trivial-yielding
+    ManySortedSubset of Carrier A by PENCIL_1:9,10;
+      dom VV = I by PBOOLE:def 3;
+then A9: X.indx(L) = K by FUNCT_7:33;
+    then indx(X) = indx(L) by A8,PENCIL_1:def 21;
+    then reconsider pX = product X as Block of Segre_Product A by A9,PENCIL_1:
+24;
+      pX in the topology of Segre_Product A;
+    then reconsider psX = pX as Subset of Segre_Product A;
+    take psX;
+    thus A10: psX is non trivial strong closed_under_lines by PENCIL_1:20,21;
+    then reconsider Z = union
+    {Y where Y is Subset of Segre_Product A :
+    Y is non trivial strong closed_under_lines & psX,Y are_joinable}
+    as Segre-Coset of A by A1,Th22;
+A11: dom X = I by PBOOLE:def 3;
+      for i being set st i in I holds X.i c= L.i
+     proof
+      let i be set; assume A12: i in I;
+      per cases; suppose i <> indx L;
+      then X.i = VV.i by FUNCT_7:34;
+then A13:   X.i = {V.i} by A12,PZFMISC1:def 1;
+        V.i in L.i by A3,A5,A12;
+      hence thesis by A13,ZFMISC_1:37;
+      suppose A14: i = indx(L);
+      then X.i c= the carrier of A.indx(L) by A9;
+      hence thesis by A2,A14,PRE_TOPC:12;
+     end;
+then A15: psX c= B by A2,A3,A11,CARD_3:38;
+      psX,psX are_joinable by A10,Th10;
+then A16: psX in {Y where Y is Subset of Segre_Product A :
+    Y is non trivial strong closed_under_lines & psX,Y are_joinable} by A10;
+      psX c= Z
+     proof
+      let a be set; assume a in psX;
+      hence a in Z by A16,TARSKI:def 4;
+     end;
+    then psX c= (B /\ Z) by A15,XBOOLE_1:19;
+then A17:  Card psX c= Card (B /\ Z) by CARD_1:27;
+      2 c= Card pX by PENCIL_1:def 6;
+    then 2 c= Card (B /\ Z) by A17,XBOOLE_1:1; then BB=Z by Th8;
+    hence B = union {Y where Y is Subset of Segre_Product A :
+    Y is non trivial strong closed_under_lines & psX,Y are_joinable};
+   end;
+  given W being Subset of Segre_Product A such that
+A18: W is non trivial strong closed_under_lines &
+  B = union {Y where Y is Subset of Segre_Product A :
+             Y is non trivial strong closed_under_lines & W,Y are_joinable};
+  thus B is Segre-Coset of A by A1,A18,Th22;
+ end;
+
+theorem Th24:
+for I being non empty set
+for A being PLS-yielding ManySortedSet of I st
+for i being Element of I holds A.i is strongly_connected
+for B being Segre-Coset of A
+for f being Collineation of Segre_Product A holds
+f.:B is Segre-Coset of A
+ proof
+  let I be non empty set;
+  let A be PLS-yielding ManySortedSet of I;
+  assume A1: for i being Element of I holds A.i is strongly_connected;
+  let B be Segre-Coset of A;
+  let f be Collineation of Segre_Product A;
+    f is bijective by Def4;
+then A2: f is one-to-one onto by FUNCT_2:def 4;
+then A3: rng f = the carrier of Segre_Product A by FUNCT_2:def 3;
+then A4: rng f = [#](Segre_Product A) by PRE_TOPC:12;
+  reconsider g=f" as Collineation of Segre_Product A by Th13;
+A5: dom f = the carrier of Segre_Product A &
+   dom g = the carrier of Segre_Product A by FUNCT_2:def 1;
+  consider W being Subset of Segre_Product A such that
+A6: W is non trivial strong closed_under_lines &
+  B = union {Y where Y is Subset of Segre_Product A :
+  Y is non trivial strong closed_under_lines & W,Y are_joinable} by A1,Th23;
+A7: f.:W is non trivial strong closed_under_lines by A6,Th14,Th16,Th18;
+    f.:B = union {Y where Y is Subset of Segre_Product A :
+  Y is non trivial strong closed_under_lines & f.:W,Y are_joinable}
+   proof
+    thus f.:B c= union {Y where Y is Subset of Segre_Product A
+:
+    Y is non trivial strong closed_under_lines & f.:W,Y are_joinable}
+     proof
+      let o be set; assume o in f.:B; then consider u being set such that
+A8:    u in dom f & u in B & o = f.u by FUNCT_1:def 12;
+      consider y being set such that
+A9:    u in y & y in {Y where Y is Subset of Segre_Product A :
+      Y is non trivial strong closed_under_lines & W,Y are_joinable}
+      by A6,A8,TARSKI:def 4;
+      consider Y being Subset of Segre_Product A such that
+A10:    y=Y & Y is non trivial strong closed_under_lines &
+      W,Y are_joinable by A9;
+A11:   f.:Y is non trivial strong closed_under_lines by A10,Th14,Th16,Th18;
+        f.:W,f.:Y are_joinable by A6,A10,Th20;
+      then A12:   f.:Y in {Z where Z is Subset of Segre_Product
+A :
+      Z is non trivial strong closed_under_lines & f.:W,Z are_joinable} by A11;
+        o in f.:Y by A8,A9,A10,FUNCT_1:def 12;
+      hence thesis by A12,TARSKI:def 4;
+     end;
+    let o be set; assume
+      o in union {Y where Y is Subset of Segre_Product A :
+    Y is non trivial strong closed_under_lines & f.:W,Y are_joinable};
+    then consider u being set such that
+A13:  o in u & u in {Y where Y is Subset of Segre_Product A :
+    Y is non trivial strong closed_under_lines & f.:W,Y are_joinable}
+    by TARSKI:def 4;
+    consider Y being Subset of Segre_Product A such that
+A14:  u=Y & Y is non trivial strong closed_under_lines & f.:
+W,Y are_joinable by A13;
+      f.:W is non trivial strong closed_under_lines by A6,Th14,Th16,Th18;
+    then A15: g.:(f.:W),g.:Y are_joinable by A14,Th20;
+A16: f"(f.:W) c= W by A2,FUNCT_1:152;
+      W c= f"(f.:W) by A5,FUNCT_1:146;
+    then f"(f.:W) = W by A16,XBOOLE_0:def 10;
+then A17: W,g.:Y are_joinable by A2,A4,A15,TOPS_2:68;
+      g.:
+Y is non trivial strong closed_under_lines by A14,Th14,Th16,Th18;
+then A18: g.:Y in {Z where Z is Subset of Segre_Product A :
+    Z is non trivial strong closed_under_lines & W,Z are_joinable} by A17;
+      g.o in g.:Y by A5,A13,A14,FUNCT_1:def 12;
+    then A19: g.o in B by A6,A18,TARSKI:def 4;
+      o = f.((f qua Function)".o) by A2,A3,A13,A14,FUNCT_1:57;
+    then o = f.(g.o) by A2,A4,TOPS_2:def 4;
+    hence o in f.:B by A5,A19,FUNCT_1:def 12;
+   end;
+  hence f.:B is Segre-Coset of A by A1,A7,Th23;
+ end;
+
+theorem
+  for I being non empty set
+for A being PLS-yielding ManySortedSet of I st
+for i being Element of I holds A.i is strongly_connected
+for B being Segre-Coset of A
+for f being Collineation of Segre_Product A holds
+f"B is Segre-Coset of A
+ proof
+  let I be non empty set;
+  let A be PLS-yielding ManySortedSet of I such that
+A1: for i being Element of I holds A.i is strongly_connected;
+  let B be Segre-Coset of A;
+  let f be Collineation of Segre_Product A;
+    f is bijective by Def4;
+then A2: f is one-to-one onto by FUNCT_2:def 4;
+  then rng f = the carrier of Segre_Product A by FUNCT_2:def 3;
+then A3: rng f = [#](Segre_Product A) by PRE_TOPC:12;
+  reconsider g=f" as Collineation of Segre_Product A by Th13;
+    f"B = g.:B by A2,A3,TOPS_2:68;
+  hence f"B is Segre-Coset of A by A1,Th24;
+ end;
+

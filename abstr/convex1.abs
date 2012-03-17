@@ -1,0 +1,290 @@
+:: Convex Sets and Convex Combinations
+::  by Noboru Endou , Takashi Mitsuishi and Yasunari Shidama
+::
+:: Received November 5, 2002
+:: Copyright (c) 2002 Association of Mizar Users
+
+environ
+
+ vocabulary RLVECT_1, FUNCT_1, PROB_2, ARYTM_1, RELAT_1, BHSP_1, FINSEQ_1,
+      BOOLE, JORDAN1, SETFAM_1, CONNSP_3, ARYTM_3, RUSUB_4, RLSUB_1, CONVEX1,
+      FINSEQ_4, SEQ_1, CARD_1, RLVECT_2;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, PRE_TOPC, STRUCT_0, NUMBERS,
+      XCMPLX_0, XREAL_0, FUNCT_1, CARD_1, NAT_1, REAL_1, FUNCT_2, FINSEQ_1,
+      RLVECT_1, RLSUB_1, FINSEQ_4, RLVECT_2, RVSUM_1, BHSP_1, RUSUB_4, RUSUB_5;
+ constructors REAL_1, EUCLID, SEQ_1, RUSUB_5, FINSEQ_4, RLVECT_2, MEMBERED;
+ clusters STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, RLVECT_1, SEQ_1, RUSUB_4,
+      MEMBERED;
+ requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+
+
+begin  :: Convex Sets
+
+definition
+let V be non empty RLSStruct, M be Subset of V, r be Real;
+  func r*M -> Subset of V equals
+:: CONVEX1:def 1
+  {r * v where v is Element of V: v in M};
+end;
+
+definition
+let V be non empty RLSStruct, M be Subset of V;
+  attr M is convex means
+:: CONVEX1:def 2
+for u,v being VECTOR of V,
+  r be Real st 0 < r & r < 1 & u in M & v in M holds
+  r*u + (1-r)*v in M;
+end;
+
+theorem :: CONVEX1:1
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M being Subset of V, r being Real st
+  M is convex holds r*M is convex;
+
+theorem :: CONVEX1:2
+  for V being Abelian add-associative
+            RealLinearSpace-like (non empty RLSStruct),
+ M,N being Subset of V st
+  M is convex & N is convex holds M + N is convex;
+
+theorem :: CONVEX1:3
+  for V being RealLinearSpace, M,N being Subset of V st
+ M is convex & N is convex holds M - N is convex;
+
+theorem :: CONVEX1:4
+for V being non empty RLSStruct, M being Subset of V holds
+ M is convex iff
+  (for r being Real st 0 < r & r < 1 holds r*M + (1-r)*M c= M);
+
+theorem :: CONVEX1:5
+  for V being Abelian (non empty RLSStruct), M being Subset of V st
+ M is convex holds
+  (for r being Real st 0 < r & r < 1 holds (1-r)*M + r*M c= M);
+
+theorem :: CONVEX1:6
+  for V being Abelian add-associative RealLinearSpace-like (non empty RLSStruct
+)
+,
+ M,N being Subset of V st M is convex & N is convex holds
+  for r being Real holds r*M + (1-r)*N is convex;
+
+theorem :: CONVEX1:7
+  for V being RealLinearSpace, M being Subset of V, v being VECTOR of V holds
+  M is convex iff v + M is convex;
+
+theorem :: CONVEX1:8
+  for V being RealLinearSpace holds Up((0).V) is convex;
+
+theorem :: CONVEX1:9
+  for V being RealLinearSpace holds Up((Omega).V) is convex;
+
+theorem :: CONVEX1:10
+for V being non empty RLSStruct, M being Subset of V st
+ M = {} holds M is convex;
+
+
+theorem :: CONVEX1:11
+for V being Abelian add-associative RealLinearSpace-like (non empty RLSStruct),
+ M1,M2 being Subset of V, r1,r2 being Real st
+  M1 is convex & M2 is convex holds r1*M1 + r2*M2 is convex;
+
+theorem :: CONVEX1:12
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M being Subset of V, r1,r2 being Real holds
+   (r1 + r2)*M c= r1*M + r2*M;
+
+theorem :: CONVEX1:13
+  for V being RealLinearSpace,
+ M being Subset of V, r1,r2 being Real st
+  r1 >= 0 & r2 >= 0 & M is convex holds r1*M + r2*M c= (r1 + r2)*M;
+
+theorem :: CONVEX1:14
+  for V being Abelian add-associative RealLinearSpace-like (non empty RLSStruct
+)
+,
+ M1,M2,M3 being Subset of V, r1,r2,r3 being Real st
+  M1 is convex & M2 is convex & M3 is convex holds
+   r1*M1 + r2*M2 + r3*M3 is convex;
+
+theorem :: CONVEX1:15
+for V being non empty RLSStruct, F being Subset-Family of V st
+ (for M being Subset of V st M in F holds M is convex) holds
+  meet F is convex;
+
+theorem :: CONVEX1:16
+for V being non empty RLSStruct, M being Subset of V st
+ M is Affine holds M is convex;
+
+definition
+let V be non empty RLSStruct;
+  cluster convex Subset of V;
+end;
+
+definition
+let V be non empty RLSStruct;
+  cluster empty convex Subset of V;
+end;
+
+definition
+let V be non empty RLSStruct;
+  cluster non empty convex Subset of V;
+end;
+
+theorem :: CONVEX1:17
+  for V being RealUnitarySpace-like (non empty UNITSTR),
+ M being Subset of V, v being VECTOR of V, r being Real st
+  M = {u where u is VECTOR of V : u .|. v >= r} holds
+   M is convex;
+
+theorem :: CONVEX1:18
+  for V being RealUnitarySpace-like (non empty UNITSTR),
+ M being Subset of V, v being VECTOR of V, r being Real st
+  M = {u where u is VECTOR of V : u .|. v > r} holds
+   M is convex;
+
+theorem :: CONVEX1:19
+  for V being RealUnitarySpace-like (non empty UNITSTR),
+ M being Subset of V, v being VECTOR of V, r being Real st
+  M = {u where u is VECTOR of V : u .|. v <= r} holds
+   M is convex;
+
+theorem :: CONVEX1:20
+  for V being RealUnitarySpace-like (non empty UNITSTR),
+ M being Subset of V, v being VECTOR of V, r being Real st
+  M = {u where u is VECTOR of V : u .|. v < r} holds
+   M is convex;
+
+begin  :: Convex Combinations
+
+definition
+let V be RealLinearSpace, L be Linear_Combination of V;
+  attr L is convex means
+:: CONVEX1:def 3
+  ex F being FinSequence of the carrier of V st
+   (F is one-to-one & rng F = Carrier L &
+    (ex f being FinSequence of REAL st len f = len F & Sum(f) = 1 &
+      (for n being Nat st n in dom f holds f.n = L.(F.n) & f.n >= 0)));
+end;
+
+theorem :: CONVEX1:21
+for V being RealLinearSpace, L being Linear_Combination of V st
+ L is convex holds Carrier(L) <> {};
+
+theorem :: CONVEX1:22
+  for V being RealLinearSpace, L being Linear_Combination of V,
+ v being VECTOR of V st
+  L is convex & L.v <= 0 holds not v in Carrier(L);
+
+theorem :: CONVEX1:23
+  for V being RealLinearSpace, L being Linear_Combination of V st
+ L is convex holds L <> ZeroLC(V);
+
+theorem :: CONVEX1:24
+  for V being RealLinearSpace, v being VECTOR of V,
+ L being Linear_Combination of {v} st L is convex holds
+  L.v = 1 & Sum(L) = L.v * v;
+
+theorem :: CONVEX1:25
+  for V being RealLinearSpace, v1,v2 being VECTOR of V,
+ L being Linear_Combination of {v1,v2} st v1 <> v2 & L is convex holds
+  L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0 & Sum(L) = L.v1 * v1 + L.v2 * v2;
+
+theorem :: CONVEX1:26
+  for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
+ L being Linear_Combination of {v1,v2,v3} st
+  v1 <> v2 & v2 <> v3 & v3 <> v1 & L is convex holds
+  L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 &
+  Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3;
+
+theorem :: CONVEX1:27
+  for V being RealLinearSpace, v being VECTOR of V,
+ L being Linear_Combination of V st
+  L is convex & Carrier(L) = {v} holds L.v = 1;
+
+theorem :: CONVEX1:28
+  for V being RealLinearSpace, v1,v2 being VECTOR of V,
+ L being Linear_Combination of V st
+  L is convex & Carrier(L) = {v1,v2} & v1 <> v2 holds
+   L.v1 + L.v2 = 1 & L.v1 >= 0 & L.v2 >= 0;
+
+theorem :: CONVEX1:29
+  for V being RealLinearSpace, v1,v2,v3 being VECTOR of V,
+ L being Linear_Combination of V st
+  L is convex & Carrier(L) = {v1,v2,v3} &
+   v1 <> v2 & v2 <> v3 & v3 <> v1 holds
+    L.v1 + L.v2 + L.v3 = 1 & L.v1 >= 0 & L.v2 >= 0 & L.v3 >= 0 &
+     Sum(L) = L.v1 * v1 + L.v2 * v2 + L.v3 * v3;
+
+begin  :: Convex Hull
+
+scheme SubFamExRLS {A() -> RLSStruct, P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B];
+
+scheme SubFamExRLS2 {A() -> RLSStruct, P[Subset of A()]}:
+   ex F being Subset-Family of A() st
+   for B being Subset of A() holds B in F iff P[B];
+
+definition let V be non empty RLSStruct, M be Subset of V;
+  func Convex-Family M -> Subset-Family of V means
+:: CONVEX1:def 4
+   for N being Subset of V holds N in it iff (N is convex & M c= N);
+end;
+
+definition
+let V be non empty RLSStruct, M being Subset of V;
+  func conv(M) -> convex Subset of V equals
+:: CONVEX1:def 5
+  meet (Convex-Family M);
+end;
+
+theorem :: CONVEX1:30
+  for V being non empty RLSStruct, M being Subset of V,
+ N being convex Subset of V st M c= N holds conv(M) c= N;
+
+begin  :: Miscellaneous
+
+theorem :: CONVEX1:31
+  for p being FinSequence, x,y,z being set st
+ p is one-to-one & rng p = {x,y,z} & x <> y & y <> z & z <> x holds
+  p = <* x,y,z *> or p = <* x,z,y *> or p = <* y,x,z *> or
+  p = <* y,z,x *> or p = <* z,x,y *> or p = <* z,y,x *>;
+
+theorem :: CONVEX1:32
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M be Subset of V holds 1*M = M;
+
+theorem :: CONVEX1:33
+  for V being non empty RLSStruct, M being empty Subset of V,
+ r be Real holds r * M = {};
+
+theorem :: CONVEX1:34
+  for V being RealLinearSpace, M be non empty Subset of V
+ holds 0 * M = {0.V};
+
+theorem :: CONVEX1:35
+  for V being right_zeroed (non empty LoopStr), M being Subset of V holds
+ M + {0.V} = M;
+
+theorem :: CONVEX1:36
+  for V be add-associative (non empty LoopStr),
+ M1,M2,M3 be Subset of V holds (M1 + M2) + M3 = M1 + (M2 + M3);
+
+theorem :: CONVEX1:37
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M being Subset of V, r1,r2 being Real holds
+  r1*(r2*M) = (r1*r2)*M;
+
+theorem :: CONVEX1:38
+  for V being RealLinearSpace-like (non empty RLSStruct),
+ M1,M2 being Subset of V, r being Real holds
+  r*(M1 + M2) = r*M1 + r*M2;
+
+theorem :: CONVEX1:39
+  for V being non empty RLSStruct, M,N being Subset of V, r being Real st
+ M c= N holds r*M c= r*N;
+
+theorem :: CONVEX1:40
+  for V being non empty LoopStr, M being empty Subset of V,
+ N being Subset of V holds M + N = {};
+

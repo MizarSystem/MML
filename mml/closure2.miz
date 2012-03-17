@@ -1,0 +1,1932 @@
+:: On the Closure Operator and the Closure System of Many Sorted Sets
+::  by Artur Korni{\l}owicz
+::
+:: Received February 7, 1996
+:: Copyright (c) 1996 Association of Mizar Users
+
+environ
+
+ vocabulary PBOOLE, FUNCT_1, BOOLE, MSUALG_2, RELAT_1, TARSKI, FRAENKEL,
+      FUNCT_2, MATRIX_1, CAT_4, PRALG_2, FINSET_1, COMPLEX1, SETFAM_1, FUNCT_4,
+      ZF_REFLE, MSSUBFAM, CANTOR_1, CAT_1, GRCAT_1, COHSP_1, RELAT_2, MSAFREE2,
+      BINOP_1, CLOSURE1, MSUALG_1, PRE_TOPC, CLOSURE2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, SETFAM_1, RELAT_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, CQC_LANG, FINSET_1, FRAENKEL, FUNCT_4,
+      PBOOLE, MSUALG_1, MSUALG_2, PRALG_2, CANTOR_1, MBOOLEAN, MSSUBFAM;
+ constructors CQC_LANG, PRALG_2, PRE_CIRC, CANTOR_1, MSSUBFAM;
+ clusters ALTCAT_1, FINSET_1, FRAENKEL, FUNCT_1, MSSUBFAM, MSUALG_1, PBOOLE,
+      RELAT_1, CQC_LANG, RELSET_1, SUBSET_1, FUNCT_2;
+ requirements SUBSET, BOOLE;
+ definitions XBOOLE_0, FRAENKEL, MSUALG_1, MSUALG_2, PBOOLE, PRALG_2, TARSKI;
+ theorems CANTOR_1, CQC_LANG, ENUMSET1, FUNCT_1, FUNCT_2, FUNCT_4, MBOOLEAN,
+      MSUALG_1, MSUALG_2, PBOOLE, PZFMISC1, SETFAM_1, TARSKI, MSSUBFAM,
+      ZFMISC_1, XBOOLE_0, XBOOLE_1;
+ schemes FRAENKEL, FUNCT_1, FUNCT_2, DOMAIN_1, XBOOLE_0;
+
+begin  :: Preliminaries
+
+reserve i, x, I for set,
+        A, B, M for ManySortedSet of I,
+        f, f1 for Function;
+
+definition let I, A, B;
+ redefine pred A in B;
+  synonym A in' B;
+end;
+
+definition let I, A, B;
+ redefine pred A c= B;
+  synonym A c=' B;
+end;
+
+theorem
+  for M being non empty set
+ for X, Y being Element of M st X c= Y
+  holds (id M).X c= (id M).Y
+  proof
+    let M be non empty set;
+    let X, Y be Element of M such that
+A1:   X c= Y;
+      (id M).X = X & (id M).Y = Y by FUNCT_1:35;
+    hence thesis by A1;
+  end;
+
+canceled;
+
+theorem Th3:
+for I being non empty set
+ for A being ManySortedSet of I
+  for B being ManySortedSubset of A holds
+   rng B c= union rng bool A
+  proof
+    let I be non empty set,
+        A be ManySortedSet of I,
+        B be ManySortedSubset of A;
+    let a be set;
+    assume a in rng B;
+    then consider i such that
+A1:   i in I and
+A2:   a = B.i by MSUALG_1:2;
+      B c= A by MSUALG_2:def 1;
+    then B in bool A by MBOOLEAN:19;
+    then B.i in (bool A).i by A1,PBOOLE:def 4;
+then A3: a in bool (A.i) by A1,A2,MBOOLEAN:def 1;
+      i in dom bool A & bool (A.i) = (bool A).i by A1,MBOOLEAN:def 1,PBOOLE:def
+3;
+    then bool (A.i) in rng bool A by FUNCT_1:def 5;
+    hence a in union rng bool A by A3,TARSKI:def 4;
+  end;
+
+definition
+ cluster empty -> functional set;
+coherence
+  proof
+    let x such that
+A1:   x is empty;
+    let i;
+    assume i in x;
+    hence thesis by A1;
+  end;
+end;
+
+definition
+ cluster empty functional set;
+existence
+  proof
+    take {};
+    thus thesis;
+  end;
+end;
+
+definition let f, g be Function;
+ cluster { f,g } -> functional;
+coherence
+  proof
+    let x;
+    assume x in {f,g};
+    hence x is Function by TARSKI:def 2;
+  end;
+end;
+
+begin  :: Set of Many Sorted Subsets of a Many Sorted Set
+
+definition let I, M;
+defpred f[set] means $1 is ManySortedSubset of M;
+ func Bool M -> set means :Def1:
+  x in it iff x is ManySortedSubset of M;
+existence
+  proof
+    per cases;
+    suppose
+A1:   I is non empty;
+    consider X being set such that
+A2:   for e being set holds e in X iff e in Funcs(I, union rng bool M) & f[e]
+        from Separation;
+    take X;
+    thus x in X iff x is ManySortedSubset of M
+    proof
+      thus x in X implies x is ManySortedSubset of M by A2;
+      assume
+A3:     x is ManySortedSubset of M;
+        now
+        reconsider xx = x as ManySortedSubset of M by A3;
+A4:     dom xx = I by PBOOLE:def 3;
+          rng xx c= union rng bool M by A1,Th3;
+        hence x in Funcs(I, union rng bool M) by A4,FUNCT_2:def 2;
+        thus f[ x ] by A3;
+      end;
+      hence x in X by A2;
+    end;
+    suppose
+A5:     I is empty;
+A6:   M is empty-yielding
+      proof
+        let i;
+        assume i in I;
+        hence thesis by A5;
+      end;
+      take {[0]{}};
+      thus x in {[0]{}} iff x is ManySortedSubset of M
+      proof
+        thus x in {[0]{}} implies x is ManySortedSubset of M
+        proof
+          assume
+A7:         x in {[0]{}};
+          reconsider M' = M as ManySortedSet of {} by A5;
+            [0]{} is ManySortedSubset of M'
+          proof
+            thus [0]{} c= M'
+            proof
+              let i;
+              assume i in {};
+              hence thesis;
+            end;
+          end;
+          then reconsider y = [0]{} as ManySortedSubset of M';
+            y is ManySortedSubset of M by A5;
+          hence thesis by A7,TARSKI:def 1;
+        end;
+        assume x is ManySortedSubset of M;
+        then consider y being ManySortedSubset of M such that
+A8:       y = x;
+          y c= M by MSUALG_2:def 1;
+        then y is empty-yielding by A6,PBOOLE:142;
+        then y = [0]{} by A5,PBOOLE:141;
+        hence thesis by A8,TARSKI:def 1;
+      end;
+  end;
+uniqueness
+  proof
+  thus for X1,X2 being set st
+   (for x being set holds x in X1 iff f[ x ]) &
+   (for x being set holds x in X2 iff f[ x ]) holds X1 = X2 from SetEq;
+ end;
+end;
+
+definition let I, M;
+ cluster Bool M -> non empty functional with_common_domain;
+coherence
+  proof
+    thus Bool M is non empty
+    proof
+        M is ManySortedSubset of M
+      proof
+        thus M c= M;
+      end;
+      hence thesis by Def1;
+    end;
+    thus Bool M is functional
+    proof
+      let x;
+      assume x in Bool M;
+      hence x is Function by Def1;
+    end;
+    let f, g be Function;
+    assume f in Bool M & g in Bool M;
+then A1: f is ManySortedSubset of M & g is ManySortedSubset of M by Def1;
+    hence dom f = I by PBOOLE:def 3
+               .= dom g by A1,PBOOLE:def 3;
+  end;
+end;
+
+definition let I, M;
+ mode SubsetFamily of M is Subset of Bool M;
+ canceled;
+end;
+
+definition let I, M;
+ redefine func Bool M -> SubsetFamily of M;
+coherence
+  proof
+      Bool M c= Bool M;
+    hence thesis;
+  end;
+end;
+
+definition let I, M;
+ cluster non empty functional with_common_domain SubsetFamily of M;
+existence
+  proof
+    take Bool M;
+    thus thesis;
+  end;
+end;
+
+definition let I, M;
+ cluster empty finite SubsetFamily of M;
+existence
+  proof
+    reconsider x = {} as SubsetFamily of M by XBOOLE_1:2;
+    take x;
+    thus thesis;
+  end;
+end;
+
+reserve SF, SG for SubsetFamily of M;
+
+definition let I, M;
+           let S be non empty SubsetFamily of M;
+ redefine mode Element of S -> ManySortedSubset of M;
+coherence
+  proof
+    let e be Element of S;
+    thus thesis by Def1;
+  end;
+end;
+
+theorem Th4:   :: MSSUBFAM:34
+SF \/ SG is SubsetFamily of M;
+
+theorem   :: MSSUBFAM:35
+  SF /\ SG is SubsetFamily of M;
+
+theorem    :: MSSUBFAM:36
+  SF \ x is SubsetFamily of M
+  proof
+A1: SF \ x c= (Bool M) \ x by XBOOLE_1:33;
+      (Bool M) \ x c= Bool M by XBOOLE_1:36;
+    hence thesis by A1,XBOOLE_1:1;
+  end;
+
+theorem   :: MSSUBFAM:37
+  SF \+\ SG is SubsetFamily of M;
+
+theorem Th8:   :: MSSUBFAM:38
+A c= M implies {A} is SubsetFamily of M
+  proof
+    assume A c= M;
+    then A is ManySortedSubset of M by MSUALG_2:def 1;
+    then A in Bool M by Def1;
+    hence thesis by ZFMISC_1:37;
+  end;
+
+theorem Th9:   :: MSSUBFAM:39
+A c= M & B c= M implies {A,B} is SubsetFamily of M
+  proof
+    assume A c= M & B c= M;
+    then {A} is SubsetFamily of M &
+      {B} is SubsetFamily of M by Th8;
+    then {A} \/ {B} is SubsetFamily of M by Th4;
+    hence thesis by ENUMSET1:41;
+  end;
+
+reserve E, T for Element of Bool M;
+
+theorem Th10:
+E /\ T in Bool M
+  proof
+      E /\ T is ManySortedSubset of M
+    proof
+        E c= M & T c= M by MSUALG_2:def 1;
+      then E /\ T c= M /\ M by PBOOLE:23;
+      hence E /\ T c= M;
+    end;
+    hence thesis by Def1;
+  end;
+
+theorem Th11:
+E \/ T in Bool M
+  proof
+      E \/ T is ManySortedSubset of M
+    proof
+        E c= M & T c= M by MSUALG_2:def 1;
+      then E \/ T c= M \/ M by PBOOLE:22;
+      hence E \/ T c= M;
+    end;
+    hence thesis by Def1;
+  end;
+
+theorem
+  E \ A in Bool M
+  proof
+      E \ A is ManySortedSubset of M
+    proof
+        E c= M by MSUALG_2:def 1;
+      hence E \ A c= M by MBOOLEAN:16;
+    end;
+    hence thesis by Def1;
+  end;
+
+theorem
+  E \+\ T in Bool M
+  proof
+      E \+\ T is ManySortedSubset of M
+    proof
+        E c= M & T c= M by MSUALG_2:def 1;
+      then E \ T c= M & T \ E c= M by MBOOLEAN:16;
+      hence E \+\ T c= M by PBOOLE:99;
+    end;
+    hence thesis by Def1;
+  end;
+
+begin  :: Many Sorted Operator corresponding
+       ::  to the Operator on Many Sorted Subsets
+
+definition let S be functional set;
+ func |. S .| -> Function means :Def3:
+ ex A being non empty functional set st A = S &
+  dom it = meet { dom x where x is Element of A : not contradiction } &
+   for i st i in dom it holds
+    it.i = { x.i where x is Element of A : not contradiction }
+     if S <> {}
+  otherwise it = {};
+existence
+  proof
+    thus S <> {} implies ex f being Function st
+     ex A being non empty functional set st A = S &
+      dom f = meet { dom x where x is Element of A : not contradiction } &
+       for i st i in dom f holds
+        f.i = { x.i where x is Element of A : not contradiction }
+    proof
+      assume S <> {};
+      then consider A being non empty functional set such that
+A1:     A = S;
+      deffunc F(set) = { x.$1 where x is Element of A : not contradiction };
+      consider f being Function such that
+A2:     dom f = meet { dom x where x is Element of A : not contradiction } and
+A3:     for i st i in meet { dom x where x is Element of A : not contradiction}
+          holds f.i = F(i) from Lambda;
+      take f, A;
+      thus thesis by A1,A2,A3;
+    end;
+    thus S = {} implies ex f be Function st f = {};
+ end;
+uniqueness
+  proof
+defpred P[Function] means
+ ex A being non empty functional set st A = S &
+  dom $1 = meet { dom x where x is Element of A : not contradiction } &
+   for i st i in dom $1 holds
+    $1.i = { x.i where x is Element of A : not contradiction };
+    let f, g be Function;
+    thus S <> {} & P[f] & P[g] implies f = g
+    proof
+      assume
+A4:     S <> {} & P[f] & P[g];
+      then consider A being non empty functional set such that
+A5:     A = S and
+A6:     dom f = meet {dom x where x is Element of A: not contradiction} and
+A7:     for i st i in dom f holds
+          f.i = { x.i where x is Element of A : not contradiction };
+      consider B being non empty functional set such that
+A8:     B = S and
+A9:     dom g = meet {dom x where x is Element of B: not contradiction} and
+A10:     for i st i in dom g holds
+          g.i = { x.i where x is Element of B : not contradiction } by A4;
+        now
+        let a be set; assume
+A11:       a in meet { dom x where x is Element of A : not contradiction };
+        hence f.a = { x.a where x is Element of A : not contradiction }
+                                by A6,A7
+                .= g.a by A5,A8,A9,A10,A11;
+      end;
+      hence f = g by A5,A6,A8,A9,FUNCT_1:9;
+    end;
+    thus S = {} & f = {} & g = {} implies f = g;
+  end;
+consistency;
+end;
+
+theorem Th14:
+for SF being non empty SubsetFamily of M holds dom |.SF.| = I
+  proof
+    let SF be non empty SubsetFamily of M;
+    consider A being non empty functional set such that
+A1:  A = SF and
+A2:  dom |.SF.| = meet { dom x where x is Element of A : not contradiction }
+      &
+      for i st i in dom |.SF.| holds
+       |.SF.|.i = { x.i where x is Element of A : not contradiction }
+         by Def3;
+      { dom x where x is Element of A : not contradiction } = {I}
+    proof
+      thus { dom x where x is Element of A : not contradiction } c= {I}
+      proof
+        let a be set;
+        assume a in { dom x where x is Element of A : not contradiction };
+        then consider x being Element of A such that
+A3:       a = dom x;
+          x is Element of SF by A1;
+        then a = I by A3,PBOOLE:def 3;
+        hence thesis by TARSKI:def 1;
+      end;
+      let a be set;
+      assume a in {I};
+then A4:   a = I by TARSKI:def 1;
+      consider x being Element of A;
+        x is Element of SF by A1;
+      then dom x = I by PBOOLE:def 3;
+      then consider x being Element of A such that
+A5:     a = dom x by A4;
+      thus thesis by A5;
+    end;
+    hence thesis by A2,SETFAM_1:11;
+  end;
+
+definition let S be empty functional set;
+ cluster |. S .| -> empty;
+coherence by Def3;
+end;
+
+definition let I, M;
+           let S be SubsetFamily of M;
+ func |: S :| -> ManySortedSet of I equals :Def4:
+   |. S .| if S <> {}
+   otherwise [0]I;
+coherence
+  proof
+    thus S <> {} implies |.S.| is ManySortedSet of I
+    proof
+      assume S <> {};
+      then dom |.S.| = I by Th14;
+      hence |.S.| is ManySortedSet of I by PBOOLE:def 3;
+    end;
+    thus thesis;
+  end;
+consistency;
+end;
+
+definition let I, M;
+           let S be empty SubsetFamily of M;
+ cluster |: S :| -> empty-yielding;
+coherence
+  proof
+      |:S:| = [0]I by Def4;
+    hence thesis;
+  end;
+end;
+
+theorem Th15:
+SF is non empty implies
+ for i st i in I holds
+  |:SF:|.i = { x.i where x is Element of Bool M : x in SF }
+  proof
+    assume
+A1:   SF is non empty;
+    then consider A being non empty functional set such that
+A2:   A = SF and
+        dom |.SF.| =
+        meet { dom x where x is Element of A : not contradiction } and
+A3:   for i st i in dom |.SF.| holds
+        |.SF.|.i =
+          { x.i where x is Element of A : not contradiction }
+           by Def3;
+A4: |:SF:| = |.SF.| by A1,Def4;
+    let i such that
+A5:   i in I;
+A6: dom |:SF:| = I by PBOOLE:def 3;
+    set K = { x.i where x is Element of Bool M : x in SF },
+        N = { x.i where x is Element of A : not contradiction };
+      K = N
+    proof
+      thus K c= N
+      proof
+        let q be set;
+        assume q in K;
+        then consider x being Element of Bool M such that
+A7:       q = x.i & x in SF;
+        thus q in N by A2,A7;
+      end;
+      let q be set;
+      assume q in N;
+      then consider x being Element of A such that
+A8:     q = x.i;
+        x in SF by A2;
+      hence q in K by A8;
+    end;
+    hence thesis by A3,A4,A5,A6;
+  end;
+
+definition let I, M;
+           let SF be non empty SubsetFamily of M;
+ cluster |: SF :| -> non-empty;
+coherence
+  proof
+    let i; assume
+     i in I;
+then A1: |:SF:|.i = { x.i where x is Element of Bool M : x in SF}
+       by Th15;
+    consider x being set such that
+A2:   x in SF by XBOOLE_0:def 1;
+    reconsider x as Element of Bool M by A2;
+      x.i in |:SF:|.i by A1,A2;
+    hence thesis;
+  end;
+end;
+
+theorem Th16:
+dom |.{f}.| = dom f
+  proof
+    consider A being non empty functional set such that
+A1:  A = {f} and
+A2:  dom |.{f}.| = meet { dom x where x is Element of A : not contradiction }
+      and
+        for i st i in dom |.{f}.| holds
+       |.{f}.|.i = { x.i where x is Element of A : not contradiction }
+        by Def3;
+    set m = { dom x where x is Element of A : not contradiction };
+  m = {dom f}
+    proof
+      thus m c= {dom f}
+      proof
+        let q be set;
+        assume q in m;
+        then consider x being Element of A such that
+A3:       q = dom x;
+          x = f by A1,TARSKI:def 1;
+        hence q in {dom f} by A3,TARSKI:def 1;
+      end;
+      let q be set;
+      assume q in {dom f};
+then A4:   q = dom f by TARSKI:def 1;
+        f is Element of A by A1,TARSKI:def 1;
+      hence q in m by A4;
+    end;
+    hence dom |.{f}.| = dom f by A2,SETFAM_1:11;
+  end;
+
+theorem
+  dom |.{f,f1}.| = dom f /\ dom f1
+  proof
+    consider A being non empty functional set such that
+A1:  A = {f,f1} and
+A2:  dom |.{f,f1}.| =
+       meet { dom x where x is Element of A : not contradiction } and
+        for i st i in dom |.{f,f1}.| holds
+       |.{f,f1}.|.i = { x.i where x is Element of A : not contradiction }
+        by Def3;
+    set m = { dom x where x is Element of A : not contradiction };
+  m = {dom f, dom f1}
+    proof
+      thus m c= {dom f, dom f1}
+      proof
+        let q be set;
+        assume q in m;
+        then consider x being Element of A such that
+A3:       q = dom x;
+          x = f or x = f1 by A1,TARSKI:def 2;
+        hence q in {dom f, dom f1} by A3,TARSKI:def 2;
+      end;
+      let q be set;
+      assume q in {dom f, dom f1};
+then A4:   q = dom f or q = dom f1 by TARSKI:def 2;
+        f is Element of A & f1 is Element of A by A1,TARSKI:def 2;
+      hence q in m by A4;
+    end;
+    hence dom |.{f,f1}.| = dom f /\ dom f1 by A2,SETFAM_1:12;
+  end;
+
+theorem Th18:
+i in dom f implies |.{f}.|.i = {f.i}
+  proof
+    assume i in dom f;
+then A1: i in dom |.{f}.| by Th16;
+    consider A being non empty functional set such that
+A2:   A = {f} and
+        dom |.{f}.| = meet { dom x where x is Element of A : not contradiction
+}
+        and
+A3:   for i st i in dom |.{f}.| holds
+        |.{f}.|.i = { x.i where x is Element of A : not contradiction }
+          by Def3;
+A4: |.{f}.|.i = { x.i where x is Element of A : not contradiction }
+      by A1,A3;
+    thus |.{f}.|.i c= { f.i }
+    proof
+      let q be set;
+      assume q in |.{f}.|.i;
+      then consider x being Element of A such that
+A5:     q = x.i by A4;
+        x = f by A2,TARSKI:def 1;
+      hence q in { f.i } by A5,TARSKI:def 1;
+    end;
+    let q be set;
+    assume q in { f.i };
+then A6: q = f.i by TARSKI:def 1;
+      f in {f} by TARSKI:def 1;
+    hence q in |.{f}.|.i by A2,A4,A6;
+  end;
+
+theorem
+  i in I & SF = {f} implies |:SF:|.i = {f.i}
+  proof
+    assume that
+A1:   i in I and
+A2:   SF = {f};
+A3: dom |:SF:| = I by PBOOLE:def 3;
+A4: |:SF:| = |.SF.| by A2,Def4;
+    then i in dom f by A1,A2,A3,Th16;
+    hence thesis by A2,A4,Th18;
+  end;
+
+theorem Th20:
+i in dom |.{f,f1}.| implies |.{f,f1}.|.i = { f.i , f1.i }
+  proof
+    assume that
+A1:   i in dom |.{f,f1}.|;
+    consider A being non empty functional set such that
+A2:   A = {f,f1} and
+        dom |.{f,f1}.| =
+        meet { dom x where x is Element of A : not contradiction } and
+A3:   for i st i in dom |.{f,f1}.| holds
+        |.{f,f1}.|.i = { x.i where x is Element of A : not contradiction }
+          by Def3;
+A4: |.{f,f1}.|.i = { x.i where x is Element of A : not contradiction }
+      by A1,A3;
+    thus |.{f,f1}.|.i c= { f.i , f1.i }
+    proof
+      let q be set;
+      assume q in |.{f,f1}.|.i;
+      then consider x being Element of A such that
+A5:     q = x.i by A4;
+      per cases by A2,TARSKI:def 2;
+      suppose x = f;
+        hence q in { f.i , f1.i } by A5,TARSKI:def 2;
+      suppose x = f1;
+        hence q in { f.i , f1.i } by A5,TARSKI:def 2;
+    end;
+    let q be set;
+    assume q in { f.i , f1.i };
+then A6: q = f.i or q = f1.i by TARSKI:def 2;
+      f in {f,f1} & f1 in {f,f1} by TARSKI:def 2;
+    hence q in |.{f,f1}.|.i by A2,A4,A6;
+  end;
+
+theorem Th21:
+i in I & SF = {f,f1} implies |:SF:|.i = { f.i , f1.i }
+  proof
+    assume that
+A1:   i in I and
+A2:   SF = {f,f1};
+A3: dom |:SF:| = I by PBOOLE:def 3;
+      |:SF:| = |.SF.| by A2,Def4;
+    hence thesis by A1,A2,A3,Th20;
+  end;
+
+definition let I, M, SF;
+ redefine func |:SF:| -> MSSubsetFamily of M;
+coherence
+  proof
+    per cases;
+    suppose
+A1:   SF is non empty;
+      |:SF:| is ManySortedSubset of bool M
+    proof
+      let i; assume
+A2:     i in I;
+then A3:   |:SF:|.i = { x.i where x is Element of Bool M : x in SF }
+         by A1,Th15;
+      thus |:SF:|.i c= (bool M).i
+      proof
+        let x;
+        assume x in |:SF:|.i;
+        then consider a being Element of Bool M such that
+A4:       x = a.i and a in SF by A3;
+          a c= M by MSUALG_2:def 1;
+        then x c= M.i by A2,A4,PBOOLE:def 5;
+        then x in bool (M.i);
+        hence x in (bool M).i by A2,MBOOLEAN:def 1;
+      end;
+    end;
+    hence thesis;
+    suppose SF is empty;
+      then |:SF:| = [0]I by Def4;
+      hence thesis by MSSUBFAM:31;
+  end;
+end;
+
+theorem Th22:
+A in SF implies A in' |:SF:|
+  proof
+    assume
+A1:   A in SF;
+    let i;
+    assume i in I;
+    then |:SF:|.i = { x.i where x is Element of Bool M : x in SF } by A1,Th15;
+    hence A.i in |:SF:|.i by A1;
+  end;
+
+theorem Th23:
+SF = {A,B} implies union |:SF:| = A \/ B
+  proof
+    assume
+A1:   SF = {A,B};
+      now
+      let i; assume
+A2:     i in I;
+      hence (union |:SF:|).i = union (|:SF:|.i) by MBOOLEAN:def 2
+                           .= union { A.i , B.i } by A1,A2,Th21
+                           .= A.i \/ B.i by ZFMISC_1:93
+                           .= (A \/ B).i by A2,PBOOLE:def 7;
+    end;
+    hence union |:SF:| = A \/ B by PBOOLE:3;
+  end;
+
+theorem Th24:   :: SETFAM_1:12
+SF = {E,T} implies meet |:SF:| = E /\ T
+  proof
+    assume
+A1:   SF = { E,T };
+      now
+      let i be set such that
+A2:     i in I;
+      reconsider sf1 = SF as non empty SubsetFamily of M by A1;
+      consider Q be Subset-Family of (M.i) such that
+A3:     Q = |:sf1:|.i and
+A4:     (meet |:sf1:|).i = Intersect Q by A2,MSSUBFAM:def 2;
+        Q <> {} by A2,A3,PBOOLE:def 16;
+      hence (meet |:SF:|).i = meet (|:sf1:|.i) by A3,A4,CANTOR_1:def 3
+                           .= meet {E.i,T.i} by A1,A2,Th21
+                           .= E.i /\ T.i by SETFAM_1:12
+                           .= (E /\ T).i by A2,PBOOLE:def 8;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+theorem Th25:   :: MSSUBFAM:4
+for Z being ManySortedSubset of M st
+ for Z1 being ManySortedSet of I st Z1 in SF holds Z c=' Z1 holds
+  Z c=' meet |:SF:|
+  proof
+    let Z be ManySortedSubset of M such that
+A1:   for Z1 be ManySortedSet of I st Z1 in SF holds Z c=' Z1;
+    let i such that
+A2:   i in I;
+    consider Q being Subset-Family of M.i such that
+A3:   Q = |:SF:|.i and
+A4:   (meet |:SF:|).i = Intersect Q by A2,MSSUBFAM:def 2;
+      Z c= M by MSUALG_2:def 1;
+then A5: Z.i is Subset of M.i by A2,PBOOLE:def 5;
+      now
+      let q be set such that
+A6:     q in Q;
+      per cases;
+      suppose SF is non empty;
+        then |:SF:|.i = { x.i where x is Element of Bool M : x in SF }
+          by A2,Th15;
+        then consider a being Element of Bool M such that
+A7:       q = a.i & a in SF by A3,A6;
+          Z c=' a by A1,A7;
+        hence Z.i c= q by A2,A7,PBOOLE:def 5;
+      suppose SF is empty;
+        then |:SF:| = [0]I by Def4;
+        hence Z.i c= q by A2,A3,A6,PBOOLE:5;
+    end;
+    hence Z.i c= (meet |:SF:|).i by A4,A5,MSSUBFAM:4;
+  end;
+
+theorem
+  |: Bool M :| = bool M
+  proof
+      now
+      let i; assume
+A1:     i in I;
+then A2:   |:Bool M:|.i = { x.i where x is Element of Bool M : x in Bool M}
+         by Th15;
+      thus |: Bool M :|.i = (bool M).i
+      proof
+        thus |: Bool M :|.i c= (bool M).i
+        proof
+          let q be set;
+          assume q in |: Bool M :|.i;
+          then consider x being Element of Bool M such that
+A3:         q = x.i and x in Bool M by A2;
+            x c= M by MSUALG_2:def 1;
+          then x.i c= M.i by A1,PBOOLE:def 5;
+          then x.i in bool (M.i);
+          hence q in (bool M).i by A1,A3,MBOOLEAN:def 1;
+        end;
+        let a be set such that
+A4:       a in (bool M).i;
+       dom ([0]I +* (i .--> a)) = I by A1,PZFMISC1:1;
+        then reconsider X = [0]I +* (i .--> a) as ManySortedSet of I
+          by PBOOLE:def 3;
+A5:     dom (i .--> a) = {i} by CQC_LANG:5;
+          i in {i} by TARSKI:def 1;
+then A6:     X.i = (i .--> a).i by A5,FUNCT_4:14
+           .= a by CQC_LANG:6;
+          X is ManySortedSubset of M
+        proof
+          let s be set such that
+A7:         s in I;
+          per cases;
+          suppose
+A8:         s = i;
+            then a in bool (M.s) by A4,A7,MBOOLEAN:def 1;
+            hence X.s c= M.s by A6,A8;
+          suppose s <> i;
+            then not s in dom (i .--> a) by A5,TARSKI:def 1;
+            then X.s = [0]I.s by FUNCT_4:12
+               .= {} by A7,PBOOLE:5;
+            hence X.s c= M.s by XBOOLE_1:2;
+        end;
+        then X is Element of Bool M by Def1;
+        then consider x being Element of Bool M such that
+A9:       a = x.i by A6;
+        thus a in |:Bool M:|.i by A2,A9;
+      end;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+
+definition let I, M;
+ let IT be SubsetFamily of M;
+ attr IT is additive means
+    for A, B st A in IT & B in IT holds A \/ B in IT;
+
+ attr IT is absolutely-additive means :Def6:
+  for F be SubsetFamily of M st F c= IT holds union |:F:| in IT;
+
+ attr IT is multiplicative means
+    for A, B st A in IT & B in IT holds A /\ B in IT;
+
+ attr IT is absolutely-multiplicative means :Def8:
+  for F be SubsetFamily of M st F c= IT holds meet |:F:| in IT;
+
+ attr IT is properly-upper-bound means :Def9:
+  M in IT;
+
+ attr IT is properly-lower-bound means :Def10:
+  [0]I in IT;
+end;
+
+Lm1:
+Bool M is additive absolutely-additive multiplicative
+ absolutely-multiplicative properly-upper-bound properly-lower-bound
+  proof
+    thus Bool M is additive
+    proof
+      let A, B;
+      assume A in Bool M & B in Bool M;
+      hence A \/ B in Bool M by Th11;
+    end;
+    thus Bool M is absolutely-additive
+    proof
+      let F be SubsetFamily of M such that F c= Bool M;
+        union |:F:| c= M by MSSUBFAM:40;
+      then union |:F:| is ManySortedSubset of M by MSUALG_2:def 1;
+      hence union |:F:| in Bool M by Def1;
+    end;
+    thus Bool M is multiplicative
+    proof
+      let A, B;
+      assume A in Bool M & B in Bool M;
+      hence A /\ B in Bool M by Th10;
+    end;
+    thus Bool M is absolutely-multiplicative
+    proof
+      let F be SubsetFamily of M such that F c= Bool M;
+      thus meet |:F:| in Bool M by Def1;
+    end;
+    thus Bool M is properly-upper-bound
+    proof
+        M is ManySortedSubset of M by MSUALG_2:def 1;
+      hence M in Bool M by Def1;
+    end;
+      [0]I c= M by PBOOLE:49;
+    then [0]I is ManySortedSubset of M by MSUALG_2:def 1;
+    hence [0]I in Bool M by Def1;
+  end;
+
+definition let I, M;
+ cluster non empty functional with_common_domain
+          additive absolutely-additive
+           multiplicative absolutely-multiplicative
+            properly-upper-bound properly-lower-bound
+             SubsetFamily of M;
+existence
+  proof
+    take Bool M;
+    thus thesis by Lm1;
+  end;
+end;
+
+definition let I, M;
+ redefine func Bool M -> additive absolutely-additive multiplicative
+       absolutely-multiplicative properly-upper-bound properly-lower-bound
+        SubsetFamily of M;
+coherence by Lm1;
+end;
+
+definition let I, M;
+ cluster absolutely-additive -> additive SubsetFamily of M;
+coherence
+  proof
+    let SF be SubsetFamily of M such that
+A1:   SF is absolutely-additive;
+    let A, B; assume
+A2:   A in SF & B in SF;
+    then A is ManySortedSubset of M & B is ManySortedSubset of M by Def1;
+    then A c= M & B c= M by MSUALG_2:def 1;
+    then reconsider ab = {A,B} as SubsetFamily of M by Th9;
+      {A} c= SF & {B} c= SF by A2,ZFMISC_1:37;
+    then {A} \/ {B} c= SF by XBOOLE_1:8;
+    then {A,B} c= SF by ENUMSET1:41;
+    then union |:ab:| in SF by A1,Def6;
+    hence A \/ B in SF by Th23;
+  end;
+end;
+
+definition let I, M;
+ cluster absolutely-multiplicative -> multiplicative SubsetFamily of M;
+coherence
+  proof
+    let SF be SubsetFamily of M such that
+A1:   SF is absolutely-multiplicative;
+    let A, B; assume
+A2:   A in SF & B in SF;
+    then A is ManySortedSubset of M & B is ManySortedSubset of M by Def1;
+    then A c= M & B c= M by MSUALG_2:def 1;
+    then reconsider ab = {A,B} as SubsetFamily of M by Th9;
+      {A} c= SF & {B} c= SF by A2,ZFMISC_1:37;
+    then {A} \/ {B} c= SF by XBOOLE_1:8;
+    then {A,B} c= SF by ENUMSET1:41;
+    then meet |:ab:| in SF by A1,Def8;
+    hence A /\ B in SF by A2,Th24;
+  end;
+end;
+
+definition let I, M;
+ cluster absolutely-multiplicative ->
+                 properly-upper-bound SubsetFamily of M;
+coherence
+  proof
+    let SF be SubsetFamily of M such that
+A1:   SF is absolutely-multiplicative;
+    reconsider a = {} as SubsetFamily of M by XBOOLE_1:2;
+      |:a:| = [0]I by Def4;
+then A2: meet |:a:| = M by MSSUBFAM:41;
+      a c= SF by XBOOLE_1:2;
+    hence M in SF by A1,A2,Def8;
+  end;
+end;
+
+definition let I, M;
+ cluster properly-upper-bound -> non empty SubsetFamily of M;
+coherence by Def9;
+end;
+
+definition let I, M;
+ cluster absolutely-additive ->
+                 properly-lower-bound SubsetFamily of M;
+coherence
+  proof
+    let SF be SubsetFamily of M such that
+A1:   SF is absolutely-additive;
+    reconsider a = {} as SubsetFamily of M by XBOOLE_1:2;
+      |:a:| = [0]I by Def4;
+then A2: union |:a:| = [0]I by MBOOLEAN:22;
+      a c= SF by XBOOLE_1:2;
+    hence [0]I in SF by A1,A2,Def6;
+  end;
+end;
+
+definition let I, M;
+ cluster properly-lower-bound -> non empty SubsetFamily of M;
+coherence by Def10;
+end;
+
+begin  :: Properties of Closure Operators
+
+definition let I, M;
+ mode SetOp of M is Function of Bool M, Bool M;
+ canceled;
+end;
+
+definition let I, M;
+           let f be SetOp of M;
+           let x be Element of Bool M;
+ redefine func f.x -> Element of Bool M;
+coherence
+  proof
+      f.x in Bool M;
+    hence thesis;
+  end;
+end;
+
+definition let I, M;
+ let IT be SetOp of M;
+ attr IT is reflexive means :Def12:
+  for x being Element of Bool M holds x c=' IT.x;
+
+ attr IT is monotonic means :Def13:
+  for x, y being Element of Bool M st x c=' y holds IT.x c=' IT.y;
+
+ attr IT is idempotent means :Def14:
+  for x being Element of Bool M holds IT.x = IT.(IT.x);
+
+ attr IT is topological means :Def15:
+  for x, y being Element of Bool M holds IT.(x \/ y) = (IT.x) \/ (IT.y);
+end;
+
+definition let I, M;
+ cluster reflexive monotonic idempotent topological SetOp of M;
+existence
+  proof
+    reconsider f = id (Bool M) as SetOp of M;
+    take f;
+    thus f is reflexive
+    proof
+      let X be Element of Bool M;
+      thus thesis by FUNCT_1:35;
+    end;
+    thus f is monotonic
+    proof
+      let X, Y be Element of Bool M such that
+A1:     X c= Y;
+        f.X = X & f.Y = Y by FUNCT_1:35;
+      hence thesis by A1;
+    end;
+    thus f is idempotent
+    proof
+      let X be Element of Bool M;
+      thus f.(f.X) = f.X by FUNCT_1:35;
+    end;
+    thus f is topological
+    proof
+      let X, Y be Element of Bool M;
+        X \/ Y is ManySortedSubset of M
+      proof
+          X c= M & Y c= M by MSUALG_2:def 1;
+        hence X \/ Y c= M by PBOOLE:18;
+      end;
+      then X \/ Y in Bool M by Def1;
+      hence f.(X \/ Y) = X \/ Y by FUNCT_1:35
+                     .= f.X \/ Y by FUNCT_1:35
+                     .= f.X \/ f.Y by FUNCT_1:35;
+    end;
+  end;
+end;
+
+theorem   :: CLOSURE:11
+  id (Bool A) is reflexive SetOp of A
+  proof
+    reconsider f = id (Bool A) as SetOp of A;
+      f is reflexive
+    proof
+      let X be Element of Bool A;
+      thus thesis by FUNCT_1:35;
+    end;
+    hence thesis;
+  end;
+
+theorem   :: CLOSURE:12
+  id (Bool A) is monotonic SetOp of A
+  proof
+    reconsider f = id (Bool A) as SetOp of A;
+      f is monotonic
+    proof
+      let X, Y be Element of Bool A such that
+A1:     X c= Y;
+        f.X = X & f.Y = Y by FUNCT_1:35;
+      hence thesis by A1;
+    end;
+    hence thesis;
+  end;
+
+theorem    :: CLOSURE:13
+  id (Bool A) is idempotent SetOp of A
+  proof
+    reconsider f = id (Bool A) as SetOp of A;
+      f is idempotent
+    proof
+      let X be Element of Bool A;
+      thus f.(f.X) = f.X by FUNCT_1:35;
+    end;
+    hence thesis;
+  end;
+
+theorem   :: CLOSURE:15
+  id (Bool A) is topological SetOp of A
+  proof
+    reconsider f = id (Bool A) as SetOp of A;
+      f is topological
+    proof
+      let X, Y be Element of Bool A;
+        X \/ Y is ManySortedSubset of A
+      proof
+          X c= A & Y c= A by MSUALG_2:def 1;
+        hence X \/ Y c= A by PBOOLE:18;
+      end;
+      then X \/ Y in Bool A by Def1;
+      hence f.(X \/ Y) = X \/ Y by FUNCT_1:35
+                     .= f.X \/ Y by FUNCT_1:35
+                     .= f.X \/ f.Y by FUNCT_1:35;
+    end;
+    hence thesis;
+  end;
+
+reserve g, h for SetOp of M;
+
+theorem   :: CLOSURE:16
+  E = M & g is reflexive implies E = g.E
+  proof
+    assume
+A1:   E = M;
+    assume g is reflexive;
+    hence E c= g.E by Def12;
+    thus g.E c= E by A1,MSUALG_2:def 1;
+  end;
+
+theorem   :: CLOSURE:17
+  (g is reflexive & for X being Element of Bool M holds g.X c= X)
+ implies g is idempotent
+  proof
+    assume that
+A1:   g is reflexive and
+A2:   for X being Element of Bool M holds g.X c= X;
+    let X be Element of Bool M;
+    thus g.X c= g.(g.X) by A1,Def12;
+    thus g.(g.X) c= g.X by A2;
+  end;
+
+theorem   :: CLOSURE:18
+  for A being Element of Bool M st A = E /\ T holds
+ g is monotonic implies g.A c= g.E /\ g.T
+  proof
+    let A be Element of Bool M such that
+A1:   A = E /\ T;
+    assume
+A2:   g is monotonic;
+      E /\ T c= E by PBOOLE:17;
+then A3: g.A c= g.E by A1,A2,Def13;
+      E /\ T c= T by PBOOLE:17;
+    then g.A c= g.T by A1,A2,Def13;
+    hence g.A c= g.E /\ g.T by A3,PBOOLE:19;
+  end;
+
+definition let I, M;
+ cluster topological -> monotonic SetOp of M;
+coherence
+  proof
+    let g be SetOp of M such that
+A1:   g is topological;
+    let X, Y be Element of Bool M such that
+A2:   X c= Y;
+      g.X \/ g.Y = g.(X \/ Y) by A1,Def15
+             .= g.Y by A2,PBOOLE:24;
+    hence g.X c= g.Y by PBOOLE:28;
+  end;
+end;
+
+theorem   :: CLOSURE:19
+  for A being Element of Bool M st A = E \ T holds
+ g is topological implies g.E \ g.T c= g.A
+  proof
+    let A be Element of Bool M such that
+A1:   A = E \ T;
+    assume
+A2:   g is topological;
+    then g.E \/ g.T = g.(E \/ T) by Def15
+             .= g.((E\T) \/ T) by PBOOLE:73
+             .= (g.A) \/ (g.T) by A1,A2,Def15;
+    then g.E c= g.A \/ g.T by PBOOLE:16;
+    then g.E \ g.T c= (g.A \/ g.T) \ g.T by PBOOLE:59;
+then A3: g.E \ g.T c= g.A \ g.T by PBOOLE:81;
+      g.A \ g.T c= g.A by PBOOLE:62;
+    hence thesis by A3,PBOOLE:15;
+  end;
+
+definition let I, M, h, g;
+ redefine func g * h -> SetOp of M;
+coherence
+  proof
+       g * h is Function of Bool M, Bool M;
+     hence thesis;
+  end;
+end;
+
+theorem   :: CLOSURE:21
+  g is reflexive & h is reflexive implies g * h is reflexive
+  proof
+    assume that
+A1:   g is reflexive and
+A2:   h is reflexive;
+    let X be Element of Bool M;
+A3: dom h = Bool M by FUNCT_2:def 1;
+A4: X c= h.X by A2,Def12;
+      h.X c= g.(h.X) by A1,Def12;
+    then X c= g.(h.X) by A4,PBOOLE:15;
+    hence X c= (g*h).X by A3,FUNCT_1:23;
+  end;
+
+theorem   :: CLOSURE:22
+  g is monotonic & h is monotonic implies g * h is monotonic
+  proof
+    assume that
+A1:   g is monotonic and
+A2:   h is monotonic;
+    let X, Y be Element of Bool M such that
+A3:   X c= Y;
+A4: dom h = Bool M by FUNCT_2:def 1;
+      h.X c= h.Y by A2,A3,Def13;
+    then g.(h.X) c= g.(h.Y) by A1,Def13;
+    then g.(h.X) c= (g*h).Y by A4,FUNCT_1:23;
+    hence (g*h).X c= (g*h).Y by A4,FUNCT_1:23;
+  end;
+
+theorem    :: CLOSURE:23
+  g is idempotent & h is idempotent & g*h = h*g implies g * h is idempotent
+  proof
+    assume that
+A1:   g is idempotent and
+A2:   h is idempotent and
+A3:   g*h = h*g;
+    let X be Element of Bool M;
+A4: dom h = Bool M by FUNCT_2:def 1;
+A5: dom g = Bool M by FUNCT_2:def 1;
+    thus (g*h).X = g.(h.X) by A4,FUNCT_1:23
+                .= g.(h.(h.X)) by A2,Def14
+                .= g.(g.(h.(h.X))) by A1,Def14
+                .= g.((h*g).(h.X)) by A3,A4,FUNCT_1:23
+                .= g.(h.(g.(h.X))) by A5,FUNCT_1:23
+                .= g.(h.((g*h).X)) by A4,FUNCT_1:23
+                .= (g*h).((g*h).X) by A4,FUNCT_1:23;
+  end;
+
+theorem   :: CLOSURE:25
+  g is topological & h is topological implies g * h is topological
+  proof
+    assume that
+A1:   g is topological and
+A2:   h is topological;
+    let X, Y be Element of Bool M;
+A3: dom h = Bool M by FUNCT_2:def 1;
+    then X \/ Y in dom h by Th11;
+    hence (g*h).(X \/ Y) = g.(h.(X \/ Y)) by FUNCT_1:23
+                       .= g.(h.X \/ h.Y) by A2,Def15
+                       .= g.(h.X) \/ g.(h.Y) by A1,Def15
+                       .= (g*h).X \/ g.(h.Y) by A3,FUNCT_1:23
+                       .= (g*h).X \/ (g*h).Y by A3,FUNCT_1:23;
+  end;
+
+begin  :: On the Closure Operator and the Closure System
+
+reserve S for 1-sorted;
+
+definition let S;
+ struct(many-sorted over S) ClosureStr over S (#
+       Sorts -> ManySortedSet of the carrier of S,
+       Family -> SubsetFamily of the Sorts #);
+end;
+
+reserve
+        MS for many-sorted over S;
+
+definition let S;
+ let IT be ClosureStr over S;
+ attr IT is additive means :Def16:
+  the Family of IT is additive;
+
+ attr IT is absolutely-additive means :Def17:
+  the Family of IT is absolutely-additive;
+
+ attr IT is multiplicative means :Def18:
+  the Family of IT is multiplicative;
+
+ attr IT is absolutely-multiplicative means :Def19:
+  the Family of IT is absolutely-multiplicative;
+
+ attr IT is properly-upper-bound means :Def20:
+  the Family of IT is properly-upper-bound;
+
+ attr IT is properly-lower-bound means :Def21:
+  the Family of IT is properly-lower-bound;
+end;
+
+definition let S, MS;
+ func Full MS -> ClosureStr over S equals :Def22:
+   ClosureStr (#the Sorts of MS, Bool the Sorts of MS#);
+correctness;
+end;
+
+definition let S, MS;
+ cluster Full MS -> strict additive absolutely-additive
+                    multiplicative absolutely-multiplicative
+                    properly-upper-bound properly-lower-bound;
+coherence
+  proof
+A1: Full MS = ClosureStr (#the Sorts of MS, Bool the Sorts of MS#) by Def22;
+    hence Full MS is strict;
+    thus the Family of Full MS is additive absolutely-additive
+     multiplicative absolutely-multiplicative properly-upper-bound
+      properly-lower-bound by A1;
+  end;
+end;
+
+definition let S;
+           let MS be non-empty many-sorted over S;
+ cluster Full MS -> non-empty;
+coherence
+  proof
+      Full MS = ClosureStr (#the Sorts of MS, Bool the Sorts of MS#) by Def22;
+    hence Full MS is non-empty by MSUALG_1:def 8;
+  end;
+end;
+
+definition let S;
+ cluster strict non-empty additive absolutely-additive
+         multiplicative absolutely-multiplicative
+         properly-upper-bound properly-lower-bound ClosureStr over S;
+existence
+  proof
+    consider a being non-empty many-sorted over S;
+    take Full a;
+    thus thesis;
+  end;
+end;
+
+definition let S;
+           let CS be additive ClosureStr over S;
+ cluster the Family of CS -> additive;
+coherence by Def16;
+end;
+
+definition let S;
+           let CS be absolutely-additive ClosureStr over S;
+ cluster the Family of CS -> absolutely-additive;
+coherence by Def17;
+end;
+
+definition let S;
+           let CS be multiplicative ClosureStr over S;
+ cluster the Family of CS -> multiplicative;
+coherence by Def18;
+end;
+
+definition let S;
+           let CS be absolutely-multiplicative ClosureStr over S;
+ cluster the Family of CS -> absolutely-multiplicative;
+coherence by Def19;
+end;
+
+definition let S;
+           let CS be properly-upper-bound ClosureStr over S;
+ cluster the Family of CS -> properly-upper-bound;
+coherence by Def20;
+end;
+
+definition let S;
+           let CS be properly-lower-bound ClosureStr over S;
+ cluster the Family of CS -> properly-lower-bound;
+coherence by Def21;
+end;
+
+definition let S;
+           let M be non-empty ManySortedSet of the carrier of S;
+           let F be SubsetFamily of M;
+ cluster ClosureStr (#M, F#) -> non-empty;
+coherence
+  proof
+    thus the Sorts of ClosureStr (#M, F#) is non-empty;
+  end;
+end;
+
+definition let S, MS;
+           let F be additive SubsetFamily of the Sorts of MS;
+ cluster ClosureStr (#the Sorts of MS, F#) -> additive;
+coherence by Def16;
+end;
+
+definition let S, MS;
+           let F be absolutely-additive SubsetFamily of the Sorts of MS;
+ cluster ClosureStr (#the Sorts of MS, F#) -> absolutely-additive;
+coherence by Def17;
+end;
+
+definition let S, MS;
+           let F be multiplicative SubsetFamily of the Sorts of MS;
+ cluster ClosureStr (#the Sorts of MS, F#) -> multiplicative;
+coherence by Def18;
+end;
+
+definition let S, MS;
+         let F be absolutely-multiplicative SubsetFamily of the Sorts of MS;
+ cluster ClosureStr (#the Sorts of MS, F#) -> absolutely-multiplicative;
+coherence by Def19;
+end;
+
+definition let S, MS;
+           let F be properly-upper-bound SubsetFamily of the Sorts of MS;
+ cluster ClosureStr (#the Sorts of MS, F#) -> properly-upper-bound;
+coherence by Def20;
+end;
+
+definition let S, MS;
+           let F be properly-lower-bound SubsetFamily of the Sorts of MS;
+ cluster ClosureStr (#the Sorts of MS, F#) -> properly-lower-bound;
+coherence by Def21;
+end;
+
+definition let S;
+ cluster absolutely-additive -> additive ClosureStr over S;
+coherence
+  proof
+    let CS be ClosureStr over S;
+    assume CS is absolutely-additive;
+then A1: the Family of CS is absolutely-additive by Def17;
+      for a being absolutely-additive SubsetFamily of M
+      holds a is additive;
+    hence the Family of CS is additive by A1;
+  end;
+end;
+
+definition let S;
+ cluster absolutely-multiplicative -> multiplicative ClosureStr over S;
+coherence
+  proof
+    let CS be ClosureStr over S;
+    assume CS is absolutely-multiplicative;
+then A1: the Family of CS is absolutely-multiplicative by Def19;
+      for a being absolutely-multiplicative SubsetFamily of M
+      holds a is multiplicative;
+    hence the Family of CS is multiplicative by A1;
+  end;
+end;
+
+definition let S;
+ cluster absolutely-multiplicative -> properly-upper-bound ClosureStr over S;
+coherence
+  proof
+    let CS be ClosureStr over S;
+    assume CS is absolutely-multiplicative;
+then A1: the Family of CS is absolutely-multiplicative by Def19;
+      for a being absolutely-multiplicative SubsetFamily of M
+      holds a is properly-upper-bound;
+    hence the Family of CS is properly-upper-bound by A1;
+  end;
+end;
+
+definition let S;
+ cluster absolutely-additive -> properly-lower-bound ClosureStr over S;
+coherence
+  proof
+    let CS be ClosureStr over S;
+    assume CS is absolutely-additive;
+then A1: the Family of CS is absolutely-additive by Def17;
+      for a being absolutely-additive SubsetFamily of M
+      holds a is properly-lower-bound;
+    hence the Family of CS is properly-lower-bound by A1;
+  end;
+end;
+
+definition let S;
+ mode ClosureSystem of S is absolutely-multiplicative ClosureStr over S;
+end;
+
+definition let I, M;
+ mode ClosureOperator of M is reflexive monotonic idempotent SetOp of M;
+end;
+
+theorem Th39:
+for A being ManySortedSet of the carrier of S
+ for f being reflexive monotonic SetOp of A
+  for D being SubsetFamily of A st
+   D = { x where x is Element of Bool A : f.x = x } holds
+ ClosureStr (#A, D#) is ClosureSystem of S
+  proof
+    let A be ManySortedSet of the carrier of S,
+        f be reflexive monotonic SetOp of A,
+        D be SubsetFamily of A such that
+A1:   D = { x where x is Element of Bool A : f.x = x };
+    reconsider cs = ClosureStr (#A, D#) as ClosureStr over S;
+      cs is absolutely-multiplicative
+    proof
+        D is absolutely-multiplicative
+      proof
+        let F be SubsetFamily of A such that
+A2:       F c= D;
+        reconsider mf = meet |:F:| as Element of Bool A by Def1;
+          f.mf = mf
+        proof
+            now
+            let Z1 be ManySortedSet of the carrier of S; assume
+A3:           Z1 in F;
+            then Z1 in D by A2;
+            then consider a being Element of Bool A such that
+A4:           Z1 = a & f.a = a by A1;
+            reconsider y1 = Z1 as Element of Bool A by A3;
+              y1 in' |:F:| by A3,Th22;
+            then mf c=' y1 by MSSUBFAM:43; hence f.mf c=' Z1 by A4,Def13;
+          end;
+          hence f.mf c=' mf by Th25;
+          thus mf c=' f.mf by Def12;
+        end;
+        hence meet |:F:| in D by A1;
+      end;
+      hence the Family of cs is absolutely-multiplicative;
+    end;
+    hence thesis;
+  end;
+
+definition let S;
+           let A be ManySortedSet of the carrier of S;
+           let g be ClosureOperator of A;
+ func ClOp->ClSys g -> strict ClosureSystem of S means :Def23:
+  the Sorts of it = A &
+  the Family of it = { x where x is Element of Bool A : g.x = x };
+existence
+  proof
+    defpred P[set] means g.$1 = $1;
+    set SF = { x where x is Element of Bool A : P[ x ] };
+    SF is Subset of Bool A from SubsetD;
+    then reconsider D = SF as SubsetFamily of A;
+    reconsider a = ClosureStr (#A, D#) as strict ClosureSystem of S by Th39;
+    take a;
+    thus thesis;
+  end;
+uniqueness;
+end;
+
+definition let S;
+           let A be ClosureSystem of S;
+           let C be ManySortedSubset of the Sorts of A;
+ func Cl C -> Element of Bool the Sorts of A means :Def24:
+  ex F being SubsetFamily of the Sorts of A st
+   it = meet |:F:| & F = { X where X is Element of Bool the Sorts of A :
+    C c=' X & X in the Family of A };
+existence
+  proof
+    defpred P[Element of Bool the Sorts of A] means
+      C c= $1 & $1 in the Family of A;
+    { X where X is Element of Bool the Sorts of A : P[X] }
+       is Subset of Bool the Sorts of A from SubsetD;
+    then reconsider F = { X where X is Element of Bool the Sorts of A :
+     C c= X & X in the Family of A } as SubsetFamily of the Sorts of A;
+    reconsider IT = meet |:F:| as Element of Bool the Sorts of A by Def1;
+    take IT,F;
+    thus thesis;
+  end;
+uniqueness;
+end;
+
+theorem Th40:
+for D being ClosureSystem of S
+ for a being Element of Bool the Sorts of D
+  for f being SetOp of the Sorts of D st
+
+  a in the Family of D &
+   for x being Element of Bool the Sorts of D holds f.x = Cl x
+
+  holds f.a = a
+  proof
+    let D be ClosureSystem of S,
+        a be Element of Bool the Sorts of D,
+        f be SetOp of the Sorts of D such that
+A1:   a in the Family of D and
+A2:   for x being Element of Bool the Sorts of D holds f.x = Cl x;
+    consider F being SubsetFamily of the Sorts of D such that
+A3:   Cl a = meet |:F:| and
+A4:   F = { X where X is Element of Bool the Sorts of D :
+        a c=' X & X in the Family of D } by Def24;
+A5: f.a = meet |:F:| by A2,A3;
+      a in F by A1,A4;
+    then a in' |:F:| by Th22;
+    hence f.a c= a by A5,MSSUBFAM:43;
+      for Z1 being ManySortedSet of the carrier of S st Z1 in F holds a c=' Z1
+    proof
+      let Z1 be ManySortedSet of the carrier of S;
+      assume Z1 in F;
+      then consider b being Element of Bool the Sorts of D such that
+A6:     Z1 = b & a c=' b and b in the Family of D by A4;
+      thus a c=' Z1 by A6;
+    end;
+    hence a c= f.a by A5,Th25;
+  end;
+
+theorem
+  for D being ClosureSystem of S
+ for a being Element of Bool the Sorts of D
+  for f being SetOp of the Sorts of D st
+
+  f.a = a &
+   for x being Element of Bool the Sorts of D holds f.x = Cl x
+
+  holds a in the Family of D
+  proof
+    let D be ClosureSystem of S,
+        a be Element of Bool the Sorts of D,
+        f be SetOp of the Sorts of D such that
+A1:   f.a = a and
+A2:   for x being Element of Bool the Sorts of D holds f.x = Cl x;
+    set F = the Family of D,
+        M = the Sorts of D;
+    consider SF being SubsetFamily of M such that
+A3:   Cl a = meet |:SF:| and
+A4:   SF = { X where X is Element of Bool M : a c= X & X in F } by Def24;
+A5: a = meet |:SF:| by A1,A2,A3;
+    deffunc F(set) = $1;
+    defpred P[Element of Bool M] means a c=' $1;
+    defpred R[Element of Bool M] means a c=' $1 & $1 in F;
+    defpred S[Element of Bool M] means $1 in F & a c=' $1;
+A6: { F(w) where w is Element of Bool M : F(w) in F & P[w] } c= F
+     from FrSet_1;
+A7: for q being Element of Bool M holds R[q] iff S[q];
+    { F(s) where s is Element of Bool M : R[s] }
+            = { F(b) where b is Element of Bool M : S[b] }
+                      from Fraenkel6'(A7);
+    hence a in the Family of D by A4,A5,A6,Def8;
+  end;
+
+theorem Th42:
+for D being ClosureSystem of S
+ for f being SetOp of the Sorts of D st
+  for x being Element of Bool the Sorts of D holds f.x = Cl x
+ holds f is reflexive monotonic idempotent
+  proof
+    let D be ClosureSystem of S,
+        f be SetOp of the Sorts of D such that
+A1:   for x being Element of Bool the Sorts of D holds f.x = Cl x;
+    set M = the Sorts of D;
+A2: f is reflexive
+    proof
+      let x be Element of Bool M;
+      consider F being SubsetFamily of M such that
+A3:     Cl x = meet |:F:| and
+A4:     F = { X where X is Element of Bool the Sorts of D :
+          x c=' X & X in the Family of D } by Def24;
+A5:   for Z1 being ManySortedSet of the carrier of S st Z1 in F holds x c=' Z1
+      proof
+        let Z1 be ManySortedSet of the carrier of S;
+        assume Z1 in F;
+        then consider a being Element of Bool M such that
+A6:       Z1 = a & x c=' a and a in the Family of D by A4;
+        thus x c=' Z1 by A6;
+      end;
+        f.x = meet |:F:| by A1,A3;
+      hence x c=' f.x by A5,Th25;
+    end;
+A7: f is monotonic
+    proof
+      let x, y be Element of Bool M such that
+A8:     x c=' y;
+      consider Fx being SubsetFamily of M such that
+A9:     Cl x = meet |:Fx:| and
+A10:     Fx = { X where X is Element of Bool the Sorts of D :
+          x c=' X & X in the Family of D } by Def24;
+      consider Fy being SubsetFamily of M such that
+A11:     Cl y = meet |:Fy:| and
+A12:     Fy = { X where X is Element of Bool the Sorts of D :
+          y c=' X & X in the Family of D } by Def24;
+        |:Fy:| c=' |:Fx:|
+      proof
+        let i such that
+A13:       i in the carrier of S;
+        thus |:Fy:|.i c= |:Fx:|.i
+        proof
+          let q be set such that
+A14:         q in |:Fy:|.i;
+          per cases;
+          suppose Fy is empty;
+            then reconsider Fy' = Fy as empty SubsetFamily of M;
+              |:Fy':|.i is empty by A13,PBOOLE:def 15;
+            hence q in |:Fx:|.i by A14;
+          suppose Fy is non empty;
+            then |:Fy:|.i = { e.i where e is Element of Bool M : e in Fy }
+               by A13,Th15;
+            then consider w being Element of Bool M such that
+A15:           q = w.i and
+A16:           w in Fy by A14;
+            consider r being Element of Bool M such that
+A17:           r = w and
+A18:           y c=' r and
+A19:           r in the Family of D by A12,A16;
+              x c=' w by A8,A17,A18,PBOOLE:15;
+then A20:         w in Fx by A10,A17,A19;
+            then |:Fx:|.i = { e.i where e is Element of Bool M : e in Fx }
+               by A13,Th15;
+            hence q in |:Fx:|.i by A15,A20;
+        end;
+      end;
+      then meet |:Fx:| c=' meet |:Fy:| by MSSUBFAM:46;
+      then meet |:Fx:| c=' f.y by A1,A11;
+      hence f.x c=' f.y by A1,A9;
+    end;
+      f is idempotent
+    proof
+      let x be Element of Bool M;
+      consider F being SubsetFamily of M such that
+A21:     Cl x = meet |:F:| and
+A22:     F = { X where X is Element of Bool the Sorts of D :
+          x c=' X & X in the Family of D } by Def24;
+        F c= the Family of D
+      proof
+        let k be set;
+        assume k in F;
+        then consider q being Element of Bool M such that
+A23:       k = q & x c=' q & q in the Family of D by A22;
+        thus k in the Family of D by A23;
+      end;
+then A24:   meet |:F:| in the Family of D by Def8;
+      thus f.x = meet |:F:| by A1,A21
+              .= f.(meet |:F:|) by A1,A24,Th40
+              .= f.(f.x) by A1,A21;
+    end;
+    hence thesis by A2,A7;
+  end;
+
+definition let S;
+           let D be ClosureSystem of S;
+ func ClSys->ClOp D -> ClosureOperator of the Sorts of D means :Def25:
+  for x being Element of Bool the Sorts of D holds it.x = Cl x;
+existence
+  proof
+    set M = the Sorts of D;
+    deffunc F(Element of Bool M) = Cl $1;
+    consider f being Function of Bool M, Bool M such that
+A1:   for x being Element of Bool M holds f.x = F(x) from LambdaD;
+    reconsider f as SetOp of M;
+    reconsider f as ClosureOperator of M by A1,Th42;
+    take f;
+    thus thesis by A1;
+  end;
+uniqueness
+  proof
+    let f, g be ClosureOperator of the Sorts of D such that
+A2:  for x being Element of Bool the Sorts of D holds f.x = Cl x and
+A3:  for x being Element of Bool the Sorts of D holds g.x = Cl x;
+      now
+      set X = Bool the Sorts of D;
+      thus X = dom f by FUNCT_2:def 1;
+      thus X = dom g by FUNCT_2:def 1;
+      let x;
+      assume x in X;
+      then reconsider x1 = x as Element of Bool the Sorts of D;
+      thus f.x = Cl x1 by A2
+              .= g.x by A3;
+    end;
+    hence f = g by FUNCT_1:9;
+  end;
+end;
+
+theorem
+  for A being ManySortedSet of the carrier of S
+ for f being ClosureOperator of A holds
+  ClSys->ClOp (ClOp->ClSys f) = f
+  proof
+    let A be ManySortedSet of the carrier of S,
+        f be ClosureOperator of A;
+    set D = ClOp->ClSys f,
+        M = the Sorts of D,
+        f1 = ClSys->ClOp D;
+A1: A = M by Def23;
+    then reconsider ff = f as reflexive idempotent monotonic SetOp of M;
+      for x st x in Bool A holds f1.x = ff.x
+    proof
+      let x;
+      assume x in Bool A;
+      then reconsider x1 = x as Element of Bool M by Def23;
+      consider F being SubsetFamily of M such that
+A2:    Cl x1 = meet |:F:| and
+A3:    F = { X where X is Element of Bool M :
+             x1 c=' X & X in the Family of D } by Def24;
+A4:   now
+        let i; assume
+A5:       i in the carrier of S;
+        then consider Q be Subset-Family of (M.i) such that
+A6:       Q = |:F:|.i and
+A7:       (meet |:F:|).i = Intersect Q by MSSUBFAM:def 2;
+A8:     x1 c=' M by MSUALG_2:def 1;
+          M in the Family of D by Def9;
+        then M in F by A3,A8;
+        then reconsider F' = F as non empty SubsetFamily of M;
+        thus (meet |:F:|).i = ff.x1.i
+        proof
+A9:       Q = { q.i where q is Element of Bool M : q in F' }
+             by A5,A6,Th15;
+A10:       the Family of D =
+             { q where q is Element of Bool M : ff.q = q } by A1,Def23;
+            ff.(ff.x1) = ff.x1 by Def14;
+then A11:       ff.x1 in the Family of D by A10;
+            x1 c=' ff.x1 by Def12;
+          then ff.x1 in F' by A3,A11;
+          then ff.x1.i in Q by A9;
+          hence (meet |:F:|).i c= ff.x1.i by A7,MSSUBFAM:2;
+            Q = |:F':|.i by A6;
+then A12:       Q is non empty by A5,PBOOLE:def 16;
+            now
+            let z be set;
+            assume z in Q;
+            then consider q being Element of Bool M such that
+A13:           z = q.i and
+A14:           q in F' by A9;
+            consider X being Element of Bool M such that
+A15:           q = X and
+A16:           x1 c=' X and
+A17:           X in the Family of D by A3,A14;
+            consider t being Element of Bool M such that
+A18:           X = t and
+A19:           ff.t = t by A10,A17;
+              ff.x1 c=' ff.X by A16,Def13;
+            hence ff.x1.i c= z by A5,A13,A15,A18,A19,PBOOLE:def 5;
+          end;
+          hence ff.x1.i c= (meet |:F:|).i by A7,A12,MSSUBFAM:5;
+        end;
+      end;
+      thus f1.x = Cl x1 by Def25
+               .= ff.x by A2,A4,PBOOLE:3;
+    end;
+    hence ClSys->ClOp (ClOp->ClSys f) = f by A1,FUNCT_2:18;
+  end;
+
+deffunc F(set) = $1;
+
+theorem
+  for D being ClosureSystem of S holds
+ ClOp->ClSys (ClSys->ClOp D) = the ClosureStr of D
+  proof
+    let D be ClosureSystem of S;
+    set M = the Sorts of D,
+        F = the Family of D,
+        d = the Family of ClOp->ClSys (ClSys->ClOp D),
+        f = ClSys->ClOp D;
+A1: d = { x where x is Element of Bool M : f.x = x } by Def23;
+      F = d
+    proof
+      thus F c= d
+      proof
+        let q be set;
+        assume
+A2:        q in F;
+        then reconsider q1 = q as Element of Bool M;
+        consider SF being SubsetFamily of M such that
+A3:       Cl q1 = meet |:SF:| and
+A4:       SF = { X where X is Element of Bool M : q1 c= X & X in F } by Def24;
+A5:     q1 c=' M by MSUALG_2:def 1;
+          M in F by Def9;
+        then M in SF by A4,A5;
+        then reconsider SF' = SF as non empty SubsetFamily of M;
+          now
+          let i; assume
+A6:         i in the carrier of S;
+          then consider Q be Subset-Family of (M.i) such that
+A7:         Q = |:SF':|.i and
+A8:         (meet |:SF':|).i = Intersect Q by MSSUBFAM:def 2;
+        Intersect Q = q1.i
+          proof
+A9:         q1 in SF' by A2,A4;
+A10:         Q = { x.i where x is Element of Bool M : x in SF' }
+              by A6,A7,Th15;
+then A11:         q1.i in Q by A9;
+            hence Intersect Q c= q1.i by MSSUBFAM:2;
+              now
+              let z be set;
+              assume z in Q;
+              then consider x being Element of Bool M such that
+A12:             z = x.i and
+A13:             x in SF' by A10;
+              consider xx being Element of Bool M such that
+A14:             xx = x & q1 c=' xx and
+                  xx in F by A4,A13;
+              thus q1.i c= z by A6,A12,A14,PBOOLE:def 5;
+            end;
+            hence q1.i c= Intersect Q by A11,MSSUBFAM:5;
+          end;
+          hence f.q1.i = q1.i by A3,A8,Def25;
+        end;
+        then f.q1 = q1 by PBOOLE:3;
+        hence q in d by A1;
+      end;
+
+      let q be set;
+      assume q in d;
+      then consider x being Element of Bool M such that
+A15:     q = x and
+A16:     f.x = x by A1;
+      consider SF being SubsetFamily of M such that
+A17:     Cl x = meet |:SF:| and
+A18:     SF = { X where X is Element of Bool M : x c=' X & X in F } by Def24;
+A19:   meet |:SF:| = q by A15,A16,A17,Def25;
+      defpred P[Element of Bool M] means x c=' $1;
+      defpred R[Element of Bool M] means x c=' $1 & $1 in F;
+      defpred S[Element of Bool M] means $1 in F & x c=' $1;
+A20:   { F(w) where w is Element of Bool M : F(w) in F & P[w] } c= F
+         from FrSet_1;
+A21:   for a being Element of Bool M holds R[a] iff S[a];
+        { F(a) where a is Element of Bool M : R[a] }
+            = { F(b) where b is Element of Bool M : S[b] }
+                       from Fraenkel6'(A21);
+      hence q in F by A18,A19,A20,Def8;
+    end;
+    hence thesis by Def23;
+  end;

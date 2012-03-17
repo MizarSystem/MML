@@ -1,0 +1,3454 @@
+:: Completeness of the Lattices of Domains of a Topological Space
+::  by Zbigniew Karno and Toshihiko Watanabe
+::
+:: Received July 16, 1992
+:: Copyright (c) 1992 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, TOPS_1, BOOLE, SETFAM_1, PCOMPS_1, TARSKI, FINSET_1,
+      FINSEQ_1, RELAT_1, FUNCT_1, TDLAT_1, LATTICES, SUBSET_1, LATTICE3,
+      BHSP_3, TDLAT_2;
+ notation TARSKI, XBOOLE_0, SUBSET_1, XREAL_0, SETFAM_1, STRUCT_0, FUNCT_1,
+      FINSET_1, FINSEQ_1, NAT_1, PRE_TOPC, TOPS_1, TOPS_2, PCOMPS_1, BINOP_1,
+      LATTICES, LATTICE3, TDLAT_1;
+ constructors FINSEQ_1, NAT_1, TOPS_1, TOPS_2, PCOMPS_1, LATTICE3, TDLAT_1,
+      MEMBERED, XBOOLE_0;
+ clusters SUBSET_1, PRE_TOPC, STRUCT_0, TDLAT_1, TOPS_1, ARYTM_3, MEMBERED,
+      ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+ definitions LATTICE3;
+ theorems TARSKI, AXIOMS, ZFMISC_1, SETFAM_1, FINSEQ_1, FUNCT_1, NAT_1,
+      PRE_TOPC, TOPS_1, TOPS_2, PCOMPS_1, LATTICES, LATTICE2, LATTICE3,
+      TDLAT_1, RELAT_1, REAL_1, XBOOLE_0, XBOOLE_1;
+ schemes PRE_TOPC, NAT_1;
+
+begin
+:: 1. Preliminary Theorems about Subsets of a Toplogical Space.
+reserve T for non empty TopSpace;
+
+theorem Th1:
+ for A being Subset of T holds
+  Int Cl Int A c= Int Cl A & Int Cl Int A c= Cl Int A
+ proof let A be Subset of T;
+     Int A c= A by TOPS_1:44;
+  then Cl Int A c= Cl A by PRE_TOPC:49;
+  hence Int Cl Int A c= Int Cl A by TOPS_1:48;
+  thus Int Cl Int A c= Cl Int A by TOPS_1:44;
+ end;
+
+theorem Th2:
+ for A being Subset of T holds
+  Cl Int A c= Cl Int Cl A & Int Cl A c= Cl Int Cl A
+ proof let A be Subset of T;
+     A c= Cl A by PRE_TOPC:48;
+  then Int A c= Int Cl A by TOPS_1:48;
+  hence Cl Int A c= Cl Int Cl A by PRE_TOPC:49;
+  thus Int Cl A c= Cl Int Cl A by PRE_TOPC:48;
+ end;
+
+theorem
+   for A being Subset of T, B being Subset of T st B is closed
+  holds Cl(Int(A /\ B)) = A implies A c= B
+ proof let A be Subset of T, B be Subset of T;
+  assume A1: B is closed;
+  assume A2: Cl(Int(A /\ B)) = A;
+      Int(A /\ B) c= A /\ B & A /\ B c= B by TOPS_1:44,XBOOLE_1:17;
+   then Int(A /\ B) c= B by XBOOLE_1:1;
+   then Cl Int(A /\ B) c= Cl B by PRE_TOPC:49;
+  hence thesis by A1,A2,PRE_TOPC:52;
+ end;
+
+theorem Th4:
+ for A being Subset of T, B being Subset of T st A is open holds
+  Int(Cl(A \/ B)) = B implies A c= B
+ proof let A be Subset of T, B be Subset of T;
+  assume A1: A is open;
+  assume A2: Int(Cl(A \/ B)) = B;
+      A \/ B c= Cl(A \/ B) & A c= A \/ B by PRE_TOPC:48,XBOOLE_1:7;
+   then A c= Cl(A \/ B) by XBOOLE_1:1;
+   then Int A c= Int Cl(A \/ B) by TOPS_1:48;
+  hence thesis by A1,A2,TOPS_1:55;
+ end;
+
+theorem Th5:
+ for A being Subset of T holds
+  A c= Cl Int A implies A \/ Int Cl A c= Cl Int(A \/ Int Cl A)
+ proof let A be Subset of T;
+  assume A1: A c= Cl Int A;
+      Int Cl A = Int Int Cl A &
+     (Int A) \/ (Int Int Cl A) c= Int (A \/ Int Cl A) by TOPS_1:45,49;
+   then A2: Cl((Int A) \/ (Int Cl A)) c= Cl(Int (A \/
+ Int Cl A)) by PRE_TOPC:49;
+      A c= Cl A by PRE_TOPC:48;
+   then Int A c= Int Cl A by TOPS_1:48;
+   then A3: Cl(Int A) c= Cl(Int Cl A) by PRE_TOPC:49;
+   then A4: Cl(Int A) \/ Cl(Int Cl A) = Cl(Int Cl A) by XBOOLE_1:12;
+      Int Cl A c= Cl Int Cl A & A c= Cl(Int Cl A) by A1,A3,PRE_TOPC:48,XBOOLE_1
+:1;
+   then A \/ Int Cl A c= (Cl Int Cl A) \/ (Cl Int Cl A) by XBOOLE_1:13;
+   then A \/ Int Cl A c= Cl((Int A) \/ (Int Cl A)) by A4,PRE_TOPC:50;
+   hence thesis by A2,XBOOLE_1:1;
+ end;
+
+theorem Th6:
+ for A being Subset of T holds
+  Int Cl A c= A implies Int Cl(A /\ Cl Int A) c= A /\ Cl Int A
+ proof let A be Subset of T;
+  assume A1: Int Cl A c= A;
+      Cl Int A = Cl Cl Int A &
+     Cl (A /\ Cl Int A) c= (Cl A) /\ (Cl Cl Int A) by PRE_TOPC:51,TOPS_1:26;
+   then A2: Int(Cl (A /\ Cl Int A)) c= Int((Cl A) /\ (Cl Int A)) by TOPS_1:48;
+      Int A c= A by TOPS_1:44;
+   then Cl Int A c= Cl A by PRE_TOPC:49;
+   then A3: Int(Cl Int A) c= Int(Cl A) by TOPS_1:48;
+   then A4: Int(Cl A) /\ Int(Cl Int A) = Int(Cl Int A) by XBOOLE_1:28;
+      Int Cl Int A c= Cl Int A & Int Cl Int A c= A by A1,A3,TOPS_1:44,XBOOLE_1:
+1
+;
+   then (Int Cl Int A) /\ (Int Cl Int A) c= A /\ Cl Int A by XBOOLE_1:27;
+   then Int((Cl A) /\ (Cl Int A)) c= A /\ Cl Int A by A4,TOPS_1:46;
+   hence thesis by A2,XBOOLE_1:1;
+ end;
+
+begin
+:: 2. The Closure and the Interior Operations for Families of Subsets of
+::                                                    a Topological Space.
+reserve T for non empty TopSpace;
+
+::(for the definition of clf see PCOMPS_1:def 3)
+definition let T; let F be Subset-Family of T;
+ redefine func clf F;
+  synonym Cl F;
+end;
+
+::Properties of the Closure Operation Cl (see also PCOMPS_1).
+theorem Th7:
+ for F being Subset-Family of T holds Cl F =
+   {A where A is Subset of T :
+     ex B being Subset of T st A = Cl B & B in F}
+ proof let F be Subset-Family of T;
+  set P =
+    {A where A is Subset of T :
+     ex B being Subset of T st A = Cl B & B in F};
+     P c= bool the carrier of T
+    proof
+       now let C be set;
+       assume C in P;
+      then ex A being Subset of T st C = A &
+                ex B being Subset of T st A = Cl B & B in F;
+      hence C in bool the carrier of T;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+   then reconsider P as Subset-Family of T by SETFAM_1:def 7;
+   reconsider P as Subset-Family of T;
+    for X being set holds X in Cl F iff X in P
+   proof let X be set;
+   A1: now assume A2: X in Cl F;
+        then reconsider C = X as Subset of T;
+           ex B being Subset of T st C = Cl B & B in F
+           by A2,PCOMPS_1:def 3;
+        hence X in P;
+       end;
+       now assume A3: X in P;
+        then reconsider C = X as Subset of T;
+          ex D being Subset of T st
+          D = C & ex B being Subset of T st D = Cl B & B in F
+          by A3;
+      hence X in Cl F by PCOMPS_1:def 3;
+     end;
+    hence thesis by A1;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem
+   for F being Subset-Family of T holds Cl F = Cl Cl F
+ proof let F be Subset-Family of T;
+  A1: Cl F = {A where A is Subset of T :
+                ex B being Subset of T st A = Cl B & B in F}
+                by Th7;
+  A2: Cl Cl F = {D where D is Subset of T :
+              ex B being Subset of T st D = Cl B & B in Cl F}
+              by Th7;
+    for X being set holds X in Cl F iff X in Cl Cl F
+   proof let X be set;
+   A3: now assume A4: X in Cl F;
+        then reconsider C = X as Subset of T;
+        consider B being Subset of T such that
+          A5: C = Cl B and A6: B in F by A4,PCOMPS_1:def 3;
+           C = Cl Cl B & Cl B in Cl F by A5,A6,PCOMPS_1:def 3,TOPS_1:26;
+        hence X in Cl Cl F by A2;
+       end;
+       now assume A7: X in Cl Cl F;
+        then reconsider C = X as Subset of T;
+          ex Q being Subset of T st
+          Q = C & ex B being Subset of T
+           st Q = Cl B & B in Cl F by A2,A7;
+        then consider B being Subset of T such that
+          A8: C = Cl B and A9: B in Cl F;
+           ex Q being Subset of T st
+          Q = B & ex R being Subset of T st Q = Cl R & R in F
+          by A1,A9;
+        then consider R being Subset of T such that
+          A10: B = Cl R and A11: R in F;
+           C = Cl R by A8,A10,TOPS_1:26;
+      hence X in Cl F by A11,PCOMPS_1:def 3;
+     end;
+    hence thesis by A3;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem Th9:
+ for F being Subset-Family of T holds F = {} iff Cl F = {}
+ proof let F be Subset-Family of T;
+  thus F = {} implies Cl F = {} by PCOMPS_1:15;
+  assume A1: Cl F = {};
+   consider B being Element of F;
+  assume
+A2:  F <> {};
+   then reconsider B as Subset of T by TARSKI:def 3;
+     Cl B in Cl F by A2,PCOMPS_1:def 3;
+  hence contradiction by A1;
+ end;
+
+theorem
+   for F,G being Subset-Family of T holds Cl(F /\ G) c= (Cl F) /\ (Cl G)
+ proof let F,G be Subset-Family of T;
+    for X being set holds X in Cl(F /\ G) implies X in (Cl F) /\ (Cl G)
+   proof let X be set;
+     assume A1: X in Cl(F /\ G);
+        then reconsider X0 = X as Subset of T;
+        consider W being Subset of T such that
+           A2: X0 = Cl W and A3: W in F /\ G by A1,PCOMPS_1:def 3;
+         A4: W in F & W in G by A3,XBOOLE_0:def 3;
+           then A5: X0 in Cl F by A2,PCOMPS_1:def 3;
+             X0 in Cl G by A2,A4,PCOMPS_1:def 3;
+       hence X in (Cl F) /\ (Cl G) by A5,XBOOLE_0:def 3;
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem
+   for F,G being Subset-Family of T holds (Cl F) \ (Cl G) c= Cl(F \ G)
+ proof let F,G be Subset-Family of T;
+    for X being set holds X in (Cl F) \ (Cl G) implies X in Cl(F \ G)
+   proof let X be set;
+    assume A1: X in (Cl F) \ (Cl G);
+     then A2: X in Cl F & not X in Cl G by XBOOLE_0:def 4;
+     reconsider X0 = X as Subset of T by A1;
+      consider W being Subset of T such that
+         A3: X0 = Cl W and A4: W in F by A2,PCOMPS_1:def 3;
+           not W in G by A2,A3,PCOMPS_1:def 3;
+         then W in F \ G by A4,XBOOLE_0:def 4;
+       hence X in Cl (F \ G) by A3,PCOMPS_1:def 3;
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem
+   for F being Subset-Family of T, A being Subset of T holds
+  A in F implies meet(Cl F) c= Cl A & Cl A c= union(Cl F)
+ proof
+   let F be Subset-Family of T, A be Subset of T;
+  assume A in F;
+  then Cl A in
+   {P where P is Subset of T :
+     ex B being Subset of T st P = Cl B & B in F};
+  then A1: Cl A in Cl F by Th7;
+  hence meet(Cl F) c= Cl A by SETFAM_1:4;
+  thus Cl A c= union(Cl F) by A1,ZFMISC_1:92;
+ end;
+
+::for F being Subset-Family of T holds union F c= union(Cl F);
+::(see PCOMPS_1:22)
+theorem Th13:
+ for F being Subset-Family of T holds meet F c= meet(Cl F)
+ proof
+  let F be Subset-Family of T;
+   A1: for A being set st A in Cl F holds meet F c= A
+        proof let A be set;
+         assume A2: A in Cl F;
+          then reconsider A0 = A as Subset of T;
+         consider B being Subset of T such that
+           A3: A0 = Cl B and A4: B in F by A2,PCOMPS_1:def 3;
+            meet F c= B & B c= A0 by A3,A4,PRE_TOPC:48,SETFAM_1:4;
+         hence thesis by XBOOLE_1:1;
+        end;
+    now per cases;
+   suppose Cl F = {};
+    hence meet F c= meet(Cl F) by Th9;
+   suppose Cl F <> {};
+    hence meet F c= meet(Cl F) by A1,SETFAM_1:6;
+  end;
+  hence thesis;
+ end;
+
+theorem Th14:
+ for F being Subset-Family of T holds Cl(meet F) c= meet(Cl F)
+ proof
+  let F be Subset-Family of T;
+     Cl F is closed by PCOMPS_1:14;
+  then meet(Cl F) is closed & meet F c= meet(Cl F) by Th13,TOPS_2:29;
+  then Cl meet(Cl F) = meet(Cl F) &
+         Cl meet F c= Cl meet(Cl F) by PRE_TOPC:49,52;
+  hence thesis;
+ end;
+
+theorem Th15:
+ for F being Subset-Family of T holds union(Cl F) c= Cl(union F)
+ proof
+  let F be Subset-Family of T;
+     for A being set st A in Cl F holds A c= Cl(union F)
+    proof let A be set;
+     assume A1: A in Cl F;
+      then reconsider A0 = A as Subset of T;
+     consider B being Subset of T such that
+       A2: A0 = Cl B and A3: B in F by A1,PCOMPS_1:def 3;
+        B c= union F by A3,ZFMISC_1:92;
+     hence thesis by A2,PRE_TOPC:49;
+    end;
+  hence thesis by ZFMISC_1:94;
+ end;
+
+definition let T; let F be Subset-Family of T;
+ func Int F -> Subset-Family of T means
+:Def1: for A being Subset of T holds
+   A in it iff ex B being Subset of T st A = Int B & B in F;
+ existence
+  proof
+   defpred X[Subset of T] means
+      ex B being Subset of T st $1 = Int B & B in F;
+   thus ex F being Subset-Family of T st
+    for A being Subset of T holds A in F iff X[A]
+     from SubFamExS;
+  end;
+ uniqueness
+  proof let H,G be Subset-Family of T;
+   assume A1: for A being Subset of T holds
+               A in H iff
+               ex B being Subset of T st A = Int B & B in F;
+   assume A2: for A being Subset of T holds
+       A in G iff ex B being Subset of T st A = Int B & B in F;
+      now
+       now let A be set;
+      assume A3: A in H;
+      then reconsider A0 = A as Subset of T;
+         ex B being Subset of T st A0 = Int B & B in F by A1,A3;
+      hence A in G by A2;
+     end;
+      then A4: H c= G by TARSKI:def 3;
+       now let A be set;
+      assume A5: A in G;
+      then reconsider A0 = A as Subset of T;
+         ex B being Subset of T st A0 = Int B & B in F by A2,A5;
+      hence A in H by A1;
+     end;
+     then G c= H by TARSKI:def 3;
+     hence H = G by A4,XBOOLE_0:def 10;
+    end;
+   hence thesis;
+  end;
+end;
+
+::Properties of the Interior Operation Int.
+theorem Th16:
+ for F being Subset-Family of T holds Int F =
+   {A where A is Subset of T :
+    ex B being Subset of T st A = Int B & B in F}
+ proof
+  let F be Subset-Family of T;
+  set P =
+    {A where A is Subset of T :
+    ex B being Subset of T st A = Int B & B in F};
+     P c= bool the carrier of T
+    proof
+       now let C be set;
+       assume C in P;
+      then ex A being Subset of T st C = A &
+                ex B being Subset of T st A = Int B & B in F;
+      hence C in bool the carrier of T;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+   then reconsider P as Subset-Family of T by SETFAM_1:def 7;
+   reconsider P as Subset-Family of T;
+    for X being set holds X in Int F iff X in P
+   proof let X be set;
+   A1: now assume A2: X in Int F;
+        then reconsider C = X as Subset of T;
+           ex B being Subset of T st C = Int B & B in
+ F by A2,Def1;
+        hence X in P;
+       end;
+       now assume A3: X in P;
+        then reconsider C = X as Subset of T;
+          ex D being Subset of T st
+          D = C & ex B being Subset of T st D = Int B & B in F
+          by A3;
+      hence X in Int F by Def1;
+     end;
+    hence thesis by A1;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem
+   for F being Subset-Family of T holds Int F = Int Int F
+ proof
+  let F be Subset-Family of T;
+  A1: Int F = {A where A is Subset of T :
+                ex B being Subset of T st A = Int B & B in F}
+                by Th16;
+  A2: Int Int F = {D where D is Subset of T :
+           ex B being Subset of T st D = Int B & B in Int F}
+           by Th16;
+    for X being set holds X in Int F iff X in Int Int F
+   proof let X be set;
+   A3: now assume A4: X in Int F;
+        then reconsider C = X as Subset of T;
+        consider B being Subset of T such that
+          A5: C = Int B and A6: B in F by A4,Def1;
+           C = Int Int B & Int B in Int F by A5,A6,Def1,TOPS_1:45;
+        hence X in Int Int F by A2;
+       end;
+       now assume A7: X in Int Int F;
+        then reconsider C = X as Subset of T;
+          ex Q being Subset of T st
+          Q = C &
+          ex B being Subset of T st Q = Int B & B in Int F
+          by A2,A7;
+        then consider B being Subset of T such that
+          A8: C = Int B and A9: B in Int F;
+           ex Q being Subset of T st
+          Q = B & ex R being Subset of T st Q = Int R & R in F
+          by A1,A9;
+        then consider R being Subset of T such that
+          A10: B = Int R and A11: R in F;
+           C = Int R by A8,A10,TOPS_1:45;
+      hence X in Int F by A11,Def1;
+     end;
+    hence thesis by A3;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem Th18:
+ for F being Subset-Family of T holds Int F is open
+ proof let F be Subset-Family of T;
+    now let A be Subset of T;
+   assume A in Int F;
+   then ex B being Subset of T st A = Int B & B in F by Def1;
+   hence A is open;
+  end;
+  hence Int F is open by TOPS_2:def 1;
+ end;
+
+theorem Th19:
+ for F being Subset-Family of T holds F = {} iff Int F = {}
+ proof let F be Subset-Family of T;
+  thus F = {} implies Int F = {}
+   proof
+    assume A1: F = {};
+     consider A being Element of Int F;
+    assume
+A2:  not thesis;
+     then reconsider A as Subset of T by TARSKI:def 3;
+       ex V being Subset of T st A = Int V & V in F by A2,Def1;
+    hence contradiction by A1;
+   end;
+  thus Int F = {} implies F = {}
+   proof
+    assume A3: Int F = {};
+     consider B being Element of F;
+    assume
+A4: not thesis;
+       then reconsider B as Subset of T by TARSKI:def 3;
+      reconsider A = Int B as set;
+         ex A be set st A in Int F
+        proof
+         take A;
+         thus A in Int F by A4,Def1;
+        end;
+      hence contradiction by A3;
+   end;
+ end;
+
+theorem Th20:
+ for A being Subset of T, F being Subset-Family of T
+ st F = { A } holds
+  Int F = { Int A }
+ proof let A be Subset of T, F be Subset-Family of T;
+  assume A1: F = { A };
+
+  reconsider C = Int F as set;
+     for B being set holds B in C iff B = Int A
+    proof let B be set;
+     A2: now
+         assume A3: B in C;
+          then reconsider B0 = B as Subset of T;
+           ex M being Subset of T st B0 = Int M & M in F
+         by A3,Def1;
+         hence B = Int A by A1,TARSKI:def 1;
+        end;
+       now
+      assume A4: B = Int A;
+         ex M being Subset of T st B = Int M & M in F
+        proof
+         take A;
+         thus thesis by A1,A4,TARSKI:def 1;
+        end;
+       hence B in C by Def1;
+     end;
+     hence thesis by A2;
+    end;
+  hence thesis by TARSKI:def 1;
+ end;
+
+theorem
+   for F,G being Subset-Family of T holds F c= G implies Int F c= Int G
+ proof let F,G be Subset-Family of T;
+  assume A1: F c= G;
+  reconsider F0 = Int F, G0 = Int G as set;
+     now let X be set;
+    assume A2: X in F0;
+    then reconsider X0 = X as Subset of T;
+     consider V being Subset of T such that
+      A3: X0 = Int V and A4: V in F by A2,Def1;
+         thus X in G0 by A1,A3,A4,Def1;
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem Th22:
+ for F,G being Subset-Family of T holds Int(F \/ G) = (Int F) \/ (Int G)
+ proof let F,G be Subset-Family of T;
+    for X being set holds X in Int(F \/ G) iff X in (Int F) \/ (Int G)
+   proof let X be set;
+   A1: now assume A2: X in Int(F \/ G);
+        then reconsider X0 = X as Subset of T;
+        consider W being Subset of T such that
+           A3: X0 = Int W and A4: W in (F \/ G) by A2,Def1;
+          now per cases by A4,XBOOLE_0:def 2;
+         suppose W in F;
+          then X0 in Int F by A3,Def1;
+          hence X0 in (Int F) \/ (Int G) by XBOOLE_0:def 2;
+         suppose W in G;
+          then X0 in Int G by A3,Def1;
+          hence X0 in (Int F) \/ (Int G) by XBOOLE_0:def 2;
+        end;
+        hence X in (Int F) \/ (Int G);
+       end;
+       now assume A5: X in (Int F) \/ (Int G);
+
+        now per cases by A5,XBOOLE_0:def 2;
+       suppose A6: X in Int F;
+        then reconsider X0 = X as Subset of T;
+          ex W being Subset of T st X0 = Int W & W in (F \/ G)
+         proof
+          consider Z being Subset of T such that
+             A7: X0 = Int Z and A8: Z in F by A6,Def1;
+          take Z;
+          thus thesis by A7,A8,XBOOLE_0:def 2;
+         end;
+        hence X in Int(F \/ G) by Def1;
+       suppose A9: X in Int G;
+        then reconsider X0 = X as Subset of T;
+          ex W being Subset of T st X0 = Int W & W in (F \/ G)
+         proof
+          consider Z being Subset of T such that
+            A10: X0 = Int Z and A11: Z in G by A9,Def1;
+          take Z;
+          thus thesis by A10,A11,XBOOLE_0:def 2;
+         end;
+        hence X in Int(F \/ G) by Def1;
+      end;
+      hence X in Int(F \/ G);
+     end;
+    hence thesis by A1;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem
+   for F,G being Subset-Family of T holds Int(F /\ G) c= (Int F) /\ (Int G)
+ proof let F,G be Subset-Family of T;
+    for X being set holds X in Int(F /\ G) implies X in (Int F) /\ (Int G)
+   proof let X be set;
+     assume A1: X in Int(F /\ G);
+        then reconsider X0 = X as Subset of T;
+        consider W being Subset of T such that
+           A2: X0 = Int W and A3: W in (F /\ G) by A1,Def1;
+         A4: W in F & W in G by A3,XBOOLE_0:def 3;
+          then A5: X0 in Int F by A2,Def1;
+             X0 in Int G by A2,A4,Def1;
+       hence X in (Int F) /\ (Int G) by A5,XBOOLE_0:def 3;
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem
+   for F,G being Subset-Family of T holds (Int F) \ (Int G) c= Int(F \ G)
+ proof let F,G be Subset-Family of T;
+    for X being set holds X in (Int F) \ (Int G) implies X in Int(F \ G)
+   proof let X be set;
+    assume A1: X in (Int F) \ (Int G);
+     then A2: X in Int F & not X in Int G by XBOOLE_0:def 4;
+     reconsider X0 = X as Subset of T by A1;
+      consider W being Subset of T such that
+         A3: X0 = Int W and A4: W in F by A2,Def1;
+           not W in G by A2,A3,Def1;
+         then W in F \ G by A4,XBOOLE_0:def 4;
+       hence X in Int (F \ G) by A3,Def1;
+   end;
+  hence thesis by TARSKI:def 3;
+ end;
+
+theorem
+   for F being Subset-Family of T, A being Subset of T holds
+  A in F implies Int A c= union(Int F) & meet(Int F) c= Int A
+   proof
+   let F be Subset-Family of T, A be Subset of T;
+  assume A in F;
+  then Int A in
+   {P where P is Subset of T :
+   ex B being Subset of T st P = Int B & B in F};
+  then A1: Int A in Int F by Th16;
+  hence Int A c= union(Int F) by ZFMISC_1:92;
+  thus meet(Int F) c= Int A by A1,SETFAM_1:4;
+ end;
+
+theorem Th26:
+ for F being Subset-Family of T holds union(Int F) c= union F
+ proof
+   let F be Subset-Family of T;
+    now let x be set;
+   assume x in union(Int F);
+   then consider A being set such that
+      A1: x in A and A2: A in Int F by TARSKI:def 4;
+   reconsider A as Subset of T by A2;
+   consider B being Subset of T such that
+      A3: A = Int B and A4: B in F by A2,Def1;
+      ex B being set st x in B & B in F
+     proof
+      take B;
+         Int B c= B by TOPS_1:44;
+      hence thesis by A1,A3,A4;
+     end;
+   hence x in union F by TARSKI:def 4;
+  end;
+  hence union(Int F) c= union F by TARSKI:def 3;
+ end;
+
+theorem
+   for F being Subset-Family of T holds meet(Int F) c= meet F
+ proof
+  let F be Subset-Family of T;
+   A1: for A being set st A in F holds meet(Int F) c= A
+        proof let A be set;
+         assume A2: A in F;
+          then reconsider A0 = A as Subset of T;
+         set C = Int A0;
+           C in {P where P is Subset of T :
+                ex Q being Subset of T st P = Int Q & Q in F}
+                            by A2
+;
+         then C in Int F by Th16;
+         then meet(Int F) c= C & C c= A0 by SETFAM_1:4,TOPS_1:44;
+         hence thesis by XBOOLE_1:1;
+        end;
+    now per cases;
+   suppose F = {};
+    hence meet(Int F) c= meet F by Th19;
+   suppose F <> {};
+    hence meet(Int F) c= meet F by A1,SETFAM_1:6;
+  end;
+  hence thesis;
+ end;
+
+theorem Th28:
+ for F being Subset-Family of T holds union(Int F) c= Int(union F)
+ proof
+  let F be Subset-Family of T;
+     Int F is open by Th18;
+  then union(Int F) is open & union(Int F) c= union F by Th26,TOPS_2:26;
+  then Int union(Int F) = union(Int F) &
+         Int union(Int F) c= Int(union F) by TOPS_1:48,55;
+  hence thesis;
+ end;
+
+theorem Th29:
+ for F being Subset-Family of T holds Int(meet F) c= meet(Int F)
+ proof
+  let F be Subset-Family of T;
+  A1: for A being set st A in Int F holds Int(meet F) c= A
+       proof let A be set;
+        assume A2: A in Int F;
+         then reconsider A0 = A as Subset of T;
+             A0 in {B where B is Subset of T :
+                   ex C being Subset of T st B = Int C & C in F}
+                     by A2,Th16;
+         then consider P being Subset of T such that
+             A3: P = A0 and
+             A4: ex C being Subset of T st P = Int C & C in F;
+        consider C being Subset of T such that
+             A5: P = Int C and A6: C in F by A4;
+           meet F c= C by A6,SETFAM_1:4;
+        hence Int(meet F) c= A by A3,A5,TOPS_1:48;
+       end;
+    now per cases;
+   suppose Int F = {};
+     then meet F = {}T & meet(Int F) = {}T & Int {}T = {}T
+                                by Th19,SETFAM_1:2,TOPS_1:47;
+    hence Int(meet F) c= meet(Int F);
+   suppose Int F <> {};
+    hence Int(meet F) c= meet(Int F) by A1,SETFAM_1:6;
+  end;
+  hence thesis;
+ end;
+
+theorem
+   for F being Subset-Family of T holds
+  F is finite implies Int(meet F) = meet(Int F)
+ proof let F be Subset-Family of T;
+  assume A1: F is finite;
+   A2:meet(Int F) c= Int(meet F)
+      proof
+       consider p being FinSequence such that
+                 A3: rng p = F by A1,FINSEQ_1:73;
+       consider n being Nat such that A4: dom p = Seg n by FINSEQ_1:def 2;
+       defpred X[Nat] means for G being Subset-Family of T st
+               G = p.:(Seg $1) & $1 <= n & 1 <= n holds
+                 meet(Int G) c= Int(meet G);
+        A5: X[0]
+         proof
+           let G be Subset-Family of T;
+          assume that A6: G = p.:(Seg 0) and 0 <= n & 1 <= n;
+             G = {} by A6,FINSEQ_1:4,RELAT_1:149;
+           then Int meet G = {}T & meet Int G = {}T by Th19,SETFAM_1:2,TOPS_1:
+47;
+          hence thesis;
+         end;
+        A7: for k being Nat st X[k] holds X[k+1]
+         proof
+           let k be Nat;
+          assume A8: for G being Subset-Family of T
+                       st G = p.:(Seg k) & k <= n & 1 <= n holds
+                         meet(Int G) c= Int(meet G);
+           let G be Subset-Family of T;
+          assume A9: G = p.:(Seg(k + 1));
+          assume A10: k + 1 <= n & 1 <= n;
+          A11:now assume k = 0;
+             then Seg(k + 1) = {1} & 1 in
+ dom p by A4,A10,FINSEQ_1:3,4;
+             then A12: p.:Seg(k + 1) = {p.1} by FUNCT_1:117;
+             then union G = p.1 by A9,ZFMISC_1:31;
+             then reconsider G1 = p.1 as Subset of T;
+                Int(meet G) = Int G1 by A9,A12,SETFAM_1:11
+                         .= meet {Int G1} by SETFAM_1:11
+                         .= meet(Int G) by A9,A12,Th20;
+             hence thesis;
+            end;
+            now assume A13: 0 < k;
+           A14: p.:(Seg(k + 1)) = p.:(Seg k \/ {k + 1}) by FINSEQ_1:11
+                             .= p.:(Seg k) \/ p.:{k + 1} by RELAT_1:153;
+                 p.:(Seg k) c= F by A3,RELAT_1:144;
+             then reconsider G1 = p.:(Seg k) as Subset-Family of T by TOPS_2:3;
+                p.:{k + 1} c= F by A3,RELAT_1:144;
+             then reconsider G2 = p.:{k + 1} as Subset-Family of T by TOPS_2:3;
+                 0 <= k & 0 + 1 = 1 by NAT_1:18;
+              then 1 <= k + 1 & k + 1 <= n by A10,REAL_1:55;
+             then A15: k + 1 in dom p by A4,FINSEQ_1:3;
+                  0 + 1 <= k & k <= k + 1 by A13,NAT_1:38;
+              then 1 <= k & k <= n by A10,AXIOMS:22;
+              then k in Seg k & k + 1 in {k + 1} &
+                      k in dom p by A4,FINSEQ_1:3,TARSKI:def 1;
+              then A16: p.k in G1 & p.(k + 1) in G2 by A15,FUNCT_1:def 12;
+             then A17: Int G1 <> {} & Int G2 <> {} by Th19;
+              A18: Int(meet G) = Int((meet G1) /\ (meet G2)) by A9,A14,A16,
+SETFAM_1:10
+                             .= Int(meet G1) /\ Int(meet G2) by TOPS_1:46;
+               A19: G2 = {p.(k + 1)} by A15,FUNCT_1:117;
+             then meet G2 = p.(k + 1) &
+                       p.(k + 1) in F by A3,A15,FUNCT_1:def 5,SETFAM_1:11;
+             then reconsider G3 = p.(k + 1) as Subset of T;
+               A20:  meet(Int G2) = meet {Int G3} by A19,Th20
+                                .= Int G3 by SETFAM_1:11
+                                .= Int(meet G2) by A19,SETFAM_1:11;
+                k + 1 <= n + 1 by A10,NAT_1:37;
+             then k <= n by REAL_1:53;
+             then meet(Int G1) c= Int(meet G1) by A8,A10;
+             then meet(Int G1) /\ meet(Int G2) c= Int(meet G) by A18,A20,
+XBOOLE_1:27;
+             then meet((Int G1) \/ (Int G2)) c= Int(meet G)
+                                                   by A17,SETFAM_1:10;
+           hence thesis by A9,A14,Th22;
+          end;
+          hence thesis by A11,NAT_1:19;
+         end;
+        A21: for k being Nat holds X[k] from Ind(A5,A7);
+        A22: now assume 1 <= n;
+             then F = p.:(Seg n) & n <= n & 1 <= n by A3,A4,RELAT_1:146;
+            hence meet(Int F) c= Int(meet F) by A21;
+           end;
+        A23: now assume n = 0;
+             then F = p.:{} by A3,A4,FINSEQ_1:4,RELAT_1:146;
+           then F = {} by RELAT_1:149;
+           then Int meet F = {}T & meet Int F = {}T
+            by Th19,SETFAM_1:2,TOPS_1:47;
+          hence meet Int F c= Int meet F;
+           end;
+           now assume n <> 0;
+           then 0 < n & 1 = 0 + 1 by NAT_1:19;
+          hence 1 <= n by NAT_1:38;
+         end;
+       hence thesis by A22,A23;
+      end;
+     Int(meet F) c= meet(Int F) by Th29;
+  hence thesis by A2,XBOOLE_0:def 10;
+ end;
+
+::Connections between the Operations Int and Cl.
+reserve F for Subset-Family of T;
+
+theorem Th31:
+ Cl Int F =
+  {A where A is Subset of T :
+  ex B being Subset of T st A = Cl Int B & B in F}
+ proof
+  set P = {A where A is Subset of T :
+            ex B being Subset of T st A = Cl Int B & B in F};
+     P c= bool the carrier of T
+    proof
+       now let C be set;
+       assume C in P;
+      then ex A being Subset of T st C = A &
+                ex B being Subset of T st A = Cl Int B & B in F;
+      hence C in bool the carrier of T;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+   then reconsider P as Subset-Family of T by SETFAM_1:def 7;
+   reconsider P as Subset-Family of T;
+    for X being set holds X in Cl Int F iff X in P
+   proof let X be set;
+   A1: now assume A2: X in Cl Int F;
+        then reconsider C = X as Subset of T;
+         consider B being Subset of T such that
+          A3: C = Cl B and A4: B in Int F by A2,PCOMPS_1:def 3;
+           ex D being Subset of T st B = Int D & D in
+ F by A4,Def1;
+        hence X in P by A3;
+       end;
+       now assume A5: X in P;
+        then reconsider C = X as Subset of T;
+          ex D being Subset of T st
+          D = C &
+          ex B being Subset of T st D = Cl Int B & B in F by A5;
+        then consider B being Subset of T such that
+               A6: C = Cl Int B and A7: B in F;
+           Int B in Int F by A7,Def1;
+      hence X in Cl Int F by A6,PCOMPS_1:def 3;
+     end;
+    hence thesis by A1;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem Th32:
+ Int Cl F =
+  {A where A is Subset of T :
+  ex B being Subset of T st A = Int Cl B & B in F}
+ proof
+  set P = {A where A is Subset of T :
+            ex B being Subset of T st A = Int Cl B & B in F};
+     P c= bool the carrier of T
+    proof
+       now let C be set;
+       assume C in P;
+      then ex A being Subset of T st C = A &
+                ex B being Subset of T st A = Int Cl B & B in F;
+      hence C in bool the carrier of T;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+   then reconsider P as Subset-Family of T by SETFAM_1:def 7;
+   reconsider P as Subset-Family of T;
+    for X being set holds X in Int Cl F iff X in P
+   proof let X be set;
+   A1: now assume A2: X in Int Cl F;
+        then reconsider C = X as Subset of T;
+         consider B being Subset of T such that
+          A3: C = Int B and A4: B in Cl F by A2,Def1;
+           ex D being Subset of T st B = Cl D & D in F by A4,
+PCOMPS_1:def 3;
+        hence X in P by A3;
+       end;
+       now assume A5: X in P;
+        then reconsider C = X as Subset of T;
+          ex D being Subset of T st
+          D = C &
+          ex B being Subset of T st D = Int Cl B & B in F by A5;
+        then consider B being Subset of T such that
+               A6: C = Int Cl B and A7: B in F;
+           Cl B in Cl F by A7,PCOMPS_1:def 3;
+      hence X in Int Cl F by A6,Def1;
+     end;
+    hence thesis by A1;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem Th33:
+ Cl Int Cl F = {A where A is Subset of T :
+     ex B being Subset of T st A = Cl Int Cl B & B in F}
+ proof
+  set P = {A where A is Subset of T :
+            ex B being Subset of T st A = Cl Int Cl B & B in F};
+     P c= bool the carrier of T
+    proof
+       now let C be set;
+       assume C in P;
+      then ex A being Subset of T st C = A &
+         ex B being Subset of T st A = Cl Int Cl B & B in F;
+      hence C in bool the carrier of T;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+   then reconsider P as Subset-Family of T by SETFAM_1:def 7;
+   reconsider P as Subset-Family of T;
+    for X being set holds X in Cl Int Cl F iff X in P
+   proof let X be set;
+   A1: now assume A2: X in Cl Int Cl F;
+        then reconsider C = X as Subset of T;
+         consider B being Subset of T such that
+          A3: C = Cl B and A4: B in Int Cl F by A2,PCOMPS_1:def 3;
+         consider D being Subset of T such that
+          A5: B = Int D and A6: D in Cl F by A4,Def1;
+           ex E being Subset of T st D = Cl E & E in F
+            by A6,PCOMPS_1:def 3;
+        hence X in P by A3,A5;
+       end;
+       now assume A7: X in P;
+        then reconsider C = X as Subset of T;
+          ex D being Subset of T st
+          D = C &
+          ex B being Subset of T st D = Cl Int Cl B & B in F
+          by A7;
+        then consider B being Subset of T such that
+               A8: C = Cl Int Cl B and A9: B in F;
+           Cl B in Cl F by A9,PCOMPS_1:def 3;
+        then Int Cl B in Int Cl F by Def1;
+      hence X in Cl Int Cl F by A8,PCOMPS_1:def 3;
+     end;
+    hence thesis by A1;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem Th34:
+ Int Cl Int F = {A where A is Subset of T :
+      ex B being Subset of T st A = Int Cl Int B & B in F}
+ proof
+  set P = {A where A is Subset of T :
+         ex B being Subset of T st A = Int Cl Int B & B in F};
+     P c= bool the carrier of T
+    proof
+       now let C be set;
+       assume C in P;
+      then ex A being Subset of T st C = A &
+         ex B being Subset of T st A = Int Cl Int B & B in F;
+      hence C in bool the carrier of T;
+     end;
+     hence thesis by TARSKI:def 3;
+    end;
+   then reconsider P as Subset-Family of T by SETFAM_1:def 7;
+   reconsider P as Subset-Family of T;
+    for X being set holds X in Int Cl Int F iff X in P
+   proof let X be set;
+   A1: now assume A2: X in Int Cl Int F;
+        then reconsider C = X as Subset of T;
+         consider B being Subset of T such that
+          A3: C = Int B and A4: B in Cl Int F by A2,Def1;
+         consider D being Subset of T such that
+          A5: B = Cl D and A6: D in Int F by A4,PCOMPS_1:def 3;
+           ex E being Subset of T st D = Int E & E in F
+           by A6,Def1;
+        hence X in P by A3,A5;
+       end;
+       now assume A7: X in P;
+        then reconsider C = X as Subset of T;
+          ex D being Subset of T st
+          D = C &
+          ex B being Subset of T st D = Int Cl Int B & B in F
+          by A7;
+        then consider B being Subset of T such that
+               A8: C = Int Cl Int B and A9: B in F;
+           Int B in Int F by A9,Def1;
+        then Cl Int B in Cl Int F by PCOMPS_1:def 3;
+      hence X in Int Cl Int F by A8,Def1;
+     end;
+    hence thesis by A1;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem
+   Cl Int Cl Int F = Cl Int F
+ proof
+   A1: Cl Int F = {A where A is Subset of T :
+              ex B being Subset of T st A = Cl Int B & B in F}
+              by Th31;
+
+    set H = {A where A is Subset of T :
+        ex B being Subset of T st A = Int Cl Int B & B in F};
+       Int Cl Int F = H by Th34;
+    then reconsider H as Subset-Family of T;
+   A2: Cl Int Cl Int F = Cl H by Th34;
+    for X being set holds X in Cl Int Cl Int F iff X in Cl Int F
+   proof let X be set;
+   A3: now assume A4: X in Cl Int Cl Int F;
+        then reconsider C = X as Subset of T;
+         consider B being Subset of T such that
+          A5: C = Cl B and
+          A6: B in {A where A is Subset of T :
+          ex B being Subset of T st A = Int Cl Int B & B in F}
+                                              by A2,A4,PCOMPS_1:def 3;
+            ex S being Subset of T st S = B &
+          ex R being Subset of T st S = Int Cl Int R & R in F
+            by A6;
+        then consider D being Subset of T such that
+          A7: B = Int Cl Int D and A8: D in F;
+          A9: C = Cl Int D by A5,A7,TOPS_1:58;
+           Int D in Int F by A8,Def1;
+        hence X in Cl Int F by A9,PCOMPS_1:def 3;
+       end;
+       now assume A10: X in Cl Int F;
+        then reconsider C = X as Subset of T;
+          ex D being Subset of T st
+     D = C & ex B being Subset of T st D = Cl Int B & B in F
+        by A1,A10;
+        then consider B being Subset of T such that
+                                       A11: C = Cl Int B and A12: B in F;
+             A13: C = Cl Int Cl Int B by A11,TOPS_1:58;
+           Int B in Int F by A12,Def1;
+        then Cl Int B in Cl Int F by PCOMPS_1:def 3;
+        then Int Cl Int B in Int Cl Int F by Def1;
+      hence X in Cl Int Cl Int F by A13,PCOMPS_1:def 3;
+     end;
+    hence thesis by A3;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem
+   Int Cl Int Cl F = Int Cl F
+ proof
+   A1: Int Cl F = {A where A is Subset of T :
+             ex B being Subset of T st A = Int Cl B & B in F}
+             by Th32;
+    set H = {A where A is Subset of T :
+          ex B being Subset of T st A = Cl Int Cl B & B in F};
+       Cl Int Cl F = H by Th33;
+    then reconsider H as Subset-Family of T;
+   A2: Int Cl Int Cl F = Int H by Th33;
+    for X being set holds X in Int Cl Int Cl F iff X in Int Cl F
+   proof let X be set;
+   A3: now assume A4: X in Int Cl Int Cl F;
+        then reconsider C = X as Subset of T;
+         consider B being Subset of T such that
+          A5: C = Int B and
+          A6: B in {A where A is Subset of T :
+           ex B being Subset of T st A = Cl Int Cl B & B in F}
+                                                        by A2,A4,Def1;
+            ex S being Subset of T st S = B &
+          ex R being Subset of T st S = Cl Int Cl R & R in F
+          by A6;
+        then consider D being Subset of T such that
+          A7: B = Cl Int Cl D and A8: D in F;
+          A9: C = Int Cl D by A5,A7,TDLAT_1:5;
+           Cl D in Cl F by A8,PCOMPS_1:def 3;
+        hence X in Int Cl F by A9,Def1;
+       end;
+       now assume A10: X in Int Cl F;
+        then reconsider C = X as Subset of T;
+          ex D being Subset of T st
+         D = C & ex B being Subset of T st D = Int Cl B & B in F
+         by A1,A10
+;
+        then consider B being Subset of T such that
+                                       A11: C = Int Cl B and A12: B in F;
+             A13: C = Int Cl Int Cl B by A11,TDLAT_1:5;
+           Cl B in Cl F by A12,PCOMPS_1:def 3;
+        then Int Cl B in Int Cl F by Def1;
+        then Cl Int Cl B in Cl Int Cl F by PCOMPS_1:def 3;
+      hence X in Int Cl Int Cl F by A13,Def1;
+     end;
+    hence thesis by A3;
+   end;
+  hence thesis by TARSKI:2;
+ end;
+
+theorem
+   union(Int Cl F) c= union(Cl Int Cl F)
+ proof
+    now let x be set;
+   assume x in union(Int Cl F);
+    then consider A being set such that
+      A1: x in A and A2: A in Int Cl F by TARSKI:def 4;
+   reconsider A as Subset of T by A2;
+   consider B being Subset of T such that
+      A3: A = Int B and A4: B in Cl F by A2,Def1;
+   consider D being Subset of T such that
+      A5: B = Cl D and A6: D in F by A4,PCOMPS_1:def 3;
+      ex P being set st x in P & P in Cl Int Cl F
+     proof
+      take Cl Int Cl D;
+A7:      A c= Cl Int Cl D by A3,A5,Th2;
+
+         Cl D in Cl F by A6,PCOMPS_1:def 3;
+      then Int Cl D in Int Cl F by Def1;
+      hence thesis by A1,A7,PCOMPS_1:def 3;
+     end;
+   hence x in union(Cl Int Cl F) by TARSKI:def 4;
+  end;
+  hence union(Int Cl F) c= union(Cl Int Cl F) by TARSKI:def 3;
+ end;
+
+theorem
+   meet(Int Cl F) c= meet(Cl Int Cl F)
+ proof
+    now per cases;
+   suppose F = {};
+    then Cl F = {} by Th9;
+    then Int Cl F = {} by Th19;
+    hence meet(Int Cl F) c= meet(Cl Int Cl F) by Th9;
+   suppose F <> {};
+    then Cl F <> {} by Th9;
+    then Int Cl F <> {} by Th19;
+     then A1: Cl Int Cl F <> {} by Th9;
+      now let x be set;
+     assume A2: x in meet(Int Cl F);
+
+        for A being set st A in Cl Int Cl F holds x in A
+       proof
+         let A be set;
+        assume A3: A in Cl Int Cl F;
+         then reconsider A as Subset of T;
+        consider B being Subset of T such that
+           A4: A = Cl B and A5: B in Int Cl F by A3,PCOMPS_1:def 3;
+           x in B & B c= Cl B by A2,A5,PRE_TOPC:48,SETFAM_1:def 1;
+        hence thesis by A4;
+       end;
+     hence x in meet(Cl Int Cl F) by A1,SETFAM_1:def 1;
+    end;
+    hence meet(Int Cl F) c= meet(Cl Int Cl F) by TARSKI:def 3;
+  end;
+  hence thesis;
+ end;
+
+theorem
+   union(Cl Int F) c= union(Cl Int Cl F)
+ proof
+    now let x be set;
+   assume x in union(Cl Int F);
+    then consider A being set such that
+      A1: x in A and A2: A in Cl Int F by TARSKI:def 4;
+   reconsider A as Subset of T by A2;
+   consider B being Subset of T such that
+      A3: A = Cl B and A4: B in Int F by A2,PCOMPS_1:def 3;
+   consider D being Subset of T such that
+      A5: B = Int D and A6: D in F by A4,Def1;
+      ex P being set st x in P & P in Cl Int Cl F
+     proof
+      take Cl Int Cl D;
+A7:      A c= Cl Int Cl D by A3,A5,Th2;
+
+         Cl D in Cl F by A6,PCOMPS_1:def 3;
+      then Int Cl D in Int Cl F by Def1;
+      hence thesis by A1,A7,PCOMPS_1:def 3;
+     end;
+   hence x in union(Cl Int Cl F) by TARSKI:def 4;
+  end;
+  hence union(Cl Int F) c= union(Cl Int Cl F) by TARSKI:def 3;
+ end;
+
+theorem
+   meet(Cl Int F) c= meet(Cl Int Cl F)
+ proof
+    now per cases;
+   suppose F = {};
+    hence meet(Cl Int F) c= meet(Cl Int Cl F) by Th9;
+   suppose F <> {};
+    then Cl F <> {} by Th9;
+    then Int Cl F <> {} by Th19;
+     then A1: Cl Int Cl F <> {} by Th9;
+      now let x be set;
+     assume A2: x in meet(Cl Int F);
+
+        for A being set st A in Cl Int Cl F holds x in A
+       proof
+         let A be set;
+        assume A3: A in Cl Int Cl F;
+         then reconsider A as Subset of T;
+        consider B being Subset of T such that
+           A4: A = Cl B and A5: B in Int Cl F by A3,PCOMPS_1:def 3;
+        consider D being Subset of T such that
+           A6: B = Int D and A7: D in Cl F by A5,Def1;
+        consider E being Subset of T such that
+           A8: D = Cl E and A9: E in F by A7,PCOMPS_1:def 3;
+            Int E in Int F by A9,Def1;
+         then Cl Int E in Cl Int F by PCOMPS_1:def 3;
+         then x in Cl Int E & Cl Int E c= Cl Int Cl E by A2,Th2,SETFAM_1:def 1
+;
+        hence thesis by A4,A6,A8;
+       end;
+     hence x in meet(Cl Int Cl F) by A1,SETFAM_1:def 1;
+    end;
+    hence meet(Cl Int F) c= meet(Cl Int Cl F) by TARSKI:def 3;
+  end;
+  hence thesis;
+ end;
+
+theorem
+   union(Int Cl Int F) c= union(Int Cl F)
+ proof
+    now let x be set;
+   assume x in union(Int Cl Int F);
+    then consider A being set such that
+      A1: x in A and A2: A in Int Cl Int F by TARSKI:def 4;
+   reconsider A as Subset of T by A2;
+   consider B being Subset of T such that
+      A3: A = Int B and A4: B in Cl Int F by A2,Def1;
+   consider D being Subset of T such that
+      A5: B = Cl D and A6: D in Int F by A4,PCOMPS_1:def 3;
+   consider E being Subset of T such that
+      A7: D = Int E and A8: E in F by A6,Def1;
+      ex P being set st x in P & P in Int Cl F
+     proof
+      take Int Cl E;
+A9:      A c= Int Cl E by A3,A5,A7,Th1;
+
+         Cl E in Cl F by A8,PCOMPS_1:def 3;
+      hence thesis by A1,A9,Def1;
+     end;
+   hence x in union(Int Cl F) by TARSKI:def 4;
+  end;
+  hence union(Int Cl Int F) c= union(Int Cl F) by TARSKI:def 3;
+ end;
+
+theorem
+   meet(Int Cl Int F) c= meet(Int Cl F)
+ proof
+    now per cases;
+   suppose F = {};
+    hence meet(Int Cl Int F) c= meet(Int Cl F) by Th19;
+   suppose F <> {};
+      then Cl F <> {} by Th9;
+     then A1: Int Cl F <> {} by Th19;
+      now let x be set;
+     assume A2: x in meet(Int Cl Int F);
+
+        for A being set st A in Int Cl F holds x in A
+       proof
+         let A be set;
+        assume A3: A in Int Cl F;
+         then reconsider A as Subset of T;
+        consider E being Subset of T such that
+           A4: A = Int E and A5: E in Cl F by A3,Def1;
+        consider B being Subset of T such that
+           A6: E = Cl B and A7: B in F by A5,PCOMPS_1:def 3;
+            Int B in Int F by A7,Def1;
+         then Cl Int B in Cl Int F by PCOMPS_1:def 3;
+         then Int Cl Int B in Int Cl Int F by Def1;
+         then x in Int Cl Int B & Int Cl Int B c= Int Cl B by A2,Th1,SETFAM_1:
+def 1;
+        hence thesis by A4,A6;
+       end;
+     hence x in meet(Int Cl F) by A1,SETFAM_1:def 1;
+    end;
+    hence meet(Int Cl Int F) c= meet(Int Cl F) by TARSKI:def 3;
+  end;
+  hence thesis;
+ end;
+
+theorem
+   union(Int Cl Int F) c= union(Cl Int F)
+ proof
+    now let x be set;
+   assume x in union(Int Cl Int F);
+    then consider A being set such that
+      A1: x in A and A2: A in Int Cl Int F by TARSKI:def 4;
+   reconsider A as Subset of T by A2;
+   consider B being Subset of T such that
+      A3: A = Int B and A4: B in Cl Int F by A2,Def1;
+   consider D being Subset of T such that
+      A5: B = Cl D and A6: D in Int F by A4,PCOMPS_1:def 3;
+   consider E being Subset of T such that
+      A7: D = Int E and A8: E in F by A6,Def1;
+      ex P being set st x in P & P in Cl Int F
+     proof
+      take Cl Int E;
+A9:      A c= Cl Int E by A3,A5,A7,Th1;
+
+         Int E in Int F by A8,Def1;
+      hence thesis by A1,A9,PCOMPS_1:def 3;
+     end;
+   hence x in union(Cl Int F) by TARSKI:def 4;
+  end;
+  hence union(Int Cl Int F) c= union(Cl Int F) by TARSKI:def 3;
+ end;
+
+theorem
+   meet(Int Cl Int F) c= meet(Cl Int F)
+ proof
+    now per cases;
+   suppose F = {};
+    then Int F = {} by Th19;
+    then Cl Int F = {} by Th9;
+    hence meet(Int Cl Int F) c= meet(Cl Int F) by Th19;
+   suppose F <> {};
+    then Int F <> {} by Th19;
+    then A1: Cl Int F <> {} by Th9;
+      now let x be set;
+     assume A2: x in meet(Int Cl Int F);
+
+        for A being set st A in Cl Int F holds x in A
+       proof
+         let A be set;
+        assume A3: A in Cl Int F;
+         then reconsider A as Subset of T;
+        consider E being Subset of T such that
+           A4: A = Cl E and A5: E in Int F by A3,PCOMPS_1:def 3;
+        consider B being Subset of T such that
+           A6: E = Int B and A7: B in F by A5,Def1;
+            Int B in Int F by A7,Def1;
+         then Cl Int B in Cl Int F by PCOMPS_1:def 3;
+         then Int Cl Int B in Int Cl Int F by Def1;
+         then x in Int Cl Int B & Int Cl Int B c= Cl Int B by A2,Th1,SETFAM_1:
+def 1;
+        hence thesis by A4,A6;
+       end;
+     hence x in meet(Cl Int F) by A1,SETFAM_1:def 1;
+    end;
+    hence meet(Int Cl Int F) c= meet(Cl Int F) by TARSKI:def 3;
+  end;
+  hence thesis;
+ end;
+
+theorem
+   union(Cl Int Cl F) c= union(Cl F)
+ proof
+    now let x be set;
+   assume x in union(Cl Int Cl F);
+    then consider A being set such that
+      A1: x in A and A2: A in Cl Int Cl F by TARSKI:def 4;
+   reconsider A as Subset of T by A2;
+   consider B being Subset of T such that
+      A3: A = Cl B and A4: B in Int Cl F by A2,PCOMPS_1:def 3;
+   consider D being Subset of T such that
+      A5: B = Int D and A6: D in Cl F by A4,Def1;
+   consider E being Subset of T such that
+      A7: D = Cl E and A8: E in F by A6,PCOMPS_1:def 3;
+      ex P being set st x in P & P in Cl F
+     proof
+      take Cl E;
+        A c= Cl E by A3,A5,A7,TDLAT_1:3;
+      hence thesis by A1,A8,PCOMPS_1:def 3;
+     end;
+   hence x in union(Cl F) by TARSKI:def 4;
+  end;
+  hence union(Cl Int Cl F) c= union(Cl F) by TARSKI:def 3;
+ end;
+
+theorem
+   meet(Cl Int Cl F) c= meet(Cl F)
+ proof
+    now per cases;
+   suppose A1: F = {};
+    then Cl F = {} by Th9;
+    hence meet(Cl Int Cl F) c= meet(Cl F) by A1,Th19;
+   suppose F <> {};
+    then A2: Cl F <> {} by Th9;
+      now let x be set;
+     assume A3: x in meet(Cl Int Cl F);
+
+        for A being set st A in Cl F holds x in A
+       proof
+         let A be set;
+        assume A4: A in Cl F;
+         then reconsider A as Subset of T;
+        consider B being Subset of T such that
+           A5: A = Cl B and A6: B in F by A4,PCOMPS_1:def 3;
+            Cl B in Cl F by A6,PCOMPS_1:def 3;
+         then Int Cl B in Int Cl F by Def1;
+         then Cl Int Cl B in Cl Int Cl F by PCOMPS_1:def 3;
+         then x in Cl Int Cl B & Cl Int Cl B c= Cl B by A3,SETFAM_1:def 1,
+TDLAT_1:3;
+        hence thesis by A5;
+       end;
+     hence x in meet(Cl F) by A2,SETFAM_1:def 1;
+    end;
+    hence meet(Cl Int Cl F) c= meet(Cl F) by TARSKI:def 3;
+  end;
+  hence thesis;
+ end;
+
+theorem
+   union(Int F) c= union(Int Cl Int F)
+ proof
+    now let x be set;
+   assume x in union(Int F);
+    then consider A being set such that
+      A1: x in A and A2: A in Int F by TARSKI:def 4;
+   reconsider A as Subset of T by A2;
+   consider B being Subset of T such that
+      A3: A = Int B and A4: B in F by A2,Def1;
+      ex P being set st x in P & P in Int Cl Int F
+     proof
+      take Int Cl Int B;
+A5:      A c= Int Cl Int B by A3,TDLAT_1:4;
+
+         Int B in Int F by A4,Def1;
+      then Cl Int B in Cl Int F by PCOMPS_1:def 3;
+      hence thesis by A1,A5,Def1;
+     end;
+   hence x in union(Int Cl Int F) by TARSKI:def 4;
+  end;
+  hence union(Int F) c= union(Int Cl Int F) by TARSKI:def 3;
+ end;
+
+theorem
+   meet(Int F) c= meet(Int Cl Int F)
+ proof
+    now per cases;
+   suppose A1: F = {};
+    then Int F = {} by Th19;
+    hence meet(Int F) c= meet(Int Cl Int F) by A1,Th9;
+   suppose F <> {};
+    then Int F <> {} by Th19;
+    then Cl Int F <> {} by Th9;
+     then A2: Int Cl Int F <> {} by Th19;
+      now let x be set;
+     assume A3: x in meet(Int F);
+
+        for A being set st A in Int Cl Int F holds x in A
+       proof
+         let A be set;
+        assume A4: A in Int Cl Int F;
+         then reconsider A as Subset of T;
+        consider E being Subset of T such that
+           A5: A = Int E and A6: E in Cl Int F by A4,Def1;
+        consider B being Subset of T such that
+           A7: E = Cl B and A8: B in Int F by A6,PCOMPS_1:def 3;
+        consider D being Subset of T such that
+           A9: B = Int D and A10: D in F by A8,Def1;
+            Int D in Int F by A10,Def1;
+         then x in
+ Int D & Int D c= Int Cl Int D by A3,SETFAM_1:def 1,TDLAT_1:4;
+        hence thesis by A5,A7,A9;
+       end;
+     hence x in meet(Int Cl Int F) by A2,SETFAM_1:def 1;
+    end;
+    hence meet(Int F) c= meet(Int Cl Int F) by TARSKI:def 3;
+  end;
+  hence thesis;
+ end;
+
+theorem Th49:
+ union(Cl Int F) c= Cl Int(union F)
+ proof
+     union Int F c= Int union F by Th28;
+  then union(Cl Int F) c= Cl(union Int F) &
+         Cl(union Int F) c= Cl Int(union F) by Th15,PRE_TOPC:49;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem Th50:
+ Cl Int(meet F) c= meet(Cl Int F)
+ proof
+     Int(meet F) c= meet(Int F) by Th29;
+  then Cl Int(meet F) c= Cl meet(Int F) &
+          Cl (meet Int F) c= meet(Cl Int F) by Th14,PRE_TOPC:49;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem Th51:
+ union(Int Cl F) c= Int Cl(union F)
+ proof
+     union Cl F c= Cl union F by Th15;
+  then union(Int Cl F) c= Int(union Cl F) &
+         Int(union Cl F) c= Int Cl(union F) by Th28,TOPS_1:48;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem Th52:
+ Int Cl(meet F) c= meet(Int Cl F)
+ proof
+     Cl(meet F) c= meet(Cl F) by Th14;
+  then Int Cl(meet F) c= Int meet(Cl F) &
+          Int(meet Cl F) c= meet(Int Cl F) by Th29,TOPS_1:48;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem
+   union(Cl Int Cl F) c= Cl Int Cl(union F)
+ proof
+     union Int Cl F c= Int Cl union F by Th51;
+  then union(Cl Int Cl F) c= Cl(union Int Cl F) &
+         Cl(union Int Cl F) c= Cl Int Cl(union F) by Th15,PRE_TOPC:49;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem
+   Cl Int Cl(meet F) c= meet(Cl Int Cl F)
+ proof
+     Int Cl meet F c= meet Int Cl F by Th52;
+  then Cl(meet Int Cl F) c= meet(Cl Int Cl F) &
+         Cl Int Cl(meet F) c= Cl(meet Int Cl F) by Th14,PRE_TOPC:49;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem
+   union(Int Cl Int F) c= Int Cl Int(union F)
+ proof
+     union Cl Int F c= Cl Int union F by Th49;
+  then union(Int Cl Int F) c= Int(union Cl Int F) &
+         Int(union Cl Int F) c= Int Cl Int(union F) by Th28,TOPS_1:48;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem
+   Int Cl Int(meet F) c= meet(Int Cl Int F)
+ proof
+     Cl Int meet F c= meet Cl Int F by Th50;
+  then Int(meet Cl Int F) c= meet(Int Cl Int F) &
+         Int Cl Int(meet F) c= Int(meet Cl Int F) by Th29,TOPS_1:48;
+  hence thesis by XBOOLE_1:1;
+ end;
+
+theorem Th57:
+ for F being Subset-Family of T holds
+  (for A being Subset of T st A in
+ F holds A c= Cl Int A) implies
+    union F c= Cl Int(union F) & Cl(union F) = Cl Int Cl(union F)
+ proof let F be Subset-Family of T;
+  assume A1: for A being Subset of T st A in F
+    holds A c= Cl Int A;
+  thus A2: union F c= Cl Int(union F)
+   proof
+        now let A0 be set;
+       assume A3: A0 in F;
+        then reconsider A = A0 as Subset of T;
+           A c= union F by A3,ZFMISC_1:92;
+        then Int A c= Int(union F) by TOPS_1:48;
+        then Cl Int A c= Cl Int(union F) & A c= Cl Int A by A1,A3,PRE_TOPC:49;
+       hence A0 c= Cl Int(union F) by XBOOLE_1:1;
+      end;
+    hence thesis by ZFMISC_1:94;
+   end;
+  thus Cl(union F) = Cl Int Cl(union F)
+   proof
+        union F c= Cl Int(union F) & union F c= Cl(union F)
+      by A2,PRE_TOPC:48;
+     then Cl(union F) c= Cl Cl Int(union F) &
+            Int(union F) c= Int Cl(union F) by PRE_TOPC:49,TOPS_1:48;
+     then Cl(union F) c= Cl Int(union F) &
+           Cl Int(union F) c= Cl Int Cl(union F) by PRE_TOPC:49,TOPS_1:26;
+     then A4: Cl(union F) c= Cl Int Cl(union F) by XBOOLE_1:1;
+        Int Cl(union F) c= Cl(union F) by TOPS_1:44;
+     then Cl Int Cl(union F) c= Cl Cl(union F) by PRE_TOPC:49;
+     then Cl Int Cl(union F) c= Cl(union F) by TOPS_1:26;
+    hence thesis by A4,XBOOLE_0:def 10;
+   end;
+ end;
+
+theorem Th58:
+ for F being Subset-Family of T holds
+  (for A being Subset of T st A in
+ F holds Int Cl A c= A) implies
+    Int Cl(meet F) c= meet F & Int Cl Int(meet F) = Int(meet F)
+ proof let F be Subset-Family of T;
+  assume A1: for A being Subset of T st A in F
+   holds Int Cl A c= A;
+  thus A2: Int Cl(meet F) c= meet F
+   proof
+      now per cases;
+     suppose A3: F = {};
+          Cl {}T = {}T by PRE_TOPC:52;
+      hence Int Cl(meet F) c= meet F by A3,SETFAM_1:2,TOPS_1:47;
+     suppose A4: F <> {};
+          now let A0 be set;
+         assume A5: A0 in F;
+          then reconsider A = A0 as Subset of T;
+             meet F c= A by A5,SETFAM_1:4;
+          then Cl(meet F) c= Cl A by PRE_TOPC:49;
+          then Int Cl(meet F) c= Int Cl A & Int Cl A c= A by A1,A5,TOPS_1:48;
+         hence Int Cl(meet F) c= A0 by XBOOLE_1:1;
+        end;
+      hence Int Cl(meet F) c= meet F by A4,SETFAM_1:6;
+    end;
+    hence thesis;
+   end;
+  thus Int Cl Int(meet F) = Int(meet F)
+   proof
+        Int Cl(meet F) c= meet F & Int(meet F) c= meet F by A2,TOPS_1:44;
+     then Int Int Cl(meet F) c= Int(meet F) &
+            Cl Int(meet F) c= Cl(meet F) by PRE_TOPC:49,TOPS_1:48;
+     then Int Cl(meet F) c= Int(meet F) &
+           Int Cl Int(meet F) c= Int Cl(meet F) by TOPS_1:45,48;
+     then A6: Int Cl Int(meet F) c= Int(meet F) by XBOOLE_1:1;
+        Int(meet F) c= Cl Int(meet F) by PRE_TOPC:48;
+     then Int Int (meet F) c= Int Cl Int(meet F) by TOPS_1:48;
+     then Int(meet F) c= Int Cl Int(meet F) by TOPS_1:45;
+    hence thesis by A6,XBOOLE_0:def 10;
+   end;
+ end;
+
+
+begin
+:: 3. Selected Properties of Domains of a Topological Space.
+reserve T for non empty TopSpace;
+
+theorem Th59:
+ for A, B being Subset of T st B is condensed holds
+  Int(Cl(A \/ B)) \/ (A \/ B) = B iff A c= B
+ proof
+   let A, B be Subset of T;
+  assume A1: B is condensed;
+  thus Int(Cl(A \/ B)) \/ (A \/ B) = B implies A c= B
+   proof
+    assume Int(Cl(A \/ B)) \/ (A \/ B) = B;
+     then A \/ B c= B & A c= A \/ B by XBOOLE_1:7;
+    hence thesis by XBOOLE_1:1;
+   end;
+  thus A c= B implies Int(Cl(A \/ B)) \/ (A \/ B) = B
+   proof
+    assume A c= B;
+     then A2: A \/ B = B by XBOOLE_1:12;
+     then Int(Cl(A \/ B)) c= B by A1,TOPS_1:def 6;
+    hence thesis by A2,XBOOLE_1:12;
+   end;
+ end;
+
+theorem
+   for A, B being Subset of T st A is condensed holds
+  Cl(Int(A /\ B)) /\ (A /\ B) = A iff A c= B
+ proof
+   let A, B be Subset of T;
+  assume A1: A is condensed;
+  thus Cl(Int(A /\ B)) /\ (A /\ B) = A implies A c= B
+   proof
+    assume Cl(Int(A /\ B)) /\ (A /\ B) = A;
+     then A c= A /\ B & A /\ B c= B by XBOOLE_1:17;
+    hence thesis by XBOOLE_1:1;
+   end;
+  thus A c= B implies Cl(Int(A /\ B)) /\ (A /\ B) = A
+   proof
+    assume A c= B;
+     then A2: A /\ B = A by XBOOLE_1:28;
+     then A c= Cl(Int(A /\ B)) by A1,TOPS_1:def 6;
+    hence thesis by A2,XBOOLE_1:28;
+   end;
+ end;
+
+theorem
+   for A, B being Subset of T st A is closed_condensed & B is closed_condensed
+ holds Int A c= Int B iff A c= B
+ proof
+  let A, B be Subset of T;
+   assume A1: A is closed_condensed & B is closed_condensed;
+  thus Int A c= Int B implies A c= B
+   proof
+    assume Int A c= Int B;
+     then Cl Int A c= Cl Int B & Cl Int A = A & Cl Int B = B
+                                 by A1,PRE_TOPC:49,TOPS_1:def 7;
+    hence thesis;
+   end;
+  thus A c= B implies Int A c= Int B by TOPS_1:48;
+ end;
+
+theorem
+   for A, B being Subset of T st A is open_condensed & B is open_condensed
+holds
+  Cl A c= Cl B iff A c= B
+ proof
+  let A, B be Subset of T;
+   assume A1: A is open_condensed & B is open_condensed;
+  thus Cl A c= Cl B implies A c= B
+   proof
+    assume Cl A c= Cl B;
+     then Int Cl A c= Int Cl B & Int Cl A = A & Int Cl B = B
+                                 by A1,TOPS_1:48,def 8;
+    hence thesis;
+   end;
+  thus A c= B implies Cl A c= Cl B by PRE_TOPC:49;
+ end;
+
+theorem
+   for A, B being Subset of T st A is closed_condensed holds
+  A c= B implies Cl(Int(A /\ B)) = A
+ proof
+   let A, B be Subset of T;
+  assume A1: A is closed_condensed;
+  assume A c= B;
+   then A /\ B = A by XBOOLE_1:28;
+  hence A = Cl(Int(A /\ B)) by A1,TOPS_1:def 7;
+ end;
+
+theorem Th64:
+ for A, B being Subset of T st B is open_condensed holds
+  A c= B implies Int(Cl(A \/ B)) = B
+ proof
+   let A, B be Subset of T;
+  assume A1: B is open_condensed;
+  assume A c= B;
+   then A \/ B = B by XBOOLE_1:12;
+  hence B = Int(Cl(A \/ B)) by A1,TOPS_1:def 8;
+ end;
+
+definition let T;
+  let IT be Subset-Family of T;
+ attr IT is domains-family means
+:Def2: for A being Subset of T holds A in IT implies A is condensed;
+end;
+
+theorem Th65:
+ for F being Subset-Family of T holds
+  F c= Domains_of T iff F is domains-family
+ proof
+   let F be Subset-Family of T;
+  thus F c= Domains_of T implies F is domains-family
+   proof
+    assume A1: F c= Domains_of T;
+       now let A be Subset of T;
+      assume A in F;
+       then A in Domains_of T by A1;
+       then A in {P where P is Subset of T : P is condensed} by TDLAT_1:def 1;
+       then ex Q being Subset of T st Q = A & Q is condensed;
+      hence A is condensed;
+     end;
+    hence F is domains-family by Def2;
+   end;
+  thus F is domains-family implies F c= Domains_of T
+   proof
+    assume A2: F is domains-family;
+       for X being set holds X in F implies X in Domains_of T
+      proof let X be set;
+       assume A3: X in F;
+        then reconsider X0 = X as Subset of T;
+           X0 is condensed by A2,A3,Def2;
+        then X0 in {P where P is Subset of T : P is condensed};
+       hence thesis by TDLAT_1:def 1;
+      end;
+     hence thesis by TARSKI:def 3;
+   end;
+ end;
+
+theorem Th66:
+ for F being Subset-Family of T holds F is domains-family implies
+  union F c= Cl Int(union F) & Cl(union F) = Cl Int Cl(union F)
+ proof let F be Subset-Family of T;
+  assume A1: F is domains-family;
+      now let A be Subset of T;
+    reconsider B = A as Subset of T;
+     assume A in F;
+      then B is condensed by A1,Def2;
+     hence A c= Cl Int A by TOPS_1:def 6;
+    end;
+  hence thesis by Th57;
+ end;
+
+theorem Th67:
+ for F being Subset-Family of T holds F is domains-family implies
+  Int Cl(meet F) c= meet F & Int Cl Int(meet F) = Int(meet F)
+ proof let F be Subset-Family of T;
+  assume A1: F is domains-family;
+      now let A be Subset of T;
+    reconsider B = A as Subset of T;
+     assume A in F;
+      then B is condensed by A1,Def2;
+     hence Int Cl A c= A by TOPS_1:def 6;
+    end;
+  hence thesis by Th58;
+ end;
+
+theorem Th68:
+ for F being Subset-Family of T holds
+  F is domains-family implies (union F) \/ (Int Cl(union F)) is condensed
+ proof let F be Subset-Family of T;
+  assume F is domains-family;
+   then A1: union F c= Cl Int(union F) by Th66;
+      Int Cl(union F) c= Cl(union F) by TOPS_1:44;
+  then Cl Int Cl(union F) c= Cl Cl(union F) by PRE_TOPC:49;
+  then A2: Cl Int Cl(union F) c= Cl(union F) by TOPS_1:26;
+
+   A3: Int Cl((union F) \/ (Int Cl(union F))) c= (union F) \/ (Int Cl(union F))
+         proof
+             Int Cl((union F) \/ (Int Cl(union F))) =
+                   Int(Cl(union F) \/ Cl(Int Cl(union F))) by PRE_TOPC:50
+                .= Int(Cl(union F)) by A2,XBOOLE_1:12;
+          hence thesis by XBOOLE_1:7;
+         end;
+     (union F) \/ (Int Cl(union F)) c= Cl Int((union F) \/ (Int Cl(union F)))
+                                                                 by A1,Th5;
+  hence thesis by A3,TOPS_1:def 6;
+ end;
+
+theorem Th69:
+ for F being Subset-Family of T holds
+  (for B being Subset of T st B in F
+   holds B c= (union F) \/ (Int Cl(union F)))
+    & (for A being Subset of T st A is condensed holds
+        (for B being Subset of T st B in F holds B c= A) implies
+          (union F) \/ (Int Cl(union F)) c= A)
+ proof
+  let F be Subset-Family of T;
+  thus
+     for B being Subset of T st B in F
+    holds B c= (union F) \/ (Int Cl(union F))
+    proof
+     let B be Subset of T;
+     assume B in F;
+     then B c= union F & union F c= (union F) \/ (Int Cl(union F))
+          by XBOOLE_1:7,ZFMISC_1:92;
+     hence thesis by XBOOLE_1:1;
+    end;
+   thus for A being Subset of T st A is condensed holds
+        (for B being Subset of T st B in F holds B c= A) implies
+          (union F) \/ (Int Cl(union F)) c= A
+    proof
+     let A be Subset of T;
+     assume A1: A is condensed;
+     assume for B being Subset of T st B in F holds B c= A;
+      then for P be set st P in F holds P c= A;
+     then A2: union F c= A by ZFMISC_1:94;
+      then Cl(union F) c= Cl A by PRE_TOPC:49;
+      then Int Cl(union F) c= Int Cl A & Int Cl A c= A by A1,TOPS_1:48,def 6;
+      then Int Cl(union F) c= A by XBOOLE_1:1;
+     hence (union F) \/ (Int Cl(union F)) c= A by A2,XBOOLE_1:8;
+    end;
+ end;
+
+theorem Th70:
+ for F being Subset-Family of T holds
+  F is domains-family implies (meet F) /\ (Cl Int(meet F)) is condensed
+ proof let F be Subset-Family of T;
+  assume F is domains-family;
+   then A1: Int Cl(meet F) c= meet F by Th67;
+      Int(meet F) c= Cl Int(meet F) by PRE_TOPC:48;
+  then Int Int (meet F) c= Int Cl Int(meet F) by TOPS_1:48;
+  then A2: Int (meet F) c= Int Cl Int(meet F) by TOPS_1:45;
+
+   A3: (meet F) /\ (Cl Int(meet F)) c= Cl Int((meet F) /\ (Cl Int(meet F)))
+         proof
+               Cl Int((meet F) /\ (Cl Int(meet F))) =
+                   Cl(Int(meet F) /\ Int(Cl Int(meet F))) by TOPS_1:46
+                .= Cl(Int(meet F)) by A2,XBOOLE_1:28;
+          hence thesis by XBOOLE_1:17;
+         end;
+     Int Cl((meet F) /\ (Cl Int(meet F))) c= (meet F) /\ (Cl Int(meet F))
+                                                                 by A1,Th6;
+  hence thesis by A3,TOPS_1:def 6;
+ end;
+
+theorem Th71:
+ for F being Subset-Family of T holds
+  (for B being Subset of T st B in F
+  holds (meet F) /\ (Cl Int(meet F)) c= B)
+  & (F = {} or for A being Subset of T st A is condensed holds
+      (for B being Subset of T st B in F holds A c= B) implies
+         A c= (meet F) /\ (Cl Int(meet F)))
+ proof
+  let F be Subset-Family of T;
+  thus
+     for B being Subset of T st B in F
+   holds (meet F) /\ (Cl Int(meet F)) c= B
+    proof
+     let B be Subset of T;
+     assume B in F;
+     then (meet F) /\ (Cl Int(meet F)) c= meet F & meet F c= B
+          by SETFAM_1:4,XBOOLE_1:17;
+     hence thesis by XBOOLE_1:1;
+    end;
+   thus F = {} or for A being Subset of T st A is condensed holds
+        (for B being Subset of T st B in F holds A c= B) implies
+          A c= (meet F) /\ (Cl Int(meet F))
+    proof
+     assume A1: F <> {};
+     let A be Subset of T;
+     assume A2: A is condensed;
+     assume for B being Subset of T st B in F holds A c= B;
+        then for P be set st P in F holds A c= P;
+       then A3: A c= meet F by A1,SETFAM_1:6;
+      then Int A c= Int(meet F) by TOPS_1:48;
+      then A c= Cl Int A & Cl Int A c= Cl Int(meet F)
+           by A2,PRE_TOPC:49,TOPS_1:def 6;
+      then A c= Cl Int(meet F) by XBOOLE_1:1;
+     hence A c= (meet F) /\ (Cl Int(meet F)) by A3,XBOOLE_1:19;
+    end;
+ end;
+
+definition let T;
+ let IT be Subset-Family of T;
+ attr IT is closed-domains-family means
+:Def3: for A being Subset of T holds A in IT implies A is closed_condensed;
+end;
+
+theorem Th72:
+ for F being Subset-Family of T holds
+  F c= Closed_Domains_of T iff F is closed-domains-family
+ proof
+   let F be Subset-Family of T;
+  thus F c= Closed_Domains_of T implies F is closed-domains-family
+   proof
+    assume A1: F c= Closed_Domains_of T;
+       now let A be Subset of T;
+      assume A in F;
+       then A in Closed_Domains_of T by A1;
+       then A in
+        {P where P is Subset of T : P is closed_condensed}
+                 by TDLAT_1:def 5;
+       then ex Q being Subset of T st Q = A & Q is closed_condensed;
+      hence A is closed_condensed;
+     end;
+    hence F is closed-domains-family by Def3;
+   end;
+  thus F is closed-domains-family implies F c= Closed_Domains_of T
+   proof
+    assume A2: F is closed-domains-family;
+       for X being set holds X in F implies X in Closed_Domains_of T
+      proof let X be set;
+       assume A3: X in F;
+        then reconsider X0 = X as Subset of T;
+           X0 is closed_condensed by A2,A3,Def3;
+        then X0 in
+         {P where P is Subset of T : P is closed_condensed};
+       hence thesis by TDLAT_1:def 5;
+      end;
+     hence thesis by TARSKI:def 3;
+   end;
+ end;
+
+theorem Th73:
+ for F being Subset-Family of T holds
+  F is closed-domains-family implies F is domains-family
+ proof
+  let F be Subset-Family of T;
+  thus F is closed-domains-family implies F is domains-family
+  proof
+   assume F is closed-domains-family;
+   then F c= Closed_Domains_of T &
+        Closed_Domains_of T c= Domains_of T by Th72,TDLAT_1:31;
+   then F c= Domains_of T by XBOOLE_1:1;
+   hence thesis by Th65;
+  end;
+ end;
+
+theorem Th74:
+ for F being Subset-Family of T holds
+  F is closed-domains-family implies F is closed
+ proof
+  let F be Subset-Family of T;
+   assume A1: F is closed-domains-family;
+     for A being Subset of T holds A in F implies A is closed
+   proof
+    let A be Subset of T;
+    assume A in F;
+    then A is closed_condensed by A1,Def3;
+    hence thesis by TOPS_1:106;
+   end;
+   hence thesis by TOPS_2:def 2;
+ end;
+
+theorem
+   for F being Subset-Family of T holds
+  F is domains-family implies Cl F is closed-domains-family
+ proof
+  let F be Subset-Family of T;
+  assume A1: F is domains-family;
+
+    for A being Subset of T
+    holds A in Cl F implies A is closed_condensed
+  proof
+   let A be Subset of T;
+   assume A in Cl F;
+   then consider P being Subset of T such that
+                   A2: A = Cl P and A3: P in F by PCOMPS_1:def 3;
+   reconsider P as Subset of T;
+     P is condensed by A1,A3,Def2;
+   hence A is closed_condensed by A2,TDLAT_1:24;
+  end;
+  hence Cl F is closed-domains-family by Def3;
+ end;
+
+theorem Th76:
+ for F being Subset-Family of T holds
+  F is closed-domains-family implies
+   Cl(union F) is closed_condensed & Cl Int(meet F) is closed_condensed
+ proof let F be Subset-Family of T;
+  assume F is closed-domains-family;
+   then F is domains-family by Th73;
+   then Cl(union F) = Cl Int Cl(union F) by Th66;
+  hence Cl(union F) is closed_condensed by TOPS_1:def 7;
+  thus Cl Int(meet F) is closed_condensed by TDLAT_1:22;
+ end;
+
+theorem Th77:
+ for F being Subset-Family of T holds
+  (for B being Subset of T st B in F holds B c= Cl(union F))
+   & (for A being Subset of T st A is closed_condensed holds
+    (for B being Subset of T st B in F holds B c= A)
+    implies Cl(union F) c= A)
+ proof
+  let F be Subset-Family of T;
+  thus for B being Subset of T st B in F holds B c= Cl(union F)
+   proof
+     let B be Subset of T;
+     assume B in F;
+     then B c= union F & union F c= Cl(union F) by PRE_TOPC:48,ZFMISC_1:92;
+     hence thesis by XBOOLE_1:1;
+   end;
+  thus for A being Subset of T st A is closed_condensed holds
+    (for B being Subset of T st B in F holds B c= A)
+    implies Cl(union F) c= A
+   proof
+     let A be Subset of T;
+     assume A1: A is closed_condensed;
+     assume A2: for B being Subset of T st B in F holds B c= A;
+     reconsider A1 = A as Subset of T;
+        for P be set st P in F holds P c= A by A2;
+     then union F c= A & A1 is closed by A1,TOPS_1:106,ZFMISC_1:94;
+      then Cl(union F) c= Cl A & Cl A = A by PRE_TOPC:49,52;
+     hence thesis;
+   end;
+ end;
+
+theorem Th78:
+ for F being Subset-Family of T holds
+  (F is closed implies
+   for B being Subset of T st B in F holds Cl Int(meet F) c= B)
+   & (F = {} or for A being Subset of T st A is closed_condensed
+   holds
+        (for B being Subset of T st B in F holds A c= B) implies
+            A c= Cl Int(meet F))
+ proof
+  let F be Subset-Family of T;
+  thus F is closed implies
+   for B being Subset of T st B in F holds Cl Int(meet F) c= B
+    proof
+     assume A1: F is closed;
+     let B be Subset of T;
+     assume B in F;
+     then A2: meet F c= B by SETFAM_1:4;
+        Int(meet F) c= meet F & meet F is closed by A1,TOPS_1:44,TOPS_2:29;
+     then Cl Int(meet F) c= Cl meet F & Cl meet F = meet F by PRE_TOPC:49,52;
+     hence thesis by A2,XBOOLE_1:1;
+    end;
+   thus F = {} or for A being Subset of T st A is closed_condensed holds
+        (for B being Subset of T st B in F holds A c= B) implies
+          A c= Cl Int(meet F)
+    proof
+     assume A3: F <> {};
+     let A be Subset of T;
+     assume A4: A is closed_condensed;
+     assume for B being Subset of T st B in F holds A c= B;
+        then for P be set st P in F holds A c= P;
+       then A c= meet F by A3,SETFAM_1:6;
+      then Int A c= Int(meet F) by TOPS_1:48;
+      then A = Cl Int A & Cl Int A c= Cl Int(meet F)
+           by A4,PRE_TOPC:49,TOPS_1:def 7;
+     hence thesis;
+    end;
+ end;
+
+definition let T;
+  let IT be Subset-Family of T;
+ attr IT is open-domains-family means
+:Def4: for A being Subset of T holds A in IT implies A is open_condensed;
+end;
+
+theorem Th79:
+ for F being Subset-Family of T holds
+  F c= Open_Domains_of T iff F is open-domains-family
+ proof
+   let F be Subset-Family of T;
+  thus F c= Open_Domains_of T implies F is open-domains-family
+   proof
+    assume A1: F c= Open_Domains_of T;
+       now let A be Subset of T;
+      assume A in F;
+       then A in Open_Domains_of T by A1;
+       then A in {P where P is Subset of T : P is open_condensed}
+         by TDLAT_1:def 9;
+       then ex Q being Subset of T st Q = A & Q is open_condensed;
+      hence A is open_condensed;
+     end;
+    hence F is open-domains-family by Def4;
+   end;
+  thus F is open-domains-family implies F c= Open_Domains_of T
+   proof
+    assume A2: F is open-domains-family;
+       for X being set holds X in F implies X in Open_Domains_of T
+      proof let X be set;
+       assume A3: X in F;
+        then reconsider X0 = X as Subset of T;
+           X0 is open_condensed by A2,A3,Def4;
+        then X0 in
+         {P where P is Subset of T : P is open_condensed};
+       hence thesis by TDLAT_1:def 9;
+      end;
+     hence thesis by TARSKI:def 3;
+   end;
+ end;
+
+theorem Th80:
+ for F being Subset-Family of T holds
+  F is open-domains-family implies F is domains-family
+ proof
+  let F be Subset-Family of T;
+  thus F is open-domains-family implies F is domains-family
+   proof
+    assume F is open-domains-family;
+     then F c= Open_Domains_of T &
+            Open_Domains_of T c= Domains_of T by Th79,TDLAT_1:35;
+     then F c= Domains_of T by XBOOLE_1:1;
+    hence thesis by Th65;
+   end;
+ end;
+
+theorem Th81:
+ for F being Subset-Family of T holds
+  F is open-domains-family implies F is open
+ proof
+  let F be Subset-Family of T;
+   assume A1: F is open-domains-family;
+     for A being Subset of T holds A in F implies A is open
+    proof
+      let A be Subset of T;
+     assume A in F;
+      then A is open_condensed by A1,Def4;
+     hence thesis by TOPS_1:107;
+    end;
+   hence thesis by TOPS_2:def 1;
+ end;
+
+theorem
+   for F being Subset-Family of T holds
+  F is domains-family implies Int F is open-domains-family
+ proof
+  let F be Subset-Family of T;
+   assume A1: F is domains-family;
+
+    for A being Subset of T
+   holds A in Int F implies A is open_condensed
+   proof
+     let A be Subset of T;
+    assume A in Int F;
+     then consider P being Subset of T such that
+       A2: A = Int P and A3: P in F by Def1;
+     reconsider P as Subset of T;
+       P is condensed by A1,A3,Def2;
+    hence A is open_condensed by A2,TDLAT_1:25;
+   end;
+  hence Int F is open-domains-family by Def4;
+ end;
+
+theorem Th83:
+ for F being Subset-Family of T holds
+  F is open-domains-family implies
+   Int(meet F) is open_condensed & Int Cl(union F) is open_condensed
+ proof let F be Subset-Family of T;
+  assume F is open-domains-family;
+   then F is domains-family by Th80;
+   then Int Cl Int(meet F) = Int(meet F) by Th67;
+  hence Int(meet F) is open_condensed by TOPS_1:def 8;
+  thus Int Cl(union F) is open_condensed by TDLAT_1:23;
+ end;
+
+theorem Th84:
+ for F being Subset-Family of T holds
+  (F is open implies
+   for B being Subset of T st B in F holds B c= Int Cl(union F))
+   & (for A being Subset of T st A is open_condensed holds
+          (for B being Subset of T st B in F holds B c= A)
+          implies Int Cl(union F) c= A)
+ proof
+  let F be Subset-Family of T;
+  thus F is open implies
+   for B being Subset of T st B in F holds B c= Int Cl(union F)
+   proof
+    assume A1: F is open;
+     let B be Subset of T;
+     assume B in F;
+     then A2: B c= union F by ZFMISC_1:92;
+        union F c= Cl(union F) & union F is open by A1,PRE_TOPC:48,TOPS_2:26;
+     then Int(union F) c= Int Cl(union F) & Int(union F) = union F
+          by TOPS_1:48,55;
+     hence thesis by A2,XBOOLE_1:1;
+   end;
+  thus for A being Subset of T st A is open_condensed holds
+          (for B being Subset of T st B in F holds B c= A)
+          implies Int Cl(union F) c= A
+   proof
+     let A be Subset of T;
+     assume A3: A is open_condensed;
+     assume for B being Subset of T st B in F holds B c= A;
+        then for P be set st P in F holds P c= A;
+       then union F c= A by ZFMISC_1:94;
+      then Cl(union F) c= Cl A by PRE_TOPC:49;
+      then A = Int Cl A & Int Cl(union F) c= Int Cl A
+           by A3,TOPS_1:48,def 8;
+     hence thesis;
+   end;
+ end;
+
+theorem Th85:
+ for F being Subset-Family of T holds
+  (for B being Subset of T st B in F holds Int(meet F) c= B)
+   & (F = {} or for A being Subset of T st A is open_condensed
+   holds
+   (for B being Subset of T st B in F holds A c= B)
+    implies A c= Int(meet F))
+ proof
+  let F be Subset-Family of T;
+  thus
+     for B being Subset of T st B in F holds Int(meet F) c= B
+    proof
+     let B be Subset of T;
+     assume B in F;
+     then Int(meet F) c= meet F & meet F c= B
+          by SETFAM_1:4,TOPS_1:44;
+     hence thesis by XBOOLE_1:1;
+    end;
+   thus F = {} or for A being Subset of T st A is open_condensed
+   holds
+        (for B being Subset of T st B in F holds A c= B) implies
+          A c= Int(meet F)
+    proof
+     assume A1: F <> {};
+     let A be Subset of T;
+     assume A is open_condensed;
+     then A is open by TOPS_1:107;
+     then A2: Int A = A by TOPS_1:55;
+     assume for B being Subset of T st B in F holds A c= B;
+        then for P be set st P in F holds A c= P;
+      then A c= meet F by A1,SETFAM_1:6;
+     hence A c= Int(meet F) by A2,TOPS_1:48;
+    end;
+ end;
+
+begin
+:: 4. Completeness of the Lattice of Domains.
+
+reserve T for non empty TopSpace;
+
+theorem Th86:
+ the carrier of Domains_Lattice T = Domains_of T
+ proof
+     Domains_Lattice T =
+    LattStr(#Domains_of T,D-Union T,D-Meet T#) by TDLAT_1:def 4;
+  hence thesis;
+ end;
+
+theorem Th87:
+ for a, b being Element of Domains_Lattice T
+  for A, B being Element of Domains_of T st a = A & b = B holds
+   a "\/" b = Int(Cl(A \/ B)) \/ (A \/ B) & a "/\" b = Cl(Int(A /\ B)) /\ (A /\
+ B)
+ proof
+   let a, b be Element of Domains_Lattice T;
+   let A, B be Element of Domains_of T;
+    A1: Domains_Lattice T =
+            LattStr(#Domains_of T,D-Union T,D-Meet T#) by TDLAT_1:def 4;
+  assume A2: a = A & b = B;
+  hence a "\/" b = (D-Union T).(A,B) by A1,LATTICES:def 1
+             .= Int(Cl(A \/ B)) \/ (A \/ B) by TDLAT_1:def 2;
+  thus a "/\" b = (D-Meet T).(A,B) by A1,A2,LATTICES:def 2
+             .= Cl(Int(A /\ B)) /\ (A /\ B) by TDLAT_1:def 3;
+ end;
+
+theorem
+   Bottom (Domains_Lattice T) = {}T & Top (Domains_Lattice T) = [#]T
+ proof
+  thus Bottom (Domains_Lattice T) = {}T
+   proof
+       {}T is condensed by TDLAT_1:14;
+    then A1: {}T in {A where A is Subset of T : A is condensed};
+    then {}T in Domains_of T by TDLAT_1:def 1;
+    then reconsider e = {}T as Element of Domains_Lattice T
+     by Th86;
+         reconsider E = {}T as Element of Domains_of T by A1,TDLAT_1:def 1;
+       for a being Element of Domains_Lattice T holds e "\/" a =
+a
+      proof let a be Element of Domains_Lattice T;
+       reconsider A = a as Element of Domains_of T by Th86;
+          A in Domains_of T;
+       then A in {C where C is Subset of T : C is condensed}
+       by TDLAT_1:def 1;
+       then ex D being Subset of T st D = A & D is condensed;
+       then A2: Int(Cl A) c= A by TOPS_1:def 6;
+       thus e "\/" a = Int(Cl(E \/ A)) \/ (E \/ A) by Th87
+                  .= a by A2,XBOOLE_1:12;
+      end;
+    hence thesis by LATTICE2:21;
+   end;
+  thus Top (Domains_Lattice T) = [#]T
+   proof
+       [#]T is condensed by TDLAT_1:15;
+    then A3: [#]T in {A where A is Subset of T : A is condensed};
+    then [#]T in Domains_of T by TDLAT_1:def 1;
+    then reconsider e = [#]T as Element of Domains_Lattice T
+         by Th86;
+         reconsider E = [#]T as Element of Domains_of T by A3,TDLAT_1:def 1;
+       for a being Element of Domains_Lattice T holds e "/\" a =
+a
+      proof let a be Element of Domains_Lattice T;
+       reconsider A = a as Element of Domains_of T by Th86;
+          A in Domains_of T;
+       then A in {C where C is Subset of T : C is condensed}
+       by TDLAT_1:def 1;
+       then ex D being Subset of T st D = A & D is condensed;
+       then A4: A c= Cl(Int A) by TOPS_1:def 6;
+A5:        A c= [#]T by PRE_TOPC:14;
+
+       thus e "/\" a = Cl(Int(E /\ A)) /\ (E /\ A) by Th87
+                  .= Cl(Int(A)) /\ ([#]T /\ A) by A5,XBOOLE_1:28
+                  .= Cl(Int(A)) /\ A by A5,XBOOLE_1:28
+                  .= a by A4,XBOOLE_1:28;
+      end;
+    hence thesis by LATTICE2:24;
+   end;
+ end;
+
+theorem Th89:
+ for a, b being Element of Domains_Lattice T
+  for A, B being Element of Domains_of T st a = A & b = B holds
+   a [= b iff A c= B
+ proof
+   let a, b be Element of Domains_Lattice T;
+   let A, B be Element of Domains_of T;
+      B in Domains_of T;
+   then B in {C where C is Subset of T : C is condensed}
+   by TDLAT_1:def 1;
+   then A1: ex Q being Subset of T st Q = B & Q is condensed;
+  assume A2: a = A & b = B;
+  thus a [= b implies A c= B
+   proof
+    assume a [= b;
+     then a "\/" b = b by LATTICES:def 3;
+     then Int(Cl(A \/ B)) \/ (A \/ B) = B by A2,Th87;
+    hence thesis by A1,Th59;
+   end;
+    assume A c= B;
+     then Int(Cl(A \/ B)) \/ (A \/ B) = B by A1,Th59;
+     then a "\/" b = b by A2,Th87;
+    hence thesis by LATTICES:def 3;
+ end;
+
+theorem Th90:
+ for X being Subset of Domains_Lattice T
+  ex a being Element of Domains_Lattice T
+     st X is_less_than a &
+   for b being Element of Domains_Lattice T
+     st X is_less_than b holds a [= b
+ proof
+  let X be Subset of Domains_Lattice T;
+      X c= the carrier of Domains_Lattice T;
+   then A1: X c= Domains_of T by Th86;
+   then reconsider F = X as Subset-Family of T by TOPS_2:3;
+  set A = (union F) \/ (Int Cl(union F));
+    A2: F is domains-family by A1,Th65;
+   then A is condensed by Th68;
+   then A in {C where C is Subset of T : C is condensed};
+   then A3: A in Domains_of T by TDLAT_1:def 1;
+   then reconsider a = A as Element of Domains_Lattice T
+    by Th86;
+  take a;
+    A4: X is_less_than a
+         proof
+          let b be Element of Domains_Lattice T;
+           reconsider B = b as Element of Domains_of T by Th86;
+          assume b in X;
+            then B c= A by Th69;
+          hence b [= a by A3,Th89;
+         end;
+      for b being Element of Domains_Lattice T
+       st X is_less_than b holds a [= b
+     proof
+       let b be Element of Domains_Lattice T;
+        reconsider B = b as Element of Domains_of T by Th86;
+           B in Domains_of T;
+        then B in {C where C is Subset of T : C is condensed}
+        by TDLAT_1:def 1;
+        then A5: ex C being Subset of T st C = B & C is condensed;
+      assume A6: X is_less_than b;
+         for C being Subset of T st C in F holds C c= B
+        proof
+          let C be Subset of T;
+          reconsider C1 = C as Subset of T;
+          assume A7: C in F;
+          then C1 is condensed by A2,Def2;
+          then C in {P where P is Subset of T : P is condensed};
+          then A8: C in Domains_of T by TDLAT_1:def 1;
+          then reconsider c = C as Element of Domains_Lattice T
+           by Th86;
+            c [= b by A6,A7,LATTICE3:def 17;
+         hence C c= B by A8,Th89;
+        end;
+       then A c= B by A5,Th69;
+      hence a [= b by A3,Th89;
+     end;
+  hence thesis by A4;
+ end;
+
+theorem Th91:
+ Domains_Lattice T is complete
+ proof
+  thus for X being set
+        ex a being Element of Domains_Lattice T st
+         X is_less_than a &
+          for b being Element of Domains_Lattice T st
+            X is_less_than b
+           holds a [= b
+   proof
+    let X be set;
+    set
+     Y = { c where c is Element of Domains_Lattice T : c in X};
+     A1: for d being Element of Domains_Lattice T holds
+          Y is_less_than d implies X is_less_than d
+          proof
+           let d be Element of Domains_Lattice T;
+           assume A2: Y is_less_than d;
+
+           thus for e being Element of Domains_Lattice T
+              st e in X holds e [= d
+            proof let e be Element of Domains_Lattice T;
+             assume e in X;
+             then e in Y;
+             hence thesis by A2,LATTICE3:def 17;
+            end;
+          end;
+     A3: for d being Element of Domains_Lattice T holds
+          X is_less_than d implies Y is_less_than d
+          proof
+           let d be Element of Domains_Lattice T;
+           assume A4: X is_less_than d;
+
+           thus for e being Element of Domains_Lattice T
+             st e in Y holds e [= d
+            proof let e be Element of Domains_Lattice T;
+             assume e in Y;
+             then ex e0 being Element of Domains_Lattice T
+              st e0 = e & e0 in X;
+             hence thesis by A4,LATTICE3:def 17;
+            end;
+          end;
+       Y c= the carrier of Domains_Lattice T
+      proof
+         now let x be set;
+        assume x in Y;
+        then ex y being Element of Domains_Lattice T
+         st y = x & y in X;
+        hence x in the carrier of Domains_Lattice T;
+       end;
+       hence thesis by TARSKI:def 3;
+      end;
+     then reconsider Y as Subset of Domains_Lattice T;
+    consider a being Element of Domains_Lattice T such that
+     A5: Y is_less_than a and
+     A6: for b being Element of Domains_Lattice T st
+           Y is_less_than b holds a [= b by Th90;
+    take a;
+       for b being Element of Domains_Lattice T
+       st X is_less_than b holds a [= b
+      proof
+       let b be Element of Domains_Lattice T;
+       assume X is_less_than b;
+       then Y is_less_than b by A3;
+       hence thesis by A6;
+      end;
+    hence thesis by A1,A5;
+   end;
+ end;
+
+theorem Th92:
+ for F being Subset-Family of T st F is domains-family
+  for X being Subset of Domains_Lattice T st X = F holds
+   "\/"(X,Domains_Lattice T) = (union F) \/ (Int Cl(union F))
+ proof
+   let F be Subset-Family of T;
+  assume A1: F is domains-family;
+   let X be Subset of Domains_Lattice T;
+  assume A2: X = F;
+  thus "\/"(X,Domains_Lattice T) = (union F) \/ (Int Cl(union F))
+   proof
+    set A = (union F) \/ (Int Cl(union F));
+        A is condensed by A1,Th68;
+     then A in {C where C is Subset of T : C is condensed};
+     then A3: A in Domains_of T by TDLAT_1:def 1;
+     then reconsider a = A as Element of Domains_Lattice T
+     by Th86;
+    A4: X is_less_than a
+         proof
+          let b be Element of Domains_Lattice T;
+           reconsider B = b as Element of Domains_of T by Th86;
+          assume b in X;
+           then B c= A by A2,Th69;
+          hence b [= a by A3,Th89;
+         end;
+    A5: for b being Element of Domains_Lattice T st
+                                      X is_less_than b holds a [= b
+         proof
+           let b be Element of Domains_Lattice T;
+            reconsider B = b as Element of Domains_of T by Th86;
+                B in Domains_of T;
+            then B in {C where C is Subset of T : C is condensed }
+            by TDLAT_1:def 1;
+then A6:    ex C being Subset of T st C = B & C is condensed;
+
+          assume A7: X is_less_than b;
+
+             for C being Subset of T st C in F holds C c= B
+            proof
+              let C be Subset of T;
+              reconsider C1 = C as Subset of T;
+             assume A8: C in F;
+              then C1 is condensed by A1,Def2;
+               then C in {P where P is Subset of T : P is condensed};
+              then A9: C in Domains_of T by TDLAT_1:def 1;
+              then reconsider c = C as Element of
+Domains_Lattice T
+              by Th86;
+                c [= b by A2,A7,A8,LATTICE3:def 17;
+             hence C c= B by A9,Th89;
+            end;
+           then A c= B by A6,Th69;
+          hence a [= b by A3,Th89;
+         end;
+       Domains_Lattice T is complete by Th91;
+    hence thesis by A4,A5,LATTICE3:def 21;
+   end;
+ end;
+
+theorem Th93:
+ for F being Subset-Family of T st F is domains-family
+  for X being Subset of Domains_Lattice T st X = F holds
+   (X <> {} implies "/\"(X,Domains_Lattice T) = (meet F) /\ (Cl Int(meet F))) &
+     (X = {} implies "/\"(X,Domains_Lattice T) = [#]T)
+ proof
+   let F be Subset-Family of T;
+  assume A1: F is domains-family;
+   let X be Subset of Domains_Lattice T;
+  assume A2: X = F;
+  thus X <> {} implies "/\"(X,Domains_Lattice T) = (meet F) /\ (Cl Int(meet F)
+)
+   proof
+    assume A3: X <> {};
+
+    set A = (meet F) /\ (Cl Int(meet F));
+        A is condensed by A1,Th70;
+     then A in {C where C is Subset of T : C is condensed};
+     then A4: A in Domains_of T by TDLAT_1:def 1;
+     then reconsider a = A as Element of Domains_Lattice T
+     by Th86;
+     A5: a is_less_than X
+          proof
+           let b be Element of Domains_Lattice T;
+            reconsider B = b as Element of Domains_of T by Th86;
+           assume b in X;
+            then A c= B by A2,Th71;
+           hence a [= b by A4,Th89;
+          end;
+     A6: for b being Element of Domains_Lattice T st
+                                       b is_less_than X holds b [= a
+          proof
+           let b be Element of Domains_Lattice T;
+            reconsider B = b as Element of Domains_of T by Th86;
+                B in Domains_of T;
+            then B in {C where C is Subset of T : C is condensed}
+             by TDLAT_1:def 1;
+then A7:          ex C being Subset of T st C = B & C is condensed;
+
+           assume A8: b is_less_than X;
+
+             for C being Subset of T st C in F holds B c= C
+            proof
+              let C be Subset of T;
+             reconsider C1 = C as Subset of T;
+             assume A9: C in F;
+              then C1 is condensed by A1,Def2;
+              then C in {P where P is Subset of T : P is condensed};
+              then A10: C in Domains_of T by TDLAT_1:def 1;
+              then reconsider c = C as Element of
+Domains_Lattice T
+              by Th86;
+                b [= c by A2,A8,A9,LATTICE3:def 16;
+             hence B c= C by A10,Th89;
+            end;
+           then B c= A by A2,A3,A7,Th71;
+           hence b [= a by A4,Th89;
+          end;
+        Domains_Lattice T is complete by Th91;
+     hence thesis by A5,A6,LATTICE3:34;
+   end;
+  thus X = {} implies "/\"(X,Domains_Lattice T) = [#]T
+   proof
+    assume A11: X = {};
+
+    set A = [#]T;
+        A is condensed by TDLAT_1:15;
+     then A in {C where C is Subset of T : C is condensed};
+     then A12: A in Domains_of T by TDLAT_1:def 1;
+     then reconsider a = A as Element of Domains_Lattice T
+      by Th86;
+     A13: a is_less_than X
+          proof
+           let b be Element of Domains_Lattice T;
+
+           assume b in X;
+           hence a [= b by A11;
+          end;
+     A14: for b being Element of Domains_Lattice T st
+                                       b is_less_than X holds b [= a
+          proof
+           let b be Element of Domains_Lattice T;
+            reconsider B = b as Element of Domains_of T by Th86;
+           assume b is_less_than X;
+              B c= A by PRE_TOPC:14;
+           hence b [= a by A12,Th89;
+          end;
+        Domains_Lattice T is complete by Th91;
+     hence thesis by A13,A14,LATTICE3:34;
+   end;
+ end;
+
+begin
+:: 5. Completeness of the Lattices of Closed Domains and Open Domains.
+reserve T for non empty TopSpace;
+
+::The Lattice of Closed Domains.
+theorem Th94:
+ the carrier of Closed_Domains_Lattice T = Closed_Domains_of T
+ proof
+     Closed_Domains_Lattice T =
+    LattStr(#Closed_Domains_of T,CLD-Union T,CLD-Meet T#) by TDLAT_1:def 8;
+  hence thesis;
+ end;
+
+theorem Th95:
+ for a, b being Element of Closed_Domains_Lattice T
+  for A, B being Element of Closed_Domains_of T st a = A & b = B holds
+   a "\/" b = A \/ B & a "/\" b = Cl(Int(A /\ B))
+ proof
+   let a, b be Element of Closed_Domains_Lattice T;
+   let A, B be Element of Closed_Domains_of T;
+    A1: Closed_Domains_Lattice T =
+            LattStr(#Closed_Domains_of T,CLD-Union T,CLD-Meet T#)
+                 by TDLAT_1:def 8;
+  assume A2: a = A & b = B;
+  hence a "\/" b = (CLD-Union T).(A,B) by A1,LATTICES:def 1
+             .= A \/ B by TDLAT_1:def 6;
+  thus a "/\" b = (CLD-Meet T).(A,B) by A1,A2,LATTICES:def 2
+             .= Cl(Int(A /\ B)) by TDLAT_1:def 7;
+ end;
+
+theorem
+   Bottom (Closed_Domains_Lattice T) = {}T & Top (Closed_Domains_Lattice T) =
+[#]
+T
+ proof
+  thus Bottom (Closed_Domains_Lattice T) = {}T
+   proof
+       {}T is closed_condensed by TDLAT_1:18;
+    then A1: {}T in
+     {A where A is Subset of T : A is closed_condensed};
+    then {}T in Closed_Domains_of T by TDLAT_1:def 5;
+    then reconsider e = {}T as Element of Closed_Domains_Lattice
+T
+      by Th94;
+         reconsider E = {}T as Element of Closed_Domains_of T by A1,TDLAT_1:def
+5;
+       for a being Element of Closed_Domains_Lattice T
+       holds e "\/" a = a
+      proof let a be Element of Closed_Domains_Lattice T;
+       reconsider A = a as Element of Closed_Domains_of T
+        by Th94;
+       thus e "\/" a = E \/ A by Th95
+                  .= a;
+      end;
+    hence thesis by LATTICE2:21;
+   end;
+  thus Top (Closed_Domains_Lattice T) = [#]T
+   proof
+       [#]T is closed_condensed by TDLAT_1:19;
+     then A2: [#]T in {A where A is Subset of T : A is closed_condensed};
+    then [#]T in Closed_Domains_of T by TDLAT_1:def 5;
+    then reconsider e = [#]T as Element of
+Closed_Domains_Lattice T
+    by Th94;
+         reconsider E = [#]T as Element of Closed_Domains_of T by A2,TDLAT_1:
+def 5;
+       for a being Element of Closed_Domains_Lattice T
+        holds e "/\" a = a
+      proof let a be Element of Closed_Domains_Lattice T;
+       reconsider A = a as Element of Closed_Domains_of T by Th94;
+          A in Closed_Domains_of T;
+        then A in {C where C is Subset of T : C is closed_condensed}
+                                                     by TDLAT_1:def 5;
+       then A3:     ex D being Subset of T st D = A & D is closed_condensed;
+A4:        A c= [#]T by PRE_TOPC:14;
+       thus e "/\" a = Cl(Int(E /\ A)) by Th95
+                  .= Cl(Int(A)) by A4,XBOOLE_1:28
+                  .= a by A3,TOPS_1:def 7;
+      end;
+    hence thesis by LATTICE2:24;
+   end;
+ end;
+
+theorem Th97:
+ for a, b being Element of Closed_Domains_Lattice T
+  for A, B being Element of Closed_Domains_of T st a = A & b = B holds
+   a [= b iff A c= B
+ proof
+   let a, b be Element of Closed_Domains_Lattice T;
+   let A, B be Element of Closed_Domains_of T;
+  assume A1: a = A & b = B;
+  thus a [= b implies A c= B
+   proof
+    assume a [= b;
+     then a "\/" b = b by LATTICES:def 3;
+     then A \/ B = B by A1,Th95;
+    hence thesis by XBOOLE_1:7;
+   end;
+  thus A c= B implies a [= b
+   proof
+    assume A c= B;
+     then A \/ B = B by XBOOLE_1:12;
+     then a "\/" b = b by A1,Th95;
+    hence thesis by LATTICES:def 3;
+   end;
+ end;
+
+theorem Th98:
+ for X being Subset of Closed_Domains_Lattice T
+  ex a being Element of Closed_Domains_Lattice T st
+   X is_less_than a &
+    for b being Element of Closed_Domains_Lattice T st
+     X is_less_than b holds a [= b
+ proof
+  let X be Subset of Closed_Domains_Lattice T;
+      X c= the carrier of Closed_Domains_Lattice T;
+   then A1: X c= Closed_Domains_of T by Th94;
+   then reconsider F = X as Subset-Family of T by TOPS_2:3;
+  set A = Cl(union F);
+    A2: F is closed-domains-family by A1,Th72;
+   then A is closed_condensed by Th76;
+   then A in {C where C is Subset of T : C is closed_condensed};
+   then A3: A in Closed_Domains_of T by TDLAT_1:def 5;
+   then reconsider a = A as Element of Closed_Domains_Lattice T
+    by Th94;
+  take a;
+    A4: X is_less_than a
+         proof
+          let b be Element of Closed_Domains_Lattice T;
+           reconsider B = b as Element of Closed_Domains_of T
+           by Th94;
+          assume b in X;
+           then B c= A by Th77;
+          hence b [= a by A3,Th97;
+         end;
+      for b being Element of Closed_Domains_Lattice T
+       st X is_less_than b
+       holds a [= b
+     proof
+       let b be Element of Closed_Domains_Lattice T;
+        reconsider B = b as Element of Closed_Domains_of T by Th94;
+            B in Closed_Domains_of T;
+         then B in {C where C is Subset of T : C is closed_condensed}
+                                                    by TDLAT_1:def 5;
+        then A5:      ex C being Subset of T
+           st C = B & C is closed_condensed;
+
+      assume A6: X is_less_than b;
+
+         for C being Subset of T st C in F holds C c= B
+        proof
+          let C be Subset of T;
+          reconsider C1 = C as Subset of T;
+         assume A7: C in F;
+          then C1 is closed_condensed by A2,Def3;
+          then C in
+           {P where P is Subset of T : P is closed_condensed};
+          then A8: C in Closed_Domains_of T by TDLAT_1:def 5;
+          then reconsider c = C
+           as Element of Closed_Domains_Lattice T by Th94;
+            c [= b by A6,A7,LATTICE3:def 17;
+         hence C c= B by A8,Th97;
+        end;
+       then A c= B by A5,Th77;
+      hence a [= b by A3,Th97;
+     end;
+  hence thesis by A4;
+ end;
+
+theorem Th99:
+ Closed_Domains_Lattice T is complete
+ proof
+  thus for X being set
+        ex a being Element of Closed_Domains_Lattice T st
+         X is_less_than a &
+          for b being Element of Closed_Domains_Lattice T
+            st X is_less_than b
+           holds a [= b
+   proof
+    let X be set;
+    set Y =
+    { c where c is Element of Closed_Domains_Lattice T : c in
+ X};
+     A1: for d being Element of Closed_Domains_Lattice T holds
+          Y is_less_than d implies X is_less_than d
+          proof
+           let d be Element of Closed_Domains_Lattice T;
+           assume A2: Y is_less_than d;
+
+           thus for e being Element of Closed_Domains_Lattice T
+              st e in X
+               holds e [= d
+            proof let e be Element of Closed_Domains_Lattice T;
+             assume e in X;
+             then e in Y;
+             hence thesis by A2,LATTICE3:def 17;
+            end;
+          end;
+     A3: for d being Element of Closed_Domains_Lattice T holds
+          X is_less_than d implies Y is_less_than d
+          proof
+           let d be Element of Closed_Domains_Lattice T;
+           assume A4: X is_less_than d;
+
+           thus for e being Element of Closed_Domains_Lattice T
+             st e in Y
+               holds e [= d
+            proof let e be Element of Closed_Domains_Lattice T;
+             assume e in Y;
+             then ex e0 being Element of Closed_Domains_Lattice
+T
+                     st e0 = e & e0 in X;
+             hence thesis by A4,LATTICE3:def 17;
+            end;
+          end;
+       Y c= the carrier of Closed_Domains_Lattice T
+      proof
+         now let x be set;
+        assume x in Y;
+        then ex y being Element of Closed_Domains_Lattice T
+           st y = x & y in X;
+        hence x in the carrier of Closed_Domains_Lattice T;
+       end;
+       hence thesis by TARSKI:def 3;
+      end;
+     then reconsider Y as Subset of Closed_Domains_Lattice T;
+    consider a being Element of Closed_Domains_Lattice T
+    such that
+     A5: Y is_less_than a and
+     A6: for b being Element of Closed_Domains_Lattice T st
+           Y is_less_than b holds a [= b by Th98;
+    take a;
+       for b being Element of Closed_Domains_Lattice T
+       st X is_less_than b
+         holds a [= b
+      proof
+       let b be Element of Closed_Domains_Lattice T;
+       assume X is_less_than b;
+       then Y is_less_than b by A3;
+       hence thesis by A6;
+      end;
+    hence thesis by A1,A5;
+   end;
+ end;
+
+theorem
+   for F being Subset-Family of T st F is closed-domains-family
+  for X being Subset of Closed_Domains_Lattice T st X = F holds
+   "\/"(X,Closed_Domains_Lattice T) = Cl(union F)
+ proof
+   let F be Subset-Family of T;
+  assume A1: F is closed-domains-family;
+   let X be Subset of Closed_Domains_Lattice T;
+  assume A2: X = F;
+  thus "\/"(X,Closed_Domains_Lattice T) = Cl(union F)
+   proof
+    set A = Cl(union F);
+        A is closed_condensed by A1,Th76;
+     then A in {C where C is Subset of T : C is closed_condensed};
+     then A3: A in Closed_Domains_of T by TDLAT_1:def 5;
+     then reconsider a = A as Element of Closed_Domains_Lattice
+T
+      by Th94;
+    A4: X is_less_than a
+         proof
+          let b be Element of Closed_Domains_Lattice T;
+           reconsider B = b as Element of Closed_Domains_of T by Th94;
+          assume b in X;
+            then B c= A by A2,Th77;
+          hence b [= a by A3,Th97;
+         end;
+    A5: for b being Element of Closed_Domains_Lattice T st
+                                      X is_less_than b holds a [= b
+         proof
+           let b be Element of Closed_Domains_Lattice T;
+            reconsider B = b as Element of Closed_Domains_of T by Th94;
+                 B in Closed_Domains_of T;
+            then B in {C where C is Subset of T :
+                     C is closed_condensed} by TDLAT_1:def 5;
+            then A6:     ex C being Subset of T st C = B & C is
+closed_condensed;
+          assume A7: X is_less_than b;
+
+             for C being Subset of T st C in F holds C c= B
+            proof
+              let C be Subset of T;
+              reconsider C1 = C as Subset of T;
+             assume A8: C in F;
+              then C1 is closed_condensed by A1,Def3;
+              then C in {P where P is Subset of T : P is closed_condensed};
+              then A9:            C in Closed_Domains_of T by TDLAT_1:def 5;
+              then reconsider c = C
+                as Element of Closed_Domains_Lattice T by Th94;
+                c [= b by A2,A7,A8,LATTICE3:def 17;
+             hence C c= B by A9,Th97;
+            end;
+           then A c= B by A6,Th77;
+          hence a [= b by A3,Th97;
+         end;
+       Closed_Domains_Lattice T is complete by Th99;
+    hence thesis by A4,A5,LATTICE3:def 21;
+   end;
+ end;
+
+theorem
+   for F being Subset-Family of T st F is closed-domains-family
+  for X being Subset of Closed_Domains_Lattice T st X = F holds
+   (X <> {} implies "/\"(X,Closed_Domains_Lattice T) = Cl(Int(meet F))) &
+     (X = {} implies "/\"(X,Closed_Domains_Lattice T) = [#]T)
+ proof
+   let F be Subset-Family of T;
+  assume A1: F is closed-domains-family;
+   let X be Subset of Closed_Domains_Lattice T;
+  assume A2: X = F;
+  thus X <> {} implies "/\"(X,Closed_Domains_Lattice T) = Cl Int(meet F)
+   proof
+    assume A3: X <> {};
+
+    set A = Cl Int(meet F);
+        A is closed_condensed by A1,Th76;
+     then A in {C where C is Subset of T : C is closed_condensed};
+     then A4: A in Closed_Domains_of T by TDLAT_1:def 5;
+     then reconsider a = A
+     as Element of Closed_Domains_Lattice T by Th94;
+     A5: a is_less_than X
+          proof
+           let b be Element of Closed_Domains_Lattice T;
+            reconsider B = b as Element of Closed_Domains_of T by Th94;
+           assume A6: b in X;
+
+               F is closed by A1,Th74;
+            then A c= B by A2,A6,Th78;
+           hence a [= b by A4,Th97;
+          end;
+     A7: for b being Element of Closed_Domains_Lattice T st
+                                       b is_less_than X holds b [= a
+          proof
+           let b be Element of Closed_Domains_Lattice T;
+            reconsider B = b as Element of Closed_Domains_of T by Th94;
+                 B in Closed_Domains_of T;
+             then B in {C where C is Subset of T :
+                   C is closed_condensed} by TDLAT_1:def 5;
+            then A8:     ex C being Subset of T st C = B & C is
+closed_condensed;
+
+           assume A9: b is_less_than X;
+
+             for C being Subset of T st C in F holds B c= C
+            proof
+              let C be Subset of T;
+              reconsider C1 = C as Subset of T;
+             assume A10: C in F;
+              then C1 is closed_condensed by A1,Def3;
+               then C in {P where P is Subset of T : P is closed_condensed};
+              then A11: C in Closed_Domains_of T by TDLAT_1:def 5;
+              then reconsider c = C
+               as Element of Closed_Domains_Lattice T by Th94;
+                b [= c by A2,A9,A10,LATTICE3:def 16;
+             hence B c= C by A11,Th97;
+            end;
+           then B c= A by A2,A3,A8,Th78;
+           hence b [= a by A4,Th97;
+          end;
+        Closed_Domains_Lattice T is complete by Th99;
+     hence thesis by A5,A7,LATTICE3:34;
+   end;
+  thus X = {} implies "/\"(X,Closed_Domains_Lattice T) = [#]T
+   proof
+    assume A12: X = {};
+
+    set A = [#]T;
+        A is closed_condensed by TDLAT_1:19;
+      then A in {C where C is Subset of T : C is closed_condensed};
+     then A13: A in Closed_Domains_of T by TDLAT_1:def 5;
+     then reconsider a = A
+      as Element of Closed_Domains_Lattice T by Th94;
+     A14: a is_less_than X
+          proof
+           let b be Element of Closed_Domains_Lattice T;
+
+           assume b in X;
+           hence a [= b by A12;
+          end;
+     A15: for b being Element of Closed_Domains_Lattice T st
+                                       b is_less_than X holds b [= a
+          proof
+           let b be Element of Closed_Domains_Lattice T;
+            reconsider B = b as Element of Closed_Domains_of T by Th94;
+           assume b is_less_than X;
+              B c= A by PRE_TOPC:14;
+           hence b [= a by A13,Th97;
+          end;
+        Closed_Domains_Lattice T is complete by Th99;
+     hence thesis by A14,A15,LATTICE3:34;
+   end;
+ end;
+
+theorem
+   for F being Subset-Family of T st F is closed-domains-family
+  for X being Subset of Domains_Lattice T st X = F holds
+   (X <> {} implies "/\"(X,Domains_Lattice T) = Cl(Int(meet F))) &
+     (X = {} implies "/\"(X,Domains_Lattice T) = [#]T)
+ proof
+   let F be Subset-Family of T;
+  assume A1: F is closed-domains-family;
+   then A2: F is domains-family by Th73;
+       F is closed by A1,Th74;
+    then A3: meet F is closed by TOPS_2:29;
+       Int(meet F) c= meet F by TOPS_1:44;
+    then Cl Int(meet F) c= Cl(meet F) by PRE_TOPC:49;
+    then Cl Int(meet F) c= meet F by A3,PRE_TOPC:52;
+    then A4: (meet F) /\ (Cl Int(meet F)) = Cl Int(meet F) by XBOOLE_1:28;
+   let X be Subset of Domains_Lattice T;
+  assume A5: X = F;
+  hence X <> {} implies "/\"(X,Domains_Lattice T) = Cl Int(meet F)
+                                                  by A2,A4,Th93;
+  thus X = {} implies "/\"(X,Domains_Lattice T) = [#]T by A2,A5,Th93;
+ end;
+
+::The Lattice of Open Domains.
+theorem Th103:
+ the carrier of Open_Domains_Lattice T = Open_Domains_of T
+ proof
+     Open_Domains_Lattice T =
+    LattStr(#Open_Domains_of T,OPD-Union T,OPD-Meet T#) by TDLAT_1:def 12;
+  hence thesis;
+ end;
+
+theorem Th104:
+ for a, b being Element of Open_Domains_Lattice T
+  for A, B being Element of Open_Domains_of T st a = A & b = B holds
+   a "\/" b = Int(Cl(A \/ B)) & a "/\" b = A /\ B
+ proof
+   let a, b be Element of Open_Domains_Lattice T;
+   let A, B be Element of Open_Domains_of T;
+    A1: Open_Domains_Lattice T =
+           LattStr(#Open_Domains_of T,OPD-Union T,OPD-Meet T#)
+ by TDLAT_1:def 12;
+  assume A2: a = A & b = B;
+  hence a "\/" b = (OPD-Union T).(A,B) by A1,LATTICES:def 1
+             .= Int(Cl(A \/ B)) by TDLAT_1:def 10;
+  thus a "/\" b = (OPD-Meet T).(A,B) by A1,A2,LATTICES:def 2
+             .= A /\ B by TDLAT_1:def 11;
+ end;
+
+theorem
+   Bottom (Open_Domains_Lattice T) = {}T & Top (Open_Domains_Lattice T) = [#]T
+ proof
+  thus Bottom (Open_Domains_Lattice T) = {}T
+   proof
+       {}T is open_condensed by TDLAT_1:20;
+    then A1: {}T in {A where A is Subset of T : A is open_condensed};
+    then {}T in Open_Domains_of T by TDLAT_1:def 9;
+    then reconsider e = {}T
+     as Element of Open_Domains_Lattice T by Th103;
+         reconsider E = {}T as Element of Open_Domains_of T by A1,TDLAT_1:def 9
+;
+       for a being Element of Open_Domains_Lattice T
+        holds e "\/" a = a
+      proof let a be Element of Open_Domains_Lattice T;
+       reconsider A = a as Element of Open_Domains_of T by Th103;
+          A in Open_Domains_of T;
+       then A in {C where C is Subset of T : C is open_condensed}
+        by TDLAT_1:def 9;
+then A2:     ex D being Subset of T st D = A & D is open_condensed;
+       thus e "\/" a = Int(Cl(E \/ A)) by Th104
+                  .= a by A2,TOPS_1:def 8;
+      end;
+    hence thesis by LATTICE2:21;
+   end;
+  thus Top (Open_Domains_Lattice T) = [#]T
+   proof
+       [#]T is open_condensed by TDLAT_1:21;
+    then A3: [#]T in {A where A is Subset of T : A is open_condensed};
+    then [#]T in Open_Domains_of T by TDLAT_1:def 9;
+    then reconsider e = [#]T
+     as Element of Open_Domains_Lattice T by Th103;
+         reconsider E = [#]T as Element of Open_Domains_of T by A3,TDLAT_1:def
+9;
+       for a being Element of Open_Domains_Lattice T
+        holds e "/\" a = a
+      proof let a be Element of Open_Domains_Lattice T;
+       reconsider A = a as Element of Open_Domains_of T by Th103;
+A4:        A c= [#]T by PRE_TOPC:14;
+
+       thus e "/\" a = E /\ A by Th104
+                  .= a by A4,XBOOLE_1:28;
+      end;
+    hence thesis by LATTICE2:24;
+   end;
+ end;
+
+theorem Th106:
+ for a, b being Element of Open_Domains_Lattice T
+  for A, B being Element of Open_Domains_of T st a = A & b = B holds
+   a [= b iff A c= B
+ proof
+   let a, b be Element of Open_Domains_Lattice T;
+   let A, B be Element of Open_Domains_of T;
+    reconsider A1 = A as Subset of T;
+      A in Open_Domains_of T & B in Open_Domains_of T;
+   then A in {C where C is Subset of T : C is open_condensed} &
+        B in {C where C is Subset of T : C is open_condensed}
+        by TDLAT_1:def 9;
+   then A1: (ex Q being Subset of T st Q = A & Q is open_condensed) &
+        (ex P being Subset of T st P = B & P is open_condensed);
+
+   then A2: A1 is open by TOPS_1:107;
+  assume A3: a = A & b = B;
+  thus a [= b implies A c= B
+   proof
+    assume a [= b;
+     then a "\/" b = b by LATTICES:def 3;
+     then Int(Cl(A \/ B)) = B by A3,Th104;
+    hence thesis by A2,Th4;
+   end;
+  thus A c= B implies a [= b
+   proof
+    assume A c= B;
+     then Int(Cl(A \/ B)) = B by A1,Th64;
+     then a "\/" b = b by A3,Th104;
+    hence thesis by LATTICES:def 3;
+   end;
+ end;
+
+theorem Th107:
+ for X being Subset of Open_Domains_Lattice T
+  ex a being Element of Open_Domains_Lattice T st
+   X is_less_than a &
+    for b being Element of Open_Domains_Lattice T st
+     X is_less_than b holds a [= b
+ proof
+  let X be Subset of Open_Domains_Lattice T;
+      X c= the carrier of Open_Domains_Lattice T;
+   then A1: X c= Open_Domains_of T by Th103;
+   then reconsider F = X as Subset-Family of T by TOPS_2:3;
+  set A = Int Cl(union F);
+    A2: F is open-domains-family by A1,Th79;
+   then A3: F is open by Th81;
+     A is open_condensed by A2,Th83;
+   then A in {C where C is Subset of T : C is open_condensed};
+   then A4: A in Open_Domains_of T by TDLAT_1:def 9;
+   then reconsider a = A
+    as Element of Open_Domains_Lattice T by Th103;
+  take a;
+    A5: X is_less_than a
+         proof
+          let b be Element of Open_Domains_Lattice T;
+           reconsider B = b as Element of Open_Domains_of T by Th103;
+          assume b in X;
+            then B c= A by A3,Th84;
+          hence b [= a by A4,Th106;
+         end;
+      for b being Element of Open_Domains_Lattice T
+      st X is_less_than b holds a [= b
+     proof
+       let b be Element of Open_Domains_Lattice T;
+        reconsider B = b as Element of Open_Domains_of T by Th103;
+                 B in Open_Domains_of T;
+        then B in {C where C is Subset of T : C is open_condensed}
+          by TDLAT_1:def 9;
+then A6:      ex C being Subset of T st C = B & C is open_condensed;
+
+      assume A7: X is_less_than b;
+
+         for C being Subset of T st C in F holds C c= B
+        proof
+          let C be Subset of T;
+          reconsider C1 = C as Subset of T;
+         assume A8: C in F;
+          then C1 is open_condensed by A2,Def4;
+           then C in {P where P is Subset of T : P is open_condensed};
+          then A9: C in Open_Domains_of T by TDLAT_1:def 9;
+          then reconsider c = C
+           as Element of Open_Domains_Lattice T by Th103;
+            c [= b by A7,A8,LATTICE3:def 17;
+         hence C c= B by A9,Th106;
+        end;
+       then A c= B by A6,Th84;
+      hence a [= b by A4,Th106;
+     end;
+  hence thesis by A5;
+ end;
+
+theorem Th108:
+ Open_Domains_Lattice T is complete
+ proof
+  thus for X being set
+        ex a being Element of Open_Domains_Lattice T st
+         X is_less_than a &
+          for b being Element of Open_Domains_Lattice T
+            st X is_less_than b
+           holds a [= b
+   proof
+    let X be set;
+    set Y =
+     { c where c is Element of Open_Domains_Lattice T : c in X};
+     A1: for d being Element of Open_Domains_Lattice T holds
+          Y is_less_than d implies X is_less_than d
+          proof
+           let d be Element of Open_Domains_Lattice T;
+           assume A2: Y is_less_than d;
+
+           thus for e being Element of Open_Domains_Lattice T
+              st e in X
+               holds e [= d
+            proof let e be Element of Open_Domains_Lattice T;
+             assume e in X;
+             then e in Y;
+             hence thesis by A2,LATTICE3:def 17;
+            end;
+          end;
+     A3: for d being Element of Open_Domains_Lattice T holds
+          X is_less_than d implies Y is_less_than d
+          proof
+           let d be Element of Open_Domains_Lattice T;
+           assume A4: X is_less_than d;
+
+           thus for e being Element of Open_Domains_Lattice T
+              st e in Y
+               holds e [= d
+            proof let e be Element of Open_Domains_Lattice T;
+             assume e in Y;
+             then ex e0 being Element of Open_Domains_Lattice T
+                     st e0 = e & e0 in X;
+             hence thesis by A4,LATTICE3:def 17;
+            end;
+          end;
+       Y c= the carrier of Open_Domains_Lattice T
+      proof
+         now let x be set;
+        assume x in Y;
+        then ex y being Element of Open_Domains_Lattice T
+         st y = x & y in X;
+        hence x in the carrier of Open_Domains_Lattice T;
+       end;
+       hence thesis by TARSKI:def 3;
+      end;
+     then reconsider Y as Subset of Open_Domains_Lattice T;
+    consider a being Element of Open_Domains_Lattice T such that
+     A5: Y is_less_than a and
+     A6: for b being Element of Open_Domains_Lattice T st
+           Y is_less_than b holds a [= b by Th107;
+    take a;
+       for b being Element of Open_Domains_Lattice T
+      st X is_less_than b
+         holds a [= b
+      proof
+       let b be Element of Open_Domains_Lattice T;
+       assume X is_less_than b;
+       then Y is_less_than b by A3;
+       hence thesis by A6;
+      end;
+    hence thesis by A1,A5;
+   end;
+ end;
+
+theorem
+   for F being Subset-Family of T st F is open-domains-family
+  for X being Subset of Open_Domains_Lattice T st X = F holds
+   "\/"(X,Open_Domains_Lattice T) = Int Cl(union F)
+ proof
+   let F be Subset-Family of T;
+  assume A1: F is open-domains-family;
+   let X be Subset of Open_Domains_Lattice T;
+  assume A2: X = F;
+  thus "\/"(X,Open_Domains_Lattice T) = Int Cl(union F)
+   proof
+    set A = Int Cl(union F);
+        A is open_condensed by A1,Th83;
+     then A in {C where C is Subset of T : C is open_condensed};
+     then A3: A in Open_Domains_of T by TDLAT_1:def 9;
+     then reconsider a = A
+      as Element of Open_Domains_Lattice T by Th103;
+    A4: X is_less_than a
+         proof
+          let b be Element of Open_Domains_Lattice T;
+           reconsider B = b as Element of Open_Domains_of T by Th103;
+          assume A5: b in X;
+
+              F is open by A1,Th81;
+           then B c= A by A2,A5,Th84;
+          hence b [= a by A3,Th106;
+         end;
+    A6: for b being Element of Open_Domains_Lattice T st
+                                      X is_less_than b holds a [= b
+         proof
+           let b be Element of Open_Domains_Lattice T;
+            reconsider B = b as Element of Open_Domains_of T by Th103;
+                 B in Open_Domains_of T;
+             then B in {C where C is Subset of T : C is open_condensed}
+              by TDLAT_1:def 9;
+            then A7:      ex C being Subset of T st C = B & C is open_condensed
+;
+
+          assume A8: X is_less_than b;
+
+             for C being Subset of T st C in F holds C c= B
+            proof
+              let C be Subset of T;
+              reconsider C1 = C as Subset of T;
+             assume A9: C in F;
+              then C1 is open_condensed by A1,Def4;
+              then C in {P where P is Subset of T : P is open_condensed};
+              then A10: C in Open_Domains_of T by TDLAT_1:def 9;
+              then reconsider c = C
+               as Element of Open_Domains_Lattice T by Th103;
+                c [= b by A2,A8,A9,LATTICE3:def 17;
+             hence C c= B by A10,Th106;
+            end;
+           then A c= B by A7,Th84;
+          hence a [= b by A3,Th106;
+         end;
+       Open_Domains_Lattice T is complete by Th108;
+    hence thesis by A4,A6,LATTICE3:def 21;
+   end;
+ end;
+
+theorem
+   for F being Subset-Family of T st F is open-domains-family
+  for X being Subset of Open_Domains_Lattice T st X = F holds
+   (X <> {} implies "/\"(X,Open_Domains_Lattice T) = Int(meet F)) &
+     (X = {} implies "/\"(X,Open_Domains_Lattice T) = [#]T)
+ proof
+   let F be Subset-Family of T;
+  assume A1: F is open-domains-family;
+   let X be Subset of Open_Domains_Lattice T;
+  assume A2: X = F;
+  thus X <> {} implies "/\"(X,Open_Domains_Lattice T) = Int(meet F)
+   proof
+    assume A3: X <> {};
+
+    set A = Int(meet F);
+        A is open_condensed by A1,Th83;
+     then A in {C where C is Subset of T : C is open_condensed};
+     then A4: A in Open_Domains_of T by TDLAT_1:def 9;
+     then reconsider a = A
+      as Element of Open_Domains_Lattice T by Th103;
+     A5: a is_less_than X
+          proof
+           let b be Element of Open_Domains_Lattice T;
+            reconsider B = b as Element of Open_Domains_of T by Th103;
+           assume b in X;
+            then A c= B by A2,Th85;
+           hence a [= b by A4,Th106;
+          end;
+     A6: for b being Element of Open_Domains_Lattice T st
+                                       b is_less_than X holds b [= a
+          proof
+           let b be Element of Open_Domains_Lattice T;
+            reconsider B = b as Element of Open_Domains_of T by Th103;
+                 B in Open_Domains_of T;
+            then B in {C where C is Subset of T : C is open_condensed}
+                   by TDLAT_1:def 9;
+then A7:          ex C being Subset of T st C = B & C is open_condensed;
+
+           assume A8: b is_less_than X;
+
+             for C being Subset of T st C in F holds B c= C
+            proof
+              let C be Subset of T;
+              reconsider C1 = C as Subset of T;
+             assume A9: C in F;
+              then C1 is open_condensed by A1,Def4;
+              then C in {P where P is Subset of T : P is open_condensed};
+              then A10: C in Open_Domains_of T by TDLAT_1:def 9;
+              then reconsider c = C
+               as Element of Open_Domains_Lattice T by Th103;
+                b [= c by A2,A8,A9,LATTICE3:def 16;
+             hence B c= C by A10,Th106;
+            end;
+           then B c= A by A2,A3,A7,Th85;
+           hence b [= a by A4,Th106;
+          end;
+        Open_Domains_Lattice T is complete by Th108;
+     hence thesis by A5,A6,LATTICE3:34;
+   end;
+  thus X = {} implies "/\"(X,Open_Domains_Lattice T) = [#]T
+   proof
+    assume A11: X = {};
+
+    set A = [#]T;
+        A is open_condensed by TDLAT_1:21;
+     then A in {C where C is Subset of T : C is open_condensed};
+     then A12: A in Open_Domains_of T by TDLAT_1:def 9;
+     then reconsider a = A
+      as Element of Open_Domains_Lattice T by Th103;
+     A13: a is_less_than X
+          proof
+           let b be Element of Open_Domains_Lattice T;
+
+           assume b in X;
+           hence a [= b by A11;
+          end;
+     A14: for b being Element of Open_Domains_Lattice T st
+                                       b is_less_than X holds b [= a
+          proof
+           let b be Element of Open_Domains_Lattice T;
+            reconsider B = b as Element of Open_Domains_of T by Th103;
+           assume b is_less_than X;
+              B c= A by PRE_TOPC:14;
+           hence b [= a by A12,Th106;
+          end;
+        Open_Domains_Lattice T is complete by Th108;
+     hence thesis by A13,A14,LATTICE3:34;
+   end;
+ end;
+
+theorem
+   for F being Subset-Family of T st F is open-domains-family
+  for X being Subset of Domains_Lattice T st X = F holds
+   "\/"(X,Domains_Lattice T) = Int Cl(union F)
+ proof
+   let F be Subset-Family of T;
+  assume A1: F is open-domains-family;
+   then A2: F is domains-family by Th80;
+       F is open by A1,Th81;
+    then A3: union F is open by TOPS_2:26;
+       union F c= Cl(union F) by PRE_TOPC:48;
+    then Int(union F) c= Int Cl(union F) by TOPS_1:48;
+    then union F c= Int Cl(union F) by A3,TOPS_1:55;
+    then A4: (union F) \/ Int Cl(union F) = Int Cl(union F) by XBOOLE_1:12;
+   let X be Subset of Domains_Lattice T;
+  assume X = F;
+  hence thesis by A2,A4,Th92;
+ end;
+

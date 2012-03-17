@@ -1,0 +1,18 @@
+HIDDEN
+TARSKI
+XBOOLE_0
+ZFMISC_1
+SUBSET_1
+SETFAM_1
+STRUCT_0
+#
+«V2 ;;;G1 ;
+«V3 ;;;G2 ;
+«W4 ;;;G1 ;
+«W4 ;;;G2 ;
+«V1 ;;G1 ;;M2 K10 U1 A1 ;;;
+«V1 ;;G1 ;;M4 U1 A1 ;;
+«W1 ;;G1 ;;M4 U1 A1 ;;
+«W1 ;;G1 W4 ;;;M2 K10 U1 A1 ;;;
+fW1 ;;G1 W4 ;;;U1 A1 ;
+!

@@ -1,0 +1,139 @@
+:: Zermelo Theorem and Axiom of Choice. The correspondence of
+:: well ordering relations and ordinal numbers
+::  by Grzegorz Bancerek
+::
+:: Received June 26, 1989
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary RELAT_1, ORDINAL1, BOOLE, RELAT_2, WELLORD1, FUNCT_1, TARSKI,
+      WELLORD2;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
+      WELLORD1, ORDINAL1;
+ constructors RELAT_2, WELLORD1, SUBSET_1, ORDINAL1, XBOOLE_0;
+ clusters FUNCT_1, ORDINAL1, ZFMISC_1, XBOOLE_0;
+ requirements SUBSET, BOOLE;
+
+
+begin
+
+ reserve X,Y,Z for set,
+         a,b,c,d,x,y,z,u for set,
+         R for Relation,
+         A,B,C for Ordinal;
+
+ definition let X;
+  func RelIncl X -> Relation means
+:: WELLORD2:def 1
+  field it = X & for Y,Z st Y in X & Z in X holds [Y,Z] in it iff Y c= Z;
+ end;
+
+canceled;
+
+theorem :: WELLORD2:2
+  RelIncl X is reflexive;
+
+theorem :: WELLORD2:3
+  RelIncl X is transitive;
+
+theorem :: WELLORD2:4
+  RelIncl A is connected;
+
+theorem :: WELLORD2:5
+  RelIncl X is antisymmetric;
+
+theorem :: WELLORD2:6
+  RelIncl A is well_founded;
+
+theorem :: WELLORD2:7
+  RelIncl A is well-ordering;
+
+theorem :: WELLORD2:8
+  Y c= X implies (RelIncl X) |_2 Y = RelIncl Y;
+
+theorem :: WELLORD2:9
+  for A,X st X c= A holds RelIncl X is well-ordering;
+
+ reserve H for Function;
+
+theorem :: WELLORD2:10
+  A in B implies A = (RelIncl B)-Seg(A);
+
+theorem :: WELLORD2:11
+  RelIncl A,RelIncl B are_isomorphic implies A = B;
+
+theorem :: WELLORD2:12
+  for X,R,A,B st R,RelIncl A are_isomorphic & R,RelIncl B are_isomorphic
+        holds A = B;
+
+theorem :: WELLORD2:13
+  for R st R is well-ordering &
+  for a st a in field R ex A st R |_2 (R-Seg(a)),RelIncl A are_isomorphic
+   ex A st R,RelIncl A are_isomorphic;
+
+theorem :: WELLORD2:14
+  for R st R is well-ordering
+    ex A st R,RelIncl A are_isomorphic;
+
+ definition let R;
+  assume
+ R is well-ordering;
+  func order_type_of R -> Ordinal means
+:: WELLORD2:def 2
+  R,RelIncl it are_isomorphic;
+ end;
+
+ definition let A,R;
+  pred A is_order_type_of R means
+:: WELLORD2:def 3
+    A = order_type_of R;
+ end;
+
+canceled 2;
+
+theorem :: WELLORD2:17
+    X c= A implies order_type_of RelIncl X c= A;
+
+ reserve f,g for Function;
+
+definition let X,Y;
+redefine pred X,Y are_equipotent means
+:: WELLORD2:def 4
+   ex f st f is one-to-one & dom f = X & rng f = Y;
+ reflexivity;
+ symmetry;
+end;
+
+canceled 4;
+
+theorem :: WELLORD2:22
+    X,Y are_equipotent & Y,Z are_equipotent implies X,Z are_equipotent;
+
+canceled 2;
+
+theorem :: WELLORD2:25
+  R well_orders X implies
+   field(R|_2 X) = X & R|_2 X is well-ordering;
+
+theorem :: WELLORD2:26
+  for X ex R st R well_orders X;
+
+ reserve M for non empty set;
+
+  ::
+  ::                  Axiom of choice
+  ::
+
+theorem :: WELLORD2:27
+    (for X st X in M holds X <> {}) &
+  (for X,Y st X in M & Y in M & X <> Y holds X misses Y)
+    implies
+      ex Choice being set st
+       for X st X in M ex x st Choice /\ X = { x };
+
+theorem :: WELLORD2:28
+    (for X st X in M holds X <> {})
+    implies
+      ex Choice being Function st dom Choice = M &
+       for X st X in M holds Choice.X in X;

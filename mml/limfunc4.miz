@@ -1,0 +1,2747 @@
+:: The Limit of a Composition of Real Functions
+::  by Jaros{\l}aw Kotowicz
+::
+:: Received September 5, 1990
+:: Copyright (c) 1990 Association of Mizar Users
+
+environ
+
+ vocabulary PARTFUN1, ARYTM_1, SEQ_1, RELAT_1, FUNCT_1, BOOLE, LIMFUNC1,
+      LIMFUNC2, SEQ_2, ORDINAL2, RCOMP_1, SEQM_3, LIMFUNC3;
+ notation TARSKI, XBOOLE_0, NUMBERS, XREAL_0, REAL_1, NAT_1, SEQ_1, SEQ_2,
+      SEQM_3, RCOMP_1, RELSET_1, PARTFUN1, RFUNCT_2, LIMFUNC1, LIMFUNC2,
+      LIMFUNC3;
+ constructors REAL_1, NAT_1, SEQ_2, SEQM_3, PROB_1, RCOMP_1, PARTFUN1,
+      RFUNCT_2, LIMFUNC1, LIMFUNC2, LIMFUNC3, MEMBERED, XBOOLE_0;
+ clusters RELSET_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems TARSKI, REAL_1, NAT_1, FUNCT_1, SEQM_3, SEQ_4, PROB_1, RCOMP_1,
+      RFUNCT_2, LIMFUNC1, LIMFUNC2, LIMFUNC3, RELAT_1, XBOOLE_0, XBOOLE_1;
+
+begin
+
+reserve r,r1,r2,g,g1,g2,x0 for Real;
+reserve f1,f2 for PartFunc of REAL,REAL;
+
+Lm1: 0<g implies r-g<r & r<r+g
+proof assume A1: 0<g; then r-g<r-0 by REAL_1:92; hence r-g<r;
+   r+0<r+g by A1,REAL_1:67; hence thesis;
+end;
+
+Lm2: for s be Real_Sequence st rng s c=dom(f2*f1) holds rng s c=dom f1 &
+ rng(f1*s)c=dom f2
+proof let s be Real_Sequence such that A1: rng s c=dom(f2*f1);
+   dom(f2*f1)c=dom f1 by RELAT_1:44;hence A2: rng s c=dom f1 by A1,XBOOLE_1:1;
+ let x be set; assume x in rng(f1*s); then consider n be Nat such that
+ A3: (f1*s).n=x by RFUNCT_2:9; s.n in rng s by RFUNCT_2:10;
+then f1.(s.n) in dom f2 by A1,FUNCT_1:21;
+ hence thesis by A2,A3,RFUNCT_2:21;
+end;
+
+theorem Th1:
+for s be Real_Sequence,X be set st rng s c= dom(f2*f1) /\ X holds
+rng s c= dom(f2*f1) & rng s c= X & rng s c= dom f1 & rng s c= dom f1 /\ X &
+rng(f1*s) c= dom f2
+proof let s be Real_Sequence,X be set such that A1: rng s c=dom(f2*f1)/\X;
+ thus A2: rng s c=dom(f2*f1) & rng s c=X by A1,XBOOLE_1:18;
+   dom(f2*f1)c=dom f1 by RELAT_1:44; hence A3: rng s c=dom f1 by A2,XBOOLE_1:1;
+ hence rng s c=dom f1/\X by A2,XBOOLE_1:19;
+ let x be set; assume x in rng(f1*s); then consider n be Nat such that
+ A4: (f1*s).n=x by RFUNCT_2:9; s.n in rng s by RFUNCT_2:10;
+then f1.(s.n) in dom f2 by A2,FUNCT_1:21;
+ hence thesis by A3,A4,RFUNCT_2:21;
+end;
+
+theorem Th2:
+for s be Real_Sequence,X be set st rng s c= dom(f2*f1) \ X holds
+rng s c= dom(f2*f1) & rng s c= dom f1 & rng s c= dom f1 \ X &
+rng(f1*s) c= dom f2
+proof let s be Real_Sequence,X be set such that A1: rng s c=dom(f2*f1)\X;
+   dom(f2*f1)\X c=dom(f2*f1) by XBOOLE_1:36;
+ hence A2: rng s c=dom(f2*f1) by A1,XBOOLE_1:1;
+   dom(f2*f1)c=dom f1 by RELAT_1:44; hence A3: rng s c=dom f1 by A2,XBOOLE_1:1;
+ thus rng s c=dom f1\X
+ proof let x be set; assume A4: x in rng s;
+  then not x in X by A1,XBOOLE_0:def 4;
+  hence thesis by A3,A4,XBOOLE_0:def 4;
+ end;
+ let x be set; assume x in rng(f1*s); then consider n be Nat such that
+ A5: (f1*s).n=x by RFUNCT_2:9; s.n in rng s by RFUNCT_2:10;
+then f1.(s.n) in dom f2 by A2,FUNCT_1:21;
+ hence thesis by A3,A5,RFUNCT_2:21;
+end;
+
+theorem
+  f1 is divergent_in+infty_to+infty & f2 is divergent_in+infty_to+infty &
+(for r ex g st r<g & g in
+dom(f2*f1)) implies f2*f1 is divergent_in+infty_to+infty
+proof assume A1: f1 is divergent_in+infty_to+infty &
+ f2 is divergent_in+infty_to+infty &
+ for r ex g st r<g & g in dom(f2*f1);
+   now let s be Real_Sequence; assume
+  A2: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then A3: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then f1*s is divergent_to+infty by A1,A2,LIMFUNC1:def 7;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 7;
+  hence f2*f1*s is divergent_to+infty by A2,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC1:def 7;
+end;
+
+theorem
+  f1 is divergent_in+infty_to+infty & f2 is divergent_in+infty_to-infty &
+(for r ex g st r<g & g in
+dom(f2*f1)) implies f2*f1 is divergent_in+infty_to-infty
+proof assume A1: f1 is divergent_in+infty_to+infty &
+ f2 is divergent_in+infty_to-infty &
+ for r ex g st r<g & g in dom(f2*f1);
+   now let s be Real_Sequence; assume
+  A2: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then A3: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then f1*s is divergent_to+infty by A1,A2,LIMFUNC1:def 7;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 8;
+  hence f2*f1*s is divergent_to-infty by A2,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC1:def 8;
+end;
+
+theorem
+  f1 is divergent_in+infty_to-infty & f2 is divergent_in-infty_to+infty &
+(for r ex g st r<g & g in
+dom(f2*f1)) implies f2*f1 is divergent_in+infty_to+infty
+proof assume A1: f1 is divergent_in+infty_to-infty &
+ f2 is divergent_in-infty_to+infty &
+ for r ex g st r<g & g in dom(f2*f1);
+   now let s be Real_Sequence; assume
+  A2: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then A3: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then f1*s is divergent_to-infty by A1,A2,LIMFUNC1:def 8;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 10;
+  hence f2*f1*s is divergent_to+infty by A2,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC1:def 7;
+end;
+
+theorem
+  f1 is divergent_in+infty_to-infty & f2 is divergent_in-infty_to-infty &
+(for r ex g st r<g & g in
+dom(f2*f1)) implies f2*f1 is divergent_in+infty_to-infty
+proof assume A1: f1 is divergent_in+infty_to-infty &
+ f2 is divergent_in-infty_to-infty &
+ for r ex g st r<g & g in dom(f2*f1);
+   now let s be Real_Sequence; assume
+  A2: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then A3: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then f1*s is divergent_to-infty by A1,A2,LIMFUNC1:def 8;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 11;
+  hence f2*f1*s is divergent_to-infty by A2,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC1:def 8;
+end;
+
+theorem
+  f1 is divergent_in-infty_to+infty & f2 is divergent_in+infty_to+infty &
+(for r ex g st g<r & g in
+dom(f2*f1)) implies f2*f1 is divergent_in-infty_to+infty
+proof assume A1: f1 is divergent_in-infty_to+infty &
+ f2 is divergent_in+infty_to+infty &
+ for r ex g st g<r & g in dom(f2*f1);
+   now let s be Real_Sequence; assume
+  A2: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then A3: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then f1*s is divergent_to+infty by A1,A2,LIMFUNC1:def 10;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 7;
+  hence f2*f1*s is divergent_to+infty by A2,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC1:def 10;
+end;
+
+theorem
+  f1 is divergent_in-infty_to+infty & f2 is divergent_in+infty_to-infty &
+(for r ex g st g<r & g in
+dom(f2*f1)) implies f2*f1 is divergent_in-infty_to-infty
+proof assume A1: f1 is divergent_in-infty_to+infty &
+ f2 is divergent_in+infty_to-infty &
+ for r ex g st g<r & g in dom(f2*f1);
+   now let s be Real_Sequence; assume
+  A2: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then A3: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then f1*s is divergent_to+infty by A1,A2,LIMFUNC1:def 10;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 8;
+  hence f2*f1*s is divergent_to-infty by A2,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC1:def 11;
+end;
+
+theorem
+  f1 is divergent_in-infty_to-infty & f2 is divergent_in-infty_to+infty &
+(for r ex g st g<r & g in
+dom(f2*f1)) implies f2*f1 is divergent_in-infty_to+infty
+proof assume A1: f1 is divergent_in-infty_to-infty &
+ f2 is divergent_in-infty_to+infty &
+ for r ex g st g<r & g in dom(f2*f1);
+   now let s be Real_Sequence; assume
+  A2: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then A3: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then f1*s is divergent_to-infty by A1,A2,LIMFUNC1:def 11;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 10;
+  hence f2*f1*s is divergent_to+infty by A2,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC1:def 10;
+end;
+
+theorem
+  f1 is divergent_in-infty_to-infty & f2 is divergent_in-infty_to-infty &
+(for r ex g st g<r & g in
+dom(f2*f1)) implies f2*f1 is divergent_in-infty_to-infty
+proof assume A1: f1 is divergent_in-infty_to-infty &
+ f2 is divergent_in-infty_to-infty &
+ for r ex g st g<r & g in dom(f2*f1);
+   now let s be Real_Sequence; assume
+  A2: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then A3: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then f1*s is divergent_to-infty by A1,A2,LIMFUNC1:def 11;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 11;
+  hence f2*f1*s is divergent_to-infty by A2,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC1:def 11;
+end;
+
+theorem
+  f1 is_left_divergent_to+infty_in x0 & f2 is divergent_in+infty_to+infty &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) implies
+f2*f1 is_left_divergent_to+infty_in x0
+proof assume A1: f1 is_left_divergent_to+infty_in x0 &
+ f2 is divergent_in+infty_to+infty
+ & for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1/\left_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1; then f1*s is divergent_to+infty
+   by A1,A2,LIMFUNC2:def 2;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 7;
+  hence f2*f1*s is divergent_to+infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC2:def 2;
+end;
+
+theorem
+  f1 is_left_divergent_to+infty_in x0 & f2 is divergent_in+infty_to-infty &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) implies
+f2*f1 is_left_divergent_to-infty_in x0
+proof assume A1: f1 is_left_divergent_to+infty_in x0 &
+ f2 is divergent_in+infty_to-infty
+ & for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1/\left_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1; then f1*s is divergent_to+infty
+   by A1,A2,LIMFUNC2:def 2;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 8;
+  hence f2*f1*s is divergent_to-infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC2:def 3;
+end;
+
+theorem
+  f1 is_left_divergent_to-infty_in x0 & f2 is divergent_in-infty_to+infty &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) implies
+f2*f1 is_left_divergent_to+infty_in x0
+proof assume A1: f1 is_left_divergent_to-infty_in x0 &
+ f2 is divergent_in-infty_to+infty
+ & for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1/\left_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1; then f1*s is divergent_to-infty
+   by A1,A2,LIMFUNC2:def 3;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 10;
+  hence f2*f1*s is divergent_to+infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC2:def 2;
+end;
+
+theorem
+  f1 is_left_divergent_to-infty_in x0 & f2 is divergent_in-infty_to-infty &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) implies
+f2*f1 is_left_divergent_to-infty_in x0
+proof assume A1: f1 is_left_divergent_to-infty_in x0 &
+ f2 is divergent_in-infty_to-infty
+ & for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1/\left_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1; then f1*s is divergent_to-infty
+   by A1,A2,LIMFUNC2:def 3;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 11;
+  hence f2*f1*s is divergent_to-infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC2:def 3;
+end;
+
+theorem
+  f1 is_right_divergent_to+infty_in x0 & f2 is divergent_in+infty_to+infty &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) implies
+f2*f1 is_right_divergent_to+infty_in x0
+proof assume A1: f1 is_right_divergent_to+infty_in x0 &
+ f2 is divergent_in+infty_to+infty & for r st x0<r ex g st g<r & x0<g &
+  g in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1/\right_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1; then f1*s is divergent_to+infty
+   by A1,A2,LIMFUNC2:def 5;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 7;
+  hence f2*f1*s is divergent_to+infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC2:def 5;
+end;
+
+theorem
+  f1 is_right_divergent_to+infty_in x0 & f2 is divergent_in+infty_to-infty &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) implies
+f2*f1 is_right_divergent_to-infty_in x0
+proof assume A1: f1 is_right_divergent_to+infty_in x0 &
+ f2 is divergent_in+infty_to-infty
+ & for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1/\right_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1; then f1*s is divergent_to+infty
+   by A1,A2,LIMFUNC2:def 5;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 8;
+  hence f2*f1*s is divergent_to-infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC2:def 6;
+end;
+
+theorem
+  f1 is_right_divergent_to-infty_in x0 & f2 is divergent_in-infty_to+infty &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) implies
+f2*f1 is_right_divergent_to+infty_in x0
+proof assume A1: f1 is_right_divergent_to-infty_in x0 &
+ f2 is divergent_in-infty_to+infty & for r st x0<r ex g st g<r & x0<g &
+  g in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1/\right_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1; then f1*s is divergent_to-infty
+   by A1,A2,LIMFUNC2:def 6;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 10;
+  hence f2*f1*s is divergent_to+infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC2:def 5;
+end;
+
+theorem
+  f1 is_right_divergent_to-infty_in x0 & f2 is divergent_in-infty_to-infty &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) implies
+f2*f1 is_right_divergent_to-infty_in x0
+proof assume A1: f1 is_right_divergent_to-infty_in x0 &
+ f2 is divergent_in-infty_to-infty
+ & for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1/\right_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1;
+  then f1*s is divergent_to-infty by A1,A2,LIMFUNC2:def 6;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 11;
+  hence f2*f1*s is divergent_to-infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC2:def 6;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 &
+ f2 is_left_divergent_to+infty_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds f1.r<lim_left(f1,x0))
+implies f2*f1 is_left_divergent_to+infty_in x0
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_left_divergent_to+infty_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+ given g such that
+ A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds f1.r<lim_left(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A3,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n by A3,LIMFUNC2:1; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_left(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: x0-g<s.(n+k) by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A4;
+   then s.(n+k) in {g1 : g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2: x0-g<g2 & g2<x0} by A9;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A4,A10,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_left(f1,x0) by A2;
+   then f1.(s.(n+k)) in {r1 : r1<lim_left(f1,x0)};
+   then A11: f1.(s.(n+k)) in left_open_halfline(lim_left(f1,x0)) by PROB_1:def
+15;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in
+dom f2/\left_open_halfline(lim_left(f1,x0)) by A11,A12,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\left_open_halfline(lim_left(f1,x0)) by TARSKI:def 3
+;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC2:def 2;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 2;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 &
+ f2 is_left_divergent_to-infty_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds f1.r<lim_left(f1,x0))
+implies f2*f1 is_left_divergent_to-infty_in x0
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_left_divergent_to-infty_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+ given g such that
+ A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds f1.r<lim_left(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A3,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n by A3,LIMFUNC2:1; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_left(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: x0-g<s.(n+k) by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2 : x0-g<g2 & g2<x0} by A9;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A4,A10,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_left(f1,x0) by A2;
+   then f1.(s.(n+k)) in {r1: r1<lim_left(f1,x0)};
+   then A11: f1.(s.(n+k)) in left_open_halfline(lim_left(f1,x0)) by PROB_1:def
+15;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in
+dom f2/\left_open_halfline(lim_left(f1,x0)) by A11,A12,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\left_open_halfline(lim_left(f1,x0)) by TARSKI:def 3
+;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC2:def 3;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 3;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 &
+ f2 is_right_divergent_to+infty_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds lim_left(f1,x0)<f1.r)
+implies f2*f1 is_left_divergent_to+infty_in x0
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_right_divergent_to+infty_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+ given g such that
+ A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds lim_left(f1,x0)<f1.r;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A3,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n by A3,LIMFUNC2:1; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_left(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: x0-g<s.(n+k) by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2: x0-g<g2 & g2<x0} by A9;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A4,A10,XBOOLE_0:def 3;
+   then lim_left(f1,x0)<f1.(s.(n+k)) by A2;
+   then f1.(s.(n+k)) in {r1: lim_left(f1,x0)<r1};
+   then A11: f1.(s.(n+k)) in
+right_open_halfline(lim_left(f1,x0)) by LIMFUNC1:def 3;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in
+dom f2/\right_open_halfline(lim_left(f1,x0)) by A11,A12,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\right_open_halfline(lim_left(f1,x0)) by TARSKI:def
+3
+;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC2:def 5;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 2;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 &
+ f2 is_right_divergent_to-infty_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds lim_left(f1,x0)<f1.r)
+implies f2*f1 is_left_divergent_to-infty_in x0
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_right_divergent_to-infty_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds lim_left(f1,x0)<f1.r;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A3,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n by A3,LIMFUNC2:1; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_left(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: x0-g<s.(n+k) by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2: x0-g<g2 & g2<x0} by A9;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A4,A10,XBOOLE_0:def 3;
+   then lim_left(f1,x0)<f1.(s.(n+k)) by A2;
+   then f1.(s.(n+k)) in {r1: lim_left(f1,x0)<r1};
+   then A11: f1.(s.(n+k)) in
+right_open_halfline(lim_left(f1,x0)) by LIMFUNC1:def 3;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in
+dom f2/\right_open_halfline(lim_left(f1,x0)) by A11,A12,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\right_open_halfline(lim_left(f1,x0)) by TARSKI:def
+3
+;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC2:def 6;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 3;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 &
+ f2 is_right_divergent_to+infty_in lim_right(f1,x0)
+& (for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0,x0+g.[ holds lim_right(f1,x0)<f1.r)
+implies f2*f1 is_right_divergent_to+infty_in x0
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_right_divergent_to+infty_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds lim_right(f1,x0)<f1.r;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A3,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds s.n<x0+g by A3,LIMFUNC2:2; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_right(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: s.(n+k)<x0+g by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A9;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A4,A10,XBOOLE_0:def 3;
+   then lim_right(f1,x0)<f1.(s.(n+k)) by A2;
+   then f1.(s.(n+k)) in {r1: lim_right(f1,x0)<r1};
+   then A11: f1.(s.(n+k)) in
+right_open_halfline(lim_right(f1,x0)) by LIMFUNC1:def 3;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in
+dom f2/\right_open_halfline(lim_right(f1,x0)) by A11,A12,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\
+right_open_halfline(lim_right(f1,x0)) by TARSKI:def 3
+;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC2:def 5;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 5;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 &
+ f2 is_right_divergent_to-infty_in lim_right(f1,x0)
+& (for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0,x0+g.[ holds lim_right(f1,x0)<f1.r)
+implies f2*f1 is_right_divergent_to-infty_in x0
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_right_divergent_to-infty_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1);
+ given g such that
+ A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds lim_right(f1,x0)<f1.r;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A3,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds s.n<x0+g by A3,LIMFUNC2:2; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_right(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: s.(n+k)<x0+g by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A9;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A4,A10,XBOOLE_0:def 3;
+   then lim_right(f1,x0)<f1.(s.(n+k)) by A2;
+   then f1.(s.(n+k)) in {r1: lim_right(f1,x0)<r1};
+   then A11: f1.(s.(n+k)) in
+right_open_halfline(lim_right(f1,x0)) by LIMFUNC1:def 3;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in
+dom f2/\right_open_halfline(lim_right(f1,x0)) by A11,A12,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\
+right_open_halfline(lim_right(f1,x0)) by TARSKI:def 3
+;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC2:def 6;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 6;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 &
+ f2 is_left_divergent_to+infty_in lim_right(f1,x0)
+& (for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0,x0+g.[ holds f1.r<lim_right(f1,x0))
+implies f2*f1 is_right_divergent_to+infty_in x0
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_left_divergent_to+infty_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds f1.r<lim_right(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A3,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds s.n<x0+g by A3,LIMFUNC2:2; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_right(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: s.(n+k)<x0+g by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A9;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A4,A10,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_right(f1,x0) by A2;
+   then f1.(s.(n+k)) in {r1: r1<lim_right(f1,x0)};
+   then A11: f1.(s.(n+k)) in left_open_halfline(lim_right(f1,x0)) by PROB_1:def
+15;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in
+dom f2/\left_open_halfline(lim_right(f1,x0)) by A11,A12,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\left_open_halfline(lim_right(f1,x0)) by TARSKI:def
+3
+;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC2:def 2;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 5;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 &
+ f2 is_left_divergent_to-infty_in lim_right(f1,x0)
+& (for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0,x0+g.[ holds f1.r<lim_right(f1,x0))
+implies f2*f1 is_right_divergent_to-infty_in x0
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_left_divergent_to-infty_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds f1.r<lim_right(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A3,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds s.n<x0+g by A3,LIMFUNC2:2; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_right(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: s.(n+k)<x0+g by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A9;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A4,A10,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_right(f1,x0) by A2;
+   then f1.(s.(n+k)) in {r1: r1<lim_right(f1,x0)};
+   then A11: f1.(s.(n+k)) in left_open_halfline(lim_right(f1,x0)) by PROB_1:def
+15;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in
+dom f2/\left_open_halfline(lim_right(f1,x0)) by A11,A12,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\left_open_halfline(lim_right(f1,x0)) by TARSKI:def
+3
+;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC2:def 3;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 6;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_left_divergent_to+infty_in lim_in+infty f1
+&
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ right_open_halfline(r) holds f1.g<lim_in+infty f1)
+implies f2*f1 is divergent_in+infty_to+infty
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_left_divergent_to+infty_in lim_in+infty f1 &
+  for r ex g st r<g & g in dom(f2*f1);
+ given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds f1.g<lim_in+infty f1;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to+infty by A3,LIMFUNC1:53;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A5,LIMFUNC1:def
+12;
+    rng(f1*q)c=dom f2/\left_open_halfline(lim_in+infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9; A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A4; then s.(n+k) in {r2: r<r2};
+   then A12: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_in+infty f1 by A2;
+   then x in {g1: g1<lim_in+infty f1} by A10;
+   then x in left_open_halfline(lim_in+infty f1) by PROB_1:def 15
+; hence thesis by A11,XBOOLE_0:def 3;
+  end; then A13: f2*(f1*q) is divergent_to+infty by A1,A8,LIMFUNC2:def 2;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 7;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_left_divergent_to-infty_in lim_in+infty f1
+&
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ right_open_halfline(r) holds f1.g<lim_in+infty f1)
+implies f2*f1 is divergent_in+infty_to-infty
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_left_divergent_to-infty_in lim_in+infty f1 &
+  for r ex g st r<g & g in dom(f2*f1);
+ given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds f1.g<lim_in+infty f1;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to+infty by A3,LIMFUNC1:53;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A5,LIMFUNC1:def
+12;
+    rng(f1*q)c=dom f2/\left_open_halfline(lim_in+infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A4; then s.(n+k) in {r2: r<r2};
+   then A12: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_in+infty f1 by A2;
+   then x in {g1: g1<lim_in+infty f1} by A10;
+   then x in left_open_halfline(lim_in+infty f1) by PROB_1:def 15
+; hence thesis by A11,XBOOLE_0:def 3;
+  end; then A13: f2*(f1*q) is divergent_to-infty by A1,A8,LIMFUNC2:def 3;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 8;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_right_divergent_to+infty_in lim_in+infty f1
+&
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ right_open_halfline(r) holds lim_in+infty f1<f1.g)
+implies f2*f1 is divergent_in+infty_to+infty
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_right_divergent_to+infty_in lim_in+infty f1 &
+ for r ex g st r<g & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds lim_in+infty f1<f1.g;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to+infty by A3,LIMFUNC1:53;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A5,LIMFUNC1:def
+12;
+    rng(f1*q)c=dom f2/\right_open_halfline(lim_in+infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A4; then s.(n+k) in {r2: r<r2};
+   then A12: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then lim_in+infty f1<f1.(s.(n+k)) by A2;
+   then x in {g1: lim_in+infty f1<g1} by A10;
+   then x in right_open_halfline(lim_in+infty f1) by LIMFUNC1:def 3;
+   hence thesis by A11,XBOOLE_0:def 3;
+  end; then A13: f2*(f1*q) is divergent_to+infty by A1,A8,LIMFUNC2:def 5;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 7;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_right_divergent_to-infty_in lim_in+infty f1
+&
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ right_open_halfline(r) holds lim_in+infty f1<f1.g)
+implies f2*f1 is divergent_in+infty_to-infty
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_right_divergent_to-infty_in lim_in+infty f1 &
+ for r ex g st r<g & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds lim_in+infty f1<f1.g;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to+infty by A3,LIMFUNC1:53;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A5,LIMFUNC1:def
+12;
+    rng(f1*q)c=dom f2/\right_open_halfline(lim_in+infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A4; then s.(n+k) in {r2: r<r2};
+   then A12: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then lim_in+infty f1<f1.(s.(n+k)) by A2;
+   then x in {g1: lim_in+infty f1<g1} by A10;
+   then x in right_open_halfline(lim_in+infty f1) by LIMFUNC1:def 3;
+   hence thesis by A11,XBOOLE_0:def 3;
+  end; then A13: f2*(f1*q) is divergent_to-infty by A1,A8,LIMFUNC2:def 6;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 8;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_left_divergent_to+infty_in lim_in-infty f1
+&
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds f1.g<lim_in-infty f1)
+implies f2*f1 is divergent_in-infty_to+infty
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_left_divergent_to+infty_in lim_in-infty f1 &
+ for r ex g st g<r & g in dom(f2*f1);
+ given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds f1.g<lim_in-infty f1;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to-infty by A3,LIMFUNC1:54;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A5,LIMFUNC1:def
+13;
+    rng(f1*q)c=dom f2/\left_open_halfline(lim_in-infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6;
+   then A11: x in dom f2 by A6,A10,RFUNCT_2:21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A4; then s.(n+k) in {r2: r2<r};
+   then A12: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_in-infty f1 by A2;
+   then x in {g1: g1<lim_in-infty f1} by A10;
+   then x in left_open_halfline(lim_in-infty f1) by PROB_1:def 15
+; hence thesis by A11,XBOOLE_0:def 3;
+  end; then A13: f2*(f1*q) is divergent_to+infty by A1,A8,LIMFUNC2:def 2;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 10;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_left_divergent_to-infty_in lim_in-infty f1
+&
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds f1.g<lim_in-infty f1)
+implies f2*f1 is divergent_in-infty_to-infty
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_left_divergent_to-infty_in lim_in-infty f1 &
+ for r ex g st g<r & g in dom(f2*f1);
+ given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds f1.g<lim_in-infty f1;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to-infty by A3,LIMFUNC1:54;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A5,LIMFUNC1:def
+13;
+    rng(f1*q)c=dom f2/\left_open_halfline(lim_in-infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6;
+   then A11: x in dom f2 by A6,A10,RFUNCT_2:21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A4; then s.(n+k) in {r2: r2<r};
+   then A12: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_in-infty f1 by A2;
+   then x in {g1: g1<lim_in-infty f1} by A10;
+   then x in left_open_halfline(lim_in-infty f1) by PROB_1:def 15
+; hence thesis by A11,XBOOLE_0:def 3;
+  end; then A13: f2*(f1*q) is divergent_to-infty by A1,A8,LIMFUNC2:def 3;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 11;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_right_divergent_to+infty_in lim_in-infty f1
+&
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds lim_in-infty f1<f1.g)
+implies f2*f1 is divergent_in-infty_to+infty
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_right_divergent_to+infty_in lim_in-infty f1 &
+ for r ex g st g<r & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds lim_in-infty f1<f1.g;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to-infty by A3,LIMFUNC1:54;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A5,LIMFUNC1:def
+13;
+    rng(f1*q)c=dom f2/\right_open_halfline(lim_in-infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A4; then s.(n+k) in {r2: r2<r};
+   then A12: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then lim_in-infty f1<f1.(s.(n+k)) by A2;
+   then x in {g1: lim_in-infty f1<g1} by A10;
+   then x in right_open_halfline(lim_in-infty f1) by LIMFUNC1:def 3;
+   hence thesis by A11,XBOOLE_0:def 3;
+  end; then A13: f2*(f1*q) is divergent_to+infty by A1,A8,LIMFUNC2:def 5;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 10;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_right_divergent_to-infty_in lim_in-infty f1
+&
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds lim_in-infty f1<f1.g)
+implies f2*f1 is divergent_in-infty_to-infty
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_right_divergent_to-infty_in lim_in-infty f1 &
+ for r ex g st g<r & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds lim_in-infty f1<f1.g;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to-infty by A3,LIMFUNC1:54;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A5,LIMFUNC1:def
+13;
+    rng(f1*q)c=dom f2/\right_open_halfline(lim_in-infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A4; then s.(n+k) in {r2: r2<r};
+   then A12: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then lim_in-infty f1<f1.(s.(n+k)) by A2;
+   then x in {g1: lim_in-infty f1<g1} by A10;
+   then x in right_open_halfline(lim_in-infty f1) by LIMFUNC1:def 3;
+   hence thesis by A11,XBOOLE_0:def 3;
+  end; then A13: f2*(f1*q) is divergent_to-infty by A1,A8,LIMFUNC2:def 6;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 11;
+end;
+
+theorem
+  f1 is_divergent_to+infty_in x0 & f2 is divergent_in+infty_to+infty &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+ g2<r2 & x0<g2 & g2 in dom(f2*f1)) implies
+f2*f1 is_divergent_to+infty_in x0
+proof assume A1: f1 is_divergent_to+infty_in x0 &
+  f2 is divergent_in+infty_to+infty &
+  for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+     g2<r2 & x0<g2 & g2 in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1\{x0} & rng(f1*s)c=dom f2 by Th2;
+  then f1*s is divergent_to+infty by A1,A2,LIMFUNC3:def 2;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 7;
+  hence f2*f1*s is divergent_to+infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC3:def 2;
+end;
+
+theorem
+  f1 is_divergent_to+infty_in x0 & f2 is divergent_in+infty_to-infty &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+ g2<r2 & x0<g2 & g2 in dom(f2*f1)) implies
+f2*f1 is_divergent_to-infty_in x0
+proof assume A1: f1 is_divergent_to+infty_in x0 &
+ f2 is divergent_in+infty_to-infty &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1\{x0} & rng(f1*s)c=dom f2 by Th2;
+  then f1*s is divergent_to+infty by A1,A2,LIMFUNC3:def 2;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 8;
+  hence f2*f1*s is divergent_to-infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC3:def 3;
+end;
+
+theorem
+  f1 is_divergent_to-infty_in x0 & f2 is divergent_in-infty_to+infty &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) implies
+f2*f1 is_divergent_to+infty_in x0
+proof assume A1: f1 is_divergent_to-infty_in x0 &
+ f2 is divergent_in-infty_to+infty &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1\{x0} & rng(f1*s)c=dom f2 by Th2;
+  then f1*s is divergent_to-infty by A1,A2,LIMFUNC3:def 3;
+  then f2*(f1*s) is divergent_to+infty by A1,A3,LIMFUNC1:def 10;
+  hence f2*f1*s is divergent_to+infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC3:def 2;
+end;
+
+theorem
+  f1 is_divergent_to-infty_in x0 & f2 is divergent_in-infty_to-infty &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) implies
+f2*f1 is_divergent_to-infty_in x0
+proof assume A1: f1 is_divergent_to-infty_in x0 &
+ f2 is divergent_in-infty_to-infty &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1);
+   now let s be Real_Sequence; assume A2: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A3: rng s c=dom(f2*f1) & rng s c=dom f1\{x0} & rng(f1*s)c=dom f2 by Th2;
+  then f1*s is divergent_to-infty by A1,A2,LIMFUNC3:def 3;
+  then f2*(f1*s) is divergent_to-infty by A1,A3,LIMFUNC1:def 11;
+  hence f2*f1*s is divergent_to-infty by A3,RFUNCT_2:39;
+ end; hence thesis by A1,LIMFUNC3:def 3;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_divergent_to+infty_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+  f1.r<>lim(f1,x0)) implies
+f2*f1 is_divergent_to+infty_in x0
+proof assume A1: f1 is_convergent_in x0 &
+ f2 is_divergent_to+infty_in lim(f1,x0) &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds f1.r<>lim(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A4: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A5: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A3,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A3,LIMFUNC3:7;
+  set q=(f1*s)^\k; A7: q is convergent & lim q=lim(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A6; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A9: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A10: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A4,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A9,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A4,A10,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))<>lim(f1,x0) by A2;
+   then A11: not f1.(s.(n+k)) in {lim(f1,x0)} by TARSKI:def 1;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9; hence x in
+dom f2\{lim(f1,x0)} by A11,A12,XBOOLE_0:def 4;
+  end; then rng q c=dom f2\{lim(f1,x0)} by TARSKI:def 3;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC3:def 2;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC3:def 2;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_divergent_to-infty_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+  f1.r<>lim(f1,x0)) implies
+f2*f1 is_divergent_to-infty_in x0
+proof assume A1: f1 is_convergent_in x0 &
+ f2 is_divergent_to-infty_in lim(f1,x0) &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds f1.r<>lim(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A4: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A5: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A3,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A3,LIMFUNC3:7;
+  set q=(f1*s)^\k; A7: q is convergent & lim q=lim(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A6; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A9: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A10: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A4,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A9,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A4,A10,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))<>lim(f1,x0) by A2;
+   then A11: not f1.(s.(n+k)) in {lim(f1,x0)} by TARSKI:def 1;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9; hence x in
+dom f2\{lim(f1,x0)} by A11,A12,XBOOLE_0:def 4;
+  end; then rng q c=dom f2\{lim(f1,x0)} by TARSKI:def 3;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC3:def 3;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC3:def 3;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_right_divergent_to+infty_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+  f1.r>lim(f1,x0)) implies
+f2*f1 is_divergent_to+infty_in x0
+proof assume A1: f1 is_convergent_in x0 &
+ f2 is_right_divergent_to+infty_in lim(f1,x0) &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds lim(f1,x0)<f1.r;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A4: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A5: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A3,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A3,LIMFUNC3:7;
+  set q=(f1*s)^\k; A7: q is convergent & lim q=lim(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A6; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A9: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A10: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A4,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A9,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A4,A10,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))>lim(f1,x0) by A2;
+   then f1.(s.(n+k)) in {g2: lim(f1,x0)<g2};
+   then A11: f1.(s.(n+k)) in right_open_halfline(lim(f1,x0)) by LIMFUNC1:def 3;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in dom f2/\right_open_halfline(lim(f1,x0)) by A11,A12,XBOOLE_0:def 3
+;
+  end; then rng q c=dom f2/\right_open_halfline(lim(f1,x0)) by TARSKI:def 3;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC2:def 5;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC3:def 2;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_right_divergent_to-infty_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+  f1.r>lim(f1,x0)) implies
+f2*f1 is_divergent_to-infty_in x0
+proof assume A1: f1 is_convergent_in x0 &
+ f2 is_right_divergent_to-infty_in lim(f1,x0) &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds lim(f1,x0)<f1.r;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A4: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A5: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A3,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A3,LIMFUNC3:7;
+  set q=(f1*s)^\k; A7: q is convergent & lim q=lim(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A6; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A9: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A10: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A4,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A9,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A4,A10,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))>lim(f1,x0) by A2;
+   then f1.(s.(n+k)) in {g2: lim(f1,x0)<g2};
+   then A11: f1.(s.(n+k)) in right_open_halfline(lim(f1,x0)) by LIMFUNC1:def 3;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in dom f2/\right_open_halfline(lim(f1,x0)) by A11,A12,XBOOLE_0:def 3
+;
+  end; then rng q c=dom f2/\right_open_halfline(lim(f1,x0)) by TARSKI:def 3;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC2:def 6;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC3:def 3;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 & f2 is_divergent_to+infty_in lim_right(f1,x0) &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\
+ ].x0,x0+g.[ holds f1.r<>lim_right(f1,x0))
+implies f2*f1 is_right_divergent_to+infty_in x0
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_divergent_to+infty_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1); given g such that
+  A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds f1.r<>lim_right(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A3,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds s.n<x0+g by A3,LIMFUNC2:2; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_right(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: s.(n+k)<x0+g by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A9;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A4,A10,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_right(f1,x0) by A2;
+   then A11: not f1.(s.(n+k)) in {lim_right(f1,x0)} by TARSKI:def 1;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9; hence x in
+dom f2\{lim_right(f1,x0)} by A11,A12,XBOOLE_0:def 4;
+  end; then rng q c=dom f2\{lim_right(f1,x0)} by TARSKI:def 3;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC3:def 2;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 5;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 & f2 is_divergent_to-infty_in lim_right(f1,x0) &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\
+ ].x0,x0+g.[ holds f1.r<>lim_right(f1,x0))
+implies f2*f1 is_right_divergent_to-infty_in x0
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_divergent_to-infty_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1); given g such that
+  A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds f1.r<>lim_right(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A3,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds s.n<x0+g by A3,LIMFUNC2:2; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_right(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: s.(n+k)<x0+g by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A9;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A4,A10,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_right(f1,x0) by A2;
+   then A11: not f1.(s.(n+k)) in {lim_right(f1,x0)} by TARSKI:def 1;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9; hence x in
+dom f2\{lim_right(f1,x0)} by A11,A12,XBOOLE_0:def 4;
+  end; then rng q c=dom f2\{lim_right(f1,x0)} by TARSKI:def 3;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC3:def 3;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 6;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_divergent_to+infty_in lim_in+infty f1 &
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in dom f1 /\ right_open_halfline(r) holds
+ f1.g<>lim_in+infty f1)
+implies f2*f1 is divergent_in+infty_to+infty
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_divergent_to+infty_in lim_in+infty f1
+ & for r ex g st r<g & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds f1.g<>lim_in+infty f1;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to+infty & rng s c=dom(f2*f1);
+   then consider k be Nat such that
+  A4: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to+infty by A3,LIMFUNC1:53;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A5,LIMFUNC1:def
+12;
+    rng(f1*q)c=dom f2\{lim_in+infty f1}
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A4; then s.(n+k) in {r2: r<r2};
+   then A12: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_in+infty f1 by A2;
+   then not f1.(s.(n+k)) in {lim_in+infty f1} by TARSKI:def 1
+; hence thesis by A10,A11,XBOOLE_0:def 4;
+  end; then A13: f2*(f1*q) is divergent_to+infty by A1,A8,LIMFUNC3:def 2;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 7;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_divergent_to-infty_in lim_in+infty f1 &
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in dom f1 /\ right_open_halfline(r) holds
+ f1.g<>lim_in+infty f1)
+implies f2*f1 is divergent_in+infty_to-infty
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_divergent_to-infty_in lim_in+infty f1
+ & for r ex g st r<g & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds f1.g<>lim_in+infty f1;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to+infty by A3,LIMFUNC1:53;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A5,LIMFUNC1:def
+12;
+    rng(f1*q)c=dom f2\{lim_in+infty f1}
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A4; then s.(n+k) in {r2: r<r2};
+   then A12: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_in+infty f1 by A2;
+   then not f1.(s.(n+k)) in {lim_in+infty f1} by TARSKI:def 1
+; hence thesis by A10,A11,XBOOLE_0:def 4;
+  end; then A13: f2*(f1*q) is divergent_to-infty by A1,A8,LIMFUNC3:def 3;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 8;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_divergent_to+infty_in lim_in-infty f1 &
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds f1.g<>lim_in-infty f1)
+implies f2*f1 is divergent_in-infty_to+infty
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_divergent_to+infty_in lim_in-infty f1
+ & for r ex g st g<r & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds f1.g<>lim_in-infty f1;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A4: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to-infty by A3,LIMFUNC1:54;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A5,LIMFUNC1:def
+13;
+    rng(f1*q)c=dom f2\{lim_in-infty f1}
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A4; then s.(n+k) in {r2: r2<r};
+   then A12: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_in-infty f1 by A2;
+   then not f1.(s.(n+k)) in {lim_in-infty f1} by TARSKI:def 1
+; hence thesis by A10,A11,XBOOLE_0:def 4;
+  end; then A13: f2*(f1*q) is divergent_to+infty by A1,A8,LIMFUNC3:def 2;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 10;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_divergent_to-infty_in lim_in-infty f1 &
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds f1.g<>lim_in-infty f1)
+implies f2*f1 is divergent_in-infty_to-infty
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_divergent_to-infty_in lim_in-infty f1
+ & for r ex g st g<r & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds f1.g<>lim_in-infty f1;
+   now let s be Real_Sequence; assume
+  A3: s is divergent_to-infty & rng s c=dom(f2*f1);
+   then consider k be Nat such that
+  A4: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A5: q is divergent_to-infty by A3,LIMFUNC1:54;
+  A6: rng s c=dom f1 & rng(f1*s)c=dom f2 by A3,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A7: rng q c=dom f1 by A6,XBOOLE_1:1;
+  then A8: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A5,LIMFUNC1:def
+13;
+    rng(f1*q)c=dom f2\{lim_in-infty f1}
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A9: (f1*q).n=x by RFUNCT_2:9;
+   A10: x=f1.(q.n) by A7,A9,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A6; then A11: x in dom f2 by A6,A10,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A4; then s.(n+k) in {r2: r2<r};
+   then A12: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A6,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_in-infty f1 by A2;
+   then not f1.(s.(n+k)) in {lim_in-infty f1} by TARSKI:def 1
+; hence thesis by A10,A11,XBOOLE_0:def 4;
+  end; then A13: f2*(f1*q) is divergent_to-infty by A1,A8,LIMFUNC3:def 3;
+    f2*(f1*q)=f2*((f1*s)^\k) by A6,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A6,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A3,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC1:def 11;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_left_divergent_to+infty_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+  f1.r<lim(f1,x0)) implies
+f2*f1 is_divergent_to+infty_in x0
+proof assume A1: f1 is_convergent_in x0 &
+ f2 is_left_divergent_to+infty_in lim(f1,x0) &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds lim(f1,x0)>f1.r;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A4: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A5: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A3,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A3,LIMFUNC3:7;
+  set q=(f1*s)^\k; A7: q is convergent & lim q=lim(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A6; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A9: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A10: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A4,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A9,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A4,A10,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))<lim(f1,x0) by A2; then f1.(s.(n+k)) in
+{g2: g2<lim(f1,x0)};
+   then A11: f1.(s.(n+k)) in left_open_halfline(lim(f1,x0)) by PROB_1:def 15;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in dom f2/\left_open_halfline(lim(f1,x0)) by A11,A12,XBOOLE_0:def 3
+;
+  end; then rng q c=dom f2/\
+left_open_halfline(lim(f1,x0)) by TARSKI:def 3;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC2:def 2;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC3:def 2;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_left_divergent_to-infty_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+  f1.r<lim(f1,x0)) implies
+f2*f1 is_divergent_to-infty_in x0
+proof assume A1: f1 is_convergent_in x0 &
+ f2 is_left_divergent_to-infty_in lim(f1,x0) &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds lim(f1,x0)>f1.r;
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A4: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A5: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A3,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A3,LIMFUNC3:7;
+  set q=(f1*s)^\k; A7: q is convergent & lim q=lim(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A6; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A9: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A10: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A4,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A9,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A4,A10,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))<lim(f1,x0) by A2; then f1.(s.(n+k)) in
+{g2: g2<lim(f1,x0)};
+   then A11: f1.(s.(n+k)) in left_open_halfline(lim(f1,x0)) by PROB_1:def 15;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in dom f2/\left_open_halfline(lim(f1,x0)) by A11,A12,XBOOLE_0:def 3
+;
+  end; then rng q c=dom f2/\left_open_halfline(lim(f1,x0)) by TARSKI:def 3;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC2:def 3;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC3:def 3;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 & f2 is_divergent_to+infty_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds f1.r<>lim_left(f1,x0))
+implies f2*f1 is_left_divergent_to+infty_in x0
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_divergent_to+infty_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1); given g such that
+  A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds f1.r<>lim_left(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A3,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n by A3,LIMFUNC2:1; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_left(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: x0-g<s.(n+k) by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2: x0-g<g2 & g2<x0} by A9;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A4,A10,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_left(f1,x0) by A2;
+   then A11: not f1.(s.(n+k)) in {lim_left(f1,x0)} by TARSKI:def 1;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9; hence x in
+dom f2\{lim_left(f1,x0)} by A11,A12,XBOOLE_0:def 4
+;
+  end; then rng q c=dom f2\{lim_left(f1,x0)} by TARSKI:def 3;
+  then A13: f2*q is divergent_to+infty by A1,A7,LIMFUNC3:def 2;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to+infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 2;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 & f2 is_divergent_to-infty_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds f1.r<>lim_left(f1,x0))
+implies f2*f1 is_left_divergent_to-infty_in x0
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_divergent_to-infty_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1); given g such that
+  A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds f1.r<>lim_left(f1,x0);
+   now let s be Real_Sequence; assume A3: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A4: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A5: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A3,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A3,Lm1; then consider k be Nat such that
+  A6: for n be Nat st k<=n holds x0-g<s.n by A3,LIMFUNC2:1; set q=(f1*s)^\k;
+  A7: q is convergent & lim q=lim_left(f1,x0) by A5,SEQ_4:33;
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A8: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A9: x0-g<s.(n+k) by A6; A10: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A4;
+   then s.(n+k) in {g1: g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2: x0-g<g2 & g2<x0} by A9;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A4,A10,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_left(f1,x0) by A2;
+   then A11: not f1.(s.(n+k)) in {lim_left(f1,x0)} by TARSKI:def 1;
+   A12: f1.(s.(n+k)) in dom f2 by A4,A10,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A4,RFUNCT_2:21
+   .=x by A8,SEQM_3:def 9;
+   hence x in dom f2\{lim_left(f1,x0)} by A11,A12,XBOOLE_0:def 4;
+  end; then rng q c=dom f2\{lim_left(f1,x0)} by TARSKI:def 3;
+  then A13: f2*q is divergent_to-infty by A1,A7,LIMFUNC3:def 3;
+    f2*q=(f2*(f1*s))^\k by A4,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is divergent_to-infty by A13,LIMFUNC1:34;
+ end; hence thesis by A1,LIMFUNC2:def 3;
+end;
+
+theorem
+  f1 is divergent_in+infty_to+infty & f2 is convergent_in+infty &
+(for r ex g st r<g & g in dom(f2*f1)) implies
+f2*f1 is convergent_in+infty & lim_in+infty(f2*f1)=lim_in+infty f2
+proof assume A1: f1 is divergent_in+infty_to+infty & f2 is convergent_in+infty
+&
+ for r ex g st r<g & g in dom(f2*f1);
+ A2: now let s be Real_Sequence; assume
+  A3: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then A4: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then A5: f1*s is divergent_to+infty by A1,A3,LIMFUNC1:def 7;
+    lim_in+infty f2=lim_in+infty f2; then f2*(f1*s) is convergent &
+  lim(f2*(f1*s))=lim_in+infty f2 by A1,A4,A5,LIMFUNC1:def 12;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in+infty f2 by A3,RFUNCT_2:39
+;
+ end; hence f2*f1 is convergent_in+infty by A1,LIMFUNC1:def 6;
+ hence thesis by A2,LIMFUNC1:def 12;
+end;
+
+theorem
+  f1 is divergent_in+infty_to-infty & f2 is convergent_in-infty &
+(for r ex g st r<g & g in dom(f2*f1)) implies
+f2*f1 is convergent_in+infty & lim_in+infty(f2*f1)=lim_in-infty f2
+proof assume A1: f1 is divergent_in+infty_to-infty & f2 is convergent_in-infty
+&
+ for r ex g st r<g & g in dom(f2*f1);
+ A2: now let s be Real_Sequence; assume
+  A3: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then A4: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then A5: f1*s is divergent_to-infty by A1,A3,LIMFUNC1:def 8;
+    lim_in-infty f2=lim_in-infty f2; then f2*(f1*s) is convergent &
+  lim(f2*(f1*s))=lim_in-infty f2 by A1,A4,A5,LIMFUNC1:def 13;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in-infty f2 by A3,RFUNCT_2:39
+;
+ end; hence f2*f1 is convergent_in+infty by A1,LIMFUNC1:def 6;
+ hence thesis by A2,LIMFUNC1:def 12;
+end;
+
+theorem
+  f1 is divergent_in-infty_to+infty & f2 is convergent_in+infty &
+(for r ex g st g<r & g in dom(f2*f1)) implies f2*f1 is convergent_in-infty &
+lim_in-infty(f2*f1)=lim_in+infty f2
+proof assume A1: f1 is divergent_in-infty_to+infty & f2 is convergent_in+infty
+&
+ for r ex g st g<r & g in dom(f2*f1);
+ A2: now let s be Real_Sequence; assume
+  A3: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then A4: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then A5: f1*s is divergent_to+infty by A1,A3,LIMFUNC1:def 10;
+    lim_in+infty f2=lim_in+infty f2; then f2*(f1*s) is convergent &
+  lim(f2*(f1*s))=lim_in+infty f2 by A1,A4,A5,LIMFUNC1:def 12;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in+infty f2 by A3,RFUNCT_2:39
+;
+ end; hence f2*f1 is convergent_in-infty by A1,LIMFUNC1:def 9;
+ hence thesis by A2,LIMFUNC1:def 13;
+end;
+
+theorem
+  f1 is divergent_in-infty_to-infty & f2 is convergent_in-infty &
+(for r ex g st g<r & g in dom(f2*f1)) implies f2*f1 is convergent_in-infty &
+lim_in-infty(f2*f1)=lim_in-infty f2
+proof assume A1: f1 is divergent_in-infty_to-infty & f2 is convergent_in-infty
+&
+ for r ex g st g<r & g in dom(f2*f1);
+ A2: now let s be Real_Sequence; assume
+  A3: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then A4: rng s c=dom f1 & rng(f1*s)c=dom f2 by Lm2;
+  then A5: f1*s is divergent_to-infty by A1,A3,LIMFUNC1:def 11;
+    lim_in-infty f2=lim_in-infty f2; then f2*(f1*s) is convergent &
+  lim(f2*(f1*s))=lim_in-infty f2 by A1,A4,A5,LIMFUNC1:def 13;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in-infty f2 by A3,RFUNCT_2:39
+;
+ end; hence f2*f1 is convergent_in-infty by A1,LIMFUNC1:def 9;
+ hence thesis by A2,LIMFUNC1:def 13;
+end;
+
+theorem
+  f1 is_left_divergent_to+infty_in x0 & f2 is convergent_in+infty &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) implies
+f2*f1 is_left_convergent_in x0 & lim_left(f2*f1,x0)=lim_in+infty f2
+proof assume A1: f1 is_left_divergent_to+infty_in x0 &
+ f2 is convergent_in+infty &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+ A2: now let s be Real_Sequence; A3: lim_in+infty f2=lim_in+infty f2;
+  assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1/\left_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1;
+  then f1*s is divergent_to+infty by A1,A4,LIMFUNC2:def 2;
+  then f2*(f1*s) is convergent & lim(f2*(f1*s))=lim_in+infty f2
+   by A1,A3,A5,LIMFUNC1:def 12;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in+infty f2 by A5,RFUNCT_2:39
+;
+ end; hence f2*f1 is_left_convergent_in x0 by A1,LIMFUNC2:def 1;
+ hence thesis by A2,LIMFUNC2:def 7;
+end;
+
+theorem
+  f1 is_left_divergent_to-infty_in x0 & f2 is convergent_in-infty &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) implies
+f2*f1 is_left_convergent_in x0 & lim_left(f2*f1,x0)=lim_in-infty f2
+proof assume A1: f1 is_left_divergent_to-infty_in x0 &
+ f2 is convergent_in-infty &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+ A2: now let s be Real_Sequence; A3: lim_in-infty f2=lim_in-infty f2;
+  assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1/\left_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1; then f1*s is divergent_to-infty
+   by A1,A4,LIMFUNC2:def 3;
+  then f2*(f1*s) is convergent & lim(f2*(f1*s))=lim_in-infty f2
+   by A1,A3,A5,LIMFUNC1:def 13;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in-infty f2 by A5,RFUNCT_2:39
+;
+ end; hence f2*f1 is_left_convergent_in x0 by A1,LIMFUNC2:def 1;
+ hence thesis by A2,LIMFUNC2:def 7;
+end;
+
+theorem
+  f1 is_right_divergent_to+infty_in x0 & f2 is convergent_in+infty &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) implies
+f2*f1 is_right_convergent_in x0 & lim_right(f2*f1,x0)=lim_in+infty f2
+proof assume A1: f1 is_right_divergent_to+infty_in x0 &
+ f2 is convergent_in+infty &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1);
+ A2: now let s be Real_Sequence; A3: lim_in+infty f2=lim_in+infty f2;
+  assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1/\right_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1;
+  then f1*s is divergent_to+infty by A1,A4,LIMFUNC2:def 5;
+  then f2*(f1*s) is convergent & lim(f2*(f1*s))=lim_in+infty f2
+   by A1,A3,A5,LIMFUNC1:def 12;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in+infty f2 by A5,RFUNCT_2:39
+;
+ end; hence f2*f1 is_right_convergent_in x0 by A1,LIMFUNC2:def 4;
+ hence thesis by A2,LIMFUNC2:def 8;
+end;
+
+theorem
+  f1 is_right_divergent_to-infty_in x0 & f2 is convergent_in-infty &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) implies
+f2*f1 is_right_convergent_in x0 & lim_right(f2*f1,x0)=lim_in-infty f2
+proof assume A1: f1 is_right_divergent_to-infty_in x0 &
+ f2 is convergent_in-infty &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1);
+ A2: now let s be Real_Sequence; A3: lim_in-infty f2=lim_in-infty f2;
+  assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1/\right_open_halfline(x0) &
+  rng(f1*s)c=dom f2 by Th1;
+  then f1*s is divergent_to-infty by A1,A4,LIMFUNC2:def 6;
+  then f2*(f1*s) is convergent & lim(f2*(f1*s))=lim_in-infty f2
+   by A1,A3,A5,LIMFUNC1:def 13;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in-infty f2 by A5,RFUNCT_2:39
+;
+ end; hence f2*f1 is_right_convergent_in x0 by A1,LIMFUNC2:def 4;
+ hence thesis by A2,LIMFUNC2:def 8;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 & f2 is_left_convergent_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds f1.r<lim_left(f1,x0))
+implies f2*f1 is_left_convergent_in x0 &
+lim_left(f2*f1,x0)=lim_left(f2,lim_left(f1,x0))
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_left_convergent_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds f1.r<lim_left(f1,x0);
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A6: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A4,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A4,Lm1; then consider k be Nat such that
+  A7: for n be Nat st k<=n holds x0-g<s.n by A4,LIMFUNC2:1; set q=(f1*s)^\k;
+  A8: q is convergent & lim q=lim_left(f1,x0) by A6,SEQ_4:33;
+  A9: lim_left(f2,lim_left(f1,x0))=lim_left(f2,lim_left(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A11: x0-g<s.(n+k) by A7; A12: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A5;
+   then s.(n+k) in {g1: g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2: x0-g<g2 & g2<x0} by A11;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A5,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_left(f1,x0) by A2;
+   then f1.(s.(n+k)) in {r1 : r1<lim_left(f1,x0)};
+   then A13: f1.(s.(n+k)) in left_open_halfline(lim_left(f1,x0)) by PROB_1:def
+15;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9;
+   hence x in
+dom f2/\left_open_halfline(lim_left(f1,x0)) by A13,A14,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\left_open_halfline(lim_left(f1,x0)) by TARSKI:def 3
+;
+  then A15: f2*q is convergent & lim(f2*q)=lim_left(f2,lim_left(f1,x0))
+   by A1,A8,A9,LIMFUNC2:def 7;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim_left(f2,lim_left(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_left_convergent_in x0 by A1,LIMFUNC2:def 1;
+ hence thesis by A3,LIMFUNC2:def 7;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 & f2 is_right_convergent_in lim_right(f1,x0) &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0,x0+g.[ holds lim_right(f1,x0)<f1.r)
+implies f2*f1 is_right_convergent_in x0 &
+lim_right(f2*f1,x0)=lim_right(f2,lim_right(f1,x0))
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_right_convergent_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds lim_right(f1,x0)<f1.r;
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A6: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A4,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A4,Lm1; then consider k be Nat such that
+  A7: for n be Nat st k<=n holds s.n<x0+g by A4,LIMFUNC2:2; set q=(f1*s)^\k;
+  A8: q is convergent & lim q=lim_right(f1,x0) by A6,SEQ_4:33;
+  A9: lim_right(f2,lim_right(f1,x0))=lim_right(f2,lim_right(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A11: s.(n+k)<x0+g by A7; A12: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A5;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A11;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A5,A12,XBOOLE_0:def 3;
+   then lim_right(f1,x0)<f1.(s.(n+k)) by A2;
+   then f1.(s.(n+k)) in {r1: lim_right(f1,x0)<r1};
+   then A13: f1.(s.(n+k)) in
+right_open_halfline(lim_right(f1,x0)) by LIMFUNC1:def 3;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9;
+   hence x in
+dom f2/\right_open_halfline(lim_right(f1,x0)) by A13,A14,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\
+right_open_halfline(lim_right(f1,x0)) by TARSKI:def 3
+;
+  then A15: f2*q is convergent & lim(f2*q)=lim_right(f2,lim_right(f1,x0))
+   by A1,A8,A9,LIMFUNC2:def 8;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim_right(f2,lim_right(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_right_convergent_in x0 by A1,LIMFUNC2:def 4;
+ hence thesis by A3,LIMFUNC2:def 8;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 & f2 is_right_convergent_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds lim_left(f1,x0)<f1.r)
+implies f2*f1 is_left_convergent_in x0 &
+lim_left(f2*f1,x0)=lim_right(f2,lim_left(f1,x0))
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_right_convergent_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1);
+ given g such that
+ A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds lim_left(f1,x0)<f1.r;
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A6: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A4,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A4,Lm1; then consider k be Nat such that
+  A7: for n be Nat st k<=n holds x0-g<s.n by A4,LIMFUNC2:1; set q=(f1*s)^\k;
+  A8: q is convergent & lim q=lim_left(f1,x0) by A6,SEQ_4:33;
+  A9: lim_right(f2,lim_left(f1,x0))=lim_right(f2,lim_left(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A11: x0-g<s.(n+k) by A7; A12: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A5;
+   then s.(n+k) in {g1 : g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2: x0-g<g2 & g2<x0} by A11;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A5,A12,XBOOLE_0:def 3;
+   then lim_left(f1,x0)<f1.(s.(n+k)) by A2;
+   then f1.(s.(n+k)) in {r1: lim_left(f1,x0)<r1};
+   then A13: f1.(s.(n+k)) in
+right_open_halfline(lim_left(f1,x0)) by LIMFUNC1:def 3;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9;
+   hence x in
+dom f2/\right_open_halfline(lim_left(f1,x0)) by A13,A14,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\right_open_halfline(lim_left(f1,x0)) by TARSKI:def
+3
+;
+  then A15: f2*q is convergent & lim(f2*q)=lim_right(f2,lim_left(f1,x0))
+   by A1,A8,A9,LIMFUNC2:def 8;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim_right(f2,lim_left(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_left_convergent_in x0 by A1,LIMFUNC2:def 1;
+ hence thesis by A3,LIMFUNC2:def 7;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 & f2 is_left_convergent_in lim_right(f1,x0) &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0,x0+g.[ holds f1.r<lim_right(f1,x0))
+implies f2*f1 is_right_convergent_in x0 &
+lim_right(f2*f1,x0)=lim_left(f2,lim_right(f1,x0))
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_left_convergent_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds f1.r<lim_right(f1,x0);
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A6: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A4,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A4,Lm1; then consider k be Nat such that
+  A7: for n be Nat st k<=n holds s.n<x0+g by A4,LIMFUNC2:2; set q=(f1*s)^\k;
+  A8: q is convergent & lim q=lim_right(f1,x0) by A6,SEQ_4:33;
+  A9: lim_left(f2,lim_right(f1,x0))=lim_left(f2,lim_right(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A11: s.(n+k)<x0+g by A7; A12: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A5;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A11;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A5,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_right(f1,x0) by A2;
+   then f1.(s.(n+k)) in {r1: r1<lim_right(f1,x0)};
+   then A13: f1.(s.(n+k)) in left_open_halfline(lim_right(f1,x0)) by PROB_1:def
+15;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9;
+   hence x in
+dom f2/\left_open_halfline(lim_right(f1,x0)) by A13,A14,XBOOLE_0:def 3;
+  end; then rng q c=dom f2/\left_open_halfline(lim_right(f1,x0)) by TARSKI:def
+3
+;
+  then A15: f2*q is convergent & lim(f2*q)=lim_left(f2,lim_right(f1,x0))
+   by A1,A8,A9,LIMFUNC2:def 7;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim_left(f2,lim_right(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_right_convergent_in x0 by A1,LIMFUNC2:def 4;
+ hence thesis by A3,LIMFUNC2:def 8;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_left_convergent_in lim_in+infty f1 &
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ right_open_halfline(r) holds f1.g<lim_in+infty f1)
+implies f2*f1 is convergent_in+infty &
+lim_in+infty(f2*f1)=lim_left(f2,lim_in+infty f1)
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_left_convergent_in lim_in+infty f1 & for r ex g st r<g & g in
+dom(f2*f1);
+ given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds f1.g<lim_in+infty f1;
+ A3: now let s be Real_Sequence; assume
+  A4: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A5: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A6: q is divergent_to+infty by A4,LIMFUNC1:53;
+  A7: rng s c=dom f1 & rng(f1*s)c=dom f2 by A4,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A8: rng q c=dom f1 by A7,XBOOLE_1:1;
+  then A9: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A6,LIMFUNC1:def
+12;
+  set L=lim_left(f2,lim_in+infty f1); A10: L=L;
+    rng(f1*q)c=dom f2/\left_open_halfline(lim_in+infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A11: (f1*q).n=x by RFUNCT_2:9;
+   A12: x=f1.(q.n) by A8,A11,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A7; then A13: x in dom f2 by A7,A12,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A5; then s.(n+k) in {r2: r<r2};
+   then A14: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A7,A14,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_in+infty f1 by A2;
+   then x in {g1: g1<lim_in+infty f1} by A12;
+   then x in left_open_halfline(lim_in+infty f1) by PROB_1:def 15
+; hence thesis by A13,XBOOLE_0:def 3;
+  end;
+  then A15: f2*(f1*q) is convergent & lim(f2*(f1*q))=L by A1,A9,A10,LIMFUNC2:
+def 7;
+  A16: f2*(f1*q)=f2*((f1*s)^\k) by A7,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A7,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=L by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is convergent_in+infty by A1,LIMFUNC1:def 6;
+ hence thesis by A3,LIMFUNC1:def 12;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_right_convergent_in lim_in+infty f1 &
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ right_open_halfline(r) holds lim_in+infty f1<f1.g)
+implies f2*f1 is convergent_in+infty &
+lim_in+infty(f2*f1)=lim_right(f2,lim_in+infty f1)
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_right_convergent_in lim_in+infty f1 & for r ex g st r<g & g in
+dom(f2*f1);
+ given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds lim_in+infty f1<f1.g;
+ A3: now let s be Real_Sequence; assume
+  A4: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A5: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A6: q is divergent_to+infty by A4,LIMFUNC1:53;
+  A7: rng s c=dom f1 & rng(f1*s)c=dom f2 by A4,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A8: rng q c=dom f1 by A7,XBOOLE_1:1;
+  then A9: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A6,LIMFUNC1:def
+12;
+  set L=lim_right(f2,lim_in+infty f1); A10: L=L;
+    rng(f1*q)c=dom f2/\right_open_halfline(lim_in+infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A11: (f1*q).n=x by RFUNCT_2:9;
+   A12: x=f1.(q.n) by A8,A11,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A7; then A13: x in dom f2 by A7,A12,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A5; then s.(n+k) in {r2: r<r2};
+   then A14: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A7,A14,XBOOLE_0:def 3;
+   then lim_in+infty f1<f1.(s.(n+k)) by A2;
+   then x in {g1: lim_in+infty f1<g1} by A12;
+   then x in right_open_halfline(lim_in+infty f1) by LIMFUNC1:def 3;
+   hence thesis by A13,XBOOLE_0:def 3;
+  end;
+  then A15: f2*(f1*q) is convergent & lim(f2*(f1*q))=L by A1,A9,A10,LIMFUNC2:
+def 8;
+  A16: f2*(f1*q)=f2*((f1*s)^\k) by A7,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A7,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=L by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is convergent_in+infty by A1,LIMFUNC1:def 6;
+ hence thesis by A3,LIMFUNC1:def 12;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_left_convergent_in lim_in-infty f1 &
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds f1.g<lim_in-infty f1)
+implies f2*f1 is convergent_in-infty &
+lim_in-infty(f2*f1)=lim_left(f2,lim_in-infty f1)
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_left_convergent_in lim_in-infty f1 & for r ex g st g<r & g in
+dom(f2*f1);
+ given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds f1.g<lim_in-infty f1;
+ A3: now let s be Real_Sequence; assume
+  A4: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A5: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A6: q is divergent_to-infty by A4,LIMFUNC1:54;
+  A7: rng s c=dom f1 & rng(f1*s)c=dom f2 by A4,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A8: rng q c=dom f1 by A7,XBOOLE_1:1;
+  then A9: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A6,LIMFUNC1:def
+13;
+  set L=lim_left(f2,lim_in-infty f1); A10: L=L;
+    rng(f1*q)c=dom f2/\left_open_halfline(lim_in-infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A11: (f1*q).n=x by RFUNCT_2:9;
+   A12: x=f1.(q.n) by A8,A11,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A7; then A13: x in dom f2 by A7,A12,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A5; then s.(n+k) in {r2: r2<r};
+   then A14: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A7,A14,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<lim_in-infty f1 by A2;
+   then x in {g1: g1<lim_in-infty f1} by A12;
+   then x in left_open_halfline(lim_in-infty f1) by PROB_1:def 15
+; hence thesis by A13,XBOOLE_0:def 3;
+  end;
+  then A15: f2*(f1*q) is convergent & lim(f2*(f1*q))=L by A1,A9,A10,LIMFUNC2:
+def 7;
+  A16: f2*(f1*q)=f2*((f1*s)^\k) by A7,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A7,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=L by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is convergent_in-infty by A1,LIMFUNC1:def 9;
+ hence thesis by A3,LIMFUNC1:def 13;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_right_convergent_in lim_in-infty f1 &
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds lim_in-infty f1<f1.g)
+implies f2*f1 is convergent_in-infty &
+lim_in-infty(f2*f1)=lim_right(f2,lim_in-infty f1)
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_right_convergent_in lim_in-infty f1 & for r ex g st g<r & g in
+dom(f2*f1);
+ given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds lim_in-infty f1<f1.g;
+ A3: now let s be Real_Sequence; assume
+  A4: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A5: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A6: q is divergent_to-infty by A4,LIMFUNC1:54;
+  A7: rng s c=dom f1 & rng(f1*s)c=dom f2 by A4,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A8: rng q c=dom f1 by A7,XBOOLE_1:1;
+  then A9: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A6,LIMFUNC1:def
+13;
+  set L=lim_right(f2,lim_in-infty f1); A10: L=L;
+    rng(f1*q)c=dom f2/\right_open_halfline(lim_in-infty f1)
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A11: (f1*q).n=x by RFUNCT_2:9;
+   A12: x=f1.(q.n) by A8,A11,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A7; then A13: x in dom f2 by A7,A12,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A5; then s.(n+k) in {r2: r2<r};
+   then A14: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A7,A14,XBOOLE_0:def 3;
+   then lim_in-infty f1<f1.(s.(n+k)) by A2;
+   then x in {g1: lim_in-infty f1<g1} by A12;
+   then x in right_open_halfline(lim_in-infty f1) by LIMFUNC1:def 3;
+   hence thesis by A13,XBOOLE_0:def 3;
+  end;
+  then A15: f2*(f1*q) is convergent & lim(f2*(f1*q))=L by A1,A9,A10,LIMFUNC2:
+def 8;
+  A16: f2*(f1*q)=f2*((f1*s)^\k) by A7,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A7,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=L by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is convergent_in-infty by A1,LIMFUNC1:def 9;
+ hence thesis by A3,LIMFUNC1:def 13;
+end;
+
+
+theorem
+  f1 is_divergent_to+infty_in x0 & f2 is convergent_in+infty &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) implies
+f2*f1 is_convergent_in x0 & lim(f2*f1,x0)=lim_in+infty f2
+proof assume A1: f1 is_divergent_to+infty_in x0 & f2 is convergent_in+infty &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1);
+ A2: now let s be Real_Sequence; A3: lim_in+infty f2=lim_in+infty f2;
+  assume A4: s is convergent & lim s=x0 & rng s c=dom(f2*f1)\{x0};
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1\{x0} & rng(f1*s)c=dom f2 by Th2;
+  then f1*s is divergent_to+infty by A1,A4,LIMFUNC3:def 2;
+ then f2*(f1*s) is convergent & lim(f2*(f1*s))=lim_in+infty f2 by A1,A3,A5,
+LIMFUNC1:def 12;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in+infty f2 by A5,RFUNCT_2:39
+;
+ end; hence f2*f1 is_convergent_in x0 by A1,LIMFUNC3:def 1;
+ hence thesis by A2,LIMFUNC3:def 4;
+end;
+
+theorem
+  f1 is_divergent_to-infty_in x0 & f2 is convergent_in-infty &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) implies
+f2*f1 is_convergent_in x0 & lim(f2*f1,x0)=lim_in-infty f2
+proof assume A1: f1 is_divergent_to-infty_in x0 & f2 is convergent_in-infty &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1);
+ A2: now let s be Real_Sequence; A3: lim_in-infty f2=lim_in-infty f2;
+  assume A4: s is convergent & lim s=x0 & rng s c=dom(f2*f1)\{x0};
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1\{x0} & rng(f1*s)c=dom f2 by Th2;
+  then f1*s is divergent_to-infty by A1,A4,LIMFUNC3:def 3;
+  then f2*(f1*s) is convergent & lim(f2*(f1*s))=lim_in-infty f2
+   by A1,A3,A5,LIMFUNC1:def 13;
+  hence f2*f1*s is convergent & lim(f2*f1*s)=lim_in-infty f2 by A5,RFUNCT_2:39
+;
+ end; hence f2*f1 is_convergent_in x0 by A1,LIMFUNC3:def 1;
+ hence thesis by A2,LIMFUNC3:def 4;
+end;
+
+theorem
+  f1 is convergent_in+infty & f2 is_convergent_in lim_in+infty f1 &
+(for r ex g st r<g & g in dom(f2*f1)) &
+(ex r st for g st g in dom f1 /\ right_open_halfline(r) holds
+ f1.g<>lim_in+infty f1)
+implies f2*f1 is convergent_in+infty &
+ lim_in+infty(f2*f1)=lim(f2,lim_in+infty f1)
+proof assume A1: f1 is convergent_in+infty &
+ f2 is_convergent_in lim_in+infty f1 &
+ for r ex g st r<g & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\right_open_halfline(r) holds f1.g<>lim_in+infty f1;
+ A3: now let s be Real_Sequence; assume
+  A4: s is divergent_to+infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A5: for n be Nat st k<=n holds r<s.n by LIMFUNC1:def 4; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A6: q is divergent_to+infty by A4,LIMFUNC1:53;
+  A7: rng s c=dom f1 & rng(f1*s)c=dom f2 by A4,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A8: rng q c=dom f1 by A7,XBOOLE_1:1;
+  then A9: f1*q is convergent & lim(f1*q)=lim_in+infty f1 by A1,A6,LIMFUNC1:def
+12;
+  set L=lim(f2,lim_in+infty f1); A10: L=L;
+    rng(f1*q)c=dom f2\{lim_in+infty f1}
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A11: (f1*q).n=x by RFUNCT_2:9;
+   A12: x=f1.(q.n) by A8,A11,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A7; then A13: x in dom f2 by A7,A12,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then r<s.(n+k) by A5; then s.(n+k) in {r2: r<r2};
+   then A14: s.(n+k) in right_open_halfline(r) by LIMFUNC1:def 3;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\right_open_halfline(r) by A7,A14,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_in+infty f1 by A2;
+   then not f1.(s.(n+k)) in {lim_in+infty f1} by TARSKI:def 1
+; hence thesis by A12,A13,XBOOLE_0:def 4;
+  end;
+  then A15: f2*(f1*q) is convergent & lim(f2*(f1*q))=L by A1,A9,A10,LIMFUNC3:
+def 4;
+  A16: f2*(f1*q)=f2*((f1*s)^\k) by A7,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A7,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=L by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is convergent_in+infty by A1,LIMFUNC1:def 6;
+ hence thesis by A3,LIMFUNC1:def 12;
+end;
+
+theorem
+  f1 is convergent_in-infty & f2 is_convergent_in lim_in-infty f1 &
+(for r ex g st g<r & g in dom(f2*f1)) &
+(ex r st for g st g in
+dom f1 /\ left_open_halfline(r) holds f1.g<>lim_in-infty f1)
+implies f2*f1 is convergent_in-infty &
+ lim_in-infty(f2*f1)=lim(f2,lim_in-infty f1)
+proof assume A1: f1 is convergent_in-infty &
+ f2 is_convergent_in lim_in-infty f1 &
+ for r ex g st g<r & g in dom(f2*f1); given r such that
+ A2: for g st g in dom f1/\left_open_halfline(r) holds f1.g<>lim_in-infty f1;
+ A3: now let s be Real_Sequence; assume
+  A4: s is divergent_to-infty & rng s c=dom(f2*f1);
+  then consider k be Nat such that
+  A5: for n be Nat st k<=n holds s.n<r by LIMFUNC1:def 5; set q=s^\k;
+    q is_subsequence_of s by SEQM_3:47;
+  then A6: q is divergent_to-infty by A4,LIMFUNC1:54;
+  A7: rng s c=dom f1 & rng(f1*s)c=dom f2 by A4,Lm2;
+    rng q c=rng s by RFUNCT_2:7; then A8: rng q c=dom f1 by A7,XBOOLE_1:1;
+  then A9: f1*q is convergent & lim(f1*q)=lim_in-infty f1 by A1,A6,LIMFUNC1:def
+13;
+  set L=lim(f2,lim_in-infty f1); A10: L=L;
+    rng(f1*q)c=dom f2\{lim_in-infty f1}
+  proof let x be set; assume x in rng(f1*q); then consider n be Nat such that
+   A11: (f1*q).n=x by RFUNCT_2:9;
+   A12: x=f1.(q.n) by A8,A11,RFUNCT_2:21
+   .=f1.(s.(n+k)) by SEQM_3:def 9; (f1*s).(n+k) in
+rng(f1*s) by RFUNCT_2:10;
+   then (f1*s).(n+k) in dom f2 by A7; then A13: x in dom f2 by A7,A12,RFUNCT_2:
+21;
+     k<=n+k by NAT_1:37; then s.(n+k)<r by A5; then s.(n+k) in {r2: r2<r};
+   then A14: s.(n+k) in left_open_halfline(r) by PROB_1:def 15;
+     s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in dom f1/\left_open_halfline(r) by A7,A14,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_in-infty f1 by A2;
+   then not f1.(s.(n+k)) in {lim_in-infty f1} by TARSKI:def 1
+; hence thesis by A12,A13,XBOOLE_0:def 4;
+  end;
+  then A15: f2*(f1*q) is convergent & lim(f2*(f1*q))=L by A1,A9,A10,LIMFUNC3:
+def 4;
+  A16: f2*(f1*q)=f2*((f1*s)^\k) by A7,RFUNCT_2:22
+  .=(f2*(f1*s))^\k by A7,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A4,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=L by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is convergent_in-infty by A1,LIMFUNC1:def 9;
+ hence thesis by A3,LIMFUNC1:def 13;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_left_convergent_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+  f1.r<lim(f1,x0)) implies
+f2*f1 is_convergent_in x0 & lim(f2*f1,x0)=lim_left(f2,lim(f1,x0))
+proof assume A1: f1 is_convergent_in x0 & f2 is_left_convergent_in lim(f1,x0) &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds f1.r<lim(f1,x0);
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A6: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A4,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A7: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A4,LIMFUNC3:7;
+  set q=(f1*s)^\k; A8: q is convergent & lim q=lim(f1,x0) by A6,SEQ_4:33;
+  A9: lim_left(f2,lim(f1,x0))=lim_left(f2,lim(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A7; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A11: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A12: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A5,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A11,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A5,A12,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))<lim(f1,x0) by A2; then f1.(s.(n+k)) in
+{g2: g2<lim(f1,x0)};
+   then A13: f1.(s.(n+k)) in left_open_halfline(lim(f1,x0)) by PROB_1:def 15;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9;
+   hence x in dom f2/\left_open_halfline(lim(f1,x0)) by A13,A14,XBOOLE_0:def 3
+;
+  end; then rng q c=dom f2/\
+left_open_halfline(lim(f1,x0)) by TARSKI:def 3;
+  then A15: f2*q is convergent & lim(f2*q)=lim_left(f2,lim(f1,x0))
+   by A1,A8,A9,LIMFUNC2:def 7;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim_left(f2,lim(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_convergent_in x0 by A1,LIMFUNC3:def 1;
+ hence thesis by A3,LIMFUNC3:def 4;
+end;
+
+theorem
+  f1 is_left_convergent_in x0 & f2 is_convergent_in lim_left(f1,x0) &
+(for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ ].x0-g,x0.[ holds f1.r<>lim_left(f1,x0))
+implies f2*f1 is_left_convergent_in x0 &
+lim_left(f2*f1,x0)=lim(f2,lim_left(f1,x0))
+proof assume A1: f1 is_left_convergent_in x0 &
+ f2 is_convergent_in lim_left(f1,x0) &
+ for r st r<x0 ex g st r<g & g<x0 & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0-g,x0.[ holds f1.r<>lim_left(f1,x0);
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\left_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=left_open_halfline(x0) & rng s c=dom f1
+&
+  rng s c=dom f1/\left_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A6: f1*s is convergent & lim(f1*s)=lim_left(f1,x0) by A1,A4,LIMFUNC2:def
+7;
+    x0-g<lim s by A2,A4,Lm1; then consider k be Nat such that
+  A7: for n be Nat st k<=n holds x0-g<s.n by A4,LIMFUNC2:1; set q=(f1*s)^\k;
+  A8: q is convergent & lim q=lim_left(f1,x0) by A6,SEQ_4:33;
+  A9: lim(f2,lim_left(f1,x0))=lim(f2,lim_left(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A11: x0-g<s.(n+k) by A7; A12: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in left_open_halfline(x0) by A5;
+   then s.(n+k) in {g1: g1<x0} by PROB_1:def 15; then ex g1 st g1=s.(n+k) &
+g1<x0;
+then s.(n+k) in {g2: x0-g<g2 & g2<x0} by A11;
+    then s.(n+k) in ].x0-g,x0.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0-g,x0.[ by A5,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_left(f1,x0) by A2;
+   then A13: not f1.(s.(n+k)) in {lim_left(f1,x0)} by TARSKI:def 1;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9; hence x in
+dom f2\{lim_left(f1,x0)} by A13,A14,XBOOLE_0:def 4
+;
+  end; then rng q c=dom f2\{lim_left(f1,x0)} by TARSKI:def 3;
+  then A15: f2*q is convergent & lim(f2*q)=lim(f2,lim_left(f1,x0))
+   by A1,A8,A9,LIMFUNC3:def 4;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim(f2,lim_left(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_left_convergent_in x0 by A1,LIMFUNC2:def 1;
+ hence thesis by A3,LIMFUNC2:def 7;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_right_convergent_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+  lim(f1,x0)<f1.r) implies
+f2*f1 is_convergent_in x0 & lim(f2*f1,x0)=lim_right(f2,lim(f1,x0))
+proof assume A1: f1 is_convergent_in x0 & f2 is_right_convergent_in lim(f1,x0)
+&
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds lim(f1,x0)<f1.r;
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A6: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A4,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A7: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A4,LIMFUNC3:7;
+  set q=(f1*s)^\k; A8: q is convergent & lim q=lim(f1,x0) by A6,SEQ_4:33;
+  A9: lim_right(f2,lim(f1,x0))=lim_right(f2,lim(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A7; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A11: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A12: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A5,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A11,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A5,A12,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))>lim(f1,x0) by A2; then f1.(s.(n+k)) in
+{g2: lim(f1,x0)<g2};
+   then A13: f1.(s.(n+k)) in right_open_halfline(lim(f1,x0)) by LIMFUNC1:def 3;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9;
+   hence x in dom f2/\right_open_halfline(lim(f1,x0)) by A13,A14,XBOOLE_0:def 3
+;
+  end; then rng q c=dom f2/\right_open_halfline(lim(f1,x0)) by TARSKI:def 3
+;
+  then A15: f2*q is convergent & lim(f2*q)=lim_right(f2,lim(f1,x0))
+   by A1,A8,A9,LIMFUNC2:def 8;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim_right(f2,lim(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_convergent_in x0 by A1,LIMFUNC3:def 1;
+ hence thesis by A3,LIMFUNC3:def 4;
+end;
+
+theorem
+  f1 is_right_convergent_in x0 & f2 is_convergent_in lim_right(f1,x0) &
+(for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\
+ ].x0,x0+g.[ holds f1.r<>lim_right(f1,x0))
+implies f2*f1 is_right_convergent_in x0 &
+lim_right(f2*f1,x0)=lim(f2,lim_right(f1,x0))
+proof assume A1: f1 is_right_convergent_in x0 &
+ f2 is_convergent_in lim_right(f1,x0) &
+ for r st x0<r ex g st g<r & x0<g & g in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in dom f1/\].x0,x0+g.[ holds f1.r<>lim_right(f1,x0);
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)/\right_open_halfline(x0);
+  then A5: rng s c=dom(f2*f1) & rng s c=right_open_halfline(x0) & rng s c=dom
+f1 &
+  rng s c=dom f1/\right_open_halfline(x0) & rng(f1*s)c=dom f2 by Th1;
+  then A6: f1*s is convergent & lim(f1*s)=lim_right(f1,x0) by A1,A4,LIMFUNC2:
+def 8;
+    lim s<x0+g by A2,A4,Lm1; then consider k be Nat such that
+  A7: for n be Nat st k<=n holds s.n<x0+g by A4,LIMFUNC2:2; set q=(f1*s)^\k;
+  A8: q is convergent & lim q=lim_right(f1,x0) by A6,SEQ_4:33;
+  A9: lim(f2,lim_right(f1,x0))=lim(f2,lim_right(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then A11: s.(n+k)<x0+g by A7; A12: s.(n+k) in rng s by RFUNCT_2:10;
+   then s.(n+k) in right_open_halfline(x0) by A5;
+   then s.(n+k) in {g1: x0<g1} by LIMFUNC1:def 3; then ex g1 st g1=s.(n+k) &
+x0<g1;
+then s.(n+k) in {g2: x0<g2 & g2<x0+g} by A11;
+    then s.(n+k) in ].x0,x0+g.[ by RCOMP_1:def 2;
+then s.(n+k) in dom f1/\].x0,x0+g.[ by A5,A12,XBOOLE_0:def 3;
+   then f1.(s.(n+k))<>lim_right(f1,x0) by A2;
+   then A13: not f1.(s.(n+k)) in {lim_right(f1,x0)} by TARSKI:def 1;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9; hence x in
+dom f2\{lim_right(f1,x0)} by A13,A14,XBOOLE_0:def 4;
+  end; then rng q c=dom f2\{lim_right(f1,x0)} by TARSKI:def 3;
+  then A15: f2*q is convergent & lim(f2*q)=lim(f2,lim_right(f1,x0))
+   by A1,A8,A9,LIMFUNC3:def 4;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim(f2,lim_right(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_right_convergent_in x0 by A1,LIMFUNC2:def 4;
+ hence thesis by A3,LIMFUNC2:def 8;
+end;
+
+theorem
+  f1 is_convergent_in x0 & f2 is_convergent_in lim(f1,x0) &
+(for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1)) &
+(ex g st 0<g & for r st r in dom f1 /\ (].x0-g,x0.[ \/ ].x0,x0+g.[) holds
+ f1.r<>lim(f1,x0))
+implies f2*f1 is_convergent_in x0 & lim(f2*f1,x0)=lim(f2,lim(f1,x0))
+proof assume A1: f1 is_convergent_in x0 & f2 is_convergent_in lim(f1,x0) &
+ for r1,r2 st r1<x0 & x0<r2 ex g1,g2 st r1<g1 & g1<x0 & g1 in dom(f2*f1) &
+  g2<r2 & x0<g2 & g2 in dom(f2*f1); given g such that
+ A2: 0<g & for r st r in
+dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) holds f1.r<>lim(f1,x0);
+ A3: now let s be Real_Sequence; assume A4: s is convergent & lim s=x0 &
+  rng s c=dom(f2*f1)\{x0};
+  then A5: rng s c=dom(f2*f1) & rng s c=dom f1 & rng s c=dom f1\{x0} &
+  rng(f1*s)c=dom f2 by Th2;
+  then A6: f1*s is convergent & lim(f1*s)=lim(f1,x0) by A1,A4,LIMFUNC3:def 4;
+  consider k be Nat such that
+  A7: for n be Nat st k<=n holds x0-g<s.n & s.n<x0+g by A2,A4,LIMFUNC3:7;
+  set q=(f1*s)^\k; A8: q is convergent & lim q=lim(f1,x0) by A6,SEQ_4:33;
+  A9: lim(f2,lim(f1,x0))=lim(f2,lim(f1,x0));
+    now let x be set; assume x in rng q; then consider n be Nat such that
+   A10: q.n=x by RFUNCT_2:9; k<=n+k by NAT_1:37;
+   then x0-g<s.(n+k) & s.(n+k)<x0+g by A7; then s.(n+k) in
+{g1: x0-g<g1 & g1<x0+g};
+   then A11: s.(n+k) in ].x0-g,x0+g.[ by RCOMP_1:def 2;
+   A12: s.(n+k) in rng s by RFUNCT_2:10;
+then s.(n+k) in dom f1 & not s.(n+k) in {x0} by A5,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0+g.[\{x0} by A11,XBOOLE_0:def 4;
+   then s.(n+k) in ].x0-g,x0.[\/].x0,x0+g.[ by A2,LIMFUNC3:4;
+   then s.(n+k) in dom f1/\(].x0-g,x0.[\/].x0,x0+g.[) by A5,A12,XBOOLE_0:def 3
+;
+   then f1.(s.(n+k))<>lim(f1,x0) by A2;
+   then A13: not f1.(s.(n+k)) in {lim(f1,x0)} by TARSKI:def 1;
+   A14: f1.(s.(n+k)) in dom f2 by A5,A12,FUNCT_1:21;
+     f1.(s.(n+k))=(f1*s).(n+k) by A5,RFUNCT_2:21
+   .=x by A10,SEQM_3:def 9;
+   hence x in dom f2\{lim(f1,x0)} by A13,A14,XBOOLE_0:def 4;
+  end; then rng q c=dom f2\{lim(f1,x0)} by TARSKI:def 3;
+  then A15: f2*q is convergent & lim(f2*q)=lim(f2,lim(f1,x0))
+   by A1,A8,A9,LIMFUNC3:def 4;
+  A16: f2*q=(f2*(f1*s))^\k by A5,RFUNCT_2:22
+  .=(f2*f1*s)^\k by A5,RFUNCT_2:39;
+  hence f2*f1*s is convergent by A15,SEQ_4:35;
+  thus lim(f2*f1*s)=lim(f2,lim(f1,x0)) by A15,A16,SEQ_4:36;
+ end; hence f2*f1 is_convergent_in x0 by A1,LIMFUNC3:def 1;
+ hence thesis by A3,LIMFUNC3:def 4;
+end;
